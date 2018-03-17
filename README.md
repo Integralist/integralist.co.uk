@@ -10,18 +10,20 @@ Website built using [Go](https://golang.org/), [Hugo](https://gohugo.io/) and d
 
 - `hugo server` (for previewing)
 
+## DNS
 
+* Hostname: www
+* Type: CNAME
+* Value: dreamy-wing-b0b998.netlify.com.
 
+---
 
+* Hostname: @
+* Type: A
+* Value: 104.198.14.52
 
+---
 
-
-
-
-
-
-
-
-
-
-
+* Hostname: www
+* Type: A
+* Value: 104.198.14.52
