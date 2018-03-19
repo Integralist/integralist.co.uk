@@ -70,7 +70,8 @@ I progressed upwards through the organisation, moving from initially being a cli
 
 ### 2018
 
-- Designed and implemented a Python package that acts as a Tornado web handler decorator for acquiring/caching/revalidating an asymmetrical public key (provided by an authentication server we built in Go). This key is then used once we have acquired a signed JWT object so we may verify the integrity is intact. It's purpose was to make engineers time assigning authentication to their services much simpler and less time consuming, and provide a consistent experience across the platform.
+- Designed and implemented a Python package which acted as a Tornado web handler decorator for acquiring/caching/revalidating an asymmetrical public key (provided by the authentication reverse proxy we built in Go - see below bullet). The key is used to verify the signature (message integrity) attached to a JWT containing public user data. Its purpose was to help engineers to quickly integrate with our custom built authentication service and provide a consistent experience across the platform.
+- Co-designed/engineered an authentication service layer reverse proxy (written in Go). Utilised JWT's (signed using public-key cryptography) to ensure upstream protected services could trust the received user data and its integrity.
 - Selected to be part of a new infrastructure team tasked with designing a new 'authentication and authorization' service layer(s).
 - Promoted to Staff Software Engineer in January.
 
