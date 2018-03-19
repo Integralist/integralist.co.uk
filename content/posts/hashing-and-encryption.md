@@ -86,6 +86,12 @@ Often cryptographic primitives need to be combined. For example, [public-key cry
 
 Hash functions (or more specifically their output: _digests_) can be used for many things, like indexing data in a hash table, fingerprinting (i.e. detecting duplicate data or uniquely identifying files), or as a checksum (i.e. detecting data corruption).
 
+Message authentication (i.e. message _integrity_) involves hashing the message to produce a digest and encrypting the digest with the private key to produce a digital signature.
+
+In order to verify this 'signature' the recipient of the encrypted message would need to compute a hash of the message, then decrypting the signer's public key and comparing the computed digest against the decrypted digest sent within the encrypted message.
+
+If the digest you generated is the same as the decrypted digest, then we can be sure the message was delivered unmodified whilst in transit (e.g. 'man-in-the-middle').
+
 <div id="3"></div>
 ## Base64 Encoding
 
