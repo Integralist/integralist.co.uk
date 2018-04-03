@@ -12,8 +12,8 @@ tags:
 draft: false
 ---
 
-- [Terminal](#1)
-- [Kernel](#2)
+- [Kernel](#1)
+- [Terminal](#2)
 - [Shell](#3)
 - [Shell Builtins](#4)
 - [Executables](#5)
@@ -24,19 +24,6 @@ draft: false
 - [List of all builtins vs executables](#9)
 
 <div id="1"></div>
-## Terminal
-
-A terminal is an input/output device.
-
-Traditionally terminals would have been a _real_ hardware device that you used to interact with a computer.
-
-In modern computing we have _electronic_ terminals.
-
-Also known as a 'terminal emulator'.
-
-If don't want to use a GUI (graphical user interface) to interact with your computer, you can use a terminal emulator.
-
-<div id="2"></div>
 ## Kernel
 
 A computer has a kernel.
@@ -45,9 +32,28 @@ The kernel is responsible for managing the computer's system.
 
 The kernel has no user interface.
 
-To interact with the kernel you use an intermediary program.
+To interact with the kernel you use an intermediary "program".
 
-A program is an executable binary.
+A "program" is a structured collection of instructions (machine code) that a computer can execute.
+
+<div id="2"></div>
+## Terminal
+
+A terminal is an input/output device.
+
+Traditionally terminals would have been a _real_ 'hardware' device that you used to interact with a computer.
+
+e.g. the computer would be a large box in a server room, and the terminal would be a monitor/keyboard connected to the computer.
+
+In modern computing we have _electronic_ terminals.
+
+The modern equivalent of a terminal is known as a 'terminal emulator'.
+
+Terminal emulators ironically (or confusingly) are part of the computer they would have previously been plugged into separately.
+
+If don't want to use a GUI (graphical user interface) to interact with your computer, you can use a terminal emulator.
+
+In case it wasn't clear: a terminal emulator is also a "program".
 
 <div id="3"></div>
 ## Shell
@@ -58,11 +64,11 @@ The terminal accepts input, passes it to the shell, and the shell's output is se
 
 The shell accepts input as a set of commands.
 
-The available commands vary depending on the shell (different shells have different commands).
+The available commands vary depending on the shell (e.g. different shells have different commands).
 
 In order to fulfil your instructions, commands are interpreted by the shell and the shell determines if it should either:
 
-- load another program
+- load _another_ program
 
 or 
 
@@ -73,7 +79,7 @@ or
 
 A 'builtin' function is one that is provided by the shell.
 
-If a command is provided and the shell has no corresponding builtin, it will lookup the command via a separate list of available _external_ 'executables'.
+If a command is provided and the shell has no corresponding builtin associated with the given command, it will lookup the command via a separate list of available _external_ 'executables'.
 
 A builtin command can affect the internal state of the shell. 
 
