@@ -70,6 +70,8 @@ OK, so using the correct terminology is essential and helps us to be explicit an
 * **authenticity**:  
   the communication is with who you expect it to be (not a man-in-the-middle).
 
+> For a longer "Security Glossary", please see [this Google doc](https://docs.google.com/document/d/1qs3jEIQvocdVhSxCSPLF1BoLnp91aLnuUIasvl-maYo/edit?usp=sharing) I created.
+
 <div id="2"></div>
 ## Hashing vs Encryption
 
