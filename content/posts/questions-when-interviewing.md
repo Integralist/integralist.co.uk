@@ -151,20 +151,22 @@ Otherwise, here are the list of questions/topics I like to cover...
       - Engineering (Features/Products)
       - Site Reliability
       - Operations
-  - How to teams work with regards to an 'on-call' rota?
+  - How do teams work with regards to an 'on-call' rota?
 - **Job Progression & Opportunities**
   - Learning budgets?
   - Conferences?
 - **Remote Working**
-  - How are remotes kept feeling inclusiveness?
+  - How are remotes kept feeling included?
 - **Work life balance and support**
-  - How do staff balance work-life, when in a multi-region/distributed organisation?
-  - e.g. cross-over hours between UK and US?
+  - How do staff balance their work-life? 
+  - How do things work in a multi-region/distributed organisation?
+      - e.g. cross-over hours between UK and US?
 - **Tech**
   - _Finally_ we get to something engineering related...
-      - What's the infrastructure look like?
+      - What does the infrastructure look like?
       - What build systems do you use?
-      - What is your deployment platform and how often do/can you deploy?
+      - What is your deployment platform?
+      - How often do/can you deploy?
       - How do you handle rollback processes?
 - **Vision and Future**
   - Where is this company going?
