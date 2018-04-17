@@ -1,0 +1,175 @@
+---
+title: "Interview Topics"
+date: 2018-04-08T12:04:43+01:00
+categories:
+  - "process"
+  - "guide"
+tags:
+  - "goals"
+  - "interviews"
+  - "jobs"
+draft: false
+---
+
+## Introduction
+
+I was approached recently by an organisation about whether I'd be interested in working for them. The focus of this post **_isn't_** that company (hence I've not mentioned their name), but more about a set of experiences I've had when changing jobs and how I think they're important to keep in mind, along with specific topics of interest you should look to include, when considering future opportunities.
+
+## What Happened?
+
+A recruiter, let's say they were calling on behalf of the "Foo" company, contacted me to say they (and their CTO) had stumbled across and enjoyed a selection of my blog posts, and found my profile on LinkedIn to fit the type of candidate they were looking for.
+
+## My current work situation
+
+I work at a company called [BuzzFeed](https://www.buzzfeed.com/).
+
+I've been here for almost two years now, and I came to them from the [BBC](http://www.bbc.co.uk/news).
+
+## Am I happy at BuzzFeed?
+
+Yes, very. 🙂
+
+BuzzFeed is the first company I've worked for where they:
+
+- Treat me like a human being.
+- Treat me fairly.
+- Support my need to work almost exclusively remotely.
+- Are truly diverse and culturally supportive.
+
+As far as interviewing, BuzzFeed also got brownie points for...
+
+- Paying me for my time interviewing with them.
+- Paying for my accommodation and travel to NY (I live in the UK).
+- Not taking advantage of me †
+
+> † one example being, they already knew my salary and still increased it by a significant percentage
+
+## Did you talk to the Foo company?
+
+Yes. Because I was interested to see how they compared.
+
+## How _did_ they compare?
+
+Well, I didn't get past the initial conversation because they didn't have a "remote role" for me, so I couldn't say with 100% certainty how they would have compared.
+
+But that said, there were a few key things I took away from the conversation that I feel are worth mentioning, as these things were specifically firing my internal alarm bell...
+
+- They tried to sell me on "we're **all engineers** here", which for me isn't something we should be aspiring to (conversation for another day, but to me it's an unhealthy attitude).
+- There was a seeming **lack of post-mortems and/or blameless culture**. I was given a response, if you can imagine, that was similar to a confused raised eye brow.
+- The concept of teams functioning differently to each other (which is fine), seemed to be confused with **inconsistency and lack of direction**.
+- **Money focused**. The biggest takeaway by far was that I was asked _constantly_ "What would it take for you to leave BuzzFeed?" †.
+- **No interest** in techniques that could help improve their ability to work more efficiently.
+
+> † I realised they cared less about me as a 'person', someone the company could build a long term relationship with, and more about me as a 'number'. I was just a resource, an entity they could acquire.
+
+## What was the problem?
+
+This company is clearly (as they themselves stated) entirely made up of engineers, with the lightest touch of management. Through my discussion it became apparent that building new products with new tech was the focus and drive for those working there. But in that type of environment, being able to work _effectively_, _efficiently_ and with _good communication_ (along with making sure you're working on _the right thing_ and _at the right time_) is rarely the case in my experience.
+
+For me, I'm at a point in my career where discussions about programming languages or tech stack X just isn't something I worry about or get giddy about, because most of the time it's _how_ you solve a problem that's important. 
+
+In most situations, if you do your due diligence and exhaust all means available to you to make the given tech work, you should be able to empirically prove it's not working, and thus are in a better position to justify a more appropriate language or tech stack. This all becomes fairly trivial.
+
+> Note: in my experience, people tend to fall back on subjective opinions and hand wavey 'facts' rather than just cracking on with solving the problem at hand.
+
+Remember, we're engineers, we can solve a lot of these issues in many different ways. But I personally find the 'human' problem is something that is typically much harder to solve and ultimately will cause a lot more detrimental effect on our ability to learn, progress in, and emotionally stay connected to our jobs.
+
+After my conversation with the Foo company I already had an unsettling feeling about them, but decided that I would do some research on Glassdoor to see if my gut feelings, stemming from the feedback I received, were correlating to other people's past experiences working at the company. †
+
+> † it's important to realise that with sites like Glassdoor you're only getting half the story, so take it with a pinch of salt. For me, I already had a lengthy conversation with the company and so I could corroborate my experience with others.
+
+Turns out my gut instincts were reciprocated by others, and by that I mean: engineers either working still (or who used to work) at Foo had voiced concerns that if you want to get paid lots of money to work on software with lots of tech debt, and with management that doesn't care about improving the situation with how teams collaborate and/or communicate with each other, then company Foo might be the place for you.
+
+Now, what I'm about to say, I can say because of priviledge (I'm totally aware of that and I try to keep that in check wherever possible)...
+
+For me, getting paid is important (because ultimately it allows me to look after my family), but in truth there's a whole world outside of just getting paid which is equally (if not more) important for being happy. 
+
+I've been fortunate enough with my priviledge to _be able_ to have that opinion, and I appreciate that for others this isn't necessarily going to be the case, and so for those of you who don't feel that way because of circumstances: that's of course absolutely ok and valid. So with that in mind, I will cover what I feel are those _other_ important topics next...
+
+## What's important to _you_?
+
+First, I just want to take a moment to re-iterate, that you need to find what's important _to you_.
+
+If you're just starting out in your career, or your mid-way through, or you're 20 years in like me, _your_ priorities, _your_ standards, and _your_ values are going to be different depending on the stage of life you're at.
+
+For me (in a general sense), I'm looking for:
+
+* A well paid job (to enable me to support my family)
+* A stable work environment (again, family)
+* A diverse cultural environment (because diversity is important to me)
+* To be able to have impact (I like helping people)
+* To be happy (i.e. not stressed)
+
+Now let's be honest, who of us _isn't_ looking for those qualities? Everyone wants a good paying job, everyone wants to be happy and in some cases most people prefer stability over chaos. Maybe diversity, or having an impact, isn't high up on your list of things because you're just starting out and to be honest, at that stage in life just _getting_ paid is probably going to be your highest priority.
+
+At any rate, figure out _your_ priorities, _your_ standards and _your_ values, when considering working opportunities.
+
+But also remember that these things will change over time, and that's ok too (sometimes we just need stability).
+
+## What should you talk about?
+
+Well, first things first. It's a good idea, at the start of _any_ conversation, to ask:
+
+> What's the focus of today's conversation?  
+
+i.e. What's important to the company (or individual) you're talking with, and what insights do _they_ want to take from this? Does it align with your agenda? If not, clarify what _you_ hope to get out of the conversation, so it's clear (on both sides) what intentions there are.
+
+Otherwise, here are the list of questions/topics I like to cover...
+
+- **What is the company's story?**  
+  - Give me an insight into the company's history/background and how we've reached this point in time.
+- **Presence**  
+  - How many offices do you have and what are their locality?
+- **Culture and Diversity**  
+  - The company's "values" will help indicate what's _important_ to them.
+- **Hierarchy and Organisation Structure**
+  - Are you fairly 'flat and lean' or 'tall and fragmented'?
+- **Visibility & Openness**
+  - How does leadership share and handle critical/internal business topics?
+- **Collaboration**
+  - Building new features across multiple cross-discipline teams (avoiding duplication)
+  - Distributed Timezones
+- **Community**
+  - How do internal & external staff interact?
+  - How do teams across offices/locality bond?
+- **Process**
+  - How are new features discussed, designed, evolved, released?
+  - What is the leadership like?
+  - Is documentation a second class citizen? (sharing of information, no silos of knowledge)
+  - Do you practice post mortems? (blameless retrospection, handling of failures)
+  - How do you handle tech debt?
+- **Communication**
+  - Do you work with any of the following practices?
+      - [SBI: Situation, Behaviour, Impact](https://gist.github.com/Integralist/24c8a9ce570d78d37ed0cf9967594e0e) (Methodology, _The Center for Creative Leadership_)
+      - [Radical Candor](https://www.radicalcandor.com/) (Book, _Kim Scott_)
+      - [Conscious Business](https://www.youtube.com/watch?v=IdMvWLARF1w) (Video, _Fred Kofman_)
+      - [Authentic Communication](https://www.soundstrue.com/store/authentic-communication.html) (Book, _Fred Kofman_)
+- **Responsibility and Ownership**
+  - What does the responsibilities look like for each of the following types of teams?
+      - Engineering (Features/Products)
+      - Site Reliability
+      - Operations
+  - How to teams work with regards to an 'on-call' rota?
+- **Job Progression & Opportunities**
+  - Learning budgets?
+  - Conferences?
+- **Remote Working**
+  - How are remotes kept feeling inclusiveness?
+- **Work life balance and support**
+  - How do staff balance work-life, when in a multi-region/distributed organisation?
+  - e.g. cross-over hours between UK and US?
+- **Tech**
+  - _Finally_ we get to something engineering related...
+      - What's the infrastructure look like?
+      - What build systems do you use?
+      - What is your deployment platform and how often do/can you deploy?
+      - How do you handle rollback processes?
+- **Vision and Future**
+  - Where is this company going?
+  - What are the end goals?
+
+## Conclusion
+
+I think that pretty much covers everything of interest. To me at least these broad topics will give you a good indicator of what an organisation is like (or the _potential_ they have), depending on how they answer these questions.
+
+What are the sorts of things you ask in an interview? What matters to you? Let me know on twitter.
