@@ -135,7 +135,9 @@ Otherwise, here are the list of questions/topics I like to cover...
 - **Process**
   - How are new features discussed, designed, evolved, released?
   - What is the leadership like?
-  - Is documentation a second class citizen? (sharing of information, no silos of knowledge)
+  - How is documentation handled here?
+      - Do they care about documentation? 
+      - Are they sharing information, or is there silos of knowledge?
   - Do you practice post mortems? (blameless retrospection, handling of failures)
   - How do you handle tech debt?
 - **Communication**
