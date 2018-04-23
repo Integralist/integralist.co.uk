@@ -80,11 +80,11 @@ After my conversation with the Foo company I already had an unsettling feeling a
 
 Turns out my gut instincts were reciprocated by others, and by that I mean: engineers either working still (or who used to work) at Foo had voiced concerns that if you want to get paid lots of money to work on software with lots of tech debt, and with management that doesn't care about improving the situation with how teams collaborate and/or communicate with each other, then company Foo might be the place for you.
 
-Now, what I'm about to say, I can say because of priviledge (I'm totally aware of that and I try to keep that in check wherever possible)...
+Now, what I'm about to say, I can say because of privilege (I'm totally aware of that and I try to keep that in check wherever possible)...
 
 For me, getting paid is important (because ultimately it allows me to look after my family), but in truth there's a whole world outside of just getting paid which is equally (if not more) important for being happy. 
 
-I've been fortunate enough with my priviledge to _be able_ to have that opinion, and I appreciate that for others this isn't necessarily going to be the case, and so for those of you who don't feel that way because of circumstances: that's of course absolutely ok and valid. So with that in mind, I will cover what I feel are those _other_ important topics next...
+I've been fortunate enough with my privilege to _be able_ to have that opinion, and I appreciate that for others this isn't necessarily going to be the case, and so for those of you who don't feel that way because of circumstances: that's of course absolutely ok and valid. So with that in mind, I will cover what I feel are those _other_ important topics next...
 
 ## What's important to _you_?
 

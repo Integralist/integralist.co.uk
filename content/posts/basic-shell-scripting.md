@@ -614,7 +614,7 @@ du:
 
 ### Double exclamation !!
 
-Sometimes you need to execute a command using `sudo` priviledges. If you forget to do this, don't write out the command again but with `sudo` at the start. Don't even use the up arrow key and then move the cursor to the start of the line to type `sudo`. All you need to do is to run `sudo !!`. The `!!` expands to the last command you executed.
+Sometimes you need to execute a command using `sudo` privileges. If you forget to do this, don't write out the command again but with `sudo` at the start. Don't even use the up arrow key and then move the cursor to the start of the line to type `sudo`. All you need to do is to run `sudo !!`. The `!!` expands to the last command you executed.
 
 ### Ctrl-r
 
