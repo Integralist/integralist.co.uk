@@ -70,6 +70,7 @@ I progressed upwards through the organisation, moving from initially being a cli
 
 ### 2018
 
+- Built a Python package that wraps scrypt. Motivation was to provide a consistent interface that allowed engineers across the organization to utilize approved security functions for hashing and encrypting data.
 - Started to introduce both Kim Scott's "Radical Candor" and Fred Kofman's "integral communication" concepts to enable teams to work more openly and honestly.
 - Introduced Wednesday lunch videos/presentations. The idea being to have multiple teams in the UK office have lunch together while watching a video (or someone giving a presentation) and thus having a topic to focus discussion around. This was primarily done for fun, but also to help us to better engage with each other and to encourage people to share things of interest to them (it didn't have to be technical videos/presentations, but anything that was felt to be _interesting_).
 - Designed and implemented a Python package which acted as a Tornado web handler decorator for acquiring/caching/revalidating an asymmetrical public key (provided by the authentication reverse proxy we built in Go - see below bullet). The key is used to verify the signature (message integrity) attached to a JWT containing public user data. Its purpose was to help engineers to quickly integrate with our custom built authentication service and provide a consistent experience across the platform.
