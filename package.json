@@ -1,0 +1,27 @@
+{
+  "name": "integralist.co.uk",
+  "version": "1.0.0",
+  "description": "Website built using [Go](https://golang.org/), [Hugo](https://gohugo.io/) and deployed via [Netlify](https://www.netlify.com/).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "index": "hugo && grunt lunr-index",
+    "dev": "npm run index && hugo server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Integralist/integralist.co.uk.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Integralist/integralist.co.uk/issues"
+  },
+  "homepage": "https://github.com/Integralist/integralist.co.uk#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "^1.0.2",
+    "js-yaml": "^3.11.0",
+    "string": "^3.3.3"
+  }
+}

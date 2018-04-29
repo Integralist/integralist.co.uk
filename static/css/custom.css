@@ -96,3 +96,7 @@ body.night, .night button, .night input, .night select, .night textarea,
 .night li strong {
   color: #c59e00;
 }
+
+input#search {
+  width: 100%;
+}
