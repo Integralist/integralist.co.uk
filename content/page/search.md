@@ -39,7 +39,7 @@ weight: -170
               try {
                 // console.log(doc.href)
                 this.add(doc)
-              } catch {}
+              } catch (e) {}
             }, this)
           })
       })
@@ -61,7 +61,7 @@ weight: -170
         try {
           console.log(page)
           return page.href === result.ref;
-        } catch {
+        } catch (e) {
           console.log('whoops')
         }
       })[0];
