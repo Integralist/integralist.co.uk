@@ -7,6 +7,7 @@ weight: -170
 ---
 
 - [Hello!](#hello)
+- [Testimonials](#testimonials)
 - [Connect](#connect)
 - [History](#history)
 - [Key Achievements](#key-achievements)
@@ -35,6 +36,12 @@ I'm also a published author with Apress and LeanPub:
 
 - [Python for Programmers](https://leanpub.com/pythonforprogrammers)
 - [Programming in Clojure](https://leanpub.com/programming-clojure/)
+
+## Testimonials
+
+> "as smart as developers are, they are not always good at explaining things in a way that makes human sense. not you. you are an exception. you are A+"
+
+ ❤️this was music to my ears, and is what I strive for: to help others to do their best work and to push/promote the good work other engineers do (especially those from either a diverse background or minority).
 
 ## Connect
 
