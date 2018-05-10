@@ -4,9 +4,9 @@ Website built using [Go](https://golang.org/), [Hugo](https://gohugo.io/) and d
 
 ## New Post
 
-- `hugo new ./posts/`
+- `hugo new ./posts/<name-of-post>.md`
 
-- `vim **<Tab>`(using [fzf](https://github.com/junegunn/fzf) for file searching)
+- `vim **<Tab>`(search for `/content/posts/...` using [fzf](https://github.com/junegunn/fzf) for file searching)
 
 - `hugo server` (for previewing)
 
