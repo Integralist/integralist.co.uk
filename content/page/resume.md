@@ -188,6 +188,7 @@ I don't profess mastery, but I'm adept with most of the below, and I have an apt
 - Make
 - [Meta Programming](https://gist.github.com/Integralist/a29212a8eb10bc8154b7)
 - Node
+- NGINX
 - PHP
 - Python
 - [Refactoring](/posts/refactoring-techniques/)

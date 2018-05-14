@@ -59,7 +59,7 @@ weight: -170
     return lunrIndex.search(query).map(function(result) {
       return documents.filter(function(page) {
         try {
-          console.log(page)
+          // console.log(page)
           return page.href === result.ref;
         } catch (e) {
           console.log('whoops')
