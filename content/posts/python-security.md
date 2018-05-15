@@ -52,7 +52,7 @@ A [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2) on the other hand is able to pr
 
 I mention both of these (KDF and PBKDF2) because the `generate_digest` function I've written is a multi-arity function that will switch implementation based upon the provided arguments in the method signature. 
 
-Originally I had two separate functions to distinguish them a bit more clearly but realised if this library is to make life easier for developers who don't understand encryption, then I need to provide a single function that intelligently handles things internally.
+Originally I had two separate functions to distinguish them a bit more clearly but realised if this library is to make life easier for developers who don't understand encryption or hashing concepts, then I need to provide a single function that intelligently handles things internally.
 
 <div id="3"></div>
 ## generate_digest
