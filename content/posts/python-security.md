@@ -29,7 +29,7 @@ draft: false
 
 I recently implemented a Python library which acts as an abstraction layer on top of an existing security algorithm (in this case [scrypt](https://www.tarsnap.com/scrypt.html)). 
 
-The motivation was for allowing teams to have a consistent experience utilising encryption in their applications and services without necessarily having to know the ins-and-outs of what's important with regards to encryption, salts, key lengths etc.
+The motivation was for allowing teams to have a consistent experience utilising encryption (and hashing) in their applications and services without necessarily having to know the ins-and-outs of what's important with regards to encryption, salts, key lengths etc.
 
 > Note: I always encourage people to understand what it is they're doing, but in some cases that's not always a practical mindset.
 
