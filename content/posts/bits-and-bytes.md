@@ -88,7 +88,26 @@ So:
 
 With this information we can identify the value assigned by adding up the numbers associated with the ones and zeros. 
 
-So in the image we can see four of the bits are given `1` (on) and the rest are `0` (off), meaning if we add up all the associated values of the bits that are 'on' we get `99`.
+So in the image we can see four of the bits are given `1` (on) and the rest are `0` (off), meaning if we add up all the associated values of the bits that are 'on' we get `99` (e.g. `64 + 32 + 2 + 1`).
+
+### Basic Bit Operators
+
+You may have seen bit operators like `<<` or `>>` and wondered what they mean (generally referred to as 'bitwise operators'). Essentially they manipulate bits.
+
+Here are some examples:
+
+```
+64 >> 1 = 32
+1 << 3 = 8
+1 << 7 = 128
+1 << 15 = 32768
+```
+
+So if we keep in mind the earlier image of our 8 bits in a byte memory representation, and that each bit had its own value (as described above), we can see (for example) that if we started at `64` and moved to the right by `1` bit, the next bit would be the one assigned the value `32`. Hence, `64 >> 1` results in the value `32`. 
+
+Similarly, if we start with the bit value `1` and move to the left by `15` bits we'll get back the result of `32768` because although we've only shown eight bit spaces above, you can just keep moving to the left (`64 * 2 = 128`, `128 * 2 = 256`, now keep going seven more places until you reach the fifteenth bit... `256 * 2 = 512`, `512 * 2 = 1024`, `1024 * 2 = 2048`, `2048 * 2 = 4096`, `4096 * 2 = 8192`, `8192 * 2 = 16384`, `16384 * 2 = 32768`).
+
+For more bitwise operators, refer to these posts: https://wiki.python.org/moin/BitwiseOperators and https://medium.com/learning-the-go-programming-language/bit-hacking-with-go-e0acee258827
 
 <div id="6"></div>
 ## Bits and Numbers
