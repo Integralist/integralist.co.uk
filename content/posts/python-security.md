@@ -1,5 +1,5 @@
 ---
-title: "Encryption with Python"
+title: "Security with Python"
 date: 2018-05-15T08:27:55+01:00
 categories:
   - "code"
