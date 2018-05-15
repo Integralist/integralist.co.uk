@@ -29,7 +29,7 @@ draft: false
 
 I recently implemented a Python library which acts as an abstraction layer on top of an existing security algorithm (in this case [scrypt](https://www.tarsnap.com/scrypt.html)). 
 
-The motivation was for allowing teams to have a consistent experience utilising encryption (and hashing) in their applications and services without necessarily having to know the ins-and-outs of what's important with regards to encryption, salts, key lengths etc.
+The motivation was for allowing teams to have a consistent experience utilising encryption (and hashing) in their applications and services without necessarily having to know the ins-and-outs of what's important with regards to salts, key lengths etc.
 
 > Note: I always encourage people to understand what it is they're doing, but in some cases that's not always a practical mindset.
 
@@ -44,7 +44,7 @@ The library provides three functions:
 
 Before we start looking at the three functions provided by this library/interface, let's very briefly talk about KDF and PBKDF2.
 
-A [KDF](https://en.wikipedia.org/wiki/Key_derivation_function) (Key Derivation Function) accepts a key and internally computes and generates a digest. They are designed to be more computationally intensive than standard hashing functions, and so they make it harder to use dictionary or rainbow table style attacks (as they would require a lot of extra memory resources and become more unfeasible as an attack vector).
+A [KDF](https://en.wikipedia.org/wiki/Key_derivation_function) (Key Derivation Function) accepts a message + a key, and produces a digest for its output. They are designed to be more computationally intensive than standard hashing functions, and so they make it harder to use dictionary or rainbow table style attacks (as they would require a lot of extra memory resources and become more unfeasible as an attack vector).
 
 By default the KDF will generate a random salt (thus output is non-deterministic) and have a maximum computational time of `0.5` (although this can be overridden using a `maxtime` argument, as we'll see later).
 
