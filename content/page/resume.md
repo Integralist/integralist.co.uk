@@ -77,6 +77,7 @@ I progressed upwards through the organisation, moving from initially being a cli
 
 ### 2018
 
+- Designed and co-implemented new authentication system built in Python on top of AWS Cognito. The aim was to replace the authentication logic currently present within our legacy monolithic web application, and also to be the foundation for authentication _and_ authorization requirements for our modern micro services moving forward.
 - Built a Python package that wraps scrypt. Motivation was to provide a consistent interface that allowed engineers across the organization to utilize approved security functions for hashing and encrypting data.
 - Started to introduce both Kim Scott's "Radical Candor" and Fred Kofman's "integral communication" concepts to enable teams to work more openly and honestly.
 - Introduced Wednesday lunch videos/presentations. The idea being to have multiple teams in the UK office have lunch together while watching a video (or someone giving a presentation) and thus having a topic to focus discussion around. This was primarily done for fun, but also to help us to better engage with each other and to encourage people to share things of interest to them (it didn't have to be technical videos/presentations, but anything that was felt to be _interesting_).
