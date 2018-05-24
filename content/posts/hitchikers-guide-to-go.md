@@ -21,6 +21,7 @@ draft: false
 - [Import Race Conditions](#10)
 - [New vs Make](#11)
 - [Custom Types](#12)
+- [Custom Errors](#12.5)
 - [Function Types](#13)
 - [Enumerator IOTA](#14)
 - [Struct: Var vs Type](#15)
@@ -1105,6 +1106,50 @@ func main() {
 
 func (f *foo) Bar() {
   f[1] = 2
+}
+```
+
+<div id="12.5"></div>
+## Custom Errors
+
+```
+package main
+
+import (
+	"errors"
+	"fmt"
+)
+
+type CustomErr interface {
+	error
+}
+
+var (
+	CustomError = errors.New("Some Custom Error")
+)
+
+// we return an 'error' type specifically
+// CustomError is indeed an error type, so returning that works
+// but also, the interface CustomErr means the CustomError var _is_ a CustomErr type too
+func succeed(b bool) (string, error) {
+	if b {
+		return "success", nil
+	}
+	return "", CustomError
+}
+
+func main() {
+	fmt.Println(CustomError) // Some Custom Error
+
+	resp, err := succeed(false)
+	if err != nil {
+		t, ok := err.(CustomErr)
+		if ok {
+			fmt.Printf("t is a custom error '%+v' (%T)\n", t, t)
+		}
+		fmt.Println(err) // Some Custom Error
+	}
+	fmt.Println(resp) // success (only if succeed(true) is called)
 }
 ```
 
