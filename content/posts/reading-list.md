@@ -12,6 +12,8 @@ draft: false
 
 I've long kept a list of books I've enjoyed reading, and decided I would share them as a blog post so others could benefit from their learnings.
 
+> Note: I generally keep the [original gist](https://gist.github.com/Integralist/77877126a0b13766f0de) the most up-to-date.
+
 ## Algorithms
 
 - [Grokking Algorithms: An illustrated guide](https://www.manning.com/books/grokking-algorithms)
@@ -39,14 +41,18 @@ I've long kept a list of books I've enjoyed reading, and decided I would share t
 
 ## Communication
 
-- [Conscious Business: How to build value through values](https://www.soundstrue.com/store/conscious-business-4036.html)
-- [Powerful: building a culture of freedom and responsibility](http://pattymccord.com/book/)
 - [Radical Candor: care personally and challenge directly](https://www.radicalcandor.com/)
 
 ## Concurrency
 
 - [Programming Concurrency on the JVM: Mastering Synchronization, STM, and Actors](http://www.amazon.co.uk/Programming-Concurrency-JVM-Mastering-Synchronization/dp/193435676X)
 - [Seven Concurrency Models in Seven Weeks: When Threads Unravel](http://www.amazon.co.uk/Seven-Concurrency-Models-Weeks-Programmers/dp/1937785653/ref=sr_1_1?ie=UTF8&qid=1427038041&sr=8-1&keywords=7+concurrency+models)
+
+## Culture
+
+- [Conscious Business: How to build value through values](https://www.soundstrue.com/store/conscious-business-4036.html)
+- [Managing Humans: Biting and Humorous Tales of a Software Engineering Manager](http://managinghumans.com/pitch.html)
+- [Powerful: building a culture of freedom and responsibility](http://pattymccord.com/book/)
 
 ## Functional Programming
 
