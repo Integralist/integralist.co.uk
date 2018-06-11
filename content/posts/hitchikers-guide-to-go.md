@@ -1985,6 +1985,117 @@ func main() {
 }
 ```
 
+> Note: don't use this ☝️ as it has timeout set to infinity by default
+
+Safer option is to create your own http.Client struct...
+
+```
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"net"
+	"net/http"
+	"os"
+	"sync"
+	"time"
+)
+
+func defaultClient(wg *sync.WaitGroup) {
+	// http.Get calls http.DefaultClient
+	// https://golang.org/src/net/http/client.go?s=12086:12134#L359
+	// https://golang.org/pkg/net/http/#Client
+	response, err := http.Get("https://www.integralist.co.uk/")
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+
+	defer response.Body.Close()
+
+	contents, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+
+	fmt.Println("\ndefaultClient...")
+	fmt.Println(response.Status)
+	fmt.Println(string(contents[0:10]))
+
+	wg.Done()
+}
+
+func customClient(wg *sync.WaitGroup) {
+	var netClient = &http.Client{
+		Timeout: time.Second * 10,
+	}
+	response, err := netClient.Get("https://www.integralist.co.uk/")
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+
+	defer response.Body.Close()
+
+	contents, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+
+	fmt.Println("\ncustomClient...")
+	fmt.Println(response.Status)
+	fmt.Println(string(contents[0:10]))
+
+	wg.Done()
+}
+
+func customTransport(wg *sync.WaitGroup) {
+	var netTransport = &http.Transport{
+		Dial: (&net.Dialer{
+			Timeout: 5 * time.Second,
+		}).Dial,
+		TLSHandshakeTimeout: 5 * time.Second,
+	}
+
+	var netClient = &http.Client{
+		Timeout:   time.Second * 10,
+		Transport: netTransport,
+	}
+
+	response, err := netClient.Get("https://www.integralist.co.uk/")
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+
+	defer response.Body.Close()
+
+	contents, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+
+	fmt.Println("\ncustomTransport...")
+	fmt.Println(response.Status)
+	fmt.Println(string(contents[0:10]))
+
+	wg.Done()
+}
+
+func main() {
+	var wg sync.WaitGroup
+	wg.Add(3)
+	go defaultClient(&wg)
+	go customClient(&wg)
+	go customTransport(&wg)
+	wg.Wait()
+}
+```
+
 <div id="28"></div>
 ## Custom HTTP Request Methods
 
