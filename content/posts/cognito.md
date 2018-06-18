@@ -194,9 +194,13 @@ It's worth noting the second half of the diagram (the section _after_ the lambda
 
 If the user has tried to authenticate using credentials that don't exist in the Cognito User Pool, then the "User Migration" lambda is triggered and once we authenticate the user within our legacy system (that is the call over to the "WebApp" in the diagram), then Cognito will create the user within its User Pool.
 
-Annoyingly we found that a social login (e.g. someone logs in using their Facebook or Google account instead of a traditional username/password), doesn't cause the 'User Migration' hook to be triggered. But we needed to process some logic when a social user attempts to sign-in and so the 'Post Authentication' hook allowed us to do that.
+Annoyingly we found that a social login (e.g. someone logs in using their Facebook or Google account instead of a traditional username/password), doesn't cause the 'User Migration' hook to be triggered. But we needed to process some logic when a social user attempts to sign-in and so the 'Post Confirmation' hook allowed us to do that.
 
 > Note: we'll explain this social login issue in more detail in the next section.
+
+But be careful and check the various lambda hooks for multiple scenarios, because they don't necessarily all work (i.e. trigger) when/how you think they do. 
+
+We originally were using 'post authentication' before moving to 'post confirmation'. This caused untold confusion because a change in our User Pool data meant our expectations of when the lambda should be triggered were challenged (meaning we were stumped for ages wondering why the lambda invocations and CloudWatch logs were all empty).
 
 ## Legacy System
 
