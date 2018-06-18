@@ -37,7 +37,7 @@ draft: false
 
 ## Introduction
 
-In this post I want to talk you through how we started to investigate how we might migrate a legacy authentication system over to a new provider (specifically AWS Cognito). The majority of the architecture and code discussed here is made-up, but there is still enough of a similarity to the actual system to hopefully be useful to others in a similar position.
+In this post I want to talk you through an investigation into how we might be able to migrate a legacy authentication system over to a new provider (specifically AWS Cognito). The majority of the architecture and code discussed here is made-up, but there is still enough of a similarity to the actual system to hopefully be useful to others in a similar position.
 
 My goal is to share with you the learning experiences I had and to help others understand the various moving pieces (and the various options) available to us in order to build this type of system, and how it might integrate with our existing legacy systems.
 
