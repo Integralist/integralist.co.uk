@@ -37,9 +37,11 @@ draft: false
 
 ## Introduction
 
-In this post I want to talk you through an investigation into how we might be able to migrate a legacy authentication system over to a new provider (specifically AWS Cognito). The majority of the architecture and code discussed here is made-up, but there is still enough of a similarity to the actual system to hopefully be useful to others in a similar position.
+In this post I want to talk you through an investigation I carried out, into how I might be able to migrate a legacy authentication system over to a new provider (specifically AWS Cognito). 
 
-My goal is to share with you the learning experiences I had and to help others understand the various moving pieces (and the various options) available to us in order to build this type of system, and how it might integrate with our existing legacy systems.
+The majority of the architecture (and code) discussed here is made-up, but there is still enough of a similarity to the actual system to hopefully be useful to others in a similar position.
+
+My goal is to share with you the learning experiences I had and to help others understand the various moving pieces (as well as the various options available to us) in order to build this type of system, and how it might integrate with our existing legacy systems.
 
 ### Sneak Peek
 
@@ -136,23 +138,23 @@ The reason we didn't discover that particular auth api request flow immediately 
 
 As it turns out, you _can_ set-up users so they can authenticate using a social provider, but you need to first configure a 'client application' in AWS. Once you have an application created you can configure various social providers via AWS' federated identity providers.
 
-> Note: if things don't work out using Cognito's hosted ui, then we might well move back to the server-side SDK's so we have more control over the UI aspect.
-
 ## Hosted UI
 
 The hosted ui option gives us all the interactions (along with a fully functioning ui) for free, this includes: sign-in, sign-up, forgotten username, forgotten password, social logins.
 
-The uri for the hosted ui looks something like:
-
-`https://your-organisation.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=<...>&redirect_uri=<...>&state=<...>`
-
-So option 3. is where we're at currently, and it works well so far, but it does have some caveats:
+Option 3. is what we opted for after playing around within options 1 and 2, and so far it's working well for us, but it does have some caveats:
 
 - Very limited controls over the ui (_very_ basic font colors and css).
 - Custom domains only work with TLS certificates via [ACM](https://aws.amazon.com/certificate-manager/).
 - Resetting password only accepts username, not an email.
 
 > Note: there are other issues I have with the hosted ui, but in a lot of cases it does the job well enough to put up with them.
+
+If you're wondering about not using a custom domain, then be aware that the hosted ui uri looks something like:
+
+`https://your-organisation.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=<...>&redirect_uri=<...>&state=<...>`
+
+> Note: if things don't work out using Cognito's hosted ui, then we might well move back to the server-side SDK's so we have more control over the UI aspect.
 
 ## Migrating Users with AWS Lambda
 
