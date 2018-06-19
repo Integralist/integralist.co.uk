@@ -23,6 +23,9 @@ draft: false
 - [Hosted UI](#hosted-ui)
 - [Migrating Users with AWS Lambda](#migrating-users-with-aws-lambda)
 - [Architecture](#architecture)
+- [Legacy System](#legacy-system)
+- [Example Python Lambda Migration Script](#example-python-lambda-migration-script)
+- [Example Python Lambda Social Script](#example-python-lambda-social-script)
 - [Authenticating Cognito Users](#authenticating-cognito-users)
 - [JWTs](#jwts)
 - [Transmitting the Tokens](#transmitting-the-tokens)
@@ -32,7 +35,6 @@ draft: false
 - [Example Cognito User Pool “Federation: Identity Providers”](#example-cognito-user-pool-federation-identity-providers)
 - [Example Facebook App Configuration](#example-facebook-app-configuration)
 - [Example Google App Configuration](#example-google-app-configuration)
-- [Example Python Lambda Migration Script](#example-python-lambda-migration-script)
 - [Conclusion](#conclusion)
 
 ## Introduction
@@ -192,15 +194,27 @@ Once the tokens are validated, the CMS will allow the user to view the relevant 
 
 It's worth noting the second half of the diagram (the section _after_ the lambda is triggered). What we have here are two separate lambda's, and which one is triggered depends on the scenario. 
 
-If the user has tried to authenticate using credentials that don't exist in the Cognito User Pool, then the "User Migration" lambda is triggered and once we authenticate the user within our legacy system (that is the call over to the "WebApp" in the diagram), then Cognito will create the user within its User Pool.
+If the user has tried to authenticate using username/password credentials that don't exist in the Cognito User Pool, then the "User Migration" lambda is triggered. In that lambda we attempt to authenticate the user within our legacy system (that is the call over to the "WebApp" in the diagram). 
 
-Annoyingly we found that a social login (e.g. someone logs in using their Facebook or Google account instead of a traditional username/password), doesn't cause the 'User Migration' hook to be triggered. But we needed to process some logic when a social user attempts to sign-in and so the 'Post Confirmation' hook allowed us to do that.
+If the authentication with the legacy system is successful, then we'll modify the user's User Pool record (which hasn't actually been created yet) to include auth related details we've pulled from their legacy account. We then return the 'event' object provided to Lambda, which let's Cognito know it can now create the user within its User Pool (returning `None` indicates an error occurred and the whole request flow fails).
 
-> Note: we'll explain this social login issue in more detail in the next section.
+> Note: with the 'user migration' for users from our legacy system over to Cognito, before we return the event in the lambda, we make sure to mark the new Cognito user as 'verified/confirmed' -- that way they don't need to enter a verification code that gets emailed or sent via SMS.
 
-But be careful and check the various lambda hooks for multiple scenarios, because they don't necessarily all work (i.e. trigger) when/how you think they do. 
+### Social Flow
 
-We originally were using 'post authentication' before moving to 'post confirmation'. This caused untold confusion because a change in our User Pool data meant our expectations of when the lambda should be triggered were challenged (meaning we were stumped for ages wondering why the lambda invocations and CloudWatch logs were all empty).
+Annoyingly we found that a social login (e.g. someone logs in using their Facebook or Google account instead of a traditional username/password), doesn't cause the 'User Migration' hook to be triggered. 
+
+This was an issue because we needed to process some logic when a social user attempts to sign-in (specifically, we needed to check if there was a legacy account with those social provider details associated with it) and so we _eventually_ discovered that the 'Post Confirmation' hook would fire at the right interval for us to do the processing we needed to.
+
+To clarify the 'eventually' comment above: we originally started using 'post authentication' for handling first time social logins (the hook sounded reasonable enough), but when we were testing this hook we already had the social account stored in our User Pool (this was from earlier testing, before we decided to do some 'post-login' processing). 
+
+The reason I mention this is because a week later we decided to clear out our User Pool and start testing our various scenarios again from scratch, and we noticed the 'post authentication' hook was no longer firing 🤔
+
+Turns out social accounts only trigger 'post migration' hooks when they already exist in the User Pool. In order to do the 'first time login' modification we were looking for, we needed the 'post confirmation' hook. 
+
+Using this hook wasn't _obvious_ to us because 'post confirmation' makes it sounds like an event that happens once a username/password user has entered their 'verification code' for the first time (and thus become marked as 'confirmed' within the User Pool). Well, turns out social provider logins are automatically considered _confirmed_ once they authenticate for the first time (hence why that event would trigger when we needed it to).
+
+> Tip: check the various lambda hooks for multiple scenarios, because they don't necessarily all trigger when/how you think they do. 
 
 ## Legacy System
 
@@ -217,6 +231,192 @@ We also do the _reverse_: storing the Cognito user id into our legacy system (i.
 What this means is that when we create the legacy user account, we make sure to add into a new column the Cognito user id. 
 
 Before we transition to the new Cognito system, we'll need to ensure that any areas of our legacy UI that allows a user to update their details (stuff that's related to authentication like their 'email') is also synced with their details stored within the Cognito User Pool.
+
+## Example Python Lambda Migration Script
+
+The following code is made up, but gives an idea of what the actual implementation might resemble for the 'user migration' lambda hook.
+
+But there is one aspect that's based off a real scenario, which is taking the returned authentication details from the legacy system `legacy_id` and storing that as a 'custom attribute' within Cognito's user pool for the user we were about to migrate.
+
+We do this so that the next time this user authenticates, our existing CMS code can be modified to lookup the user's data from Cognito. You might wonder why that's even necessary? Well for us we have mobile applications relying on our legacy authentication system and they won't be able to migrate to Cognito for a few months.
+
+Meaning: we have two authentication systems that need to stay functioning alongside each other for the foreseeable future. Your mileage may vary.
+
+> Note: our legacy system would first check for the cookie that potentially contains our authenticated user's tokens, and if that wasn't found it would look for a legacy session cookie instead (if _that_ didn't exist, then it would redirect to the Cognito hosted ui so the unauthenticated user could authenticate appropriately).
+
+```
+from botocore.vendored import requests
+
+
+def authn_legacy(event):
+    data = {'username': event['userName'],
+            'password': event['request']['password']}
+
+    uri = f'https://cms.example.com/api/login'
+
+    return requests.post(uri, data=data)
+
+
+def lambda_handler(event, context):
+    """
+    There are two states:
+
+    1. authentication (but before user created in cognito)
+    2. forgotten password (we don't cover that in this example code)
+
+    For authentication we log the user into the legacy authentication system 
+    and then extract their details, then modify the user account that is 
+    about to be created in cognito's user pool.
+    """
+
+    if event['triggerSource'] == "UserMigration_Authentication":
+        login_response = authn_legacy(event)
+
+        if login_response.status_code == 200:
+            d = login_response.json()
+
+            user_attr = {'username': d['username'],
+                         'name': d['display_name'],
+                         'email': d['email'],
+                         'email_verified': 'true',
+                         'custom:legacy_id': d['userid']}
+
+            event['response']['userAttributes'] = user_attr
+            event['response']['finalUserStatus'] = "CONFIRMED"
+            event['response']['messageAction'] = "SUPPRESS"
+
+            return event
+        else:
+            return None
+    elif event['triggerSource'] == "UserMigration_ForgotPassword":
+        # TODO: an exercise for the reader
+        return None
+    else:
+        return None
+```
+
+Something else of interest in this code is that when the lambda finishes executing, as long as the response isn't `None`, Cognito will create a new user. So we explicitly return the original `event` that was passed to the lambda.
+
+The event we return has a `response` setting where we can make modifications to the user account about to be created within Cognito.
+
+## Example Python Lambda Social Script
+
+Remember the purpose of this script is to create a new social user within our legacy datastore and to also ensure that the `legacy_uid` and Cognito user id are stored in both authentication datastores so we're able to cross reference users while we migrate more legacy systems over to Cognito.
+
+```
+import os
+import random
+import re
+import string
+import boto3
+
+from botocore.vendored import requests
+
+
+def social_account_lookup(provider, uid):
+    """See if the webapp has a user account with this social provider."""
+
+    url = f'https://cms.example.com/api/cognito_helper?provider={provider}&user_id={uid}'
+    response = requests.get(url)
+    return response.json()
+
+
+def generate_random_output():
+    return ''.join(random.sample(string.ascii_lowercase, 10))
+
+
+def create_legacy_user(provider_name, uid, display_name, email, username, rand_pass):
+    """Create new legacy user for the authenticated social user."""
+
+    params = f'?{provider_name}={uid}&name={display_name}&username={username}&email={email}&pw={rand_pass}'
+    url = f'https://cms.example.com/api/create_legacy_account{params}'
+
+    response = requests.get(url)
+    response_data = response.json()
+
+    if response_data['status'] == 'failed':
+        return None
+
+    return response_data['userid']
+
+
+def update_legacy_user(legacy_uid, cognito_id):
+    """Update webapp account so it has a cognito id associated with it."""
+
+    url = f'{https://cms.example.com/api/cognito_helper?cognito_id={cognito_id}&user_id={legacy_uid}'
+
+    response = requests.get(url)
+    response_data = response.json()
+
+    if response_data['success'] == 0:
+        return None
+
+
+def no_legacy_account(response):
+    return response['success'] == 0
+
+
+def modify_cognito_user(username, legacy_uid):
+    attributes = [{'Name': 'custom:legacy_uid', 'Value': legacy_uid}]
+
+    # credentials are dynamically pulled from IAM role
+    client = boto3.client('cognito-idp', **{'region_name': 'us-east-1'})
+
+    response = client.admin_update_user_attributes(**{'UserPoolId': '...',
+                                                      'UserAttributes': attributes,
+                                                      'Username': username})
+
+
+def post_authentication(event):
+    return event['triggerSource'] == 'PostAuthentication_Authentication'
+
+
+def external_provider(event):
+    return event['request']['userAttributes']['cognito:user_status'] == 'EXTERNAL_PROVIDER'
+
+
+def migrated(event):
+    """We know an account has been migrated if there is a legacy_uid in cognito."""
+    return event['request']['userAttributes'].get('custom:legacy_uid')
+
+
+def lambda_handler(event, context):
+    if post_authentication(event) and external_provider(event) and not migrated(event):
+        cognito_id = event['request']['userAttributes']['sub']
+        identities = event['request']['userAttributes']['identities']
+        provider = re.search('providerName":"(.+?)"', identities)
+        uid = re.search('userId":"(.+?)"', identities)
+
+        if provider and uid:
+            provider = provider.group(1)
+            uid = uid.group(1)
+
+            response = social_account_lookup(provider, uid)
+
+            if no_legacy_account(response):
+                display_name = event['request']['userAttributes']['name']
+                email = event['request']['userAttributes']['email']
+                username = event['userName']
+                rand_pass = generate_random_output()
+
+                provider_name = f'{provider.lower()}_uid'
+                legacy_uid = create_legacy_user(provider_name, uid, display_name, email, username, rand_pass)
+
+                if not legacy_uid:
+                    return None
+            else:
+                username = response['user']['username']
+                legacy_uid = response['user']['id']
+
+            modify_cognito_user(username, legacy_uid)
+            update_webapp_user(legacy_uid, cognito_id)
+    else:
+        user = event['request']['userAttributes']['name']
+        legacy_uid = event['request']['userAttributes']['custom:legacy_uid']
+        print(f"this user {user} already has a legacy_uid {legacy_uid} in their cognito account")
+
+    return event
+```
 
 ## Authenticating Cognito Users
 
@@ -564,192 +764,6 @@ https://console.developers.google.com/
 - **Authorized redirect URIs**:  
   `https://your-organisation.auth.us-east-1.amazoncognito.com/oauth2/idpresponse`  
   `https://auth-api.example.com/auth/signin/callback`
-
-## Example Python Lambda Migration Script
-
-The following code is made up, but gives an idea of what the actual implementation might resemble for the 'user migration' lambda hook.
-
-But there is one aspect that's based off a real scenario, which is taking the returned authentication details from the legacy system `legacy_id` and storing that as a 'custom attribute' within Cognito's user pool for the user we were about to migrate.
-
-We do this so that the next time this user authenticates, our existing CMS code can be modified to lookup the user's data from Cognito. You might wonder why that's even necessary? Well for us we have mobile applications relying on our legacy authentication system and they won't be able to migrate to Cognito for a few months.
-
-Meaning: we have two authentication systems that need to stay functioning alongside each other for the foreseeable future. Your mileage may vary.
-
-> Note: our legacy system would first check for the cookie that potentially contains our authenticated user's tokens, and if that wasn't found it would look for a legacy session cookie instead (if _that_ didn't exist, then it would redirect to the Cognito hosted ui so the unauthenticated user could authenticate appropriately).
-
-```
-from botocore.vendored import requests
-
-
-def authn_legacy(event):
-    data = {'username': event['userName'],
-            'password': event['request']['password']}
-
-    uri = f'https://cms.example.com/api/login'
-
-    return requests.post(uri, data=data)
-
-
-def lambda_handler(event, context):
-    """
-    There are two states:
-
-    1. authentication (but before user created in cognito)
-    2. forgotten password (we don't cover that in this example code)
-
-    For authentication we log the user into the legacy authentication system 
-    and then extract their details, then modify the user account that is 
-    about to be created in cognito's user pool.
-    """
-
-    if event['triggerSource'] == "UserMigration_Authentication":
-        login_response = authn_legacy(event)
-
-        if login_response.status_code == 200:
-            d = login_response.json()
-
-            user_attr = {'username': d['username'],
-                         'name': d['display_name'],
-                         'email': d['email'],
-                         'email_verified': 'true',
-                         'custom:legacy_id': d['userid']}
-
-            event['response']['userAttributes'] = user_attr
-            event['response']['finalUserStatus'] = "CONFIRMED"
-            event['response']['messageAction'] = "SUPPRESS"
-
-            return event
-        else:
-            return None
-    elif event['triggerSource'] == "UserMigration_ForgotPassword":
-        # TODO: an exercise for the reader
-        return None
-    else:
-        return None
-```
-
-Something else of interest in this code is that when the lambda finishes executing, as long as the response isn't `None`, Cognito will create a new user. So we explicitly return the original `event` that was passed to the lambda.
-
-The event we return has a `response` setting where we can make modifications to the user account about to be created within Cognito.
-
-## Example Python Lambda Social Script
-
-Remember the purpose of this script is to create a new social user within our legacy datastore and to also ensure that the `legacy_uid` and Cognito user id are stored in both authentication datastores so we're able to cross reference users while we migrate more legacy systems over to Cognito.
-
-```
-import os
-import random
-import re
-import string
-import boto3
-
-from botocore.vendored import requests
-
-
-def social_account_lookup(provider, uid):
-    """See if the webapp has a user account with this social provider."""
-
-    url = f'https://cms.example.com/api/cognito_helper?provider={provider}&user_id={uid}'
-    response = requests.get(url)
-    return response.json()
-
-
-def generate_random_output():
-    return ''.join(random.sample(string.ascii_lowercase, 10))
-
-
-def create_legacy_user(provider_name, uid, display_name, email, username, rand_pass):
-    """Create new legacy user for the authenticated social user."""
-
-    params = f'?{provider_name}={uid}&name={display_name}&username={username}&email={email}&pw={rand_pass}'
-    url = f'https://cms.example.com/api/create_legacy_account{params}'
-
-    response = requests.get(url)
-    response_data = response.json()
-
-    if response_data['status'] == 'failed':
-        return None
-
-    return response_data['userid']
-
-
-def update_legacy_user(legacy_uid, cognito_id):
-    """Update webapp account so it has a cognito id associated with it."""
-
-    url = f'{https://cms.example.com/api/cognito_helper?cognito_id={cognito_id}&user_id={legacy_uid}'
-
-    response = requests.get(url)
-    response_data = response.json()
-
-    if response_data['success'] == 0:
-        return None
-
-
-def no_legacy_account(response):
-    return response['success'] == 0
-
-
-def modify_cognito_user(username, legacy_uid):
-    attributes = [{'Name': 'custom:legacy_uid', 'Value': legacy_uid}]
-
-    # credentials are dynamically pulled from IAM role
-    client = boto3.client('cognito-idp', **{'region_name': 'us-east-1'})
-
-    response = client.admin_update_user_attributes(**{'UserPoolId': '...',
-                                                      'UserAttributes': attributes,
-                                                      'Username': username})
-
-
-def post_authentication(event):
-    return event['triggerSource'] == 'PostAuthentication_Authentication'
-
-
-def external_provider(event):
-    return event['request']['userAttributes']['cognito:user_status'] == 'EXTERNAL_PROVIDER'
-
-
-def migrated(event):
-    """We know an account has been migrated if there is a legacy_uid in cognito."""
-    return event['request']['userAttributes'].get('custom:legacy_uid')
-
-
-def lambda_handler(event, context):
-    if post_authentication(event) and external_provider(event) and not migrated(event):
-        cognito_id = event['request']['userAttributes']['sub']
-        identities = event['request']['userAttributes']['identities']
-        provider = re.search('providerName":"(.+?)"', identities)
-        uid = re.search('userId":"(.+?)"', identities)
-
-        if provider and uid:
-            provider = provider.group(1)
-            uid = uid.group(1)
-
-            response = social_account_lookup(provider, uid)
-
-            if no_legacy_account(response):
-                display_name = event['request']['userAttributes']['name']
-                email = event['request']['userAttributes']['email']
-                username = event['userName']
-                rand_pass = generate_random_output()
-
-                provider_name = f'{provider.lower()}_uid'
-                legacy_uid = create_legacy_user(provider_name, uid, display_name, email, username, rand_pass)
-
-                if not legacy_uid:
-                    return None
-            else:
-                username = response['user']['username']
-                legacy_uid = response['user']['id']
-
-            modify_cognito_user(username, legacy_uid)
-            update_webapp_user(legacy_uid, cognito_id)
-    else:
-        user = event['request']['userAttributes']['name']
-        legacy_uid = event['request']['userAttributes']['custom:legacy_uid']
-        print(f"this user {user} already has a legacy_uid {legacy_uid} in their cognito account")
-
-    return event
-```
 
 ## Conclusion
 
