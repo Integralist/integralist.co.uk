@@ -30,6 +30,7 @@ draft: false
 - [JWTs](#jwts)
 - [Transmitting the Tokens](#transmitting-the-tokens)
 - [Validating Authenticated Users](#validating-authenticated-users)
+- [Signing Out Authenticated Users](#signing-out-authenticated-users)
 - [AWS Resources](#aws-resources)
 - [Example Cognito App Settings](#example-cognito-app-settings)
 - [Example Cognito User Pool “Federation: Identity Providers”](#example-cognito-user-pool-federation-identity-providers)
@@ -627,6 +628,39 @@ self.write({'verified': True, 'user': payload})
 
 > Note: we would also update the cookie that holds the old JWT user pool tokens, in the case of the tokens being updated after verification initially failed due to expiry of the provided tokens (as long as the refresh token hadn't also expired).
 
+## Signing Out Authenticated Users
+
+To sign out a user, you have to call AWS' [logout](https://docs.aws.amazon.com/cognito/latest/developerguide/logout-endpoint.html) endpoint.
+
+Below is some example code to help clarify the request flow, but first let's take a look at the link you'll need to point users to AWS' logout endpoint (and which ultimately will then redirect the user back to your service):
+
+`https://your-organisation.auth.us-east-1.amazoncognito.com/logout?client_id={...}&logout_uri=https://auth-api.example.com/auth/signout`
+
+In the above endpoint we're specifying our API service as being the place to redirect a user, and this is so we can handle the resetting of our authentication cookie (remember: this was the cookie we assigned the user's User Pool tokens to):
+
+```
+class SignoutHandler(BaseHandler):
+    async def get(self):
+        redirect_host = 'https://cms.example.com'
+
+        cookie_name = 'usercookie'
+        cookie_value = ''
+        cookie_args = {'secure': True, 'httponly': True}
+
+        self.set_cookie(cookie_name,
+                        cookie_value,
+                        domain='example.com',
+                        expires_days=0,
+                        **cookie_args)
+
+        self.redirect(redirect_host, status=302)
+
+    def set_default_headers(self):
+        self.clear_header('Server')
+```
+
+> Note: we've hardcoded a redirect host in the above example, but if we were calling 'logout' for multiple service, then we'd likely revert to overloading the `state` param so we can support _dynamic_ redirects.
+
 ## AWS Resources
 
 OK, let's take a moment to consider some of the AWS resources that are needed for this set-up:
@@ -697,6 +731,9 @@ This isn't meant to be an exhaustive example, but it gives you an idea of some o
 
 - **Callback URL(s)**:  
   `https://auth-api.example.com/auth/signin/callback`
+
+- **Sign out URL(s)**:  
+  `https://auth-api.example.com/auth/signout`
 
 - **Allowed OAuth Flows**:  
   Authorization code grant  
