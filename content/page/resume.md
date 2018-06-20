@@ -206,13 +206,11 @@ I don't profess mastery, but I'm adept with most of the below, and I have an apt
 
 ## Talks
 
-- [Site Router](https://www.youtube.com/watch?v=md4de3RyN-8):  
-80 minute presentation on BuzzFeed HTTP routing service abstraction.  
+- [Site Router (Video)](https://www.youtube.com/watch?v=md4de3RyN-8): 80 minute presentation on BuzzFeed HTTP routing service abstraction.
 
-- [BBC Talks: Slides](https://slides.com/markmcdonnell/)
+- [BBC Talks (Slides)](https://slides.com/markmcdonnell/): various presentations I gave while at the BBC.
 
-- [Imager.js Presentation](https://speakerdeck.com/integralist/bbc-news-responsive-images):  
-Talk I gave at the Mozilla offices in Paris (which included speakers from: Google, Apple, Microsoft, Adobe, Opera, W3C and Akamai).
+- [Imager.js (Slides)](https://speakerdeck.com/integralist/bbc-news-responsive-images): Talk I gave at the Mozilla offices in Paris (which included speakers from: Google, Apple, Microsoft, Adobe, Opera, W3C and Akamai).
 
 ## Published
 
@@ -263,6 +261,7 @@ I'm a print published and self-published author; I'm also a tech reviewer and am
 
 The following links are to some of my more 'popular' articles. My main focus when writing is to take a complicated or confusing topic and attempt to distil it, in order for the subject to be more easily understood.
 
+- [Authentication with AWS Cognito](/posts/cognito/) (2018)
 - [Interview Topics](/posts/questions-when-interviewing/) (2018)
 - [Hashing, Encryption and Encoding](/posts/hashing-and-encryption/) (2018)
 - [Computers 101: terminals, kernels and shells](/posts/terminal-shell/) (2018)
@@ -293,6 +292,8 @@ The following links are to some of my more 'popular' articles. My main focus whe
 - [JavaScript 101](/posts/javascript-101/) (2012)
 
 ## Open-Source
+
+> Note: listed alphabetically
 
 - [BBC Alephant](https://github.com/BBC-News/alephant):  
 The Alephant framework is a collection of isolated Ruby gems, which interconnect to offer powerful message passing functionality built up around the "Broker" pattern.  

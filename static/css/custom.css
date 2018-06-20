@@ -100,3 +100,18 @@ body.night, .night button, .night input, .night select, .night textarea,
 input#search {
   width: 100%;
 }
+
+#key-achievements ~ ul > li {
+  border-bottom: 1px solid #ffcd00;
+  list-style: circle;
+  margin-bottom: 1em;
+  padding-bottom: 1em;
+}
+
+/* reset list stylings after 'resume' key achievements */
+#key-achievements ~ h2 ~ ul > li {
+  border: none;
+  list-style: disc;
+  margin: 0;
+  padding: 0;
+}
