@@ -149,7 +149,8 @@ Option 3. is what we opted for after playing around within options 1 and 2, and 
 
 - Very limited controls over the ui (_very_ basic font colors and css).
 - Custom domains only work with TLS certificates via [ACM](https://aws.amazon.com/certificate-manager/).
-- Resetting password only accepts username, not an email.
+- State parameter overloading
+- Can't access new signup passwords (necessary for us to continue supporting our legacy system)
 
 > Note: there are other issues I have with the hosted ui, but in a lot of cases it does the job well enough to put up with them.
 
