@@ -13,6 +13,29 @@ tags:
 draft: false
 ---
 
+- [Introduction](#introduction)
+- [What is Cognito?](#what-is-cognito)
+- [Authentication vs Authorization](#authentication-vs-authorization)
+- [User Pools vs Identity Pools](#user-pools-vs-identity-pools)
+- [Implementation Options](#implementation-options)
+    - [Client SDK](#client-sdk)
+    - [Server SDK](#server-sdk)
+    - [AWS Hosted UI](#aws-hosted-ui)
+- [Logic Processing with AWS Lambda](#logic-processing-with-aws-lambda)
+- [Beware the Lambdas](#beware-the-lambdas)
+- [Social Logins](#social-logins)
+    - [Overloading the State Parameter](#overloading-the-state-parameter)
+- [JWTs](#jwt)
+- [Which is the right solution?](#which-is-the-right-solution)
+- [User Pool Configuration](#user-pool-configuration)
+- [IAM User](#iam-user)
+- [Lambda IAM Role](#lambda-iam-role)
+- [Example Cognito App Settings](#example-cognito-app-settings)
+- [Example Cognito User Pool “Federation: Identity Providers”](#example-cognito-user-pool-federation-identity-providers)
+- [Example Facebook App Configuration](#example-facebook-app-configuration)
+- [Example Google App Configuration](#example-google-app-configuration)
+- [Conclusion](#conclusion)
+
 ## Introduction
 
 In this post I would like to introduce you to the [AWS Cognito](https://aws.amazon.com/cognito/) service, and to explain its various moving pieces and how they fit together.
