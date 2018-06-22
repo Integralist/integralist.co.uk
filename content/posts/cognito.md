@@ -262,7 +262,7 @@ As far as the User Pool is concerned you'll need a few things:
 
 - **IAM User**: some API calls require AWS credentials (access/secret key), so you'll need to create an IAM user and define the various Cognito APIs you want it to have access to.
 
-> † even if you opt for the 'hosted ui' solution, you'll still need an application client. This is because you'll configure which 'providers' you want to support for that application -- and this will affect what the hosted ui will display to your users.
+> † even if you opt for the 'hosted ui' solution, you'll still need an application client (for two reasons). Firstly you'll configure which 'providers' you want your client app to support, and this will affect what the hosted ui will display to your users. Secondly, the client app id is used as part of the hosted ui uri; meaning you can have _different_ hosted ui's (all configured slightly differently).
 
 ## IAM User
 
