@@ -138,7 +138,7 @@ But there are some caveats:
 
 There are other issues still that I have with the hosted ui, but in a lot of cases it does the job well enough to put up with them.
 
-The 'state' parameter overloading is an interesting issue and I'll come back to that later on when I discuss a little bit about logging in with social providers.
+The 'state' parameter overloading is an interesting issue and I'll come back to that later on when I discuss a little bit about sign-ins with social providers.
 
 ## Logic Processing with AWS Lambda
 
@@ -214,7 +214,7 @@ The values you can assign to `identity_provider` are:
 
 The `state` param is used for [CSRF](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)) protection, and is the only parameter that is persisted when the user is redirected to `redirect_uri`.
 
-A common problem for people using Cognito is that they need more than one redirect. In my case (see the earlier 'hosted ui' architecture diagram) I need to redirect the logged in user to an API service so we can handle the exchanging of the AWS 'code' for the Cognito User Pool tokens before needing to then redirect the user back to our actual origin service.
+A common problem for people using Cognito is that they need more than one redirect. In my case (see the earlier 'hosted ui' architecture diagram) I need to redirect the signed-in user to an API service so we can handle the exchanging of the AWS 'code' for the Cognito User Pool tokens before needing to then redirect the user back to our actual origin service.
 
 The only way we can do this is to overload the `state` param so it has a value like:
 
@@ -238,7 +238,7 @@ The ID token provides details about the user, and the access token indicates the
 
 Both the ID token and access token will expire after one hour. To use them after that you'll need the refresh token to refresh the access/id tokens for another hour. The refresh token expires after 30 days.
 
-We use the ID token for verifying the user is authenticated (we do this by passing the token to an internal service that verifies the token hasn't been manipulated by checking it against the AWS [JWK](https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html#amazon-cognito-identity-user-pools-using-id-and-access-tokens-in-web-api) that cryptographically signed the token.
+We use the ID token for verifying the user is authenticated, and we do this by passing the token to an internal service that verifies the token hasn't been manipulated by checking it against the AWS [JWK](https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html#amazon-cognito-identity-user-pools-using-id-and-access-tokens-in-web-api) that cryptographically signed the token.
 
 The JWK is a set of keys that are the public equivalent of the private keys used by AWS to digitally sign the tokens. We acquire these via a standard format endpoint:
 
