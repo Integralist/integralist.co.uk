@@ -26,6 +26,7 @@ draft: false
 - [Social Logins](#social-logins)
     - [Overloading the State Parameter](#overloading-the-state-parameter)
 - [JWTs](#jwt)
+- [API Limits](#api-limits)
 - [Which is the right solution?](#which-is-the-right-solution)
 - [User Pool Configuration](#user-pool-configuration)
 - [IAM User](#iam-user)
@@ -243,6 +244,12 @@ We use the ID token for verifying the user is authenticated, and we do this by p
 The JWK is a set of keys that are the public equivalent of the private keys used by AWS to digitally sign the tokens. We acquire these via a standard format endpoint:
 
 `https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json.`
+
+## API Limits
+
+One issue we stumbled across recently was the API limits, which meant we couldn't make any further API requests (and for an indeterminate amount of time) 🤔
+
+Seems there is a [Cognito API limits](https://docs.aws.amazon.com/cognito/latest/developerguide/limits.html) reference page, but it's still unclear how long you have to wait before you can start making requests again.
 
 ## Which is the right solution?
 
