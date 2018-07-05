@@ -25,7 +25,7 @@ draft: false
 - [Beware the Lambdas](#beware-the-lambdas)
 - [Social Logins](#social-logins)
     - [Overloading the State Parameter](#overloading-the-state-parameter)
-- [JWTs](#jwt)
+- [JWTs](#jwts)
 - [API Limits](#api-limits)
 - [Which is the right solution?](#which-is-the-right-solution)
 - [User Pool Configuration](#user-pool-configuration)
