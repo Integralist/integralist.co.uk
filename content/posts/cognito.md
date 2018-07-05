@@ -245,6 +245,8 @@ The JWK is a set of keys that are the public equivalent of the private keys used
 
 `https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json.`
 
+> Note: the JWK's are rotated every 24hrs (approx), and so you need to ensure (if you're caching the response) your code gets a fresh copy of the JWK. You can check this by inspecting the `Cache-Control` header set on the JWK response.
+
 ## API Limits
 
 One issue we stumbled across recently was the API limits, which meant we couldn't make any further API requests (and for an indeterminate amount of time) 🤔
