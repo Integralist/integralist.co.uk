@@ -35,7 +35,7 @@ Below are some of the areas we'll be focusing in on...
 <div id="1"></div>
 ## Terminology
 
-There is a lot of confusion around the difference between certain terms such as "observability", "monitoring" and "instrumentation". Let's start with defining what each of these mean...
+There is a lot of confusion around the difference between certain terms such as "observability", "monitoring", "instrumentation" and "telemetry". Let's start with defining what each of these mean...
 
 > <u>**Observability**</u> is a measure of how well internal states of a system can be inferred from knowledge of its external outputs – Wikipedia
 
@@ -48,6 +48,10 @@ In that context, "monitoring" is the word you use when talking about tools for v
 > <u>**Instrumentation**</u> refers to an ability to monitor or measure the level of a product's performance, to diagnose errors and to write trace information – Wikipedia
 
 In that context, "instrumentation" is the word you use when talking about how you're recording data to be viewed and monitored.
+
+> <u>**Telemetry**</u> is the process of gathering remote information that is collected by instrumentation – MSDN
+
+In that context, "telemetry" is the word you use when talking about the mechanisms for _acquiring_ the data that has been _gathered_ by your instrumentation (e.g. tools like [FluentD](https://www.fluentd.org/) or [Syslog](https://en.wikipedia.org/wiki/Syslog)).
 
 <div id="2"></div>
 ## Understand the different types of monitoring
