@@ -29,6 +29,7 @@ draft: false
 - [JWTs](#jwts)
 - [API Limits](#api-limits)
 - [Which is the right solution?](#which-is-the-right-solution)
+- [Updated Architecture](#updated-architecture)
 - [User Pool Configuration](#user-pool-configuration)
 - [IAM User](#iam-user)
 - [Lambda IAM Role](#lambda-iam-role)
@@ -271,6 +272,18 @@ Seems there is a [Cognito API limits](https://docs.aws.amazon.com/cognito/latest
 The answer: it depends.
 
 For me the server-side solution made the most sense, and although difficult in the beginning (primarily due to documentation and general mis-understandings about the difference between User Pools and Identity Pools) we found it worked the best for our requirements, and gave us the most flexibility.
+
+## Updated Architecture
+
+If you're interested the updated architecture looked something like this...
+
+<a href="../../images/cognito-high-level-new-arch.png">
+  <img src="../../images/cognito-high-level-new-arch.png">
+</a>
+
+None of the listed services are public, they're all internal. The "API Gateway" is an internal tool that allows upstreams (such as the `buzzfeed_auth_api` to control concurrency and rate limiting) of downstream consumers (such as `buzzfeed_auth_ui` and `user_settings`).
+
+The reason we migrated certain 'user settings' functionality out of our monolithic webapp and not other user features is because we only wanted to move behaviours that interacted with fields that needed sync'ing between Cognito and our legacy datastore. As times goes on, we'll start to migrate more and more functionality out into separate services.
 
 ## User Pool Configuration
 
