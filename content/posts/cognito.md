@@ -25,6 +25,7 @@ draft: false
 - [Beware the Lambdas](#beware-the-lambdas)
 - [Social Logins](#social-logins)
     - [Overloading the State Parameter](#overloading-the-state-parameter)
+    - [Scope](#scope)
 - [JWTs](#jwts)
 - [API Limits](#api-limits)
 - [Which is the right solution?](#which-is-the-right-solution)
@@ -225,6 +226,18 @@ The value `123` is the nonce (for CSRF) and the `_` gives us a way to split the 
 
 > Note: it's recommended you do validation on that input (e.g. a whitelist of accepted URIs) so hackers can't manipulate the endpoint a user is sent to once they've authenticated.
 
+### Scope
+
+One thing I stumbled across, and which took a while to figure out, was when I tried to call the [GlobalSignOut](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_GlobalSignOut.html) API operation.
+
+It worked fine for users authenticated against the Cognito User Pool, but not for users authenticated via their social provider.
+
+Turns out I needed to enable the right scope within the Cognito User Pool UI console (within "App Integration -> App Client Settings", and under "Allowed OAuth Scopes"): `aws.cognito.signin.user.admin` needed to be ticked.
+
+But also, when making the request to the Auth API endpoint (e.g. `/oauth2/authorize`), I needed to append a `scope` query parameter: `&scope=scope=openid+aws.cognito.signin.user.admin`.
+
+> See [the API docs](https://docs.aws.amazon.com/cognito/latest/developerguide/authorization-endpoint.html) and the [UI docs](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-app-idp-settings.html) for more information on the reasoning.
+
 ## JWTs
 
 When you exchange the cognito 'code' for a user pool 'token', you'll actually be returned _three_ tokens:
@@ -330,10 +343,10 @@ It simply sets up CloudWatch logs access, and allows us (as an 'admin') to updat
 This isn't meant to be an exhaustive example, but it gives you an idea of some of the configuration you'll need.
 
 - **Callback URL(s)**:  
-  `https://auth-api.example.com/auth/signin/callback`
+  https://auth-api.example.com/auth/signin/callback
 
 - **Sign out URL(s)**:  
-  `https://auth-api.example.com/auth/signout`
+  https://auth-api.example.com/auth/signout
 
 - **Allowed OAuth Flows**:  
   Authorization code grant  
@@ -342,7 +355,8 @@ This isn't meant to be an exhaustive example, but it gives you an idea of some o
 - **Allowed OAuth Scopes**:  
   email  
   openid  
-  profile
+  profile  
+  aws.cognito.signin.user.admin
 
 ## Example Cognito User Pool "Federation: Identity Providers"
 
@@ -359,13 +373,13 @@ For each provider there is a "Authorize Scope" section.
 https://developers.facebook.com/apps
 
 - **App Domains**:  
-  `https://your-organisation.auth.us-east-1.amazoncognito.com`
+  https://your-organisation.auth.us-east-1.amazoncognito.com
 
 - **Privacy Policy URL**:  
-  `https://www.example.com/about/privacy`
+  https://www.example.com/about/privacy
 
 - **Site URL**:  
-  `https://your-organisation.auth.us-east-1.amazoncognito.com/oauth2/idpresponse`
+  https://your-organisation.auth.us-east-1.amazoncognito.com/oauth2/idpresponse
 
 ### Product Added: "Facebook Login"
 
@@ -379,8 +393,8 @@ https://developers.facebook.com/apps
   Yes
 
 - **Valid OAuth Redirect URIs**:  
-  `https://your-organisation.auth.us-east-1.amazoncognito.com/oauth2/idpresponse`  
-  `https://auth-api.example.com/auth/signin/callback`
+  https://your-organisation.auth.us-east-1.amazoncognito.com/oauth2/idpresponse  
+  https://auth-api.example.com/auth/signin/callback
 
 ## Example Google App Configuration
 
@@ -396,11 +410,11 @@ https://console.developers.google.com/
   Web application
 
 - **Authorized JavaScript origins**:  
-  `https://your-organisation.auth.us-east-1.amazoncognito.com`
+  https://your-organisation.auth.us-east-1.amazoncognito.com
 
 - **Authorized redirect URIs**:  
-  `https://your-organisation.auth.us-east-1.amazoncognito.com/oauth2/idpresponse`  
-  `https://auth-api.example.com/auth/signin/callback`
+  https://your-organisation.auth.us-east-1.amazoncognito.com/oauth2/idpresponse  
+  https://auth-api.example.com/auth/signin/callback
 
 ## Conclusion
 
