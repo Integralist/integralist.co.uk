@@ -13,15 +13,22 @@ draft: false
 ---
 
 - [Kernel](#1)
+- [Program](#1.5)
+- [Executables](#5)
 - [Terminal](#2)
 - [Shell](#3)
 - [Shell Builtins](#4)
-- [Executables](#5)
 - [Documentation](#6)
 - [Explicit Requests](#6.1)
 - [Locating programs](#7)
 - [Hashed Types](#8)
 - [List of all builtins vs executables](#9)
+
+Before we get started, here's a diagram to give you an overview of what we will be covering in this post:
+
+<a href="../../images/terminals-kernals-shells.png">
+  <img src="../../images/terminals-kernals-shells.png">
+</a>
 
 <div id="1"></div>
 ## Kernel
@@ -34,7 +41,37 @@ The kernel has no user interface.
 
 To interact with the kernel you use an intermediary "program".
 
-A "program" is a structured collection of instructions (machine code) that a computer can execute.
+<div id="1.5"></div>
+## Program
+
+A "[program](https://simple.wikipedia.org/wiki/Computer_program)" is a structured collection of instructions (machine code) that a computer can execute.
+
+Your computer has many programs. One such example would be the 'terminal emulator' program.
+
+> Note: see next section for explanation of what a "terminal" is.
+
+Depending on the programming language used to create the program, either the program is _compiled_ down into binary so it can be understood by the computer, or it'll be _interpreted_ by another program that then generates machine code out of the human readable program.
+
+<div id="5"></div>
+## Executables
+
+Executables (or 'executable binaries') are programs.
+
+More specifically, an 'executable' is a file that _contains_ a program.
+
+> Note: these are also often referred to as just 'binaries'.
+
+Executables are generally the _result_ of a program being turned into something that can be 'executed' by the computer.
+
+Executables can be found in multiple locations, e.g. look at the `$PATH` environment variable in a terminal.
+
+```
+$ echo $PATH
+
+/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+```
+
+> Note: separate the output by `:` and you see there are six directories
 
 <div id="2"></div>
 ## Terminal
@@ -51,9 +88,7 @@ The modern equivalent of a terminal is known as a 'terminal emulator'.
 
 Terminal emulators ironically (or confusingly) are part of the computer they would have previously been plugged into separately.
 
-If don't want to use a GUI (graphical user interface) to interact with your computer, you can use a terminal emulator.
-
-In case it wasn't clear: a terminal emulator is also a "program".
+If you don't want to use a GUI (graphical user interface) to interact with your computer, you can use a terminal emulator.
 
 <div id="3"></div>
 ## Shell
@@ -86,21 +121,6 @@ A builtin command can affect the internal state of the shell.
 This is why a command such as `cd` _must_ be part of the shell (i.e. a builtin), because an external program can't change the current directory of the shell. 
 
 Other commands, like `echo`, might be (and are in this case) built into the shell for the sake of performance (it's quicker to call the builtin `echo` than it is to load and manage the external executable `echo`).
-
-<div id="5"></div>
-## Executables
-
-Executables are programs.
-
-Executables can be found in multiple locations, e.g. look at the `$PATH` environment variable in a terminal.
-
-```
-$ echo $PATH
-
-/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-```
-
-> Note: separate the output by `:` and you see there are six directories
 
 <div id="6"></div>
 ## Documentation
