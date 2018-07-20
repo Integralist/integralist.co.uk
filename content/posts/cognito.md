@@ -381,6 +381,18 @@ For each provider there is a "Authorize Scope" section.
 - **Google**:  
   profile email openid
 
+### Facebook Attribute Mappings
+
+- fb: `id` --> user_pool: `Username`
+- fb: `email` --> user_pool: `Email`
+- fb: `name` --> user_pool: `Name`
+
+### Google Attribute Mappings
+
+- google: `email` --> user_pool: `Email`
+- google: `name` --> user_pool: `Name`
+- google: `sub` --> user_pool: `Username`
+
 ## Example Facebook App Configuration
 
 https://developers.facebook.com/apps
