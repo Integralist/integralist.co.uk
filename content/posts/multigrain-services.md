@@ -43,11 +43,11 @@ Let's breakdown these concepts along with their old/new terminology:
 
 ## Real micro services?
 
-Martin Fowler famously defined microservices has having a very specific design application and that most "micro services" aren't conforming to that. Specifically he says that they should:
+Martin Fowler famously defined microservices as having a very specific design application and that most "micro services" aren't conforming to that. Specifically he says that they should:
 
 - Have a single responsibility
 - Be loosely coupled
-- Be independently deployable and scalable executable
+- Be independently deployable and scalable
 
 But according to Ross Garrett (VP of Marketing Cloud Elements): "an HTTP-build service has to know more about what’s going on around it in order to communicate".
 
