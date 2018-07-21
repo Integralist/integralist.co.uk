@@ -12,6 +12,7 @@ draft: false
 - [Introduction](#1)
 - [Private Repo Access](#2)
 - [Build and Compilation](#3)
+- [Build Time Dynamic Variables](#3.1)
 - [Dependency Information](#4)
 - [Dependency Management](#5)
 - [Documentation](#6)
@@ -154,6 +155,39 @@ This will generate three files:
 Use the `-a` flag when running `go build`.
 
 In short, if you dont' use `go build -a -v .` then Go won't know if any packages are missing (you can find the gory details [here](https://medium.com/@felixge/why-you-should-use-go-build-a-or-gb-c469157d5c1b#.jf5orcwrj))
+
+<div id="3.1"></div>
+## Build Time Dynamic Variables
+
+Imagine you have a global variable called `version` in your `main` package and you want to update that value at build time:
+
+```
+go build -ldflags "-X main.version=foobar"
+```
+
+A more realistic example would be to use some form of revision number of commit hash:
+
+```
+go build -ldflags "-X main.version=$(git rev-parse HEAD)"
+```
+
+Another approach would be to have separate files for different 'environments' (all under the `main` package). You would then use a code comment to indicate what the environment was, and at build time you would tell the compiler which version of the file to compile.
+
+```
+// +build prod
+
+package main
+
+func init() {
+    version = 123
+}
+```
+
+You would compile the above `version` variable using:
+
+```
+go build -tags prod
+```
 
 <div id="4"></div>
 ## Dependency Information
