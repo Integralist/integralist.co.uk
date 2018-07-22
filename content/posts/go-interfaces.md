@@ -11,6 +11,16 @@ tags:
 draft: false
 ---
 
+- [Interfaces in Go](#interfaces-in-go)
+- [Keep Interfaces Small](#keep-interfaces-small)
+- [Standard Library Interfaces](#standard-library-interfaces)
+- [Tight Coupling](#tight-coupling)
+- [Dependency Injection](#dependency-injection)
+- [Refactoring Considerations](#refactoring-considerations)
+- [Testing](#testing)
+- [More flexible solutions?](#more-flexible-solutions)
+- [Conclusion](#conclusion)
+
 This post is going to explain the importance of interfaces, and the concept of programming to abstractions (using the [Go](https://golang.org/) programming language), by way of a simple example. 
 
 While treading what might seem like familiar ground to some readers, this is a fundamental skill to understand because it enables you to design more flexible and maintable services. 
@@ -248,7 +258,7 @@ How far you take your interface design is up to you. For me, I don't necessarily
 
 Meaning that this refactor could be considered 'good enough' for our use cases. Your values and standards may differ, and so you need to consider your options for how you might what to design this solution in such a way that it would allow you to not be reliant at all on HTTP as the transport mechanism.
 
-> Note: we'll revisit this code later and consider other options for completely removing any form of coupling.
+> Note: we'll revisit this code later and consider another refactor that will help clean up this first pass of code decoupling.
 
 But first, let's look at how we might want to test this code.
 
