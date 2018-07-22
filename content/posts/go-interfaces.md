@@ -96,6 +96,8 @@ func main() {
 
 We can see our `process` function accepts an integer, which is interpolated into the URL that is requested. We then use the `http.Get` function from the [net/http](https://golang.org/pkg/net/http/) package to request the URL.
 
+The function then stringify's the response body and returns it. This is sufficient for a basic example, but in the real world this function would likely do lots more processing to the response data.
+
 Already in this code there are lots of interfaces being utilised, which may not be immediately obvious. Let's break down the code and see what interfaces there are.
 
 The `http.Get` function returns a pointer to a `http.Response` struct, and from within that struct we extract the `Body` field and pass it to `ioutil.ReadAll`. 
@@ -149,7 +151,7 @@ In the case of our `process` function, it needs to be able to acquire data from 
 
 The _how_ is not the responsibility of the `process` function, especially if we decide later on that we want to change the implementation from HTTP to GRPC or some other data source.
 
-Meaning, we need to provide that functionality to the `process` function. Let's see what this might look like in practice:
+Meaning, we need to provide that functionality to the `process` function. Let's see what this might look like in practice (this is just a first iteration and so is actually not a great solution, but is _a_ solution):
 
 ```
 package main
@@ -325,4 +327,92 @@ Our test can now call the `process` function and process the mocked dependency a
 
 ## More flexible solutions?
 
-I'll revisit this in a follow-up post. For now, let me know your thoughts on twitter.
+OK, so we've already explained why this implementation might not be the best we could do. Let's now consider an alternative implementation:
+
+```
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"net/http"
+)
+
+type dataSource interface {
+	Get(url string) ([]byte, error)
+}
+
+type httpbin struct{}
+
+func (l *httpbin) Get(url string) ([]byte, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Printf("url get error: %s\n", err)
+		return []byte{}, err
+	}
+
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Printf("body read error: %s\n", err)
+		return []byte{}, err
+	}
+
+	return body, nil
+}
+
+func process(n int, ds dataSource) (string, error) {
+	url := fmt.Sprintf("http://httpbin.org/links/%d/0", n)
+
+	resp, err := ds.Get(url)
+	if err != nil {
+		fmt.Printf("data source get error: %s\n", err)
+		return "", err
+	}
+
+	return string(resp), nil
+}
+
+func main() {
+	data, err := process(5, &httpbin{})
+	if err != nil {
+		fmt.Printf("\ndata processing error: %s\n", err)
+		return
+	}
+	fmt.Printf("\nSuccess: %v\n", data)
+}
+```
+
+All we've really done here is move more of the logic related to HTTP up into the `httpbin.Get` implementation of the `dataSource` interface. We've also changed the response type from `(*http.Response, error)` to `([]byte, error)` to account for these movements.
+
+Now the `process` function has even _less_ responsibility as far as acquiring data is concerned. This also means our test suite benefits by having a much simpler implementation:
+
+```
+package main
+
+import "testing"
+
+type fakeHTTPBin struct{}
+
+func (l *fakeHTTPBin) Get(url string) ([]byte, error) {
+	return []byte("Hello World"), nil
+}
+
+func TestBasics(t *testing.T) {
+	expect := "Hello World"
+	actual, _ := process(5, &fakeHTTPBin{})
+
+	if actual != expect {
+		t.Errorf("expected %s, actual %s", expect, actual)
+	}
+}
+```
+
+Now our `fakeHTTPBin.Get` only has to return a byte array.
+
+## Conclusion
+
+Is there more we can do to improve this code's design? Sure. But we'll leave a new refactor iteration to another post. 
+
+Hopefully this has given you a feeling for how interfaces are used in the Go standard library and how you might utilise custom interfaces yourself.
