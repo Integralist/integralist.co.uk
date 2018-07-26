@@ -16,7 +16,7 @@ draft: false
 - [Example Golang Proxy Code](#3)
 - [Demonstration](#4)
 - [Explanation](#5)
-- [More Examples](#6)
+- [NGINX-Lite (not-really)](#6)
 - [Conclusion](#7)
 
 <div id="1"></div>
@@ -272,7 +272,7 @@ logger.Fatal(http.ListenAndServe(":9001", router))
 ```
 
 <div id="6"></div>
-## More Examples
+## NGINX-Lite (not-really)
 
 Below is an example that demonstrates using [httpbin](https://httpbin.org/) as our origin.
 
@@ -315,11 +315,14 @@ Now let's elaborate on this example a little bit and ensure that our reverse pro
 
 We also use `gorilla/mux` as it supports utilising regular expression path matching (we could do this ourselves, but using a library in this case helps to keep the code we have to write down).
 
+One last thing you'll notice is that we're using a configuration object that allows us to configure _override_ behaviour. For example, if our request includes a HTTP header of `X-BF-Testing` and its value is `integralist`, then we'll proxy the request to a different endpoint.
+
+You can do more complex things if necessary, but this gives you a good idea of how to replicate something like NGINX with very little code (obviously to replicate something like NGINX is _waaay_ beyond the scope of this post) 😉
+
 ```
 package main
 
 import (
-	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -329,9 +332,40 @@ import (
 	"github.com/gorilla/mux"
 )
 
+type override struct {
+	Header string
+	Match  string
+	Host   string
+	Path   string
+}
+
 type config struct {
-	Path string
-	Host string
+	Path     string
+	Host     string
+	Override override
+}
+
+func generateProxy(conf config) http.Handler {
+	proxy := &httputil.ReverseProxy{Director: func(req *http.Request) {
+		originHost := conf.Host
+		req.Header.Add("X-Forwarded-Host", req.Host)
+		req.Header.Add("X-Origin-Host", originHost)
+		req.Host = originHost
+		req.URL.Host = originHost
+		req.URL.Scheme = "https"
+
+		if conf.Override.Header != "" && conf.Override.Match != "" {
+			if req.Header.Get(conf.Override.Header) == conf.Override.Match {
+				req.URL.Path = conf.Override.Path
+			}
+		}
+	}, Transport: &http.Transport{
+		Dial: (&net.Dialer{
+			Timeout: 5 * time.Second,
+		}).Dial,
+	}}
+
+	return proxy
 }
 
 func main() {
@@ -345,25 +379,16 @@ func main() {
 		config{
 			Path: "/anything/foobar",
 			Host: "httpbin.org",
+			Override: override{
+				Header: "X-BF-Testing",
+				Match:  "integralist",
+				Path:   "/anything/newthing",
+			},
 		},
 	}
 
 	for _, conf := range configuration {
-		proxy := &httputil.ReverseProxy{Director: func(req *http.Request) {
-			originHost := conf.Host
-
-			req.Header.Add("X-Forwarded-Host", req.Host)
-			req.Header.Add("X-Origin-Host", originHost)
-			req.Host = originHost
-			req.URL.Scheme = "https"
-			req.URL.Host = originHost
-
-			fmt.Printf("final request\n\n %+v \n\n", req)
-		}, Transport: &http.Transport{
-			Dial: (&net.Dialer{
-				Timeout: 5 * time.Second,
-			}).Dial,
-		}}
+		proxy := generateProxy(conf)
 
 		r.HandleFunc(conf.Path, func(w http.ResponseWriter, r *http.Request) {
 			proxy.ServeHTTP(w, r)
