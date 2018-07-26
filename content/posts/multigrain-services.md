@@ -5,6 +5,10 @@ categories:
   - "design"
 tags:
   - "architecture"
+  - "macro"
+  - "micro"
+  - "mini"
+  - "nano"
   - "services"
   - "system"
 draft: false
@@ -23,7 +27,9 @@ Below is an image that visualises the concept, and makes understanding these var
 
 ## A rose by any other name
 
-To me "mini services" isn't anything new, nor do I think it necessarily needs a new term to be applied to it. For me "mini services" are effectively just [SOA](https://en.wikipedia.org/wiki/Service-oriented_architecture) (Service Oriented Architecture).
+To me "mini services" isn't anything new, nor do I think it necessarily needs a new term to be applied to it. For me "mini services" are effectively just [SOA](https://en.wikipedia.org/wiki/Service-oriented_architecture) (Service Oriented Architecture), but done right.
+
+People complain about SOA and say it has lots of pain points that make it unusable. I disagree. From what I've read it simply comes down to designing your SOA correctly so that it has proper fault tolerance and resiliency. Not just throwing together some code, seeing certain dependencies break and then crying that SOA is rubbish 🤦‍♂️
 
 Although maybe a new services lexicon † _is_ useful, at least for giving a consistent and modern terminology to these concepts we collectively understand.
 
@@ -38,6 +44,8 @@ Let's breakdown these concepts along with their old/new terminology:
 - **Mini Service** (SOA): an evolution of the monolith where domain 'boundaries' were more clearly defined and made into _separate_ services and data stores. Although these services would still handle multiple responsibilities, those responsibilties were at least _related_.
 
 - **Micro Service**: we breakdown the domain boundaries even further so that services/data stores have very narrow and specific responsibilties. We've moved to 'feature driven' services.
+
+- **Nano Service**: we go to the extremes of boundary definitions and are working at the 'component' level (BBC explain their approach to this [here](https://medium.com/bbc-design-engineering/powering-bbc-online-with-nanoservices-727840ba015b)).
 
 > Micro services are themselves a new'ish concept at ~7 years of age (at the time of writing). The term was first used in 2011.
 
