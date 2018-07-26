@@ -16,7 +16,8 @@ draft: false
 - [Example Golang Proxy Code](#3)
 - [Demonstration](#4)
 - [Explanation](#5)
-- [Conclusion](#6)
+- [More Examples](#6)
+- [Conclusion](#7)
 
 <div id="1"></div>
 ## Introduction
@@ -271,6 +272,117 @@ logger.Fatal(http.ListenAndServe(":9001", router))
 ```
 
 <div id="6"></div>
+## More Examples
+
+Below is an example that demonstrates using [httpbin](https://httpbin.org/) as our origin.
+
+Specifically we use its `/anything` endpoint, which allows you to provide any value as the final path segment. So for example, `/anything/foo` or `/anything/beep`, both work with the `httpbin.org` service.
+
+```
+package main
+
+import (
+	"fmt"
+	"log"
+	"net/http"
+	"net/http/httputil"
+)
+
+func main() {
+	proxy := &httputil.ReverseProxy{Director: func(req *http.Request) {
+		originHost := "httpbin.org"
+		originPathPrefix := "/anything"
+
+		req.Header.Add("X-Forwarded-Host", req.Host)
+		req.Header.Add("X-Origin-Host", originHost)
+		req.Host = originHost
+		req.URL.Scheme = "https"
+		req.URL.Host = originHost
+		req.URL.Path = originPathPrefix + req.URL.Path
+
+		fmt.Printf("final request\n\n %+v \n\n", req)
+	}}
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		proxy.ServeHTTP(w, r)
+	})
+
+	log.Fatal(http.ListenAndServe(":9001", nil))
+}
+```
+
+Now let's elaborate on this example a little bit and ensure that our reverse proxy has a client timeout specified (see [this article](https://medium.com/@nate510/don-t-use-go-s-default-http-client-4804cb19f779) for details as to why you would want to do this). 
+
+We also use `gorilla/mux` as it supports utilising regular expression path matching (we could do this ourselves, but using a library in this case helps to keep the code we have to write down).
+
+> Note: you would likely abstract the multiple reverse proxy instances away under a factory function to simplify the code.
+
+```
+package main
+
+import (
+	"fmt"
+	"log"
+	"net"
+	"net/http"
+	"net/http/httputil"
+	"time"
+
+	"github.com/gorilla/mux"
+)
+
+func yourHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Gorilla!\n"))
+}
+
+func main() {
+	originProxy1 := &httputil.ReverseProxy{Director: func(req *http.Request) {
+		originHost := "httpbin.org"
+
+		req.Header.Add("X-Forwarded-Host", req.Host)
+		req.Header.Add("X-Origin-Host", originHost)
+		req.Host = originHost
+		req.URL.Scheme = "https"
+		req.URL.Host = originHost
+
+		fmt.Printf("final request\n\n %+v \n\n", req)
+	}, Transport: &http.Transport{
+		Dial: (&net.Dialer{
+			Timeout: 5 * time.Second,
+		}).Dial,
+	}}
+
+	originProxy2 := &httputil.ReverseProxy{Director: func(req *http.Request) {
+		originHost := "httpbin.org"
+
+		req.Header.Add("X-Forwarded-Host", req.Host)
+		req.Header.Add("X-Origin-Host", originHost)
+		req.Host = originHost
+		req.URL.Scheme = "https"
+		req.URL.Host = originHost
+
+		fmt.Printf("final request\n\n %+v \n\n", req)
+	}, Transport: &http.Transport{
+		Dial: (&net.Dialer{
+			Timeout: 5 * time.Second,
+		}).Dial,
+	}}
+
+	r := mux.NewRouter()
+
+	r.HandleFunc("/{path:anything/(?:foo|bar)}", func(w http.ResponseWriter, r *http.Request) {
+		originProxy1.ServeHTTP(w, r)
+	})
+
+	r.HandleFunc("/anything/foobar", func(w http.ResponseWriter, r *http.Request) {
+		originProxy2.ServeHTTP(w, r)
+	})
+
+	log.Fatal(http.ListenAndServe(":9001", r))
+}
+```
+
+<div id="7"></div>
 ## Conclusion
 
 That's all there is to it.
