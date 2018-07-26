@@ -16,8 +16,8 @@ preserveTaxonomyNames = true
   copyrightOwner = "integralist"
   copyrightStartYear = "2017"
   # hideEntryNavigation = false
-  customCSS = ["css/custom.css"]
-  customJS = ["js/custom.js"]
+  customCSS = ["css/custom.css", "css/highlight.github.css"]
+  customJS = ["js/custom.js", "js/highlight.pack.js", "js/highlight-trigger.js"]
   # hideSocialMenu = false
   showReadTime = true
 

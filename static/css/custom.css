@@ -43,8 +43,12 @@ li strong {
   color: #c31900;
 }
 
-pre {
+pre, pre code {
   border-radius: .3em;
+}
+
+pre {
+  padding: .5em;
 }
 
 .ll-fatal {
