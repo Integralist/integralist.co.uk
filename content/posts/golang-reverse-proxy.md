@@ -315,8 +315,6 @@ Now let's elaborate on this example a little bit and ensure that our reverse pro
 
 We also use `gorilla/mux` as it supports utilising regular expression path matching (we could do this ourselves, but using a library in this case helps to keep the code we have to write down).
 
-> Note: you would likely abstract the multiple reverse proxy instances away under a factory function to simplify the code.
-
 ```
 package main
 
@@ -331,52 +329,46 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func yourHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Gorilla!\n"))
+type config struct {
+	Path string
+	Host string
 }
 
 func main() {
-	originProxy1 := &httputil.ReverseProxy{Director: func(req *http.Request) {
-		originHost := "httpbin.org"
-
-		req.Header.Add("X-Forwarded-Host", req.Host)
-		req.Header.Add("X-Origin-Host", originHost)
-		req.Host = originHost
-		req.URL.Scheme = "https"
-		req.URL.Host = originHost
-
-		fmt.Printf("final request\n\n %+v \n\n", req)
-	}, Transport: &http.Transport{
-		Dial: (&net.Dialer{
-			Timeout: 5 * time.Second,
-		}).Dial,
-	}}
-
-	originProxy2 := &httputil.ReverseProxy{Director: func(req *http.Request) {
-		originHost := "httpbin.org"
-
-		req.Header.Add("X-Forwarded-Host", req.Host)
-		req.Header.Add("X-Origin-Host", originHost)
-		req.Host = originHost
-		req.URL.Scheme = "https"
-		req.URL.Host = originHost
-
-		fmt.Printf("final request\n\n %+v \n\n", req)
-	}, Transport: &http.Transport{
-		Dial: (&net.Dialer{
-			Timeout: 5 * time.Second,
-		}).Dial,
-	}}
-
 	r := mux.NewRouter()
 
-	r.HandleFunc("/{path:anything/(?:foo|bar)}", func(w http.ResponseWriter, r *http.Request) {
-		originProxy1.ServeHTTP(w, r)
-	})
+	configuration := []config{
+		config{
+			Path: "/{path:anything/(?:foo|bar)}",
+			Host: "httpbin.org",
+		},
+		config{
+			Path: "/anything/foobar",
+			Host: "httpbin.org",
+		},
+	}
 
-	r.HandleFunc("/anything/foobar", func(w http.ResponseWriter, r *http.Request) {
-		originProxy2.ServeHTTP(w, r)
-	})
+	for _, conf := range configuration {
+		proxy := &httputil.ReverseProxy{Director: func(req *http.Request) {
+			originHost := conf.Host
+
+			req.Header.Add("X-Forwarded-Host", req.Host)
+			req.Header.Add("X-Origin-Host", originHost)
+			req.Host = originHost
+			req.URL.Scheme = "https"
+			req.URL.Host = originHost
+
+			fmt.Printf("final request\n\n %+v \n\n", req)
+		}, Transport: &http.Transport{
+			Dial: (&net.Dialer{
+				Timeout: 5 * time.Second,
+			}).Dial,
+		}}
+
+		r.HandleFunc(conf.Path, func(w http.ResponseWriter, r *http.Request) {
+			proxy.ServeHTTP(w, r)
+		})
+	}
 
 	log.Fatal(http.ListenAndServe(":9001", r))
 }
