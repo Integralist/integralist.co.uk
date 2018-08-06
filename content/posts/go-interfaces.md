@@ -37,19 +37,55 @@ type Foo interface {
 
 If an object in your code implements a `Bar` function, with the exact same signature (e.g. accepts a string and returns either a string or an error), then that object is said to _implement_ the `Foo` interface.
 
-Now you can define a function that will accept an object as long as it fulfils the `Foo` interface, like so:
+An example of this would be:
 
 ```
-func doThingWith(obj Foo)
+type thing struct{}
+
+func (l *thing) Bar(s string) (string, error) {
+  ...
+}
 ```
 
-Meaning you don't have to _explicitly_ assign an interface type to an object, like you would have to do with a language such as Java:
+Now you can define a function that will accept that object, as long as it fulfils the `Foo` interface, like so:
+
+```
+func doStuffWith(thing Foo)
+```
+
+This is different to other languages, where you have to _explicitly_ assign an interface type to an object, like with Java:
 
 ```
 class testClass implements Foo
 ```
 
 Because of this flexibility in how interfaces are 'applied', it also means that an object could end up implementing _multiple_ interfaces.
+
+Imagine we have two interfaces:
+
+```
+type Foo interface {
+  Bar(s string) (string, error)
+}
+
+type Beeper interface {
+  Beep(s string) (string, error)
+}
+```
+
+We can define an object that fulfils _both_ interfaces simply by implementing the functions they define:
+
+```
+type thing struct{}
+
+func (l *thing) Bar(s string) (string, error) {
+  ...
+}
+
+func (l *thing) Beep(s string) (string, error) {
+  ...
+}
+```
 
 ## Keep Interfaces Small
 
@@ -59,7 +95,46 @@ You'll find in the [Go Proverbs](https://go-proverbs.github.io/), the following 
 
 The reason for this is due to how interfaces are designed in Go and the fact that an object can potentially support multiple interfaces. 
 
-By making an interface too big, we reduce an object's ability to support it. Alternatively, if we were to make many smaller interfaces, then an object is more likely to be re-usable.
+By making an interface too big, we reduce an object's ability to support it. Consider the following example:
+
+```
+type FooBeeper interface {
+  Bar(s string) (string, error)
+  Beep(s string) (string, error)
+}
+
+type thing struct{}
+
+func (l *thing) Bar(s string) (string, error) {
+  ...
+}
+
+func (l *thing) Beep(s string) (string, error) {
+  ...
+}
+
+type differentThing struct{}
+
+func (l *differentThing) Bar(s string) (string, error) {
+  ...
+}
+
+type anotherThing struct{}
+
+func (l *anotherThing) Beep(s string) (string, error) {
+  ...
+}
+```
+
+In the above example we've defined a `FooBeeper` interface that requires two methods: `Bar` and `Beep`. Now if we look at the various objects we've defined `thing`, `differentThing` and `anotherThing` we'll find:
+
+- `thing`: fulfils the `FooBeeper` interface
+- `differentThing`: does _not_ fulfil the `FooBeeper` interface
+- `anotherThing`: does _not_ fulfil the `FooBeeper` interface
+
+Alternatively, if we were to break the `FooBeeper` interface up into separate smaller interfaces (like we demonstrated earlier), then in our above example, the `differentThing` and `anotherThing` would become more re-usable.
+
+That's ultimately what this Go proverb is suggesting: smaller interfaces allow for greater code reuse.
 
 ## Standard Library Interfaces
 
@@ -108,7 +183,7 @@ We can see our `process` function accepts an integer, which is interpolated into
 
 The function then stringify's the response body and returns it. This is sufficient for a basic example, but in the real world this function would likely do lots more processing to the response data.
 
-Already in this code there are lots of interfaces being utilised, which may not be immediately obvious. Let's break down the code and see what interfaces there are.
+It may not be immediately obvious but there are already many instances where interfaces are being utilised. Let's break down the code and see what interfaces there are.
 
 The `http.Get` function returns a pointer to a `http.Response` struct, and from within that struct we extract the `Body` field and pass it to `ioutil.ReadAll`. 
 
@@ -230,7 +305,7 @@ type dataSource interface {
 
 We've not been overly explicit when naming this interface `dataSource`. Its name is quite generic on purpose so as not to imply an underlying implementation bias.
 
-Although the signature of the `Get` method is quite specific because it _does_ indicate a very _specific_ implementation (i.e. `http.Response`).
+Unfortunately the defined `Get` method is still too tightly coupled to a specific implementation (i.e. it specifies `http.Response` as a return type).
 
 Meaning, that although the refactored code is _better_, it is far from perfect. 
 
@@ -254,13 +329,13 @@ By using this interface as the accepted type in the `process` function signature
 
 The reason this is a problem is because the `process` function still _knows_ that the returned object is a `http.Response` because it has to reference the `Body` field of the response, which isn't defined on the object we've injected (meaning the function intrinsically _knows_ of its existence).
 
-How far you take your interface design is up to you. For me, I don't necessarily want to solve all possible concerns unless I have a need to do so. 
+How far you take your interface design is up to you. You don't necessarily have to solve all possible concerns at once (unless there really is a need to do so). 
 
-Meaning that this refactor could be considered 'good enough' for our use cases. Your values and standards may differ, and so you need to consider your options for how you might what to design this solution in such a way that it would allow you to not be reliant at all on HTTP as the transport mechanism.
+Meaning, this refactor _could_ be considered 'good enough' for your use cases. Alternatively your values and standards may differ, and so you need to consider your options for how you might what to design this solution in such a way that it would allow the code to not be so reliant on HTTP as the transport mechanism.
 
 > Note: we'll revisit this code later and consider another refactor that will help clean up this first pass of code decoupling.
 
-But first, let's look at how we might want to test this code.
+But first, let's look at how we might want to test this initial code refactor (as testing this code allows us to learn some interesting things when it comes to needing to mock interfaces).
 
 ## Testing
 
@@ -315,25 +390,31 @@ If we remember from earlier:
 
 > The `Body` field's 'type' is set to the `io.ReadCloser` interface.
 
-This means when mocking the `Body` value we need to return something that has both a `Read` and `Close` method. So we've used `ioutil.NopCloser`, which if we look at its signature we see:
+This means when mocking the `Body` value we need to return something that has both a `Read` and `Close` method. So we've used `ioutil.NopCloser` which, if we look at its signature, we see returns an `io.ReadCloser` interface:
 
 ```
 func NopCloser(r io.Reader) io.ReadCloser
 ```
 
-It returns a `io.ReadCloser` which is exactly what we need. But to use it we need to provide the `NopCloser` function something that supports the `io.Reader` interface.
+The `io.ReadCloser` interface is exactly what we need (as that interface indicates the returned concrete type will indeed implement the required `Read` and `Close` methods). 
+
+But to use it we need to provide the `NopCloser` function something that supports the `io.Reader` interface.
 
 If we were to provide a simple string like `"Hello World"`, then this wouldn't implement the required interface. So we wrap the string in a call to `bytes.NewBufferString`.
 
-If we look at the signature for `bytes.NewBufferString` we'll see:
+The reason we do this is because the returned type is something that supports the `io.Reader` interface we need.
+
+But that might not be immediately obvious when looking at the signature for `bytes.NewBufferString`:
 
 ```
 func NewBufferString(s string) *Buffer
 ```
 
-So yes it accepts a string, but it returns a pointer to a [`Buffer`](https://golang.org/src/bytes/buffer.go?s=402:817#L7) type? But if we look at the implementation of `Buffer` we'll see it does actually [implement](https://golang.org/src/bytes/buffer.go?s=9564:9614#L287) the required `Read` function necessary to support the `io.Reader` interface.
+So yes it accepts a string, but we want an `io.Reader` as the return type, where as this function returns a pointer to a [`Buffer`](https://golang.org/src/bytes/buffer.go?s=402:817#L7) type? 
 
-Our test can now call the `process` function and process the mocked dependency and the code/test works as intended.
+If we look at the implementation of `Buffer` though, we will see that it does actually [implement](https://golang.org/src/bytes/buffer.go?s=9564:9614#L287) the required `Read` function necessary to support the `io.Reader` interface.
+
+Great! Our test can now call the `process` function and process the mocked dependency and the code/test works as intended.
 
 ## More flexible solutions?
 
