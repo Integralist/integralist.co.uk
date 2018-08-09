@@ -80,6 +80,10 @@ pre {
   color: #fff;
 }
 
+.night h3 {
+  color: #999;
+}
+
 body.night, .night button, .night input, .night select, .night textarea,
 .night .main-menu a:hover, .night .social-menu a:hover,
 .night a:active, .night a:focus, .night a:hover{
