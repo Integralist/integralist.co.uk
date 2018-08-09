@@ -271,6 +271,7 @@ I'm a print published and self-published author; I'm also a tech reviewer and am
 
 The following links are to some of my more 'popular' articles. My main focus when writing is to take a complicated or confusing topic and attempt to distil it, in order for the subject to be more easily understood.
 
+- [Post Mortems](/posts/post-mortem-template/) (2018)
 - [Authentication with AWS Cognito](/posts/cognito/) (2018)
 - [Interview Topics](/posts/questions-when-interviewing/) (2018)
 - [Hashing, Encryption and Encoding](/posts/hashing-and-encryption/) (2018)
@@ -328,6 +329,9 @@ Locate the root directory of a project using Git via the command line
 
 - [Go Requester](https://github.com/Integralist/Go-Requester):  
 HTTP service that accepts a collection of "components", fans-out requests and returns aggregated content  
+
+- [Go Reverse Proxy](https://github.com/Integralist/go-reverse-proxy):  
+A configuration-driven reverse proxy written in Go (no dependencies outside of the standard library).  
 
 - [Grunt Boilerplate](https://github.com/Integralist/Grunt-Boilerplate):  
 Original Grunt Boilerplate  
