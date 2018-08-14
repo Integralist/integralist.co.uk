@@ -78,7 +78,7 @@ This is a tricky one to get right, and will vary depending on your organisationa
 
 You shouldn't invite only those people involved during the incident because there are insights that can be gained from Product Managers (just as an example) who might not have been online at the time of the incident, and who might be able to elucidate certain aspects that the engineers/support team were not aware of.
 
-You also don't necessarily want to invite too many people outside of the those involved in the incident (and maybe a select few employees who are relevant -- see my previous point). As the old saying goes: "too many cooks spoil the broth". You could find the 'noise to signal' ratio goes up.
+You also don't necessarily want to invite too many people outside of those involved in the incident. As the old saying goes: "too many cooks spoil the broth". You could find the 'noise to signal' ratio goes up.
 
 ### Have the right attitude
 
@@ -104,7 +104,7 @@ Once you have the post-mortem document filled in fully, reviewed and all takeway
 
 We generally take the finished post-mortem document and email it around to our development mailing list so that all engineers in the organsation get to see what happened, why, and how it was resolved.
 
-This is super important because there are so many benefits that can come from this sharing of knowledge. Probably top of that list would be that it supports the notation that your organisation respects 'accountability' and that it's honest about mistakes that are made.
+This is super important because there are so many benefits that can come from this sharing of knowledge. Probably top of that list would be that it supports the notion that your organisation respects 'accountability' and that it's honest about mistakes that are made.
 
 It highlights to others (not just tech and engineering) that these mistakes aren't punished but treated as _opportunities_ for growth and learning. As well as exposing engineers (of varying skill levels) to different architectures, systems and services that are in place and helps them not only understand them a little better but encourages them to investigate more.
 
@@ -142,8 +142,8 @@ What did we do to resolve the incident?
 
 e.g. 
 
-- We did X to fix the problem.
-- We also did Y to fix the problem.
+- We did X to resolve the problem.
+- We also did Y to resolve the problem.
 
 ### Impact
 
@@ -154,7 +154,7 @@ What was the 'cost' of this incident?
 e.g.
 
 - Thing A broke for N hours.
-- Thing B broke and all data for Users C during the incident were lost.
+- Thing B broke and all entered data for User C, during the incident, was lost.
 
 ### Key Points
 
@@ -201,7 +201,7 @@ Bilbo Baggins (Product Manager): said something useful that not everyone would h
 
 ### Communication
 
-Where was the 'war room' (i.e. the incident channel where this everything was being discussed at the time of the incident)?
+Where was the 'war room' (i.e. the incident channel where everyone was gathered to help problem solve)?
 
 e.g.
 
