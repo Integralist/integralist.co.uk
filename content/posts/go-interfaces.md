@@ -12,7 +12,9 @@ draft: false
 ---
 
 - [Interfaces in Go](#interfaces-in-go)
+- [Name Your Interface Arguments](#name-your-interface-arguments)
 - [Keep Interfaces Small](#keep-interfaces-small)
+- [Don't Return Concrete Types](#don-t-return-concrete-types)
 - [Standard Library Interfaces](#standard-library-interfaces)
 - [Tight Coupling](#tight-coupling)
 - [Dependency Injection](#dependency-injection)
@@ -87,6 +89,28 @@ func (l *thing) Beep(s string) (string, error) {
 }
 ```
 
+## Name Your Interface Arguments
+
+Consider the following interface:
+
+```
+type Mover interface {
+  Move(context.Context, string, string) error
+}
+```
+
+Do you know what the second and third arguments refer to and how the function will use them?
+
+Now consider this refactored version where the arguments have names associated with them:
+
+```
+type Mover interface {
+  Move(context.Context, source string, destination string) error
+}
+```
+
+Now _that_ is better, because we can clearly see what the expectations are: the second argument is the 'source' and the third argument is the 'destination'.
+
 ## Keep Interfaces Small
 
 You'll find in the [Go Proverbs](https://go-proverbs.github.io/), the following useful tip:
@@ -135,6 +159,30 @@ In the above example we've defined a `FooBeeper` interface that requires two met
 Alternatively, if we were to break the `FooBeeper` interface up into separate smaller interfaces (like we demonstrated earlier), then in our above example, the `differentThing` and `anotherThing` would become more re-usable.
 
 That's ultimately what this Go proverb is suggesting: smaller interfaces allow for greater code reuse.
+
+## Don't Return Concrete Types
+
+Imagine you have the following interface:
+
+```
+type Foo interface {
+  Bar(r *http.Request) error
+}
+```
+
+We can see this takes in a pointer to a `http.Request` type and returns an `error` type.
+
+Imagine that we change the interface to the following:
+
+```
+type Foo interface {
+  Bar(r *http.Request) (*Bar, error)
+}
+```
+
+Now this is fine, but it does mean that the `Foo` interface is now only applicable when an implementor returns _specifically_ a pointer to the concrete type `Bar`. 
+
+Returning a concrete type ends up limiting the reuse of the interface, and so if you can avoid doing that (e.g. return something that supports an interface instead), then you'll allow for greater reuse. This is just part of the problem with code design: you sometimes need to be thinking more broadly. 
 
 ## Standard Library Interfaces
 
