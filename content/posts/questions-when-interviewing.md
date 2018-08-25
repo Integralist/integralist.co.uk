@@ -76,7 +76,7 @@ Remember, we're engineers, we can solve a lot of these issues in many different 
 
 After my conversation with the Foo company I already had an unsettling feeling about them, but decided that I would do some research on Glassdoor to see if my gut feelings, stemming from the feedback I received, were correlating to other people's past experiences working at the company. †
 
-> † it's important to realise that with sites like Glassdoor you're only getting half the story, so take it with a pinch of salt. For me, I already had a lengthy conversation with the company and so I could corroborate my experience with others.
+> † it's important to realise that with sites like Glassdoor you're only getting half the story, so take it with a pinch of salt. For me, I already had a lengthy conversation with the company and so I felt like I had sufficient information on which to corroborate my experience against.
 
 Turns out my gut instincts were reciprocated by others, and by that I mean: engineers either working still (or who used to work) at Foo had voiced concerns that if you want to get paid lots of money to work on software with lots of tech debt, and with management that doesn't care about improving the situation with how teams collaborate and/or communicate with each other, then company Foo might be the place for you.
 
