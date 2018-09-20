@@ -23,6 +23,7 @@ draft: false
     - [AWS Hosted UI](#aws-hosted-ui)
 - [Logic Processing with AWS Lambda](#logic-processing-with-aws-lambda)
 - [Beware the Lambdas](#beware-the-lambdas)
+- [Useful Lambdas](#useful-lambdas)
 - [Social Logins](#social-logins)
     - [Overloading the State Parameter](#overloading-the-state-parameter)
     - [Scope](#scope)
@@ -188,6 +189,62 @@ The reason I mention this is because a week later we decided to clear out our Us
 Turns out social accounts only trigger 'post migration' hooks when they already exist in the User Pool. In order to do the 'first time login' modification we were looking for, we needed the 'post confirmation' hook. 
 
 Using this hook wasn't _obvious_ to us because 'post confirmation' makes it sounds like an event that happens once a username/password user has entered their 'verification code' for the first time (and thus become marked as 'confirmed' within the User Pool). Well, turns out social provider logins are automatically considered _confirmed_ once they authenticate for the first time (hence why that event would trigger when we needed it to).
+
+## Useful Lambdas
+
+There are some useful lambda's though, for example, the [Custom Message Lambda Trigger](https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-custom-message.html) is great for intercepting the emails (or SMS) messages that are sent to your users, and allowing you to configure them however you like.
+
+Take a look at the following code for an example...
+
+```
+def lambda_handler(event, context):
+
+    domain = 'https://your.domain.com'
+    username = event.get('userName', '')
+    code = event['request'].get('codeParameter', '')
+
+    print(event)
+
+    if event['triggerSource'] == "CustomMessage_SignUp":
+        event['response']['emailSubject'] = "Validate your account"
+        event['response']['emailMessage'] = "Hi <b>" + username + "</b>!<br>" \
+                                            "Thank you for signing up.<br>" \
+                                            "Click <a href='" + domain + "confirm-account-signup-validation?" \
+                                            "username=" + username + "&code=" + code + "'>here</a> " \
+                                            "to validate your account."
+
+    elif event['triggerSource'] == "CustomMessage_ForgotPassword":
+        event['response']['emailSubject'] = "Reset your password"
+        event['response']['emailMessage'] = "Hi <b>" + username + "</b>!<br>" \
+                                            "Click <a href='" + domain + "confirm-password-reset?" \
+                                            "identifier=" + username + "&code=" + code + "'>here</a> " \
+                                            "to reset your password."
+
+    elif event['triggerSource'] == "CustomMessage_UpdateUserAttribute":
+        event['response']['emailSubject'] = "Validate your new email"
+        event['response']['emailMessage'] = "Hi <b>" + username + "</b>!<br>" \
+                                            "Click <a href='" + domain + "/confirm-email-change?" \
+                                            "code=" + code + "'>here</a> " \
+                                            "to validate your new email."
+
+    if event['triggerSource'] == "CustomMessage_AdminCreateUser":
+        user_attr = event['request'].get('userAttributes', {})
+        user_status = user_attr.get('cognito:user_status')
+        if user_status == 'FORCE_CHANGE_PASSWORD':
+            event['response']['emailSubject'] = "Validate your account"
+            event['response']['emailMessage'] = "Hi <b>" + username + "</b>!<br><br>" \
+                                                "You recently attempted to signin, but your account is still 'unverified'.<br><br>" \
+                                                "Your temporary password is <b>" + code + "</b>.<br><br>" \
+                                                "Click <a href='" + domain + "/confirm-account-password-validation'>here</a> to complete account validation."
+
+    return event
+```
+
+What's good about this lambda is that we're able to improve the user's flow a little bit. Otherwise if we relied on AWS to generate the email/SMS we'd have to create a separate UI that allowed (for example, when verifying an account using a code) the user to copy paste their code into the UI and then submit that code to our server to process.
+
+By controlling the email content ourselves we can construct an endpoint that has the verification code as a query param and make a GET request to an endpoint that will process that code for the user (saving them from having to manually enter anything).
+
+Just something to consider when using Cognito: can I use lambda triggers to _improve_ the user flow?
 
 ## Social Logins
 
