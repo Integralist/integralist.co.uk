@@ -36,9 +36,9 @@ If you weren't using webpack, the configuration would be different as you'd be c
 
 ## Example Project
 
-We're going to create a very basic project simply to demonstrate the setup and configuration of webpack and babel.
+We're going to create a very basic project. It's so basic, it doesn't really do anything. It's the bare minimum required in order to demonstrate the setup and configuration of webpack and babel (I purposely did this because learning new tech can be confusing enough without needing to understand a real-world application at the same time).
 
-It's important that you have [Node](https://nodejs.org/) and [NPM](https://www.npmjs.com/) installed, as we'll be installing webpack and babel from existing NPM packages.
+One thing you'll need upfront though, is [Node](https://nodejs.org/) and [NPM](https://www.npmjs.com/) installed, as we'll be installing webpack and babel from existing NPM packages.
 
 Let's begin by creating our project directory:
 
@@ -57,9 +57,9 @@ npm init -y
 Next, we'll install all the relevant packages we'll be needing...
 
 ```
-npm install --save-dev babel-preset-env \
-                       webpack \
+npm install --save-dev webpack \
                        webpack-cli \
+                       webpack-dev-server \
                        @babel/core \
                        @babel/preset-env \
                        "babel-loader@^8.0.0-beta" \
@@ -67,7 +67,6 @@ npm install --save-dev babel-preset-env \
                        css-loader \
                        sass-loader \
                        node-sass \
-                       webpack-dev-server \
                        eslint@4.x babel-eslint@8
 
 npm install --save @babel/polyfill
@@ -90,19 +89,18 @@ Your `package.json` should now have the following content:
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.1.0",
+    "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
     "babel-eslint": "^8.2.6",
-    "babel-loader": "^8.0.2",
-    "babel-preset-env": "^1.7.0",
+    "babel-loader": "^8.0.4",
     "css-loader": "^1.0.0",
     "eslint": "^4.19.1",
     "node-sass": "^4.9.3",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.0",
-    "webpack": "^4.19.1",
-    "webpack-cli": "^3.1.1",
-    "webpack-dev-server": "^3.1.8"
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.9"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0"
@@ -317,9 +315,11 @@ document.body.appendChild(root);
 
 A simple script that imports from our `component.js` and then logs it (to prove the import code works), it then demonstrates `let` variables and another modern JS feature known as '[destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)' before finally creating a HTML `<div>` element and populating it with some text and inserting it into the DOM of the HTML page.
 
-At the top of the script you'll notice some code comments. These are used to tell our ES linter package what context this script is running in, and so global references such as `document` and `console` won't trigger a linting error any more (this could be added into the `.eslintrc` - and in fact has been - but this can be a much clearer indicator of the expectations of the file scope).
+At the top of the script you'll notice some code comments. These are used to tell our ES linter package what context this script is running in, and so global references such as `document` or `console` won't trigger a linting error as we've told the linter that the context the script will run is the browser environment, where those globals are expected to exist. The code comment for `eslint-env` could be replaced by adding individual references into the `.eslintrc` file (and I have done that, take a look at the `globals` field in the file contents shown earlier), but I prefer the code comment as it can be a much clearer indicator of the expectations of the file's scope.
 
-> Note: you'll notice we also import a Sass file, which is kinda strange for a JS file, but read on to understand more about what this is doing.
+You'll also notice that we import the `@babel/polyfill` at the top of the file. This module must _always_ be the first import in the file.
+
+Lastly, you'll notice we also import a Sass file, which admittedly is a bit strange considering we're dealing with a JS file, but we'll dig into this a little bit more later on and why we do that.
 
 ### src/styles.scss
 
@@ -387,7 +387,10 @@ We see the `entry` field of the configuration is telling webpack that the main a
 
 The file that is generated (and where) is determined by the `output` field. We can see we want the file to be called `bundle.js` and we want the file to be saved to the `./dist` directory (this is indicated by the `path` field).
 
-The `publicPath` field is a bit different, in that it tells the `webpack-dev-server` package (which will be using in development mode, not production) where to find the `bundle.js` file that the HTML is attempting to load.
+The `publicPath` field is a bit different, in that it tells the `webpack-dev-server` package where to find the `bundle.js` file that the HTML is attempting to load. What won't be clear yet is the fact that when running our code locally (in dev) we'll be using `webpack-dev-server` because it allows us to utilise a web server for running our code as well as 'hot reloading' (which means, if we're dealing with a complex single-page application with lots of nested state, that a change in code doesn't cause us to lose the state the page is in).
+
+For production we'll statically generate our final bundle file using the standard `webpack` command, and so you'll see shortly that we need to update our `package.json` to include two `npm run ...` commands that let us use either `webpack-dev-server` or `webpack` depending on where our code needs to run.
+
 
 The `module` field tells webpack, that for every file it finds, before adding it to the final `bundle.js`, to run it through a 'loader' script for additional processing. In this case, all `.js` files are passed through babel and so their modern JS code is transpiled into ES5 code first before being added to `bundle.js`.
 
@@ -404,3 +407,36 @@ styleLoader(cssLoader(sassLoader("source")))
 ```
 
 Where the source file is passed into the Sass loader, and so transforming the Sass into CSS. That CSS is then passed into the CSS loader, which allows it to be parsed by JavaScript. Finally, the Style loader places our CSS into a `<style>` tag within our HTML page.
+
+## Package.json Update
+
+As mentioned earlier, we want to modify the `package.json` so that we have two `npm run ...` commands for letting us run our code in development mode (i.e. locally) or compile our code ready for use in production.
+
+The following snippet shows the changes needed to be made:
+
+```
+{
+  ...
+
+  "scripts": {
+    "build": "webpack --mode=production",
+    "dev": "webpack-dev-server --mode=development --config webpack.config.js",
+
+    ...
+  },
+  
+  ...
+}
+```
+
+Now we can run either `npm run dev` (for local dev) or `npm run build` (to compile our bundle for production).
+
+You'll notice that we pass a specific `--mode` flag to both `webpack` and `webpack-dev-server`, and this indicates to both tools what to do to the files it's configured to interact with.
+
+In the case of `--mode=production` the `webpack` tool will make additional modifications that means the `bundle.js` output is as efficient as possible (such as minifiying and obfuscating the code).
+
+Where as `--mode=development` will allow for the generation of webpack source map files (to aid you in debugging).
+
+## Conclusion
+
+This should be the basics covered of how to use babel with webpack, and hopefully is enough to help you kickstart your exploration of new JavaScript features.
