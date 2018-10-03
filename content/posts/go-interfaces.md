@@ -193,7 +193,7 @@ We can see we have defined a `foo` interface and said that an object that has a 
 
 We then have a `createThing` function which is explicitly returning a pointer to the concrete type `thing`.
 
-This is OK, but it has restricted the `createThing` function because it mean it will only work if the returned type is of the concrete form `thing`.
+This is OK, but it has restricted the `createThing` function because it means the function will only work if the returned type is of the concrete form `thing`.
 
 It might not look like much of an issue here in this simplified example, but once the code becomes more complex and `createThing` is calling out to other functions that may or may not return a `thing`, then we will discover the function is less accommodating than it could be.
 
