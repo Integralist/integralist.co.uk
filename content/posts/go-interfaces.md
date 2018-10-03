@@ -63,7 +63,7 @@ class testClass implements Foo
 
 Because of this flexibility in how interfaces are 'applied', it also means that an object could end up implementing _multiple_ interfaces.
 
-Imagine we have two interfaces:
+For example, imagine we have the following two interfaces:
 
 ```
 type Foo interface {
@@ -88,6 +88,8 @@ func (l *thing) Beep(s string) (string, error) {
   ...
 }
 ```
+
+> Note: this is a bit of silly example, and so you'll notice the method signature for each type is effectively the same. Be careful when designing your interfaces, because in this case we could possibly combine these two interfaces into a single (more generic) interface.
 
 ## Name Your Interface Arguments
 
@@ -162,27 +164,50 @@ That's ultimately what this Go proverb is suggesting: smaller interfaces allow f
 
 ## Don't Return Concrete Types
 
-Imagine you have the following interface:
+Imagine you have the following code:
 
 ```
-type Foo interface {
-  Bar(r *http.Request) error
+package main
+
+type foo interface {
+	Bar() error
+}
+
+type thing struct{}
+
+func (t *thing) Bar() error {
+	return nil
+}
+
+func createThing() *thing {
+	return &thing{}
+}
+
+func main() {
+	t := createThing()
+	t.Bar()
 }
 ```
 
-We can see this takes in a pointer to a `http.Request` type and returns an `error` type.
+We can see we have defined a `foo` interface and said that an object that has a `Bar` function which returns an `error` type should be considered compatible with this interface.
 
-Imagine that we change the interface to the following:
+We then have a `createThing` function which is explicitly returning a pointer to the concrete type `thing`.
+
+This is OK, but it has restricted the `createThing` function because it mean it will only work if the returned type is of the concrete form `thing`.
+
+It might not look like much of an issue here in this simplified example, but once the code becomes more complex and `createThing` is calling out to other functions that may or may not return a `thing`, then we will discover the function is less accommodating than it could be.
+
+To fix this is simple: we remove the explicit concrete type in favour of a more flexible interface type:
 
 ```
-type Foo interface {
-  Bar(r *http.Request) (*Bar, error)
+func createThing() foo {
+	return &thing{}
 }
 ```
 
-Now this is fine, but it does mean that the `Foo` interface is now only applicable when an implementor returns _specifically_ a pointer to the concrete type `Bar`. 
+Returning a concrete type ends up limiting the flexibility of certain portions of code, and so if you can avoid doing that (e.g. return something that supports an interface instead), then you'll allow for greater flexibility and for code that can more easily adapt as your system becomes more complex. 
 
-Returning a concrete type ends up limiting the reuse of the interface, and so if you can avoid doing that (e.g. return something that supports an interface instead), then you'll allow for greater reuse. This is just part of the problem with code design: you sometimes need to be thinking more broadly. 
+This is just part of the problem with code design: you sometimes need to be thinking more broadly. 
 
 ## Standard Library Interfaces
 
@@ -284,7 +309,9 @@ In the case of our `process` function, it needs to be able to acquire data from 
 
 The _how_ is not the responsibility of the `process` function, especially if we decide later on that we want to change the implementation from HTTP to GRPC or some other data source.
 
-Meaning, we need to provide that functionality to the `process` function. Let's see what this might look like in practice (this is just a first iteration and so is actually not a great solution, but is _a_ solution):
+Meaning, we need to provide that functionality to the `process` function. Let's see what this might look like in practice:
+
+> Note: this is just a first iteration, and is a poor design because although it shifts the problem slightly, there will still be tight coupling. I'll come back to this code later and refactor away the coupling completely. The reason I've not done that upfront is because there are learnings to be had from trying to write tests for this code (which we'll see in a minute).
 
 ```
 package main
