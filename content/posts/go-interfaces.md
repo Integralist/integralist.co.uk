@@ -29,7 +29,7 @@ While treading what might seem like familiar ground to some readers, this is a f
 
 ## Interfaces in Go
 
-An 'interface' in Go looks something like the following:
+An 'interface' is a contract which describes _behaviour_ (not _data_), and in Go it looks something like the following:
 
 ```
 type Foo interface {
