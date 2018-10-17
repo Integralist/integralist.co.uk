@@ -14,7 +14,10 @@ draft: false
 - [Interfaces in Go](#interfaces-in-go)
 - [Name Your Interface Arguments](#name-your-interface-arguments)
 - [Keep Interfaces Small](#keep-interfaces-small)
+- [Accept Interfaces, Return Concrete Types](#accept-interfaces-return-concrete-types)
 - [Don't Return Concrete Types](#don-t-return-concrete-types)
+- [Use existing interfaces](#use-existing-interfaces)
+- [Don't Force Interfaces](#don-t-force-interfaces)
 - [Standard Library Interfaces](#standard-library-interfaces)
 - [Tight Coupling](#tight-coupling)
 - [Dependency Injection](#dependency-injection)
@@ -162,52 +165,157 @@ Alternatively, if we were to break the `FooBeeper` interface up into separate sm
 
 That's ultimately what this Go proverb is suggesting: smaller interfaces allow for greater code reuse.
 
+## Accept Interfaces, Return Concrete Types
+
+If your function accepts a concrete type then you've limited the consumers ability to provide different implementations.
+
+Consider a function only accepting the concrete type `*os.File` instead of the `io.Writer` interface. Now try swapping out the `os.File` implementation in a test environment, you'll have a hard time vs mocking this using a struct that has the relevant interface methods.
+
+Try to return concrete types instead of interfaces, as interfaces have a tendendency to add an unnecessary layer of indirection for consumers of your package. 
+
+Interfaces ultimately do not protect your underlying API from change. For example if your interface changes, then the returned struct will likely need to change as well (unless the interface is removing a method which your struct continues to implement, but even then, returning a concrete type will be better as it removes the indirection of having to go through an interface to access the underlying methods they want to use).
+
 ## Don't Return Concrete Types
 
-Imagine you have the following code:
+This is to keep you on your toes 😉
+
+If your function needs to return _multiple types_, then returning an interface can be an appropriate solution.
+
+The following code example highlights the principle:
+
+```
+type ItemInterface interface {
+	GetItemValue() string
+}
+
+type Item struct {
+	ID int
+}
+
+type URLItem struct {
+	Item
+	URL string
+}
+
+type TextItem struct {
+	Item
+	Text string
+}
+
+func (ui URLItem) GetItemValue(){
+	return ui.URL
+}
+
+func (ti TextItem) GetItemValue(){
+	return ti.Text
+}
+
+func FindItem(ID int) ItemInterface {
+  // ...
+}
+```
+
+The `FindItem` could be an internal library function that attempts to locate an item via multiple data sources. Depending on which data source the item was found, the type returned will change. 
+
+In this instance returning an interface allows the consumer to not have to worry about the change in underlying data types.
+
+> Note: it's possible the returned types could be consolidated into a single generic type struct, which means we can avoid returning an interface, but it depends on the exact scenario/use case.
+
+## Use Existing Interfaces
+
+It's important to not 'reinvent the wheel' and to utilise existing interfaces wherever possible (otherwise you'll suffer from a condition known as 'interface pollution'). 
+
+The golang toolchain offers a tool called [Go Guru](https://docs.google.com/document/d/1_Y9xCEMj5S-7rv2ooHpZNH15JgRT5iM742gJkw5LtmQ/edit#heading=h.7q1t7o2y7td3) which helps you to navigate Go code.
+
+It's a command line tool, but it's designed to be utilised from within an editor (like Atom or Vim etc).
+
+Here is a list of the sub commands available:
+
+```
+callees         show possible targets of selected function call
+callers         show possible callers of selected function
+callstack       show path from callgraph root to selected function
+definition      show declaration of selected identifier
+describe        describe selected syntax: definition, methods, etc
+freevars        show free variables of selection
+implements      show 'implements' relation for selected type or method
+peers           show send/receive corresponding to selected channel op
+pointsto        show variables the selected pointer may point to
+referrers       show all refs to entity denoted by selected identifier
+what            show basic information about the selected syntax node
+whicherrs       show possible values of the selected error variable
+```
+
+This can be really useful for identifying (for example) whether a new interface you've defined is similar to an existing interface.
+
+To demonstrate this, consider the following example...
+
+```
+// this is a duplicate of fmt.Stringer interface
+type stringit interface {
+	String() string
+}
+
+type testthing struct{}
+
+func (t testthing) String() string {
+	return "a test thing"
+}
+```
+
+The `stringit` interface I've defined is actually a duplication of the existing standard library interface `fmt.Stringer`.
+
+So using Guru via my Vim editor I can see (when I have my cursor over the `testthing` struct and I call Guru) that this concrete type implements not only `stringit` but a few other interfaces...
+
+```
+/main.go:33.6-33.14:                                                 struct type testthing
+/usr/local/Cellar/go/1.10.3/libexec/src/fmt/print.go:62.6-62.13:     implements fmt.Stringer
+/main.go:29.6-29.13:                                                 implements stringit
+/usr/local/Cellar/go/1.10.3/libexec/src/runtime/error.go:66.6-66.13: implements runtime.stringer
+```
+
+Now whether you continue to define a new interface is up to you. There are actually quite a few places in the Go standard library where interfaces are duplicated for (what I believe to be) semantic reasoning, but otherwise if you don't need to make an explicit/semantic distinction, then I'd opt to reuse an existing interface.
+
+> Note: for more details on how to use Guru, see [this gist](https://gist.github.com/Integralist/20ff7427d3df5cc02d5a619ca0cd9695).
+
+## Don't Force Interfaces
+
+If your code doesn't require interfaces, then don't use them.
+
+No point making the design of your code more complicated for no reason. Consider the following code which returns an interface
+
+> Note: the following example is modified from a much older post by [William Kennedy](https://www.ardanlabs.com/blog/2016/10/avoid-interface-pollution.html).
 
 ```
 package main
 
-type foo interface {
-	Bar() error
+import "fmt"
+
+// Server defines a contract for tcp servers.
+type Server interface {
+	Start()
 }
 
-type thing struct{}
+type server struct{}
 
-func (t *thing) Bar() error {
-	return nil
+// NewServer returns an interface value of type Server
+func NewServer() Server {
+	return &server{}
 }
 
-func createThing() *thing {
-	return &thing{}
+// Start allows the server to begin to accept requests.
+func (s *server) Start() {
+	fmt.Println("start called")
 }
 
 func main() {
-	t := createThing()
-	t.Bar()
+	s := NewServer()
+	fmt.Printf("%+v (%T)\n", s, s)
+	s.Start()
 }
 ```
 
-We can see we have defined a `foo` interface and said that an object that has a `Bar` function which returns an `error` type should be considered compatible with this interface.
-
-We then have a `createThing` function which is explicitly returning a pointer to the concrete type `thing`.
-
-This is OK, but it has restricted the `createThing` function because it means the function will only work if the returned type is of the concrete form `thing`.
-
-It might not look like much of an issue here in this simplified example, but once the code becomes more complex and `createThing` is calling out to other functions that may or may not return a `thing`, then we will discover the function is less accommodating than it could be.
-
-To fix this is simple: we remove the explicit concrete type in favour of a more flexible interface type:
-
-```
-func createThing() foo {
-	return &thing{}
-}
-```
-
-Returning a concrete type ends up limiting the flexibility of certain portions of code, and so if you can avoid doing that (e.g. return something that supports an interface instead), then you'll allow for greater flexibility and for code that can more easily adapt as your system becomes more complex. 
-
-This is just part of the problem with code design: you sometimes need to be thinking more broadly. 
+The use of an interface here is a bit pointless. We should instead just return a pointer to an exported version of the server struct because the user is gaining no benefits from an interface being returned by `NewServer` (see [Don't Return Concrete Types](#don-t-return-concrete-types) for a possible use case for returning interfaces, but the above example is not one of them).
 
 ## Standard Library Interfaces
 
