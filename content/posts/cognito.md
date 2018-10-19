@@ -372,9 +372,11 @@ As we were only interested in the User Pool functionality, we found it strange t
 
 So we struggled for a bit to understand the difference, and although we used the "CognitoIdentityProvider" service (i.e. `cognito-idp`), we were confused for a long time as to why that was the case.
 
-Turns out that Cognito's "User Pool" is itself fundamentally a _identity provider_, and because of that you can configure a "Identity Pool" to have a "User Pool" associated within it (along with more common external identity providers such as Facebook and Google).
+Turns out that Cognito's "User Pool" is itself fundamentally a _identity provider_ (idp), and because of that you can configure a "Identity Pool" to have a "User Pool" associated within it (along with more common external identity providers such as Facebook and Google).
 
-But as far as the SDK is concerned, you'll always use `cognito-idp` when dealing with a User Pool or an Identity Pool.
+So with that understanding firmly in place, the fact the SDK uses `cognito-idp` for interacting with a User Pool makes total sense (because the User Pool _is_ an "idp"), and the Identity Pool is just a tool for handling "identities" via many different providers (whether that be a User Pool or a social 'provider' such as Facebook or Google), and so the SDK using `cognito-identity` for interating with AWS Identity Pools also makes perfect sense.
+
+It's the little details that can really make a difference to even the simplest aspects of using an SDK/API, and why Amazon's atrocious documentation is a real detriment to its users.
 
 ## Lambda IAM Role
 
