@@ -15,6 +15,7 @@ draft: false
 - [Four ways to skin a cat](#2)
 - [How does the adapter work?](#3)
 - [Why is this interesting?](#4)
+- [Summary/Breakdown](#summary-breakdown)
 
 <div id="1"></div>
 ## Introduction
@@ -380,3 +381,23 @@ We know now that we've utilised Go's `func` type to adapt/transform our incoming
 Really understanding what initially looked to be a simple web server abstraction ended up being a complex mix of types and interfaces that work together to allow seemingly incompatible types to be adapted to fit. Demonstrating how flexible and dynamic your code can be when working in an idiomatic way with the Go principles.
 
 I now have a much better appreciation of why lots of long time Gophers will routinely recommend sifting through the official Go source code, as it can indeed be quite enlightening.
+
+## Summary/Breakdown
+
+Here is a useful summary for you...
+
+- `http.Handler` = interface  
+
+> you support `http.Handler` if you have a `ServeHTTP(w http.ResponseWriter, r *http.Request)` method available.
+
+- `http.Handle("/", <give me something that supports the http.Handler interface>)`  
+
+> e.g. an object with a `ServeHTTP` method.
+
+- `http.HandleFunc("/", <give me any function with the same signature as ServeHTTP >)`  
+
+> e.g. a function that accepts the arguments `(w http.ResponseWriter, r *http.Request)`.
+
+- `http.HandlerFunc` = func type used internally by `http.HandleFunc`  
+
+> e.g. it adapts the given function to the `http.HandlerFunc` type, which has an associated `ServeHTTP` method (that is able to call your original incompatible function).
