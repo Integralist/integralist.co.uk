@@ -58,6 +58,8 @@ This is a short checklist of things you probably should be doing...
 - Once categorized, group related items (e.g. group together all high, medium, low items).
 - A table matrix can help visualise the various tasks and their importance.
 
+> Regardless of the approach you choose, you wont be able to prioritize using just a 'problem/solution/impact' approach. You'll need to document and consider both 'cost' and 'risk' as part of your assessment. [Here is an example document](https://docs.google.com/document/d/1Qd5wrcTLuwQFIUvHgpvYUC889tk1XLnFsRRbkjvTYpU/edit?usp=sharing) you can use.
+
 🗒 Work through the unknowns
 
 - Do this over and over, until there is no more value to be gained in spending time on them.

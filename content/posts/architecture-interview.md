@@ -1,16 +1,22 @@
 ---
-title: "Architecture Interviews (and other thoughts)"
+title: "Interview Techniques"
 date: 2018-08-18T16:26:57+01:00
 categories:
   - "process"
   - "guide"
 tags:
   - "architecture"
+  - "engineering"
   - "goals"
   - "interviews"
   - "jobs"
+  - "manager"
 draft: false
 ---
+
+## Introduction
+
+This post will explain a little bit about a particular type of interview: an architecture interview. It'll breakdown what it is, why using whiteboards isn't necessarily a bad thing to use in an interview context, as well as understanding a bit about what it is we're looking for from a particular candidate (in this post the information will be related to interviewing someone for an Engineering Manager opportunity).
 
 ## What is an architecture interview?
 

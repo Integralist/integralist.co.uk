@@ -271,8 +271,14 @@ I'm a print published and self-published author; I'm also a tech reviewer and am
 
 The following links are to some of my more 'popular' articles. My main focus when writing is to take a complicated or confusing topic and attempt to distil it, in order for the subject to be more easily understood.
 
+- [Engineer to Manager](/posts/engineer-to-manager/) (2018)
+- [Interview Techniques](/posts/architecture-interview/) (2018)
 - [Post Mortems](/posts/post-mortem-template/) (2018)
+- [Thinking about Interfaces in Go](/posts/go-interfaces/) (2018)
+- [Multigrain Services](/posts/multigrain-services/) (2018)
 - [Authentication with AWS Cognito](/posts/cognito/) (2018)
+- [1:1 in Five Minutes](/posts/1-1/) (2018)
+- [Project Management in Five Minutes](/posts/project-management-in-five-minutes/) (2018)
 - [Interview Topics](/posts/questions-when-interviewing/) (2018)
 - [Hashing, Encryption and Encoding](/posts/hashing-and-encryption/) (2018)
 - [Computers 101: terminals, kernels and shells](/posts/terminal-shell/) (2018)
