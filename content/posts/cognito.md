@@ -38,6 +38,7 @@ draft: false
 - [Example Cognito User Pool “Federation: Identity Providers”](#example-cognito-user-pool-federation-identity-providers)
 - [Example Facebook App Configuration](#example-facebook-app-configuration)
 - [Example Google App Configuration](#example-google-app-configuration)
+- [Terraform Example](#terraform-example)
 - [Conclusion](#conclusion)
 
 ## Introduction
@@ -499,6 +500,636 @@ https://console.developers.google.com/
 - **Authorized redirect URIs**:  
   https://your-organisation.auth.us-east-1.amazoncognito.com/oauth2/idpresponse  
   https://auth-api.example.com/auth/signin/callback
+
+## Terraform Example
+
+```
+# Examples for Cognito User Pools can be found here:
+# https://github.com/terraform-providers/terraform-provider-aws/blob/master/examples/cognito-user-pool/main.tf
+
+####################################################
+# main.tf
+####################################################
+
+# TODO: split this file up into separate modules
+# e.g.
+#
+# user_pool/
+# identity_pool/
+
+provider "aws" {
+  region = "${var.aws_region}"
+
+  assume_role {
+    role_arn = "${var.aws_role_arn}"
+  }
+}
+
+resource "aws_cognito_user_pool" "pool" {
+  name = "${var.environment}_${var.name}_user_pool"
+
+  alias_attributes         = ["email", "preferred_username", "phone_number"]
+  auto_verified_attributes = ["email", "phone_number"]
+
+  admin_create_user_config {
+    allow_admin_create_user_only = false
+  }
+
+  # container for the AWS Lambda triggers associated with the user pool.
+  # https://www.terraform.io/docs/providers/aws/r/cognito_user_pool.html#lambda-configuration
+  lambda_config {
+    custom_message = "${aws_lambda_function.custom_message_lambda.arn}"
+  }
+
+  mfa_configuration = "OPTIONAL"
+
+  sms_configuration {
+    external_id    = "${var.environment}_${var.name}_sns_external_id"
+    sns_caller_arn = "${aws_iam_role.cognito_sns_role.arn}"
+  }
+
+  password_policy {
+    minimum_length    = 6
+    require_lowercase = false
+    require_numbers   = false
+    require_symbols   = false
+    require_uppercase = false
+  }
+
+  /*
+  # email was a required field, but it ended up causing issues for any social
+  # users whose identity is actually their mobile number. So to avoid problems
+  # authenticating those users, we no longer require an email to be provided.
+  schema {
+    name                     = "email"
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    required                 = true
+
+    string_attribute_constraints {
+      min_length = 1
+      max_length = 2048
+    }
+  }
+  */
+
+  schema {
+    name                     = "some_custom_attribute"
+    attribute_data_type      = "Number"
+    developer_only_attribute = false
+    mutable                  = true
+    required                 = false
+
+    number_attribute_constraints {
+      min_value = 1
+      max_value = 50000000
+    }
+  }
+  tags {
+    "environment" = "${var.environment}"
+    "service"     = "${var.name}"
+  }
+  depends_on = [
+    "aws_iam_role.cognito_sns_role",
+  ]
+}
+
+resource "aws_cognito_user_pool_client" "pool_client" {
+  # Federation > Identity providers
+  depends_on = [
+    "aws_cognito_identity_provider.facebook_provider",
+    "aws_cognito_identity_provider.google_provider",
+  ]
+
+  # General settings > App clients
+  user_pool_id           = "${aws_cognito_user_pool.pool.id}"
+  name                   = "${var.environment}_${var.name}_user_pool_client"
+  generate_secret        = true
+  refresh_token_validity = 30
+  explicit_auth_flows    = ["ADMIN_NO_SRP_AUTH", "USER_PASSWORD_AUTH"]
+
+  # this flag is automatically set to true when creating the user pool using the AWS console.
+  # however, when creating the user pool using Terraform, this flag needs to be set explicitly.
+  allowed_oauth_flows_user_pool_client = true
+
+  # issue: https://github.com/terraform-providers/terraform-provider-aws/issues/4476
+  read_attributes  = ["email", "preferred_username", "profile", "custom:some_custom_attribute"]
+  write_attributes = ["email", "preferred_username", "profile", "custom:some_custom_attribute"]
+
+  # App integration > App client settings
+  supported_identity_providers = ["COGNITO", "Facebook", "Google"]
+  callback_urls                = "${var.callback_urls}"
+  logout_urls                  = "${var.logout_urls}"
+  allowed_oauth_flows          = ["code"]
+
+  allowed_oauth_scopes = [
+    "aws.cognito.signin.user.admin",
+    "email",
+    "openid",
+    "profile",
+  ]
+}
+
+# aws cert configured in certs.tf
+resource "aws_cognito_user_pool_domain" "pool_domain" {
+  domain          = "${var.domain}.${var.root_domain}"
+  certificate_arn = "${aws_acm_certificate.certificate.arn}"
+  user_pool_id    = "${aws_cognito_user_pool.pool.id}"
+}
+
+# bug in https://github.com/terraform-providers/terraform-provider-aws/issues/4807 that keep showing changes in plan
+resource "aws_cognito_identity_provider" "google_provider" {
+  user_pool_id  = "${aws_cognito_user_pool.pool.id}"
+  provider_name = "Google"
+  provider_type = "Google"
+
+  provider_details {
+    authorize_scopes = "profile email openid"
+    client_id        = "${var.google_provider_client_id}"
+    client_secret    = "${var.google_provider_client_secret}"
+  }
+
+  attribute_mapping {
+    username = "sub"
+    email    = "email"
+  }
+}
+
+# bug in https://github.com/terraform-providers/terraform-provider-aws/issues/4807 that keep showing changes in plan
+resource "aws_cognito_identity_provider" "facebook_provider" {
+  user_pool_id  = "${aws_cognito_user_pool.pool.id}"
+  provider_name = "Facebook"
+  provider_type = "Facebook"
+
+  provider_details {
+    authorize_scopes = "public_profile,email"
+    client_id        = "${var.facebook_provider_client_id}"
+    client_secret    = "${var.facebook_provider_client_secret}"
+  }
+
+  attribute_mapping {
+    username = "id"
+    email    = "email"
+  }
+}
+
+# The identity pool(s) are used by our mobile apps, and allows them to authenticate
+# their users via our Cognito 'user pool'.
+#
+# Note: we're not sure if we need to configure anything else in facebook/google ui's?
+#       we're also not sure what `server_side_token_check` (set below) really means.
+resource "aws_cognito_identity_pool" "apps_identity_pool" {
+  identity_pool_name               = "${var.environment}_${var.name}_identity_pool"
+  allow_unauthenticated_identities = false
+
+  cognito_identity_providers {
+    client_id               = "${aws_cognito_user_pool_client.pool_client.id}"
+    provider_name           = "cognito-idp.us-east-1.amazonaws.com/${aws_cognito_user_pool.pool.id}"
+    server_side_token_check = false
+  }
+
+  supported_login_providers {
+    "graph.facebook.com"  = "${var.facebook_provider_client_id}"
+    "accounts.google.com" = "${var.google_provider_client_id}"
+  }
+
+  depends_on = [
+    "aws_cognito_user_pool.pool",
+  ]
+}
+
+# an identity pool (used by mobile apps) requires a role to be assigned to both
+# authenticated and unauthenticated access (even if the identity pool is configured
+# to not allow unauthenticated access, it still requires a role to be assigned)
+#
+# https://www.terraform.io/docs/providers/aws/r/cognito_identity_pool_roles_attachment.html
+resource "aws_iam_role" "apps_identity_pool_authenticated" {
+  name = "${var.environment}_${var.name}_identitypool_authenticated"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "cognito-identity.amazonaws.com"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "cognito-identity.amazonaws.com:aud": "${aws_cognito_identity_pool.apps_identity_pool.id}"
+        },
+        "ForAnyValue:StringLike": {
+          "cognito-identity.amazonaws.com:amr": "authenticated"
+        }
+      }
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role" "apps_identity_pool_unauthenticated" {
+  name = "${var.environment}_${var.name}_identitypool_unauthenticated"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::864932087808:root"
+      },
+      "Action": "sts:AssumeRole",
+      "Condition": {
+        "Bool": {
+          "aws:MultiFactorAuthPresent": "true"
+        }
+      }
+    }
+  ]
+}
+EOF
+}
+
+# we can then attach additional policies to each identity pool role
+resource "aws_iam_role_policy" "apps_identity_pool_authenticated" {
+  name = "${var.environment}_${var.name}_identitypool_authenticated_policy"
+  role = "${aws_iam_role.apps_identity_pool_authenticated.id}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "mobileanalytics:PutEvents",
+        "cognito-sync:*",
+        "cognito-identity:*"
+      ],
+      "Resource": [
+        "*"
+      ]
+    }
+  ]
+}
+EOF
+}
+
+# we don't allow unauthenticated access, so just set all actions to be denied
+resource "aws_iam_role_policy" "apps_identity_pool_unauthenticated" {
+  name = "${var.environment}_${var.name}_identitypool_unauthenticated_policy"
+  role = "${aws_iam_role.apps_identity_pool_unauthenticated.id}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Deny",
+      "Action": [
+        "*"
+      ],
+      "Resource": [
+        "*"
+      ]
+    }
+  ]
+}
+EOF
+}
+
+# finally, we can attach our roles to our identity pools
+resource "aws_cognito_identity_pool_roles_attachment" "apps_identity_pool_role_attachment" {
+  identity_pool_id = "${aws_cognito_identity_pool.apps_identity_pool.id}"
+
+  roles {
+    "authenticated"   = "${aws_iam_role.apps_identity_pool_authenticated.arn}"
+    "unauthenticated" = "${aws_iam_role.apps_identity_pool_unauthenticated.arn}"
+  }
+}
+
+/*
+We originally had this policy inlined within the the below iam role,
+but then discovered it caused a cyclic reference...
+
+aws_cognito_user_pool -> aws_lambda_function -> aws_iam_role <BOOM!> -> aws_cognito_user_pool
+
+So to avoid that we could have made the policy not depend on that
+specific user pool resource, using: "arn:aws:cognito-idp:*:*:*"
+but we opted to create a separate policy, which we then attach to
+the existing role, and tell the policy it can't be attached until
+the user pool has been created.
+*/
+resource "aws_iam_role_policy" "cognito_lambda_policy" {
+  depends_on = [
+    "aws_cognito_user_pool.pool",
+  ]
+
+  name = "send_user_email_policy"
+  role = "${aws_iam_role.iam_for_lambda.id}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:logs:*:*:*"
+    },
+    {
+      "Action": [
+        "cognito-idp:AdminUpdateUserAttributes"
+      ],
+      "Effect": "Allow",
+      "Resource": "${aws_cognito_user_pool.pool.arn}"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role" "iam_for_lambda" {
+  name = "${var.environment}_${var.name}_sendUserEmailLambdaRole"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF
+}
+
+data "archive_file" "generate_custom_message_lambda" {
+  type        = "zip"
+  source_dir  = "${path.module}/source/"
+  output_path = "lambda.zip"
+}
+
+resource "aws_lambda_function" "custom_message_lambda" {
+  filename         = "lambda.zip"
+  function_name    = "${var.environment}_${var.name}_customMessages"
+  role             = "${aws_iam_role.iam_for_lambda.arn}"
+  handler          = "custom_message.lambda_handler"
+  source_code_hash = "${data.archive_file.generate_custom_message_lambda.output_base64sha256}"
+  runtime          = "python3.6"
+}
+
+# this resource allows lambda to be invoked by our user pool and tripped us up initially because
+# it is automatically applied when setting up the lambda trigger in the AWS console.
+# however, when creating the lambda trigger via Terraform, this needs to be set explicitly.
+resource "aws_lambda_permission" "allow_cognito" {
+  statement_id  = "AllowExecutionFromCognito"
+  action        = "lambda:InvokeFunction"
+  function_name = "${aws_lambda_function.custom_message_lambda.function_name}"
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = "${aws_cognito_user_pool.pool.arn}"
+}
+
+####################################################
+# certs.tf
+####################################################
+
+resource "aws_acm_certificate" "certificate" {
+  domain_name       = "${var.domain}.${var.root_domain}"
+  validation_method = "DNS"
+
+  tags {
+    "environment" = "${var.environment}"
+    "service"     = "${var.name}"
+  }
+}
+
+####################################################
+# outputs.tf
+####################################################
+
+output "user_pool_id" {
+  value = "${aws_cognito_user_pool.pool.id}"
+}
+
+output "user_pool_arn" {
+  value = "${aws_cognito_user_pool.pool.arn}"
+}
+
+output "user_pool_client_id" {
+  value = "${aws_cognito_user_pool_client.pool_client.id}"
+}
+
+output "user_pool_client_secret" {
+  // this is only shown at creation
+  value = "${aws_cognito_user_pool_client.pool_client.client_secret}"
+}
+
+output "app_user_name" {
+  value = "${aws_iam_user.cognito_app_user.name}"
+}
+
+output "app_user_arn" {
+  value = "${aws_iam_user.cognito_app_user.arn}"
+}
+
+output "acm_certificate_arn" {
+  value = "${aws_acm_certificate.certificate.arn}"
+}
+
+output "acm_certificate_domain_name" {
+  value = "${aws_acm_certificate.certificate.domain_name}"
+}
+
+output "acm_certificate_domain_validation_options" {
+  value = "${aws_acm_certificate.certificate.domain_validation_options}"
+}
+
+####################################################
+# required.tf
+####################################################
+
+terraform {
+  # No value within the terraform block can use interpolations. 
+  # The terraform block is loaded very early in the execution of Terraform and interpolations are not yet available.
+  required_version = "0.10.7"
+}
+
+####################################################
+# service_iam.tf
+####################################################
+
+resource "aws_iam_group" "cognito_app_group" {
+  name = "${var.environment}_${var.name}_group"
+}
+
+resource "aws_iam_user" "cognito_app_user" {
+  name = "${var.environment}_${var.name}_user"
+}
+
+# note:
+# we don't also create an 'aws_iam_access_key' resource
+# because we don't want the access key to be committed
+# 
+# so we manually create access/secret keys via the console
+
+resource "aws_iam_user_group_membership" "cognito_app_user_groups" {
+  user = "${aws_iam_user.cognito_app_user.name}"
+
+  groups = [
+    "${aws_iam_group.cognito_app_group.name}",
+  ]
+}
+
+data "aws_iam_policy_document" "cognito_app_group_policy" {
+  statement {
+    actions = [
+      "cognito-idp:ListUserPools",
+      "cognito-idp:ListUsers",
+    ]
+
+    resources = [
+      "*",
+    ]
+  }
+
+  statement {
+    actions = [
+      "cognito-idp:AdminAddUserToGroup",
+      "cognito-idp:AdminConfirmSignUp",
+      "cognito-idp:AdminCreateUser",
+      "cognito-idp:AdminDeleteUser",
+      "cognito-idp:AdminDeleteUserAttributes",
+      "cognito-idp:AdminDisableProviderForUser",
+      "cognito-idp:AdminDisableUser",
+      "cognito-idp:AdminEnableUser",
+      "cognito-idp:AdminForgetDevice",
+      "cognito-idp:AdminGetDevice",
+      "cognito-idp:AdminGetUser",
+      "cognito-idp:AdminInitiateAuth",
+      "cognito-idp:AdminLinkProviderForUser",
+      "cognito-idp:AdminListDevices",
+      "cognito-idp:AdminListGroupsForUser",
+      "cognito-idp:AdminListUserAuthEvents",
+      "cognito-idp:AdminRemoveUserFromGroup",
+      "cognito-idp:AdminResetUserPassword",
+      "cognito-idp:AdminRespondToAuthChallenge",
+      "cognito-idp:AdminSetUserMFAPreference",
+      "cognito-idp:AdminSetUserSettings",
+      "cognito-idp:AdminUpdateAuthEventFeedback",
+      "cognito-idp:AdminUpdateDeviceStatus",
+      "cognito-idp:AdminUpdateUserAttributes",
+      "cognito-idp:AdminUserGlobalSignOut",
+    ]
+
+    resources = [
+      "${aws_cognito_user_pool.pool.arn}",
+    ]
+  }
+}
+
+resource "aws_iam_policy" "cognito_app_group_policy" {
+  name   = "${var.environment}_${var.name}_group_policy"
+  policy = "${data.aws_iam_policy_document.cognito_app_group_policy.json}"
+}
+
+resource "aws_iam_group_policy_attachment" "cognito_app_group_attachment" {
+  group      = "${aws_iam_group.cognito_app_group.name}"
+  policy_arn = "${aws_iam_policy.cognito_app_group_policy.arn}"
+}
+
+####################################################
+# sns_iam.tf
+####################################################
+
+data "aws_iam_policy_document" "cognito_sns_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["cognito-idp.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "cognito_sns_role" {
+  name               = "${var.environment}_${var.name}_cognito_sns_role"
+  assume_role_policy = "${data.aws_iam_policy_document.cognito_sns_assume_role_policy.json}"
+}
+
+data "aws_iam_policy_document" "cognito_sns_publish_policy" {
+  statement {
+    actions = [
+      "sns:Publish",
+    ]
+
+    resources = [
+      "*",
+    ]
+  }
+}
+
+resource "aws_iam_policy" "cognito_sns_role_policy" {
+  name   = "${var.environment}_${var.name}_cognito_sns_role_policy"
+  policy = "${data.aws_iam_policy_document.cognito_sns_publish_policy.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "cognito_sns_role_policy_attachment" {
+  role       = "${aws_iam_role.cognito_sns_role.name}"
+  policy_arn = "${aws_iam_policy.cognito_sns_role_policy.arn}"
+}
+
+####################################################
+# vars.tf
+####################################################
+
+variable "aws_role_arn" {}
+
+variable "aws_region" {
+  default = "us-east-1"
+}
+
+variable "environment" {}
+
+variable "name" {
+  default = "your_service_name"
+}
+
+variable "callback_urls" {
+  type = "list"
+}
+
+variable "logout_urls" {
+  type = "list"
+}
+
+variable "domain" {}
+
+variable "google_provider_client_id" {}
+variable "google_provider_client_secret" {}
+
+variable "facebook_provider_client_id" {}
+variable "facebook_provider_client_secret" {}
+
+variable "root_domain" {
+  description = "certificate root domain"
+  default     = "your-example-domain.com"
+}
+```
 
 ## Conclusion
 
