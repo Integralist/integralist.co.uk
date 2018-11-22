@@ -29,6 +29,7 @@ draft: false
     - [Scope](#scope)
 - [JWTs](#jwts)
 - [API Limits](#api-limits)
+- [Logout Issues](#logout-issues)
 - [Which is the right solution?](#which-is-the-right-solution)
 - [Updated Architecture](#updated-architecture)
 - [User Pool Configuration](#user-pool-configuration)
@@ -324,6 +325,34 @@ The JWK is a set of keys that are the public equivalent of the private keys used
 One issue we stumbled across recently was the API limits, which meant we couldn't make any further API requests (and for an indeterminate amount of time) 🤔
 
 Seems there is a [Cognito API limits](https://docs.aws.amazon.com/cognito/latest/developerguide/limits.html) reference page, but it's still unclear how long you have to wait before you can start making requests again.
+
+## Logout Issues
+
+AWS provides a [`/logout`](https://docs.aws.amazon.com/cognito/latest/developerguide/logout-endpoint.html) that when visited allows a user to clear any session tracking AWS might have on their browser.
+
+This is different to the 'signout' API functionality in that the user can call the `/logout` endpoint without any special tokens †
+
+> Note: you have to provide quite specific query params (e.g. `client_id` and `logout_uri` -- so AWS can redirect back to a pre-configured logout page that you host) and so it's likely you'll want to wrap that long and ugly URL within an `<a href=''>click to logout</a>` link.
+
+This endpoint is useful because if you have a social user in your user pool, and you delete that user (something we would do regularly while we were testing in our stage environment), you would find that AWS is tracking your browser via session and so if you tried to sign-up or sign-in again using that same social user you would get an `invalid grant` exception back from AWS (this was _super_ confusing behaviour and took a long time to figure out).
+
+So for our use case, we would have a social user (e.g. facebook or google) sign-in for the first time, Cognito would (once the user had authenticated with their social provider) automatically create a social user account in our user pool ...BUT we have other post-processing steps and if any of those fail we want to delete the social user and tell the user what went wrong.
+
+So to explain: _before_, our intention for when we were getting an error from an AWS API operation, would be to catch the error, then make a request to `/logout` and have it redirect to a failure page we host (we would get that behaviour via the `logout_uri` query param that AWS provideds). 
+
+Our `logout_uri` value (a URL) would itself have a query param specified of `err_msg=<SOME_ERROR>` so that our failure page could use that param to indicate the original error to the user. Problem was in Cognito you can only specify a logout url that matches what's predefined in your user pool. Meaning if we wanted to redirect to `https://example.com/failure?err_msg=foo` then that's exactly what needs to be defined in Cognito (even down to the query param).
+
+We didn't realise this and we only had `https://example.com/failure` defined as a valid `logout_uri`. We could have explicitly specified the `err_msg` param but we have lots of error types to handle and so it wasn't practical to list each and every variant URL.
+
+So to work around the fact that we can't specify a query param (because there are too many value variants to be practical for us to explicitly list all of them in the UI) we now catch the original API error and redirect the user to our failure page with the `err_msg` param passed so we can indicate the error back to the user. 
+
+At this point we still need to call the AWS `/logout` endpoint so we can clear any session tracking. So along with the error message we display to the user, we also show a message to say we will redirect them automatically (via JavaScript) back to another part of our site in N seconds time (enough time for the user to read the error we're displaying).
+
+Before we redirect the user to that page we first redirect them to the AWS `/logout` endpoint, this time specifying our failure page as the value for the `logout_uri` query param but just without an `err_msg` query param provided.
+
+Our failure page is configured with a conditional check that says "if an `err_msg` param is passed then show error page with the JS redirect to `/logout`, otherwise if no `err_msg` provided just immediately redirect to our `/signin` page".
+
+So that's how we're resolving this issue currently. It's not elegant for sure but it works.
 
 ## Which is the right solution?
 
