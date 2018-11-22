@@ -328,7 +328,7 @@ Seems there is a [Cognito API limits](https://docs.aws.amazon.com/cognito/latest
 
 ## Logout Issues
 
-AWS provides a [`/logout`](https://docs.aws.amazon.com/cognito/latest/developerguide/logout-endpoint.html) that when visited allows a user to clear any session tracking AWS might have on their browser.
+AWS provides a [`/logout`](https://docs.aws.amazon.com/cognito/latest/developerguide/logout-endpoint.html) endpoint that when visited allows a user to clear any session tracking AWS might have on their browser.
 
 This is different to the 'signout' API functionality in that the user can call the `/logout` endpoint without any special tokens †
 
@@ -338,11 +338,17 @@ This endpoint is useful because if you have a social user in your user pool, and
 
 So for our use case, we would have a social user (e.g. facebook or google) sign-in for the first time, Cognito would (once the user had authenticated with their social provider) automatically create a social user account in our user pool ...BUT we have other post-processing steps and if any of those fail we want to delete the social user and tell the user what went wrong.
 
-So to explain: _before_, our intention for when we were getting an error from an AWS API operation, would be to catch the error, then make a request to `/logout` and have it redirect to a failure page we host (we would get that behaviour via the `logout_uri` query param that AWS provideds). 
+But again, we _need_ to now call the `/logout` endpoint so if that user decides they want to try and sign-up again they don't get a more confusing `invalid_grant` error message thrown at them (and we don't have to translate that message into something that shouldn't even be a concern for them in the first place).
 
-Our `logout_uri` value (a URL) would itself have a query param specified of `err_msg=<SOME_ERROR>` so that our failure page could use that param to indicate the original error to the user. Problem was in Cognito you can only specify a logout url that matches what's predefined in your user pool. Meaning if we wanted to redirect to `https://example.com/failure?err_msg=foo` then that's exactly what needs to be defined in Cognito (even down to the query param).
+This brings us to the problem we have with the `/logout` endpoint...
 
-We didn't realise this and we only had `https://example.com/failure` defined as a valid `logout_uri`. We could have explicitly specified the `err_msg` param but we have lots of error types to handle and so it wasn't practical to list each and every variant URL.
+Our intention, for when we were getting an error from an AWS API operation, would be to catch the error, then make a request to `/logout` and have it redirect to a failure page we host (the redirection is a built-in feature that AWS provides via a `logout_uri` query param). 
+
+Our `logout_uri` value (a URL) would itself have a query param specified of `err_msg=<SOME_ERROR>` so that our failure page could use that param to indicate the original error to the user. Problem was in Cognito you can only specify a logout url that matches what's predefined in your user pool. 
+
+Meaning if we wanted to redirect to `https://example.com/failure?err_msg=foo` then that's exactly what needs to be defined in Cognito (even down to the query param). We didn't realise this and we only had `https://example.com/failure` defined as a valid `logout_uri`. 
+
+To solve this issue we could have explicitly specified the `err_msg` param but we have lots of error types to handle and so it wasn't practical to list each and every variant URL.
 
 So to work around the fact that we can't specify a query param (because there are too many value variants to be practical for us to explicitly list all of them in the UI) we now catch the original API error and redirect the user to our failure page with the `err_msg` param passed so we can indicate the error back to the user. 
 
