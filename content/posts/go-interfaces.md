@@ -18,6 +18,7 @@ draft: false
 - [Don't Return Concrete Types](#don-t-return-concrete-types)
 - [Use existing interfaces](#use-existing-interfaces)
 - [Don't Force Interfaces](#don-t-force-interfaces)
+- [Upgrading Interfaces](#upgrading-interfaces)
 - [Standard Library Interfaces](#standard-library-interfaces)
 - [Tight Coupling](#tight-coupling)
 - [Dependency Injection](#dependency-injection)
@@ -316,6 +317,125 @@ func main() {
 ```
 
 The use of an interface here is a bit pointless. We should instead just return a pointer to an exported version of the server struct because the user is gaining no benefits from an interface being returned by `NewServer` (see [Don't Return Concrete Types](#don-t-return-concrete-types) for a possible use case for returning interfaces, but the above example is not one of them).
+
+## Upgrading Interfaces
+
+If you use have an interface that's used by lots of people, how do you add a new method to it without breaking their code? The moment you add a new method to the interface, their existing code that handles the concrete implementation will fail.
+
+Below is an example of this problem:
+
+```
+package main
+
+import "fmt"
+
+type foo interface {
+	bar() string
+	baz() string // new method added, which breaks the code
+}
+
+func doThing(f foo) {
+	fmt.Println("bar:", f.bar())
+}
+
+type point struct {
+	X, Y int
+}
+
+func (p point) bar() string {
+	return fmt.Sprintf("p=%d, y=%d", p.X, p.Y)
+}
+
+func main() {
+	var pt point
+	pt.X = 1
+	pt.Y = 2
+
+	doThing(pt)
+}
+```
+
+In the above code we can see we have added a new method `baz` to our `foo` interface which means the concrete implementation `pt` is no longer satisfying the `foo` interface as it has no `baz` method.
+
+> Note: I appreciate the example is a bit silly because we could just update the code to support the new interface, but we have to imagine a world where your interface is provided as part of a public package that is consumed by lots of users.
+
+To solve this problem we need an intermediate interface. The following example demonstrates the process, but the steps are...
+
+1. add the method to your concrete type implementation
+2. define a new interface containing the new method
+3. document the new interface and ask your interface consumers to type assert for it
+
+```
+package mainold
+
+import "fmt"
+
+type foo interface {
+	bar() string
+}
+
+type newfoo interface {
+	baz() string
+}
+
+// We want a `foo` interface type, but if that valid type can also do the new
+// behaviour, then we'll execute that behaviour...
+
+func doThing(f foo) {
+	if nf, ok := f.(newfoo); ok {
+		fmt.Println("baz:", nf.baz())
+	}
+	fmt.Println("bar:", f.bar())
+}
+
+// Original concrete implementation...
+
+type point struct {
+	X, Y int
+}
+
+func (p point) bar() string {
+	return fmt.Sprintf("p=%d, y=%d", p.X, p.Y)
+}
+
+// New concrete implementation of `point` struct (has the new method)...
+
+type newpoint struct {
+	point
+}
+
+func (np newpoint) baz() string {
+	return fmt.Sprintf("np !!! %d, ny !!! %d", np.X, np.Y)
+}
+
+func main() {
+	var pt point
+	pt.X = 1
+	pt.Y = 2
+
+	doThing(pt)
+
+	var npt newpoint
+	npt.X = 3
+	npt.Y = 4
+
+	doThing(npt)
+}
+```
+
+The output of the above code is as follows:
+
+```
+bar: p=1, y=2
+baz: np !!! 3, ny !!! 4
+bar: p=3, y=4
+```
+
+So we can see we called `doThing` and passed a concrete type that satisfied the `foo` interface and so that function called the `bar` method it was expecting to exist. Next we called `doThing` again but passed a different concrete type that not only satisfied the `foo` interface, but the `newfoo` interface and within `doThing` we type assert that the object passed in is not only a `foo` but a `newfoo`.
+
+What would this look like in practice then? Well, if the Go standard library wanted to add a new method to the existing (and very popular) `net/http` package `ResponseWriter` interface: they would create a new interface with just the new behaviour defined, then they would document its existence and in that documentation they would explain that if your HTTP handler required the new behaviour, then you should type assert for it.
+
+Imagine if the go standard library just updated the `ResponseWriter` with the new method? Lots and lots of existing HTTP server code would break as the concrete implementation that was passed through would not support that implementation.
 
 ## Standard Library Interfaces
 
