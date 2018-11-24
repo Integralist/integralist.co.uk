@@ -1194,6 +1194,28 @@ func main() {
 }
 ```
 
+Another form of custom error can be seen using a struct:
+
+```
+type errCustom struct {
+    message string
+    code    int
+}
+
+func (e errCustom) Error() string {
+    return fmt.Sprintf("error message: %s (code: %d)", e.message, e.code)
+} 
+```
+
+We would then implement the struct with the specific error context information and return it:
+
+```
+return errCustom{
+    message: "whoops",
+    code:    500
+}
+```
+
 <div id="13"></div>
 ## Function Types
 
