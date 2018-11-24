@@ -117,6 +117,8 @@ The [@babel/polyfill](https://babeljs.io/docs/en/babel-polyfill) dependency will
 
 The [@babel/preset-env](https://babeljs.io/docs/en/babel-preset-env) helps manage the browser environment for you, so it'll handle determining what additional scripts/polyfills you need. By default it'll setup everything to support ES5 environments, but you can configure it for very specific browsers if you don't need to worry about older browsers.
 
+> Note: `@babel/polyfill` also provides a `useBuiltIns` flag which allows Babel to selectively polyfill built-in features that were introduced as part of ES6+. Because it filters polyfills to include only the ones required by the environment, we mitigate the cost of shipping with babel-polyfill in its entirety.
+
 Now let's create all the files we need to build out our example application:
 
 ```
