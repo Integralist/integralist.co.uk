@@ -189,6 +189,13 @@ You would compile the above `version` variable using:
 go build -tags prod
 ```
 
+<div id="3.2"></div>
+## Package Naming
+
+In Go, the name of the package is used to refer to the exported item: `fmt.Println`, `http.RegisterFunc` etc. Because the package name is so visible, the package name should describe what the exported items are. Meaning, we shouldn't have packages named `util` (as a common example of bad package naming) because `util.JSONMarshal` isn't as efficient and effective as `json.Marshal`.
+
+Another example of this that I found in my own code was `utils.CreateUser`. Later on during the project I had added `utils.CreateLegacyUser`. When I discovered what I had done I went back and made two separate packages `legacy` and `aws` so that I could have a consistent `CreateUser` function within both (e.g. `aws.CreateUser` and `legacy.CreateUser`).
+
 <div id="4"></div>
 ## Dependency Information
 
