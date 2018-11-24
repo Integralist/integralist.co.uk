@@ -1438,6 +1438,45 @@ foo: {X:8 Y:8}
 {Circle:{Point:{X:8 Y:8} Radius:5} Spokes:20}
 ```
 
+The following example shows how you can mix and match 'named' and 'anonymous' embeds:
+
+```
+package main
+
+import "fmt"
+
+// Point is ...
+type Point struct {
+	X, Y int
+}
+
+func (p Point) foo() {
+	fmt.Printf("foo: %+v\n", p)
+}
+
+// Circle is ...
+type Circle struct {
+	p      Point
+	Radius int
+}
+
+// Wheel is ...
+type Wheel struct {
+	Circle
+	Spokes int
+}
+
+func main() {
+	var w Wheel
+	w.Spokes = 1
+	w.Radius = 2
+	w.p.X = 3 // w.Circle.p.X
+	w.p.Y = 4 // w.Circle.p.X
+	w.p.foo()
+	fmt.Printf("%+v", w)
+}
+```
+
 Here is a more practical example that demonstrates how embedded functionality can make code more expressive:
 
 ```
