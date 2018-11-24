@@ -1515,7 +1515,11 @@ func main() {
 <div id="17"></div>
 ## Reference vs Value
 
-Map data structures are passed by reference, rather than a copied value
+Summary: limit passing by reference unless the size of the copied value is a problem (i.e. memory allocations).
+
+Map data structures are passed by reference, rather than a copied value.
+
+Consider the following example:
 
 ```
 package main
@@ -1536,7 +1540,106 @@ func foo(m map[string]int) {
 }
 ```
 
-In fact, anything with `make` is a reference, as well as any explicit interface
+The output:
+
+```
+main before, m =  map[]
+foo before, m =  map[]
+foo after, m =  map[hai:123]
+main after, m =  map[hai:123]
+```
+
+Notice how the map is mutated even once the `foo` function has finished. This is because a reference to the underlying struct memory location was passed and so the changes made were effective everywhere.
+
+In fact, anything with `make` is a reference, as well as any explicit interface.
+
+Now consider the next example, which is a slice of integers:
+
+```
+package main
+
+import "fmt"
+
+func main() {
+	m := []int{1, 2, 3}
+	fmt.Println("main before, m = ", m)
+	foo(m)
+	fmt.Println("main after, m = ", m)
+}
+
+func foo(m []int) {
+	fmt.Println("foo before, m = ", m)
+	m = append(m, 4)
+	fmt.Println("foo after, m = ", m)
+}
+```
+
+The output:
+
+```
+main before, m =  [1 2 3]
+foo before, m =  [1 2 3]
+foo after, m =  [1 2 3 4]
+main after, m =  [1 2 3]
+```
+
+Notice how the slice isn't showing as mutated after the `foo` function has finished. This is because a _copy_ of the slice was passed to the function for mutating.
+
+In the following example we pass a struct by value (i.e. a copy of the `person` variable is passed):
+
+```
+package main
+
+import "fmt"
+
+type Person struct {
+    firstName string
+    lastName  string
+}
+
+func changeName(p Person) {
+    p.firstName = "Bob"
+}
+
+func main() {
+    person := Person {
+        firstName: "Alice",
+        lastName: "Dow",
+    }
+
+    changeName(person)
+
+    fmt.Println(person)
+}
+```
+
+In order to have that type of change we would need to pass a pointer reference:
+
+```
+package main
+
+import "fmt"
+
+type Person struct {
+    firstName string
+    lastName  string
+}
+
+func changeName(p *Person) {
+    p.firstName = "Bob"
+}
+
+func main() {
+    person := Person {
+        firstName: "Alice",
+        lastName: "Dow",
+    }
+
+    changeName(&person)
+
+    fmt.Println(person)
+}
+```
 
 <div id="18"></div>
 ## See all methods on `<Type>`
