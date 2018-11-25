@@ -322,7 +322,9 @@ The use of an interface here is a bit pointless. We should instead just return a
 
 If you use have an interface that's used by lots of people, how do you add a new method to it without breaking their code? The moment you add a new method to the interface, their existing code that handles the concrete implementation will fail.
 
-Below is an example of this problem:
+Unfortunately there isn't a completely clean solution to this problem. In essence the original interface needs to stay untouched and we need to define a _new_ interface that contains the new behaviour. Then the consumer's of an interface will continue to reference the original interface while using a type assertion within their functions for the new interface.
+
+Below is an example of this problem in action:
 
 ```
 package main
