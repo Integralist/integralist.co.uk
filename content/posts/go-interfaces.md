@@ -359,14 +359,14 @@ In the above code we can see we have added a new method `baz` to our `foo` inter
 
 > Note: I appreciate the example is a bit silly because we could just update the code to support the new interface, but we have to imagine a world where your interface is provided as part of a public package that is consumed by lots of users.
 
-To solve this problem we need an intermediate interface. The following example demonstrates the process, but the steps are...
+To solve this problem we need an intermediate interface. The following example demonstrates the process. The steps are...
 
-1. add the method to your concrete type implementation
-2. define a new interface containing the new method
+1. define a new interface containing the new method
+2. add the method to the concrete type implementation
 3. document the new interface and ask your interface consumers to type assert for it
 
 ```
-package mainold
+package main
 
 import "fmt"
 
@@ -422,6 +422,8 @@ func main() {
 	doThing(npt)
 }
 ```
+
+> Note: again, the example is a bit silly in that we're handling everything within a single file, where as in reality the consumer won't have access to the original interface/implementation code like we do here (so just use your imagination 🙂).
 
 The output of the above code is as follows:
 
