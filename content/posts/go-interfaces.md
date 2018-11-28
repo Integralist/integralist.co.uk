@@ -441,7 +441,7 @@ What would this look like in practice then? Well, if the Go standard library wan
 
 Imagine if the go standard library just updated the `ResponseWriter` with the new method? Lots and lots of existing HTTP server code would break as the concrete implementation that was passed through would not support that implementation.
 
-In fact this is exatly what the go standard library authors have done with the [`Flusher`](https://golang.org/pkg/net/http/#Flusher) and [`Hijacker`](https://golang.org/pkg/net/http/#Hijacker) interfaces. The following code demonstrates the use of a type assertion to access the additional behaviour defined by those interfaces:
+In fact this is exactly what the go standard library authors have done with the [`Flusher`](https://golang.org/pkg/net/http/#Flusher) and [`Hijacker`](https://golang.org/pkg/net/http/#Hijacker) interfaces. The following code demonstrates the use of a type assertion to access the additional behaviour defined by those interfaces:
 
 ```
 func(w http.ResponseWriter, r *http.Request) {
