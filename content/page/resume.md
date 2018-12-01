@@ -277,7 +277,7 @@ The following links are to some of my more 'popular' articles. My main focus whe
 - [Thinking about Interfaces in Go](/posts/go-interfaces/) (2018)
 - [Multigrain Services](/posts/multigrain-services/) (2018)
 - [Authentication with AWS Cognito](/posts/cognito/) (2018)
-- [1:1 in Five Minutes](/posts/1-1/) (2018)
+- [A guide to effective 1:1 meetings](/posts/1-1/) (2018)
 - [Project Management in Five Minutes](/posts/project-management-in-five-minutes/) (2018)
 - [Interview Topics](/posts/questions-when-interviewing/) (2018)
 - [Hashing, Encryption and Encoding](/posts/hashing-and-encryption/) (2018)
