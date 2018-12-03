@@ -42,6 +42,8 @@ I've long kept a list of books I've enjoyed reading, and decided I would share t
 ## Communication
 
 - [Radical Candor: care personally and challenge directly](https://www.radicalcandor.com/)
+- [Nonviolent Communication](https://www.nonviolentcommunication.com/)
+- [Authentic Communication](https://www.soundstrue.com/store/authentic-communication.html)
 
 ## Concurrency
 
@@ -51,7 +53,6 @@ I've long kept a list of books I've enjoyed reading, and decided I would share t
 ## Culture
 
 - [Conscious Business: How to build value through values](https://www.soundstrue.com/store/conscious-business-4036.html)
-- [Managing Humans: Biting and Humorous Tales of a Software Engineering Manager](http://managinghumans.com/pitch.html)
 - [Powerful: building a culture of freedom and responsibility](http://pattymccord.com/book/)
 
 ## Functional Programming
@@ -69,6 +70,11 @@ I've long kept a list of books I've enjoyed reading, and decided I would share t
 - [High Performance JavaScript (Build Faster Web Application Interfaces)](http://www.amazon.co.uk/Performance-JavaScript-Faster-Application-Interfaces/dp/059680279X/ref=sr_1_1?ie=UTF8&qid=1427038840&sr=8-1&keywords=high+performance+javascript)
 - [JavaScript: The Good Parts](http://www.amazon.co.uk/JavaScript-Good-Parts-Douglas-Crockford/dp/0596517742/ref=sr_1_1?ie=UTF8&qid=1427038785&sr=8-1&keywords=javascript+the+good+parts)
 - [Test Driven JavaScript Development](http://www.amazon.co.uk/Driven-JavaScript-Development-Developers-Library/dp/0321683919/ref=sr_1_1?ie=UTF8&qid=1427038811&sr=8-1&keywords=test-driven+javascript+development)
+
+## Management
+
+- [The Manager's Path](http://shop.oreilly.com/product/0636920056843.do)
+- [Managing Humans: Biting and Humorous Tales of a Software Engineering Manager](http://managinghumans.com/pitch.html)
 
 ## Patterns
 
