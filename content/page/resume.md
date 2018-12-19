@@ -70,7 +70,7 @@ Near the end of 2015 I decided to change roles to Principal Software Engineer, a
 
 ### Storm Creative (Feb 2001 - Dec 2012)
 
-I started working at the agency [Storm Creative](http://www.stormcreative.co.uk/) straight out of college. I was always focused on learning and improving my skill set - both technical and soft skills - the latter helped me communicate better with both clients and other stakeholders/colleagues. 
+I started working at the agency [Storm Creative](http://www.stormcreative.co.uk/) straight out of college. I was always focused on learning and improving my skill set - both technical and communication skills - the latter helped me communicate better with both clients and other stakeholders/colleagues. 
 
 I progressed upwards through the organisation, moving from initially being a client-side web developer (this included doing animations utilising ActionScript 3.0) to becoming a server-side developer (ASP.NET, PHP and Ruby), then onto becoming a Technical Lead across all projects and finally becoming the Digital Media Manager responsible for my own team of four engineers and overseeing all aspects of our projects.
 
