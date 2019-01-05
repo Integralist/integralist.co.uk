@@ -77,7 +77,7 @@ pre {
 
 .night .title, .night h1, .night h2, .night h3, .night h4, .night h5, .night h6,
 .night a, .night a:visited {
-  color: #fff;
+  color: #DDD;
 }
 
 .night h3 {
@@ -122,4 +122,8 @@ input#search {
   list-style: disc;
   margin: 0;
   padding: 0;
+}
+
+.image-caption {
+  margin-top: -1em;
 }
