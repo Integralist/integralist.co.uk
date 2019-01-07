@@ -1,6 +1,6 @@
 ---
 title: About
-description: Privileged. Polyglot. Author. Jazz Guitarist. Human.
+description: Compassionate Listener. Polyglot. Author. Husband. Father. He/Him.
 comments: false
 menu: main
 weight: -170
