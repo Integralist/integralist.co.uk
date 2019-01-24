@@ -7,16 +7,16 @@ weight: -170
 ---
 
 - [Hello!](#hello)
-- [Testimonials](#testimonials)
+- [Working Together](#working-together)
 - [Connect](#connect)
-- [History](#history)
-- [Key Achievements](#key-achievements)
-- [Tools, Languages and Tech](#tools-languages-and-tech)
+- [Brief History](#brief-history)
+- [Impact!](#impact)
 - [Talks](#talks)
 - [Interviews](#interviews)
 - [Published](#published)
 - [Popular articles](#popular-articles)
 - [Open-Source](#open-source)
+- [Tools, Languages and Tech](#tools-languages-and-tech)
 - [Summary](#summary)
 
 <img src="../images/profile.jpg">
@@ -29,20 +29,24 @@ I'm also a published author with Apress and LeanPub:
 
 ### Apress
 
+- [Quick Clojure: Effective Functional Programming](http://www.apress.com/9781484229514)
 - [Pro Vim](http://www.apress.com/9781484202517)
 - [Tmux Taster](http://www.apress.com/gb/book/9781484207765)
-- [Quick Clojure: Effective Functional Programming](http://www.apress.com/9781484229514)
 
 ### LeanPub
 
 - [Python for Programmers](https://leanpub.com/pythonforprogrammers)
 - [Programming in Clojure](https://leanpub.com/programming-clojure/)
 
-## Testimonials
+## Working Together
 
-> "as smart as developers are, they are not always good at explaining things in a way that makes human sense. not you. you are an exception. you are A+"
+> "as smart as developers are, they are not always good at explaining things in a way that makes human sense. not you. you are an exception. you are A+".
 
-I ❤️ this feedback. It's music to my ears, and is what I strive for: to help others to do their best work and to push/promote the good work other engineers do (especially those from either a diverse background or minority).
+I ❤️ this feedback. It came from someone I was mentoring who worked in Product Support at BuzzFeed. She was interested in getting a better understanding of how software systems were designed/architected, and also how to know what types of questions she should ask when investigating technical incidents.
+
+Her feedback also hints at something bigger which I strive for: to help others to do their best work and to push/promote the good work other engineers do (especially those from either a diverse background or minority).
+
+I care a lot about the people I work with, and aim to build meaningful relationships with people across the company. In doing so I hope to ensure that we collectively are able to work as a cohesive unit, and thus provide great value to our users.
 
 ## Connect
 
@@ -54,11 +58,21 @@ You can find me online at the following locations:
 - [keybase.io/integralist](https://keybase.io/integralist)
 - [linkedin.com/mark-mcdonnell](https://www.linkedin.com/in/mark-mcdonnell-08800565)
 
-## History
+## Brief History
 
 ### BuzzFeed (June 2016 - present)
 
 The journey has just begun...
+
+BUT the story so far is that I joined as a Senior Software Engineer as part of a new core UK dev team being pushed to take on some important new projects for the company.
+
+Alongside that we were tasked with decommissioning a 10yr+ legacy Perl monolithic application stack over to various Python and Go services.
+
+I've worked primarily within BuzzFeed's OO-INFRA group which sits somewhere in-between traditional infrastructure/operation teams and engineering teams building user facing products. Our motivations were to make the lifes of our fellow engineers easier by building tools, services and abstractions that enabled them to work more quickly and efficiently.
+
+In January 2018 I was promoted to Staff Software Engineer, after helping to design/architect, develop and maintain some of BuzzFeed's key infrastructure and software (CDN, caching strategies, routing behaviours, and security/authentication related concerns).
+
+Each year I would also participate in the various working groups and mentoring programs, and become part of the 'on-call' rota and handle interactions with the Hackerone program.
 
 ### BBC (Jan 2013 - June 2016)
 
@@ -74,36 +88,93 @@ I started working at the agency [Storm Creative](http://www.stormcreative.co.uk/
 
 I progressed upwards through the organisation, moving from initially being a client-side web developer (this included doing animations utilising ActionScript 3.0) to becoming a server-side developer (ASP.NET, PHP and Ruby), then onto becoming a Technical Lead across all projects and finally becoming the Digital Media Manager responsible for my own team of four engineers and overseeing all aspects of our projects.
 
-## Key Achievements
+## Impact!
+
+I'd like to share the various things I've worked on over the years and the impact/value this work has provided.
 
 ### 2018
 
-- Saved BuzzFeed $60k annually during Hack Week working on a project that replaced NGINX+ (an expensive commercial product) with its open-source equivalent (see my presentation [slides here](../../pdfs/hackweek_2018_nginx.pdf)).
-- Designed and co-implemented new authentication system built in Python on top of AWS Cognito. The aim was to replace the authentication logic currently present within our legacy monolithic web application, and also to be the foundation for authentication _and_ authorization requirements for our modern micro services moving forward.
-- Built a Python package that wraps scrypt. Motivation was to provide a consistent interface that allowed engineers across the organization to utilize approved security functions for hashing and encrypting data.
-- Started to introduce both Kim Scott's "Radical Candor" and Fred Kofman's "integral communication" concepts to enable teams to work more openly and honestly.
-- Introduced Wednesday lunch videos/presentations. The idea being to have multiple teams in the UK office have lunch together while watching a video (or someone giving a presentation) and thus having a topic to focus discussion around. This was primarily done for fun, but also to help us to better engage with each other and to encourage people to share things of interest to them (it didn't have to be technical videos/presentations, but anything that was felt to be _interesting_).
-- Designed and implemented a Python package which acted as a Tornado web handler decorator for acquiring/caching/revalidating an asymmetrical public key (provided by the authentication reverse proxy we built in Go - see below bullet). The key is used to verify the signature (message integrity) attached to a JWT containing public user data. Its purpose was to help engineers to quickly integrate with our custom built authentication service and provide a consistent experience across the platform.
-- Co-designed/engineered an authentication service layer reverse proxy (written in Go). Utilised JWT's (signed using public-key cryptography) to ensure upstream protected services could trust the received user data and its integrity.
-- Selected to be part of a new infrastructure team tasked with designing a new 'authentication and authorization' service layer(s).
-- Promoted to Staff Software Engineer in January.
+- **What**: I replaced BuzzFeed's use of NGINX+ (a very expensive commercial product that was being used as part of a critical piece of BuzzFeed's infrastructure) with the open-source equivalent.  
+  **Why**: This was a [hack week project](../../pdfs/hackweek_2018_nginx.pdf). It took one day to implement the changes, one day to test and verify behaviours in a staging environment, followed by a quick rollout to production.   
+  **Impact**: This saved the organization $60,000 a year in licensing fees.
+
+- **What**: Designed and co-implemented new authentication system built in Python on top of AWS Cognito.   
+  **Why**: Decommission our legacy authentication system which was tightly coupled to a 10yr+ monolithic Perl application.  
+  **Impact**: Enabled more services to offer authentication services, thus allowing more community driven features across our products.
+
+- **What**: Built a Python package that wraps scrypt.  
+  **Why**: Provide a consistent interface when requiring a hashing function.  
+  **Impact**: Engineers unfamiliar with the particulars of various security protocols (e.g. the various hashing mechanisms or the difference to encryption) could safely utilise hashing without having to understand the implementation.
+
+- **What**: Helped promote the benefits of Kim Scott's 'Radical Candor', Marshall Rosenberg's 'Nonviolent Communication' and Fred Kofman's 'Authentic Communication' to various teams across BuzzFeed.   
+  **Why**: Effective, clear and compassionate communication benefits everyone.  
+  **Impact**: Teams were becoming more productive as the confidence to give the most appropriate and direct feedback necessary to catch both interpersonal issues and team concerns much more quickly.
+
+- **What**: Introduced Wednesday lunch videos/presentations.   
+  **Why**: To motivate and inspire our development teams.  
+  **Impact**: People had fun listening to interesting topics (not all tech related), and having a source of conversation and discussion beyond the lunch hour and in some cases helped to inspire changes that fed back into the company.
+
+- **What**: Designed and implemented a Python Tornado web handler decorator responsible for acquiring/caching/revalidating an asymmetrical public key.   
+  **Why**: To protect services from unauthenticated access (the public key was used to sign JWTs provided by an authentication proxy we had built previously in Go).  
+  **Impact**: Helped engineers to quickly integrate with our custom built authentication service and provide a consistent experience across the platform.
+
+- **What**: Co-designed and co-implemented a Go based reverse proxy acting as an authentication layer in front of BuzzFeed services.   
+  **Why**: Part of a plan to decommission our legacy authentication system.  
+  **Impact**: The use of JWTs helped to implement a stateless system for providing authenticated access to services, thus making the system easier to reason about, and allowed certain teams an opportunity to decouple themselves from our legacy Perl stack.
 
 ### 2017
 
-- Created basic [README validator](https://gist.github.com/Integralist/03279be86a356119b1f820da6ebb8740#file-2-python-3-4-compatible-version-for-rig-vm-mono-repo-result-csv-options-py) as part of our Better Docs initiative and in preparation for our Doc Day event.
-- Took lead on documenting and improving the state of our monitoring by way of implementing best practices ([see my article for details](/posts/monitoring-best-practices/)) as well as improving the quality (and consistency) of our operational runbooks ([see an example template](https://docs.google.com/document/d/1eaT9KMam5zq7lT-5OVz9T91RJQUx-qx2q6WnKSvxC_U/edit?usp=sharing)).
-- Core member of the BuzzFeed "Better-Docs" Working Group. We aim to improve documentation and its discoverability for BuzzFeed Tech. We primarily intend to do this through the standardization of doc formats, the creation and maintenance of doc tooling, and continuing education of ourselves and the BF Tech community about documentation.
-- Tech Lead for the Site Infra 'Resilience' team. This includes designing a disaster recovery strategy by the name of "Plan Z" with handling of multiple failure scenarios and failovers across many service providers.
-- For the 2017 Hack Week I built an operations Slackbot tool in Go called OpsBot. It would dynamically create standardized incident channels and would automatically invite relevant users to the incident channel (using an emoji 'message reaction' convention). It also allowed searching for runbooks via the Google Drive API. Future updates will include creating a post-mortem Google Doc and inviting all users inside the incident channel to view the newly created doc.
-- Implemented nginx solution (with integration tests) to round-robin requests for static assets between multiple cloud providers, as well as to ensure in the face of an outage that we failover appropriately to one of the other functioning providers for complete static asset resiliency and robustness.
-- Technical Lead and architect for a new dynamic video player service to enable an asynchronous editor workflow along with a flexible architecture for providing the most appropriate video for our users.
-- Consolidated two separate cli tools into one [go-fastly-cli](https://github.com/integralist/go-fastly-cli): General purpose CLI tool for interacting with the Fastly CDN service via its REST API
-- Redesigned one of our Python packages, which initially was a facade providing a multi-tiered cache abstraction around a single HTTP client. Requirements determined that the consumer should provide one of a list of accepted HTTP clients and so I utilised an adapter pattern internally in order to provide a unified interface for the provided HTTP client dependency. 
-- Built a [Python Auto Generated API Documentation](https://gist.github.com/Integralist/e1743503f18904e3af99dac27134de91) tool that builds upon Git pre-commit hooks and utilises Make and Bash
-- Throughout the year I've found the need to build different tools to help me do my job more efficiently: [Ero: Local/Remote CLI Diffing Tool written in Go](https://github.com/Integralist/ero), [Lataa: Fastly VCL uploader/activation CLI tool written in Go](https://github.com/Integralist/lataa), [Carbon: CLI HTTP Headers Filtering Tool written in Go](https://github.com/Integralist/carbon) which was superseded by a [Bash equivalent](https://github.com/Integralist/Bash-Headers) as well as a [Vim plugin for MyPy: a Python static type checker](https://github.com/Integralist/vim-mypy)
-- Worked on the CDN layer's VCL logic and spent time investigating and building abstractions to make working with VCL easier (such as a logging abstraction along with a quick on/off toggle)
-- Presented an engineering workshop on the Site Router service (see last year) to all engineers within BuzzFeed
-- Lead the development across a mostly US based team and rollout of new critical service responsible for serving the responsive BuzzFeed home page
+- **What**: Implemented README validator in Python.   
+  **Why**: As part of BuzzFeed's "Better Docs" initiative (of which I was a core member of its Working Group).  
+  **Impact**: This helped BuzzFeed to track the success of its new "Doc Day" event, which supports staff across the org in reviewing and improving software documentation.
+
+- **What**: Led the effort to document, improve, and educate others on the state of BuzzFeed's monitoring.   
+  **Why**: Our monitoring system was very noisy, which made going on-call a much more stressful proposition.  
+  **Impact**: . I also wrote a [community blog post](/posts/monitoring-best-practices/) sharing and explaining a lot of what we did, along with sharing [a template Runbook](https://docs.google.com/document/d/1eaT9KMam5zq7lT-5OVz9T91RJQUx-qx2q6WnKSvxC_U/edit?usp=sharing) for operational safety.
+
+- **What**: Core member of the BuzzFeed “Better-Docs” Working Group.   
+  **Why**: We aim to improve documentation and its discoverability for BuzzFeed Tech.  
+  **Impact**: We standardized the majority of doc formats, the creation and maintenance of doc tooling, and continued to educate ourselves and the BF Tech community about the importance of good documentation.
+
+- **What**: Tech Lead for the Site Infra 'Resilience' team.   
+  **Why**: Necessary to help improve the stablity and resilience of BuzzFeed's existing services while helping to educate development teams on the various best practices.  
+  **Impact**: We designed a disaster recovery strategy specific for BuzzFeed's needs (called 'Plan Z') which helped to facilitate multiple failure scenarios and failovers for many of our service providers (alongside that primary task we helped improve the resilience for many BuzzFeed services).
+
+- **What**: Built and operations Slackbot in Go.   
+  **Why**: This was implemented as part of BuzzFeed's 'Hack Week' but was quickly put into general rotation as is still used for all service incidents.  
+  **Impact**: Enabled all BuzzFeed staff (whether technical or not) to quickly spin up either a public or private incident channel in Slack, while allowing interested parties to be auto-invited based upon an emoji reaction implementation. The tool also allowed people to search for operational runbooks stored within our organizations Google Drive.
+
+- **What**: Designed and implemented a round-robin, multi-cloud provider nginx solution for serving static assets.   
+  **Why**: To help provide greater resilience when serving client-side static assets such as images or scripts.  
+  **Impact**: The tooling we built around this implementation helped to make the process of deploying and serving static assets efficiently much easier.
+
+- **What**: Technical Lead and architect for a dynamic video player service.   
+  **Why**: To enable asynchronous editor workflows.  
+  **Impact**: Allowed for flexible video selection for end users, while helping to promote BuzzFeed's own brand of video content outside of YouTube (which would otherwise require us to lose potential profit).
+
+- **What**: Designed and implemented [a Go CLI tool for deploying Fastly VCL changes](https://github.com/integralist/go-fastly-cli).   
+  **Why**: The existing process for deploying Fastly VCL was manual and time consuming, and prone to mistakes.  
+  **Impact**: Helped unblock engineers who needed a more efficient way to rollout changes, while allowing them to diff and validate changes locally without having to sign-in to Fastly's otherwise confusing UI.
+
+- **What**: Refactored existing HTTP Cache Client Python package.   
+  **Why**: Original design was a facade around a multi-tiered cache abstraction over a Python HTTP client. This proved to be too limiting for engineers.  
+  **Impact**: Utilized an Adapter pattern internally in order to provide a unified interface, thus making it easier for various HTTP clients to be provided instead of locking the caller down to a single client type.
+
+- **What**: Implemented GitHub hook mechanism for detecting API changes and generating updated documentation.   
+  **Why**: Documentation would often go stale because engineers would make changes but not re-run the rendering tools to generate new docs.  
+  **Impact**: Allowed engineers to make changes without having to think about generating new documentation or have to know how to use the various tools for generating documentation.
+
+- **What**: Refactored legacy VCL code and spent time building necessary abstractions.   
+  **Why**: Original code was difficult to understand and meant only a blessed few engineers understood how it all worked.  
+  **Impact**: Opened up the CDN to more engineers and helped to provide abstractions (such as for logging) to make working with VCL easier for those new to the language.
+
+- **What**: Led development across a mostly US baed team, and the rollout of a new critical routing service.   
+  **Why**: The routing behaviours for BuzzFeed were locked down to those blessed few who understood the CDN and VCL.  
+  **Impact**: Enabled the entire engineering department to make routing changes based on complex sets of dynamic input and requirements via a simple config driven workflow.
+
+- **What**: .   
+  **Why**: .  
+  **Impact**: .
 
 ### 2016
 
@@ -170,41 +241,6 @@ I progressed upwards through the organisation, moving from initially being a cli
 - Developed open-source [PhantomJS CLI](https://github.com/Integralist/Squirrel) tool for automating the generation of Application Cache manifests
 - Developed open-source [Sass image extension](https://github.com/Integralist/Sass-Base64-Extension) in Ruby
 - Introduced and led the use of [GruntJS](http://gruntjs.com/) across all teams within BBC News
-
-## Tools, Languages and Tech
-
-I don't profess mastery, but I'm adept with most of the below, and I have an aptitude towards learning what I need to get the job done right:
-
-- AWS CloudFormation
-- CSS
-- Clojure
-- [Design Patterns](https://github.com/Integralist/Ruby-Design-Patterns)
-- Docker
-- [Functional Programming](/posts/functional-recursive-javascript-programming/)
-- Git
-- Go
-- HTML
-- JRuby/MRI Ruby
-- JavaScript (client-side)
-- Jenkins
-- Jira
-- Make
-- [Meta Programming](https://gist.github.com/Integralist/a29212a8eb10bc8154b7)
-- Node
-- NGINX
-- PHP
-- Python
-- [Refactoring](/posts/refactoring-techniques/)
-- Regular Expressions
-- Sass
-- [Shell Scripting](/posts/basic-shell-scripting/)
-- Terraform
-- Tmux
-- Trello
-- Vagrant
-- Varnish
-- VCL
-- Vim
 
 ## Talks
 
@@ -359,6 +395,41 @@ PhantomJS script to automate Application Cache manifest file generation
 
 - [Stark](https://github.com/Integralist/Stark):  
 Node Build Script for serving HTML components
+
+## Tools, Languages and Tech
+
+I don't profess mastery, but I'm adept with most of the below, and I have an aptitude towards learning what I need to get the job done right:
+
+- AWS CloudFormation
+- CSS
+- Clojure
+- [Design Patterns](https://github.com/Integralist/Ruby-Design-Patterns)
+- Docker
+- [Functional Programming](/posts/functional-recursive-javascript-programming/)
+- Git
+- Go
+- HTML
+- JRuby/MRI Ruby
+- JavaScript (client-side)
+- Jenkins
+- Jira
+- Make
+- [Meta Programming](https://gist.github.com/Integralist/a29212a8eb10bc8154b7)
+- Node
+- NGINX
+- PHP
+- Python
+- [Refactoring](/posts/refactoring-techniques/)
+- Regular Expressions
+- Sass
+- [Shell Scripting](/posts/basic-shell-scripting/)
+- Terraform
+- Tmux
+- Trello
+- Vagrant
+- Varnish
+- VCL
+- Vim
 
 ## Summary
 
