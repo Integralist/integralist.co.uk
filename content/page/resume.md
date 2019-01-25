@@ -68,7 +68,7 @@ BUT the story so far is that I joined as a Senior Software Engineer as part of a
 
 Alongside that we were tasked with decommissioning a 10yr+ legacy Perl monolithic application stack over to various Python and Go services.
 
-I've worked primarily within BuzzFeed's OO-INFRA group which sits somewhere in-between traditional infrastructure/operation teams and engineering teams building user facing products. Our motivations were to make the lifes of our fellow engineers easier by building tools, services and abstractions that enabled them to work more quickly and efficiently.
+I've worked primarily within BuzzFeed's OO-INFRA group which sits somewhere in-between traditional infrastructure/operation teams and engineering teams building user facing products. Our motivations were to make the lives of our fellow engineers easier by building tools, services and abstractions that enabled them to work more quickly and efficiently.
 
 In January 2018 I was promoted to Staff Software Engineer, after helping to design/architect, develop and maintain some of BuzzFeed's key infrastructure and software (CDN, caching strategies, routing behaviours, and security/authentication related concerns).
 
@@ -100,7 +100,7 @@ I'd like to share the various things I've worked on over the years and the impac
 
 - **What**: Designed and co-implemented new authentication system built in Python on top of AWS Cognito.   
   **Why**: Decommission our legacy authentication system which was tightly coupled to a 10yr+ monolithic Perl application.  
-  **Impact**: Enabled more services to offer authentication services, thus allowing more community driven features across our products.
+  **Impact**: Enabled more services to offer authentication, thus allowing more community driven features across our products.
 
 - **What**: Built a Python package that wraps scrypt.  
   **Why**: Provide a consistent interface when requiring a hashing function.  
@@ -120,7 +120,7 @@ I'd like to share the various things I've worked on over the years and the impac
 
 - **What**: Co-designed and co-implemented a Go based reverse proxy acting as an authentication layer in front of BuzzFeed services.   
   **Why**: Part of a plan to decommission our legacy authentication system.  
-  **Impact**: The use of JWTs helped to implement a stateless system for providing authenticated access to services, thus making the system easier to reason about, and allowed certain teams an opportunity to decouple themselves from our legacy Perl stack.
+  **Impact**: The use of JWTs helped to implement a stateless system for providing authenticated access to services, thus making the system easier to reason about, and enabled teams to decouple themselves from our legacy Perl stack.
 
 ### 2017
 
@@ -140,7 +140,7 @@ I'd like to share the various things I've worked on over the years and the impac
   **Why**: Necessary to help improve the stablity and resilience of BuzzFeed's existing services while helping to educate development teams on the various best practices.  
   **Impact**: We designed a disaster recovery strategy specific for BuzzFeed's needs (called 'Plan Z') which helped to facilitate multiple failure scenarios and failovers for many of our service providers (alongside that primary task we helped improve the resilience for many BuzzFeed services).
 
-- **What**: Built and operations Slackbot in Go.   
+- **What**: Built an operations Slackbot in Go.   
   **Why**: This was implemented as part of BuzzFeed's 'Hack Week' but was quickly put into general rotation as is still used for all service incidents.  
   **Impact**: Enabled all BuzzFeed staff (whether technical or not) to quickly spin up either a public or private incident channel in Slack, while allowing interested parties to be auto-invited based upon an emoji reaction implementation. The tool also allowed people to search for operational runbooks stored within our organizations Google Drive.
 
@@ -150,7 +150,7 @@ I'd like to share the various things I've worked on over the years and the impac
 
 - **What**: Technical Lead and architect for a dynamic video player service.   
   **Why**: To enable asynchronous editor workflows.  
-  **Impact**: Allowed for flexible video selection for end users, while helping to promote BuzzFeed's own brand of video content outside of YouTube (which would otherwise require us to lose potential profit).
+  **Impact**: Enabled flexible video selection for end users, while helping to promote BuzzFeed's own brand of video content outside of YouTube (which would otherwise require us to lose potential profit).
 
 - **What**: Designed and implemented [a Go CLI tool for deploying Fastly VCL changes](https://github.com/integralist/go-fastly-cli).   
   **Why**: The existing process for deploying Fastly VCL was manual and time consuming, and prone to mistakes.  
@@ -162,85 +162,143 @@ I'd like to share the various things I've worked on over the years and the impac
 
 - **What**: Implemented GitHub hook mechanism for detecting API changes and generating updated documentation.   
   **Why**: Documentation would often go stale because engineers would make changes but not re-run the rendering tools to generate new docs.  
-  **Impact**: Allowed engineers to make changes without having to think about generating new documentation or have to know how to use the various tools for generating documentation.
+  **Impact**: Enabled engineers to make changes without having to think about generating new documentation or having to know how to use the various tools for generating documentation.
 
 - **What**: Refactored legacy VCL code and spent time building necessary abstractions.   
   **Why**: Original code was difficult to understand and meant only a blessed few engineers understood how it all worked.  
   **Impact**: Opened up the CDN to more engineers and helped to provide abstractions (such as for logging) to make working with VCL easier for those new to the language.
 
-- **What**: Led development across a mostly US baed team, and the rollout of a new critical routing service.   
+### 2016
+
+- **What**: Migrated Fastly’s version of varnish/vcl 2.x to standard 4.1.   
+  **Why**: Support switching to an alternative backup CDN.  
+  **Impact**: Strengthened our relationship with Site Reliability, while also building confidence in a failover CDN.
+
+- **What**: Designed and implemented generic GitHub Pull Request template file.   
+  **Why**: Consistency and standardization of how pull requests are structured. The final format was based loosely on an [old blog post](/posts/github-pull-request-formatting/) I wrote (back before GitHub offered their template feature).  
+  **Impact**: Clearer problem/solution descriptions that enabled engineers not familiar with the services to understand the changes being proposed.
+
+- **What**: Implemented a smoke test scheduler service in Python.   
+  **Why**: Catch regressions with BuzzFeed's primary routing service.  
+  **Impact**: Helped engineers to identify integration problems where routing changes would have adverse unexpected effects.
+
+- **What**: Led development across a mostly US based team, and the rollout of a new critical routing service.   
   **Why**: The routing behaviours for BuzzFeed were locked down to those blessed few who understood the CDN and VCL.  
   **Impact**: Enabled the entire engineering department to make routing changes based on complex sets of dynamic input and requirements via a simple config driven workflow.
 
-- **What**: .   
-  **Why**: .  
-  **Impact**: .
+- **What**: Porting of Perl services over to Python [BFF](http://samnewman.io/patterns/architectural/bff/) services.   
+  **Why**: Decommission of 10yr+ monolithic Perl application.  
+  **Impact**: Increased BuzzFeed's recruitment opportunities by expanding the amount of services written in Python (compared to hiring Perl developers), as well as improving the code quality of those services migrated.
 
-### 2016
+- **What**: Proposed usage of specific Python linters and related tooling.   
+  **Why**: Code consistency and easier debugging of code.  
+  **Impact**: Improved overall code quality.
 
-- Migrated Fastly's version of varnish/vcl 2.x to standard 4.1 (working with one of the Site Reliability Engineers) for use as a backup CDN in case of extreme failure scenarios that required us to switch providers quickly and who do not have the features that Fastly provides as part of their modified version of Varnish
-- As part of a mono repo that stores multiple sub-services (each with their own team/squad) I designed and implemented a generic Pull Request template file to be used across the organisation for that repository. It stemmed from this blog post I wrote "[GitHub Pull Request Formatting](/posts/github-pull-request-formatting/)" back before GitHub provided an automated feature (although based on specific feedback it didn't end up _exactly_ the same as described there)
-- Co-ordinated use of gpg-agent inside our infrastructure teams VM tooling
-- Built a microservice using a Python scheduler for automatically executing integration/smokes tests periodically to ensure there are no regressions with the new BuzzFeed nginx router and its core behaviours (deployed via AWS's ECS 'Container Service')
-- Worked with the lead engineer on a safe and measured (monitoring handled by Datadog) global rollout of our new routing service by utilising an incremental regional deployment process (controlled by Varnish and GeoIP lookups) and working closely with the relevant QA teams
-- Architect and author of a fundamental new routing service (Site Router), responsible for taking logic out from the Fastly CDN/Varnish configuration and proxying specific requests onto upstream services via nginx - helping to decouple services from the CDN layer. I also designed a YAML based config driven API on top of nginx and helped translate and update the relevant CDN/Varnish logic.
-- Developed multiple reusable Python scripts, such as a timing decorator that posted runtime metrics to StatsD/Datadog
-- Helped porting over old Perl based monolithic web app into separate [BFF](http://samnewman.io/patterns/architectural/bff/) microservices built with Python and deployed via AWS ECS
-- Encouraged and implemented use of additional Python linters to catch common issues within BuzzFeed services and APIs
-- Started working for BuzzFeed as a Senior Software Engineer, to become part of and build up the core UK team
-- Defined "[The Perfect Developer Qualities](https://gist.github.com/Integralist/3f8089345a1236b374a7a5b8a13591a1)" and refined the values based on open community discussions
-- Released two new open-source projects: 
-	- [go-elasticache](https://github.com/Integralist/go-elasticache) and [go-findroot](https://github.com/Integralist/go-findroot)
-- Strong focus on DevOps: writing [shell](https://github.com/Integralist/Shell-Scripts) [scripts](https://gist.github.com/search?utf8=✓&q=user%3Aintegralist+bash&ref=searchresults) whilst in charge of creating and configuring multiple AWS accounts for development/production environments 
-- Tasked with load testing, analysing, identifying and fixing performance and scaling issues within the BBC's "Mozart" platform
-- I built a simple, yet performant, open-source URL monitoring system in Bash called [Bash Watchtower](/posts/bash-watchtower/)
-- Tasked with leading the [BBC News coding and architecture 'best practices' working group](https://github.com/bbc/news-coding-best-practices)
-- Co-author/architect of the BBC's "Mozart" platform
-  - Page composition microservice platform
-  - AWS microservices built with Ruby and Go
+- **What**: Defined "[The Perfect Developer Qualities](https://gist.github.com/Integralist/3f8089345a1236b374a7a5b8a13591a1)".   
+  **Why**: To inspire and motivate my colleagues.  
+  **Impact**: Engineers from across the organization reached out to me to share their thoughts, feedback and general appreciation for the time and consideration (as well as the obvious past experience) that led to this ideal list of character traits.
+
+- **What**: Released the open-source project [go-elasticache](https://github.com/Integralist/go-elasticache).   
+  **Why**: Share useful tools that would benefit others.  
+  **Impact**: Improved the developer experience when working with AWS's ElastiCache service.
+
+- **What**: Led performance testing, analysis and resolution of scaling issues for the BBC's internal "Mozart" platform (written in Ruby).   
+  **Why**: Network bottlenecks were causing issues during load testing.  
+  **Impact**: Helped to identify specific service within the overall architecture that resulted in it being rewritten in Go and thus resolving the scaling performance issues.
+
+- **What**: Implemented simple, yet performant, URL monitoring system in Bash called [Bash Watchtower](/posts/bash-watchtower/).   
+  **Why**: Previous version was a complicated and over engineered Node application (it was a colleagues pet project, and no one in the organization used Node at the time). It was also laden with NPM packages which made installing and running a very slow process.  
+  **Impact**: Improved deployment speed, helped other engineers understand the code base by using a language they were more familiar with, and simplified the overall code.
+
+- **What**: Created and led BBC News "Coding and Architecture" working group.   
+  **Why**: We were charged with ensuring best practices were adhered to.  
+  **Impact**: Improved the overall quality of new services being developed, and helped us to communicate with a wider range of the organization.
+
+- **What**: Co-designed and co-implemented the BBC News "Mozart" platform.   
+  **Why**: Simplify the ability to build up dynamic page composition.  
+  **Impact**: Enabled teams to more easily build up complex pages of individual components. It also helped path the way for the organization to move away from internal hosted system to the AWS platform, while enabling developers to utilize easier languages and tools.
 
 ### 2015
 
-- Published guest article "[Building Software with Make](http://www.smashingmagazine.com/2015/10/building-web-applications-with-make/)" for popular online resource [Smashing Magazine](http://www.smashingmagazine.com/)
-- Represented BBC at the AWS re:Invent week-long technical conference in Las Vegas
-- Co-author/architect for a [Go](http://golang.org/) based cli tool called "Apollo", which abstracted away cert based access to an internal REST API and allowed teams to more easily deploy services to the AWS platform
-- Released open-source program (written in [Go](http://golang.org/)) called "[go-requester](https://github.com/Integralist/go-requester)", which is a HTTP service that accepts a collection of "components", fans-out requests & returns aggregated content
-- Published the book "[Programming in Clojure](https://leanpub.com/programming-clojure/)"
-- Worked closely with multiple members of my team (over the course of the year) with the goal of getting them ready for their next round of promotions
-- Developed event archiving service using Go and AWS Lambda
-- BBC News Frameworks team won the "Connecting the News" category at BBC Hack Day 
-- BBC Newsbeat v2 was released (this was the first fully AWS product from BBC News)
-- Co-author/architect for a BBC AWS-based monitoring solution
-- Published guest article "[Designing for Simplicity](http://davidwalsh.name/designing-simplicity)" for popular Mozilla engineer David Walsh
-- Tech Lead for the General Elections (Feb - May 2015)
-- Released open-source [Clojure version](https://github.com/Integralist/spurious-clojure-aws-sdk-helper) of the [Spurious Ruby AWS SDK Helper](https://github.com/spurious-io/ruby-awssdk-helper) to enable Clojure developers to utilise fake AWS resources locally
-- Rebuilt and migrated BBC's Market Data to AWS using the BBC's open-source Alephant framework, of which I was a co-author (Nov 2014 - Feb 2015)
+- **What**: Represented BBC at AWS' week long re:Invent technical conference in Las Vegas.   
+  **Why**: To learn more about the new AWS services that could benefit the organization.  
+  **Impact**: Networking with lots of different companies and helping to promote the work that the BBC does (specifically the engineering arm of the organization).
+
+- **What**: Co-designed and co-implemented a Go based CLI tool called "Apollo".   
+  **Why**: Abstract away certificate based authentication to internal APIs.  
+  **Impact**: Enabled teams to more easily deploy services to the AWS platform.
+
+- **What**: Team Lead for BBC News Frameworks team.   
+  **Why**: To help my team grow and to learn.  
+  **Impact**: Helped to promote a large segment of my team into senior position roles.
+
+- **What**: Won "Connecting the News" Hack Day event.   
+  **Why**: Event for different news organizations to come together around a shared data source (provided by the BBC) and to see what interesting tools and services can enhance that data.  
+  **Impact**: Networking with engineering teams across different news platforms helped to inform potential ideas for our own services. Showcased BBC News as a great place to work.
+
+- **What**: Released BBC Newsbeat v2.   
+  **Why**: First fully AWS product from BBC News.  
+  **Impact**: Started the movement of services from using an internal hosting platform onto the AWS platform.
+
+- **What**: Tech Lead for General Elections.   
+  **Why**: The General Elections was a big event for BBC News.  
+  **Impact**: Successful build, deploy and monitoring of election reporting platform.
+
+- **What**: Rebuilt and migrated BBC's Market Data to AWS using the BBC's open-source Alephant framework, of which I was a co-author.   
+  **Why**: Fix an old and un-maintained, yet critical, data service.  
+  **Impact**: Modernized and improved this essential financial market service for its stakeholders and enabled further extension by other engineering teams.
 
 ### 2014
 
-- Jello (internal synchronisation service between Trello and Jira)
-- Won "Most innovative use of Technology" BBC News Award (Docker CI)
-- Won "Best Public Relations of the Year" BBC News Award (Pro Vim)
-- Became Technical Lead for the BBC News Frameworks team (October 2014)
-- Senior developer part of the BBC's Scottish Referendum offering (June - September 2014)
-- Senior developer part of the BBC's Vote 2014 Elections  offering (Jan - May 2014)
-- Co-author/architect for the open-source [Alephant framework](https://github.com/BBC-News/alephant)
-- Co-author/architect of a cloud based distributed load test tool (built around JMeter)
-- Arranged public BBC presentation with [Sandi Metz](http://www.sandimetz.com/) "Object-Oriented Design"
+- **What**: Designed and implemented "Jello" which was an internal synchroniation service between Trello and Jira.   
+  **Why**: Teams preferred to use Trello, while the rest of the organization was using a very old version of Jira.  
+  **Impact**: Enabled teams to benefit from the speed and feature set of Trello without having to manually track tasks back into Jira for the rest of the organizations visibility.
+
+- **What**: Won "Most innovative use of Technology" BBC News Award (Docker CI).   
+  **Why**: Legacy Jenkins CI was locked down to centralized operations team.  
+  **Impact**: Enabled teams to build and deploy software using any langage or platform supported by Docker.
+
+- **What**: Won "Best Public Relations of the Year" BBC News Award (Pro Vim).   
+  **Why**: I like writing and sharing information that helps people be more proficient with the tools they use.  
+  **Impact**: Book was well received and opened the Vim editor to wider range of engineers.
+
+- **What**: Co-designed and co-implemented cloud based distributed load testing tool.   
+  **Why**: Existing solutions weren't able to scale with our platform.  
+  **Impact**: .
+
+- **What**: Organized public speaking event with [Sandi Metz](http://www.sandimetz.com/).   
+  **Why**: To build an engineering network event for the London tech community.  
+  **Impact**: London tech community got to see an otherwise often unseen internal look at BBC engineering talent and were able to discuss topics of interest.
 
 ### 2013
 
-- Won "Developer of the Year" BBC News Award
-- Led the development of the BBC News responsive navigation redesign
-- Mozilla invited me to present at the W3C Responsive Images meet-up in Paris
-  - [Presentation Slides](https://speakerdeck.com/integralist/bbc-news-responsive-images)
-- Member of the [BBC's GEL Responsive Working Group](http://www.bbc.co.uk/gel)
-- Integrated new BBC UX framework
-- Published BBC News blog post regarding [Imager.js](http://responsivenews.co.uk/post/58244240772/imagerjs)
-- Rewrote and open-sourced the BBC News [responsive image technique](https://github.com/BBC-News/Imager.js/)
-- Developed open-source [PhantomJS CLI](https://github.com/Integralist/Squirrel) tool for automating the generation of Application Cache manifests
-- Developed open-source [Sass image extension](https://github.com/Integralist/Sass-Base64-Extension) in Ruby
-- Introduced and led the use of [GruntJS](http://gruntjs.com/) across all teams within BBC News
+- **What**: Voted "Developer of the Year" at the BBC News awards.   
+  **Why**: I had made sure to reach out and affect in a positive way every single aspect of the business and to make a real difference to the developer community within the BBC.  
+  **Impact**: A genuine sense of pride that I was able to achieve what I set out to do: make a difference.
+
+- **What**: Led development of the BBC News 'responsive navigation' redesign.   
+  **Why**: Part of the new BBC UX rebranding.  
+  **Impact**: Resulted in communication with product, design and engineering teams across the entire breadth of the BBC platform. Leading to a new responsive nagivation that was able to successfully accommodate all perspectives and requirements.
+
+- **What**: Invited to [speak at Mozilla offices in Paris](https://speakerdeck.com/integralist/bbc-news-responsive-images).   
+  **Why**: To discuss the BBC News responsive images technique to browser vendors such as Apple, Microsoft, Opera, Mozilla and Google.  
+  **Impact**: I was able to establish myself as a person of interest to this organizations and an expert in the field when it came to client-side development.
+
+- **What**: Implemented new BBC UX framework.   
+  **Why**: The BBC brand was undergoing a organization wide redesign.  
+  **Impact**: This was a very long and deliberate implementation and rollout process that helps re-establish BBC News as a leader in the responsive mobile development space and helped showcase BBC News engineering talents.
+
+- **What**: Implemented new BBC [responsive images solution](https://github.com/BBC-News/Imager.js/).   
+  **Why**: Scalable and responsive images was not widely supported by browsers with native APIs, meaning custom solutions needed to be implemented.  
+  **Impact**: [Public BBC News post](http://responsivenews.co.uk/post/58244240772/imagerjs) proposed our solution to the then difficult problem of how best to serve images in a scalable way to browsers and mobile devices.
+
+- **What**: Introduced the use of [GruntJS](http://gruntjs.com/).   
+  **Why**: Ruby and Rake was being used although majority of engineers were unfamiliar with the language and were afraid to make changes or to build new tasks.  
+  **Impact**: Improved the ability of engineers to automate project tasks using JavaScript.
+
+- **What**: Member of the [BBC's GEL Responsive Working Group](http://www.bbc.co.uk/gel/).   
+  **Why**: To help ensure engineers perspective on how best to implement new UX designs were accounted for.  
+  **Impact**: Simplified specific aspects of GELs design.
 
 ## Talks
 
