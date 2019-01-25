@@ -92,6 +92,8 @@ I progressed upwards through the organisation, moving from initially being a cli
 
 I'd like to share the various things I've worked on over the years and the impact/value this work has provided.
 
+> Note: it's important to realize that the large majority of my 'impact' has been while being a _remote_ worker. Do not make the mistake of discounting the hiring of candidates who are remote as not offering value to your organization and/or not _capable_ of making big impact. I'm living proof that it's possible.
+
 ### 2018
 
 - **What**: I replaced BuzzFeed's use of NGINX+ (a very expensive commercial product that was being used as part of a critical piece of BuzzFeed's infrastructure) with the open-source equivalent.  
