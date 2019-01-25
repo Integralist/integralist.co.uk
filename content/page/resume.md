@@ -110,7 +110,7 @@ I'd like to share the various things I've worked on over the years and the impac
 
 - **What**: Helped promote the benefits of Kim Scott's 'Radical Candor', Marshall Rosenberg's 'Nonviolent Communication' and Fred Kofman's 'Authentic Communication' to various teams across BuzzFeed.   
   **Why**: Effective, clear and compassionate communication benefits everyone.  
-  **Impact**: Teams were becoming more productive as the confidence to give the most appropriate and direct feedback necessary to catch both interpersonal issues and team concerns much more quickly.
+  **Impact**: Teams were becoming more productive as the confidence to give the most appropriate and direct feedback necessary to catch both interpersonal issues and team concerns happened much more quickly.
 
 - **What**: Introduced Wednesday lunch videos/presentations.   
   **Why**: To motivate and inspire our development teams.  
