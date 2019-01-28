@@ -74,6 +74,8 @@ In January 2018 I was promoted to Staff Software Engineer, after helping to desi
 
 Each year I would also participate in the various working groups and mentoring programs, and become part of the 'on-call' rota and handle interactions with the Hackerone program.
 
+> Note: I'm a remote worker and currently my team is based in New York, so good communication (+ focus and work ethic) is essential.
+
 ### BBC (Jan 2013 - June 2016)
 
 I joined [BBC News](http://www.bbc.co.uk/news) as a client-side/mobile specialist within their Core News team. Within the year I had moved into a senior engineering role. The (then) Technical Lead for the BBC News Frameworks team requested I join them in order to help the organisation transition from its current platform over to one built upon the AWS platform.
