@@ -1,5 +1,5 @@
 ---
-title: "Python Tips 2019"
+title: "Python Code Design and Dependency Management"
 date: 2019-01-02T18:02:23Z
 categories:
   - "code"
