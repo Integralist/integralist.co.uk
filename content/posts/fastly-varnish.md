@@ -105,7 +105,7 @@ You can also view their generated custom VCL here in this isolated gist (for ref
 
 There are various request flow diagrams for Varnish ([example](http://book.varnish-software.com/4.0/_images/simplified_fsm.svg)) and generally they separate the request flow into two sections: request and backend. 
 
-So handling the request, looking up the hash key in the cache, getting a hit or miss, or opening a pipe to the origin are all considered part of the "request" section. Where as fetching of the content is considered part of the "backend" section.
+So handling the request, looking up the hash key in the cache, getting a hit or miss, or opening a pipe to the origin are all considered part of the "request" section. Whereas fetching of the content is considered part of the "backend" section.
 
 The purpose of the distinction is because Varnish likes to handle backend fetches _asynchronously_. This means Varnish can serve stale data while a new version of the cached object is being fetched. This means less request queuing when the backend is slow.
 
@@ -191,7 +191,7 @@ Let's consider one of the example routes given: we can see a request comes into 
 
 That's one example route that could be taken. As you can see there are many more shown on the diagram, and many more I've not included.
 
-But what's important to understand is that Fastly's infrastructure means that `vcl_recv`, `vcl_hash` and `vcl_deliver` are all executed on an edge node (the node nearest the client). Where as the other states are executed on a "cluster" node (or cache node).
+But what's important to understand is that Fastly's infrastructure means that `vcl_recv`, `vcl_hash` and `vcl_deliver` are all executed on an edge node (the node nearest the client). Whereas the other states are executed on a "cluster" node (or cache node).
 
 We can see in [Fastly's documentation](https://docs.fastly.com/guides/performance-tuning/request-collapsing), certain VCL subroutines run on the edge and some on the shield (i.e. what we're calling "cluster"):
 

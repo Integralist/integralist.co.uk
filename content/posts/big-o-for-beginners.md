@@ -313,9 +313,9 @@ If we were using the Simple Search algorithm (which is `O(n)`) on a collection o
 
 Let's consider what Big O looks like for the Array and Linked List data structures.
 
-An Array supports 'index access', meaning you can jump straight to an Array index. Where as with Linked Lists you have to traverse the entire list in order to locate a specific item.
+An Array supports 'index access', meaning you can jump straight to an Array index. Whereas with Linked Lists you have to traverse the entire list in order to locate a specific item.
 
-> Note: another difference comes in memory management. Arrays require n number of memory 'slots' to be next to each other, where as Linked List memory can be sparse and spread out due to how it implements its internal chaining of nodes. This is why Arrays are typically considered to be 'fixed size' and not easily expanded, because expansion of the Array's size could potentially require an expensive movement of the Array to a new location in memory in order to faciliate a new index and yet still have memory slots side-by-side
+> Note: another difference comes in memory management. Arrays require n number of memory 'slots' to be next to each other, whereas Linked List memory can be sparse and spread out due to how it implements its internal chaining of nodes. This is why Arrays are typically considered to be 'fixed size' and not easily expanded, because expansion of the Array's size could potentially require an expensive movement of the Array to a new location in memory in order to faciliate a new index and yet still have memory slots side-by-side
 
 This suggests that Array lookups are `O(1)`, known as 'constant time' because the lookup growth stays the same no matter the length of the collection (i.e. it's constant).
 

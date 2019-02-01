@@ -26,7 +26,7 @@ Typically, for a software engineering role, a candidate will be asked to design 
 
 > Note: this is typically carried out on a whiteboard, but pen and paper is sufficent too (although harder for both candidate and interviewer to share and discuss over).
 
-Where as for a more senior role, like an engineering manager (or even a director of engineering), the format will change to one where the candidate is asked to _present_ a system architecture they've been involved with.
+Whereas for a more senior role, like an engineering manager (or even a director of engineering), the format will change to one where the candidate is asked to _present_ a system architecture they've been involved with.
 
 The reason for the switch around of formats is that generally the more senior roles won't necesarily be controlling the system design (they'll have input, but generally speaking this would be the responsibility of individual teams), and so what you're trying to gauge from that type of interview is an understanding of whether they have a solid technical grounding, because their other skills are of a bigger priority.
 
@@ -55,7 +55,7 @@ But let's be honest, that rarely correlates to the _actual_ work you typically e
 
 For me, that type of whiteboarding session is a problem. Whiteboard interviews of _that_ nature, the ones that have you jumping through hoops to perform some kind of mathematical trickery are at best useless, and at worst very stressful. They're also likely to result in a candidate leaving unenthused and saying bad things about the company and its interview process on social media.
 
-You should not be having whiteboard interviews consisting of questions of that kind. Where as architecture interviews are (in my experience any way) about more about discussing 'high-level' concepts, and demonstrating 'practical' problem solving skills which are applicable at many different levels of experience, and useful in many different situations.
+You should not be having whiteboard interviews consisting of questions of that kind. Whereas architecture interviews are (in my experience any way) about more about discussing 'high-level' concepts, and demonstrating 'practical' problem solving skills which are applicable at many different levels of experience, and useful in many different situations.
 
 If structured (and presented) correctly by the interviewer, a whiteboard interview (such as an architecture interview) can actually be fun for both the candidate and the interviewer, and be an enlightening experience rather than a stressful one.
 

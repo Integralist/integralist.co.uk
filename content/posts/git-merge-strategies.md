@@ -531,11 +531,11 @@ Also of interest, if using GitHub for Pull Requests, is that you can add a `.pat
 
 So if you have a GitHub PR URL like `https://github.com/my-org/my-repo/pull/123`, then you can convert this into a patch file using `https://github.com/my-org/my-repo/pull/123.patch`
 
-Git also offers you the `git apply` command to use in place of `git am`. The reason being is that `git am` actually commits the changes in the patch, where as `git apply` will only affect your working directory, so you'll have the opportunity to stage and commit the changes however you like. Unless you use the `--cached` or `--index` flags (see `man git-apply` for details).
+Git also offers you the `git apply` command to use in place of `git am`. The reason being is that `git am` actually commits the changes in the patch, whereas `git apply` will only affect your working directory, so you'll have the opportunity to stage and commit the changes however you like. Unless you use the `--cached` or `--index` flags (see `man git-apply` for details).
 
 > Note: `git apply` also has a `--reverse` flag to manipulate the order when applying multiple patchess
 
-The other difference is that `git am` only accepts patch files, where as `git apply` accepts patch files and also output from `git diff`. So you have more options available to you that way. For example:
+The other difference is that `git am` only accepts patch files, whereas `git apply` accepts patch files and also output from `git diff`. So you have more options available to you that way. For example:
 
 ```
 curl https://gist.githubusercontent.com/anonymous/x/raw/x/test.diff | git apply

@@ -82,7 +82,7 @@ I joined [BBC News](http://www.bbc.co.uk/news) as a client-side/mobile specialis
 
 I started in the Frameworks team building and designing back-end architecture for different microservices hosted upon the AWS platform, and we developed these services primarily using JRuby. In October 2014, I was offered the role of Technical Lead. 
 
-Near the end of 2015 I decided to change roles to Principal Software Engineer, as my previous role required more of my time to be spent in meetings and handling line manager duties, where as I wanted to focus my time more on helping my team solve technical problems.
+Near the end of 2015 I decided to change roles to Principal Software Engineer, as my previous role required more of my time to be spent in meetings and handling line manager duties, whereas I wanted to focus my time more on helping my team solve technical problems.
 
 ### Storm Creative (Feb 2001 - Dec 2012)
 
@@ -369,6 +369,7 @@ I'm a print published and self-published author; I'm also a tech reviewer and am
 
 The following links are to some of my more 'popular' articles. My main focus when writing is to take a complicated or confusing topic and attempt to distil it, in order for the subject to be more easily understood.
 
+- [Data Types and Data Structures](/posts/data-types-and-data-structures/) (2019)
 - [Engineer to Manager](/posts/engineer-to-manager/) (2018)
 - [Interview Techniques](/posts/architecture-interview/) (2018)
 - [Post Mortems](/posts/post-mortem-template/) (2018)
@@ -408,7 +409,7 @@ The following links are to some of my more 'popular' articles. My main focus whe
 
 ## Open-Source
 
-> Note: listed alphabetically
+> Note: listed alphabetically (i.e. not 'prioritized' in any way)
 
 - [BBC Alephant](https://github.com/BBC-News/alephant):  
 The Alephant framework is a collection of isolated Ruby gems, which interconnect to offer powerful message passing functionality built up around the "Broker" pattern.  

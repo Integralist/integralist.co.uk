@@ -66,7 +66,7 @@ For example, raw data might look like:
 [3, 5, 7]
 ```
 
-Where as _information_ would be the taking of that raw data and giving it extra context. So, in this example, those three data points could represent the age of three children. In a classic CSV (comma separated values) format (which is used for storing 'tabular' data), it might be represented like so:
+Whereas _information_ would be the taking of that raw data and giving it extra context. So, in this example, those three data points could represent the age of three children. In a classic CSV (comma separated values) format (which is used for storing 'tabular' data), it might be represented like so:
 
 ```
 Age
@@ -90,7 +90,7 @@ Consider the following data:
 3,5,5,5,7,7,2
 ```
 
-The first number `3` and the last number `2` both have a frequency of one, in that they only appear once throughout the entire dataset. Where as the number `5` has a frequency of three and the number `7` has a frequency of two for similar reasons (i.e. `5` appears three times and `7` appears twice).
+The first number `3` and the last number `2` both have a frequency of one, in that they only appear once throughout the entire dataset. Whereas the number `5` has a frequency of three and the number `7` has a frequency of two for similar reasons (i.e. `5` appears three times and `7` appears twice).
 
 Another way to represent this data is by defining a separate column for the frequency (which allows you to more clearly see the unique numbers that are present in the dataset):
 
@@ -123,7 +123,7 @@ Now both graphs use the same datapoints, but the first graph is misleading the v
 
 At a quick glance (or if you just didn't know any better), you would see the first graph and think the company has some incredible profit growth. But the second graph doesn't look as impressive? 
 
-This is because the first graph is zoomed in from the starting point `2.0` where as the first graph is zoomed out at the correct level so you can see the data in a more accurate and representative form.
+This is because the first graph is zoomed in from the starting point `2.0` whereas the first graph is zoomed out at the correct level so you can see the data in a more accurate and representative form.
 
 > See also my comment in the next section about [pie charts](#5). You'll notice there that the data can be mis-represented if not all the information is made available to the user. 
 >
@@ -230,7 +230,7 @@ It's less likely for this chart to be mis-represented because the _length_ of ea
 
 You can see for the groups "Go" and "Bash" we've had a consistent number of reports (300 in total), and so when the values are visualised as a percentage the length of the bars are the same. 
 
-Where as the "Python" group has less data frequency compared to the other groups (only 250 in total, where the other groups were 300), and so although it correctly represents that data as a percentage (60% were "like" vs 40% "dislike") it's still not as representative as a whole in comparison to the other data groups we have. Ideally each group would have consistent frequencies.
+Whereas the "Python" group has less data frequency compared to the other groups (only 250 in total, where the other groups were 300), and so although it correctly represents that data as a percentage (60% were "like" vs 40% "dislike") it's still not as representative as a whole in comparison to the other data groups we have. Ideally each group would have consistent frequencies.
 
 <div id="6.2"></div>
 ### Split Bars
@@ -278,7 +278,7 @@ Here 'hours' is the grouped numerical data. As explained above, we would put the
 
 <img src="../../images/disproportionate_historgram.png">
 
-> Note: we can see our first bar "0-1" spreads only one interval and "20-22" spreads only two intervals, where as the middle bar "1-20" spreads over nineteen intervals!
+> Note: we can see our first bar "0-1" spreads only one interval and "20-22" spreads only two intervals, whereas the middle bar "1-20" spreads over nineteen intervals!
 
 The problem with the above graph is that the height of the middle bar is wrong as we've set it to be as high as the frequency value itself (and the third bar is incorrect too!), which normally would be fine if the interval range were the same across all groups, but in this case it isn't the correct approach due to each group covering a different range from each other.
 
@@ -403,7 +403,7 @@ Age:       19, 20, 21
 Frequency: 1,  3,  1
 ```
 
-What the frequencies indicate is that 19 and 21 only appear once, where as 20 appears three times. So when summing the values (`Σx`) this _doesn't_ mean `19+20+21`, instead it means `19+20+20+20+21`.
+What the frequencies indicate is that 19 and 21 only appear once, whereas 20 appears three times. So when summing the values (`Σx`) this _doesn't_ mean `19+20+21`, instead it means `19+20+20+20+21`.
 
 Similarly, when dividing by the number of items in the dataset (the `n` in `Σx/n`) it means dividing by 5 (`1+3+1`) and not taking the number of frequencies literally, so _not_ dividing by 3 (`1,3,1`).
 
@@ -657,7 +657,7 @@ Meaning the interquartile range can be found in-between the lower/upper quartile
 
 When dealing with quartiles (see above), you're splitting your data into quarters. When dealing with percentiles, you're splitting your data into percentages. Each percentage is a percentile. For example, the 20th percentile is the value that is found 20% into your data.
 
-> Note: quartiles are a type of percentile. For example, the lower quartile is the 25th percentile. Where as the upper quarter is the 75th percentile. The median (or Q2) is the 50th percentile.
+> Note: quartiles are a type of percentile. For example, the lower quartile is the 25th percentile. Whereas the upper quarter is the 75th percentile. The median (or Q2) is the 50th percentile.
 
 Percentiles are generally used as a means for identifing values for a specific percentage of your users. For example, if your dataset reported performance numbers, then you could look at the value at the 95th percentile of the data and say "95% of our users are seeing this measure of performance". Which is more relevant than looking at the average (i.e. mean/median/mode) of that performance data.
 
@@ -730,7 +730,7 @@ You need to realise when measuring the distance to the mean that you're actually
 
 If we look at the number `1` and count the distance to `4`, we're effectively counting _forward_ (i.e. positive) towards `4` (similarly with the number `2`). But with `9` we have to count _backwards_ (i.e. negative) towards `4`.
 
-For example: counting `8,7,6,5,4` shows that `9` is five numbers away from `4`. But as we're treating this as a negative distance, the value is `-5`. Where as when calculating the distance from either `1` or `2` to the mean, the mean (`4`) is ahead of it and so you count positive not negative.
+For example: counting `8,7,6,5,4` shows that `9` is five numbers away from `4`. But as we're treating this as a negative distance, the value is `-5`. Whereas when calculating the distance from either `1` or `2` to the mean, the mean (`4`) is ahead of it and so you count positive not negative.
 
 OK so we now have the distances `3, 2, -5`, from here we need to square these numbers and then add them up (we have to square the numbers otherwise the sum result would be zero). 
 
@@ -754,7 +754,7 @@ You would then compare this standard devication to a standard deviation of anoth
 
 > Note: standard deviation has its own Greek symbol `σ` (referred to as the lowercase Sigma). Remember to calculate `σ` you start by calculating the variance, and then take the square root.
 
-Some other real-world examples would be a company that manufactures machine parts. For them, they want the standard deviation for their data to be small so they can be sure all the parts they build are the same size. Where as if you were inspecting wages across a large organisation you would likely find that the standard deviation naturally becomes quite large.
+Some other real-world examples would be a company that manufactures machine parts. For them, they want the standard deviation for their data to be small so they can be sure all the parts they build are the same size. Whereas if you were inspecting wages across a large organisation you would likely find that the standard deviation naturally becomes quite large.
 
 Standard deviation is also measured in the same units as your data. So if your dataset values are, for example, centimeters and the standard deviation is `1`, this means that the values are typically 1 centimeter away from the mean.
 

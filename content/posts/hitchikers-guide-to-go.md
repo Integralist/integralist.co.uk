@@ -414,7 +414,7 @@ godoc -src builtin make | less
 > here is a similar result using `go doc`    
 > `go doc http.Request.ParseForm | less`
 
-The purpose of `go doc` was to provide a simplistic cli documentation viewer, where as `Godoc` has many more features available.
+The purpose of `go doc` was to provide a simplistic cli documentation viewer, whereas `Godoc` has many more features available.
 
 The `go doc` command also works not only with Go's own library's but your own custom packages as well.
 
@@ -1263,7 +1263,7 @@ func main() {
   
   // Notice the types are different
   // FooIt is just a function with a signature (no known type associated with it)
-  // Where as "x" is of known type "Foo"
+  // Whereas "x" is of known type "Foo"
   fmt.Printf("%T\n", FooIt) // func(int, string)
   fmt.Printf("%T\n", x)     // main.Foo
   

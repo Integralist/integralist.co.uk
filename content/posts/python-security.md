@@ -54,7 +54,7 @@ I mention both of these (KDF and PBKDF2) because the `generate_digest` function 
 
 Originally I had two separate functions to distinguish them a bit more clearly but realised if this library is to make life easier for developers who don't understand encryption or hashing concepts, then I need to provide a single function that intelligently handles things internally.
 
-Because KDF accepts a key and is able to return the original message (given the same key) it's acting as a form of symmetrical encryption, where as a PBKDF2 is more like a one-way hash function. Hence I named the function in this library `generate_digest` rather than something like `encrypt_message` which wouldn't have made sense when dealing with PBKDF2.
+Because KDF accepts a key and is able to return the original message (given the same key) it's acting as a form of symmetrical encryption, whereas a PBKDF2 is more like a one-way hash function. Hence I named the function in this library `generate_digest` rather than something like `encrypt_message` which wouldn't have made sense when dealing with PBKDF2.
 
 <div id="3"></div>
 ## generate_digest

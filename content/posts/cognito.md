@@ -75,7 +75,7 @@ In order for you to be able to _authenticate_ and _authorize_ access, Cognito pr
 1. User Pools
 2. Identity Pools
 
-User Pools deal with 'authentication', where as Identity Pools deal with 'authorization' (and specifically that means AWS based resources only).
+User Pools deal with 'authentication', whereas Identity Pools deal with 'authorization' (and specifically that means AWS based resources only).
 
 For the purposes of this post I'll only be focusing in on User Pools, as I've not yet had to worry about authorizing access for AWS resources to an authenticated user (which is where Identity Pools would come into play).
 

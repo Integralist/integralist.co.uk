@@ -67,7 +67,7 @@ Security can be confusing. It's taken me longer than I care to admit to really u
 
 Throughout this post you'll see me use words like "plaintext" and "cipher". It's important to know what these mean before moving on, so let's clarify this now:
 
-When a file is said to be plaintext it simply means that it's unencrypted, where as a cipher is a noun that refers to a plaintext that has been encrypted. That's it.
+When a file is said to be plaintext it simply means that it's unencrypted, whereas a cipher is a noun that refers to a plaintext that has been encrypted. That's it.
 
 <div id="2"></div>
 ## What are keys and how do they work?

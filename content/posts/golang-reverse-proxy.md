@@ -75,9 +75,9 @@ if __name__ == "__main__":
 
 There are two versions of the code, a simple version and a more advanced version that aims to handle more specific use cases.
 
-The simple version uses just the Go standard library, where as the advanced version uses the standard library as well as a few a few external packages such as [httprouter](https://github.com/julienschmidt/httprouter) and [logrus](https://github.com/Sirupsen/logrus) for routing and logging respectively.
+The simple version uses just the Go standard library, whereas the advanced version uses the standard library as well as a few a few external packages such as [httprouter](https://github.com/julienschmidt/httprouter) and [logrus](https://github.com/Sirupsen/logrus) for routing and logging respectively.
 
-One difference between them that's worth mentioning is that in the simple version we use the `httputil.ReverseProxy` http handler directly, where as in the advanced version we use `httputil.NewSingleHostReverseProxy` to construct this for us. The advanced version also tries to normalise the paths by stripping trailing slashes and joining them up with the base path (if there was one, although ironically I don't define one in the advanced example).
+One difference between them that's worth mentioning is that in the simple version we use the `httputil.ReverseProxy` http handler directly, whereas in the advanced version we use `httputil.NewSingleHostReverseProxy` to construct this for us. The advanced version also tries to normalise the paths by stripping trailing slashes and joining them up with the base path (if there was one, although ironically I don't define one in the advanced example).
 
 ### Simple
 
@@ -241,7 +241,7 @@ In this example, we attach a few common proxy related headers to the incoming re
 
 Next, we change the request path to the origin. What we do is ensure the path we request from the origin is whatever the base origin path is + the requested path (i.e. not just directing the request to the root/entrypoint of the origin).
 
-In our example, our origin's path is just `/` where as the client will be requesting things like `/foo` and `/bar/baz`, so these would be appended to the origin's defined `/`. But we also make sure that when joining the origin's path with the incoming request path, that we avoid double slashes in the middle. 
+In our example, our origin's path is just `/` whereas the client will be requesting things like `/foo` and `/bar/baz`, so these would be appended to the origin's defined `/`. But we also make sure that when joining the origin's path with the incoming request path, that we avoid double slashes in the middle. 
 
 Lastly, we ensure that any trailing slash is removed as well:
 

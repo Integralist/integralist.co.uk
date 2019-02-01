@@ -425,7 +425,7 @@ func main() {
 }
 ```
 
-> Note: again, the example is a bit silly in that we're handling everything within a single file, where as in reality the consumer won't have access to the original interface/implementation code like we do here (so just use your imagination 🙂).
+> Note: again, the example is a bit silly in that we're handling everything within a single file, whereas in reality the consumer won't have access to the original interface/implementation code like we do here (so just use your imagination 🙂).
 
 The output of the above code is as follows:
 
@@ -732,7 +732,7 @@ But that might not be immediately obvious when looking at the signature for `byt
 func NewBufferString(s string) *Buffer
 ```
 
-So yes it accepts a string, but we want an `io.Reader` as the return type, where as this function returns a pointer to a [`Buffer`](https://golang.org/src/bytes/buffer.go?s=402:817#L7) type? 
+So yes it accepts a string, but we want an `io.Reader` as the return type, whereas this function returns a pointer to a [`Buffer`](https://golang.org/src/bytes/buffer.go?s=402:817#L7) type? 
 
 If we look at the implementation of `Buffer` though, we will see that it does actually [implement](https://golang.org/src/bytes/buffer.go?s=9564:9614#L287) the required `Read` function necessary to support the `io.Reader` interface.
 

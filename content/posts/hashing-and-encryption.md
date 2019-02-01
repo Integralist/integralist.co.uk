@@ -107,7 +107,7 @@ How it works: Base64 encoding takes three bytes, each consisting of eight bits, 
 <div id="2.1"></div>
 ## MAC vs HMAC
 
-A 'MAC' (Message Authentication Code) uses symmetrical cryptography with an encryption algorithm (such as AES †) to verify the integrity of a message, where as a 'HMAC' will use a hash function (such as SHA256) internally instead of an encryption algorithm.
+A 'MAC' (Message Authentication Code) uses symmetrical cryptography with an encryption algorithm (such as AES †) to verify the integrity of a message, whereas a 'HMAC' will use a hash function (such as SHA256) internally instead of an encryption algorithm.
 
 > † encryption algorithms: AES (Advanced Encryption Standard), Blowfish, DES (Data Encryption Standard), Triple DES, Serpent, and Twofish.
 

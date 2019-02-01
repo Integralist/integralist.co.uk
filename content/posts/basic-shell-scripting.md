@@ -194,7 +194,7 @@ find . -name '*.go' -exec grep 'my_pattern_im_searching_for' {} \;
 
 > Note: where `{}` is a placeholder for the file path
 
-You'll see the `\;` at the end indicates the end of the command. You need to escape the `;` otherwise it won't work. Also you can replace it with `\+` which *appends* file paths. The reason you'd use this is if you want to execute your specified utility command once and have all matching file paths added as arguments. Where as `\;` means it'll execute the command once for each file matched.
+You'll see the `\;` at the end indicates the end of the command. You need to escape the `;` otherwise it won't work. Also you can replace it with `\+` which *appends* file paths. The reason you'd use this is if you want to execute your specified utility command once and have all matching file paths added as arguments. Whereas `\;` means it'll execute the command once for each file matched.
 
 ### Finding files over a certain size
 
@@ -551,7 +551,7 @@ Results in:
 f!bar
 ```
 
-Where as if we didn't use the squeeze command we would've seen `f!!!bar` instead (notice the 'o' was translated multiple times)..
+Whereas if we didn't use the squeeze command we would've seen `f!!!bar` instead (notice the 'o' was translated multiple times)..
 
 ### du
 

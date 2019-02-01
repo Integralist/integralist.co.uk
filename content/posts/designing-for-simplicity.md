@@ -155,7 +155,7 @@ So this design might not be perfect, but what's better about this architecture i
 
 If the user visits the auto generated URL before the image has been processed, then a message can be displayed to indicate the image is still being processed. Again, this isn't perfect but it has freed up the user to go off and do other things, they're not chained to the browser window watching a message that says "Processing..." for the next few minutes (or longer depending on how much load your system is under).
 
-One practical improvement here is that the new system is much more fault tolerant than the original. In the original system, if the server crashed then the user would likely be returned a [500 HTTP Status Code](http://en.wikipedia.org/wiki/List_of_HTTP_status_codes#500), where as with the new system the user can continue to use the website (they'll see the message "Image waiting to be processed" until a new back-end server instance can be brought up, where by it'll continue to process messages off the image queue).
+One practical improvement here is that the new system is much more fault tolerant than the original. In the original system, if the server crashed then the user would likely be returned a [500 HTTP Status Code](http://en.wikipedia.org/wiki/List_of_HTTP_status_codes#500), whereas with the new system the user can continue to use the website (they'll see the message "Image waiting to be processed" until a new back-end server instance can be brought up, where by it'll continue to process messages off the image queue).
 
 > Note: fault tolerance is often referred to as "partition tolerance"; I mentioned this earlier when discussing CAP Theorem.
 
@@ -429,9 +429,9 @@ It's still in development and has some rough edges (there is a rewrite planned, 
 
 So far in this post we've been discussing top-level system and architectural design, tooling and other associated processes. In this section I want to take it down a level and briefly express my love for Functional Programming (FP), which will require me to make some comparisons to Object-Oriented Programming (OOP).
 
-OOP and FP are two styles of development that have somewhat apposing interests. OOP is focused more around encapsulation of data, where as FP likes to _filter_ data.
+OOP and FP are two styles of development that have somewhat apposing interests. OOP is focused more around encapsulation of data, whereas FP likes to _filter_ data.
 
-OOP consists of classes and creating objects where data is hidden inside them, but you can manipulate the data from exposed methods. Where as FP is generally a collection of pure functions that help to enforce [referential transparency](http://en.wikipedia.org/wiki/Referential_transparency_%28computer_science%29), and data is passed _through_ these functions, manipulating it as it goes.
+OOP consists of classes and creating objects where data is hidden inside them, but you can manipulate the data from exposed methods. Whereas FP is generally a collection of pure functions that help to enforce [referential transparency](http://en.wikipedia.org/wiki/Referential_transparency_%28computer_science%29), and data is passed _through_ these functions, manipulating it as it goes.
 
 One of the big selling points for (most) FP languages is support for immutability. Immutability is a way of distinguishing state, identity and value. From a practical standpoint: if you modify data, then the changes will result in a modified _copy_ of the original data (as apposed to mutating it).
 
@@ -520,7 +520,7 @@ For example, a container wasn't logging any thing, and on top of that the applic
 
 Scaling containers requires a new approach that might not fit your current infrastructure model. Also, the question of scalability could potentially be simplified by the upcoming release of Docker's "Swarm" feature; which offers the ability to control a cluster of machines running Docker via a single endpoint. But how easily this makes actually _scaling_ a cluster of running docker instances within a single host, remains to be seen in practice.
 
-Traditional "vertical vs horizontal" scaling is quite straight forward: with vertical scaling you increase the size of the box running your application; where as with horizontal scaling you increase the number of boxes instead. The ability to horizontally scale a cluster of docker containers might not be so straight forward.
+Traditional "vertical vs horizontal" scaling is quite straight forward: with vertical scaling you increase the size of the box running your application; whereas with horizontal scaling you increase the number of boxes instead. The ability to horizontally scale a cluster of docker containers might not be so straight forward.
 
 Imagine I have an EC2 server instance running with an [auto scaling group](http://aws.amazon.com/autoscaling/) that creates a new server instance when the CPU reaches 70%. On this instance I have a web service running inside a Docker container and it's maxing out its resources. We'd have to use custom metrics fired off from our Docker container to [AWS CloudWatch](http://aws.amazon.com/cloudwatch/), which would allow us to define an alarm that triggered a new server instance to be created. Otherwise our ASG wouldn't catch the Docker container failing.
 

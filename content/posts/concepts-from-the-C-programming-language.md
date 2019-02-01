@@ -268,7 +268,7 @@ The reason we specify a length of 4 and not 3 (as you would expect with a string
 ["a", "b", "c", "\0"] // yes it does actually have four elements
 ```
 
-The last element is known as the null terminator. When this data is stored in memory, we can start at the location in memory (the _address_) where the first element is stored and then step through memory until we reach the null terminator; where we'll then find the end of the string.
+The last element is known as the [null terminator](https://en.wikipedia.org/wiki/Null-terminated_string). When this data is stored in memory, we can start at the location in memory (the _address_) where the first element is stored and then step through memory until we reach the null terminator; where we'll then find the end of the string.
 
 > Note: you can set your variable to be the actual length of the content (e.g. `char my_string[1] = "a";`) but in some instances this can cause strange overlaps of data and strictly speaking isn't valid code either
 
@@ -418,7 +418,7 @@ char* foo, bar;
 
 You might (incorrectly) think this would create two variables, both of type 'character pointer', but really only `foo` is the pointer and `bar` is a normal `char` type.
 
-Where as using the second format (`char *foo`), this code becomes much clearer:
+Whereas using the second format (`char *foo`), this code becomes much clearer:
 
 ```
 char *foo, bar;
@@ -483,7 +483,7 @@ When assigning a string, the compiler expects the contents to be stored within a
 
 So in our example above (i.e. the string `"abc"`), `"a"` is stored in memory and the address of that memory is placed in `my_string[0]`. Next `"b"` is stored in memory and the address of that memory is placed in `my_string[1]` and so on.
 
-A pointer in contrast is a single location in memory, where as an array hold lots of memory addresses.
+A pointer in contrast is a single location in memory, whereas an array hold lots of memory addresses.
 
 Because of this, an array variable automatically points to the first element within the array.
 
@@ -619,7 +619,7 @@ printf("element_count: %zu\n", element_count); // 3
 
 ### Signed vs Unsigned
 
-In C you can define an integer to be either `signed` or `unsigned`. The former means the number can be both negative and positive as well as zero. Where as the latter is always positive.
+In C you can define an integer to be either `signed` or `unsigned`. The former means the number can be both negative and positive as well as zero. Whereas the latter is always positive.
 
 > Note: typically, if a number is negative, you'll prefix it with `-`. If the number is positive, then it is just the number. For example, `-1` and `1`. This is a little more convoluted in binary though (resulting in concepts such as 'ones complement' and 'twos complement' - Google it if you want to know more though).
 
@@ -676,7 +676,7 @@ char *getln()
 }
 ```
 
-There is a very good blog post that covers the steps in detail here: [https://brennan.io/2015/01/16/write-a-shell-in-c/](https://brennan.io/2015/01/16/write-a-shell-in-c/). It's effectively the same implementation (in principle), except for the use of `getchar` vs `getc` (the former can only read from stdin, where as `getc` can read from any input stream).
+There is a very good blog post that covers the steps in detail here: [https://brennan.io/2015/01/16/write-a-shell-in-c/](https://brennan.io/2015/01/16/write-a-shell-in-c/). It's effectively the same implementation (in principle), except for the use of `getchar` vs `getc` (the former can only read from stdin, whereas `getc` can read from any input stream).
 
 ```
 #define LSH_RL_BUFSIZE 1024

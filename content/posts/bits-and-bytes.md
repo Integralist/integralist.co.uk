@@ -17,6 +17,7 @@ draft: false
 - [Byte](#3)
 - [RAM](#4)
 - [Bit and RAM Visualisation](#5)
+- [Bits and ASCII](#5.1)
 - [Bits and Numbers](#6)
 - [IPs](#7)
 - [Base Numbers](#8)
@@ -109,6 +110,13 @@ Similarly, if we start with the bit value `1` and move to the left by `15` bits 
 
 For more bitwise operators, refer to these posts: https://wiki.python.org/moin/BitwiseOperators and https://medium.com/learning-the-go-programming-language/bit-hacking-with-go-e0acee258827
 
+<div id="5.1"></div>
+### Bits and ASCII
+
+ASCII is a set of codes where each 'code point' represents a textual character such as a `1`, `a`, `z`, `!`, `?` etc.
+
+Each code point has an associated binary number. For example, `a` has the binary number `0110 0001` which if we add up the values associated with those specific bits we'll find it'll yield the code point number `97`. In ASCII the character `a` is code point `97`.
+
 <div id="6"></div>
 ## Bits and Numbers
 
@@ -192,7 +200,7 @@ Below is an image, credit to Jenny Eather, that helps us visualise this model:
     <img src="../../images/base-10-system.png">
 </a>
 
-The 'base number' is the number of numbers within the system. So base-10 has 10 numbers (0,1,2,3,4,5,6,7,8,9) where as binary is base-2 because it uses two numbers only (0, 1).
+The 'base number' is the number of numbers within the system. So base-10 has 10 numbers (0,1,2,3,4,5,6,7,8,9) whereas binary is base-2 because it uses two numbers only (0, 1).
 
 If you want to know the unit each number in a system represents (we'll use base-10 as the example, thanks to the following visualisation credited to Jenny Eather), then you calculate this using the power of the base number.
 
@@ -342,7 +350,7 @@ And so on...
 
 So `10.0.0.0/24` gives us an ip range of `10.0.0.0` to `10.0.0.255` (256 IPs). 
 
-Where as `10.0.0.0/32` gives us an ip range of 1 ip (`10.0.0.0` to `10.0.0.0`).
+Whereas `10.0.0.0/32` gives us an ip range of 1 ip (`10.0.0.0` to `10.0.0.0`).
 
 > Note: you can use a tool such as [http://www.ipaddressguide.com/cidr](http://www.ipaddressguide.com/cidr) to help you generate CIDRs
 

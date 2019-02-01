@@ -437,7 +437,7 @@ You'll notice that we pass a specific `--mode` flag to both `webpack` and `webpa
 
 In the case of `--mode=production` the `webpack` tool will make additional modifications that means the `bundle.js` output is as efficient as possible (such as minifiying and obfuscating the code).
 
-Where as `--mode=development` will allow for the generation of webpack source map files (to aid you in debugging).
+Whereas `--mode=development` will allow for the generation of webpack source map files (to aid you in debugging).
 
 ## Conclusion
 

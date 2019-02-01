@@ -237,7 +237,7 @@ As you can see, the temp variable was handling more responsibility than it shoul
 
 This technique has a very similar intent to [Inline Temp](#inline-temp) in that one of its primary focuses is to aid the [Extract Method](#extract-method).
 
-The subtle but important difference between this technique and [Inline Temp](#inline-temp) is that the complex expression assigned to the temp needs to be first moved to a method (where as the [Inline Temp](#inline-temp) technique is different in that the temp may already be using a method invocation).
+The subtle but important difference between this technique and [Inline Temp](#inline-temp) is that the complex expression assigned to the temp needs to be first moved to a method (whereas the [Inline Temp](#inline-temp) technique is different in that the temp may already be using a method invocation).
 
 For example:
 

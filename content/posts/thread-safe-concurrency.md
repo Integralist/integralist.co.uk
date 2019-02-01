@@ -150,11 +150,11 @@ The three core mechanisms are:
 - `agent`
 - `ref`
 
-A `ref` provides synchronised access to shared mutable state in a *coordinated* fashion (i.e. it uses the STM to ensure multiple references are coordinated before applying changes). Where as an `atom` is similiar, but differs in that it works like a straight forward CAS (compare and swap) operation. So an `atom` is considered *un-coordinated*. An `agent` is the same as an `atom` with the exception that it can be run asynchronously.
+A `ref` provides synchronised access to shared mutable state in a *coordinated* fashion (i.e. it uses the STM to ensure multiple references are coordinated before applying changes). Whereas an `atom` is similiar, but differs in that it works like a straight forward CAS (compare and swap) operation. So an `atom` is considered *un-coordinated*. An `agent` is the same as an `atom` with the exception that it can be run asynchronously.
 
 Clojure's atom provides a validator function (pass `:validator` argument followed by a validating function), which prevents invalid values being set; similar to a function's pre/post assertion conditions. You are also able to "watch" atoms for state changes via `add-watch`.
 
-> Note: there is also `Var` type which is a mutable variable and is created via the `def` form. A variable is "thread-local" meaning it isn't shared across threads (where as `atom`, `agent` and `ref` are all accessible across threads)
+> Note: there is also `Var` type which is a mutable variable and is created via the `def` form. A variable is "thread-local" meaning it isn't shared across threads (whereas `atom`, `agent` and `ref` are all accessible across threads)
 
 Now let's consider the following functions:
 
@@ -373,20 +373,20 @@ Actors can also coordinate more safely by combining themselves via STM transacti
 
 Clojure does not support Actors, although it does have a mechanism known as "[agents](http://clojure.org/agents)". An agent provides access to shared mutable state, but does so asynchronously (much like an Actor). Where an Actor receives a "message", an agent accepts an `action`.
 
-> Note: Actors and Agents have some surface similarities, but ultimately are different beasts. Actors "encapsulates" state and provides no means to access it from the outside. Where as Agents contain a single value that can be retrieved and manipulated (via `send` or `send-off` - see below for details). Actors also encapsulate behaviour, where as an Agent is provided the function that affects its value. Actors can be distributed, where as Agents cannot
+> Note: Actors and Agents have some surface similarities, but ultimately are different beasts. Actors "encapsulates" state and provides no means to access it from the outside. Whereas Agents contain a single value that can be retrieved and manipulated (via `send` or `send-off` - see below for details). Actors also encapsulate behaviour, whereas an Agent is provided the function that affects its value. Actors can be distributed, whereas Agents cannot
 
-Where as the STM provides coordinated access to data (i.e. atomic - it verifies that there are no changes to shared data that has been written to; otherwise it'll cause the entire transaction to fail). Agents are independent; meaning that actions run concurrently (the call to `action` returns immediately), but the actions are executed sequentially via a separate thread. So where a transaction is a synchronous operation, an action handled by an agent is *asynchronous*.
+Whereas the STM provides coordinated access to data (i.e. atomic - it verifies that there are no changes to shared data that has been written to; otherwise it'll cause the entire transaction to fail). Agents are independent; meaning that actions run concurrently (the call to `action` returns immediately), but the actions are executed sequentially via a separate thread. So where a transaction is a synchronous operation, an action handled by an agent is *asynchronous*.
 
-In Clojure, agents are transaction aware (where as atoms are not) and the `!` at end of function name is an indicator of this: `swap!` (not coordinated) vs `send`.
+In Clojure, agents are transaction aware (whereas atoms are not) and the `!` at end of function name is an indicator of this: `swap!` (not coordinated) vs `send`.
 
-> Note: the agent API in Clojure provides two methods: `send-off` and `send`. The former creates a new thread specifically for that agent; where as the latter selects a thread from a pre-defined thread pool. The problem with `send` is that agents fight for an available thread and so if your action does blocking I/O then you'll delay other agents from working (and thus reducing the extra concurrency benefits of using a thread pool)
+> Note: the agent API in Clojure provides two methods: `send-off` and `send`. The former creates a new thread specifically for that agent; whereas the latter selects a thread from a pre-defined thread pool. The problem with `send` is that agents fight for an available thread and so if your action does blocking I/O then you'll delay other agents from working (and thus reducing the extra concurrency benefits of using a thread pool)
 
 Once the agent's state is changed, the next action is applied to the agent (now using the latest state it points to).
 
 <div id="7-3"></div>
 ### Differences between Agents and Erlang Actors
 
-There is one distinctive difference between Erlang's Actor and Clojure's Agent, which is that an Agents "action" doesn't block additional value request calls like an Erlang "message". This is demonstrated in the following image, but in summary: requests to an Actor are blocked until a response to the previous message can be provided; where as Clojure Agents allow multiple `@deref` calls to be made and processed:
+There is one distinctive difference between Erlang's Actor and Clojure's Agent, which is that an Agents "action" doesn't block additional value request calls like an Erlang "message". This is demonstrated in the following image, but in summary: requests to an Actor are blocked until a response to the previous message can be provided; whereas Clojure Agents allow multiple `@deref` calls to be made and processed:
 
 <a href="../../images/actors-vs-agents.png">
     <img src="../../images/actors-vs-agents.png">
@@ -420,7 +420,7 @@ Some of the fundamental differences between this and the Actor pattern are:
 - Communication happens via defined "channels"
 - Processes are anonymous 
   - i.e. Actors know who to communicate with
-  - Where as Channels are pipes with messages going in and listeners the other end
+  - Whereas Channels are pipes with messages going in and listeners the other end
 
 You also have the option of applying other patterns such as multiplexing multiple channels down into one, think "fan-in", which can help in certain scenarios where you want to accept lots of messages comming in (the reverse is also possible, i.e. "fan-out").
 
@@ -489,7 +489,7 @@ To calculate how many more threads than cores you'll need for an intensive set o
 Number of Threads = Number of Available Cores / (1 - Blocking Coefficient)
 ```
 
-> Note: the blocking coefficient (coefficient being a fancy word that means: a value used as a multiplier) is different depending on the operation. For a computational operation it is 0, where as a fully blocking operation it is 1.
+> Note: the blocking coefficient (coefficient being a fancy word that means: a value used as a multiplier) is different depending on the operation. For a computational operation it is 0, whereas a fully blocking operation it is 1.
 
 An example of a blocking coefficient would be: `0.9` - which means a task blocks 90% (`0.9`) of the time & works only 10% (`0.1`) of the time. Meaning, if you had 2 cores then you'd want 20 threads.
 

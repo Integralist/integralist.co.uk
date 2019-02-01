@@ -37,7 +37,7 @@ The script has the following steps:
 <div id="3"></div>
 ## Comparison
 
-Well, the Node package has quite a few layers to it (e.g. Dockerfile, package.json, dependencies, multiple nested files that take some time to navigate around) where as my 'Bash Watchtower' is a single shell script. So it's actually a lot easier and quicker (in my opinion at least) to understand what's going on and how things work.
+Well, the Node package has quite a few layers to it (e.g. Dockerfile, package.json, dependencies, multiple nested files that take some time to navigate around) whereas my 'Bash Watchtower' is a single shell script. So it's actually a lot easier and quicker (in my opinion at least) to understand what's going on and how things work.
 
 > Note: on the plus side, he's got tests :-)  
 > I couldn't be bothered with that for this quick hack

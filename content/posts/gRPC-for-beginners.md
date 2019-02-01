@@ -134,7 +134,7 @@ So to keep things simple I've only used a single property setting for each messa
 
 You can then access these properties from your code as a nested object field/property. So in Ruby, for example, if you accepted the message `Config` as an argument `c` to your `Process` method then your code would call `c.data`.
 
-The numbers assigned to the property (e.g. both `data` and `message` are assigned the value `1`) are known as 'tags'. Effectively, tags with a number between 1 and 15 take one byte to encode where as tags between 16 and 2047 take two bytes to encode. 
+The numbers assigned to the property (e.g. both `data` and `message` are assigned the value `1`) are known as 'tags'. Effectively, tags with a number between 1 and 15 take one byte to encode whereas tags between 16 and 2047 take two bytes to encode. 
 
 The idea is that you should reserve the tags 1 through 15 for very frequently occurring message elements. But if you really want all the gory details then I'll refer you to the [encoding documentation](https://developers.google.com/protocol-buffers/docs/encoding).
 

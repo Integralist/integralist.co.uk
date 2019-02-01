@@ -192,7 +192,7 @@ Here is a table matrix that attempts to identify these 'layers':
 
 > Note: you'll find many differing versions of the OSI Model (i.e. the layers described are always the same, but you may see more or less protocols defined depending on what version you look at), this is just one such version copied vertabim from Wikipedia
 
-The reason this is useful, is because you can identify which layer the relevant tools are operating at. Tools like `netstat` operate at layer four (transport: `tcp`), where as `telnet` operates at layer seven (application: it actually has its own protocol `telnet`).
+The reason this is useful, is because you can identify which layer the relevant tools are operating at. Tools like `netstat` operate at layer four (transport: `tcp`), whereas `telnet` operates at layer seven (application: it actually has its own protocol `telnet`).
 
 When debugging an issue, if you know the problem space is a particular layer of the OSI model, then you'll have an easier time identifying which tool is best suited to the investigation.
 
@@ -296,7 +296,7 @@ Majority of the time you'll use `ps` just to identify the process id (`pid`) so 
     <img src="../../images/shell-ps.jpg">
 </a>
 
-The differences between `ps` and `top` are subtle, both display details about active processes (albeit in different formats). But `top` is continuous where as `ps` is just a snapshop.
+The differences between `ps` and `top` are subtle, both display details about active processes (albeit in different formats). But `top` is continuous whereas `ps` is just a snapshop.
 
 The `ps` command also offers some more advanced display options, not just a table matrix, and these can help visualise the parent/children relationship for particular processes.
 
