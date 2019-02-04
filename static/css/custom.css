@@ -51,24 +51,28 @@ pre {
   padding: .5em;
 }
 
-.ll-fatal {
+.ll-fatal, .awful {
   color: red;
 }
 
-.ll-error {
+.ll-error, .bad {
   color: orange;
 }
 
-.ll-warn {
+.ll-warn, .ok {
   color: gold;
 }
 
-.ll-info {
+.ll-info, .good {
   color: green;
 }
 
 .ll-debug {
   color: blue;
+}
+
+.good, .ok, .bad, .awful {
+  font-weight: bold;
 }
 
 .night {

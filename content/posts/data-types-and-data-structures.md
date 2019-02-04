@@ -8,6 +8,7 @@ tags:
   - "design"
   - "algorithms"
   - "data-structures"
+  - "python"
 draft: false
 ---
 

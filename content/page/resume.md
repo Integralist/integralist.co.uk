@@ -369,6 +369,7 @@ I'm a print published and self-published author; I'm also a tech reviewer and am
 
 The following links are to some of my more 'popular' articles. My main focus when writing is to take a complicated or confusing topic and attempt to distil it, in order for the subject to be more easily understood.
 
+- [Algorithmic Complexity in Python](/posts/algorithmic-complexity-in-python/) (2019)
 - [Data Types and Data Structures](/posts/data-types-and-data-structures/) (2019)
 - [Engineer to Manager](/posts/engineer-to-manager/) (2018)
 - [Interview Techniques](/posts/architecture-interview/) (2018)
