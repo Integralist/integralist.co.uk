@@ -30,6 +30,7 @@ draft: false
 - [JWTs](#jwts)
 - [API Limits](#api-limits)
 - [Logout Issues](#logout-issues)
+- [Other Concerns?](#other-concerns)
 - [Which is the right solution?](#which-is-the-right-solution)
 - [Updated Architecture](#updated-architecture)
 - [User Pool Configuration](#user-pool-configuration)
@@ -46,7 +47,13 @@ draft: false
 
 In this post I would like to introduce you to the [AWS Cognito](https://aws.amazon.com/cognito/) service, and to explain its various moving pieces and how they fit together.
 
-I personally found Cognito hard to get up and running with (for various reasons I'll explain as we go), and to make things worse there didn't seem to be that many reference points outside of the official documentation to help me. Hence this blog post now exists for those weary travellers looking for answers.
+If you're interested in a very high-level view of what I was working on, then [this architecture diagram](#updated-architecture) should give you the basic idea. 
+
+Effectively I co-designed and implemented a new authentication system (using AWS Cognito) for BuzzFeed's existing community users to utilize and which opened the doors for new BuzzFeed services to also be able to offer additional features built upon authentication to their users.
+
+Cognito is tricky to get up and running with (for a variety of reasons which I'll explain as we go), and to make things worse there aren't many reference points outside of the official documentation to help you. Hence this blog post now exists for those weary travellers looking for answers.
+
+> Note: this post was written approximately five months into a year long project and so a lot has changed in the design of the system and the implementation. But this post is still very relevant and useful for those looking to understand Cognito. This post also was fed back to various internal AWS teams and has resulted in work being carried out to improve various aspects of their services mentioned here.
 
 Let's start at the beginning...
 
@@ -66,7 +73,7 @@ It's important to clarify that in this blog post we're only really discussing au
 
 - **Authorization** is the function of specifying access rights to resources, which is different to (and commonly confused with) the process of authentication.
 
-> Note: if you're new to these types of security concepts, then take a look at [this glossary document](https://docs.google.com/document/d/1qs3jEIQvocdVhSxCSPLF1BoLnp91aLnuUIasvl-maYo/edit#) for various terminology.
+> Note: if you're new to these types of security concepts, then take a look at [this glossary document](https://docs.google.com/document/d/1qs3jEIQvocdVhSxCSPLF1BoLnp91aLnuUIasvl-maYo/edit#) I put together which covers the various terminology.
 
 ## User Pools vs Identity Pools
 
@@ -77,7 +84,9 @@ In order for you to be able to _authenticate_ and _authorize_ access, Cognito pr
 
 User Pools deal with 'authentication', whereas Identity Pools deal with 'authorization' (and specifically that means AWS based resources only).
 
-For the purposes of this post I'll only be focusing in on User Pools, as I've not yet had to worry about authorizing access for AWS resources to an authenticated user (which is where Identity Pools would come into play).
+For the purposes of this post I'll only be focusing in on User Pools, as our project requirements did not involve authorizing access for AWS resources to an authenticated user (which is where Identity Pools would typically come into play). 
+
+Now, with _that_ said (and what makes this oh the more confusing, due to the design of the mobile SDKs), mobile applications do utilize Identity Pools for authentication, but the Identity Pool would be configured with a 'provider' which happened to be our User Pool.
 
 > If you're interested in the various Identity Pool concepts, then please refer to [the official documentation](https://docs.aws.amazon.com/cognito/latest/developerguide/authentication-flow.html).
 
@@ -119,9 +128,11 @@ It's worth me taking a moment to also explain that some APIs require you to defi
 
 What I didn't know originally, and was one of the reasons we decided to use a library such as Warrant, was that the code involved with some of these auth flows can be quite complex (I still now struggle to follow exactly what the code does within Warrant when it uses one of these 'flows').
 
-Just to give you an example of the type of code AWS Cognito would expect you to write, take a look at the [`InitiateAuth`](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_InitiateAuth.html) API call with the `USER_SRP_AUTH` auth flow. First of all I don't think it's very clear what is expected to be provided in that documentation alone, but also, take a look at [Warrant's implementation](https://github.com/capless/warrant/blob/master/warrant/aws_srp.py) and specifically how to generate an `SRP_A`, which also doesn't appear to be explained anywhere (no where obvious at least).
+Just to give you an example of the type of code AWS Cognito would expect you to write, take a look at the [`InitiateAuth`](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_InitiateAuth.html) API call with the `USER_SRP_AUTH` auth flow. 
 
-> Note: it wasn't until much later, we discovered that we could (in the case of `InitiateAuth` at least) have avoided writing all the SRP generation code and instead used the _admin_ version of that API, called [`AdminInitiateAuth`](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminInitiateAuth.html) which allows you to skip SRP in favour of implicitly trusting the caller.
+First of all I don't think it's very clear what is expected to be provided in that documentation alone, but also, take a look at [Warrant's implementation](https://github.com/capless/warrant/blob/master/warrant/aws_srp.py) and specifically how to generate an `SRP_A`, which also doesn't appear to be explained anywhere (no where obvious at least).
+
+> Note: it wasn't until much later, we discovered that we could (in the case of `InitiateAuth` at least) have avoided writing all the SRP generation code and instead used the _admin_ version of that API, called [`AdminInitiateAuth`](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminInitiateAuth.html) which allows you to skip SRP in favour of implicitly trusting the caller -- which was fine for our use case as we were building a centralized authentication API service.
 
 ### AWS Hosted UI
 
@@ -359,6 +370,16 @@ Before we redirect the user to that page we first redirect them to the AWS `/log
 Our failure page is configured with a conditional check that says "if an `err_msg` param is passed then show error page with the JS redirect to `/logout`, otherwise if no `err_msg` provided just immediately redirect to our `/signin` page".
 
 So that's how we're resolving this issue currently. It's not elegant for sure but it works.
+
+## Other Concerns?
+
+It's worth me mentioning a few other concerns we had, the first of which wasn't directly related to Cognito but was specific to the system we were designing, and that was 'atomic operations'. 
+
+We had to make changes to Cognito and then sync some behaviours back to our legacy system. If there was a network (or other) fault then we needed both systems to be tolerant and to undo any data modifcations in case of failure.
+
+Other than that we would be storing off the JWT tokens we received from AWS into secure cookies (+Secure +HttpOnly attributes), and this caused us issues because our cookies needed to be scoped to the right domains to prevent overloading the HTTP request header limit.
+
+Due to the JWTs being large in size, and the fact that BuzzFeed has many services/properties for users to interact with, we noticed that some users would end up seeing a `400 Bad Request` caused by the large cookies. The routing services in front of these upstreams are generally nginx instances and so we would use `large_client_header_buffers` to allow an increased size until such a time we could figure out an appropriate solution.
 
 ## Which is the right solution?
 
@@ -776,7 +797,7 @@ resource "aws_iam_role" "apps_identity_pool_unauthenticated" {
     {
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::864932087808:root"
+        "AWS": "arn:aws:iam::000000000000:root"
       },
       "Action": "sts:AssumeRole",
       "Condition": {
