@@ -134,7 +134,7 @@ I'd like to share the various things I've worked on over the years and the impac
 
 - **What**: Led the effort to document, improve, and educate others on the state of BuzzFeed's monitoring.   
   **Why**: Our monitoring system was very noisy, which made going on-call a much more stressful proposition.  
-  **Impact**: . I also wrote a [community blog post](/posts/monitoring-best-practices/) sharing and explaining a lot of what we did, along with sharing [a template Runbook](https://docs.google.com/document/d/1eaT9KMam5zq7lT-5OVz9T91RJQUx-qx2q6WnKSvxC_U/edit?usp=sharing) for operational safety.
+  **Impact**: I also wrote a [community blog post](/posts/monitoring-best-practices/) sharing and explaining a lot of what we did, along with sharing [a template Runbook](https://docs.google.com/document/d/1eaT9KMam5zq7lT-5OVz9T91RJQUx-qx2q6WnKSvxC_U/edit?usp=sharing) for operational safety.
 
 - **What**: Core member of the BuzzFeed “Better-Docs” Working Group.   
   **Why**: We aim to improve documentation and its discoverability for BuzzFeed Tech.  
@@ -254,7 +254,7 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ### 2014
 
-- **What**: Designed and implemented "Jello" which was an internal synchroniation service between Trello and Jira.   
+- **What**: Designed and implemented "Jello" which was an internal synchronization service between Trello and Jira.   
   **Why**: Teams preferred to use Trello, while the rest of the organization was using a very old version of Jira.  
   **Impact**: Enabled teams to benefit from the speed and feature set of Trello without having to manually track tasks back into Jira for the rest of the organizations visibility.
 
@@ -268,7 +268,7 @@ I'd like to share the various things I've worked on over the years and the impac
 
 - **What**: Co-designed and co-implemented cloud based distributed load testing tool.   
   **Why**: Existing solutions weren't able to scale with our platform.  
-  **Impact**: .
+  **Impact**: Enabled engineers to easily load test their services at scale and identify performance bottlenecks.
 
 - **What**: Organized public speaking event with [Sandi Metz](http://www.sandimetz.com/).   
   **Why**: To build an engineering network event for the London tech community.  
