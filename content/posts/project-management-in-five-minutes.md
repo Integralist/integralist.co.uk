@@ -42,6 +42,7 @@ This is a short checklist of things you probably should be doing...
 🤔 Understand the requirements, and specifically why they are important. 
 
 - If you don't understand the project values, then you'll have a hard time building something that benefits your users.
+- Does the project even _align_ with your team's mission statement/responsibilities? You should be focused on building things that bring value to your stakeholders.
 
 📝 Create simple/high-level Gherkin [user stories](#user-stories)
 
@@ -73,6 +74,8 @@ This is a short checklist of things you probably should be doing...
 - How far has the project come? 
 - How far is it from completion?
 
+> Don't work _faster_ (and or _harder_) when you discover the team is missing deadlines (e.g. "it's ok, I know we missed this deadline/milestone, but we're _sooooo_ close, let's crank it up and get it done!"). **STOP!** take a breath and understand why the deadline was missed. Were there any trending patterns that are likely to repeat themselves?
+
 📈 Track changes to requirements
 
 - Be clear about the cost of those changes.
@@ -98,6 +101,28 @@ This is a short checklist of things you probably should be doing...
 🎉 CELEBRATE!  
 
 - Doesn't matter how big or small the project, or whether it was difficult at times. Always, always, celebrate the finishing line and thank your team for their hard work.
+
+## Shielding
+
+Don't shield the team from issues that are arising around them (e.g. don't think "oh, they're stressed and missing deadlines, so I need to pretend like everything is ok" -- it's not ok). Treat the team with respect, as adults, and let them know things aren't working and that we need to adjust the process to resolve that.
+
+Yes, shield the team from _distractions_, but that is something altogether different than shielding them from bombs exploding around them. They can help you negotiate those mindfields if you let them. We're working with adults, and they don't need to have scary things hidden from them.
+
+## Positive Mindset
+
+I've found that swapping the word "problem" for "challenge" a good thing to do in general, whether it be talking about an actual technical challenge or discussing a challenging interaction with another employee. 
+
+The subtle switch in language helps me refocus on a more positive and motivated projectory (rather than setting myself up to be in a negative mindset for the conversation).
+
+## Recognising Trends
+
+As time goes on, you might start having issues with your team (for various reasons - we're humans, we're notoriously difficult creatures).
+
+When reporting to your line manager (e.g. 1:1's where you discuss things that are on your mind), it can be difficult sometimes to voice concerns without explicit examples. 
+
+Depending on the situation, explicit examples aren't always possible to recall. In those cases where you have a niggling feeling something isn't quite right but you couldn't point to an exact moment in time where an incident occurred, then being able to see a _trend_ of something negative happening can help you to raise it up to leadership.
+
+Be aware of trends in people, otherwise you might find yourself in a bad situation and not sure how or why you got there in the first place. If you catch problems early enough, you can help work towards a solution that gets your team back on track.
 
 ## User Stories
 
@@ -151,17 +176,3 @@ Scenario: unauthenticated user sign-up
   When I visit www.buzzfeed.com/cms
   Then I am directed to a legacy sign-up flow
 ```
-
-## Positive Mindset
-
-I've found that swapping the word "problem" for "challenge" a good thing to do in general, whether it be talking about an actual technical challenge or discussing a challenging interaction with another employee. The subtle switch in language helps me refocus on a more positive and motivated projectory (rather than setting myself up to be in a negative mindset for the conversation).
-
-## Recognising Trends
-
-As time goes on, you might start having issues with your team (for various reasons - we're humans, we're notoriously difficult creatures).
-
-When reporting to your line manager (e.g. 1:1's where you discuss things that are on your mind), it can be difficult sometimes to voice concerns without explicit examples. 
-
-Depending on the situation, explicit examples aren't always possible to recall. In those cases where you have a niggling feeling something isn't quite right but you couldn't point to an exact moment in time where an incident occurred, then being able to see a _trend_ of something negative happening can help you to raise it up to leadership.
-
-Be aware of trends in people, otherwise you might find yourself in a bad situation and not sure how or why you got there in the first place. If you catch problems early enough, you can help work towards a solution that gets your team back on track.
