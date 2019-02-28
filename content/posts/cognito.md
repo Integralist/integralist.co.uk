@@ -33,6 +33,7 @@ draft: false
 - [Other Concerns?](#other-concerns)
 - [Which is the right solution?](#which-is-the-right-solution)
 - [Updated Architecture](#updated-architecture)
+- [Native Mobile Social Sign-ins](#native-mobile-social-sign-ins)
 - [User Pool Configuration](#user-pool-configuration)
 - [IAM User](#iam-user)
 - [Lambda IAM Role](#lambda-iam-role)
@@ -398,6 +399,14 @@ If you're interested the updated architecture looked something like this...
 None of the listed services are public, they're all internal. The "API Gateway" is an internal tool that allows upstreams (such as the `buzzfeed_auth_api` to control concurrency and rate limiting) of downstream consumers (such as `buzzfeed_auth_ui` and `user_settings`).
 
 The reason we migrated certain 'user settings' functionality out of our monolithic webapp and not other user features is because we only wanted to move behaviours that interacted with fields that needed sync'ing between Cognito and our legacy datastore. As times goes on, we'll start to migrate more and more functionality out into separate services.
+
+## Native Mobile Social Sign-ins
+
+We discovered that the social sign-in for native mobile apps doesn't work as well as the web SDK's. Mobile apps need to instead do things differently as their SDK's aren't as 'integrated' like web.
+
+<a href="../../images/mobile-app-authentication-flow.png">
+  <img src="../../images/mobile-app-authentication-flow.png">
+</a>
 
 ## User Pool Configuration
 
