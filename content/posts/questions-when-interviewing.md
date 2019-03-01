@@ -133,20 +133,25 @@ Otherwise, here are the list of questions/topics I like to cover...
   - How do internal & external staff interact?
   - How do teams across offices/locality bond?
 - **Process**
+  - What's your 'onboarding' process?
   - How are new features discussed, designed, evolved, released?
+      - How do you prioritize (e.g. impact/value for end-users)?
   - What is the leadership like?
   - How is documentation handled here?
       - Do they care about documentation? 
       - Are they sharing information, or is there silos of knowledge?
   - Do you practice post mortems? (blameless retrospection, handling of failures)
-  - How do you handle tech debt?
+  - How do you handle tech debt (i.e. sustainability of your software)?
 - **Communication**
+  - What do you consider to be _good_ communication?
   - Do you work with any of the following practices?
       - [SBI: Situation, Behaviour, Impact](https://gist.github.com/Integralist/24c8a9ce570d78d37ed0cf9967594e0e) (Methodology, _The Center for Creative Leadership_)
       - [Radical Candor](https://www.radicalcandor.com/) (Book, _Kim Scott_)
       - [Conscious Business](https://www.youtube.com/watch?v=IdMvWLARF1w) (Video, _Fred Kofman_)
       - [Authentic Communication](https://www.soundstrue.com/store/authentic-communication.html) (Book, _Fred Kofman_)
 - **Responsibility and Ownership**
+  - What are your expectations of me when I start?
+      - What is your indicator that I was a successful hire?
   - What does the responsibilities look like for each of the following types of teams?
       - Engineering (Features/Products)
       - Site Reliability
