@@ -21,6 +21,7 @@ draft: false
     - [Client SDK](#client-sdk)
     - [Server SDK](#server-sdk)
     - [AWS Hosted UI](#aws-hosted-ui)
+- [Stateless Authentication](#stateless-authentication)
 - [Logic Processing with AWS Lambda](#logic-processing-with-aws-lambda)
 - [Beware the Lambdas](#beware-the-lambdas)
 - [Useful Lambdas](#useful-lambdas)
@@ -157,6 +158,22 @@ But there are some caveats:
 There are other issues still that I have with the hosted ui, but in a lot of cases it does the job well enough to put up with them.
 
 The 'state' parameter overloading is an interesting issue and I'll come back to that later on when I discuss a little bit about sign-ins with social providers.
+
+## Stateless Authentication
+
+The thing we liked about Cognito was that it would allow us to build a 'stateless' authentication system. Due to the use of [JWT](https://jwt.io/)s we could pass these tokens around (†) and know that if the user had these tokens that they would be valid and untampered with (because when decoding the tokens we could verifiy this using the public signing key AWS uses to sign the tokens at point of generation).
+
+> † we only ever pass tokens around 'server-side', using secure cookies (with HttpOnly and Secure attributes set) to avoid replay attacks that might occur if we exposed the tokens to the client.
+
+The problem we then stumbled across was: what happens if a user authenticates on a public computer but doesn't log out (or they authenticate on their laptop but have no password to prevent someone from stealing it and thus their existing authenticated session tokens)?
+
+Well, we would still decode the ID JWT we got back from Cognito (to ensure there was no tampering of the token), but we would then make a simple API call to AWS (specifically the [`GetUser`](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_GetUser.html)) as it required us to provide the ACCESS JWT we get back from Cognito.
+
+The reason I mention this is because, we needed a way to invalidate a session, and the only way to do that was to call the [`GlobalSignOut`](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_GlobalSignOut.html) API. 
+
+We originally though that would invalidate all tokens ID/Access/Refresh, but we were wrong. Only the Access and Refresh tokens are invalidated. But that was fine as our system was already being passed the Access token and so once we invalidated the session, if that user tried to reuse the tokens at one of our protected endpoints, we could be sure that it would now fail to give them access as we not only verified the ID token but attempted to use the Access token to call an AWS API to see if it suceeded or not.
+
+Our use case is probably quite unconventional, but otherwise the whole point of having a stateless system was in danger of being made redundant by the fact that _if_ (for _whatever_ reason) we had a set of compromised users we'd otherwise have no way to invalidate their sessions (and we didn't want to have to build our own session state datastore to track all this).
 
 ## Logic Processing with AWS Lambda
 
