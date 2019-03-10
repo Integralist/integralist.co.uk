@@ -103,7 +103,7 @@ You should try to learn more about your colleagues, and appreciate what sorts of
 
 So for example I know a colleague of mine who works in Argentina loves cats and has two of her own. I also have cats and we chat regularly in DM's about not only work, but we share pictures of our cats. Simple things like that help build stronger relationships and makes working together more meaningful. 
 
-We also follow each other in Instagram, and I have many work friends (current and old) who follow me (and vice-versa) on twitter and facebook. We spend a large majority of our life at work, so making friends and really caring about who you work with will make a massive positive impact on your enjoyment while at work.
+We also follow each other on Instagram, and I have many work friends (current and old) who follow me (and vice-versa) on twitter and facebook. We spend a large majority of our life at work, so making friends and really caring about who you work with will make a massive positive impact on your enjoyment while at work.
 
 Don't limit yourself to reaching out to just your team, or to people in your locality. Make an effort to take part in various channels of communication (including those that might be happening across different timezones). This might be as simple as joining various Slack channels where people talk about certain languages or tech, but it can include joining various 'working groups'.
 
@@ -168,7 +168,7 @@ None of these are traits that should be limited to remote workers, as this is ju
 
 I would say that if you're going to be a remote worker though, you'll want to have yourself a space where you can work. Yes it's nice to be able to work from any where in your home, but to have a dedicated 'office space' is important.
 
-I have an office space which I use the majority of the time because it's quiet and it's away from the family noise. But I also find that when it's sunny I like to work from the lounge in the morning (because the sun hits that room first, and also means I can be around my sun while he's enjoying his morning playtime).
+I have an office space which I use the majority of the time because it's quiet and it's away from the family noise. But I also find that when it's sunny I like to work from the lounge in the morning (because the sun hits that room first, and also means I can be around my son while he's enjoying his morning playtime).
 
 I might then move to working from the kitchen so I can look out at my garden and again enjoy some sunshine and scenery as the sun moves around during the day. But again, I do mainly work from my office space, especially when I have meetings or I feel I really need to concentrate.
 
