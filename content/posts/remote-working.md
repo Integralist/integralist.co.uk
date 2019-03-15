@@ -158,7 +158,7 @@ With this process you should have enough to demonstrate you're 'getting things d
 
 - **Daily team standups**: this is your chance to say what you worked on yesterday, what you worked on today, and whether anything is blocking you. This is a great time to express things concerning you and for your manager/team to get an insight into that.
 - **Task tracking**: if you use Jira then you'll have a set of tasks on a backlog that are prioritized and are assigned to specific individuals. Management can track and review what you're doing and see if things aren't getting done.
-- **One to one meetiings**: you have an opportunity at 1-1 mettings with your line manager to express your concerns, and it can be a good time to highlight things you're doing (not project/task specific as that's not the point of 1-1's, but maybe you've created a working group or are working on an important RFC).
+- **One to one meetings**: you have an opportunity at 1-1 meetings with your line manager to express your concerns, and it can be a good time to highlight things you're doing (not project/task specific as that's not the point of 1-1's, but maybe you've created a working group or are working on an important RFC).
 
 ### How do I avoid procrastinating?
 
