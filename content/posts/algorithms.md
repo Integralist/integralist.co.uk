@@ -18,60 +18,18 @@ In this post I'll be demonstrating a few common algorithms using the Python lang
 
 Instead I'm going to focus specifically on algorithms that I find useful and are important to know and understand:
 
-- [Binary Search](#binary-search)
-- [Merge Sort](#merge-sort)
-- [Quick Sort](#quick-sort)
+- **Sorting**
+  - [Merge Sort](#merge-sort)
+  - [Quick Sort](#quick-sort)
+- **Searching**
+  - [Binary Search](#binary-search)
+  - [Breadth First Search](#breadth-first-search)
+  - [Depth First Search](#depth-first-search)
+  - [Dijkstra's Algorithm](#dijkstra-s-algorithm)
 
-We'll then wrap up by considering the [differences between a merge sort and a quick sort](#difference-between-merge-and-quick-sort).
+Three out of the four search algorithms will be searching a graph data struture. Graphs appear everywhere in life. For example, your Facebook list of friends, mutual friends, and extended friends (i.e. friends of your friends who you don't know) is a perfect example of a 'graph'. 
 
-## Binary Search
-
-The most popular algorithm (by far) for searching a value in a _sorted_ list is 'binary search'. The reason for its popularity is that it provides [logarithmic performance](/posts/algorithmic-complexity-in-python/#logarithmic-time) (on average) for access, search, insertion and deletion operations.
-
-- Average: `O(log(n))`
-- Worst: `O(n)`
-
-The algorithm can be broken down into the following pseudo-steps:
-
-- define 'start' and 'end' positions (usually length of list).
-- locate middle of list.
-- stop searching if correct value found.
-- if value is greater: change end position to the middle index.
-- if value is smaller: change start position to the middle index.
-- repeat above steps until value is found.
-
-What this ultimately achieves is shortening the search 'window' of items by half each time (that's the logarithmic part). So if you have a list of 1000 elements, then we can say it'll take a maximum of ten operations to find the number you're looking for (that's: `log 2(10)` == `2^10` == `1024`).
-
-That's outstanding.
-
-Below is an implementation of this popular search algorithm:
-
-```
-def binary_search(collection, item):
-    start = 0
-    stop = len(collection) - 1
-
-    while start <= stop:
-        middle = round((start + stop) / 2)
-        guess = collection[middle]
-
-        if guess == item:
-            return middle
-        if guess > item:
-            stop = middle - 1
-        else:
-            start = middle + 1
-
-    return None
-
-collection = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 20, 21]
-
-result = binary_search(collection, 9)
-
-print(f'the value was found at index {result}\n\n')  # index 4
-```
-
-> Note: you could swap `round((start + stop) / 2)` for `(start + stop) // 2` which uses Python's `//` floor division operator, but I typically opt for the clarity of using the explicit `round` function.
+Graphs can also be 'weighted', so they can indicate that a relationship between two nodes within the graph are possibly stronger than another connection, and is typically used in road maps for determining the quickest path to a particular node (we'll come back to this later when reviewing [Dijkstra's Algorithm](#dijkstras-algorithm)).
 
 ## Merge Sort
 
@@ -199,3 +157,389 @@ Additionally, with a merge sort it's possible to parallelize the data over multi
 This means that quick sort has potentially more operations to be carried out than merge sort, and therefore has a greater time complexity. Although quick sort can offer better 'space' complexity (worst case: `O(log(n))`) compared to merge sort (worst case: `O(n)`).
 
 All that said, the implementation of the algorithms can be tweaked as needed to produce better or worst performance. For example, quick sort could be modified to use another algorithm called [intro sort](https://en.wikipedia.org/wiki/Introsort) which is a mix of quick sort, insertion sort, and heapsort, that's worst-case `O(n log(n))` but retains the speed of quick sort in most cases.
+
+## Binary Search
+
+The most popular algorithm (by far) for searching a value in a _sorted_ list is 'binary search'. The reason for its popularity is that it provides [logarithmic performance](/posts/algorithmic-complexity-in-python/#logarithmic-time) (on average) for access, search, insertion and deletion operations.
+
+- Average: `O(log(n))`
+- Worst: `O(n)`
+
+The algorithm can be broken down into the following pseudo-steps:
+
+- define 'start' and 'end' positions (usually length of list).
+- locate middle of list.
+- stop searching if correct value found.
+- if value is greater: change end position to the middle index.
+- if value is smaller: change start position to the middle index.
+- repeat above steps until value is found.
+
+What this ultimately achieves is shortening the search 'window' of items by half each time (that's the logarithmic part). So if you have a list of 1000 elements, then we can say it'll take a maximum of ten operations to find the number you're looking for (that's: `log 2(10)` == `2^10` == `1024`).
+
+That's outstanding.
+
+Below is an implementation of this popular search algorithm:
+
+```
+def binary_search(collection, item):
+    start = 0
+    stop = len(collection) - 1
+
+    while start <= stop:
+        middle = round((start + stop) / 2)
+        guess = collection[middle]
+
+        if guess == item:
+            return middle
+        if guess > item:
+            stop = middle - 1
+        else:
+            start = middle + 1
+
+    return None
+
+collection = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 20, 21]
+
+result = binary_search(collection, 9)
+
+print(f'the value was found at index {result}\n\n')  # index 4
+```
+
+> Note: you could swap `round((start + stop) / 2)` for `(start + stop) // 2` which uses Python's `//` floor division operator, but I typically opt for the clarity of using the explicit `round` function.
+
+## Breadth First Search
+
+A BFS (breadth first search) is an algorithm that searches a data structure from either a root node or some arbitrary starting point. It does this by exploring all the neighbouring nodes, before moving onto other connected nodes.
+
+The following graph represents a group of people. Some people know each other (e.g. both Alice and Bob know each other), where as other people don't (e.g. Dave knows Ethan, but Ethan knows no one else in this group). 
+
+<a href="../../images/graph-bfs.png">
+    <img src="../../images/graph-bfs.png">
+</a>
+
+We'll use the BFS (breadth first search) algorithm to locate 'Ethan'.
+
+The time complexity of this algorithm will be, at worst, `O(V+E)`.
+
+> Note: in the case of dealing with a graph, `V` = vertex (a node in the graph) and `E` = edge (the line between nodes), the worst case scenario will mean we have to explore every edge and node.
+
+The algorithm can be broken down into the following pseudo-steps:
+
+- Pick a starting point in the data structure.
+- Track nodes to process (e.g. a queue).
+- While the queue has content:
+  - Take a node from the queue.
+  - If the node has been searched already, then skip it.
+  - If not searched, check if it's a match, otherwise update queue.
+  - Queue should be updated with that node's adjacent nodes.
+  - If match is found, then exit the queue loop.
+
+Below is our example implementation of the BFS algorithm:
+
+```
+import random
+from collections import deque
+
+graph = {'alice': ['bob', 'charlie', 'dave'],
+         'bob': ['alice', 'charlie'],
+         'charlie': ['alice', 'bob'],
+         'dave': ['alice', 'ethan']}
+
+def search(starting_point, name):
+    print(f'starting point: {starting_point}')
+
+    queue = deque()
+    queue += graph[starting_point]  # add starting_point's neighbours
+    print(f'queue: {queue}')
+
+    searched = []
+
+    while queue:
+        person = queue.popleft()
+        print(f'person: {person}')
+
+        if person not in searched:
+            if person == name:
+                print(f'found a match: {person}')
+                return True
+            else:
+                queue += graph[person]  # add this item's neighbours
+                print(f'queue updated: {queue}')
+                searched.append(person)
+        else:
+            print(f'skipping {person} as they have already been searched')
+
+    return False
+
+starting_point = random.choice(list(graph.keys()))
+search(starting_point, 'ethan')
+```
+
+> Note: an alternative implementation might use Python's `set` data structure to avoid having to filter already searched people.
+
+Let's take a look at the first run of this program:
+
+```
+starting point: dave
+queue: deque(['alice', 'ethan'])
+person: alice
+queue updated: deque(['ethan', 'bob', 'charlie', 'dave'])
+person: ethan
+found a match: ethan
+```
+
+From that output we can see that we started very conveniently at the 'Dave' node. Dave's adjacent nodes are Alice and Ethan. Due to the order of the nodes in the queue we attempt to process Alice next. Then we check the next node (Ethan) and find what we're looking for.
+
+Now consider a second run which has a different starting point (notice the difference in the number of operations):
+
+```
+starting point: charlie
+queue: deque(['alice', 'bob'])
+person: alice
+queue updated: deque(['bob', 'bob', 'charlie', 'dave'])
+person: bob
+queue updated: deque(['bob', 'charlie', 'dave', 'alice', 'charlie'])
+person: bob
+person: charlie
+queue updated: deque(['dave', 'alice', 'charlie', 'alice', 'bob'])
+person: dave
+queue updated: deque(['alice', 'charlie', 'alice', 'bob', 'alice', 'ethan'])
+person: alice
+skipping alice as they have already been searched
+person: charlie
+skipping charlie as they have already been searched
+person: alice
+skipping alice as they have already been searched
+person: bob
+skipping bob as they have already been searched
+person: alice
+skipping alice as they have already been searched
+person: ethan
+found a match: ethan
+```
+
+> Note: I've used a dict to represent a graph, which helped to make the code simpler to understand. A different data structure (e.g. a directed tree) would require a different implementation of the algorithm. Remember, the basic premise is to search a graph node's adjacent fields, and then their adjacent nodes.
+
+## Depth First Search
+
+A DFS (depth first search) is an algorithm that searches a data structure from its root node. It does this by exploring all the initial child node, before moving down each node's children. 
+
+If no match is found, then we'll backtrack up to the top of the tree and start again at the root node's next child node.
+
+The following graph represents a group of people. Some people know each other (e.g. both Alice and Bob know each other), where as other people don't (e.g. Dave knows Ethan, but Ethan knows no one else in this group). 
+
+<a href="../../images/graph-dfs.png">
+    <img src="../../images/graph-dfs.png">
+</a>
+
+We'll use the DFS (depth first search) algorithm to locate 'Ethan'.
+
+The time complexity of this algorithm will be, at worst, `O(V+E)` (as noted with Breath First Search, this means we could end up hitting every single node and edge in the data struture).
+
+> Note: this example uses a traditional tree data structure instead of a graph to represent the underlying data to be searched.
+
+The algorithm can be broken down into the following pseudo-steps:
+
+- Start at the root node.
+- Check first child to see if it's a match.
+- If not a match, check that child's children.
+- Keep checking the children until a match is found.
+- If no children are a match, then start from next highest node.
+
+Below is our example implementation of the DFS algorithm:
+
+```
+class Tree(object):
+    def __init__(self, name='root', children=None):
+        self.name = name
+        self.children = []
+
+        if children is not None:
+            for child in children:
+                self.add_child(child)
+
+    def __repr__(self):
+        return self.name
+
+    def add_child(self, node):
+        assert isinstance(node, Tree)
+        self.children.append(node)
+
+
+tree = Tree('Alice', [Tree('Bob'),
+                      Tree('Charlie', [Tree('Fred')]),
+                      Tree('Dave', [Tree('Ethan')])])
+
+
+def search_tree(tree, node):
+    print(f'current tree: {tree}')
+
+    if tree.name == node:
+        print(f'found node: {node} in {tree}')
+        return tree
+
+    for index, child in enumerate(tree.children):
+        print(f'current child: {child}')
+
+        if child.name == node:
+            print(f'found node: {node} in {child}')
+            return child
+
+        if child.children:
+            print(f'attempt searching {child} for {node}')
+            match = search_tree(child, node)
+
+            if match:
+                print(f'returning the match: {match}')
+                return match
+
+result = search_tree(tree, 'Ethan')
+
+print(f'result: {result}')
+```
+
+> Note: in our example we use a simple tree data structure to represent the data to be searched. Our implementation is designed to work with that structure. So, for example, if we had multiple children per node (left and right child nodes), then we would need to account for the backtrack to the relevant child right node near the top of the tree.
+
+Let's take a look at the output of this program:
+
+```
+current tree: Alice
+current child: Bob
+current child: Charlie
+attempt searching Charlie for Ethan
+current tree: Charlie
+current child: Fred
+current child: Dave
+attempt searching Dave for Ethan
+current tree: Dave
+current child: Ethan
+found node: Ethan in Ethan
+returning the match: Ethan
+result: Ethan
+```
+
+So from this output we can see we started at Alice, and first checked Bob but because Bob has no children we moved back up to Charlie. From Charlie we go down to Fred but as there's no more children we move back up to Dave. Finally we check Dave's children to find Ethan.
+
+## When to choose BFS vs DFS?
+
+Generally BFS is better when dealing with relationships across fields, where as DFS is better suited to tree hierarchies.
+
+That said, below is a short list of things to consider when opting for either a BFS or DFS:
+
+> Note: the data strutures used (including the implementation of your algorithm) can also contribute to your decision.
+
+- If you know the result is not far from the root: BFS.
+- If result(s) are located deep in the structure then: DFS.
+- If the depth of the structure is _very_ deep, then in some cases: BFS.
+- If the width of the structure is _very_ wide, then memory consumption could mean: DFS.
+
+Ultimately, it all depends.
+
+## Dijkstra's Algorithm
+
+The Dijkstra algorithm tells you the quickest path from A to B within a weighted graph.
+
+<a href="../../images/graph-weighted.png">
+    <img src="../../images/graph-weighted.png">
+</a>
+
+In the above graph we have a few options:
+
+- Start > A > End (Cost: 7)
+- Start > B > End (Cost: 7)
+- Start > B > A > End (Cost: 6)
+
+> Note: as you can see, the route that visually looks longer is actually quicker when considering the weighted nature of the graph.
+
+The time complexity of this algorithm will be, at worst, `O(V+E)` (as noted with Breath First Search and Depth First Search, this means we could end up hitting every single node and edge in the data struture).
+
+The algorithm can be broken down into the following pseudo-steps (it's important to note that in this implementation we calculate the route in reverse):
+
+- Identify the lowest cost node in our graph.
+- Acquire the adjacent nodes.
+- Update costs for each node while accounting for surrounding nodes.
+- Track the processed nodes.
+- Check for new lowest code node.
+
+These steps are very specific to our graph, so if your data structure is different, then the implementation of the algorithm will need to change to reflect those differences. Regardless this should be a nice introduction to the fundamental properties of the algorithm.
+
+Without further ado, below is an example implementation of the Dijkstra's algorithm:
+
+```
+graph = {
+    'start': {
+        'a': 6,
+        'b': 2
+    },
+    'a': {
+        'end': 1
+    },
+    'b': {
+        'a': 3,
+        'end': 5
+    },
+    'end': {}
+}
+
+costs = {
+    'a': 6,
+    'b': 2,
+    'end': float('inf')  # set to infinity until we know the cost to reach
+}
+
+parents = {
+    'a': 'start',
+    'b': 'start',
+    'end': None  # doesn't have one yet until we choose either 'a' or 'b'
+}
+
+processed = []
+route = []
+
+def find_lowest_cost_node(costs):
+    lowest_cost = float('inf')
+    lowest_cost_node = None
+
+    for node in costs:
+        cost = costs[node]
+
+        if cost < lowest_cost and node not in processed:
+            lowest_cost = cost
+            lowest_cost_node = node
+
+    return lowest_cost_node
+
+def find_fastest_path():
+    node = find_lowest_cost_node(costs)
+
+    while node is not None:
+        cost = costs[node]
+        neighbours = graph[node]
+
+        for n in neighbours.keys():
+            new_cost = cost + neighbours[n]
+
+            if costs[n] > new_cost:
+                costs[n] = new_cost
+                parents[n] = node
+        processed.append(node)
+        node = find_lowest_cost_node(costs)
+
+def display_route(node=None):
+    if not node:
+        route.append('end')
+        display_route(parents['end'])
+    elif node == 'start':
+        route.append(node)
+        reverse_route = list(reversed(route))
+        print('Fastest Route: ' + ' -> '.join(reverse_route))
+    else:
+        route.append(node)
+        display_route(parents[node])
+
+find_fastest_path()  # mutates global 'costs' & 'parents' arrays
+display_route()  # Fastest Route: start -> b -> a -> end
+```
+
+The output of this program is (as expected):  
+`Fastest Route: start -> b -> a -> end`.
