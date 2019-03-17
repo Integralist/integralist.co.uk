@@ -27,7 +27,7 @@ Instead I'm going to focus specifically on algorithms that I find useful and are
   - [Depth First Search](#depth-first-search)
   - [Dijkstra's Algorithm](#dijkstra-s-algorithm)
 
-Three out of the four search algorithms will be searching a graph data struture. Graphs appear everywhere in life. For example, your Facebook list of friends, mutual friends, and extended friends (i.e. friends of your friends who you don't know) is a perfect example of a 'graph'. 
+Three out of the four 'search' algorithms listed above will be implemented around a graph data struture. Graphs appear everywhere in life. For example, your Facebook list of friends, mutual friends, and extended friends (i.e. friends of your friends who you don't know) is a perfect example of a 'graph'. 
 
 Graphs can also be 'weighted', so they can indicate that a relationship between two nodes within the graph are possibly stronger than another connection, and is typically used in road maps for determining the quickest path to a particular node (we'll come back to this later when reviewing [Dijkstra's Algorithm](#dijkstra-s-algorithm)).
 
@@ -474,6 +474,12 @@ That said, below is a short list of things to consider when opting for either a 
 - If the width of the structure is _very_ wide, then memory consumption could mean: DFS.
 
 Ultimately, it all depends.
+
+## Searching an unsorted collection?
+
+If you have an unsorted collection, then your only option for searching is a linear time complexity `O(n)`. To improve that performance we would need to first sort the collection so we could use a binary search on it.
+
+Another potential option is to run a linear search across multiple CPU cores so you're effectively parallelizing the processing. It's still `O(n)` linear time complexity, but the perceived time would be shorter (depending on the restructuring of the collection split chunks).
 
 ## Dijkstra's Algorithm
 
