@@ -29,7 +29,7 @@ Instead I'm going to focus specifically on algorithms that I find useful and are
 
 Three out of the four search algorithms will be searching a graph data struture. Graphs appear everywhere in life. For example, your Facebook list of friends, mutual friends, and extended friends (i.e. friends of your friends who you don't know) is a perfect example of a 'graph'. 
 
-Graphs can also be 'weighted', so they can indicate that a relationship between two nodes within the graph are possibly stronger than another connection, and is typically used in road maps for determining the quickest path to a particular node (we'll come back to this later when reviewing [Dijkstra's Algorithm](#dijkstras-algorithm)).
+Graphs can also be 'weighted', so they can indicate that a relationship between two nodes within the graph are possibly stronger than another connection, and is typically used in road maps for determining the quickest path to a particular node (we'll come back to this later when reviewing [Dijkstra's Algorithm](#dijkstra-s-algorithm)).
 
 ## Merge Sort
 
@@ -322,17 +322,19 @@ found a match: ethan
 
 ## Depth First Search
 
-A DFS (depth first search) is an algorithm that searches a data structure from its root node. It does this by exploring all the initial child node, before moving down each node's children. 
-
-If no match is found, then we'll backtrack up to the top of the tree and start again at the root node's next child node.
-
-The following graph represents a group of people. Some people know each other (e.g. both Alice and Bob know each other), where as other people don't (e.g. Dave knows Ethan, but Ethan knows no one else in this group). 
+The following image shows a tree structure that represents various people... 
 
 <a href="../../images/graph-dfs.png">
     <img src="../../images/graph-dfs.png">
 </a>
 
-We'll use the DFS (depth first search) algorithm to locate 'Ethan'.
+A DFS (depth first search) is an algorithm that searches a data structure (such as a tree, or a graph) from its root node. It searches _downwards_ through each child node until there are no more children.
+
+We'll use the DFS (depth first search) algorithm to locate the node 'Ethan'.
+
+Using our example tree structure (above) we would start with Alice, then check the first child Bob. Bob has no children so we would move onto Charlie. Charlie has a single child Fred so we would check him next. Fred has no children so we start back up at Dave. Finally, we check the child of Dave which is Ethan.
+
+Notice how if don't find a match for what we're looking for, then we backtrack up to the top of the tree and start again at the root node's next child node.
 
 The time complexity of this algorithm will be, at worst, `O(V+E)` (as noted with Breath First Search, this means we could end up hitting every single node and edge in the data struture).
 
@@ -378,7 +380,7 @@ def search_tree(tree, node):
         print(f'found node: {node} in {tree}')
         return tree
 
-    for index, child in enumerate(tree.children):
+    for child in tree.children:
         print(f'current child: {child}')
 
         if child.name == node:
@@ -459,7 +461,7 @@ The algorithm can be broken down into the following pseudo-steps (it's important
 - Acquire the adjacent nodes.
 - Update costs for each node while accounting for surrounding nodes.
 - Track the processed nodes.
-- Check for new lowest code node.
+- Check for new lowest cost node.
 
 These steps are very specific to our graph, so if your data structure is different, then the implementation of the algorithm will need to change to reflect those differences. Regardless this should be a nice introduction to the fundamental properties of the algorithm.
 
