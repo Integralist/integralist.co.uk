@@ -158,6 +158,44 @@ This means that quick sort has potentially more operations to be carried out tha
 
 All that said, the implementation of the algorithms can be tweaked as needed to produce better or worst performance. For example, quick sort could be modified to use another algorithm called [intro sort](https://en.wikipedia.org/wiki/Introsort) which is a mix of quick sort, insertion sort, and heapsort, that's worst-case `O(n log(n))` but retains the speed of quick sort in most cases.
 
+### Radix Search?
+
+Another searching algorithm that I see crop up in discussions every now and then is 'radix search'. The way it works is to loop over your data structure _twice_ and (if we're dealing with integers) for the first iteration you'll 'bucket' the elements by their 1's digit, followed by another iteration to bucket the elements by their 10's digit.
+
+So with a collection like `25, 17, 85, 94, 32, 79`, after the first iteration we would have created 'numbered' buckets that looked something like the following:
+
+```
+1: <empty>
+2: 32
+3: <empty>
+4: 94
+5: 25, 85
+6: <empty>
+7: 17
+8: <empty>
+9: 79
+```
+
+If we remove the empty buckets it means we'll end up with a partially sorted list of `32, 94, 25, 85, 17, 79`. Now for the second iteration we re-bucket by the 10's, so this means we end up with:
+
+```
+1: 17
+2: 25
+3: 32
+4: <empty>
+5: <empty>
+6: <empty>
+7: 79
+8: 85
+9: 94
+```
+
+Again if we remove the empty buckets we'll find we now have a fully sorted list: `17, 25, 32, 79, 85, 94`.
+
+It's an interesting algorithm but ultimately is quite limited and so other sorting algorithms like merge/quick sort are generally preferred. Some constraints to be aware of are is that it's generally less efficient than other comparison sorting algorithms. 
+
+Radix sort is also targeted at integers, fixed size strings, floating points and `<`, `>` or lexicographic order comparison predicates.
+
 ## Binary Search
 
 The most popular algorithm (by far) for searching a value in a _sorted_ list is 'binary search'. The reason for its popularity is that it provides [logarithmic performance](/posts/algorithmic-complexity-in-python/#logarithmic-time) (on average) for access, search, insertion and deletion operations.
