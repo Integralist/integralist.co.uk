@@ -15,14 +15,14 @@ draft: false
 ---
 
 - [Introduction](#introduction)
-- [unittest.mock or mock](#unittestmock-or-mock)
+- [unittest.mock or mock](#unittest-mock-or-mock)
 - [Decorator](#decorator)
 - [Resource location](#resource-location)
-- [Mock return_value vs side_effect](#mock-return_value-vs-side_effect)
+- [Mock return_value vs side_effect](#mock-return-value-vs-side-effect)
 - [Mock Nested Calls](#mock-nested-calls)
 - [Verify Exceptions](#verify-exceptions)
-- [Clearing lru_cache](#clearing-lru_cache)
-- [Mock Module Level/Global Variables](#mock-module-levelglobal-variables)
+- [Clearing lru_cache](#clearing-lru-cache)
+- [Mock Module Level/Global Variables](#mock-module-level-global-variables)
 - [Mock Instance Method](#mock-instance-method)
 - [Mock Class Method](#mock-class-method)
 - [Mock Entire Class](#mock-entire-class)
