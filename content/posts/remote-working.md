@@ -172,7 +172,9 @@ I have an office space which I use the majority of the time because it's quiet a
 
 I might then move to working from the kitchen so I can look out at my garden and again enjoy some sunshine and scenery as the sun moves around during the day. But again, I do mainly work from my office space, especially when I have meetings or I feel I really need to concentrate.
 
-You need to get used to recognizing when you're distracted and to combat that however it makes sense for you.
+If you listen to music while working then that can actually be a cause of distraction. For me, if I need to focus (or am working on something I'm unsure about) I tend to find music with lyrics generally distracts me so I'll listen to genres like jazz, classical or downbeat instrumental (trip hop'ish stuff like DJ Crush's "Code 4109"). But if I'm working on a system I know very well and I'm just churning out stuff like a batch of unit tests, then I can listen to anything.
+
+Ultimately you need to get used to recognizing when you're distracted and to combat that however it makes sense for you.
 
 ### How can I stay healthy?
 
