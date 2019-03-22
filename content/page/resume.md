@@ -100,12 +100,12 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ### 2019
 
-- **What**: Locked down purging of individual CDN URLs to authentication by API key.
-  **Why**: Avoid bad actors engineering a distributed attack of our cache nodes.
+- **What**: Locked down purging of individual CDN URLs to authentication by API key.  
+  **Why**: Avoid bad actors engineering a distributed attack of our cache nodes.  
   **Impact**: Increased platform resilience to cache dropping exploits.
 
-- **What**: Moved to 'Core Infra' (specifically the Infra Edge) team.
-  **Why**: To increase the security and resilience of our Edge.
+- **What**: Moved to 'Core Infra' (specifically the Infra Edge) team.  
+  **Why**: To increase the security and resilience of our Edge.  
   **Impact**: Everyone in Core Infra was very excited to have me onboard. Seems my reputation preceded me ❤️
 
 ### 2018
