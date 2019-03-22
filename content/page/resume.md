@@ -70,7 +70,9 @@ Alongside that we were tasked with decommissioning a 10yr+ legacy Perl monolithi
 
 I've worked primarily within BuzzFeed's OO-INFRA group which sits somewhere in-between traditional infrastructure/operation teams and engineering teams building user facing products. Our motivations were to make the lives of our fellow engineers easier by building tools, services and abstractions that enabled them to work more quickly and efficiently.
 
-In January 2018 I was promoted to Staff Software Engineer, after helping to design/architect, develop and maintain some of BuzzFeed's key infrastructure and software (CDN, caching strategies, routing behaviours, and security/authentication related concerns).
+January 2018 I was promoted to Staff Software Engineer, after helping to design/architect, develop and maintain some of BuzzFeed's key infrastructure and software (CDN, caching strategies, routing behaviours, and security/authentication related concerns).
+
+January 2019 I moved over to the Core Infrastructure team (which is split up into multiple sub teams). I'm initially part of the 'Infra Edge' team responsible for strengthening and securing our Edge. The Edge is the surface area of our infrastructure that is in direct contact with the public internet. It includes DNS and the various services that accept ingress traffic from the Big Bad Internet. It is essential to our business that our Edge be a resilient and security-focused layer of our infrastructure.
 
 Each year I would also participate in the various working groups and mentoring programs, and become part of the 'on-call' rota and handle interactions with the Hackerone program.
 
@@ -95,6 +97,16 @@ I progressed upwards through the organisation, moving from initially being a cli
 I'd like to share the various things I've worked on over the years and the impact/value this work has provided.
 
 > Note: the large majority of my 'impact' has been as a _remote_ worker. My hope is that the following list demonstrates how I've successfully made a positive impact (both as an IC and as a Team Lead) while also being 100% remote.
+
+### 2019
+
+- **What**: Locked down purging of individual CDN URLs to authentication by API key.
+  **Why**: Avoid bad actors engineering a distributed attack of our cache nodes.
+  **Impact**: Increased platform resilience to cache dropping exploits.
+
+- **What**: Moved to 'Core Infra' (specifically the Infra Edge) team.
+  **Why**: To increase the security and resilience of our Edge.
+  **Impact**: Everyone in Core Infra was very excited to have me onboard. Seems my reputation preceded me ❤️
 
 ### 2018
 
