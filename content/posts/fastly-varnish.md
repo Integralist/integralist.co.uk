@@ -164,6 +164,8 @@ Once a lookup in the cache is complete (i.e. `vcl_hash`) we'll end up in either 
 
 If you were to end up at `vcl_miss` instead, then you'll probably want to manipulate the `bereq` object and not the `req` object because manipulating the `req` object doesn't affect the request that will shortly be made to the origin. If you decide at this last moment you want to send an additional header to the origin, then you would set that header on the `bereq` and that would mean the request to origin would include that header.
 
+> Note: this is where understanding the various state variables can be useful, as you might want to modify the `req` object for the sake of 'persisting' a change to another state, where as `bereq` modification will only live for the lifetime of the `vcl_miss` subroutine.
+
 Once a request is made, the content is copied into the `beresp` variable and made available within the `vcl_fetch` state. You would likely want to modify this object in order to change its ttl or cache headers because this is the last chance you have to do that before the content is stored in the cache.
 
 Finally, the `beresp` object is copied into `resp` and that is what's made available within the `vcl_deliver` state. This is the last chance you have for manipulating the response that the client will receive. Changes you make to this object doesn't affect what was stored in the cache (because that time, `vcl_fetch`, has already passed).
