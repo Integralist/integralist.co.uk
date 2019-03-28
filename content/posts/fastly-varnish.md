@@ -52,7 +52,7 @@ Varnish is a 'state machine' and it switches between these states via calls to a
 - `fetch`: content has been fetched, we can now inspect/modify it before delivering it to the user.
 - `deliver`: content has been cached (or not, if we had used `return(pass)`) and ready to be delivered to the user.
 
-For each state there is a corresponding subroutine that is executed. It has the form `vcl_<state>`, and so there is a `vcl_recv`, `recv_hash`, `recv_hit` etc.
+For each state there is a corresponding subroutine that is executed. It has the form `vcl_<state>`, and so there is a `vcl_recv`, `vcl_hash`, `vcl_hit` etc.
 
 So in `vcl_recv` to change state to "pass" you would execute `return(pass)`. If you were in `vcl_fetch` and wanted to move to `vcl_deliver`, then you would execute `return(deliver)`.
 
