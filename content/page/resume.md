@@ -100,6 +100,14 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ### 2019
 
+- **What**: Planned and designed project to migrate VCL logic from CDN layer to a new 'perimeter' service.  
+  **Why**: Reduce the amount of custom routing and behavioural logic within our CDN (which is a 'black box' for most engineers).  
+  **Impact**: Enabled BuzzFeed's ability to failover to a different CDN provider, thus avoiding vendor lock-in and improving our CDN resilience.
+
+- **What**: Implemented CLI command for authenticated purging of URLs in Python.  
+  **Why**: To enable BuzzFeed staff (inc. tech support) to purge a given URL.  
+  **Impact**: Reduced the number of 'blessed' users given direct access to our CDN control panel, thus reducing the scope of potential user mistakes for a critical piece of our infrastructure.
+
 - **What**: Locked down purging of individual CDN URLs to authentication by API key.  
   **Why**: Avoid bad actors engineering a distributed attack of our cache nodes.  
   **Impact**: Increased platform resilience to cache dropping exploits.
