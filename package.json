@@ -18,10 +18,13 @@
     "url": "https://github.com/Integralist/integralist.co.uk/issues"
   },
   "homepage": "https://github.com/Integralist/integralist.co.uk#readme",
-  "dependencies": {},
+  "dependencies": {
+    "concat-map": "0.0.1",
+    "findup-sync": "^3.0.0"
+  },
   "devDependencies": {
-    "grunt": "^1.0.2",
-    "js-yaml": "^3.11.0",
+    "grunt": "^1.0.4",
+    "js-yaml": "^3.13.1",
     "string": "^3.3.3"
   }
 }
