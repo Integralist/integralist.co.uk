@@ -520,6 +520,12 @@ defaults read "Apple Global Domain" com.apple.mouse.tapBehavior
 
 > Note: [here](https://github.com/Integralist/dotfiles/blob/cc906bd14636543e71d9c034d6507f5986a80bbd/bootstrap.sh#L7-L53) are the settings I used to configure via the terminal.
 
+One thing I like to do is to make sure macOS' "Spaces" feature doesn't rearrange spaces based on their recent usage, and to do that you need to open up the 'Mission Control' settings panel and disable the option:
+
+```
+Automatically rearrange Spaces based on most recent use
+```
+
 ## Homebrew Output
 
 Finally, for those interested, below is the output of installing Homebrew for the first time. I like to see what Homebrew creates, so in future if I ever want to know where something should exist I can refer back to this as a reference point:
