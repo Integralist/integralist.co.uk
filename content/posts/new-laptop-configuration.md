@@ -362,7 +362,7 @@ brew install pyenv
 
 > Note: pyenv will also install `python-build` (no need to install that separately), but it's useful to know because the version of Python you want to install will be based on what's available from `python-build --definitions`.
 
-So let's set-up a new Python environment:
+So let's set-up a new Python environment (remember installing `pipenv` resulted in `python3` command being installed, and that's specifically version `3.7.3`, so we'll install a different Python3 version to that):
 
 ```bash
 mkdir -p ~/Code/Python/3.7.1
@@ -371,9 +371,25 @@ cd ~/Code/Python/3.7.1
 pyenv install 3.7.1
 
 pipenv --python 3.7.1
-pipenv shell
 pipenv install boto3 pytest structlog tornado
 pipenv install --dev flake8 flake8-import-order mypy tox ipython
+
+# notice the following command will fail as we haven't installed
+# anything into the python3 version 3.7.3 that was installed when
+# we installed pipenv...
+ipython
+
+# instead you can use pipenv's `run` subcommand to use Python 3.7.1
+pipenv run python --version
+pipenv run ipython
+
+# pipenv's `shell` subcommand is an alternative to `pipenv run <command>`
+# it'll drop you into a new shell which uses the relevant Python version
+pipenv shell
+
+# now these commands will work as they'll be using 3.7.1
+python --version
+ipython
 ```
 
 If you don't have your `~/.bashrc` setup with `eval "$(pyenv init -)"`, then you won't have `/Users/integralist/.pyenv/shims` prefixed to your `$PATH` and so `pipenv` won't be able to locate your installed Python versions. 
