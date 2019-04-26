@@ -481,7 +481,7 @@ Install `tmux`:
 brew install tmux
 ```
 
-Configure tmux and expose `tmuxy` command (for quickly spinning up a new working environment):
+Configure tmux and expose `tmuxy` command (defined in my `~/.bashrc` for quickly spinning up a new working environment):
 
 ```bash
 curl -LSso ~/.tmux.conf https://raw.githubusercontent.com/Integralist/dotfiles/master/.tmux.conf
