@@ -421,6 +421,8 @@ brew install vim
 
 Or you can manually compile vim yourself:
 
+> Note: I manually compile vim as I need Python3 support baked in, which Homebrew's version no longer does (it used to, but not any more). Python3 support means my Python linting tools will work as expected.
+
 ```bash
 git clone https://github.com/vim/vim.git
 
