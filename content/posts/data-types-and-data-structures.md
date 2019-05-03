@@ -197,7 +197,7 @@ Let's consider the properties of a red-black tree:
 
 <img src="../../images/red-black-tree.png">
 
-The height of the tree is referred to as its 'black-height', which is the number of black nodes (not including the root) to the further leaf, and should be no longer than twice as long as the length of the shortest path (the nearest NIL).
+The height of the tree is referred to as its 'black-height', which is the number of black nodes (not including the root) to the furthest leaf, and should be no longer than twice as long as the length of the shortest path (the nearest NIL).
 
 These properties are what enable the red-black tree to provide the performance characteristics it has (i.e. `O(log n)`), and so whenever changes are made to the tree we want to aim to keep the tree height as short as possible.
 
