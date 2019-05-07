@@ -455,6 +455,15 @@ poetry run ipython
 # load virtual environment permanently for the current shell (e.g. now python version will be the expected environment, not the OS version)
 poetry shell
 python --version
+
+# here is a shortened Python3 example, as the above uses the OS default of Python2 for installing `2.7.15`
+# where as if you tried to set the Python version in the `pyproject.toml` to `^3.7` it would fail as that Python version wouldn't be available
+# it means whenever you want to setup a new Python3 environment, you'll need a compatible Python interpreter running first.
+# e.g. if you want to install 3.7.1 you'll need 3.7.3 running first to execute Poetry (this isn't necessary with Python2 as we already had 2.7 available by the OS)
+pyenv install 3.7.3
+pyenv local 3.7.3
+poetry add boto3 pytest structlog tornado
+poetry add --dev flake8 flake8-import-order mypy tox ipython
 ```
 
 ## Vim
