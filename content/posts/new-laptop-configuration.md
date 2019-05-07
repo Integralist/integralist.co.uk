@@ -77,7 +77,7 @@ Let's begin our journey by first installing a 'package manager'. This software w
 
 > Note: there are many apps that aren't available in the App Store because Apple can be a bit anti-competition (see [Spotify's "time to play fair" campaign](https://timetoplayfair.com)).
 
-So we have to download our own package manager, and the defacto standard for macOS is a program called [Homebrew](https://brew.sh/) (which is a terminal based tool, so no GUI). In fact, I'm not actually sure what _alternatives_ to Homebrew exist? On Linux you have tools such as `yum` or `apt` but for macOS you either use the built-in App Store or find your own alternative (so in this case, we'll use Homebrew).
+So we have to download our own package manager, and the defacto standard for macOS is a program called [Homebrew](https://brew.sh/) (which is a terminal based tool, so no GUI). In fact, I'm not actually sure what _alternatives_ to Homebrew exist (other than [MacPorts](https://www.macports.org), which if you want to understand the differences between it and Homebrew then [read this](https://saagarjha.com/blog/2019/04/26/thoughts-on-macos-package-managers/))? On Linux you have tools such as `yum` or `apt` but for macOS you either use the built-in App Store or find your own alternative (so in this case, we'll use Homebrew).
 
 To install Homebrew, execute the following command in your terminal:
 

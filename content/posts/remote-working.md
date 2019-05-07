@@ -139,6 +139,11 @@ For those of you who are interested I would highly recommend reading the followi
 - [Nonviolent Communication](https://www.nonviolentcommunication.com/)
 - [Authentic Communication](https://www.soundstrue.com/store/authentic-communication.html)
 
+A couple of other important notes to make:
+
+**Make sure you block out time in your calendar for important events**, such as a lunch hour or family time etc. This becomes especially useful when working within a distributed company, for example, in my calendar I block out 5pm to 10pm for 'family time' so people in New York and LA can't accidentally try to book a meeting with me.
+
+**Schedule monthly 1:1 meetings with people of differing levels within the company**, such as interns, seniors, managers, designers etc. This is useful because it gives you a regular 'check-in' with what's happening elsewhere in the organisation _and_ it also helps others to get to know _you_.
 
 ### How can I be impactful?
 
