@@ -344,7 +344,9 @@ pip 19.0.3 from /Library/Python/2.7/site-packages/pip-19.0.3-py2.7.egg/pip (pyth
 
 At this point, in order to have a sane Python setup, we should look towards 'virtual environments'.
 
-We'll install [`pipenv`](https://pipenv.readthedocs.io/en/latest/install/) which is a high-level abstraction across multiple tools (inc. [`pyenv`](https://github.com/pyenv/pyenv) and [`virtualenv`](https://virtualenv.readthedocs.io/)).
+We'll start by showing you how to install [`pipenv`](https://pipenv.readthedocs.io/en/latest/install/) which is a high-level abstraction across multiple tools (inc. [`pyenv`](https://github.com/pyenv/pyenv) and [`virtualenv`](https://virtualenv.readthedocs.io/)), then we'll move onto installing [Poetry](https://poetry.eustace.io) (which I prefer for reasons I'll explain later).
+
+### Pipenv
 
 There is a brew install:
 
@@ -410,6 +412,50 @@ sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_heade
 ```
 
 > Note: it's also useful to set-up autocompletion for pipenv in your `.bashrc` configuration file `eval "$(pipenv --completion)"`.
+
+### Poetry
+
+Poetry is better in that it's a cleaner and more isolated installation process (unlike Pipenv which requires us to `brew install python3`)
+
+```bash
+# install
+curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+
+# reload .bash_profile and check poetry version
+poetry --version
+
+# update poetry to latest version
+poetry self:update
+
+# generate auto-complete for Homebrew installed version of bash
+poetry completions bash > $(brew --prefix)/etc/bash_completion.d/poetry.bash-completion
+
+# install python version
+pyenv install 2.7.15
+
+# check help for poetry init (which generates a `pyproject.toml`)
+# poetry doesn't allow installing packages via cli (they need to be specified in toml)
+poetry init -h
+
+# create pyproject.toml interactively (see below for generated `pyproject.toml`)
+# 
+# notice [tool.poetry.dependencies] specifies the Python version used (this is required!).
+poetry init
+
+# install dependencies
+poetry install
+
+# add additional dependencies (use --dev for dev dependency)
+poetry add requests <...>
+poetry add --dev requests <...>
+
+# execute commands within the virtual environment (e.g. dev dependency ipython was installed)
+poetry run ipython
+
+# load virtual environment permanently for the current shell (e.g. now python version will be the expected environment, not the OS version)
+poetry shell
+python --version
+```
 
 ## Vim
 
