@@ -344,6 +344,12 @@ pip 19.0.3 from /Library/Python/2.7/site-packages/pip-19.0.3-py2.7.egg/pip (pyth
 
 At this point, in order to have a sane Python setup, we should look towards 'virtual environments'.
 
+There are three aproaches we'll look at (each of them rely on [`pyenv`](https://github.com/pyenv/pyenv)):
+
+1. [`pipenv`](https://pipenv.readthedocs.io/en/latest/install/)
+2. [Poetry](https://poetry.eustace.io)
+3. [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv)
+
 We'll start by showing you how to install [`pipenv`](https://pipenv.readthedocs.io/en/latest/install/) which is a high-level abstraction across multiple tools (inc. [`pyenv`](https://github.com/pyenv/pyenv) and [`virtualenv`](https://virtualenv.readthedocs.io/)), then we'll move onto installing [Poetry](https://poetry.eustace.io) (which I prefer for reasons I'll explain later).
 
 ### Pipenv
@@ -465,6 +471,53 @@ pyenv local 3.7.3
 poetry add boto3 pytest structlog tornado
 poetry add --dev flake8 flake8-import-order mypy tox ipython
 ```
+
+### pyenv-virtualenv
+
+This tool is a plugin for pyenv and is designed to manage virtual environments _only_, where as pipenv and poetry are toolkits designed for solving many different problems (one of which is virtual environments).
+
+You install the plugin via Homebrew:
+
+```
+brew install pyenv-virtualenv
+```
+
+Next you add the following lines to your `~/.bashrc`:
+
+```bash
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+```
+
+Now within some directory you can define a new virtual environment using:
+
+```bash
+pyenv virtualenv 3.7.1 testing-plugin-with-3.7.1
+```
+
+To see the available virtual environments:
+
+```bash
+$ pyenv virtualenvs
+
+3.7.1/envs/testing-plugin-with-3.7.1 (created from /Users/integralist/.pyenv/versions/3.7.1)
+testing-plugin-with-3.7.1 (created from /Users/integralist/.pyenv/versions/3.7.1)
+```
+
+To activate and deactivate the virtual environment:
+
+```bash
+pyenv activate testing-plugin-with-3.7.1
+pyenv deactivate
+```
+
+Simple.
+
+### Python Packages
+
+Here are some packages I like to install as a general rule...
+
+pip install black
 
 ## Vim
 
