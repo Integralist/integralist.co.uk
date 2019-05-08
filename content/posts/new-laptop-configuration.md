@@ -472,6 +472,35 @@ poetry add boto3 pytest structlog tornado
 poetry add --dev flake8 flake8-import-order mypy tox ipython
 ```
 
+Here is an example configuration file I use:
+
+```toml
+[tool.poetry]
+name = "3.7.3"
+version = "0.1.0"
+description = ""
+authors = ["Integralist"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+boto3 = "^1.9"
+pytest = "^4.4"
+structlog = "^19.1"
+tornado = "^6.0"
+
+[tool.poetry.dev-dependencies]
+black = { python=">3.6", version=">=19.3b0", allow_prereleases=true}
+flake8 = "^3.7"
+flake8-import-order = "^0.18.1"
+mypy = "^0.701.0"
+tox = "^3.9"
+ipython = "^7.5"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+```
+
 ### pyenv-virtualenv
 
 This tool is a plugin for pyenv and is designed to manage virtual environments _only_, where as pipenv and poetry are toolkits designed for solving many different problems (one of which is virtual environments).
