@@ -517,7 +517,16 @@ Simple.
 
 Here are some packages I like to install as a general rule...
 
-pip install black
+- [black](https://github.com/python/black): formatter (like golang's `gofmt`)
+- [flake8](http://flake8.pycqa.org): linter
+- [flake8-import-order](https://github.com/PyCQA/flake8-import-order): validates imports
+- [mypy](http://www.mypy-lang.org): static analysis
+- [ipython](https://ipython.org): REPL
+- [pytest](https://pytest.org): testing framework
+- [structlog](http://www.structlog.org/en/stable/): structured logging
+- [tornado](https://www.tornadoweb.org): async web framework
+- [boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html): AWS CLI tool
+- [tox](https://tox.readthedocs.io/en/latest/): generic virtualenv management and testing tool
 
 ## Vim
 
