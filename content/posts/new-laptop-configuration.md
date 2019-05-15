@@ -102,6 +102,7 @@ brew install <package_name>
 Here is a list of the packages I'll install:
 
 - `ag`: a `grep` like tool (aka. the_silver_searcher)
+- `gnu-sed`: it's the gnu version of `sed` (`gsed`) used for filtering/transforming text
 - `jq`: tool for parsing/inspecting json output
 - `docker`: useful for running containerized programs
 - `hugo`: static site generator (used to make this website)
@@ -116,7 +117,7 @@ Here is a list of the packages I'll install:
 Here's a handy one-liner:
 
 ```
-brew install ag jq docker hugo node pwgen reattach-to-user-namespace shellcheck sift tree watch
+brew install ag gnu-sed jq docker hugo node pwgen reattach-to-user-namespace shellcheck sift tree watch
 ```
 
 ## Essential Apps
