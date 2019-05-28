@@ -100,6 +100,10 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ### 2019
 
+- **What**: Documented specific definitions for [SLI, SLO, SLA](https://gist.github.com/b9aa8e225ade0f78fcb57e1852627785).  
+  **Why**: To help people understand what these terms mean and why they are useful.  
+  **Impact**: Engaged more teams in defining SLA's for their services along with their own internal SLI/SLO's.
+
 - **What**: Planned and designed project to migrate VCL logic from CDN layer to a new 'perimeter' service.  
   **Why**: Reduce the amount of custom routing and behavioural logic within our CDN (which is a 'black box' for most engineers).  
   **Impact**: Enabled BuzzFeed's ability to failover to a different CDN provider, thus avoiding vendor lock-in and improving our CDN resilience.
