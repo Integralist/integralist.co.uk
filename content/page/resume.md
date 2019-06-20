@@ -100,6 +100,10 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ### 2019
 
+- **What**: Built (go based) CDN smoke test verification service.  
+  **Why**: Migration of behaviours from CDN to new Perimeter service was proving complicated.  
+  **Impact**: Able to verify existing behaviours, then deployments can be made more confidently that the smoke tests should continue to pass.
+
 - **What**: Documented specific definitions for [SLI, SLO, SLA](https://gist.github.com/b9aa8e225ade0f78fcb57e1852627785).  
   **Why**: To help people understand what these terms mean and why they are useful.  
   **Impact**: Engaged more teams in defining SLA's for their services along with their own internal SLI/SLO's.
