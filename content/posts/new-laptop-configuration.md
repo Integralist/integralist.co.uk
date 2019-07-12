@@ -111,8 +111,11 @@ Here is a list of the packages I'll install:
 - `reattach-to-user-namespace`: used by tmux for clipboard storage
 - `shellcheck`: bash linter
 - `sift`: another command line search tool
+- `transmission`: torrent client † (alt. `npm install -g t-get`)
 - `tree`: displays directory heirarchy structures as a tree
 - `watch`: executes given command every N seconds
+
+> † see [transmission user guide](https://cli-ck.io/transmission-cli-user-guide/)
 
 Here's a handy one-liner:
 
