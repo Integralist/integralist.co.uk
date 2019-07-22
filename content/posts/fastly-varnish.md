@@ -204,6 +204,16 @@ We can see in [Fastly's documentation](https://docs.fastly.com/guides/performanc
 
 > † not documented, but Fastly support suggested it would execute at the edge.
 
+I've used the terminology "cluster node" to describe these cache server nodes handling the alternative states (i.e. those nodes _NOT_ handling recv/hash/deliver), but fastly uses the term "shield" node while describing the concept of having different cache nodes handle different states as "clustering". I've avoided this terminology because it overlaps with _another_ fastly feature called [Shielding](https://docs.fastly.com/guides/performance-tuning/shielding) and so I didn't want those two concepts to get confused.
+
+When we `return(restart)` a request, we _break_ 'clustering' which means the request will go back to an edge server and that edge server will handle the full request cycle. This is where a request header such as `Fastly-Force-Shield: 1` will re-enable clustering.
+
+The benefit of clustering (summarized in [this fastly community support post](https://support.fastly.com/hc/en-us/community/posts/360046680252-What-is-Clustering-)) is that your request only ever goes through (at _most_) two cache server nodes (the edge node and a cluster/shield node). If clustering was disabled, then an edge node would handle the complete request 'state' life cycle (e.g. recv/hash/fetch/deliver) and thus all the nodes within a POP (at the time of writing: 64 of them) would have to go through to origin in order to request your content.
+
+With clustering enabled, the resource cache key/hash is used to identify a specific cluster/shield node (this is referred to as the "primary" node, or _fetching_ node). This clustering approach means multiple requests to different edge nodes would all go to the same "primary" cache node to _fetch_ the content from the origin (and _request collapsing_ would help protect the origin from traffic overload).
+
+The primary cache node will store the content on-disk, while the edge cache node will store the content in-memory. Finally, any node within the cluster can be selected as the 'edge' node for an incoming request (its selected at random), hence the in-memory copy of the cached content could exist there and you only hit one cache server before a response is served back to the user.
+
 OK, so two more _really_ important things to be aware of at this point:
 
 1. Data added to the `req` object _cannot_ persist across boundaries (except for when initially moving from the edge to the cluster).
@@ -489,6 +499,50 @@ You might find that you're not serving stale even though you would expect to be.
 
 Lastly, there's one quirk of Fastly's caching implementation you might need to know about: if you specify a `max-age` of less than 61 minutes, then your content will only be persisted into memory (and there are many situations where a cached object in memory can be removed). To make sure the object is persisted (i.e. cached) on disk and thus available for a longer period of time for serving stale, you must set a `max-age` above 61 minutes.
 
+### Caveats of Fastly's Shielding
+
+Be careful with changes you make to a request as they could result in the lookup hash to change between the edge and shield nodes. 
+
+Also, be aware that the "backend" will change when shielding is enabled. Traditionally (i.e. without shielding) you defined your backend with a specific value (e.g. an S3 bucket or a domain such as `https://app.domain.com`) and it would stay set to that value unless you yourself implemented custom vcl logic to change its value. 
+
+But with shielding enabled, the 'edge' cache node will dynamically change the backend to be a shield node value (as it's effectively _always_ going to pass through that node if there is no cached content found). Once on the shield node, _its_ "backend" value is set to whatever your actual origin is (e.g. an S3 bucket).
+
+You can utilize the existence of the header `Fastly-FF` to indicate if your code is currently running on a shield node. This header doesn't exist on an edge node, and its presence indicates that the request has already come from a fastly cache server. 
+
+Alternatively you could check `req.backend.is_shield` which (if available/set) would indicate your code was executing on a non-shield cache node (i.e. the edge cache node). You might prefer to use the latter because if your client uses Fastly and they put your service behind their Fastly account, then `Fastly-FF` would be set as the request travels through the system and so your check for `Fastly-FF` on your shield node might execute when it shouldn't.
+
+It's probably best to only modify your backends dynamically whilst your VCL is executing on the shield (e.g. `if (!req.backend.is_shield)`, maybe abstract in a variable `declare local var.shield_node BOOL;`) and to also only `restart` a request in vcl_deliver when executing on the shield node. 
+
+You might also need to modify vcl_hash so that the generated hash is consistent with the 'edge' cache node if your shield modifies the request! Remember that modifying either the host or the path will cause a different cache key to be generated and so modifying that in either the edge _or_ the shield means modifying the relevant vcl_hash subroutine so the hashes are _consistent_ between the edge and shield.
+
+```
+sub vcl_hash {
+  # we do this because we want the cache key to be identical at the edge and
+  # at the shield. Because the shield rewrites req.url (but not the edge), we
+  # need align vcl_hash by using the original Host and URL.
+  set req.hash += req.http.X-Original-URL;
+  set req.hash += req.http.X-Original-Host;
+
+  #FASTLY hash
+
+  return(hash);
+}
+```
+
+Lastly, when enabling shielding, make sure to deploy your VCL code changes first _before_ enabling shielding. This way you avoid a race condition whereby a shield has old VCL (i.e. no conditional checks for either `Fastly-FF` or `req.backend.is_shield`) and thus tries to do something that should only happen on the edge cache node.
+
+When using `Fastly-Debug:1` to inspect debug response headers, and we look at `fastly-state`, `fastly-debug-path` and `fastly-debug-ttl` we might see...
+
+```
+< fastly-state: HIT-STALE
+< fastly-debug-path: (D cache-lhr6346-LHR 1563794040) (F cache-lhr6324-LHR 1563794019)
+< fastly-debug-ttl: (H cache-lhr6346-LHR -10.999 31536000.000 20)
+```
+
+The `fastly-debug-path` suggests we delivered from the edge node `lhr6346` while we fetched from the cluster/shield node `lhr6324`, and yet the `fastly-debug-ttl` header suggests we got a HIT (`H`) from the edge node `lhr6346`. This is just a side-effect of the stale/cached content (coming back from the fetching cluster/shield node) being stored in-memory on the edge node and so it's indicated as a HIT from the edge when really it came from the cluster/shield node (the `fastly-debug-ttl` header is set on the edge node, which re-enforces this understanding).
+
+What makes it confusing is that you don't necessarily know if the request went to the cluster cache node (i.e. the fetching cache node) or whether the stale content actually came from the edge node's in-memory cache. The only way to be sure is to check the `fastly-state` response header and see if you got back `HIT-STALE` or `HIT-STALE-CLUSTER`.
+
 ### Different actions for different states
 
 So if we find a stale object, we need to deliver it to the user. But the action you take (as far as Fastly's implementation of Varnish is concerned) depends on which state Varnish currently is in (`vcl_fetch` or `vcl_deliver`). 
@@ -586,5 +640,7 @@ So there we have it, a quick run down of how some important aspects of Varnish a
 One thing I want to mention is that I am personally a HUGE fan of Fastly and the tools they provide. They are an amazing company and their software has helped BuzzFeed (and many other large organisations) to scale massively with ease.
 
 I would also highly recommend watching this talk by Rogier Mulhuijzen (Senior Varnish Engineer - who currently works for Fastly) on "Advanced VCL": [vimeo.com/226067901](https://vimeo.com/226067901). It goes into great detail about some complex aspects of VCL and Varnish and really does a great job of elucidating them.
+
+Also recommended is [this Fastly talk](https://vimeo.com/178057523) which details how 'clustering' works (see also [this fastly community support post](https://support.fastly.com/hc/en-us/community/posts/360040445272--Fastly-Force-Shield-AND-Fastly-No-Shield-Usage) that details how to utilize the request headers `Fastly-Force-Shield` and `Fastly-No-Shield`).
 
 Lastly, there was [a recent article from an engineer working at the Financial Times](https://medium.com/@samparkinson_/making-a-request-to-the-financial-times-b2119a2f422d), detailing the complete request flow from DNS to Delivery. It's very interesting and covers a lot of information about Fastly. Highly recommended reading.
