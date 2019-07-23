@@ -231,7 +231,9 @@ For number 1. that means: `req` data you set in `vcl_recv` and `vcl_hash` will b
 
 For number 2. that means: if you were in `vcl_deliver` and you set a value on `req` and then triggered a restart, the value would be available in `vcl_recv`. Yet, if you were in `vcl_miss` for example and you set `req.http.X-Foo` and let's say in `vcl_fetch` you look at the response from the origin and see the origin sent you back a 5xx status, you might decide you want to restart the request and try again. But if you were expecting `X-Foo` to be set on the `req` object when the code in `vcl_recv` was re-executed, you'd be wrong. That's because the header was set on the `req` object while it was in a state that is executed on a cluster node; and so the `req` data set there doesn't persist a restart.
 
-> If you're starting to think: "this makes things tricky", you'd be right :-)
+> SUMMARY: MODIFICATIONS ON THE 'CLUSTER' DON’T PERSIST TO 'EDGE'
+
+If you're starting to think: "this makes things tricky", you'd be right :-)
 
 ### Breadcrumb Trail
 
