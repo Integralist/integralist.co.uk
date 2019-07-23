@@ -204,15 +204,23 @@ We can see in [Fastly's documentation](https://docs.fastly.com/guides/performanc
 
 > † not documented, but Fastly support suggested it would execute at the edge.
 
+### Clustering
+
 I've used the terminology "cluster node" to describe these cache server nodes handling the alternative states (i.e. those nodes _NOT_ handling recv/hash/deliver), but fastly uses the term "shield" node while describing the concept of having different cache nodes handle different states as "clustering". I've avoided this terminology because it overlaps with _another_ fastly feature called [Shielding](https://docs.fastly.com/guides/performance-tuning/shielding) and so I didn't want those two concepts to get confused.
 
-When we `return(restart)` a request, we _break_ 'clustering' which means the request will go back to an edge server and that edge server will handle the full request cycle. This is where a request header such as `Fastly-Force-Shield: 1` will re-enable clustering.
+The following diagram visualizes the approach for how a request inside of a POP will reach a specific cache node...
+
+<a href="../../images/fastly-pop.png">
+    <img src="../../images/fastly-pop.png">
+</a>
 
 The benefit of clustering (summarized in [this fastly community support post](https://support.fastly.com/hc/en-us/community/posts/360046680252-What-is-Clustering-)) is that your request only ever goes through (at _most_) two cache server nodes (the edge node and a cluster/shield node). If clustering was disabled, then an edge node would handle the complete request 'state' life cycle (e.g. recv/hash/fetch/deliver) and thus all the nodes within a POP (at the time of writing: 64 of them) would have to go through to origin in order to request your content.
 
 With clustering enabled, the resource cache key/hash is used to identify a specific cluster/shield node (this is referred to as the "primary" node, or _fetching_ node). This clustering approach means multiple requests to different edge nodes would all go to the same "primary" cache node to _fetch_ the content from the origin (and _request collapsing_ would help protect the origin from traffic overload).
 
 The primary cache node will store the content on-disk, while the edge cache node will store the content in-memory. Finally, any node within the cluster can be selected as the 'edge' node for an incoming request (its selected at random), hence the in-memory copy of the cached content could exist there and you only hit one cache server before a response is served back to the user.
+
+When we `return(restart)` a request, we _break_ 'clustering' which means the request will go back to an edge server and that edge server will handle the full request cycle. This is where a request header such as `Fastly-Force-Shield: 1` will re-enable clustering.
 
 OK, so two more _really_ important things to be aware of at this point:
 
@@ -224,6 +232,8 @@ For number 1. that means: `req` data you set in `vcl_recv` and `vcl_hash` will b
 For number 2. that means: if you were in `vcl_deliver` and you set a value on `req` and then triggered a restart, the value would be available in `vcl_recv`. Yet, if you were in `vcl_miss` for example and you set `req.http.X-Foo` and let's say in `vcl_fetch` you look at the response from the origin and see the origin sent you back a 5xx status, you might decide you want to restart the request and try again. But if you were expecting `X-Foo` to be set on the `req` object when the code in `vcl_recv` was re-executed, you'd be wrong. That's because the header was set on the `req` object while it was in a state that is executed on a cluster node; and so the `req` data set there doesn't persist a restart.
 
 > If you're starting to think: "this makes things tricky", you'd be right :-)
+
+### Breadcrumb Trail
 
 Let's now revisit our requirement, which was to create a breadcrumb trail using a HTTP header (this is where all this context becomes important).
 
