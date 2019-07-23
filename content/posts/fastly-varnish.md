@@ -490,12 +490,22 @@ set beresp.stale_if_error = <N>s;
 
 > Where `<N>` is the amount of time in seconds you want to keep the object for after its ttl has expired.
 
-- `stale_while_revalidate`: when cache ttl expires, we'll serve stale for N seconds while we acquire fresh content.
-- `stale_if_error`: if we have an error, we'll serve stale for N seconds while we acquire fresh content.
+- `stale_while_revalidate`: request received, obj found in cache, but ttl has expired (results in cache MISS), so we serve stale while we go to origin and request the content (†).
+- `stale_if_error`: request received, obj found in cache, but ttl has expired, so we go to origin and the origin returns an error, so we serve stale.
 
-Even more specifically, `stale_while_revalidate` causes Varnish to serve stale after a cache MISS, while it asynchronously fetches a newer version of the content from origin. This takes precedence over `stale_if_error`.
+> † if successful, new content is cached and the TTL is updated to whatever the cache response headers dictate.
 
-If these settings aren't configured in VCL, then you'll need to provide them as part of Fastly's `Surrogate-Control` header (see [here](https://docs.fastly.com/guides/tutorials/cache-control-tutorial#surrogate-control) for the details):
+Ultimately this means that `stale_if_error` will only ever be initialized if `stale_while_revalidate` fails. Which begs the question... 
+
+Why use `stale_if_error` at all when we _could_ just set `stale_while_revalidate` to a large value, and it would effectively result in the same outcome: stale content served to the user for a set period of time?
+
+This is a question I don't have an answer for, and I've yet to receive a satisfactory answer to from either Fastly or the dev community.
+
+My own opinion on this is that if my origin is unable to serve a `200 OK` response after something like an 1hr of trying via `stale_while_revalidate` then something must be seriously wrong with my origin and so maybe that's the appropriate indicator for what value I should give to it in comparison to the value I would set for `stale_if_error` (which would be the longest value possible).
+
+It feels like setting _both_ `stale_while_revalidate` and `stale_if_error` is kind of like 'cargo culting' (i.e. doing something because it's always been done and so people presume it's the correct way), but at the same time I would hate to find myself in a situation where there _was_ a subtle difference between the two which had a very niche scenario that broke my user's experience because I neglected to set both stale configurations.
+
+Additionally, if these 'stale' settings aren't configured in VCL, then you'll need to provide them as part of Fastly's `Surrogate-Control` header (see [here](https://docs.fastly.com/guides/tutorials/cache-control-tutorial#surrogate-control) for the details, but be aware that VCL configured values will take precedence over response headers from origin):
 
 ```vcl
 "Surrogate-Control": "max-age=123, stale-while-revalidate=172800, stale-if-error=172800"
@@ -510,6 +520,8 @@ You might find that you're not serving stale even though you would expect to be.
 > Another reason would be to use "[soft purging](https://docs.fastly.com/guides/purging/soft-purges)" rather than hard purges.
 
 Lastly, there's one quirk of Fastly's caching implementation you might need to know about: if you specify a `max-age` of less than 61 minutes, then your content will only be persisted into memory (and there are many situations where a cached object in memory can be removed). To make sure the object is persisted (i.e. cached) on disk and thus available for a longer period of time for serving stale, you must set a `max-age` above 61 minutes.
+
+It's worth reading [fastly's notes on why you might not be serving stale](https://docs.fastly.com/guides/performance-tuning/serving-stale-content#why-serving-stale-content-may-not-work-as-expected) which additionally includes notes on things like the fact that their implementation is an LRU (Least Recently Used) cache, and so even if a cached object's TTL has not expired it might be so infrequently requested/accessed that it'll be evicted from the cache any way! The LRU affects both fresh (i.e. non-expired) objects _and_ 'stale' objects (i.e. TTL has expired but they have stale config values that haven't expired).
 
 ### Caveats of Fastly's Shielding
 
