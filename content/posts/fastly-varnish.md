@@ -19,11 +19,12 @@ draft: false
 - [Fastly Custom VCL](#3)
 - [Fastly Request Flow Diagram](#4)
 - [State Variables](#4.1)
-- [Persisting State](#4.2)
+- [Persisting State](#4.2) (inc. clustering architecture)
 - [Hit for Pass](#5)
-- [Serving Stale](#6)
-- [Logging](#7)
-- [Conclusion](#8)
+- [Serving Stale](#6) (inc. caveats of Fastly’s Shielding)
+- [Disable Caching](#7)
+- [Logging](#8)
+- [Conclusion](#9)
 
 <div id="1"></div>
 ## Introduction
@@ -602,6 +603,19 @@ This means we end up processing the request again, but this time when we make a 
 In this scenario we don't find a stale object in either `vcl_fetch` or `vcl_deliver` and so we end up serving the 5xx content that we got from origin to the client. Although you may want to attempt to restart the request and use a custom header (e.g. `set req.http.X-Serve-500-Page = "true"`) in order to indicate to `vcl_recv` that you want to short-circuit the request cycle and serve a custom error page instead.
 
 <div id="7"></div>
+## Disable Caching
+
+It's possible to disable caching for either the client or fastly, or both! But it gets confusing with all the various documentation pages fastly provides to know which one is the source of truth (useful information is spread across all of them).
+
+In my experience I've found the following to be sufficient...
+
+> Note: any time you want Fastly to cache your content use `Surrogate-Control`, and this will take precedence over `Cache-Control` _EXCEPT_ when `Cache-Control` has the value `private` included somewhere inside it. So generally if I'm doing that I'll just make sure I'm not sending a `Surrogate-Control` as it'll just be confusing for anyone reading that code.
+
+- Disable Client Caching: `Cache-Control: no-store, must-revalidate` ([docs](https://docs.fastly.com/guides/tutorials/cache-control-tutorial#applying-different-cache-rules-for-fastly-and-browsers))
+- Disable CDN Caching: `Cache-Control: private` ([docs](https://docs.fastly.com/guides/tutorials/cache-control-tutorial#do-not-cache))
+- Disable ALL Caching: `Cache-Control: no-cache, no-store, private, must-revalidate, max-age=0, max-stale=0, post-check=0, pre-check=0` + `Pragma: no-cache` + `Expires: 0` ([docs](https://docs.fastly.com/guides/debugging/temporarily-disabling-caching))
+
+<div id="8"></div>
 ## Logging
 
 With Fastly, to set-up logging you'll need to use their UI, as this means they can configure the relevant integration with your log aggregation provider. But what people don't realise is that by default Fastly will generate a subroutine called `vcl_log`.
@@ -656,7 +670,7 @@ As you can probably tell, this recommended condition will never match and so the
 
 Mystery solved.
 
-<div id="8"></div>
+<div id="9"></div>
 ## Conclusion
 
 So there we have it, a quick run down of how some important aspects of Varnish and VCL work (and specifically for Fastly's implementation).
