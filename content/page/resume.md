@@ -100,6 +100,10 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ### 2019
 
+- **What**: Extended OpsBot Slackbot application with `/oncall` command and generate reports that are dynamically added to incident document in Google Drive.  
+  **Why**: Seemed like a useful feature to add as part of HackWeek.  
+  **Impact**: People 'on-call' can now track what they work on and generate a report which becomes a permanent record.
+
 - **What**: Built (go based) CDN smoke test verification service.  
   **Why**: Migration of behaviours from CDN to new Perimeter service was proving complicated.  
   **Impact**: Able to verify existing behaviours, then deployments can be made more confidently that the smoke tests should continue to pass.
