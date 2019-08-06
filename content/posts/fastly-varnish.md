@@ -124,6 +124,17 @@ if (beresp.http.Expires || beresp.http.Surrogate-Control ~ "max-age" || beresp.h
 
 > Note: 3600 isn't long enough to persist your cached content to disk, it will exist in-memory only. See their documentation on ["Why serving stale content may not work as expected"](https://docs.fastly.com/guides/performance-tuning/serving-stale-content#why-serving-stale-content-may-not-work-as-expected) for more information.
 
+You can override this VCL with your own custom VCL, but it's also worth being aware of the priority ordering Fastly gives when presented with multiple ways to determine your content's cache TTL...
+
+1. `beresp.ttl = 10s`: caches for 10s 
+2. `Surrogate-Control: max-age=300` caches for 5 minutes 
+3. `Cache-Control: max-age=10` caches for 10s 
+4. `Expires: Fri, 28 June 2008 15:00:00 GMT` caches until this date has expired
+
+As we can see from the above list, setting a TTL via VCL takes ultimate priority even if caching headers are provided by the origin server.
+
+Next in line is `Surrogate-Control` (see [my post on HTTP caching](/posts/http-caching/) for more information on this cache header), which takes priority over `Cache-Control`. The `Cache-Control` header itself takes priority over `Expires`.
+
 <div id="4"></div>
 ## Fastly Request Flow Diagram
 
