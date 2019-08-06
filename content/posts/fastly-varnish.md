@@ -17,6 +17,7 @@ draft: false
 - [Introduction](#1)
 - [Varnish Default VCL](#2)
 - [Fastly Custom VCL](#3)
+- [Fastly TTLs](#3.1)
 - [Fastly Request Flow Diagram](#4)
 - [State Variables](#4.1)
 - [Persisting State](#4.2) (inc. clustering architecture)
@@ -100,6 +101,28 @@ You can see Fastly's VCL boilerplate, and learn more about their custom VCL impl
 You can also view their generated custom VCL here in this isolated gist (for reference purposes):
 
 - [Fastly's Custom VCL](https://gist.github.com/Integralist/56cf991ae97551583d5a2f0d69f37788)
+
+> If you're interested, [here is a gist](https://gist.github.com/Integralist/2e4a78fe92ec70d2e2709ff7be660669) that shows the 'master' VCL from Fastly (i.e. a new service created, with 'no custom vcl' nor any UI based configurations made). This is as _barebones_ a service as you can get.
+
+<div id="3.1"></div>
+## Fastly TTLs
+
+Fastly [has some rules](https://docs.fastly.com/guides/performance-tuning/controlling-caching) about how it determines a TTL for your content. In summary...
+
+The 'master' VCL sets a TTL of 120s ([this comes from Varnish](https://github.com/varnishcache/varnish-cache/blob/5.0/bin/varnishd/builtin.vcl#L158-L172) rather than Fastly) when no other VCL TTL has been defined and if no cache headers were sent by the origin.
+
+Fastly does a similar thing with its own default VCL which it uses when you create a new service. It looks like the following and increases the default to 3600s (1hr):
+
+```
+if (beresp.http.Expires || beresp.http.Surrogate-Control ~ "max-age" || beresp.http.Cache-Control ~"(s-maxage|max-age)") {
+  # keep the ttl here
+} else {
+  # apply the default ttl
+  set beresp.ttl = 3600s;
+}
+```
+
+> Note: 3600 isn't long enough to persist your cached content to disk, it will exist in-memory only. See their documentation on ["Why serving stale content may not work as expected"](https://docs.fastly.com/guides/performance-tuning/serving-stale-content#why-serving-stale-content-may-not-work-as-expected) for more information.
 
 <div id="4"></div>
 ## Fastly Request Flow Diagram
