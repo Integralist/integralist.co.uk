@@ -68,7 +68,7 @@ The `Cache-Control` cache response header has many directives you can configure,
 
 > References: [MDN: `Cache-Control`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control) and [W3C Specification](http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html) (see also: [MDN: Caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching)).
 
-## no-cache vs must-revalidate
+### no-cache vs must-revalidate
 
 A lot of the `Cache-Control` directives have subtle overlapping responsibilities, and `no-cache`/`must-revalidate` is one of the more confusing ones, so I'd like to take a moment to add some extra clarity...
 
