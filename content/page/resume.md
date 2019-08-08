@@ -100,6 +100,10 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ### 2019
 
+- **What**: Wrote [a guide to HTTP caching](/posts/http-caching/).  
+  **Why**: As engineers we have a responsibility to understand the platform we write software for.  
+  **Impact**: Shared understanding of how to properly utilize HTTP caching directives.
+
 - **What**: Extended OpsBot Slackbot application with `/oncall` command and generate reports that are dynamically added to incident document in Google Drive.  
   **Why**: Seemed like a useful feature to add as part of HackWeek.  
   **Impact**: People 'on-call' can now track what they work on and generate a report which becomes a permanent record.
@@ -401,6 +405,7 @@ I'm a print published and self-published author; I'm also a tech reviewer and am
 
 The following links are to some of my more 'popular' articles. My main focus when writing is to take a complicated or confusing topic and attempt to distil it, in order for the subject to be more easily understood.
 
+- [HTTP Caching Guide](/posts/http-caching/) (2019)
 - [Algorithmic Complexity in Python](/posts/algorithmic-complexity-in-python/) (2019)
 - [Data Types and Data Structures](/posts/data-types-and-data-structures/) (2019)
 - [Engineer to Manager](/posts/engineer-to-manager/) (2018)
