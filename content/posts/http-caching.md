@@ -93,12 +93,14 @@ Fastly [has some rules](https://docs.fastly.com/guides/tutorials/cache-control-t
 - `Surrogate-Control` determines proxy caching behaviour (takes priority over `Cache-Control`).
 - `Cache-Control` determines client caching behaviour.
 - `Cache-Control` determines both client/proxy caching behaviour if no `Surrogate-Control` †.
-- `Cache-Control` determines both client/proxy caching behaviour if it includes both `maxage` and `s-maxage`.
+- `Cache-Control` determines both client/proxy caching behaviour if it includes both `max-age` and `s-maxage`.
 - `Expires` determines both client/proxy caching behaviour if no `Cache-Control` or `Surrogate-Control` headers.
 - `Expires` ignored if `Cache-Control` is also set (recommended to avoid `Expires`).
 - `Pragma` is a legacy cache header only recommended if you need to support older HTTP/1.0 protocol.
 
 > † _except_ when `Cache-Control` contains `private`.
+
+If you're interested in learning more about Fastly (inc. Varnish and VCL), then [read my blog post](/posts/fastly-varnish) on the topic.
 
 ## Default TTLs
 
@@ -108,7 +110,7 @@ Below is a (oversimplified †) summary of these rules.
 
 - If your origin doesn't set a cache response header, then cache content TTL will be 1hr.
 - 1hr TTL is set by [Fastly's VCL boilerplate](https://docs.fastly.com/vcl/custom-vcl/creating-custom-vcl/) (applied by default).
-- 1hr TTL can be overridden by BuzzFeed's own custom VCL.
+- 1hr TTL can be overridden by your own custom VCL.
 
 > † Fastly has many factors it takes into account when deciding if an object stays in its cache (see: [LRU](https://docs.fastly.com/guides/performance-tuning/serving-stale-content#why-serving-stale-content-may-not-work-as-expected)).
 
