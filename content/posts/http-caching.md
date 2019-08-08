@@ -43,6 +43,7 @@ In order to cache content efficiently we need to use a combination of the two he
 > Note: `Surrogate-Control` is typically stripped from the response, by a cache proxy, before the client receives it.
 
 - [Cache-Control Directives](#cache-control-directives)
+  - [no-cache vs must-revalidate](#no-cache-vs-must-revalidate)
 - [Surrogate-Control Directives](#surrogate-control-directives)
 - [Fastly CDN](#fastly-cdn)
 - [Default TTLs](#default-ttls)
