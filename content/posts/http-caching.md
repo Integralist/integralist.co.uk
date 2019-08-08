@@ -70,7 +70,7 @@ The `Cache-Control` cache response header has many directives you can configure,
 
 ## no-cache vs must-revalidate
 
-A lot of the `Cache-Control` directives have subtle overlapping responsibilities, and `no-cache`/`must-revalidate` is one of them.
+A lot of the `Cache-Control` directives have subtle overlapping responsibilities, and `no-cache`/`must-revalidate` is one of the more confusing ones, so I'd like to take add some extra clarity...
 
 With `must-revalidate` it's suggesting that cached content must revalidate and not serve stale after the cached content's `max-age` TTL has expired. 
 
