@@ -126,6 +126,8 @@ Depending on your requirements, when trying to disable caching it can be confusi
   - `Pragma: no-cache`
   - `Expires: 0`
 
+> Note: regarding the disabling of caching at the client level, I reached out to Fastly because of their suggested use of `must-revalidate` _with_ `no-store` (which doesn't make sense). They have since consulted with their resident RFC expert who confirmed this was redundant, and so expect their documentation to be updated to just `no-store`.
+
 ## Serving Stale Content
 
 As you saw at the beginning of this post, we have a 'reverse proxy' that's placed in front of our origin servers. This proxy will configure (as a default) cache settings that will result in stale versions of our origin's cached content being served when the `max-age` TTL for that content has expired. 
