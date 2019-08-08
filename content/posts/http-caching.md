@@ -61,7 +61,7 @@ The `Cache-Control` cache response header has many directives you can configure,
 - `public`: content can be cached by both client and proxy (implicit default).
 - `private`: content can be cached by client, but not proxy (as content is _unique_ to the user).
 - `max-age`: determines how long (seconds) content is cached, after which requests will reach origin.
-- `s-maxage`: used by 'shared cache' proxies and is equivalent to `Surrogate-Control` (except not stripped).
+- `s-maxage`: used by 'shared cache' proxies and is equivalent to `Surrogate-Control: max-age=<...>` (except not stripped).
 - `must-revalidate`: cached content can be served if TTL hasn't expired, but do not serve 'stale' content under _any_ circumstance.
 - `no-cache`: cached content must revalidate on all requests (i.e. serve stale is fine, but only after consulting origin).
 - `no-store`: prevents client or proxies from caching the content.
