@@ -44,6 +44,7 @@ In order to cache content efficiently we need to use a combination of the two he
 
 - [Cache-Control Directives](#cache-control-directives)
   - [no-cache vs must-revalidate](#no-cache-vs-must-revalidate)
+  - [Client Request Directives](#client-request-directives)
 - [Surrogate-Control Directives](#surrogate-control-directives)
 - [Fastly CDN](#fastly-cdn)
 - [Default TTLs](#default-ttls)
@@ -80,6 +81,16 @@ This is effectively saying "we have some content cached and its TTL is still val
 Unlike `no-cache` which is effectively saying "we have cached content, but before we release it to you we're going to check with the origin that there isn't a fresher version first". It's a way of enforcing a _rigid_ 'freshness' plan.
 
 The downside of these (and other similar) directives is that you need to be sure your origins are capable of handling revalidation (see '[Serving Stale Content](#serving-stale-content)' for more details).
+
+### Client Request Directives
+
+One typically unmentioned feature of the `Cache-Control` HTTP header is that it can also be utilised at the client level for indicating to a cache what it will and wont accept.
+
+This is an interesting perspective on caching that we rarely see.
+
+In the case of Fastly CDN, they will ignore the `Cache-Control` header and its directives when provided as part of the client request.
+
+> Reference: [RFC](https://tools.ietf.org/html/rfc7234#page-22).
 
 ## Surrogate-Control Directives
 
