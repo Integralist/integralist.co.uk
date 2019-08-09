@@ -43,15 +43,16 @@ In order to cache content efficiently we need to use a combination of the two he
 > Note: `Surrogate-Control` is typically stripped from the response, by a cache proxy, before the client receives it.
 
 - [Cache-Control Directives](#cache-control-directives)
+  - [client requests](#client-requests)
   - [no-cache vs must-revalidate](#no-cache-vs-must-revalidate)
-  - [Client Request Directives](#client-request-directives)
 - [Surrogate-Control Directives](#surrogate-control-directives)
 - [Fastly CDN](#fastly-cdn)
-- [Default TTLs](#default-ttls)
+  - [Default TTLs](#default-ttls)
 - [Disable Caching](#disable-caching)
 - [Serving Stale Content](#serving-stale-content)
-- [ETag or Last-Modified?](#etag-or-last-modified)
-- [Should my origin set ETag/Last-Modified?](#should-my-origin-set-etag-last-modified)
+  - [ETag or Last-Modified?](#etag-or-last-modified)
+  - [Revalidation TTL](#revalidation-ttl)
+  - [Strong and Weak Validators](#strong-and-weak-validators)
 - [Cache Headers Example](#cache-headers-example)
 - [Conclusion](#conclusion)
 
@@ -70,6 +71,16 @@ The `Cache-Control` cache response header has many directives you can configure,
 
 > References: [MDN: `Cache-Control`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control) and [W3C Specification](http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html) (see also: [MDN: Caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching)).
 
+### client requests
+
+One typically unmentioned feature of the `Cache-Control` HTTP header is that it can also be utilised at the client level for indicating to a cache what it will and wont accept.
+
+This is an interesting perspective on caching that we rarely see.
+
+In the case of Fastly CDN, they will ignore the `Cache-Control` header and its directives when provided as part of the client request.
+
+> Reference: [RFC](https://tools.ietf.org/html/rfc7234#page-22).
+
 ### no-cache vs must-revalidate
 
 A lot of the `Cache-Control` directives have subtle overlapping responsibilities, and `no-cache`/`must-revalidate` is one of the more confusing ones, so I'd like to take a moment to add some extra clarity...
@@ -81,16 +92,6 @@ This is effectively saying "we have some content cached and its TTL is still val
 Unlike `no-cache` which is effectively saying "we have cached content, but before we release it to you we're going to check with the origin that there isn't a fresher version first". It's a way of enforcing a _rigid_ 'freshness' plan.
 
 The downside of these (and other similar) directives is that you need to be sure your origins are capable of handling revalidation (see '[Serving Stale Content](#serving-stale-content)' for more details).
-
-### Client Request Directives
-
-One typically unmentioned feature of the `Cache-Control` HTTP header is that it can also be utilised at the client level for indicating to a cache what it will and wont accept.
-
-This is an interesting perspective on caching that we rarely see.
-
-In the case of Fastly CDN, they will ignore the `Cache-Control` header and its directives when provided as part of the client request.
-
-> Reference: [RFC](https://tools.ietf.org/html/rfc7234#page-22).
 
 ## Surrogate-Control Directives
 
@@ -114,7 +115,7 @@ Fastly [has some rules](https://docs.fastly.com/guides/tutorials/cache-control-t
 
 If you're interested in learning more about Fastly (inc. Varnish and VCL), then [read my blog post](/posts/fastly-varnish) on the topic.
 
-## Default TTLs
+### Default TTLs
 
 The CDN (Fastly) [has some rules](https://docs.fastly.com/guides/performance-tuning/controlling-caching) about how long it will cache content for. 
 
@@ -171,23 +172,31 @@ The official [W3C specification](https://www.w3.org/Protocols/rfc2616/rfc2616-se
 
 A good additional reference is MDN's article on [Cache Validation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching#Cache_validation).
 
-## Should my origin set ETag/Last-Modified?
+### Revalidation TTL
 
-Whether your origin sets `ETag`/`Last-Modified` will depend on your opinions regarding the performance of your origin. To understand what that statement means, consider the following diagram which highlights the typical request flow when using (for example) an `ETag`:
+One aspect of serving stale content that normally confuses people is how to determine the TTL for `stale-while-revalidate`. It would seem that determining a TTL for `stale-if-error` is fairly straight forward, in that you'll just pick an arbitrarily long time period to serve stale, while the `stale-while-revalidate` directive isn't as simple.
+
+Consider the following diagram which highlights a typical request flow when using (for example) an `ETag` to handle the revalidation step:
 
 <a href="../../images/http-conditional-requests.png">
     <img src="../../images/http-conditional-requests.png">
 </a>
 
-In this request flow we can see that although we're successfully serving stale content when a cached object's TTL has expired, this is still resulting in multiple requests to the origin rather than acting as a cache HIT. Thus, having a large `stale-while-revalidate` TTL might not be a good idea because ultimately for that time period, if there is no updated version of the content, new client requests are going to be constantly hitting the origin. 
+In this request flow we can see that although we're successfully serving stale content when a cached object's TTL has expired, this is still potentially going to result in multiple requests to the origin (rather than acting as a cache HIT) if we have an influx of requests for the same resource. 
 
-Yes, having an empty response is better performance (as far as bandwidth is concerned), but the origin still has to spend time and resources constructing the response. It would be better to have a shorter `stale-while-revalidate` TTL so we could go to origin and get the proper full response back and cache that, which would then result in future client requests actually getting a cache HIT and saving the origin from having to handle extra unnecessary load.
+Thus, having a large `stale-while-revalidate` TTL might not be a good idea because ultimately for that time period, if there is no updated version of the content, new client requests are going to be constantly hitting the origin. 
 
-> Note: it's important to realize that generating an `ETag` and figuring out the `Last-Modified` date of a resource is outside the responsibility of a proxy, hence the proxy sat in front of our origins doesn't set these headers even when they aren't set by the origin.
+Yes, having an empty response is better performance (as far as bandwidth is concerned), but the origin still has to spend time and resources constructing the response. It would be better to have a shorter `stale-while-revalidate` TTL so that it would expire more quickly. This means we would go back to the origin sooner, in order to get a full response back to be re-cached, which would then result in future client requests actually getting a cache HIT and saving the origin from having to handle extra unnecessary load.
 
-As far as the actual _setting_ of an `ETag` is concerned, this isn't necessarily as straight forward as you might first imagine. For example, a typical approach is to use a hash function to generate a digest of the response body to verify the content has changed. Of course there is the potential for the hash function to not be robust enough to avoid hash conflicts, but additionally there is a concept referred to as "[validation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests#Validators)" which needs to be considered (e.g. should the `ETag` be marked as being a "strong" validator or a "weak" validator).
+### Strong and Weak Validators
+
+As far as the actual _setting_ of an `ETag` is concerned, this isn't necessarily as straight forward as you might first imagine. For example, a typical approach is to use a hash function to generate a digest of the response body to verify the content has changed. 
+
+Of course there is the potential for the hash function to not be robust enough to avoid hash conflicts, but additionally there is a concept referred to as "[validation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests#Validators)" which needs to be considered (e.g. should the `ETag` be marked as being a "strong" validator or a "weak" validator).
 
 These are things that you'll need to consider when generating an `ETag` for a resource, and it's recommended you read documentation on [what constitutes a "strong" or "weak" validator](https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests#Strong_validation).
+
+> Note: it's important to realize that generating an `ETag` and figuring out the `Last-Modified` date of a resource is outside the responsibility of a proxy, hence the proxy sat in front of our origins doesn't set these headers even when they aren't set by the origin.
 
 ## Cache Headers Example
 
