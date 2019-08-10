@@ -19,6 +19,8 @@ draft: false
 
 Caching is hard. Let's try and understand it a little better.
 
+> Note: some sections are purposefully brief. I'm not aiming to be a specification document.
+
 ## Caching at multiple layers
 
 Caching can occur at both a 'client' level and a 'cache proxy' level. 
