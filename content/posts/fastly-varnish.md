@@ -152,6 +152,30 @@ Below is a diagram of Fastly's VCL request flow (including its WAF and Clusterin
     <img src="../../images/fastly-request-flow.png">
 </a>
 
+### Update 2019.08.10
+
+Fastly reached out to me to let me know that this diagram is now incorrect. 
+
+Specifically, the request flow for a hit-for-pass ([see below](#5) for details) _was_: 
+
+```
+RECV, HASH, HIT, PASS, DELIVER
+``` 
+
+Where `vcl_hit` would `return(pass)` once it had identified the cached object as being a hit-for-pass object.
+
+It is now:
+
+```
+RECV, HASH, PASS, DELIVER
+```
+
+Where after the object is returned from `vcl_hash`'s lookup, it's immediately identified as being a HFP (hit-for-pass) and thus triggers `vcl_pass` as the next state, and finally `vcl_deliver`.
+
+What this ultimately means is there is some redundant code later on in this blog post where I make reference to serving stale content. Specifically, I mention that `vcl_hit` required some custom VCL for checking the cached object's `cacheable` attribute for the purpose of identifying whether it's a hit-for-pass object or not. 
+
+> Note: this `vcl_hit` code logic is still part of the free Varnish software, but it has been made redundant by Fastly's version.
+
 <div id="4.1"></div>
 ## State Variables
 
@@ -204,6 +228,16 @@ If you were to end up at `vcl_miss` instead, then you'll probably want to manipu
 Once a request is made, the content is copied into the `beresp` variable and made available within the `vcl_fetch` state. You would likely want to modify this object in order to change its ttl or cache headers because this is the last chance you have to do that before the content is stored in the cache.
 
 Finally, the `beresp` object is copied into `resp` and that is what's made available within the `vcl_deliver` state. This is the last chance you have for manipulating the response that the client will receive. Changes you make to this object doesn't affect what was stored in the cache (because that time, `vcl_fetch`, has already passed).
+
+### Anonymous Objects
+
+There are two scenarios in which a `pass` occurs. One is that you `return(pass)` from `vcl_recv` explicitly, and the other is that `vcl_recv` executes a `return(lookup)` (which is the default behaviour) and the lookup results in a hit-for-pass object. 
+
+In both cases, an anonymous object is created, and the next customer-accessible VCL hook that will run is `vcl_pass`. Because the object is anonymous, any changes you make to it in `vcl_fetch` are not persisted beyond that one client request. 
+
+The only difference between the behaviour of a `return(pass)` from `vcl_recv` and a `return(pass)` resulting from a hit-for-pass in the cache, is that `req.digest` will be set. Fastly's internal varnish engineering team state that `req.digest` is not an identifier for the object but rather a property of the request, which has been set simply because the request went through the hash process. 
+
+An early `return(pass)` from `vcl_recv` doesn't go through `vcl_hash` and so no hash (`req.digest`) is added to the anonymous object. If there is a hash (`req.digest`) available on the object inside of `vcl_pass`, it doesn't mean you retain a reference to the cache object.
 
 <div id="4.2"></div>
 ## Persisting State
@@ -490,6 +524,8 @@ What this does is it checks whether the object we found in the cache has the att
 By default this `cacheable` attribute is set to 'true', but when Varnish executes `return(pass)` from inside of `vcl_fetch` it caches the "hit-for-pass" object with the `cacheable` attribute set to 'false'.
 
 The reason the ttl for a "hit-for-pass" object is supposed to be short is because, for that period of time, your origin is susceptible to multiple requests. So you don't want your origin to become overloaded by lots of traffic for uncacheable content.
+
+It's important to note that an object can't be _re-cached_ (let's say the origin no longer sends a `private` directive) until either the hit-for-pass TTL expires _or_ the hit-for-pass object is purged.
 
 > See [this Varnish blog post](https://info.varnish-software.com/blog/hit-for-pass-varnish-cache) for the full details.
 
