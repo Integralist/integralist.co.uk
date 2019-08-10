@@ -103,7 +103,7 @@ There are some other directives defined in the [W3C Specification](https://www.w
 
 Fastly [has some rules](https://docs.fastly.com/guides/tutorials/cache-control-tutorial) about the various caching response headers it respects and in what order this behaviour is applied. The following is a summary of these rules:
 
-- `Surrogate-Control` determines proxy caching behaviour (takes priority over `Cache-Control`).
+- `Surrogate-Control` determines proxy caching behaviour (takes priority over `Cache-Control`) †.
 - `Cache-Control` determines client caching behaviour.
 - `Cache-Control` determines both client/proxy caching behaviour if no `Surrogate-Control` †.
 - `Cache-Control` determines both client/proxy caching behaviour if it includes both `max-age` and `s-maxage`.
