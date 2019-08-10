@@ -186,9 +186,13 @@ Consider the following diagram which highlights a typical request flow when usin
 
 In this request flow we can see that although we're successfully serving stale content when a cached object's TTL has expired, this is still potentially going to result in multiple requests to the origin (rather than acting as a cache HIT) if we have an influx of requests for the same resource. 
 
-Thus, having a large `stale-while-revalidate` TTL might not be a good idea because ultimately for that time period, if there is no updated version of the content, new client requests are going to be constantly hitting the origin. 
+Thus, having a large `stale-while-revalidate` TTL might not be a good idea because ultimately for that time period, if there is no updated version of the content, new client requests are going to be able to hit the origin. 
 
 Yes, having an empty response is better performance (as far as bandwidth is concerned), but the origin still has to spend time and resources constructing the response. It would be better to have a shorter `stale-while-revalidate` TTL so that it would expire more quickly. This means we would go back to the origin sooner, in order to get a full response back to be re-cached, which would then result in future client requests actually getting a cache HIT and saving the origin from having to handle extra unnecessary load.
+
+Now with that said, the ability to reach the origin is only going to be on a datacenter by datacenter basis. The reason being, each [cache node](https://www.integralist.co.uk/posts/fastly-varnish/#clustering) will perform [request collapsing](https://docs.fastly.com/guides/performance-tuning/request-collapsing) which will mitigate the damage of having to allow a request through to your origin.
+
+> Open Question: do _you_ think `stale-while-revalidate` should contain a long or short TTL (and why)?
 
 ### Strong and Weak Validators
 
