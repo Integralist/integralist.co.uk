@@ -14,9 +14,13 @@ tags:
 draft: false
 ---
 
+In this post I'm going to be explaining how the [Fastly CDN](https://www.fastly.com/) works, with regards to their 'programmatic edge' feature (i.e. the ability to execute code on cache servers nearest to your users).
+
+Fastly utilizes free software and extends it to fit their purposes, but this extending of existing software can make things confusing when it comes to understanding what underlying features work and how they work.
+
 - [Introduction](#1)
 - [Varnish Default VCL](#2)
-- [Fastly Custom VCL](#3)
+- [Fastly Default VCL](#3)
 - [Fastly TTLs](#3.1)
 - [Fastly Request Flow Diagram](#4)
 - [State Variables](#4.1)
@@ -92,17 +96,20 @@ Specifically:
 - some modifications to the `synthetic` in `vcl_error`
 
 <div id="3"></div>
-## Fastly Custom VCL
+## Fastly Default VCL
 
-On top of the built-in VCL the open-source version of Varnish uses, Fastly also includes its own 'custom' VCL logic alongside your own additions.
+On top of the built-in VCL the open-source version of Varnish uses, Fastly also includes its own 'default' VCL logic alongside your own additions.
 
-You can see Fastly's VCL boilerplate, and learn more about their custom VCL implementation [here](https://docs.fastly.com/guides/vcl/mixing-and-matching-fastly-vcl-with-custom-vcl).
+When creating a new Fastly 'service', this default VCL is added automatically to your new service. You are then free to remove it completely and replace it with your own custom VCL if you like.
 
-You can also view their generated custom VCL here in this isolated gist (for reference purposes):
+Fastly has some guidelines around the use (or removal) of their default VCL which you can learn more about [here](https://docs.fastly.com/guides/vcl/mixing-and-matching-fastly-vcl-with-custom-vcl).
 
-- [Fastly's Custom VCL](https://gist.github.com/Integralist/56cf991ae97551583d5a2f0d69f37788)
+Below are some useful links to see Fastly's default VCL:
 
-> If you're interested, [here is a gist](https://gist.github.com/Integralist/2e4a78fe92ec70d2e2709ff7be660669) that shows the 'master' VCL from Fastly (i.e. a new service created, with 'no custom vcl' nor any UI based configurations made). This is as _barebones_ a service as you can get.
+- [Fast\y's Default VCL (full service context)](https://gist.github.com/Integralist/2e4a78fe92ec70d2e2709ff7be660669)
+- [Fastly's Default VCL (each state split into separate files)](https://gist.github.com/Integralist/56cf991ae97551583d5a2f0d69f37788)
+
+> Note: Fastly also has what they call a 'master' VCL which runs outside of what we (as customers) can see, and this VCL is used to help Fastly scale varnish (e.g. handle things like their custom clustering solution).
 
 <div id="3.1"></div>
 ## Fastly TTLs
