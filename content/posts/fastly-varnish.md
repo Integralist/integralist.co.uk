@@ -116,7 +116,7 @@ Below are some useful links to see Fastly's default VCL:
 
 Fastly [has some rules](https://docs.fastly.com/guides/performance-tuning/controlling-caching) about how it determines a TTL for your content. In summary...
 
-The 'master' VCL sets a TTL of 120s ([this comes from Varnish](https://github.com/varnishcache/varnish-cache/blob/5.0/bin/varnishd/builtin.vcl#L158-L172) rather than Fastly) when no other VCL TTL has been defined and if no cache headers were sent by the origin.
+Their 'master' VCL sets a TTL of 120s ([this comes from Varnish](https://github.com/varnishcache/varnish-cache/blob/5.0/bin/varnishd/builtin.vcl#L158-L172) rather than Fastly) when no other VCL TTL has been defined and if no cache headers were sent by the origin.
 
 Fastly does a similar thing with its own default VCL which it uses when you create a new service. It looks like the following and increases the default to 3600s (1hr):
 
