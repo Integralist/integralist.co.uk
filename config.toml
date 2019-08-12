@@ -41,12 +41,12 @@ preserveTaxonomyNames = true
   page = "/:slug/"
 
 [[menu.main]]
-  name = "Home."
+  name = "Home "
   url = "/"
   weight = 100
 
 [[menu.main]]
-  name = "About."
+  name = "About "
   url = "/about"
   weight = 200
 
@@ -56,12 +56,12 @@ preserveTaxonomyNames = true
   weight = 300
 
 [[menu.main]]
-  name = "Search."
+  name = "Search "
   url = "/search"
   weight = 400
 
 [[menu.main]]
-  name = "Resume."
+  name = "Resume "
   url = "/resume"
   weight = 500
 

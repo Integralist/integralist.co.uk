@@ -2,8 +2,6 @@
 title: About
 description: Compassionate Listener. Polyglot. Author. Husband. Father. He/Him.
 comments: false
-menu: main
-weight: -170
 ---
 
 <img src="../images/profile.jpg">

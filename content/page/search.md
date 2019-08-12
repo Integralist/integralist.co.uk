@@ -2,8 +2,6 @@
 title: Search
 description: Lookup articles of interest.
 comments: false
-menu: main
-weight: -170
 ---
 
 <p><input id="search" type="text" placeholder="type something here"></p>

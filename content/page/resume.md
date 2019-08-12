@@ -2,8 +2,6 @@
 title: Resume
 description: Staff Software Engineer @BuzzFeed
 comments: false
-menu: main
-weight: -170
 ---
 
 - [Hello!](#hello)
