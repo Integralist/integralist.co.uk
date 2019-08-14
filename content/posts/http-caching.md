@@ -190,9 +190,11 @@ Now with that said, the ability to reach the origin is only going to be on a dat
 
 With this in mind, having a large `stale-while-revalidate` TTL might not necessarily be a good idea because ultimately for that time period, if there is no updated version of the content, new client requests are going to be able to reach the origin. 
 
-Yes, having an empty response sent back from origin with the `304 Not Modified` is better as far as bandwidth consumption is concerned, but the origin still has to spend time and resources constructing the response. 
+Yes, it's not going to be millions of requests (even if you're a globally distributed brand), and Yes, having an empty response sent back from origin with the `304 Not Modified` is better as far as bandwidth consumption is concerned, but the origin still has to spend time and resources constructing the response. 
 
-It would be better to have a shorter `stale-while-revalidate` TTL so that it would expire more quickly. This means we would go back to the origin sooner, in order to get a full response back to be re-cached, which would then result in future client requests actually getting a cache HIT and saving the origin from having to handle extra unnecessary load.
+So depending on your origin and potentially the costs related to these types of requests it might be better to have a shorter `stale-while-revalidate` TTL so that it would expire more quickly. 
+
+This would then mean the request would go back to the origin _sooner_, in order to get a full response back to be re-cached, which would then result in future client requests actually getting a cache HIT and saving the origin from having to handle that extra unnecessary load.
 
 > Open Question: do _you_ think `stale-while-revalidate` should contain a long or short TTL (and why)?
 

@@ -131,3 +131,12 @@ input#search {
 .image-caption {
   margin-top: -1em;
 }
+
+em {
+  color: #C97747;
+  font-weight: bold;
+}
+
+blockquote code {
+  font-style: normal;
+}
