@@ -196,6 +196,16 @@ So depending on your origin and potentially the costs related to these types of 
 
 This would then mean the request would go back to the origin _sooner_, in order to get a full response back to be re-cached, which would then result in future client requests actually getting a cache HIT and saving the origin from having to handle that extra unnecessary load.
 
+On the 'flip side', I think the _actual_ question needed to be asked is: "how important is it that you get fresh content as quickly as possible"? 
+
+The answer to _that_ will firstly depend on whether we were using a CDN where purging content dynamically was not possible (specifically whenever fresh content was published by an origin). Fastly enables this dynamic purging by providing support for setting a `Surrogate-Key` HTTP response header. 
+
+So if we _were_ in that situation where we couldn't dynamically purge our CDN cache, and the freshness of our content was important then I would imagine we would set a longer `stale-while-revalidate` TTL in order to force the caching proxy to attempt to revalidate _more often_. 
+
+Otherwise, again if we were in that situation where we couldn't dynamically purge our CDN cache and we had ended up setting a _short_ `stale-while-revalidate` TTL, then that would mean we'd go back to origin and get a new `max-age` TTL set (which could be set to a very long value) and so we could end up with users getting a cache HIT for content which for all extensive purposes could very well be stale anyway but you would lose the opportunity to try and acquire fresh content via revalidation now.
+
+If you're using a CDN such as Fastly, you can utilize `Surrogate-Key` to purge your content dynamically whenever fresher versions have been published. Meaning, you could have a short revalidation TTL and if there was no fresh content within that time period you wouldn't actually have to worry about going to origin and getting the same content back but now with a long `max-age` TTL because you know you could dynamically trigger this behaviour (e.g. a cache MISS) whenever your fresh content was published any way.
+
 > Open Question: do _you_ think `stale-while-revalidate` should contain a long or short TTL (and why)?
 
 ### Strong and Weak Validators
