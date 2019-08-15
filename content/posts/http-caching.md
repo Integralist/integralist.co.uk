@@ -93,7 +93,7 @@ This is effectively saying "we have some content cached and its TTL is still val
 
 Unlike `no-cache` which is effectively saying "we have cached content, but before we release it to you we're going to check with the origin that there isn't a fresher version first". It's a way of enforcing a _rigid_ 'freshness' plan.
 
-The downside of these (and other similar) directives is that you need to be sure your origins are capable of handling revalidation (see '[Serving Stale Content](#serving-stale-content)' for more details).
+Whenever using these (and other similar) directives, you need give consideration to what else needs to be in place to make them function efficiently. Specifically you need to be sure your origins are actually capable of handling revalidation (see '[Serving Stale Content](#serving-stale-content)' for more details), otherwise the behaviours might not work as intended or perform as well as you think they will.
 
 ## Surrogate-Control Directives
 
