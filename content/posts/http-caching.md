@@ -180,13 +180,15 @@ One aspect of serving stale content that normally confuses people is how to dete
 
 Consider the following diagram which highlights a typical request flow when using (for example) an `ETag` to handle the revalidation step:
 
+> Note: this diagram presumes the use of a CDN like Fastly which has specific behaviours, such as 'request collapsing' built-in.
+
 <a href="../../images/http-conditional-requests.png">
     <img src="../../images/http-conditional-requests.png">
 </a>
 
 In this request flow we can see that although we're successfully serving stale content when a cached object's TTL has expired, this is still potentially going to result in multiple requests to the origin (rather than acting as a cache HIT) if we have an influx of requests for the same resource. 
 
-Now with that said, the ability to reach the origin is only going to be on a datacenter by datacenter basis. The reason being, each [cache node](https://www.integralist.co.uk/posts/fastly-varnish/#clustering) will perform [request collapsing](https://docs.fastly.com/guides/performance-tuning/request-collapsing) which will mitigate the damage of having to allow a request through to your origin.
+Now with that said, the ability to reach the origin (if we're using Fastly at least, other CDN providers may differ) is only going to be on a datacenter by datacenter basis. The reason being, each [cache node](https://www.integralist.co.uk/posts/fastly-varnish/#clustering) will perform [request collapsing](https://docs.fastly.com/guides/performance-tuning/request-collapsing) which will mitigate the damage of having to allow a request through to your origin.
 
 With this in mind, having a large `stale-while-revalidate` TTL might not necessarily be a good idea because ultimately for that time period, if there is no updated version of the content, new client requests are going to be able to reach the origin. 
 
@@ -204,7 +206,7 @@ So if we _were_ in that situation where we couldn't dynamically purge our CDN ca
 
 Otherwise, again if we were in that situation where we couldn't dynamically purge our CDN cache and we had ended up setting a _short_ `stale-while-revalidate` TTL, then that would mean we'd go back to origin and get a new `max-age` TTL set (which could be set to a very long value) and so we could end up with users getting a cache HIT for content which for all extensive purposes could very well be stale anyway but you would lose the opportunity to try and acquire fresh content via revalidation now.
 
-If you're using a CDN such as Fastly, you can utilize `Surrogate-Key` to purge your content dynamically whenever fresher versions have been published. Meaning, you could have a short revalidation TTL and if there was no fresh content within that time period you wouldn't actually have to worry about going to origin and getting the same content back but now with a long `max-age` TTL because you know you could dynamically trigger this behaviour (e.g. a cache MISS) whenever your fresh content was published any way.
+If you're using a CDN such as Fastly, you can utilize `Surrogate-Key` to purge your content dynamically whenever fresher versions have been published. Meaning, you could have a short revalidation TTL and if there was no fresh content within that time period you wouldn't actually have to worry about going to origin and getting the same content back but now with a long `max-age` TTL, because you know you could dynamically trigger a cache MISS whenever your fresh content was published anyway.
 
 > Open Question: do _you_ think `stale-while-revalidate` should contain a long or short TTL (and why)?
 
