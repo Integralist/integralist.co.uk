@@ -33,7 +33,7 @@ Consider the following request flow architecture diagram...
 
 In the above diagram, the "CDN" is a 'caching proxy' and so caching can (and of course does) happen there. 
 
-The box that's _labelled_ "proxy" in the above diagram _isn't_ a caching proxy, it's just a standard 'reverse proxy' that's figuring out which (of many) 'origins' the request should be proxied onto (meaning: caching does _not_ happen there).
+The box that's labelled "proxy" in the above diagram _isn't_ a caching proxy, it's just a standard 'reverse proxy' that's figuring out which (of many) 'origins' the request should be proxied onto (meaning: caching does _not_ happen there).
 
 We're able to control caching for both 'clients' and 'cache proxies', using the following two HTTP response headers:
 
