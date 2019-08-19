@@ -161,7 +161,7 @@ Below is a diagram of Fastly's VCL request flow (including its WAF and Clusterin
 
 ### 304 Not Modified
 
-Although not specifically mentioned in the above diagram it's worth noting that Fastly doesn't execute `vcl_fetch` when it receives a `304 Not Modified` from origin, but it will use any `Cache-Control` or `Surrogate-Control` values defined on that response.
+Although not specifically mentioned in the above diagram it's worth noting that Fastly doesn't execute `vcl_fetch` when it receives a `304 Not Modified` from origin, but it will use any `Cache-Control` or `Surrogate-Control` values defined on that response to determine how long the stale object should now be kept in cache.
 
 If no caching headers are sent with the `304 Not Modified` response, then the stale object's TTL is _refreshed_. This means its age is set back to zero and the original `max-age` TTL is enforced.
 
