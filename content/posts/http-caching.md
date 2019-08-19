@@ -220,6 +220,8 @@ These are things that you'll need to consider when generating an `ETag` for a re
 
 > Note: it's important to realize that generating an `ETag` and figuring out the `Last-Modified` date of a resource is outside the responsibility of a proxy, hence the proxy sat in front of our origins doesn't set these headers even when they aren't set by the origin.
 
+In essence a strong ETag indicates that the resource's content is the same with regards to both the response body and the response headers, whereas a weak ETag indicates that the two representations are semantically equivalent. It compares only the response body. Weak ETags are prefixed with `W\` and thus can easily be distinguished between weak and strong.
+
 ## Cache Headers Example
 
 Let's wrap up by considering a real-world example of cache headers and what they look like, and why.
