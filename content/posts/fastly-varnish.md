@@ -22,6 +22,7 @@ Fastly utilizes free software and extends it to fit their purposes, but this ext
 - [Varnish Default VCL](#2)
 - [Fastly Default VCL](#3)
 - [Fastly TTLs](#3.1)
+- [Fastly Default Cached Status Codes](#3.2)
 - [Fastly Request Flow Diagram](#4)
 - [State Variables](#4.1)
 - [Persisting State](#4.2) (inc. clustering architecture)
@@ -141,6 +142,23 @@ You can override this VCL with your own custom VCL, but it's also worth being aw
 As we can see from the above list, setting a TTL via VCL takes ultimate priority even if caching headers are provided by the origin server.
 
 Next in line is `Surrogate-Control` (see [my post on HTTP caching](/posts/http-caching/) for more information on this cache header), which takes priority over `Cache-Control`. The `Cache-Control` header itself takes priority over `Expires`.
+
+<div id="3.2"></div>
+## Fastly Default Cached Status Codes
+
+The CDN (Fastly) [doesn't cache all responses](https://docs.fastly.com/en/guides/http-status-codes-cached-by-default). It will not cache any responses with a status code in the `5xx` range, and it will only cache a tiny subset of responses with a status code in the `4xx` and `3xx` range.
+
+The status codes it will cache by default are:
+
+- `200 OK`
+- `203 Non-Authoritative Information`
+- `300 Multiple Choices`
+- `301 Moved Permanently`
+- `302 Moved Temporarily`
+- `404 Not Found`
+- `410 Gone`
+
+> Note: in VCL you can allow _any_ response status code to be cached by executing `set beresp.cacheable = true;` within `vcl_fetch`.
 
 <div id="4"></div>
 ## Fastly Request Flow Diagram
