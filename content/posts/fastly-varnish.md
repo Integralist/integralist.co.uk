@@ -21,6 +21,7 @@ Fastly utilizes free software and extends it to fit their purposes, but this ext
 - [Introduction](#1)
 - [Varnish Default VCL](#2)
 - [Fastly Default VCL](#3)
+- [Custom VCL](#3.0)
 - [Fastly TTLs](#3.1)
 - [Fastly Default Cached Status Codes](#3.2)
 - [Fastly Request Flow Diagram](#4)
@@ -103,6 +104,18 @@ On top of the built-in VCL the open-source version of Varnish uses, Fastly also 
 
 When creating a new Fastly 'service', this default VCL is added automatically to your new service. You are then free to remove it completely and replace it with your own custom VCL if you like.
 
+See the link below for what this default VCL looks like, but in there you'll notice code comments such as:
+
+```
+#--FASTLY RECV BEGIN
+
+...code here...
+
+#--FASTLY RECV END
+```
+
+> Note: those specific portions of the default code define _critical_ behaviour that needs to be defined whenever you want to write [your own custom VCL](#3.0).
+
 Fastly has some guidelines around the use (or removal) of their default VCL which you can learn more about [here](https://docs.fastly.com/guides/vcl/mixing-and-matching-fastly-vcl-with-custom-vcl).
 
 Below are some useful links to see Fastly's default VCL:
@@ -111,6 +124,31 @@ Below are some useful links to see Fastly's default VCL:
 - [Fastly's Default VCL (each state split into separate files)](https://gist.github.com/Integralist/56cf991ae97551583d5a2f0d69f37788)
 
 > Note: Fastly also has what they call a 'master' VCL which runs outside of what we (as customers) can see, and this VCL is used to help Fastly scale varnish (e.g. handle things like their custom clustering solution).
+
+<div id="3.0"></div>
+## Custom VCL
+
+When adding your own custom VCL code you'll need to ensure that you add Fastly's critical default behaviours, otherwise things might not work as expected.
+
+The way you add their defaults to your own custom VCL code is to specific a specific type of code comment, for example:
+
+```
+sub vcl_recv {
+  #FASTLY recv
+}
+```
+
+See [their documentation](https://docs.fastly.com/vcl/custom-vcl/creating-custom-vcl/) for more details, but ultimately these code comments are 'macros' that get expanded into the actual default VCL code at compile time.
+
+It can be useful to know what the default VCL code does (see [links in previous section](#3)) because it might affect where you place these macros within your own custom code (e.g. do you place it in the middle of your custom sub routines or at the start or the end).
+
+This is important because, for example, the default behaviours Fastly defines for `vcl_recv` is to set a backend for your service. Your custom VCL can of course override that backend, but where you define your custom code that does that overriding might not function correctly if placed in the wrong place. 
+
+In our case we had a conditional comment like `if (req.restarts == 0) { ...set backend... }` and then later on in our VCL we would trigger a request restart (e.g. `return(restart)`), but now `req.restarts` would be equal to `1` and not zero and so when the request restarted we wouldn't set the backend correctly and our request would end up being proxied to an unexpected backend that was selected by Fastly's default VCL!
+
+Fastly selects the default backend based on the age of the backend. To quote Fastly directly...
+
+> We choose the first backend that was created that doesn't have a conditional on it. If all of your backends have conditionals on them, I believe we then just use the first backend that was created. If a backend has a conditional on it, we assume it isn't a default. That backend is only set under the conditions defined, so then we look for the oldest backend defined that doesn’t have a conditional to make it the default.
 
 <div id="3.1"></div>
 ## Fastly TTLs
