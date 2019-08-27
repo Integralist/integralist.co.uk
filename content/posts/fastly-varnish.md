@@ -120,7 +120,7 @@ Fastly has some guidelines around the use (or removal) of their default VCL whic
 
 Below are some useful links to see Fastly's default VCL:
 
-- [Fast\y's Default VCL (full service context)](https://gist.github.com/Integralist/2e4a78fe92ec70d2e2709ff7be660669)
+- [Fastly's Default VCL (full service context)](https://gist.github.com/Integralist/2e4a78fe92ec70d2e2709ff7be660669)
 - [Fastly's Default VCL (each state split into separate files)](https://gist.github.com/Integralist/56cf991ae97551583d5a2f0d69f37788)
 
 > Note: Fastly also has what they call a 'master' VCL which runs outside of what we (as customers) can see, and this VCL is used to help Fastly scale varnish (e.g. handle things like their custom clustering solution).
