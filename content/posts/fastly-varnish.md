@@ -130,7 +130,7 @@ Below are some useful links to see Fastly's default VCL:
 
 When adding your own custom VCL code you'll need to ensure that you add Fastly's critical default behaviours, otherwise things might not work as expected.
 
-The way you add their defaults to your own custom VCL code is to specific a specific type of code comment, for example:
+The way you add their defaults to your own custom VCL code is to add a specific type of code comment, for example:
 
 ```
 sub vcl_recv {
