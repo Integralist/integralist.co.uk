@@ -613,6 +613,8 @@ In order to serve stale we need to add some conditional checks into our VCL logi
 
 You'll typically notice in both `vcl_fetch` and `vcl_deliver` there are checks for a 5xx status code in the response we got back from origin, and subsequently a further check for `stale.exists` if we found a match for a 5xx status code. It looks something like the following:
 
+> Note: you don't have to run this code only from `vcl_deliver`. It can be beneficial to do this via `vcl_error` as well because if your origin is unreachable, then it means you'll want to check for stale in `vcl_error` as well. Fastly gives an example of this in [their documentation](https://docs.fastly.com/en/guides/serving-stale-content#serving-stale-content-on-errors).
+
 ```vcl
 if (<object>.status >= 500 && <object>.status < 600) {
   if (stale.exists) {
