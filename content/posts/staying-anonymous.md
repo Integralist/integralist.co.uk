@@ -120,7 +120,7 @@ Below is a screenshot of what the 'DuckDuckGo Privacy Essentials' add-on looks l
     <img src="../../images/firefox-duckduckgo.png">
 </a>
 
-Also, each release of Firefox improves the Privacy settings available and so things like content blocking and preventing 'browser fingerprinting' is starting to be rolled out more generally for Firefox users:
+Also, each release of Firefox improves the Privacy settings available and so things like content blocking and preventing '[browser fingerprinting](https://blog.mozilla.org/firefox/how-to-block-fingerprinting-with-firefox/)' is starting to be rolled out more generally for Firefox users:
 
 <a href="../../images/firefox-security-strict.png">
     <img src="../../images/firefox-security-strict.png">
