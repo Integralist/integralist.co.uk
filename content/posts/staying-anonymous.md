@@ -126,7 +126,7 @@ Also, each release of Firefox improves the Privacy settings available and so thi
     <img src="../../images/firefox-security-strict.png">
 </a>
 
-Below is a screenshot of Firefox's built-in "Do Not Track" setting looks like (definitely worth enabling, even if respecting it is voluntary):
+Below is a screenshot of Firefox's built-in "Do Not Track" setting (which is definitely worth enabling, even if respecting it is only _voluntary_):
 
 <a href="../../images/firefox-do-not-track.png">
     <img src="../../images/firefox-do-not-track.png">
