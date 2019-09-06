@@ -48,10 +48,12 @@ There are currently two forms that this type of encryption can take:
 
 Here are some useful links to Cloudflare and Google if you're interested in their services:
 
-- https://developers.cloudflare.com/1.1.1.1/dns-over-tls/
-- https://developers.cloudflare.com/1.1.1.1/dns-over-https/
-- https://developers.google.com/speed/public-dns/docs/dns-over-tls
-- https://developers.google.com/speed/public-dns/docs/doh/
+- Cloudflare: 
+  - [DNS over TLS](https://developers.cloudflare.com/1.1.1.1/dns-over-tls/)
+  - [DNS over HTTPS](https://developers.cloudflare.com/1.1.1.1/dns-over-https/)
+- Google: 
+  - [DNS over TLS](https://developers.google.com/speed/public-dns/docs/dns-over-tls)
+  - [DNS over HTTPS](https://developers.google.com/speed/public-dns/docs/doh/)
 
 ## VPN
 
@@ -146,4 +148,4 @@ But all that said, it's still worth checking what your browser is doing. For exa
 
 ## Conclusion
 
-Security is hard, and never ending. Hopefully this post has given you some ideas.
+Security is hard, and a never ending challenge to get right. But hopefully this post has given you some ideas about the various tools you can use to help you stay anonymous and to protect your privacy.
