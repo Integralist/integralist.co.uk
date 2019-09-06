@@ -141,6 +141,8 @@ Depending on your requirements, when trying to disable caching it can be confusi
   - `Expires: 0`
 
 > Note: regarding the disabling of caching at the client level, I reached out to Fastly because of their suggested use of `must-revalidate` _with_ `no-store` (which doesn't make sense). They have since consulted with their resident RFC expert who confirmed this was redundant, and so expect their documentation to be updated to just `no-store`.
+>
+> It's also worth mentioning that Fastly's use of `post-check` and `pre-check` is _also_ redundant as per [this old Microsoft article](https://blogs.msdn.microsoft.com/ie/2006/06/01/a-caching-issue-in-ie7-beta-2/) that states setting them to zero does not actually 'do anything'!
 
 ## Serving Stale Content
 
