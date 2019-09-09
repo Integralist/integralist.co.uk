@@ -103,17 +103,31 @@ The below image shows some of the add-ons I utilize:
 
 The ones of relevance here are:
 
-- **Cookie AutoDelete**: highly configurable way to delete cookies once you've finished browsing (whether it be changing domain, or tabs or browser restart).
-- **DuckDuckGo Privacy Essentials**: blocks hidden trackers, forces encryption via HTTPS, private search data, tools for grading websites based on their privacy performance.
+- **Cookie Quick Manager**: simple UI for editing/deleting cookies (useful to see what's being set and by whom!).
+- **Privacy Badger**: blocks invisible third-party trackers.
 - **ExpressVPN**: allows for doing things like 'double hops', spoofing my location, blocking WebRTC and enforcing HTTPS.
 - **NoScript**: blocks JavaScript and allows me to configure how specific scripts are run and for how long they're trusted.
+- **uBlock**: blocks ads, pop ups, and trackers.
 
-There are of course overlaps in these various add-ons (e.g. enforcing HTTPS), and I'm OK with that, but in some cases you need things like 'NoScript' to prevent things like applications setting cookies client-side while 'Cookie AutoDelete' helps to catch server-side cookies (just as an example).
+Old add-ons I used to have installed...
+
+- **Cookie AutoDelete**: highly configurable way to delete cookies once you've finished browsing (whether it be changing domain, or tabs or browser restart).
+- **DuckDuckGo Privacy Essentials**: blocks hidden trackers, forces encryption via HTTPS, private search data, tools for grading websites based on their privacy performance.
+
+In the case of 'DuckDuckGo Privacy Essentials' I removed that once I had 'ExpressVPN' and 'Privacy Badger' installed as I needed 'ExpressVPN' any way (and that has 'HTTPS Everywhere' built-in like DDG did), but also 'Privacy Badger' was much a more advanced tracker blocker than DDG was. 
+
+In the case of 'Cookie AutoDelete' I removed that once I installed 'Privacy Badger' and 'NoScript' as both those add-ons aided with the same problem.
 
 Below is a screenshot of what the 'NoScript' add-on looks like:
 
 <a href="../../images/firefox-noscript-example.png">
     <img src="../../images/firefox-noscript-example.png">
+</a>
+
+Below is a screenshot of what the 'uBlock' add-on looks like when visiting `google.com`:
+
+<a href="../../images/firefox-ublock-example.png">
+    <img src="../../images/firefox-ublock-example.png">
 </a>
 
 Below is a screenshot of what the 'DuckDuckGo Privacy Essentials' add-on looks like:
