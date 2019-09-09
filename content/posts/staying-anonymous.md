@@ -26,6 +26,7 @@ I've broken them down into sections...
 - [VPN](#vpn)
 - [Tor](#tor)
 - [Web Browser Extensions](#web-browser-extensions)
+- [Email](#email)
 
 ## DNS
 
@@ -160,6 +161,18 @@ But all that said, it's still worth checking what your browser is doing. For exa
     <img src="../../images/firefox-data-collection.png">
 </a>
 
+## Email
+
+Email through free providers such as Google's [Gmail](https://gmail.com/) are definitely NOT private. Google has already admitted to reading their user's emails in order to serve them advertising based on the content of their email.
+
+If you are not paying for the service then you're not a 'customer'. You are in fact a 'target'.
+
+An alternative is to use an email provider that encrypts your messages and doesn't have access to their content in any way. A good option (which has a free tier, but obviously you'll use up that free tier pretty quickly) is [Protonmail](https://mail.protonmail.com/).
+
+> Note: due to how they encrypt your data, if you forget your password and try to reset it, you'll lose _all_ your email because they don't have a means to decrypt those files unless you provide the relevant password.
+
 ## Conclusion
+
+Remember, staying 'anonymous' and 'protecting your privacy' are actually different things. The tools I use above will not help to keep my internet actions _anonymous_. If you want a good breakdown of what that would take (which is a lot of effort!) then [read this article](https://blog.windscribe.com/how-to-actually-be-anonymous-online-801811b7088d?gi=317e75c4d929) by Windscribe VPN.
 
 Security is hard, and a never ending challenge to get right. But hopefully this post has given you some ideas about the various tools you can use to help you stay anonymous and to protect your privacy.
