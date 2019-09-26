@@ -25,6 +25,7 @@ Fastly utilizes free software and extends it to fit their purposes, but this ext
 - [Fastly TTLs](#3.1)
 - [Fastly Default Cached Status Codes](#3.2)
 - [Fastly Request Flow Diagram](#4)
+- [Error Handling](#4.0)
 - [State Variables](#4.1)
 - [Persisting State](#4.2) (inc. clustering architecture)
 - [Hit for Pass](#5)
@@ -181,6 +182,8 @@ As we can see from the above list, setting a TTL via VCL takes ultimate priority
 
 Next in line is `Surrogate-Control` (see [my post on HTTP caching](/posts/http-caching/) for more information on this cache header), which takes priority over `Cache-Control`. The `Cache-Control` header itself takes priority over `Expires`.
 
+> Note: if you ever want to debug Fastly and your custom VCL then it's recommended you create a 'reduced test case' using their [Fastly Fiddle](https://fiddle.fastlydemo.net/) tool. Be aware this tool shares code publicly so don't put secret codes or logic into it!
+
 <div id="3.2"></div>
 ## Fastly Default Cached Status Codes
 
@@ -246,6 +249,40 @@ Where after the object is returned from `vcl_hash`'s lookup, it's immediately id
 What this ultimately means is there is some redundant code later on in this blog post where I make reference to serving stale content. Specifically, I mention that `vcl_hit` required some custom VCL for checking the cached object's `cacheable` attribute for the purpose of identifying whether it's a hit-for-pass object or not. 
 
 > Note: this `vcl_hit` code logic is still part of the free Varnish software, but it has been made redundant by Fastly's version.
+
+<div id="4.0"></div>
+## Error Handling
+
+In Varnish you can trigger an error using the `error` directive, like so:
+
+```
+error 900 "Not found";
+```
+
+> Note: it's common to use the made-up `9xx` range for these error triggers (900, 901, 902 etc).
+
+Once executed, Varnish will switch to the `vcl_error` state, where you can construct a _synthetic_ error to be returned (or do some other action like set a header and restart the request).
+
+```
+if (obj.status == 900) {
+  set obj.status = 500;
+  set obj.http.Content-Type = "text/html";
+  synthetic {"<h1>Hmmm. Something went wrong.</h1>"};
+  return(deliver);
+}
+```
+
+In the above example we construct a synthetic error response where the status code is a `500 Internal Server Error`, we set the content-type to HTML and then we use the `synthetic` directive to manually construct some HTML to be the 'body' of our response. Finally we execute `return(deliver)` to jump over to the `vcl_deliver` state.
+
+Now, I wanted to talk briefly about error handling because there are situations where an error can occur, and it can cause Varnish to change to an _unexpected_ state. I'll give a real-life example of this...
+
+We noticed that we were getting a raw `503 Backend Unavailable` error from Varnish displayed to our customers. This is odd? We have VCL code in `vcl_fetch` (the state that you move to once the response from the origin has been received by Fastly/Varnish) which checks the response status code for a 5xx and handles the error there. Why didn't that code run?
+
+Well, it turns out that `vcl_fetch` is only executed if the backend/origin was considered 'available' (i.e. Fastly could make a request to it). In this scenario what happened was that our backend _was_ available but there was a network issue with one of Fastly's POPs which meant it was unable to route certain traffic, resulting in the backend appearing as 'unavailable'.
+
+So what happens in those scenarios? In this case Varnish won't execute `vcl_fetch` because of course no request was ever made (how could Varnish make a request if it thinks the backend is unavailable), so instead Varnish jumps from `vcl_miss` (where the request to the backend would be initiated from) to `vcl_error`.
+
+This means in order to handle that very specific error scenario, we'd need to have similar code for checking the status code (and trying to serve stale, see later in this article for more information on that) within `vcl_error`.
 
 <div id="4.1"></div>
 ## State Variables
