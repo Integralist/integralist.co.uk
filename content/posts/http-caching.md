@@ -115,6 +115,10 @@ Fastly [has some rules](https://docs.fastly.com/guides/tutorials/cache-control-t
 
 > † _except_ when `Cache-Control` contains `private`.
 
+It's worth reiterating a segment of the above priority list which is that `Cache-Control` _can_ include serving stale directives such as `stale-while-revalidate` and `stale-if-error`, but they are typically utilized with `Surrogate-Control` more than they are with `Cache-Control`. If Fastly receives no `Surrogate-Control` but it does get `Cache-Control` with those directives it _will_ presume those are defined for its benefit.
+
+Client devices (e.g. web browsers) can respect those stale directives, but it's not very well supported currently (see [MDN compatibility table](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#Browser_compatibility)).
+
 If you're interested in learning more about Fastly (inc. Varnish and VCL), then [read my blog post](/posts/fastly-varnish) on the topic.
 
 ### Default TTLs

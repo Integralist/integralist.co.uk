@@ -19,17 +19,31 @@ In this post I'm going to be explaining how the [Fastly CDN](https://www.fastly.
 Fastly utilizes free software and extends it to fit their purposes, but this extending of existing software can make things confusing when it comes to understanding what underlying features work and how they work.
 
 - [Introduction](#1)
+  - [Varnish Basics](#varnish-basics)
 - [Varnish Default VCL](#2)
 - [Fastly Default VCL](#3)
 - [Custom VCL](#3.0)
 - [Fastly TTLs](#3.1)
+- [Caching Priority List](#caching-priority-list)
 - [Fastly Default Cached Status Codes](#3.2)
 - [Fastly Request Flow Diagram](#4)
+  - [304 Not Modified](#304-not-modified)
+  - [Update 2019.08.10](#update-2019-08-10)
 - [Error Handling](#4.0)
 - [State Variables](#4.1)
+  - [Anonymous Objects](#anonymous-objects)
 - [Persisting State](#4.2) (inc. clustering architecture)
+  - [Clustering](#clustering)
+  - [Breadcrumb Trail](#breadcrumb-trail)
 - [Hit for Pass](#5)
 - [Serving Stale](#6) (inc. caveats of Fastly’s Shielding)
+  - [Stale for Client Devices](#stale-for-client-devices)
+  - [Caveats of Fastly’s Shielding](#caveats-of-fastly-s-shielding)
+  - [Different actions for different states](#different-actions-for-different-states)
+  - [Why the difference?](#why-the-difference)
+  - [The happy path (stale found in vcl_fetch)](#the-happy-path-stale-found-in-vcl-fetch)
+  - [The longer path (stale found in vcl_deliver)](#the-longer-path-stale-found-in-vcl-deliver)
+  - [The unhappy path (stale not found anywhere)](#the-unhappy-path-stale-not-found-anywhere)
 - [Disable Caching](#7)
 - [Logging](#8)
 - [Restricting requests to another Fastly service](#8.1)
@@ -180,6 +194,20 @@ You can override this VCL with your own custom VCL, but it's also worth being aw
 4. `Expires: Fri, 28 June 2008 15:00:00 GMT` caches until this date has expired
 
 As we can see from the above list, setting a TTL via VCL takes ultimate priority even if caching headers are provided by the origin server.
+
+## Caching Priority List
+
+Fastly [has some rules](https://docs.fastly.com/guides/tutorials/cache-control-tutorial) about the various caching response headers it respects and in what order this behaviour is applied. The following is a summary of these rules:
+
+- `Surrogate-Control` determines proxy caching behaviour (takes priority over `Cache-Control`) †.
+- `Cache-Control` determines client caching behaviour.
+- `Cache-Control` determines both client/proxy caching behaviour if no `Surrogate-Control` †.
+- `Cache-Control` determines both client/proxy caching behaviour if it includes both `max-age` and `s-maxage`.
+- `Expires` determines both client/proxy caching behaviour if no `Cache-Control` or `Surrogate-Control` headers.
+- `Expires` ignored if `Cache-Control` is also set (recommended to avoid `Expires`).
+- `Pragma` is a legacy cache header only recommended if you need to support older HTTP/1.0 protocol.
+
+> † _except_ when `Cache-Control` contains `private`.
 
 Next in line is `Surrogate-Control` (see [my post on HTTP caching](/posts/http-caching/) for more information on this cache header), which takes priority over `Cache-Control`. The `Cache-Control` header itself takes priority over `Expires`.
 
@@ -704,6 +732,12 @@ You might find that you're not serving stale even though you would expect to be.
 Lastly, there's one quirk of Fastly's caching implementation you might need to know about: if you specify a `max-age` of less than 61 minutes, then your content will only be persisted into memory (and there are many situations where a cached object in memory can be removed). To make sure the object is persisted (i.e. cached) on disk and thus available for a longer period of time for serving stale, you must set a `max-age` above 61 minutes.
 
 It's worth reading [fastly's notes on why you might not be serving stale](https://docs.fastly.com/guides/performance-tuning/serving-stale-content#why-serving-stale-content-may-not-work-as-expected) which additionally includes notes on things like the fact that their implementation is an LRU (Least Recently Used) cache, and so even if a cached object's TTL has not expired it might be so infrequently requested/accessed that it'll be evicted from the cache any way! The LRU affects both fresh (i.e. non-expired) objects _and_ 'stale' objects (i.e. TTL has expired but they have stale config values that haven't expired).
+
+### Stale for Client Devices
+
+It's worth reiterating a segment of the earlier [caching priority list](#caching-priority-list) which is that `Cache-Control` _can_ include serving stale directives such as `stale-while-revalidate` and `stale-if-error`, but they are typically utilized with `Surrogate-Control` more than they are with `Cache-Control`. If Fastly receives no `Surrogate-Control` but it does get `Cache-Control` with those directives it _will_ presume those are defined for its benefit.
+
+Client devices (e.g. web browsers) can respect those stale directives, but it's not very well supported currently (see [MDN compatibility table](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#Browser_compatibility)).
 
 ### Caveats of Fastly's Shielding
 
