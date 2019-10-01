@@ -32,6 +32,7 @@ Fastly utilizes free software and extends it to fit their purposes, but this ext
 - [Serving Stale](#6) (inc. caveats of Fastly’s Shielding)
 - [Disable Caching](#7)
 - [Logging](#8)
+- [Restricting requests to another Fastly service](#8.1)
 - [Conclusion](#9)
 
 <div id="1"></div>
@@ -853,6 +854,37 @@ sub vcl_log {
 As you can probably tell, this recommended condition will never match and so the log call isn't executed.
 
 Mystery solved.
+
+<div id="8.1"></div>
+## Restricting requests to another Fastly service
+
+We had a requirement where by we had a request flow that looked something like the following...
+
+```
+Client > Fastly (service: foo) > Fastly (service: bar) > Origin
+```
+
+In this request flow both the Fastly services were managed by us (i.e. managed by BuzzFeed) and we wanted to ensure that the service `bar` could only accept requests when they came via service `foo`.
+
+We didn't want to rely on HTTP request headers as these can be spoofed very easily. Fastly suggested the following VCL based solution...
+
+```
+if (!req.http.myservice && (client.ip ~ fastly_ip_ranges))
+ error 808;
+}
+```
+
+> Note: `808` is a custom error status (see [Error Handling](#4.0) for more context about using non-standard status codes). I typically prefer to use the 9xx range.
+
+The idea being we can check if the `client.ip` matches a known Fastly POP IP range. If it doesn't match that then we'll reject the request. Additionally, service `bar` would check to see if a special request header was set by service `foo` (e.g. `set req.http.myservice = "yes";`).
+
+An alternative approach also suggested by Fastly was to replace the IP check for a request header check for a Fastly specific header `Fastly-FF` (which is only set when the request came from a Fastly POP):
+
+```
+if (req.http.fastly-ff && !req.http.myservice) {
+  error 808;
+}
+```
 
 <div id="9"></div>
 ## Conclusion
