@@ -595,6 +595,8 @@ make && make install
 
 The above code will copy the compiled vim binary into `/usr/local/bin` so `which vim` will show `/usr/local/bin/vim`
 
+> Note: you can also specify the path to the Python 3 interpreter if you don't want to rely on a global Python3 interpreter (`--with-python3-config-dir`). This gets more confusing when you have packages such as [Black](https://github.com/psf/black) that needs to be installed to that global interpreter.
+
 Configure vim with [vim-plug](https://github.com/junegunn/vim-plug) plugin manager:
 
 ```bash
