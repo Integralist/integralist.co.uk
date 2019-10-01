@@ -271,6 +271,101 @@ router.Handle("GET", path, func(w http.ResponseWriter, r *http.Request, p httpro
 logger.Fatal(http.ListenAndServe(":9001", router))
 ```
 
+<div id="5.1"></div>
+## Handling Errors
+
+In order to handle errors the reverse proxy needs to construct a _new_ response object, which means if you wanted the error response you generate to have all the same response headers as were provided by the upstream service, then you'd have to programmatically add those to the new response object.
+
+Let's see how we can handle errors in the basic sense, just to get an idea for how the code looks. Now we don't need to use another programming language to do this, we can do it all in Go (we could have done this earlier instead of using Python, but I wanted to highlight how you _could_ use another language if you wanted).
+
+```
+package main
+
+import (
+	"errors"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net"
+	"net/http"
+	"net/http/httptest"
+	"net/http/httputil"
+	"net/url"
+	"strings"
+	"time"
+)
+
+// copied from https://golang.org/src/net/http/httputil/reverseproxy.go?s=3330:3391#L98
+func singleJoiningSlash(a, b string) string {
+	aslash := strings.HasSuffix(a, "/")
+	bslash := strings.HasPrefix(b, "/")
+	switch {
+	case aslash && bslash:
+		return a + b[1:]
+	case !aslash && !bslash:
+		return a + "/" + b
+	}
+	return a + b
+}
+
+func main() {
+	backendServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, "backend server handled the request!")
+	}))
+	defer backendServer.Close()
+
+	backendServerURL, err := url.Parse(backendServer.URL)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	proxy := &httputil.ReverseProxy{
+		Director: func(r *http.Request) {
+			r.URL.Scheme = backendServerURL.Scheme
+			r.URL.Host = backendServerURL.Host
+			r.URL.Path = singleJoiningSlash(backendServerURL.Path, r.URL.Path)
+		},
+		Transport: &http.Transport{
+			Dial: (&net.Dialer{
+				Timeout: 10 * time.Second,
+			}).Dial,
+		},
+		ModifyResponse: func(r *http.Response) error {
+			// return nil
+			//
+			// purposefully return an error so ErrorHandler gets called
+			return errors.New("uh-oh")
+		},
+		ErrorHandler: func(rw http.ResponseWriter, r *http.Request, err error) {
+			fmt.Printf("error was: %+v", err)
+			rw.WriteHeader(http.StatusInternalServerError)
+			rw.Write([]byte(err.Error()))
+		},
+	}
+
+	frontendServer := httptest.NewServer(proxy)
+	defer frontendServer.Close()
+
+	resp, err := http.Get(frontendServer.URL)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("\n\nbody: \n%s\n\n", b)
+}
+```
+
+Here we can see that our `httputil.ReverseProxy#ModifyResponse` function is hardcoded to return an error type, which then causes the `httputil.ReverseProxy#ErrorHandler` function to be called.
+
+From there we use the `http.ResponseWriter` to create a _new_ response. In this case we do nothing other than print the original error, but you could do pretty much anything you like at this point.
+
+If you needed the original response object that came from the upstream then you'd need to make sure the error you returned from `ModifyResponse` was a custom error type so that you attach a field such as `OriginalResponse` to it and thus assign it the original `http.Response` that was available to you within `ModifyResponse`.
+
 <div id="6"></div>
 ## NGINX-Lite (not-really)
 
