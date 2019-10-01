@@ -476,7 +476,7 @@ poetry add boto3 pytest structlog tornado
 poetry add --dev flake8 flake8-import-order mypy tox ipython
 ```
 
-Here is an example configuration file I use:
+Here is an example configuration file I use (`pyproject.toml`):
 
 ```toml
 [tool.poetry]
@@ -493,7 +493,7 @@ structlog = "^19.1"
 tornado = "^6.0"
 
 [tool.poetry.dev-dependencies]
-black = { python=">3.6", version=">=19.3b0", allow_prereleases=true}
+black = { version = "*", allows-prereleases = true }
 flake8 = "^3.7"
 flake8-import-order = "^0.18.1"
 mypy = "^0.701.0"
@@ -504,6 +504,8 @@ ipython = "^7.5"
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
 ```
+
+> Note: an older iteration of Black install was `black = { python=">3.6", version=">=19.3b0", allow_prereleases=true}` but `poetry check` would fail, so switched to updated version shown above.
 
 ### pyenv-virtualenv
 
