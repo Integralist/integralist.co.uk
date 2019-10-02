@@ -98,6 +98,18 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ### 2019
 
+- **What**: Consolidated various debug headers and query parameters.  
+  **Why**: As the list of services along a request path increased (various proxies were introduced) the number of debug entry points increased.  
+  **Impact**: Reduced ~4 different debug entry points to 1 allowing engineers to more simply access the information they needed.
+
+- **What**: Implemented new endpoint that directs traffic to a custom instance of [httpbin](https://httpbin.org/).  
+  **Why**: To enable engineers to test specific scnearios and behaviours of different aspects of our overall system.  
+  **Impact**: Teams are not only able to debug how various proxies will affect the request flow, but we're able to test areas of our CDN logic we previously were unable to (such as verifying if we're serving stale when expected).
+
+- **What**: Defined service contracts ([example](https://gist.github.com/524be67b0b33e8087dd67a5a6af9b3c5)).  
+  **Why**: Complex services (especially in technical areas teams were unfamiliar with) could behave like black boxes.  
+  **Impact**: Provided a service consumers with a clear definition of expectations, enabling teams to better understand what a service would do for them.
+
 - **What**: Wrote [a guide to HTTP caching](/posts/http-caching/).  
   **Why**: As engineers we have a responsibility to understand the platform we write software for.  
   **Impact**: Shared understanding of how to properly utilize HTTP caching directives.
