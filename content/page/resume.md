@@ -108,7 +108,7 @@ I'd like to share the various things I've worked on over the years and the impac
 
 - **What**: Defined service contracts ([example](https://gist.github.com/524be67b0b33e8087dd67a5a6af9b3c5)).  
   **Why**: Complex services (especially in technical areas teams were unfamiliar with) could behave like black boxes.  
-  **Impact**: Provided a service consumers with a clear definition of expectations, enabling teams to better understand what a service would do for them.
+  **Impact**: Provided service consumers with a clear definition of expectations, enabling teams to better understand what a service would do for them.
 
 - **What**: Wrote [a guide to HTTP caching](/posts/http-caching/).  
   **Why**: As engineers we have a responsibility to understand the platform we write software for.  
