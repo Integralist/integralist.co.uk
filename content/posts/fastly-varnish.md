@@ -749,7 +749,9 @@ But with shielding enabled, the 'edge' cache node will dynamically change the ba
 
 You can utilize the existence of the header `Fastly-FF` to indicate if your code is currently running on a shield node. This header doesn't exist on an edge node, and its presence indicates that the request has already come from a fastly cache server. 
 
-Alternatively you could check `req.backend.is_shield` which (if available/set) would indicate your code was executing on a non-shield cache node (i.e. the edge cache node). You might prefer to use the latter because if your client uses Fastly and they put your service behind their Fastly account, then `Fastly-FF` would be set as the request travels through the system and so your check for `Fastly-FF` on your shield node might execute when it shouldn't.
+Alternatively you could check `req.backend.is_shield` which (if available/set) would indicate your code was executing on a non-shield cache node (i.e. the edge cache node) †. You might prefer to use the latter because if your client uses Fastly and they put your service behind their Fastly account, then `Fastly-FF` would be set as the request travels through the system and so your check for `Fastly-FF` on your shield node might execute when it shouldn't.
+
+> † in 2018 Fastly introduced: `req.backend.is_origin` which helps indicate if the server running the code is indeed the shield or not.
 
 It's probably best to only modify your backends dynamically whilst your VCL is executing on the shield (e.g. `if (!req.backend.is_shield)`, maybe abstract in a variable `declare local var.shield_node BOOL;`) and to also only `restart` a request in vcl_deliver when executing on the shield node. 
 
