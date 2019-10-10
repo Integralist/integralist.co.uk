@@ -80,7 +80,9 @@ For each state there is a corresponding subroutine that is executed. It has the 
 
 So in `vcl_recv` to change state to "pass" you would execute `return(pass)`. If you were in `vcl_fetch` and wanted to move to `vcl_deliver`, then you would execute `return(deliver)`.
 
-> Note: `vcl_hash` is the only exception because it's not a _state_ per se, so you don't execute `return(hash)` but `return(lookup)` as this helps distinguish that we're performing an action and not a state change (i.e. we're going to _lookup_ in the cache).
+For a state such as `vcl_miss` you'll discover shortly (when we look at a 'request flow' diagram of Varnish) that when `vcl_miss` finishes executing it will then trigger a request to the origin/backend service to acquire the requested content. Once the content is requested, _then_ we end up at `vcl_fetch` where we can then inspect the response from the origin. This is why at the end of `vcl_miss` we change state by calling `return(fetch)`. It looks like we're telling Varnish to 'fetch' data but really we're saying move to the next logical state which is actually `vcl_fetch`.
+
+> Note: `vcl_hash` is the only exception to this rule because it's not a _state_ per se, so you don't execute `return(hash)` but `return(lookup)`. This helps distinguish that we're performing an action and not a state change (i.e. we're going to _lookup_ in the cache). We could argue `vcl_miss`'s `return(fetch)` is the same, but from my understanding that's not the case.
 
 The reason for this post is because when dealing with Varnish and VCL it gets very confusing having to jump between official documentation for VCL and Fastly's specific implementation of it. Even more so because the version of Varnish Fastly are using is now quite old and yet they've also implemented some features from more recent Varnish versions. Meaning you end up getting in a muddle about what should and should not be the expected behaviour (especially around the general request flow cycle).
 
