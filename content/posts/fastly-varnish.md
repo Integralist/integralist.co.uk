@@ -414,9 +414,11 @@ We can see in [Fastly's documentation](https://docs.fastly.com/guides/performanc
 
 ### Clustering
 
-I've used the terminology "cluster node" to describe these cache server nodes handling the alternative states (i.e. those nodes _NOT_ handling recv/hash/deliver), but fastly uses the term "shield" node while describing the concept of having different cache nodes handle different states as "clustering". I've avoided this terminology because it overlaps with _another_ fastly feature called [Shielding](https://docs.fastly.com/guides/performance-tuning/shielding) and so I didn't want those two concepts to get confused.
+I've used the terminology "cluster node" to describe cache server nodes that handle the _alternative_ states (i.e. those nodes _NOT_ handling recv/hash/deliver). Fastly on the other hand has historically used the term "shield" node to describe that behaviour, and although their documentation still refers to the behaviour as "shielding", it infact has changed verbally to being described as "clustering". 
 
-The following diagram visualizes the approach for how a request inside of a POP will reach a specific cache node...
+Subsequently I've purposely avoided the historical "shield" terminology because it overlaps with a more _recent_ fastly feature also called [Shielding](https://docs.fastly.com/guides/performance-tuning/shielding) (hence Fastly changed the historical process to "clustering", so as to now confuse the now two distinct concepts).
+
+The following diagram visualizes the approach for how a request inside of a POP will reach a specific cache node (i.e. "clustering", this doesn't cover how "[shielding](https://docs.fastly.com/guides/performance-tuning/)" works)...
 
 <a href="../../images/fastly-pop.png">
     <img src="../../images/fastly-pop.png">
