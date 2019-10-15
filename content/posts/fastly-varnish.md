@@ -36,7 +36,7 @@ Fastly utilizes free software and extends it to fit their purposes, but this ext
   - [Clustering](#clustering)
   - [Breadcrumb Trail](#breadcrumb-trail)
 - [Hit for Pass](#5)
-- [Serving Stale](#6) (inc. caveats of Fastly’s Shielding)
+- [Serving Stale](#6)
   - [Stale for Client Devices](#stale-for-client-devices)
   - [Caveats of Fastly’s Shielding](#caveats-of-fastly-s-shielding)
   - [Different actions for different states](#different-actions-for-different-states)
@@ -420,6 +420,8 @@ I've used the terminology "cluster node" to describe cache server nodes that han
 Subsequently I've purposely avoided the historical "shield" terminology because it overlaps with a more _recent_ fastly feature also called [Shielding](https://docs.fastly.com/guides/performance-tuning/shielding) (hence Fastly changed the historical process to "clustering", so as to not confuse the now two distinct concepts).
 
 The following diagram visualizes the approach for how a request inside of a POP will reach a specific cache node (i.e. "clustering", this doesn't cover how "[shielding](https://docs.fastly.com/guides/performance-tuning/)" works, which effectively is a _nested_ clustering process)...
+
+> Note: here is a great [Fastly Fiddle](https://fiddle.fastlydemo.net/fiddle/72e0d619) that demonstrates the clustering/shielding flow. If that fiddle no longer exists by the time you read this then I've made a copy of it in a [gist](https://gist.github.com/Integralist/c08b1ab3e9dd508b1ccc5fe768d1a9b0).
 
 <a href="../../images/fastly-pop.png">
     <img src="../../images/fastly-pop.png">
