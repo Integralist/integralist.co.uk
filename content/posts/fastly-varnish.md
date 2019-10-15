@@ -33,7 +33,9 @@ Fastly utilizes free software and extends it to fit their purposes, but this ext
 - [State Variables](#4.1)
   - [Anonymous Objects](#anonymous-objects)
 - [Persisting State](#4.2) (inc. clustering architecture)
+  - [Terminology](#terminology)
   - [Clustering](#clustering)
+  - [Shielding](#shielding)
   - [Breadcrumb Trail](#breadcrumb-trail)
 - [Hit for Pass](#5)
 - [Serving Stale](#6)
@@ -413,27 +415,47 @@ We can see in [Fastly's documentation](https://docs.fastly.com/guides/performanc
 
 > † not documented, but Fastly support suggested it would execute at the edge.
 
+### Terminology
+
+Fastly _internally_ uses a different naming for these 'caching nodes'. 
+
+What I call an 'edge node' is a 'cluster edge node', and what I call a 'cluster node' (what does the fetching of content) they call a 'cluster shield node'. 
+
+You can see how with the concepts of _clustering_ and _shielding_ there is an overlap in terminology that can cause great confusion!
+
 ### Clustering
 
-I've used the terminology "cluster node" to describe cache server nodes that handle the _alternative_ states (i.e. those nodes _NOT_ handling recv/hash/deliver). Fastly on the other hand has historically used the term "shield" node to describe that behaviour, and although their documentation still refers to the behaviour as "shielding", it infact has changed verbally to being described as "clustering". 
-
-Subsequently I've purposely avoided the historical "shield" terminology because it overlaps with a more _recent_ fastly feature also called [Shielding](https://docs.fastly.com/guides/performance-tuning/shielding) (hence Fastly changed the historical process to "clustering", so as to not confuse the now two distinct concepts).
-
-The following diagram visualizes the approach for how a request inside of a POP will reach a specific cache node (i.e. "clustering", this doesn't cover how "[shielding](https://docs.fastly.com/guides/performance-tuning/)" works, which effectively is a _nested_ clustering process)...
-
-> Note: here is a great [Fastly Fiddle](https://fiddle.fastlydemo.net/fiddle/72e0d619) that demonstrates the clustering/shielding flow. If that fiddle no longer exists by the time you read this then I've made a copy of it in a [gist](https://gist.github.com/Integralist/c08b1ab3e9dd508b1ccc5fe768d1a9b0).
+Clustering is the co-ordination of two nodes within a POP to fulfill a request. The following image (and explanation) should help clarify this.
 
 <a href="../../images/fastly-pop.png">
     <img src="../../images/fastly-pop.png">
 </a>
 
-The benefit of clustering (summarized in [this fastly community support post](https://support.fastly.com/hc/en-us/community/posts/360046680252-What-is-Clustering-)) is that your request only ever goes through (at _most_) two cache server nodes (the edge node and a cluster/shield node). If clustering was disabled, then an edge node would handle the complete request 'state' life cycle (e.g. recv/hash/fetch/deliver) and thus all the nodes within a POP (at the time of writing: 64 of them) would have to go through to origin in order to request your content.
+With clustering enabled, the resource cache key/hash is used to identify a specific node (this is referred to as the "primary" node, or _fetching_ node). 
 
-With clustering enabled, the resource cache key/hash is used to identify a specific cluster/shield node (this is referred to as the "primary" node, or _fetching_ node). This clustering approach means multiple requests to different edge nodes would all go to the same "primary" cache node to _fetch_ the content from the origin (and _request collapsing_ would help protect the origin from traffic overload).
+This clustering approach means multiple requests to different edge nodes would all go to the same "primary" cache node to _fetch_ the content from the origin (and _request collapsing_ would help protect the origin from traffic overload).
 
-The primary cache node will store the content on-disk, while the edge cache node will store the content in-memory. Finally, any node within the cluster can be selected as the 'edge' node for an incoming request (its selected at random), hence the in-memory copy of the cached content could exist there and you only hit one cache server before a response is served back to the user.
+> Note: for resiliency/redundancy Fastly also internally has a _secondary_ cache node that caches content in case of failures, but that's more an internal implementation detail.
+
+The primary cache node will store the content on-disk, while the edge cache node will store the content in-memory. 
+
+Finally, any node within the cluster can be selected as the 'edge' node for an incoming request (its selected at random), hence the in-memory copy of the cached content could exist there and you only hit one cache server before a response is served back to the user.
+
+The benefit of clustering (summarized in [this fastly community support post](https://support.fastly.com/hc/en-us/community/posts/360046680252-What-is-Clustering-)) is that your request only ever goes through (at _most_) two cache server nodes (the edge node and a cluster/shield node). 
+
+If clustering was disabled, then an edge node would handle the complete request 'state' life cycle (e.g. recv/hash/fetch/deliver) and thus all the nodes within a POP (at the time of writing: 64 of them) would have to go through to origin in order to request your content.
 
 When we `return(restart)` a request, we _break_ 'clustering' which means the request will go back to an edge server and that edge server will handle the full request cycle. This is where a request header such as `Fastly-Force-Shield: 1` will re-enable clustering.
+
+I use the terminology "cluster node" to describe cache server nodes that do the _fetching_ of content (i.e. with clustering the cluster node does _NOT_ handle recv/hash/deliver, as they are handled by the 'edge' node). 
+
+Fastly on the other hand has historically used the term "shield" node to describe that node, and although their documentation still refers to the behaviour as "shielding", it infact has changed verbally to being described as "clustering". 
+
+Subsequently I've purposely avoided the historical "shield" terminology because it overlaps with a more _recent_ fastly feature also called [Shielding](https://docs.fastly.com/guides/performance-tuning/shielding) (hence Fastly changed the historical process to "clustering", so as to not confuse the now two distinct concepts).
+
+The earlier diagram visualizes the approach for how a request inside of a POP will reach a specific cache node (i.e. "clustering", this doesn't cover how "[shielding](https://docs.fastly.com/guides/performance-tuning/)" works, which effectively is a _nested_ clustering process)...
+
+> Note: here is a great [Fastly Fiddle](https://fiddle.fastlydemo.net/fiddle/72e0d619) that demonstrates the clustering/shielding flow. If that fiddle no longer exists by the time you read this then I've made a copy of it in a [gist](https://gist.github.com/Integralist/c08b1ab3e9dd508b1ccc5fe768d1a9b0).
 
 OK, so two more _really_ important things to be aware of at this point:
 
@@ -447,6 +469,22 @@ For number 2. that means: if you were in `vcl_deliver` and you set a value on `r
 > SUMMARY: MODIFICATIONS ON THE 'CLUSTER' DON’T PERSIST TO 'EDGE'
 
 If you're starting to think: "this makes things tricky", you'd be right :-)
+
+### Shielding
+
+Shielding is a designated POP that a request will flow through _before_ reaching your origin.
+
+As mentioned above, clustering is the co-ordination of two nodes within a POP, and this 'clustering' happens within every POP (so the shield POP is no different from any other POP in its fundamental behaviour). 
+
+The purpose of shielding is to give extra protection to your origin, because multiple users will arrive at different POPs (due to their locality) and so a POP in the UK might not have a cached object, while a POP in the USA might have a cached version of the resource. To help prevent the UK user from making a request back to the origin, we can select a POP nearest the origin to act as a single point of access. 
+
+Now when the UK request comes through and there is no cached content within that POP, the request wont go to origin, it'll go to the shield POP which will hopefully have the content cached (if not then the shield POP sends the request onto the origin). 
+
+But ultimately the content either already cached at the shield (or is about to be cached at the shield if it had no cache) will be bubbled back to the UK POP where the content will be cached there as well.
+
+> Note: there isn't any real latency concern with using shielding because Fastly optimizes the network BGP routing between POPs. The only thing to ensure is that your shield POP is located next to your origin because Fastly can't optimize the connection from the shield POP to the origin (it can only optimize traffic within its own network).
+
+This also gives us extra nomenclature to distinguish POPs. Before we learnt about shielding, we just knew there were 'POPs' but now we know that with shielding enabled we have 'edge' POPs and a singular 'shield' POP for a particular Fastly service.
 
 ### Breadcrumb Trail
 
