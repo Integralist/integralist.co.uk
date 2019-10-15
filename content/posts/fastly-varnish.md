@@ -46,6 +46,7 @@ Fastly utilizes free software and extends it to fit their purposes, but this ext
   - [The unhappy path (stale not found anywhere)](#the-unhappy-path-stale-not-found-anywhere)
 - [Disable Caching](#7)
 - [Logging](#8)
+  - [Logging Memory Exhaustion](#logging-memory-exhaustion)
 - [Restricting requests to another Fastly service](#8.1)
 - [Conclusion](#9)
 
@@ -894,6 +895,82 @@ sub vcl_log {
 As you can probably tell, this recommended condition will never match and so the log call isn't executed.
 
 Mystery solved.
+
+### Logging Memory Exhaustion
+
+We discovered an issue with our logging code which meant we would see `(null)` log lines being generated. The cause of this turned out to be the Fastly 'workspace' (as they refer to it) would run out of memory while generating our log output that they would stream to either GCS or AWS S3.
+
+Why this happens is unclear because, as you'll see below, the log output we were generating isn't large although the _structure_ of it is more complex, in that we're generating JSON to log...
+
+> Note: we have two seperate services, one production and one staging and we run the same VCL code in both. This requires us to have logic that checks whether our code is running in the stage environment or not.
+
+```
+declare local var.stage_service_id STRING;
+declare local var.prod_service_id STRING;
+declare local var.running_service_id STRING;
+
+set var.stage_service_id = req.http.X-Fastly-ServiceID-Stage;
+set var.prod_service_id = req.http.X-Fastly-ServiceID-Prod;
+set var.running_service_id = var.stage_service_id;
+
+if (req.service_id == var.prod_service_id) {
+  set var.running_service_id = var.prod_service_id;
+}
+
+declare local var.json STRING;
+
+set var.json = "{" +
+  "%22http%22: {" +
+    "%22body_size%22: %22" + resp.body_bytes_written + "%22," +
+    "%22content_type%22: %22" + resp.http.Content-Type + "%22," +
+    "%22host%22: %22" + req.http.host + "%22," +
+    "%22method%22: %22" + req.method + "%22," +
+    "%22path%22: %22" + json.escape(req.url) + "%22," +
+    "%22protocol%22: %22" + req.proto + "%22," +
+    "%22request_time%22: " + time.to_first_byte + "," +
+    "%22served_stale%22: " + req.http.X-BF-Served-Stale + "," +
+    "%22status_code%22: " + resp.status + "," +
+    "%22tls_version%22: %22" + tls.client.protocol + "%22," +
+    "%22uri%22: %22" + json.escape(if(req.http.Fastly-SSL, "https", "http") + "://" + req.http.host + req.url) + "%22," +
+    "%22user_agent%22: %22" + json.escape(req.http.User-Agent) + "%22" +
+  "}," +
+  "%22network%22: {" +
+    "%22client%22: {" +
+      "%22ip%22: %22" + req.http.Fastly-Client-IP + "%22" +
+    "}," +
+    "%22server%22: {" +
+      "%22state%22: %22" + fastly_info.state + "%22" +
+    "}" +
+  "}," +
+  "%22timestamp%22: " + time.start.msec + "," +
+  "%22timestamp_sec%22: " + time.start.sec + "," + # exists to support BigQuery
+  "%22upstreams%22: {" +
+    "%22service%22: %22" + req.http.X-BF-Backend + "%22" +
+  "}"
+"}";
+```
+
+Generating JSON structured output is not easy in VCL. The above VCL snippet demonstrates the 'manual' approach (encoding `"` as `%22` and concatenating across multiple lines). This was the best solution for us as the alternatives were unsuitable:
+
+1. [github.com/fastly/vcl-json-generate](https://github.com/fastly/vcl-json-generate) is wildly verbose in comparison, although it's supposed to make things easier?
+2. using "long string" variation (everything must be all on _one_ line!?), e.g. `{"{  "foo":""} req.http.X-Foo {"",  "bar":"} req.http.X-Bar {" }"};`
+
+So manually constructing the JSON was what we opted for, and once you get used to the endless `%22` it's actually quite readable IMHO (when compared to the alternatives we just described).
+
+Now here's how we worked-around the memory issue: before we trigger our `log` call we first check that Fastly's workspace hasn't been exhausted by generating the `var.json` variable content. If we find an 'out of memory' error, then we won't attempt to call the `log` function (as that would result in the `(null)` for a log line).
+
+> Documentation: [docs.fastly.com/vcl/variables/fastly-error/](https://docs.fastly.com/vcl/variables/fastly-error/)
+
+It's important to reiterate that this isn't a _solution_, but a _work-around_. We don't know how many logs we're losing due to memory exhaustion (it could be lots!) so this is a problem we need to investigate further (as of October 2019 ...wow did I really start writing this post two years ago!!? time flies heh).
+
+```
+if (fastly.error != "ESESOOM") {
+  log "syslog " var.running_service_id " logs_to_s3 :: " var.json;
+  log "syslog " var.running_service_id " logs_to_gcs :: " var.json;
+}
+```
+
+> Note: `logs_to_s3` and `logs_to_gcs` are references to the two different log streams we setup within the Fastly UI.
 
 <div id="8.1"></div>
 ## Restricting requests to another Fastly service
