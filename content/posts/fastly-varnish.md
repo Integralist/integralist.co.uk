@@ -513,7 +513,7 @@ There are a few properties hanging off the `req.backend` object in VCL...
 
 - `is_cluster`: indicates when the request has come from a clustering node (e.g. 'cluster shield' node).
 - `is_origin`: indicates if the request will be proxied to an origin server (e.g. your own backend application).
-- `is_shield`: indicates if the rquest will be proxied to a shield POP (which happens when shielding is enabled).
+- `is_shield`: indicates if the request will be proxied to a shield POP (which happens when shielding is enabled).
 
 ### Undocumented APIs
 
