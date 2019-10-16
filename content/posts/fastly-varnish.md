@@ -515,6 +515,10 @@ There are a few properties hanging off the `req.backend` object in VCL...
 - `is_origin`: indicates if the request will be proxied to an origin server (e.g. your own backend application).
 - `is_shield`: indicates if the request will be proxied to a shield POP (which happens when shielding is enabled).
 
+If you try to access `is_origin` from within the `vcl_recv` state subroutine, for example, it will be cause a compiler error. This is because that API is only available to 'cluster shield' nodes (and specifically only states that would result in a request being proxied, meaning although `vcl_hit` runs on a 'cluster shield' node, that state would not have access to `is_origin`).
+
+So depending on what you're trying to verify, it might be preferable to use the negated `is_shield` approach for checking if the request is going to be proxied to origin or a shield pop node.
+
 ### Undocumented APIs
 
 - `req.http.Fastly-FF`
