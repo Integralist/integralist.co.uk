@@ -450,13 +450,17 @@ The primary cache node will store the content on-disk, while the edge cache node
 
 Finally, any node within the cluster can be selected as the 'edge' node for an incoming request (its selected at random), hence the in-memory copy of the cached content could exist there and you only hit one cache server before a response is served back to the user.
 
-The benefit of clustering (summarized in [this fastly community support post](https://support.fastly.com/hc/en-us/community/posts/360046680252-What-is-Clustering-)) is that your request only ever goes through (at _most_) two cache server nodes (the edge node and a cluster/shield node). 
+The benefit of clustering (summarized in [this fastly community support post](https://support.fastly.com/hc/en-us/community/posts/360046680252-What-is-Clustering-)) is that your request only ever goes through (at _most_) two cache server nodes (the 'cluster edge' node and a 'cluster shield' node). 
 
-If clustering was disabled, then an edge node would handle the complete request 'state' life cycle (e.g. recv/hash/fetch/deliver) and thus all the nodes within a POP (at the time of writing: 64 of them) would have to go through to origin in order to request your content.
+If clustering was disabled, then the server node the client request was sent to within the edge POP would have to handle the _complete_ state request life cycle (e.g. recv/hash/fetch/deliver).
 
-When we `return(restart)` a request, we _break_ 'clustering' which means the request will go back to an edge server and that edge server will handle the full request cycle. 
+This would mean that _every_ node within the edge POP (and at the time of writing there are 64 nodes within a POP) would have to go through to origin in order to request your content. 
 
-This is where a request header such as `Fastly-Force-Shield: 1` will re-enable clustering so that we again use multiple server nodes when executing the different VCL subroutine states.
+That is _much_ less efficient. Hence Fastly designed their 'clustering' solution to help improve the request/caching/origin performance.
+
+When we `return(restart)` a request, we _break_ 'clustering'. This means the request will go back to the 'cluster edge' node and that node will handle the full request cycle (this is done for reasons of performance, such as finding stale content in the `vcl_deliver` state on the 'cluster edge' node and wanting to serve that stale content). 
+
+But sometimes breaking clustering might be something you want to avoid (note: I've never found a reason for this!). In order to avoid breaking the clustering process you'll need to utilize the `Fastly-Force-Shield: 1` request header. This header will re-enable clustering so that we again use multiple server nodes within a POP when executing the different VCL subroutine states.
 
 > Notice the naming in `Fastly-Force-Shield` is still the legacy 'shield' terminology.
 
@@ -592,114 +596,350 @@ Let's see what this looks like in a clustering scenario like shown a moment ago.
 
 Let's now revisit our requirement, which was to create a breadcrumb trail using a HTTP header (this is where all this context becomes important).
 
-The first thing we have to do (in `vcl_recv`) is:
+First I'm going to show you the basic outline of the various vcl state subroutines and a set of function calls. Next I'll show you the code for those function calls and talk through what they're doing.
+
+> Note: the code examples will be simplified for sake of brevity and to highlight the calls related to the breadcrumb trail functionality.
+
+In essence though, we're using the understanding we have for the 'cluster edge' and 'cluster shield' _boundaries_ and ensuring that while on the 'cluster shield' we track information in Varnish objects (e.g. things like `req`, `obj`, `beresp` etc) that are able to persist crossing those boundaries.
+
+This means when going from `vcl_fetch` to `vcl_deliver` we can't track information on the `req` object because it'll be lost when we move over to `vcl_deliver` and so we track it in the `beresp` object that `vcl_fetch` has access to. We do this because we know that `beresp` is _copied_ over to `vcl_deliver` and exposed inside of `vcl_deliver` as the `resp` object. 
+
+Similarly for `vcl_error`, we track information in its `obj` reference because when we move over to `vcl_deliver` the `obj` reference will be copied over as the `resp` object. 
+
+From `vcl_deliver` we're then free to copy the tracked information from the `X-VCL-Route` header (stored in the `resp` object) into the `req` object (in case we need to restart the request and keep tracking information after a restart).
+
+Remember that `vcl_pass` and `vcl_miss` both run on the 'cluster shield' and so again tracking information on the `req` object won't persist when moving over to `vcl_deliver`. That's why although we track information on the `req` object within those state subroutines, we in fact (once we've reached `vcl_fetch`) copy those tracked values into the `beresp` object available to `vcl_fetch` for the reasons we described earlier.
+
+OK, enough talking, let's see the code...
 
 ```
-if (req.restarts == 0) {
-  set req.http.X-VCL-Route = "VCL_RECV";
-} else {
-  set req.http.X-VCL-Route = req.http.X-VCL-Route ",VCL_RECV";
+include "debug_info"
+
+sub vcl_recv {
+  call debug_info_recv;
+
+  #FASTLY recv
+
+  return(lookup);
+}
+
+sub vcl_hash {
+  #FASTLY hash
+
+  set req.hash += req.url;
+  set req.hash += req.http.host;
+
+  call debug_info_hash;
+
+  return(hash);
+}
+
+
+sub vcl_miss {
+  #FASTLY miss
+
+  call debug_info_miss;
+
+  return(fetch);
+}
+
+sub vcl_pass {
+  #FASTLY pass
+
+  call debug_info_pass;
+}
+
+sub vcl_fetch {
+  #FASTLY fetch
+
+  call debug_info_fetch;
+
+  return(deliver);
+}
+
+sub vcl_error {
+  #FASTLY error
+
+  call debug_info_error;
+
+  return(deliver);
+}
+
+sub vcl_deliver {
+  call debug_info_deliver;
+
+  ...other code...
+
+  call debug_info_send;
+
+  #FASTLY deliver
+
+  return(deliver);
 }
 ```
 
-> Note: we check `req.restarts` to make sure we don't include a leading `,` unnecessarily.
+The thing to look out for (in the above code) are the function calls that start with `debug_info_` (e.g. `debug_info_recv`, `debug_info_hash` ...etc).
 
-So we know from the "[State Variables](#4.1)" section earlier, that the `req` object is available for reading and writing.
+These functions are all defined within a VCL file called `debug_info.vcl`, which we import at the top of the example code (i.e. `include "debug_info"`). 
 
-Varnish pretty much always calls `vcl_hash` at the end of `vcl_recv` so we add the following into `vcl_hash`:
+Once that file is imported we will have access to the various `debug_info_` functions that the VCL state subroutines are calling.
 
-```
-set req.http.X-VCL-Route = req.http.X-VCL-Route ",VCL_HASH(host: " req.http.host ", url: " req.url ")";
-```
+The other thing you'll notice is that we have _two_ separate function calls within `vcl_deliver`. We have the standard `debug_info_deliver` (as described a moment ago), but we also have `debug_info_send`.
 
-You can see we're not setting the value anew on the header, but am _appending_ to the header.
+The `debug_info_send` isn't strictly necessary (e.g. the code within it could be moved inside of `debug_info_deliver`) but I wanted to distinguish between functions that _collected_ data and this function that was responsible for _sending_ the collected data back within the response.
 
-> The idea of appending to the header, again makes things tricky (as we'll see) when we come to trying to persist data across not only the cluster but the caching of an object as well.
-
-With the above 'note' fresh in your mind, let's look at `vcl_miss` and what we do there (remember `vcl_miss` is executing on a 'cluster shield' node so anything we set on `req` won't persist a restart):
+Let's now take a look at that `debug_info` VCL and then we'll explain what the code is doing...
 
 ```
-set req.http.X-PreFetch-Miss = ",VCL_MISS(" bereq.http.host bereq.url ")";
-```
+# This file sets a X-VCL-Route response header.
+#
+# X-VCL-Route has a baseline format of:
+#
+# pop: <value>, node: <value>, state: <value>, host: <value>, path: <value>
+#
+# pop  = the POP where the request is currently passing through.
+# node  = whether the cache node is a 'cluster edge' or 'cluster shield' node (see: https://www.integralist.co.uk/posts/fastly-varnish/#4.2).
+# state = internal fastly variable that reports state flow as well as whether a request waited for request collapsing or whether it was clustered.
+# host  = the full host name, without the path or query parameters.
+# path   = the full path, including query parameters.
+#
+# Additional to this baseline we include information relevant to the subroutine state.
 
-So we still set a value on the `req` object, but we don't append to `X-VCL-Route`, we instead create a new header `X-PreFetch-Miss`.
+sub debug_info_recv {
+  declare local var.context STRING;
+  set var.context = "";
 
-> The eagle eyed amongst you may notice we took the value we assigned to the new header from `bereq`. I do this for semantic reasons rather than any real _need_. When we move to `vcl_miss` the `req` object is copied to `bereq`. So to make the distinction that `req` (once outside of `vcl_recv`) is only useful for tracking information, I use `bereq` as the value source. But I could have just used `req.http.host` and `req.url` as the value assigned to the header.
-
-Similarly in `vcl_pass` (that also executes on a 'cluster shield' node), we create a new header again and don't append to `X-VCL-Route`:
-
-```
-set req.http.X-PreFetch-Pass = ",VCL_PASS";
-```
-
-Now at this point in the request cycle we know that `vcl_pass` and `vcl_miss` are both going to make a request to origin for content and subsequently end up in `vcl_fetch`. But as we'll see in a moment, in `vcl_fetch` we don't assign data to the `req` object this time, instead we assign to `beresp`:
-
-```
-set beresp.http.X-VCL-Route = req.http.X-VCL-Route;
-set beresp.http.X-PreFetch-Pass = req.http.X-PreFetch-Pass;
-set beresp.http.X-PreFetch-Miss = req.http.X-PreFetch-Miss;
-set beresp.http.X-PostFetch = ",VCL_FETCH(status: " beresp.status ", url: " req.url ")";
-```
-
-So there are a few things happening here:
-
-- We take the `X-VCL-Route` and we assign it to a header of the same name, but on the `beresp` object.
-- We take the `X-PreFetch-Pass` and `X-PreFetch-Miss` headers and also assign those to the `beresp` object.
-- Finally we create a new header `X-PostFetch` and give it a fresh value that indicates we're in the fetch state.
-
-Why do we do this?
-
-Firstly, when we move from `vcl_pass` or `vcl_miss` to `vcl_fetch` the content we fetched from origin is assigned to the object `beresp`. When we leave `vcl_fetch` the object `beresp` will be stored in the cache. So any header we set on that object will exist when we pull the object from the cache at a later time (e.g. when we lookup content in the cache and we move to `vcl_hit` that subroutine will have access to an `obj` object, which is the `beresp` object pulled from the cache).
-
-Also when we leave `vcl_fetch` and move to `vcl_deliver`, the `beresp` object is copied into a new object (available in `vcl_deliver`) called `resp`. You'll find when `vcl_hit` moves to `vcl_deliver` the `obj` object which was pulled from the cache is also copied over to `resp` in `vcl_deliver`.
-
-Now the reason why we set data onto `beresp` in `vcl_fetch` is because we're ultimately about to cross the boundary of a 'cluster shield' node (`vcl_fetch`) to a 'cluster edge' node (`vcl_deliver`) and so if we were to continue setting data onto `req` (like we did in `vcl_pass` and `vcl_miss`), then that data would be lost by the time we changed state from `vcl_fetch` to `vcl_deliver`.
-
-The reason we set separate headers for the `vcl_pass`, `vcl_miss` and `vcl_fetch` states is because we wanted to ensure the `beresp` object stored in the cache had a clean request history at the point in time when it was cached. Otherwise we would have issues later on when pulling the object from the cache and trying to append values in `vcl_deliver` (we could end up with large chunks of the breadcrumb trail duplicated).
-
-So for this reason, we separate the baseline routing (i.e. `vcl_recv` and `vcl_hash`) from all the other states (e.g. `vcl_pass`, `vcl_miss`, `vcl_fetch`) and then when we arrive at `vcl_deliver` we grab the baseline `X-VCL-Route` header and append to it the values from `X-PreFetch-Pass`, `X-PreFetch-Miss` and `X-PostFetch` only once we identify (via other inputs - which we'll see shortly) the actual route taken.
-
-Let's look at `vcl_deliver` and see what it is we do there to collate everything together:
-
-```
-if (resp.http.X-VCL-Route) {
-  set req.http.X-VCL-Route = resp.http.X-VCL-Route;
-}
-
-if (fastly_info.state ~ "^HITPASS") {
-  set req.http.X-VCL-Route = req.http.X-VCL-Route ",VCL_HIT(object: uncacheable, return: pass)";
-}
-elseif (fastly_info.state ~ "^HIT") {
-  set req.http.X-VCL-Route = req.http.X-VCL-Route ",VCL_HIT(" req.http.host req.url ")";
-}
-else {
-  if (resp.http.X-PreFetch-Pass) {
-    set req.http.X-VCL-Route = req.http.X-VCL-Route resp.http.X-PreFetch-Pass;
+  if (req.restarts > 0) {
+    set var.context = req.http.X-VCL-Route + ", ";
   }
 
-  if (resp.http.X-PreFetch-Miss) {
-    set req.http.X-VCL-Route = req.http.X-VCL-Route resp.http.X-PreFetch-Miss;
-  }
-
-  if (resp.http.X-PostFetch) {
-    set req.http.X-VCL-Route = req.http.X-VCL-Route resp.http.X-PostFetch;
-  }
+  set req.http.X-VCL-Route = var.context + "VCL_RECV(" +
+    "pop: " + if(req.backend.is_shield, "edge", if(fastly.ff.visits_this_service < 2, "edge", "shield")) + " [" + server.datacenter + ", " + server.hostname + "], " +
+    "node: cluster_edge, " +
+    "state: " + fastly_info.state + ", " +
+    "host: " + req.http.host + ", " +
+    "path: " + req.url +
+    ")";
 }
 
-set req.http.X-VCL-Route = req.http.X-VCL-Route ",VCL_DELIVER";
+sub debug_info_hash {
+  set req.http.X-VCL-Route = req.http.X-VCL-Route + ", VCL_HASH(" +
+    "pop: " + if(req.backend.is_shield, "edge", if(fastly.ff.visits_this_service < 2, "edge", "shield")) + " [" + server.datacenter + ", " + server.hostname + "], " +
+    "node: cluster_edge, " +
+    "state: " + fastly_info.state + ", " +
+    "host: " + req.http.host + ", " +
+    "path: " + req.url +
+    ")";
+}
+
+sub debug_info_miss {
+  set req.http.X-PreFetch-Miss = ", VCL_MISS(" +
+    "pop: " + if(req.backend.is_shield, "edge", if(fastly.ff.visits_this_service < 2, "edge", "shield")) " [" server.datacenter ", " server.hostname "], " +
+    "node: cluster_shield, " +
+    "state: " + fastly_info.state + ", " +
+    "host: " + bereq.http.host + ", " +
+    "path: " + bereq.url +
+    ")";
+}
+
+sub debug_info_pass {
+  set req.http.X-PreFetch-Pass = ", VCL_PASS(" +
+    "pop: " + if(req.backend.is_shield, "edge", if(fastly.ff.visits_this_service < 2, "edge", "shield")) + " [" + server.datacenter + ", " + server.hostname + "], " +
+    "node: cluster_shield, " +
+    "state: " + fastly_info.state + ", " +
+    "host: " + req.http.host + ", " +
+    "path: " + req.url + ", " +
+    ")";
+}
+
+sub debug_info_fetch {
+  set beresp.http.X-Track-VCL-Route = req.http.X-VCL-Route;
+  set beresp.http.X-PreFetch-Pass = req.http.X-PreFetch-Pass;
+  set beresp.http.X-PreFetch-Miss = req.http.X-PreFetch-Miss;
+  set beresp.http.X-PostFetch = ", VCL_FETCH(" +
+    "pop: " + if(req.backend.is_shield, "edge", if(fastly.ff.visits_this_service < 2, "edge", "shield")) + " [" + server.datacenter + ", " + server.hostname + "], " +
+    "node: cluster_shield, " +
+    "state: " + fastly_info.state + ", " +
+    "host: " + req.http.host + ", " +
+    "path: " + req.url + ", " +
+    "status: " + beresp.status + ", " +
+    "stale: " + if(stale.exists, "exists", "none") + ", " +
+    if(beresp.http.Cache-Control ~ "private", "cache_control: private, return: pass", "return: deliver") +
+    ")";
+}
+
+sub debug_info_error {
+  declare local var.error_page BOOL;
+  set var.error_page = false;
+
+  set obj.http.X-VCL-Route = req.http.X-VCL-Route + ", VCL_ERROR(" +
+    "pop: " + if(req.backend.is_shield, "edge", if(fastly.ff.visits_this_service < 2, "edge", "shield")) + " [" + server.datacenter + ", " + server.hostname + "], " +
+    "node: cluster_" + if(fastly_info.is_cluster_shield, "shield", "edge") + ", " +
+    "state: " + fastly_info.state + ", " +
+    "host: " + req.http.host + ", " +
+    "path: " + req.url + ", " +
+    "status: " + obj.status + ", " +
+    "stale: " + if(stale.exists, "exists", "none") + ", " +
+    ")";
+}
+
+sub debug_info_deliver {
+  # only track the previous route flow if we've come from vcl_fetch
+  # otherwise we'll end up displaying the uncached request flow as
+  # part of this cache hit request flow (which would be confusing).
+  if (resp.http.X-Track-VCL-Route && fastly_info.state ~ "^MISS") {
+    set req.http.X-VCL-Route = resp.http.X-Track-VCL-Route;
+
+    if (resp.http.X-PreFetch-Pass) {
+      set req.http.X-VCL-Route = req.http.X-VCL-Route + resp.http.X-PreFetch-Pass;
+    }
+
+    if (resp.http.X-PreFetch-Miss) {
+      set req.http.X-VCL-Route = req.http.X-VCL-Route + resp.http.X-PreFetch-Miss;
+    }
+
+    if (resp.http.X-PostFetch) {
+      set req.http.X-VCL-Route = req.http.X-VCL-Route + resp.http.X-PostFetch;
+    }
+  } elseif (fastly_info.state ~ "^ERROR") {
+    # otherwise track in the request object any request flow information that has occurred from an error request flow 
+    # which should include either the original vcl_fetch flow or the vcl_hit flow.
+    set req.http.X-VCL-Route = resp.http.X-VCL-Route;
+  } elseif (fastly_info.state ~ "^HIT($|-)") {
+    # otherwise track the initial vcl_hit request flow.
+    set req.http.X-VCL-Route = req.http.X-VCL-Route + ", VCL_HIT(" +
+      "pop: " + if(req.backend.is_shield, "edge", if(fastly.ff.visits_this_service < 2, "edge", "shield")) + " [" + server.datacenter + ", " + server.hostname + "], " +
+      "node: cluster_shield, " +
+      "state: " + fastly_info.state + ", " +
+      "host: " + req.http.host + ", " +
+      "path: " + req.url + ", " +
+      "status: " + resp.status + ", " +
+      "cacheable: true, " +
+      "return: deliver" +
+      ")";
+  }
+
+  # used to extend the baseline X-VCL-Route (set below)
+  declare local var.context STRING;
+  set var.context = "";
+
+  # there is one state subroutine that we have no way of tracking information for: vcl_hit
+  # this is because the only object we have available with R/W access is the req object
+  # and modifications to the req object don't persiste from cluster node to edge node (e.g. vcl_deliver)
+  # this means we need to utilise fastly's internal state to see if we came from vcl_hit.
+  #
+  # we also use this internal state variable to help identify other states progressions such as
+  # STALE (stale content found in case of an error) and ERROR (we've arrived to vcl_deliver from vcl_error).
+  #
+  # Documentation (fastly_info.state):
+  # https://support.fastly.com/hc/en-us/community/posts/360040168391/comments/360004718351
+  if (fastly_info.state ~ "^HITPASS") {
+    set var.context = ", cacheable: uncacheable, return: pass";
+  } elseif (fastly_info.state ~ "^ERROR") {
+    set var.context = ", custom_error_page: " + resp.http.CustomErrorPage;
+  }
+
+  set req.http.X-VCL-Route = req.http.X-VCL-Route + ", VCL_DELIVER(" +
+    "pop: " + if(req.backend.is_shield, "edge", if(fastly.ff.visits_this_service < 2, "edge", "shield")) + " [" + server.datacenter + ", " + server.hostname + "], " +
+    "node: cluster_edge, " +
+    "state: " + fastly_info.state + ", " +
+    "host: " + req.http.host + ", " +
+    "path: " + req.url + ", " +
+    "status: " + resp.status + ", " +
+    "stale: " + if(stale.exists, "exists", "none") +
+    var.context +
+    ")";
+}
+
+# this subroutine must be placed BEFORE the vcl_deliver macro `#FASTLY deliver`
+# otherwise the setting of Fastly-Debug within this subroutine will have no effect.
+sub debug_info_send {
+  unset resp.http.X-Track-VCL-Route;
+  unset resp.http.X-VCL-Route;
+  unset resp.http.X-PreFetch-Miss;
+  unset resp.http.X-PreFetch-Pass;
+  unset resp.http.X-PostFetch;
+
+  if (req.http.X-Debug) {
+    # ensure that when Fastly's own VCL executes it will be able to identify
+    # the Fastly-Debug request header as enabled.
+    set req.http.Fastly-Debug = "true";
+
+    # other useful debug information
+    set resp.http.Fastly-State = fastly_info.state;
+    set resp.http.X-VCL-Route = req.http.X-VCL-Route;
+  }
+}
 ```
 
-So we start by checking if there is a `X-VCL-Route` header available on the incoming object, and if so we overwrite the existing `req.http.X-VCL-Route` header with that `resp` object's value. This is important because we could have arrived at `vcl_deliver` from the edge node (or never even left the edge node) depending on specific scenarios such as going from `vcl_recv` straight to `vcl_error`.
+So I've already summarized the basic approach (i.e. ensure we set tracking information in Varnish objects that we know persist the boundary changes), but there are some interesting bits to take away from this code still...
 
-This point about `vcl_error` is _very_ important, we'll skip that discussion for moment and come back to it.
+Within `debug_info_recv`, because a request can be restarted, the breadcrumb trail may need to repeat the VCL states. So for example if a request was restarted we would want to see `VCL_RECV(...)` twice in the output to indicate that this was the flow of the request. To account for that I use a `var.context` variable to prepend the information from _before_ the request to the new `X-VCL-Route` header being created now the request has restarted.
 
-Next in `vcl_deliver`, once we have reset the `X-VCL-Route` header on the `req` object, we look at `fastly_info.state` which is Fastly's own internal system for tracking the current state of Varnish. We first look to see if we've had a 'hit-for-pass' (see the [next section](#5) for details on that), and if so we append the relevant information to the header. Next we check we had a hit from an earlier cache lookup, again, if we have then we append the relevant information.
+Next you'll notice that we have a strange expression which we're assigning to a `pop` field. This field represents whether the request is being executed at an 'edge' POP or a 'shield' POP (in the case that the Fastly service has shielding enabled)...
+
+```
+if(req.backend.is_shield, "edge", if(fastly.ff.visits_this_service < 2, "edge", "shield"))
+```
+
+We use the `req.backend.is_shield` API to tell us if the server is going to send the request to a shield POP or not, but unfortunately it's not as straight forward as just saying "ok `is_shield` is false so we must be on a node within the shield POP already".
+
+The reason being, if the Fastly service _doesn't_ have shielding enabled then `req.backend.is_shield` will _always_ return false! So that's why we have that nested conditional check...
+
+```
+if(fastly.ff.visits_this_service < 2, "edge", "shield")
+```
+
+Instead of just printing `shield` when `req.backend.is_shield` is false we will now first check `fastly.ff.visits_this_service` (which we [discussed earlier](#fastly-ff-visits-this-service)). This says "ok, if the returned value is less than two we know that we must be running within an edge POP, because if shielding was enabled and we were on a shield POP currently then the number of 'views' would be three or more at this point".
+
+Although I don't demonstrate it here in this example code, `debug_info_hash` might need an extra conditional header check added to it to prevent tracking the `vcl_hash` execution. The reason you might want to do that is because `vcl_hash` is _always_ executed (even though it can in some scenarios be a no-op!).
+
+For example, in my own VCL code at work we have a process whereby we'll restart a request if we have an error come back from the origin. The reason we restart the request is so we can serve a custom error page synthetically from the edge server. In order to do that we set a header in `vcl_deliver` before we restart (e.g. `X-Error`) and then we check it from within `vcl_recv` only if the `req.restarts == 1`. From that point in `vcl_recv` if `X-Error` is set we'll trigger `vcl_error` by calling the `error` directive, and within `vcl_error` we'll construct our synthetic custom error page.
+
+Now the problem we have is that in the final `X-VCL-Route` sent back in the response we'll see `vcl_hash` in the flow just after the second `vcl_recv` (which happens because of the restart in order to handle the custom error page logic), and that just ...looks weird because it suggests to a viewer that `vcl_hash` had some sort of _purpose_ for running, but it doesn't!
+
+So to avoid recording the `vcl_hash` execution I wrap the tracking code in a check for the `X-Error` header (e.g. `if (!req.http.X-BF-Error) { track the execution }`).
+
+In `debug_info_fetch` you'll see that I don't assign to a `X-VCL-Route` header on the `beresp` object but a new `X-Track-VCL-Route` header. The reason for this is because the `beresp` object is going to be placed into the Varnish cache system once `vcl_fetch` has finished executing and we need to be careful about setting `X-VCL-Route` there. 
+
+The reason for the concern is due to _new_ client requests. Imagine we set the tracking information onto the actual `X-VCL-Route` header on the `beresp` (which will be cached). 
+
+When a new request is received for that same resource we'll go to `vcl_hit` because the resource is found in the cache and from there we'll end up at `vcl_deliver` which would normally just check for a `X-VCL-Route` on the `resp` object it has been passed. 
+
+But in this scenario the `resp` object is the object pulled from the Varnish cache and so we might end up including the _uncached_ request flow in the final `X-VCL-Route` header sent back for this secondary request! 
+
+That would be wrong because the secondary request should only report a `recv > hash > hit > deliver` and not `recv > hash > miss > fetch > recv > hash > hit > deliver` (which is what would happen otherwise!). See how easy it is for things to get dangerous and confusing!
+
+With that in mind if we look at `debug_info_deliver` we'll see that we only track the 'uncached' request flow _if_ we can tell that we actually came from a cache MISS state...
+
+```
+if (resp.http.X-Track-VCL-Route && fastly_info.state ~ "^MISS") { track the data that was stored in X-Track VCL-Route }
+```
 
 > If you want more information on `fastly_info.state` see [this community comment](https://community.fastly.com/t/useful-variables-to-log/303/3).
 
-After that we check if the `X-PreFetch-Pass`, `X-PreFetch-Miss` or `X-PostFetch` headers exist, and if so we append the relevant details to the `X-VCL-Route` header. Finally leaving us with appending the _current_ state (i.e. we're in `vcl_deliver`) to the header.
+You'll also see in that same conditional block we then reconstruct a `X-VCL-Route` from the various temporary headers, such as `X-PreFetch-Pass`, `X-PreFetch-Miss` and `X-PostFetch`.
 
-Right, OK so now let's go back and revisit `vcl_error`...
+Remember that in `vcl_hit` we have no object that we can track information on that will be persisted to the 'cluster edge' node where `vcl_deliver` is executed. This is because `vcl_hit` can go straight to `vcl_deliver` and there's no inbetween state like `vcl_fetch` where we can borrow a Varnish object for tracking purposes like we do with `vcl_miss` and `vcl_pass`.
+
+So to solve that problem you'll see that we check to see if we came from a cache HIT state...
+
+```
+fastly_info.state ~ "^HIT($|-)"
+```
+
+> Note: this will catch multiple types of hit flows, such as `HIT` or `HIT-CLUSTER` or `HIT-STALE-CLUSTER`.
+
+Finally, in `debug_info_send` you'll see that we make sure to `unset` any temporary response headers (e.g. `X-Track-VCL-Route`) so it doesn't confuse people scanning the response headers we send back. We also don't send this debug information back to the client unless they ask for it, which they can do by providing a `req.http.X-Debug` request header.
+
+One interesting thing to note there is that in order to get Fastly to send back its own debug information the user needs to provide a `Fastly-Debug` request header, but to avoid having to rely on that knowledge we provide our own `X-Debug` (which we tell our engineers about) so they only have to remember one simpler request header to enable not only our own debugging information but Fastly's as well.
+
+In order then for the Fastly debug information to be included we have to do two things:
+
+1. manually `set req.http.Fastly-Debug = "true";` in our VCL code.
+2. ensure our `debug_info_send` is executed _before_ the `#FASTLY deliver` macro (which is where they execute their `Fastly-Debug` logic).
+
+OK, let's go back and revisit `vcl_error`...
 
 The `vcl_error` subroutine is a tricky one because it exists on _both_ the 'cluster edge' and the 'cluster shield' nodes. 
 
@@ -711,7 +951,7 @@ To help explain this I'm going to give another _real_ example, where I wanted to
 
 To do this I expected the route to go from `vcl_recv`, to `vcl_hash` and the lookup to fail so we would end up in `vcl_miss`. Now from `vcl_miss` I could have triggered a restart, but anything I set on the `req` object at that point (such as any breadcrumb data appended to `X-VCL-Route`) would have been lost as we transitioned from the 'cluster shield' node back to the 'cluster edge' node (where `vcl_recv` is).
 
-I needed a way to persist the "miss" breadcrumb, so instead of returning a restart from `vcl_miss` I would trigger a custom error such as `error 901` and inside of `vcl_error` I have the following logic:
+I needed a way to persist the "miss" breadcrumb, so instead of returning a restart from `vcl_miss` I would trigger a custom error such as `error 901` and inside of `vcl_error` I would have the following logic:
 
 ```
 set obj.http.X-VCL-Route = req.http.X-VCL-Route;
@@ -735,7 +975,7 @@ When we trigger an error an object is created for us. On that object I set our `
 
 Now we could have arrived at `vcl_error` from `vcl_recv` (e.g. if in our `vcl_recv` we had logic for checking Basic Authentication and none was found on the incoming request we could decide from `vcl_recv` to execute `error 401`) or we could have arrived at `vcl_error` from `vcl_miss` (as per our earlier example). So we need to check the internal Fastly state to identify this, hence checking `fastly_info.state ~ "^MISS"`.
 
-After that we append to the `obj` object's `X-VCL-Route` header our current state (i.e. so we know we came into `vcl_error`). Finally we look at the status on the `obj` object and see it's a 901 custom status code and so so we append that information so we know what happened.
+After that we append to the `obj` object's `X-VCL-Route` header our current state (i.e. so we know we came into `vcl_error`). Finally we look at the status on the `obj` object and see it's a 901 custom status code and so we append that information in order to know what happened.
 
 But you'll notice we don't restart the request from `vcl_error`, because if we did come from `vcl_miss` the data in `obj` would be lost because ultimately it was set on a 'cluster shield' node (as `vcl_error` would be running on the 'cluster shield' node when coming from `vcl_miss`).
 
@@ -743,7 +983,9 @@ Instead we `return(deliver)`, because all that data assigned to `obj` is guarant
 
 Once we're at `vcl_deliver` we continue to set breadcrumb tracking onto `req.http.X-VCL-Route` as we know that will persist a restart (as we're still going to be executing code on the 'cluster edge' node).
 
-Phew! Well that was easy wasn't it.
+Phew! Well, that was NOT an easy task, and if you struggled to follow along. That's OK because it's hard to learn about all this stuff at once. Just keep coming back to this post as a reference point if you need to. 
+
+Thankfully by going through this process there will be very little about Varnish's request flow that you won't now understand or have the ability to work around in future if the right problem scenario presents itself.
 
 <div id="5"></div>
 ## Hit for Pass
