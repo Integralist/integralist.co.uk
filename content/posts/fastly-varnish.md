@@ -55,6 +55,7 @@ Fastly utilizes free software and extends it to fit their purposes, but this ext
 - [Logging](#8)
   - [Logging Memory Exhaustion](#logging-memory-exhaustion)
 - [Restricting requests to another Fastly service](#8.1)
+- [Custom Error Pages](#custom-error-pages)
 - [Conclusion](#9)
 
 <div id="1"></div>
@@ -1382,6 +1383,146 @@ if (req.http.fastly-ff && !req.http.myservice) {
   error 808;
 }
 ```
+
+## Custom Error Pages
+
+Near the beginning of this post we looked at [error handling](#4.0) in VCL. I want to now revisit this topic with regards to serving your own custom error pages from the edge synthetically, so as to give you a real example of how this might be put together.
+
+Below is example code that you can also run via [Fastly's Fiddle tool](https://fiddle.fastlydemo.net/fiddle/cfd09f79):
+
+```
+sub vcl_recv {
+  if (req.restarts == 1) {
+    if (req.http.X-Error) {
+      error std.strtol(req.http.X-Error, 10);
+    }
+  }
+}
+
+sub vcl_deliver {
+  if (req.restarts == 0 && resp.status >= 400) {
+    if(fastly_info.state ~ "HIT($|-)") {
+      set req.http.X-FastlyInfoStatus = fastly_info.state;
+      set req.http.X-CachedObjectHitCounter = obj.hits;
+    }
+    set req.http.X-Error = resp.status;
+    return(restart);
+  }
+
+  if (req.restarts == 1) {
+    if (req.http.X-FastlyInfoStatus) {
+      set resp.http.X-Cache = req.http.X-FastlyInfoStatus;
+    }
+    
+    if (req.http.X-CachedObjectHitCounter) {
+      set resp.http.X-Cache-Hits = std.strtol(req.http.X-CachedObjectHitCounter, 10);
+    }
+  }
+}
+
+vcl_error {
+  synthetic {"
+    <!doctype html>
+    <html>
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <title>Page Not Found</title>
+      <meta name="generator" content="fastly">
+    </head>
+      <body>
+        error happened
+      </body>
+    </html>
+  "};
+
+  return(deliver);
+}
+```
+
+The flow is actually quite simple once you have these pieces put together. The principle of what we're trying to achieve is that we want to serve a custom error page from the edge server (rather than using the error page that may have be sent by an origin).
+
+The way we'll do this is that when we get the error response from the origin we'll restart the request and upon restarting the request we'll trigger `vcl_error` (via the `error` directive) and construct a synthetic response.
+
+Once we have that synthetic response we'll also need to make some modifications so that Fastly's default VCL doesn't make it look like we don't get cache HITs from future requests for this same resource. 
+
+This otherwise happens because Fastly's default VCL has a basic check in `vcl_deliver` for an internal 'hit' state which does occur, but then because we restart the request and trigger `vcl_error`, that internal hit state is replaced by an 'error' state and so it ends up confusing Fastly's VCL logic.
+
+Let's dig into the code a bit...
+
+So first of all we need to check in `vcl_deliver` for an error status (and because we plan on restarting the request, we don't want to have an endless loop so we'll check the restart count as well):
+
+```
+if (req.restarts == 0 && resp.status >= 400) {
+```
+
+If we find we have indeed come from `vcl_hit`, then we store off contextual information about that cached object into the `req` so it will persist the restart and thus be usable later on when required:
+
+```
+set req.http.X-FastlyInfoStatus = fastly_info.state;
+set req.http.X-CachedObjectHitCounter = obj.hits;
+```
+
+Regardless of whether we came from `vcl_hit` or if we came from `vcl_fetch`, we store off the error response status code into the `req` object so again we may access it after the request is restarted:
+
+```
+set req.http.X-Error = resp.status;
+```
+
+Finally, we'll restart the request. At this point let's now look at `vcl_recv` where we first check if we are dealing with a restart, and if so we extract the response error status code and pass it over to `vcl_error` by way of the `error` directive (notice we have to use a Fastly function to convert it from a STRING to a INTEGER):
+
+```
+if (req.restarts == 1) {
+  if (req.http.X-Error) {
+    error std.strtol(req.http.X-Error, 10);
+  }
+}
+```
+
+Once we reach `vcl_error` we can now construct our custom error page. In the example code I give I just use a single synthetic object to represent the error but in real-life you'd check the status code provided to `vcl_error` and then construct a _specific_ error page. Once we create the object we jump back over to `vcl_deliver`.
+
+Now we're back at `vcl_deliver` for the second time you'll find the first check we had will no longer pass (avoiding an endless loop) but the second check _will_ pass:
+
+```
+if (req.restarts == 1) {
+```
+
+Once we know we're into the restarted request we can check the `req` object for the headers/information we were tracking earlier and use that information to update two response headers that otherwise are set by Fastly: `X-Cache` and `X-Cache-Hits`.
+
+The reason we need to override these two headers is because otherwise Fastly records them as `X-Cache: MISS` and `X-Cache-Hits: 0` even after a secondary request for the same resource. This would be concerning to people, because it seems to suggest we went back to the origin again when we should have gotten a cache HIT (we in fact _do_ get a cache HIT but Fastly is incorrectly reporting that fact).
+
+To understand what's going on with Fastly incorrectly reporting the state of the request, let's look at the request flow...
+
+```
+# Request 1
+
+vcl_recv > vcl_hash > vcl_miss > vcl_fetch > vcl_deliver (restart) > vcl_recv > vcl_error > vcl_deliver.
+
+# Request 2
+
+vcl_recv > vcl_hash > vcl_hit > vcl_deliver (restart) > vcl_recv > vcl_error > vcl_deliver.
+```
+
+For request 1 we have a cold cache scenario whereby the requested resource (e.g. `/i-dont-exist`) isn't cached. So we go to the origin and the origin returns a `404 Not Found`. At that point `vcl_deliver` identifies the error and restarts the request. We construct a custom error page within `vcl_error` and finally serve the custom error page via `vcl_deliver`.
+
+After request 1 the response headers would suggest (correctly) that we got a `X-Cache: MISS` and `X-Cache-Hits: 0`.
+
+So what happens if we request `/i-dont-exist` again? Well, unless we fixed those headers, the cache miss and zero hits would be reported again even though we know that the second request got a cache HIT.
+
+This happens because Fastly's internal logic for setting `X-Cache: MISS` and `X-Cache-Hits` looks a bit like this:
+
+```
+set resp.http.X-Cache = if(resp.http.X-Cache, resp.http.X-Cache ", ","") if(fastly_info.state ~ "HIT($|-)", "HIT", "MISS");
+
+if(!resp.http.X-Cache-Hits) {
+  set resp.http.X-Cache-Hits = obj.hits;
+} else {
+  set resp.http.X-Cache-Hits = resp.http.X-Cache-Hits ", " obj.hits;
+}
+```
+
+Even though the second request gets a cache HIT for the origin's _original_ error response, the serving of the custom error page from the edge causes the Fastly internal state (i.e. `fastly_info.state`) to report as `ERROR` instead of a `HIT` (_that_ happens because we call `error` from within `vcl_recv` after restarting the request).
+
+This is why when we get back into `vcl_deliver` we override those headers according to the values we tracked within the initial request flow.
 
 <div id="9"></div>
 ## Conclusion
