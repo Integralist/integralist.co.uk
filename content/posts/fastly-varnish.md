@@ -813,7 +813,7 @@ sub debug_info_miss {
 }
 
 sub debug_info_pass {
-  set req.http.X-PreFetch-Pass = ", VCL_PASS(" +
+  set req.http.X-PreFetch-Pass = ", " if(fastly_info.state ~ "^HITPASS", "VCL_HIT", "VCL_PASS") "(" +
     "pop: " + if(req.backend.is_shield, "edge", if(fastly.ff.visits_this_service < 2, "edge", "shield")) + " [" + server.datacenter + ", " + server.hostname + "], " +
     "node: cluster_shield, " +
     "state: " + fastly_info.state + ", " +
@@ -857,7 +857,7 @@ sub debug_info_deliver {
   # only track the previous route flow if we've come from vcl_fetch
   # otherwise we'll end up displaying the uncached request flow as
   # part of this cache hit request flow (which would be confusing).
-  if (resp.http.X-Track-VCL-Route && fastly_info.state ~ "^MISS") {
+  if (resp.http.X-Track-VCL-Route && fastly_info.state ~ "^(MISS|PASS)") {
     set req.http.X-VCL-Route = resp.http.X-Track-VCL-Route;
 
     if (resp.http.X-PreFetch-Pass) {
