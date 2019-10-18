@@ -23,6 +23,7 @@ Fastly utilizes free software and extends it to fit their purposes, but this ext
 - [Varnish Default VCL](#2)
 - [Fastly Default VCL](#3)
 - [Custom VCL](#3.0)
+  - [Be Careful](#be-careful)
 - [Fastly TTLs](#3.1)
 - [Caching Priority List](#caching-priority-list)
 - [Fastly Default Cached Status Codes](#3.2)
@@ -178,6 +179,74 @@ In our case we had a conditional comment like `if (req.restarts == 0) { ...set b
 Fastly selects the default backend based on the age of the backend. To quote Fastly directly...
 
 > We choose the first backend that was created that doesn't have a conditional on it. If all of your backends have conditionals on them, I believe we then just use the first backend that was created. If a backend has a conditional on it, we assume it isn't a default. That backend is only set under the conditions defined, so then we look for the oldest backend defined that doesn’t have a conditional to make it the default.
+
+### Be Careful!
+
+We experienced a problem that broke our production site and it was related to implementing our own `vcl_hash` subroutine.
+
+The problem wasn't as obvious as you might think. We didn't implement `vcl_hash` to change the hashing algorithm, but instead we wanted to add some debug log calls into it.
+
+We looked at the VCL that Fastly generated before we added our own `vcl_hash` subroutine and that VCL looked like the following...
+
+```
+sub vcl_hash {
+#--FASTLY HASH BEGIN
+  #if unspecified fall back to normal
+  {
+    set req.hash += req.url;
+    set req.hash += req.http.host;
+    set req.hash += "#####GENERATION#####";
+    return (hash);
+  }
+#--FASTLY HASH END
+}
+```
+
+We thought "OK, that's what Fastly is generating, so we'll just let them continue generating that code, nothing special we need to do" ...wrong!
+
+So we added the following code to our own VCL...
+
+```
+sub vcl_hash {
+  #FASTLY hash
+
+  call debug_info;
+
+  return(hash)
+}
+```
+
+The expectation was that the `#FASTLY hash` macro would still include all the code from inbetween `#--FASTLY HASH BEGIN` and `#--FASTLY HASH END` (see the earlier code snippet).
+
+What actually ended up happening was that the Fastly macro dynamically changed itself to not include critical behaviours
+
+Notice the `set req.hash += req.url;` and `set req.hash += req.http.host;` that they originally were generating? Yup. They were no longer included. This caused the system caching to blow up.
+
+The code that was being generated now looked like the following...
+
+```
+#--FASTLY HASH BEGIN
+# support purge all
+set req.hash += req.vcl.generation;
+#--FASTLY HASH END
+```
+
+So to fix the problem we had to put those missing settings manually back into our own `vcl_hash` subroutine...
+
+```
+sub vcl_hash {
+  #FASTLY hash
+
+  set req.hash += req.url;
+  set req.hash += req.http.host;
+
+  call debug_info;
+
+  return(hash);
+}
+```
+
+Interestingly Fastly's default VCL _doesn't_ require us to also set `set req.hash += "#####GENERATION#####";`, so they happily keep that part within their generated code 🤦
 
 <div id="3.1"></div>
 ## Fastly TTLs
