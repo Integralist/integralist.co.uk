@@ -43,6 +43,7 @@ Fastly utilizes free software and extends it to fit their purposes, but this ext
       - [`fastly_info.is_cluster_edge` and `fastly_info.is_cluster_shield`](#fastly-info-is-cluster-edge-and-fastly-info-is-cluster-shield)
       - [`fastly.ff.visits_this_service`](#fastly-ff-visits-this-service)
   - [Breadcrumb Trail](#breadcrumb-trail)
+  - [Header Overflow Errors](#header-overflow-errors)
 - [Hit for Pass](#5)
 - [Serving Stale](#6)
   - [Stale for Client Devices](#stale-for-client-devices)
@@ -1066,6 +1067,32 @@ Once we're at `vcl_deliver` we continue to set breadcrumb tracking onto `req.htt
 Phew! Well, that was NOT an easy task, and if you struggled to follow along. That's OK because it's hard to learn about all this stuff at once. Just keep coming back to this post as a reference point if you need to. 
 
 Thankfully by going through this process there will be very little about Varnish's request flow that you won't now understand or have the ability to work around in future if the right problem scenario presents itself.
+
+### Header Overflow Errors
+
+One final thing to note about building a 'breadcrumb trail' like I've detailed above is that you'll need to be careful about how many times you restart your request flow. 
+
+I've seen us restart our request up to three times (for multiple-backend failover resiliency) and it has resulted in a raw Varnish error of `Header overflow` to be returned in the response (the client won't even record any network data at all, it's as if the client compleletely flatlines).
+
+Googling around I discovered some [Fastly documentation](https://docs.fastly.com/en/guides/resource-limits#request-and-header-limits) which makes reference to a `Header count`...
+
+> Exceeding the limit results in a Header overflow error. A small portion of this limit is reserved for internal Fastly use, making the practical limit closer to 85.
+
+To me this was quite an ambiguous statement and have the value set to `96` didn't help elucidate the situation at all either. I had no idea what this really meant. 
+
+Was Fastly saying the overall request header size of `X-VCL-Route` was too large (hence a `400 Bad Request` would be the typical response expected for that type of error) or did it mean that I could only set that specific header 96 times and I was reaching that limit due to the number of restarts (surely not?) 
+
+> Even if I restarted the request flow three times, there's only a total of _eight_ VCL states and they don't all get executed in a single request flow, so that's only a maximum of 24 times I would have called set on the `X-VCL-Route` header (way under the 96 limit).
+
+Turns out it's a bit more a broad range of possible problem causes than just that.
+
+The official Fastly response to my question about what this documentation means was as follows...
+
+> `header count = 96` specifically means 96 headers can be present for an object (this includes the request and response headers). The header overflow can be caused by exceeding _any_ of the limits defined in the documentation throughout the whole VCL process.
+
+So it's more likely that we _were_ hitting the http header size limit, but it was being transformed into this raw Varnish error instead.
+
+At any rate this is something to keep in mind and be mindful of.
 
 <div id="5"></div>
 ## Hit for Pass
