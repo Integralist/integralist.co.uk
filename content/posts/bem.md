@@ -2,6 +2,14 @@
 title: "Maintainable CSS with BEM"
 date: 2012-09-12T10:02:05Z
 draft: false
+categories:
+  - "guide"
+  - "code"
+tags:
+  - "css"
+  - "bem"
+  - "frontend"
+  - "client"
 ---
 
 - [Introduction](#introduction)
