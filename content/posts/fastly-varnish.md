@@ -805,7 +805,7 @@ sub debug_info_hash {
 sub debug_info_miss {
   set req.http.X-PreFetch-Miss = ", VCL_MISS(" +
     "pop: " + if(req.backend.is_shield, "edge", if(fastly.ff.visits_this_service < 2, "edge", "shield")) " [" server.datacenter ", " server.hostname "], " +
-    "node: cluster_shield, " +
+    "node: cluster_" + if(fastly_info.is_cluster_shield, "shield", "edge") + ", " +
     "state: " + fastly_info.state + ", " +
     "host: " + bereq.http.host + ", " +
     "path: " + bereq.url +
@@ -815,7 +815,7 @@ sub debug_info_miss {
 sub debug_info_pass {
   set req.http.X-PreFetch-Pass = ", " if(fastly_info.state ~ "^HITPASS", "VCL_HIT", "VCL_PASS") "(" +
     "pop: " + if(req.backend.is_shield, "edge", if(fastly.ff.visits_this_service < 2, "edge", "shield")) + " [" + server.datacenter + ", " + server.hostname + "], " +
-    "node: cluster_shield, " +
+    "node: cluster_" + if(fastly_info.is_cluster_shield, "shield", "edge") + ", " +
     "state: " + fastly_info.state + ", " +
     "host: " + req.http.host + ", " +
     "path: " + req.url + ", " +
@@ -828,7 +828,7 @@ sub debug_info_fetch {
   set beresp.http.X-PreFetch-Miss = req.http.X-PreFetch-Miss;
   set beresp.http.X-PostFetch = ", VCL_FETCH(" +
     "pop: " + if(req.backend.is_shield, "edge", if(fastly.ff.visits_this_service < 2, "edge", "shield")) + " [" + server.datacenter + ", " + server.hostname + "], " +
-    "node: cluster_shield, " +
+    "node: cluster_" + if(fastly_info.is_cluster_shield, "shield", "edge") + ", " +
     "state: " + fastly_info.state + ", " +
     "host: " + req.http.host + ", " +
     "path: " + req.url + ", " +
@@ -1016,6 +1016,16 @@ The `vcl_error` subroutine is a tricky one because it exists on _both_ the 'clus
 Meaning if you execute `error 401` from `vcl_recv`, then `vcl_error` will execute in the context of the 'cluster edge' node; whereas if you executed an `error` from a 'cluster shield' node state like `vcl_fetch`, then `vcl_error` would execute in the context of the 'cluster shield' node.
 
 Meaning, how you transition information between `vcl_error` and `vcl_deliver` could depend on whether you're on a 'cluster edge' node or a 'cluster shield' node.
+
+This is why when on what are typically considered the 'cluster shield' nodes, I don't hardcode them a such. I use the following conditional check...
+
+```
+"node: cluster_" + if(fastly_info.is_cluster_shield, "shield", "edge") + ", " +
+```
+
+...this check means if the request is restarted, which we know this causes Fastly's clustering behaviour to stop and for the request to flow through the same 'cluster edge' server for all states, then we can change the reported node to be the 'cluster edge' instead of a 'cluster shield' for states such as MISS/PASS/FETCH.
+
+> Note: this conditional check could be improved by also checking for the existence of the `Fastly-Force-Shield` header (which we talked about earlier). This is because if someone uses that header then it would force Fastly's clustering behaviour to not be stopped.
 
 To help explain this I'm going to give another _real_ example, where I wanted to lookup some content in our cache and if it didn't exist I wanted to restart the request and use a different origin server to serve the content.
 
