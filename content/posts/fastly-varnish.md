@@ -311,7 +311,7 @@ The status codes it will cache by default are:
 - `404 Not Found`
 - `410 Gone`
 
-> Note: in VCL you can allow _any_ response status code to be cached by executing `set beresp.cacheable = true;` within `vcl_fetch`.
+> Note: in VCL you can allow _any_ response status code to be cached by executing `set beresp.cacheable = true;` within `vcl_fetch` (you can also change the status code if you like to _look_ like it was a different code with `set beresp.status = <new_status_code>;`).
 
 <div id="4"></div>
 ## Fastly Request Flow Diagram
