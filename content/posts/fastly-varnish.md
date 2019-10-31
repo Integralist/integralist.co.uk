@@ -1387,7 +1387,9 @@ Mystery solved.
 
 We discovered an issue with our logging code which meant we would see `(null)` log lines being generated. The cause of this turned out to be the Fastly 'workspace' (as they refer to it) would run out of memory while generating our log output that they would stream to either GCS or AWS S3.
 
-Why this happens is unclear because, as you'll see below, the log output we were generating isn't large although the _structure_ of it is more complex, in that we're generating JSON to log...
+The 'workspace' is the amount of memory allocated to _each_ in-flight request, and its value is set to 128k. So although the JSON object we're building is small, _prior_ to that, our request flow might be making lots of HTTP header modifications and all those things are counting towards the overall memory being consumed.
+
+So ultimately be wary of making too many HTTP modifcations as you might discover you'll end up losing log data.
 
 > Note: we have two seperate services, one production and one staging and we run the same VCL code in both. This requires us to have logic that checks whether our code is running in the stage environment or not.
 
@@ -1444,11 +1446,11 @@ Generating JSON structured output is not easy in VCL. The above VCL snippet demo
 
 So manually constructing the JSON was what we opted for, and once you get used to the endless `%22` it's actually quite readable IMHO (when compared to the alternatives we just described).
 
-Now here's how we worked-around the memory issue: before we trigger our `log` call we first check that Fastly's workspace hasn't been exhausted by generating the `var.json` variable content. If we find an 'out of memory' error, then we won't attempt to call the `log` function (as that would result in the `(null)` for a log line).
+Now here's how we worked-around the memory issue causing a `(null)` log line: before we trigger our `log` call we first check that Fastly's workspace hasn't been exhausted (the variable contains the error code raised by the last function). If we find an 'out of memory' error, then we won't attempt to call the `log` function (as that would result in the `(null)` for a log line).
 
 > Documentation: [docs.fastly.com/vcl/variables/fastly-error/](https://docs.fastly.com/vcl/variables/fastly-error/)
 
-It's important to reiterate that this isn't a _solution_, but a _work-around_. We don't know how many logs we're losing due to memory exhaustion (it could be lots!) so this is a problem we need to investigate further (as of October 2019 ...wow did I really start writing this post two years ago!!? time flies heh).
+It's important to reiterate that this isn't a _solution_, but a _work-around_. We don't know how many logs we're losing due to memory exhaustion (it could be lots!) so this is a problem we need to investigate further (as of October 2019, ...wow did I really start writing this post two years ago!!? time flies heh).
 
 ```
 if (fastly.error != "ESESOOM") {
