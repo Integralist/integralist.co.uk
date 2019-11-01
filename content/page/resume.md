@@ -98,6 +98,10 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ### 2019
 
+- **What**: Refactored and rewrote our static rendering 'disaster recovery' edge logic/process.  
+  **Why**: Modifications to our VCL for serving custom error pages from the edge had broken legacy DR logic that would attempt to pull error pages from AWS S3.  
+  **Impact**: Improved maintainability, understanding, effectiveness, resilience.
+
 - **What**: Consolidated various debug headers and query parameters.  
   **Why**: As the list of services along a request path increased (various proxies were introduced) the number of debug entry points increased.  
   **Impact**: Reduced ~4 different debug entry points to 1 allowing engineers to more simply access the information they needed.
