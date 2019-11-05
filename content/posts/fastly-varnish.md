@@ -1387,6 +1387,8 @@ Mystery solved.
 
 We discovered an issue with our logging code which meant we would see `(null)` log lines being generated. The cause of this turned out to be the Fastly 'workspace' (as they refer to it) would run out of memory while generating our log output that they would stream to either GCS or AWS S3.
 
+> You can inspect the workspace using the undocumented `workspace.bytes_free` property, and this value will change as you make modifications to your request/response and other related objects.
+
 The 'workspace' is the amount of memory allocated to _each_ in-flight request, and its value is set to 128k. So although the JSON object we're building is small, _prior_ to that, our request flow might be making lots of HTTP header modifications and all those things are counting towards the overall memory being consumed.
 
 So ultimately be wary of making too many HTTP modifcations as you might discover you'll end up losing log data.
