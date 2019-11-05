@@ -98,6 +98,10 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ### 2019
 
+- **What**: Created an RFC for an updated Disaster Recovery plan.  
+  **Why**: Our 'Plan Z' (static rendering) approach wasn't clear to some teams/influencers.  
+  **Impact**: Summarized our current disaster recovery approach (i.e. in most cases relying on serve-stale) and highlighted the ways we were building confidence in our Plan Z approach by smoke testing the behaviours regularly. As well as documenting possible active:active CDN approaches where an alternative provider supports a programmatic edge similar to Fastly.
+
 - **What**: Refactored and rewrote our static rendering 'disaster recovery' edge logic/process.  
   **Why**: Modifications to our VCL for serving custom error pages from the edge had broken legacy DR logic that would attempt to pull error pages from AWS S3.  
   **Impact**: Improved maintainability, understanding, effectiveness, resilience.
