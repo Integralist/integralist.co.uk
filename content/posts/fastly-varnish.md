@@ -495,6 +495,9 @@ We can see in [Fastly's documentation](https://docs.fastly.com/guides/performanc
 
 > † not documented, but Fastly support say that `vcl_hash` executes at the edge.
 
+**UPDATE** (2019.11.07): Fastly's documentation is incorrect. `vcl_pass` does not run on the cluster-shield node and it will actually cause clustering behaviour to break (official the response was "if you pass in recv, you're saying no to cache lookup, and no to request collapsing, so there's no reason to cluster the request" followed by "big sigh, ok, I'm filing an issue" when pointed to their documentation). It would seem that you definitely _can_ end up in `vcl_pass` on a cluster-shield node, but it's harder to do, you would have to `return(pass)` from either `vcl_hit` or `vcl_miss`.
+
+
 ### Terminology
 
 Fastly _internally_ uses a different naming for these 'caching nodes'. 
