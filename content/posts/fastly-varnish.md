@@ -29,8 +29,10 @@ Fastly utilizes free software and extends it to fit their purposes, but this ext
 - [Fastly Default Cached Status Codes](#3.2)
 - [Fastly Request Flow Diagram](#4)
   - [304 Not Modified](#304-not-modified)
-  - [Update 2019.08.10](#update-2019-08-10)
+  - [UPDATE 2019.08.10](#update-2019-08-10)
 - [Error Handling](#4.0)
+  - [Unexpected State Change](#unexpected-state-change)
+  - [UPDATE 2019.11.07](#update-2019-11-07)
 - [State Variables](#4.1)
   - [Anonymous Objects](#anonymous-objects)
 - [Persisting State](#4.2) (inc. clustering architecture)
@@ -338,7 +340,7 @@ If no caching headers are sent with the `304 Not Modified` response, then the st
 
 Ultimately this means if you were hoping to execute logic defined within `vcl_fetch` whenever a `304 Not Modified` was returned (e.g. dynamically modify the stale/cached object's TTL), then that isn't possible.
 
-### Update 2019.08.10
+### UPDATE 2019.08.10
 
 Fastly reached out to me to let me know that this diagram is now incorrect. 
 
@@ -386,7 +388,7 @@ if (obj.status == 900) {
 
 In the above example we construct a synthetic error response where the status code is a `500 Internal Server Error`, we set the content-type to HTML and then we use the `synthetic` directive to manually construct some HTML to be the 'body' of our response. Finally we execute `return(deliver)` to jump over to the `vcl_deliver` state.
 
-> UPDATE 2019.11.07: Fastly's Fiddle tool now shows a compiler error that suggests 8xx-9xx are codes used internally by Fastly and that we should use the 6xx range instead. 
+### Unexpected State Change
 
 Now, I wanted to talk briefly about error handling because there are situations where an error can occur, and it can cause Varnish to change to an _unexpected_ state. I'll give a real-life example of this...
 
@@ -397,6 +399,14 @@ Well, it turns out that `vcl_fetch` is only executed if the backend/origin was c
 So what happens in those scenarios? In this case Varnish won't execute `vcl_fetch` because of course no request was ever made (how could Varnish make a request if it thinks the backend is unavailable), so instead Varnish jumps from `vcl_miss` (where the request to the backend would be initiated from) to `vcl_error`.
 
 This means in order to handle that very specific error scenario, we'd need to have similar code for checking the status code (and trying to serve stale, see later in this article for more information on that) within `vcl_error`.
+
+### UPDATE 2019.11.07
+
+Fastly's Fiddle tool now shows a compiler error that suggests 8xx-9xx are codes used internally by Fastly and that we should use the 6xx range instead. 
+
+According to Fastly the 900 code is often a dangeous code to use in custom VCL. In 8xx territory, they have a special case attached to 801, which is used for redirects to TLS in the case of requests coming in on HTTP. So if you manually trigger an 801, weird stuff happens.
+
+6xx and 7xx are clean. 600, 601 and 750 are by far the most popular codes used in customer configs apparently. In the standards range, we have a special case attached to 550, for some reason, lost in the mists of time, but otherwise errors in the standards range are interpreted as specified in the IETF spec
 
 <div id="4.1"></div>
 ## State Variables
@@ -495,8 +505,7 @@ We can see in [Fastly's documentation](https://docs.fastly.com/guides/performanc
 
 > † not documented, but Fastly support say that `vcl_hash` executes at the edge.
 
-**UPDATE** (2019.11.07): Fastly's documentation is incorrect. `vcl_pass` does not run on the cluster-shield node and it will actually cause clustering behaviour to break (official the response was "if you pass in recv, you're saying no to cache lookup, and no to request collapsing, so there's no reason to cluster the request" followed by "big sigh, ok, I'm filing an issue" when pointed to their documentation). It would seem that you definitely _can_ end up in `vcl_pass` on a cluster-shield node, but it's harder to do, you would have to `return(pass)` from either `vcl_hit` or `vcl_miss`.
-
+**UPDATE** (2019.11.07): Fastly's documentation is incorrect. `vcl_pass` does not run on the cluster-shield node and it will actually cause clustering behaviour to break (officially the response was "if you pass in recv, you're saying no to cache lookup, and no to request collapsing, so there's no reason to cluster the request" followed by "big sigh, ok, I'm filing an issue" when pointed to their documentation). It would seem that you definitely _can_ end up in `vcl_pass` on a cluster-shield node, but it's harder to do, you would have to `return(pass)` from either `vcl_hit` or `vcl_miss`.
 
 ### Terminology
 
