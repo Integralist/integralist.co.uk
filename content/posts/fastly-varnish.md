@@ -386,6 +386,8 @@ if (obj.status == 900) {
 
 In the above example we construct a synthetic error response where the status code is a `500 Internal Server Error`, we set the content-type to HTML and then we use the `synthetic` directive to manually construct some HTML to be the 'body' of our response. Finally we execute `return(deliver)` to jump over to the `vcl_deliver` state.
 
+> UPDATE 2019.11.07: Fastly's Fiddle tool now shows a compiler error that suggests 8xx-9xx are codes used internally by Fastly and that we should use the 6xx range instead. 
+
 Now, I wanted to talk briefly about error handling because there are situations where an error can occur, and it can cause Varnish to change to an _unexpected_ state. I'll give a real-life example of this...
 
 We noticed that we were getting a raw `503 Backend Unavailable` error from Varnish displayed to our customers. This is odd? We have VCL code in `vcl_fetch` (the state that you move to once the response from the origin has been received by Fastly/Varnish) which checks the response status code for a 5xx and handles the error there. Why didn't that code run?
