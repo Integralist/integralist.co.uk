@@ -28,6 +28,7 @@ Fastly utilizes free software and extends it to fit their purposes, but this ext
 - [Caching Priority List](#caching-priority-list)
 - [Fastly Default Cached Status Codes](#3.2)
 - [Fastly Request Flow Diagram](#4)
+  - [Fastly-Debug](#fastly-debug)
   - [304 Not Modified](#304-not-modified)
   - [UPDATE 2019.08.10](#update-2019-08-10)
 - [Error Handling](#4.0)
@@ -36,9 +37,12 @@ Fastly utilizes free software and extends it to fit their purposes, but this ext
 - [State Variables](#4.1)
   - [Anonymous Objects](#anonymous-objects)
 - [Persisting State](#4.2) (inc. clustering architecture)
+  - [UPDATE 2019.11.08](#update-2019-11-08)
   - [Terminology](#terminology)
   - [Clustering](#clustering)
   - [Shielding](#shielding)
+  - [Caveats of Fastly's Shielding](#caveats-of-fastly-s-shielding)
+  - [Debugging Shielding](#debugging-shielding)
   - [`is_cluster` vs `is_origin` vs `is_shield`](#is-cluster-vs-is-origin-vs-is-shield)
   - [Undocumented APIs](#undocumented-apis)
       - [`req.http.Fastly-FF`](#req-http-fastly-ff)
@@ -48,13 +52,14 @@ Fastly utilizes free software and extends it to fit their purposes, but this ext
   - [Header Overflow Errors](#header-overflow-errors)
 - [Hit for Pass](#5)
 - [Serving Stale](#6)
+  - [Why you might not be serving stale?](#why-you-might-not-be-serving-stale)
   - [Stale for Client Devices](#stale-for-client-devices)
-  - [Caveats of Fastly’s Shielding](#caveats-of-fastly-s-shielding)
   - [Different actions for different states](#different-actions-for-different-states)
   - [Why the difference?](#why-the-difference)
   - [The happy path (stale found in vcl_fetch)](#the-happy-path-stale-found-in-vcl-fetch)
   - [The longer path (stale found in vcl_deliver)](#the-longer-path-stale-found-in-vcl-deliver)
   - [The unhappy path (stale not found anywhere)](#the-unhappy-path-stale-not-found-anywhere)
+  - [Test Serving Stale](#test-serving-stale)
 - [Disable Caching](#7)
 - [Logging](#8)
   - [Logging Memory Exhaustion](#logging-memory-exhaustion)
@@ -332,6 +337,23 @@ Below is a diagram of Fastly's VCL request flow (including its WAF and Clusterin
     <img src="../../images/fastly-request-flow.png">
 </a>
 
+### Fastly-Debug
+
+Fastly will display extra information about a request/response flow within its HTTP response headers if the request was issued with a `Fastly-Debug` HTTP request header (set with a value of `1`).
+
+Some of the extra headers you'll find in the response are:
+
+- `Fastly-Debug-Digest`
+- `Fastly-Debug-Path`
+- `Fastly-Debug-TTL`
+- `Surrogate-Control`
+- `Surrogate-Key`
+- `X-Cache-Hits`
+- `X-Cache`
+- `X-Served-By`
+
+> Note: the `Surrogate-*` response headers are typically set by an origin server and are otherwise stripped by Fastly.
+
 ### 304 Not Modified
 
 Although not specifically mentioned in the above diagram it's worth noting that Fastly doesn't execute `vcl_fetch` when it receives a `304 Not Modified` from origin, but it will use any `Cache-Control` or `Surrogate-Control` values defined on that response to determine how long the stale object should now be kept in cache.
@@ -505,7 +527,21 @@ We can see in [Fastly's documentation](https://docs.fastly.com/guides/performanc
 
 > † not documented, but Fastly support say that `vcl_hash` executes at the edge.
 
-**UPDATE** (2019.11.07): Fastly's documentation is incorrect. `vcl_pass` does not run on the cluster-shield node and it will actually cause clustering behaviour to break (officially the response was "if you pass in recv, you're saying no to cache lookup, and no to request collapsing, so there's no reason to cluster the request" followed by "big sigh, ok, I'm filing an issue" when pointed to their documentation). It would seem that you definitely _can_ end up in `vcl_pass` on a cluster-shield node, but it's harder to do, you would have to `return(pass)` from either `vcl_hit` or `vcl_miss`.
+### UPDATE 2019.11.08
+
+Fastly's documentation is incorrect: `vcl_pass` does not run on the cluster-shield node and it will actually cause clustering behaviour to break. 
+
+The official Fastly response was:
+
+> "if you pass in recv, you're saying no to cache lookup, and no to request collapsing, so there's no reason to cluster the request" 
+
+This was then followed with a...
+
+> "big sigh, ok, I'm filing an issue" 
+
+...when pointed to their documentation, which was _incorrectly_ suggesting that `vcl_pass` only executes on the cluster-shield. 
+
+You definitely _can_ end up in `vcl_pass` on a cluster-shield node, but admittedly it happens less frequently because you would have to `return(pass)` from either `vcl_hit` or `vcl_miss` (and that's not a typical state change flow for most people).
 
 ### Terminology
 
@@ -589,6 +625,54 @@ But ultimately the content either already cached at the shield (or is about to b
 This also gives us extra nomenclature to distinguish POPs. Before we learnt about shielding, we just knew there were 'POPs' but now we know that with shielding enabled we have 'edge' POPs and a singular 'shield' POP for a particular Fastly service.
 
 I'll link [here](https://fiddle.fastlydemo.net/fiddle/72e0d619) to a Fastly-Fiddle (created by a Fastly engineer) that demonstrates the clustering/shielding flow. If that fiddle no longer exists by the time you read this then I've made a copy of it in a [gist](https://gist.github.com/Integralist/c08b1ab3e9dd508b1ccc5fe768d1a9b0). It's interesting to see how the various APIs for identifying a server node come together.
+
+### Caveats of Fastly's Shielding
+
+Be careful with changes you make to a request as they could result in the lookup hash to change between the edge POP nodes and shield POP nodes. 
+
+Also, be aware that the "backend" will change when shielding is enabled. Traditionally (i.e. without shielding) you defined your backend with a specific value (e.g. an S3 bucket or a domain such as `https://app.domain.com`) and it would stay set to that value unless you yourself implemented custom vcl logic to change its value. 
+
+But with shielding enabled, the 'cluster edge' node will dynamically change the backend to be a shield node value (as it's effectively _always_ going to pass through that node if there is no cached content found). Once on the 'cluster edge' node within the shield POP, _its_ "backend" value is set to whatever your actual origin is (e.g. an S3 bucket).
+
+It's probably best to only modify your backends dynamically whilst your VCL is executing on the shield (e.g. `if (!req.backend.is_shield)`, maybe abstract in a variable `declare local var.shield_node BOOL;`) and to also only `restart` a request in vcl_deliver when executing on a node within the shield POP. 
+
+You might also need to modify vcl_hash so that the generated hash is consistent with the edge POP's 'cluster edge' node if your shield POP nodes happen to modify the request! Remember that modifying either the host or the path will cause a different cache key to be generated and so modifying that in either the edge POP _or_ the shield POP means modifying the relevant vcl_hash subroutine so the hashes are _consistent_ between them.
+
+```
+sub vcl_hash {
+  # we do this because we want the cache key to be identical at the edge and
+  # at the shield. Because the shield rewrites req.url (but not the edge), we
+  # need align vcl_hash by using the original Host and URL.
+  set req.hash += req.http.X-Original-URL;
+  set req.hash += req.http.X-Original-Host;
+
+  #FASTLY hash
+
+  return(hash);
+}
+```
+
+> Note: alternatively you could move rewriting of the URL to a state after the hash lookup, such as vcl_miss (e.g. modifying the `bereq` object).
+
+Lastly, when enabling shielding, make sure to deploy your VCL code changes first _before_ enabling shielding. This way you avoid a race condition whereby a shield has old VCL (i.e. no conditional checks for either `Fastly-FF` or `req.backend.is_shield`) and thus tries to do something that should only happen on the edge cache node.
+
+### Debugging Shielding
+
+When using `Fastly-Debug:1` to inspect debug response headers, we might want to look at `fastly-state`, `fastly-debug-path` and `fastly-debug-ttl`. These would have values such as...
+
+```
+< fastly-state: HIT-STALE
+< fastly-debug-path: (D cache-lhr6346-LHR 1563794040) (F cache-lhr6324-LHR 1563794019)
+< fastly-debug-ttl: (H cache-lhr6346-LHR -10.999 31536000.000 20)
+```
+
+The `fastly-debug-path` suggests we delivered from the 'cluster edge' node `lhr6346`, while we fetched from the 'cluster shield' node `lhr6324`. The `fastly-debug-ttl` header suggests we got a HIT (`H`) from the 'cluster edge' node `lhr6346` but this is just a side-effect of the stale/cached content (coming back from the 'cluster shield' node) being stored in-memory on the 'cluster edge' node and so it's indicated as a HIT from the 'cluster edge' node when really it came from the 'cluster shield' node (the `fastly-debug-ttl` header is set on the 'cluster edge' node, which re-enforces this understanding).
+
+What makes it confusing is that you don't necessarily know if the request went to the 'cluster shield' node (i.e. the fetching node) or whether the stale content actually came from the 'cluster edge' node's in-memory cache. The only way to be sure is to check the `fastly-state` response header and see if you got back `HIT-STALE` or `HIT-STALE-CLUSTER`.
+
+Another confusing aspect to `fastly-debug-ttl` is that with regards to `stale-while-revalidate` you could end up seeing a `-` in the section where you might otherwise expect to see the grace period of the object (i.e. how long can it be served stale for while revalidating). This can occur when the origin server hasn't sent back either an `ETag` header or `Last-Modified` header. Fastly still serves stale content if the `stale-while-revalidate` TTL is still valid but the output of the `fastly-debug-ttl` can be confusing and/or misleading.
+
+> Something else to note, while I write this August 2019 update is that the `fastly-debug-ttl` only every displays the 'grace' value when it comes to `stale-if-error`, meaning if you're trying to check if you're serving `stale-while-revalidate` by looking at the grace period you might get confused when you see the `stale-if-error` grace period (or worse a `-` value), this is because the `fastly-debug-ttl` header isn't as granular as it should be. Fastly have indicated that they intend on making updates to this header in the future in order for the values to be much clearer.
 
 If you want to track extra information when using shielding, then using (in combination with either `req.backend.is_origin` or `!req.backend.is_shield`) the values from `server.datacenter` and `server.hostname` which can help you identify the POP as your shielding POP (remember there is only one POP that is designated as your shield, so this can come in handy).
 
@@ -1221,7 +1305,7 @@ Why use `stale_if_error` at all when we _could_ just set `stale_while_revalidate
 
 This is a question I don't have an answer for, and I've yet to receive a satisfactory answer to from either Fastly or the dev community.
 
-My own opinion on this is that if my origin is unable to serve a `200 OK` response after something like an 1hr of trying via `stale_while_revalidate` then something must be seriously wrong with my origin and so maybe that's the appropriate indicator for what value I should give to it in comparison to the value I would set for `stale_if_error` (which would be the longest value possible).
+My own opinion on this is that if my origin is unable to serve a `200 OK` response after 1hr of trying via `stale_while_revalidate` then something must be seriously wrong with my origin and so maybe that's the appropriate indicator for what value I should give to it in comparison to the value I would set for `stale_if_error` (which would be the longest value possible).
 
 It feels like setting _both_ `stale_while_revalidate` and `stale_if_error` is kind of like 'cargo culting' (i.e. doing something because it's always been done and so people presume it's the correct way), but at the same time I would hate to find myself in a situation where there _was_ a subtle difference between the two which had a very niche scenario that broke my user's experience because I neglected to set both stale configurations.
 
@@ -1234,6 +1318,8 @@ Additionally, if these 'stale' settings aren't configured in VCL, then you'll ne
 The use of `beresp.stale_if_error` is effectively the same as Varnish's `beresp.grace`. But be careful if your VCL already utilises Varnish's original `grace` feature, because it will override any Fastly behaviour that is using the `stale_if_error`.
 
 > You can find more details on Fastly's implementation [here](https://docs.fastly.com/guides/performance-tuning/serving-stale-content) as well as a blog post announcing this feature [here](https://www.fastly.com/blog/stale-while-revalidate-stale-if-error-available-today/). If you want details on Varnish 4.0's implementation of serving stale, see [this post](https://info.varnish-software.com/blog/grace-varnish-4-stale-while-revalidate-semantics-varnish).
+
+### Why you might not be serving stale?
 
 You might find that you're not serving stale even though you would expect to be. This can be caused by a lack of [shielding](https://docs.fastly.com/guides/performance-tuning/shielding) (an additional Fastly feature that's designed to improve your hit ratio) as you can only serve a stale cached object if the request ended up being routed through the POP that has the content cached (which is more difficult without shielding enabled). 
 
@@ -1248,52 +1334,6 @@ It's worth reading [fastly's notes on why you might not be serving stale](https:
 It's worth reiterating a segment of the earlier [caching priority list](#caching-priority-list) which is that `Cache-Control` _can_ include serving stale directives such as `stale-while-revalidate` and `stale-if-error`, but they are typically utilized with `Surrogate-Control` more than they are with `Cache-Control`. If Fastly receives no `Surrogate-Control` but it does get `Cache-Control` with those directives it _will_ presume those are defined for its benefit.
 
 Client devices (e.g. web browsers) can respect those stale directives, but it's not very well supported currently (see [MDN compatibility table](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#Browser_compatibility)).
-
-### Caveats of Fastly's Shielding
-
-Be careful with changes you make to a request as they could result in the lookup hash to change between the edge POP nodes and shield POP nodes. 
-
-Also, be aware that the "backend" will change when shielding is enabled. Traditionally (i.e. without shielding) you defined your backend with a specific value (e.g. an S3 bucket or a domain such as `https://app.domain.com`) and it would stay set to that value unless you yourself implemented custom vcl logic to change its value. 
-
-But with shielding enabled, the 'cluster edge' node will dynamically change the backend to be a shield node value (as it's effectively _always_ going to pass through that node if there is no cached content found). Once on the 'cluster edge' node within the shield POP, _its_ "backend" value is set to whatever your actual origin is (e.g. an S3 bucket).
-
-It's probably best to only modify your backends dynamically whilst your VCL is executing on the shield (e.g. `if (!req.backend.is_shield)`, maybe abstract in a variable `declare local var.shield_node BOOL;`) and to also only `restart` a request in vcl_deliver when executing on a node within the shield POP. 
-
-You might also need to modify vcl_hash so that the generated hash is consistent with the edge POP's 'cluster edge' node if your shield POP nodes happen to modify the request! Remember that modifying either the host or the path will cause a different cache key to be generated and so modifying that in either the edge POP _or_ the shield POP means modifying the relevant vcl_hash subroutine so the hashes are _consistent_ between them.
-
-```
-sub vcl_hash {
-  # we do this because we want the cache key to be identical at the edge and
-  # at the shield. Because the shield rewrites req.url (but not the edge), we
-  # need align vcl_hash by using the original Host and URL.
-  set req.hash += req.http.X-Original-URL;
-  set req.hash += req.http.X-Original-Host;
-
-  #FASTLY hash
-
-  return(hash);
-}
-```
-
-> Note: alternatively you could move rewriting of the URL to a state after the hash lookup, such as vcl_miss (e.g. modifying the `bereq` object).
-
-Lastly, when enabling shielding, make sure to deploy your VCL code changes first _before_ enabling shielding. This way you avoid a race condition whereby a shield has old VCL (i.e. no conditional checks for either `Fastly-FF` or `req.backend.is_shield`) and thus tries to do something that should only happen on the edge cache node.
-
-When using `Fastly-Debug:1` to inspect debug response headers, we might want to look at `fastly-state`, `fastly-debug-path` and `fastly-debug-ttl`. These would have values such as...
-
-```
-< fastly-state: HIT-STALE
-< fastly-debug-path: (D cache-lhr6346-LHR 1563794040) (F cache-lhr6324-LHR 1563794019)
-< fastly-debug-ttl: (H cache-lhr6346-LHR -10.999 31536000.000 20)
-```
-
-The `fastly-debug-path` suggests we delivered from the 'cluster edge' node `lhr6346`, while we fetched from the 'cluster shield' node `lhr6324`. The `fastly-debug-ttl` header suggests we got a HIT (`H`) from the 'cluster edge' node `lhr6346` but this is just a side-effect of the stale/cached content (coming back from the 'cluster shield' node) being stored in-memory on the 'cluster edge' node and so it's indicated as a HIT from the 'cluster edge' node when really it came from the 'cluster shield' node (the `fastly-debug-ttl` header is set on the 'cluster edge' node, which re-enforces this understanding).
-
-What makes it confusing is that you don't necessarily know if the request went to the 'cluster shield' node (i.e. the fetching node) or whether the stale content actually came from the 'cluster edge' node's in-memory cache. The only way to be sure is to check the `fastly-state` response header and see if you got back `HIT-STALE` or `HIT-STALE-CLUSTER`.
-
-Another confusing aspect to `fastly-debug-ttl` is that with regards to `stale-while-revalidate` you could end up seeing a `-` in the section where you might otherwise expect to see the grace period of the object (i.e. how long can it be served stale for while revalidating). This can occur when the origin server hasn't sent back either an `ETag` header or `Last-Modified` header. Fastly still serves stale content if the `stale-while-revalidate` TTL is still valid but the output of the `fastly-debug-ttl` can be confusing and/or misleading.
-
-> Something else to note, while I write this August 2019 update is that the `fastly-debug-ttl` only every displays the 'grace' value when it comes to `stale-if-error`, meaning if you're trying to check if you're serving `stale-while-revalidate` by looking at the grace period you might get confused when you see the `stale-if-error` grace period (or worse a `-` value), this is because the `fastly-debug-ttl` header isn't as granular as it should be. Fastly have indicated that they intend on making updates to this header in the future in order for the values to be much clearer.
 
 ### Different actions for different states
 
@@ -1328,6 +1368,60 @@ This means we end up processing the request again, but this time when we make a 
 #### The unhappy path (stale not found anywhere)
 
 In this scenario we don't find a stale object in either `vcl_fetch` or `vcl_deliver` and so we end up serving the 5xx content that we got from origin to the client. Although you may want to attempt to restart the request and use a custom header (e.g. `set req.http.X-Serve-500-Page = "true"`) in order to indicate to `vcl_recv` that you want to short-circuit the request cycle and serve a custom error page instead.
+
+### Test Serving Stale
+
+In order to test that you're serving stale content you'll need to:
+
+1. ensure that you are able to force a resource to succeed _and_ fail when necessary.
+2. ensure that you have `max-age`, `stale-while-revalidate` and `stale-if-error` set to short values.
+
+For point 1. we need this because the serving of stale content during `stale-if-error` will only happen if the backend/origin server fails or returns an error status. But if you're testing a real backend/origin server then you _want_ it to be running 😅 so being able to force it to look like it failed is ideal for testing our 'serve stale' VCL code.
+
+For point 2. we need this because the serving of stale content will only happen when the TTL of the cached resource has expired. If we didn't do this, then we would have to wait for whatever TTL was set by the backend/origin server to expire (which could be a very long time!).
+
+We'll serve stale content for a period of time while we try and acquire fresher content (e.g. `stale-while-revalidate`), followed by serving stale for a period of time if the backend/origin server fails to respond after the revalidation period (e.g. `stale-if-error`). So again, if either of those stale directives have long TTLs set by the backend/origin server, then it'll make testing our ability to serve stale impractical.
+
+In order to achieve these two requirements, I've found the following approach to work quite well.
+
+First, add the following code to your `vcl_fetch` subroutine...
+
+```
+if (req.http.X-TTLs == "shorten") { 
+  set beresp.ttl = 10s;
+  set beresp.stale_while_revalidate = 20s;
+  set beresp.stale_if_error = 60s;
+}
+
+if (req.http.X-ResponseState == "fail") {
+  set beresp.status = 500;
+  set beresp.cacheable = false;
+}
+
+if (beresp.status >= 500 && beresp.status < 600) {
+  if (stale.exists) {
+    return(deliver_stale);
+  }
+}
+```
+
+> Note: you should already have the code that checks for `stale.exists` etc, but I'm including it for the sake of clarity.
+
+Now the mistake I initially made was instead of setting `beresp.ttl`, `beresp.stale_while_revalidate`, `beresp.stale_if_error` (as shown above) I tried to manipulate `beresp.http.Surrogate-Control` like so:
+
+```
+set beresp.http.Surrogate-Control = "max-age=10, stale-while-revalidate=20, stale-if-error=60";)
+```
+
+The reason that doesn't work is that it would only affect _downstream_ caches (inc. a Fastly cache if this cache node was a '[shield](#shielding)' node). This is because the `Surrogate-Control` and `Cache-Control` headers are _parsed_ before `vcl_fetch` is called.
+
+So if we want to affect the duration for which Fastly caches an object (inc. stale TTLs) we need to manipulate the `beresp.ttl`, `beresp.stale_while_revalidate`, `beresp.stale_if_error` variables. 
+
+With the above VCL in place we can make a request with the `X-TTLs` header set with a value of `shorten` to cause the cached object to have a shorter set of caching TTLs than the origin intended.
+
+Then we can wait for the `max-age` TTL to expire before making the same request again and see that now Fastly will attempt to revalidate the content and so during its `stale-while-revalidate` time period Fastly will serve stale content back to us.
+
+Then we can wait for the `stale-while-revalidate` TTL to expire before making the same request again but changing `X-TTLs` to `X-ResponseState` and setting the value to `fail`, which means when Fastly attempts to acquire the content from the origin it'll think it received an error from the backend/origin server and go ahead and serve stale content back to us.
 
 <div id="7"></div>
 ## Disable Caching
