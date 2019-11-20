@@ -1393,6 +1393,9 @@ if (req.http.X-TTLs == "shorten") {
   set beresp.ttl = 10s;
   set beresp.stale_while_revalidate = 20s;
   set beresp.stale_if_error = 60s;
+
+  unset beresp.http.ETag;
+  unset beresp.http.Last-Modified;
 }
 
 if (req.http.X-ResponseState == "fail") {
@@ -1409,6 +1412,8 @@ if (beresp.status >= 500 && beresp.status < 600) {
 
 > Note: you should already have the code that checks for `stale.exists` etc, but I'm including it for the sake of clarity.
 
+#### Mistake 1.
+
 Now the mistake I initially made was instead of setting `beresp.ttl`, `beresp.stale_while_revalidate`, `beresp.stale_if_error` (as shown above) I tried to manipulate `beresp.http.Surrogate-Control` like so:
 
 ```
@@ -1424,6 +1429,26 @@ With the above VCL in place we can make a request with the `X-TTLs` header set w
 Then we can wait for the `max-age` TTL to expire before making the same request again and see that now Fastly will attempt to revalidate the content and so during its `stale-while-revalidate` time period Fastly will serve stale content back to us.
 
 Then we can wait for the `stale-while-revalidate` TTL to expire before making the same request again but changing `X-TTLs` to `X-ResponseState` and setting the value to `fail`, which means when Fastly attempts to acquire the content from the origin it'll think it received an error from the backend/origin server and go ahead and serve stale content back to us.
+
+#### Mistake 2.
+
+Another thing I had initially done wrong was not handle the situation where the origin would serve back a `304 Not Modified`. In this scenario Varnish will not execute `vcl_fetch` (why would it? there's no change in the content, based upon its 'conditional request' it made and so no FULL request needs to be made to the origin to fetch the full response).
+
+The reason this causes an issue is because along with a `304` not executing `vcl_fetch` (and thus our cache directives and failure modifications wont be actioned) it means the object in the cache will be updated in a way that can break our expectations.
+
+Specifically, when Varnish receives a `304` from origin, it will re-cache the object with the _original_ TTLs (normally this would be fine as this would be our _modified_ cache directives) but it'll only do that if there is no valid `Cache-Control` or `Surrogate-Control` header found in the `304` response from origin. 
+
+So in my case, our origin responded with a `304` and also provided the _original_ (i.e. unmodified) `Surrogate-Control` header, and thus those TTLs were being applied to the re-cached object. Making my testing code's assertions about the state of the object incorrect.
+
+This had me confused for a _long_ time. With the help of Fastly support we realized the best way to avoid this `304` response from messing up our expectations was to cause strip the `ETag` and `Last-Modified` headers from the first `200 OK` response we got back from the origin.
+
+The reason we do this is so that the Varnish cache has no way of making a conditional request when it comes to us testing `stale-while-revalidate` and so it is forced to make a full request to the origin, where upon Varnish will have to execute `vcl_fetch` and our code modifications will again be applied.
+
+If we didn't do that, then there would literally be _no way_ of testing our website's ability to serve stale unless we changed the backend to a different origin server that was pre-configured to respond how we needed it to.
+
+Having a different backend was something we had already done in the past and helped us to validate our VCL code and cache headers were correct, but it didn't tell us if our _real_ pages would serve stale at the critical time that we needed them to -- so that's way we wanted to control everything from VCL rather than using a special backend.
+
+> Note: [here](https://gist.github.com/Integralist/f7a6abdd946ad5b3b06907069f79cc48) is an example Python3 script that demonstrates how we verify these behaviours.
 
 <div id="7"></div>
 ## Disable Caching
