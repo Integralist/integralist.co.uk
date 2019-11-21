@@ -231,12 +231,12 @@ fmt.Printf("data: %#v\n", data) // [4]int{1, 2, 3, 4}
 
 s = append(s, 5)
 
-hdr = (*reflect.SliceHeader)(unsafe.Pointer(&s))
-data = *(*[4]int)(unsafe.Pointer(hdr.Data))
+hdr2 := (*reflect.SliceHeader)(unsafe.Pointer(&s))
+data2 := *(*[8]int)(unsafe.Pointer(hdr.Data))
 
 fmt.Printf("slice:  %T\n\t%#v\n\tlen: %d\n\tcap: %d\n", s, s, len(s), cap(s))
-fmt.Printf("hdr: %#v\n", hdr)   // &reflect.SliceHeader{Data:0x45e020, Len:5, Cap:8}
-fmt.Printf("data: %#v\n", data) // [4]int{1, 2, 3, 4}
+fmt.Printf("hdr2: %#v\n", hdr2)   // &reflect.SliceHeader{Data:0x45e020, Len:5, Cap:8}
+fmt.Printf("data2: %#v\n", data2) // [8]int{1, 2, 3, 4, 5, 0, 0, 0}
 ```
 
 > Note: `s := []int{1, 2, 3, 4}` causes an underlying array to be created and then referened by the slice we defined.
@@ -258,7 +258,7 @@ slice:  []int
 	cap: 8
 
 hdr: &reflect.SliceHeader{Data:0x45e020, Len:5, Cap:8}
-data: [4]int{1, 2, 3, 4}
+data: [8]int{1, 2, 3, 4, 5, 0, 0, 0}
 ```
 
 We can see the `Data` field on the `SliceHeader` is pointing to a different memory address!
