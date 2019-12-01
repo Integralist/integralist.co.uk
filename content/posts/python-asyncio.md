@@ -30,6 +30,7 @@ This is a _quick_ guide to Python's `asyncio` module and is based on Python vers
   - [`as_completed`](#as-completed)
   - [`create_task`](#create-task)
   - [Callbacks](#callbacks)
+- [Pools](#pools)
 
 ## Introduction
 
@@ -365,4 +366,57 @@ The output of this program is:
 Hello World!
 got the result! Foo!
 <Task finished coro=<foo() done, defined at gather.py:4> result='Foo!'>
+```
+
+## Pools
+
+When dealing with lots of concurrent operations it might be wise to utilize a 'pool' of threads (or subprocesses) to prevent exhausting your application's host resources. Asyncio provides a concept referred to as a Executor to help with this (see: [Executor documentation](https://docs.python.org/3.8/library/concurrent.futures.html#concurrent.futures.Executor)).
+
+There are two types of 'executors':
+
+- [`ThreadPoolExecutor`](https://docs.python.org/3.8/library/concurrent.futures.html#threadpoolexecutor)
+- [`ProcessPoolExecutor`](https://docs.python.org/3.8/library/concurrent.futures.html#processpoolexecutor)
+
+In order to execute code within one of these executors, you need to call the event loop's `.run_in_executor()` function and pass in the executor type as the first argument. If `None` is provided, then the _default_ executor is used (which is the `ThreadPoolExecutor`).
+
+The following example is copied verbatim from the [Python documentation](https://docs.python.org/3.8/library/asyncio-eventloop.html#executing-code-in-thread-or-process-pools):
+
+```
+import asyncio
+import concurrent.futures
+
+
+def blocking_io():
+    # File operations (such as logging) can block the
+    # event loop: run them in a thread pool.
+    with open("/dev/urandom", "rb") as f:
+        return f.read(100)
+
+
+def cpu_bound():
+    # CPU-bound operations will block the event loop:
+    # in general it is preferable to run them in a
+    # process pool.
+    return sum(i * i for i in range(10 ** 7))
+
+
+async def main():
+    loop = asyncio.get_running_loop()
+
+    # 1. Run in the default loop's executor:
+    result = await loop.run_in_executor(None, blocking_io)
+    print("default thread pool", result)
+
+    # 2. Run in a custom thread pool:
+    with concurrent.futures.ThreadPoolExecutor() as pool:
+        result = await loop.run_in_executor(pool, blocking_io)
+        print("custom thread pool", result)
+
+    # 3. Run in a custom process pool:
+    with concurrent.futures.ProcessPoolExecutor() as pool:
+        result = await loop.run_in_executor(pool, cpu_bound)
+        print("custom process pool", result)
+
+
+asyncio.run(main())
 ```
