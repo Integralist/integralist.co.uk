@@ -57,11 +57,11 @@ There are two closely related terms used here:
 
 All asyncio applications will typically have (at least) a single 'main' entrypoint task that will be scheduled to run immediately on the event loop. This is done using the `asyncio.run` function (see '[Running an asyncio program](#running-an-asyncio-program)'). 
 
-A coroutine function is expected to be passed to `asyncio.run`, while _internally_ asyncio will check this using the helper function `coroutines.iscoroutine`. If not a coroutine, then an error is raised, otherwise the coroutine will be passed to `loop.run_until_complete`. 
+A coroutine function is expected to be passed to `asyncio.run`, while _internally_ asyncio will check this using the helper function `coroutines.iscoroutine` (see: [source code](https://github.com/python/cpython/blob/master/Lib/asyncio/runners.py#L8)). If not a coroutine, then an error is raised, otherwise the coroutine will be passed to `loop.run_until_complete` (see: [source code](https://github.com/python/cpython/blob/master/Lib/asyncio/base_events.py#L599)). 
 
-The `run_until_complete` function expects a [Future](#futures) (see below section) and uses another helper function `futures.isfuture` to check the type provided.
+The `run_until_complete` function expects a [Future](#futures) (see below section for what a Future is) and uses another helper function `futures.isfuture` to check the type provided. If not a Future, then the low-level API `ensure_future` is used to convert the coroutine into a Future (see [source code](https://github.com/python/cpython/blob/master/Lib/asyncio/tasks.py#L653)).
 
-In older versions of Python you would have used `asyncio.ensure_future` (now considered to be a low-level API) to schedule a coroutine to be executed on the event loop, but with Python 3.7+ this has been superseded by `asyncio.create_task`. 
+In older versions of Python, if you were going to manually create your own Future and schedule it onto the event loop, then you would have used `asyncio.ensure_future` (now considered to be a low-level API), but with Python 3.7+ this has been superseded by `asyncio.create_task`. 
 
 Additionally with Python 3.7, the idea of interacting with the event loop directly (e.g. getting the event loop, creating a task with `create_task` and then passing it to the event loop) has been replaced with `asyncio.run`, which abstracts it all away for you (see '[Running an asyncio program](#running-an-asyncio-program)' to understand what that means).
 
