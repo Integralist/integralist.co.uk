@@ -14,6 +14,25 @@ draft: false
 
 This is a _quick_ guide to Python's `asyncio` module and is based on Python version 3.8.
 
+- [Introduction](#introduction)
+- [Event Loop](#event-loop)
+- [Awaitables](#awaitables)
+  - [Coroutines](#coroutines)
+  - [Tasks](#tasks)
+  - [Futures](#futures)
+- [Running an asyncio program](#running-an-asyncio-program)
+- [Concurrent Functions](#concurrent-functions)
+- [Deprecated Functions](#deprecated-functions)
+- [Examples](#examples)
+  - [`gather`](#gather)
+  - [`wait`](#wait)
+  - [`wait_for`](#wait-for)
+  - [`as_completed`](#as-completed)
+  - [`create_task`](#create-task)
+  - [Callbacks](#callbacks)
+
+## Introduction
+
 > asyncio is a library to write concurrent code using the `async`/`await` syntax. -- [docs.python.org/3.8/library/asyncio.html](https://docs.python.org/3.8/library/asyncio.html)
 
 The asyncio module provides both high-level and low-level APIs. Library and Framework developers will be expected to use the low-level APIs, while all other users are encouraged to use the high-level APIs.
@@ -26,7 +45,9 @@ The core element of all asyncio applications is the 'event loop'. The event loop
     <img src="../../images/event-loop.png">
 </a>
 
-> Image Credit: https://eng.paxos.com/python-3s-killer-feature-asyncio
+<div class="credit">
+  <a href="https://eng.paxos.com/python-3s-killer-feature-asyncio">Image Credit</a>
+</div>
 
 > Note: for more API information on the event loop, please refer to [the documentation](https://docs.python.org/3.8/library/asyncio-eventloop.html).
 
@@ -128,9 +149,9 @@ The following functions help to co-ordinate the running of functions concurrentl
 
 ## Examples
 
-### Gather
+### `gather`
 
-The following example demonstrates how simple the `gather` behaviour is. 
+The following example demonstrates how to wait for multiple asynchronous tasks to complete.
 
 ```
 import asyncio
@@ -149,7 +170,7 @@ async def main():
 asyncio.run(main())
 ```
 
-### Wait
+### `wait`
 
 The following example uses the `FIRST_COMPLETED` option, meaning whichever task finishes first is what will be returned.
 
@@ -174,7 +195,7 @@ async def main():
 asyncio.run(main())
 ```
 
-The output of this program would be:
+An example output of this program would be:
 
 ```
 1 will sleep for: 4 seconds
@@ -184,4 +205,164 @@ The output of this program would be:
 n: 3!
 
 ({<Task finished coro=<foo() done, defined at await.py:5> result=None>}, {<Task pending coro=<foo() running at await.py:8> wait_for=<Future pending cb=[<TaskWakeupMethWrapper object at 0x10322b468>()]>>, <Task pending coro=<foo() running at await.py:8> wait_for=<Future pending cb=[<TaskWakeupMethWrapper object at 0x10322b4c8>()]>>})
+```
+
+### `wait_for`
+
+The following example demonstrates how we can utilize a timeout to prevent waiting endlessly for an asynchronous task to finish.
+
+```
+import asyncio
+
+
+async def foo(n):
+    await asyncio.sleep(10)
+    print(f"n: {n}!")
+
+
+async def main():
+    try:
+        await asyncio.wait_for(foo(1), timeout=5)
+    except asyncio.TimeoutError:
+        print("timeout!")
+
+
+asyncio.run(main())
+```
+
+> Note: the `asyncio.TimeoutError` doesn't provide any extra information so there's no point in trying to use it in your output (e.g. `except asyncio.TimeoutError as err: print(err)`).
+
+### `as_completed`
+
+The following example demonstrates how `as_complete` will yield the first task to complete, followed by the next quickest, and the next until all tasks are completed.
+
+```
+import asyncio
+from random import randrange
+
+
+async def foo(n):
+    s = randrange(10)
+    print(f"{n} will sleep for: {s} seconds")
+    await asyncio.sleep(s)
+    return f"{n}!"
+
+
+async def main():
+    counter = 0
+    tasks = [foo("a"), foo("b"), foo("c")]
+
+    for future in asyncio.as_completed(tasks):
+        n = "quickest" if counter == 0 else "next quickest"
+        counter += 1
+        result = await future
+        print(f"the {n} result was: {result}")
+
+
+asyncio.run(main())
+```
+
+An example output of this program would be:
+
+```
+c will sleep for: 9 seconds
+a will sleep for: 1 seconds
+b will sleep for: 0 seconds
+
+the quickest result was: b!
+the next quickest result was: a!
+the next quickest result was: c!
+```
+
+### `create_task`
+
+The following example demonstrates how to convert a coroutine into a Task and schedule it onto the event loop.
+
+```
+import asyncio
+
+
+async def foo():
+    await asyncio.sleep(10)
+    print("Foo!")
+
+
+async def hello_world():
+    task = asyncio.create_task(foo())
+    print(task)
+    await asyncio.sleep(5)
+    print("Hello World!")
+    await asyncio.sleep(10)
+    print(task)
+
+
+asyncio.run(hello_world())
+```
+
+We can see from the above program that we use `create_task` to convert our coroutine function into a Task. This automatically schedules the Task to be run on the event loop at the next available tick. 
+
+This is in contrast to the lower-level API `ensure_future` (which is the preferred way of creating new Tasks). The `ensure_future` function has specific logic branches that make it useful for more input types than `create_task` which only supports scheduling a coroutine onto the event loop and wrapping it inside a Task (see: [`ensure_future` source code](https://github.com/python/cpython/blob/master/Lib/asyncio/tasks.py#L653)).
+
+The output of this program would be:
+
+```
+<Task pending coro=<foo() running at create_task.py:4>>
+Hello World!
+Foo!
+<Task finished coro=<foo() done, defined at create_task.py:4> result=None>
+```
+
+Let's review the code and compare to the above output we can see...
+
+We convert `foo()` into a Task and then print the returned Task immediately after it is created. So when we print the Task we can see that its status is shown as 'pending' (as it hasn't been executed yet). 
+
+Next we'll sleep for five seconds, as this will cause the `foo` Task to now be run (as the current Task `hello_world` will be considered busy).
+
+Within the `foo` Task we also sleep, but for a _longer_ period of time than `hello_world`, and so the event loop will now context switch _back_ to the `hello_world` Task, where upon the sleep will pass and we'll print the output string `Hello World`.
+
+Finally, we sleep again for ten seconds. This is just so we can give the `foo` Task enough time to complete and print its own output. If we didn't do that then the `hello_world` task would finish and close down the event loop. The last line of `hello_world` is printing the `foo` Task, where we'll see the status of the `foo` Task will now show as  'finished'.
+
+### Callbacks
+
+When dealing with a Task, which really is a Future, then you have the ability to execute a 'callback' function once the Future has a value set on it.
+
+The following example demonstrates this by modifying the previous [`create_task`](#create_task) example code:
+
+```
+import asyncio
+
+
+async def foo():
+    await asyncio.sleep(10)
+    return "Foo!"
+
+
+def got_result(future):
+    print(f"got the result! {future.result()}")
+
+
+async def hello_world():
+    task = asyncio.create_task(foo())
+    task.add_done_callback(got_result)
+    print(task)
+    await asyncio.sleep(5)
+    print("Hello World!")
+    await asyncio.sleep(10)
+    print(task)
+
+
+asyncio.run(hello_world())
+```
+
+Notice in the above program we add a new `got_result` function that expects to receive a Future type, and thus calls `.result()` on the Future.
+
+Also notice that to get this function to be called, we pass it to `.add_done_callback()` which is called on the Task returned by `create_task`.
+
+The output of this program is:
+
+```
+<Task pending coro=<foo() running at gather.py:4> cb=[got_result() at gather.py:9]>
+Hello World!
+got the result! Foo!
+<Task finished coro=<foo() done, defined at gather.py:4> result='Foo!'>
 ```
