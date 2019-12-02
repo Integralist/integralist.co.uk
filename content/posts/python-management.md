@@ -12,6 +12,13 @@ tags:
 draft: false
 ---
 
+- [Introduction](#introduction)
+- [Virtual Environments](#virtual-environments)
+- [Installing Python Versions](#installing-python-versions)
+- [Setting Up Virtual Environments](#setting-up-virtual-environments)
+- [Only Virtual Environments](#only-virtual-environments)
+- [Managing Dependencies](#managing-dependencies)
+
 ## Introduction
 
 This blog post aims to demonstrate the most practical way to install multiple versions of Python, and of setting up 'virtual environments' for macOS users. 
@@ -100,3 +107,80 @@ python3 -m pip install <dependencies>
 This will ensure you only install third-party packages/modules into the specific virtual environment you've just activated.
 
 The downside of this very simple approach is that installing Python via Homebrew means you'll have only a single version of Python installed and you have no control over what that version is, let alone have multiple versions installed (as the `python3` command will be overwritten each time).
+
+## Managing Dependencies
+
+When it comes to dealing with specific dependency versions, I like to use the method [Kenneth Reitz](https://www.kennethreitz.org/essays/a-better-pip-workflow) published back in 2016.
+
+> **Note**: this method keeps with the traditional `requirements.txt` file as utilized by [Pip](https://pip.pypa.io/en/stable/). I mention this as you'll notice with other tools (such as Pipenv or Poetry), that they move away from this established format and that can be a bit disruptive in terms of how Python teams have traditionally worked. I'm not saying it's a bad thing, but change isn't always good.
+
+### Problem Summary
+
+Here is a summary of the problem we're trying to solve:
+
+The `requirements.txt` file typically doesn't include the sub-dependencies required by your top-level dependencies (because that would require you to manually identify them and to type them all out, something that should be an automated process and so in practice never happens manually). 
+
+e.g. you specify a top-level dependency of `foo` (which might install version 1.0), but that internally requires the use of other third-party packages such as `bar` and `baz` (and specific versions for each of them).
+
+But a `pip install` from a file that only includes the top-level dependencies could (over time) result in different sub-dependency versions being installed by either different members of your team or via your deployment platform.
+
+e.g. if you don't specify a version for `foo`, then in a months time when someone else (or your deployment platform) runs `pip install` it will attempt to install the latest version of `foo` which might be version 2.0 (and subsequently the third-party packages it uses might also change).
+
+To avoid that people have come to use `pip freeze` after doing a `pip install` to overwrite their `requirements.txt` with a list of _all_ dependencies and their explicit versions. 
+
+This solves the issue of installing from `requirements.txt` in a months time when lots of your top-level dependencies release new breaking versions. 
+
+The problem now is that you have to manually search for the top-level dependencies (in this new larger/more-indepth `requirements.txt` file) and update them manually. Doing this might break things as you now don't know what the sub-dependency versions should be set to.
+
+### Solution
+
+So the approach we take with any project is to define a `requirements-to-freeze.txt` file. This file will contain all your project's top-level dependencies (inc. any _explicit_ versions required), for example:
+
+```
+requests[security]
+flask
+gunicorn==19.4.5
+```
+
+Next we can generate our actual `requirements.txt` file based upon the contents of `requirements-to-freeze.txt` using the `pip freeze` command, like so:
+
+```
+python -m pip install -r requirements-to-freeze.txt
+python -m pip freeze > requirements.txt
+```
+
+Which will result in a `requirements.txt` file that looks something like:
+
+```
+cffi==1.5.2
+cryptography==1.2.2
+enum34==1.1.2
+Flask==0.10.1
+gunicorn==19.4.5
+idna==2.0
+ipaddress==1.0.16
+itsdangerous==0.24
+Jinja2==2.8
+MarkupSafe==0.23
+ndg-httpsclient==0.4.0
+pyasn1==0.1.9
+pycparser==2.14
+pyOpenSSL==0.15.1
+requests==2.9.1
+six==1.10.0
+Werkzeug==0.11.4
+```
+
+This means you'll never manually update `requirements.txt` again. Any time you need to update a dependency you'll do it in `requirements-to-freeze.txt`, then re-run:
+
+```
+python -m pip install -r requirements-to-freeze.txt
+python -m pip freeze > requirements.txt
+```
+
+Or instead of manually updating the dependencies in `requirements-to-freeze.txt` you could use the `--upgrade` flag:
+
+```
+python -m pip install -r requirements-to-freeze.txt --upgrade
+python -m pip freeze > requirements.txt
+```
