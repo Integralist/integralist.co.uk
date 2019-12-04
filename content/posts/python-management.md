@@ -1,5 +1,5 @@
 ---
-title: "Python Management"
+title: "Python Management and Project Dependencies"
 date: 2019-12-01T11:25:19Z
 categories:
   - "code"
@@ -14,16 +14,20 @@ draft: false
 
 - [Introduction](#introduction)
 - [Virtual Environments](#virtual-environments)
+- [Creating Virtual Environments](#creating-virtual-environments)
 - [Installing Python Versions](#installing-python-versions)
-- [Setting Up Virtual Environments](#setting-up-virtual-environments)
-- [Only Virtual Environments](#only-virtual-environments)
+- [Virtual Environments for multiple Pythons](#virtual-environments-for-multiple-pythons)
 - [Managing Dependencies](#managing-dependencies)
+- [Caching Dependencies](#caching-dependencies)
+- [Command Line Packages](#command-line-packages)
 
 ## Introduction
 
-This blog post aims to demonstrate the most practical way to install multiple versions of Python, and of setting up 'virtual environments' for macOS users. 
+This blog post aims to demonstrate the most practical way to install multiple versions of Python, and of setting up 'virtual environments' for macOS userso
 
-Why is this not a simple thing to do? I hear you ask! Well, because we don't live in a perfect world and sometimes the overhead of 'convenience' can be worth the cost otherwise incurred.
+We'll also dig into how to manage our project dependencies (e.g. we'll be discussing the classic Pip and `requirements.txt` format) + our approach for avoiding newer tools such as [Poetry](https://pypi.org/project/poetry/) and [Pipenv](https://pypi.org/project/pipenv/), which I feel are just too complicated/overkill for the majority of use cases. 
+
+Why is this not a simple thing to do? I hear you ask! Well, because we don't live in a perfect world and sometimes the overhead of 'convenience' can be worth the cost otherwise incurred, and sometimes it can't.
 
 I'll start by describing briefly what a virtual environment is, and then I'll move onto the point of this article and the options we have available to us.
 
@@ -36,6 +40,24 @@ To simplify: if you work on multiple Python projects and each project uses the s
 Having a virtual environment setup for each project means you can have project specific Python package installs. For example, project 'foo' can use the Request library version 1.0 while project 'bar' can use version 2.0 (which might introduce a different API).
 
 > Note: the official documentation on Virtual Environments can be found [here](https://docs.python.org/3/tutorial/venv.html).
+
+## Creating Virtual Environments
+
+If you installed Python using Homebrew (e.g. `brew install python3`) and you don't care what version of Python you have, you only care about having virtual environments, then you can utilize the built-in `venv` module like so:
+
+```
+python3 -m venv /foo/bar
+source /foo/bar/bin/activate
+python3 -m pip install <dependencies>
+```
+
+This will ensure you only install third-party packages/modules into the specific virtual environment you've just activated.
+
+The only downside of this very simple approach is that installing Python via Homebrew means you'll have only a single version of Python installed and you have no control over what that version is, let alone have multiple versions installed (as the `python3` command will be overwritten each time).
+
+> Note: if you want to prevent accidentally executing `pip install` outside of a virtual environment then use `export PIP_REQUIRE_VIRTUALENV=true` (it can also be set in a [`~/.pip/pip.conf`](https://github.com/Integralist/dotfiles/blob/master/.pip/pip.conf))
+
+If you require virtual environments across _multiple_ Python versions, then read the following couple of sections...
 
 ## Installing Python Versions
 
@@ -77,7 +99,7 @@ What the first point does is it'll allow your shell to respond to any `.python-v
 
 What generates the `.python-version` file is the latter point.
 
-## Setting Up Virtual Environments
+## Virtual Environments for multiple Pythons
 
 To setup virtual environments with Python is actually very simple (see [next section](#only-virtual-environments)), but not compatible when using an external build tool such as `pyenv` because of where `pyenv` installs Python binaries and how it switches between versions.
 
@@ -93,20 +115,6 @@ Once installed, setting up a new virtual environment is as simple as:
 pyenv virtualenv foobar
 pyenv activate foobar
 ```
-
-## Only Virtual Environments
-
-If you installed Python using Homebrew (e.g. `brew install python3`) and you don't care what version of Python you have, you only care about having virtual environments, then you can utilize the built-in `venv` module like so:
-
-```
-python3 -m venv /foo/bar
-source /foo/bar/bin/activate
-python3 -m pip install <dependencies>
-```
-
-This will ensure you only install third-party packages/modules into the specific virtual environment you've just activated.
-
-The downside of this very simple approach is that installing Python via Homebrew means you'll have only a single version of Python installed and you have no control over what that version is, let alone have multiple versions installed (as the `python3` command will be overwritten each time).
 
 ## Managing Dependencies
 
@@ -183,4 +191,53 @@ Or instead of manually updating the dependencies in `requirements-to-freeze.txt`
 ```
 python -m pip install -r requirements-to-freeze.txt --upgrade
 python -m pip freeze > requirements.txt
+```
+
+## Caching Dependencies
+
+Starting with pip version 6.0 you can prevent having to reinstall dependencies that are used across multiple virtual environments by caching them (this is especially useful with Continuous Integration builds).
+
+To do so, add the following to your `~/.bashrc` file:
+
+```
+export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
+```
+
+Alternatively add it to your `~/.pip/pip.conf` file:
+
+```
+[global]
+require-virtualenv = true
+download-cache = $HOME/.pip/cache
+```
+
+## Command Line Packages
+
+As a bonus section I'm going to quickly mention the tool [`pipx`](https://github.com/pipxproject/pipx) which allows us to install Python command line tools such that they are isolated binaries and so they don't clutter up our top-level Python runtime space.
+
+To install `pipx`, the official instructions are:
+
+```
+python3 -m pip install --user pipx
+python3 -m pipx ensurepath
+```
+
+But I found it didn't work unless I omitted the `--user` flag:
+
+```
+python3 -m pip install pipx
+python3 -m pipx ensurepath
+```
+
+After that you can add the following to your `~/.bashrc` (or similar for whatever shell you use):
+
+```
+pipx completions
+# eval "$(register-python-argcomplete pipx)"
+```
+
+Now you're able to safely install command line Python tools, like so:
+
+```
+pipx install pycowsay
 ```

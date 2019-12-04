@@ -420,3 +420,57 @@ async def main():
 
 asyncio.run(main())
 ```
+
+There is also an alternative way of scheduling a task to be run concurrently within a pool, without having to acquire the current event loop and passing the pool into it (as the above example demonstrates). 
+
+To do this we'll need to 'submit' a function to be run in the pool, as shown below:
+
+```
+import asyncio
+import concurrent.futures
+import time
+
+THREAD_POOL = concurrent.futures.ThreadPoolExecutor(max_workers=5)
+
+
+async def main():
+    future = THREAD_POOL.submit(time.sleep, 5)
+
+    for result in concurrent.futures.as_completed([future]):
+        assert future.done() and not future.cancelled()
+        print("all done!")
+
+
+asyncio.run(main())
+```
+
+One thing worth noting here is that because we've not used the `with` statement (like we did in the earlier pool example) it means we're not shutting down the pool once it has finished its work, and so (depending on if your program continues running) you may discover resources aren't being cleaned up.
+
+To solve that problem we can call the `.shutdown()` method which is exposed to both types of executors via its parent class `concurrent.futures.Executor`. Below is an updated example that does that:
+
+```
+import asyncio
+import concurrent.futures
+import time
+
+THREAD_POOL = concurrent.futures.ThreadPoolExecutor(max_workers=5)
+
+
+async def main():
+    future = THREAD_POOL.submit(time.sleep, 5)
+
+    THREAD_POOL.shutdown()
+
+    assert future.done() and not future.cancelled()
+
+    print("all done!")
+
+
+asyncio.run(main())
+```
+
+Notice the placement of the call to `.shutdown()` is _before_ we've explictly waited for the scheduled task to complete, and yet when we assert if the returned future is `.done()` we find that it is? 
+
+This works because the default behaviour for the shutdown method is `wait=True` which means it'll wait for all scheduled tasks to complete before shutting down the executor pool. This also means it's a blocking call. 
+
+If we passed `.shutdown(wait=False)` instead, then the call to `future.done()` would indeed raise an exception as the scheduled task would still be running and so in that case we'd need to ensure that we use another mechanism for acquiring the results of the scheduled tasks (such as `concurrent.futures.as_completed` or `concurrent.futures.wait`.
