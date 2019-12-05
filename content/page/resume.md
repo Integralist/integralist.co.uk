@@ -423,6 +423,8 @@ I'm a print published and self-published author; I'm also a tech reviewer and am
 
 The following links are to some of my more 'popular' articles. My main focus when writing is to take a complicated or confusing topic and attempt to distil it, in order for the subject to be more easily understood.
 
+- [Python Management and Project Dependencies](/posts/python-management/) (2019)
+- [Guide to Python 3.8 Asyncio](/posts/python-asyncio/) (2019)
 - [Staying Anonymous](/posts/staying-anonymous/) (2019)
 - [HTTP Caching Guide](/posts/http-caching/) (2019)
 - [Algorithmic Complexity in Python](/posts/algorithmic-complexity-in-python/) (2019)
