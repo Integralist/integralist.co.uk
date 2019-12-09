@@ -410,6 +410,23 @@ if (obj.status == 900) {
 
 In the above example we construct a synthetic error response where the status code is a `500 Internal Server Error`, we set the content-type to HTML and then we use the `synthetic` directive to manually construct some HTML to be the 'body' of our response. Finally we execute `return(deliver)` to jump over to the `vcl_deliver` state.
 
+If you want to send a synthetic JSON response (maybe your Fastly service is fronting an API that returns JSON), then this is possible:
+
+```
+if (obj.status == 401) {
+  set obj.http.Content-Type = "application/json";
+  set obj.http.WWW-Authenticate = "Basic realm=Secured";
+
+  synthetic "{" +
+    "%22error%22: %22401 Unauthorized%22" +
+  "}";
+
+  return(deliver);
+}
+```
+
+We discuss JSON generation in more detail [later](#logging-memory-exhaustion).
+
 ### Unexpected State Change
 
 Now, I wanted to talk briefly about error handling because there are situations where an error can occur, and it can cause Varnish to change to an _unexpected_ state. I'll give a real-life example of this...
