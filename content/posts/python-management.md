@@ -55,6 +55,8 @@ This will ensure you only install third-party packages/modules into the specific
 
 The only downside of this very simple approach is that installing Python via Homebrew means you'll have only a single version of Python installed and you have no control over what that version is, let alone have multiple versions installed (as the `python3` command will be overwritten each time).
 
+This consideration is actually _critical_ to understand when you consider the Linux OS internals use the same Python version as exposed to the end user. Meaning if you mess up your Python install on Linux, then there is a high chance you'll break the entire operating system!
+
 > Note: if you want to prevent accidentally executing `pip install` outside of a virtual environment then use `export PIP_REQUIRE_VIRTUALENV=true` (it can also be set in a [`~/.pip/pip.conf`](https://github.com/Integralist/dotfiles/blob/master/.pip/pip.conf))
 
 If you require virtual environments across _multiple_ Python versions, then read the following couple of sections...
