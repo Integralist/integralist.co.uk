@@ -143,8 +143,8 @@ The following functions help to co-ordinate the running of functions concurrentl
 
 ## Deprecated functions
 
-- `@asyncio.coroutine`: removed in Python 3.10
-- `asyncio.sleep`: removed in Python 3.10
+- `@asyncio.coroutine`: removed in favour of `async def` in Python 3.10
+- `asyncio.sleep`: the `loop` parameter will be removed in Python 3.10
 
 > Note: you'll find in most of these APIs a `loop` argument can be provided to enable you to indicate the specific event loop you want to utilize). It seems Python has deprecated this argument in 3.8, and will remove it completely in 3.10.
 
