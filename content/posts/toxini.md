@@ -18,6 +18,7 @@ draft: false
 - [Example tox.ini](#example-tox-ini)
 - [Configuring _other_ packages](#configuring-other-packages)
 - [Why do multiple tools support `tox.ini`?](#why-do-multiple-tools-support-tox-ini)
+- [Bonus Section](#bonus-section)
 
 ## Introduction
 
@@ -119,3 +120,63 @@ addopts =
 markers =
     integration: mark a test as an integration test that makes http calls.
 ```
+
+## Bonus Section
+
+Although not directly related to the conversation about `tox.ini` I thought it worth mentioning that I discovered recently the Python logging library allows you to be able to configure logging via an ini configuration file!
+
+> Reference: [docs.python.org/3/howto/logging.html](https://docs.python.org/3/howto/logging.html#configuring-logging)
+
+The ini file might look something like the following:
+
+```
+[loggers]
+keys=root,simpleExample
+
+[handlers]
+keys=consoleHandler
+
+[formatters]
+keys=simpleFormatter
+
+[logger_root]
+level=DEBUG
+handlers=consoleHandler
+
+[logger_simpleExample]
+level=DEBUG
+handlers=consoleHandler
+qualname=simpleExample
+propagate=0
+
+[handler_consoleHandler]
+class=StreamHandler
+level=DEBUG
+formatter=simpleFormatter
+args=(sys.stdout,)
+
+[formatter_simpleFormatter]
+format=%(asctime)s - %(name)s - %(levelname)s - %(message)s
+datefmt=
+```
+
+The Python program that uses this file might look like the following:
+
+```
+import logging
+import logging.config
+
+logging.config.fileConfig('logging.conf')
+
+# create logger
+logger = logging.getLogger('simpleExample')
+
+# 'application' code
+logger.debug('debug message')
+logger.info('info message')
+logger.warning('warn message')
+logger.error('error message')
+logger.critical('critical message')
+```
+
+Notice though, the _name_ of the configuration file we imported was `logging.conf` (no `.ini` extension). It doesn't matter that the file doesn't use the `.ini` extension as long as the format of the file itself conforms to the ini format.
