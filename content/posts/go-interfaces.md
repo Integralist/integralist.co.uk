@@ -16,6 +16,7 @@ draft: false
 - [Keep Interfaces Small](#keep-interfaces-small)
 - [Accept Interfaces, Return Concrete Types](#accept-interfaces-return-concrete-types)
 - [Don't Return Concrete Types](#don-t-return-concrete-types)
+- [Return Values not Pointers](#return-values-not-pointers)
 - [Use existing interfaces](#use-existing-interfaces)
 - [Don't Force Interfaces](#don-t-force-interfaces)
 - [Upgrading Interfaces](#upgrading-interfaces)
@@ -221,6 +222,12 @@ The `FindItem` could be an internal library function that attempts to locate an 
 In this instance returning an interface allows the consumer to not have to worry about the change in underlying data types.
 
 > Note: it's possible the returned types could be consolidated into a single generic type struct, which means we can avoid returning an interface, but it depends on the exact scenario/use case.
+
+## Return Values not Pointers
+
+This section isn't directly related to the conversation about interface design, but it does highlight an important 'design' decision, which is: if your code returns a pointer to some data, then it means once that pointer has been passed around a few different functions, we now have multiple entities that are able to mutate that data.
+
+So be careful about whether you return a value (immutable) vs a pointer (mutable) as it could help reduce confusion with regards to how the data is modified by your program.
 
 ## Use Existing Interfaces
 
