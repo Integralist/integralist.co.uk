@@ -21,6 +21,7 @@ This is a _quick_ guide to Python's `asyncio` module and is based on Python vers
   - [Tasks](#tasks)
   - [Futures](#futures)
 - [Running an asyncio program](#running-an-asyncio-program)
+  - [Running Async Code in the REPL](#running-async-code-in-the-repl)
 - [Concurrent Functions](#concurrent-functions)
 - [Deprecated Functions](#deprecated-functions)
 - [Examples](#examples)
@@ -128,6 +129,31 @@ loop = asyncio.get_event_loop()
 loop.run_until_complete(hello_world())
 loop.close()
 ```
+
+### Running Async Code in the REPL
+
+Prior to Python 3.8 you couldn't execute async code within the standard Python REPL (it would have required you to use the IPython REPL instead). 
+
+To do this with the latest version of Python you would run `python -m asyncio`. Once the REPL has started you don't need to use `asyncio.run()`, but just use the `await` statement directly.
+
+```
+asyncio REPL 3.8.0+ (heads/3.8:5f234538ab, Dec  1 2019, 11:05:25)
+
+[Clang 10.0.1 (clang-1001.0.46.4)] on darwin
+
+Use "await" directly instead of "asyncio.run()".
+Type "help", "copyright", "credits" or "license" for more information.
+
+>>> import asyncio
+>>> async def foo():
+...   await asyncio.sleep(5)
+...   print("done")
+...
+>>> await foo()
+done
+```
+
+> Notice we didn't need to import `asyncio` to use the `.sleep` function, that's because the REPL has been started with that module.
 
 ## Concurrent Functions
 
