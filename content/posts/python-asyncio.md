@@ -499,4 +499,4 @@ Notice the placement of the call to `.shutdown()` is _before_ we've explictly wa
 
 This works because the default behaviour for the shutdown method is `wait=True` which means it'll wait for all scheduled tasks to complete before shutting down the executor pool. This also means it's a blocking call. 
 
-If we passed `.shutdown(wait=False)` instead, then the call to `future.done()` would indeed raise an exception as the scheduled task would still be running and so in that case we'd need to ensure that we use another mechanism for acquiring the results of the scheduled tasks (such as `concurrent.futures.as_completed` or `concurrent.futures.wait`.
+If we passed `.shutdown(wait=False)` instead, then the call to `future.done()` would indeed raise an exception as the scheduled task would still be running and so in that case we'd need to ensure that we use another mechanism for acquiring the results of the scheduled tasks (such as `concurrent.futures.as_completed` or `concurrent.futures.wait`).
