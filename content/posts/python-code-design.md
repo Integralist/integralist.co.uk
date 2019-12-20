@@ -15,67 +15,11 @@ draft: false
 
 This post is going to cover a few tools and features I plan on using when writing Python code in 2019. I've grouped these into the following sections:
 
-- [Dependency Management](#dependency-management)
 - [Type Hints and Static Analysis](#type-hints-and-static-analysis)
 - [Interfaces, Protocols and Abstract Methods](#interfaces-protocols-and-abstract-methods)
+- [Dependency Management](#dependency-management)
 
 > Note: if you want to learn the basics of Python, then I recommend reading "[Python for Programmers](https://leanpub.com/pythonforprogrammers)"
-
-## Dependency Management
-
-Python has historically utilised a `requirements.txt` file for defining the dependencies required of your program, but there are [various](https://medium.com/knerd/the-nine-circles-of-python-dependency-hell-481d53e3e025) annoying [complications](https://realpython.com/pipenv-guide/#dependency-management-with-requirementstxt) that go along with the traditional model of handling dependencies which has meant we have a few new players in the field to help us.
-
-One such concern is the setting up of multiple virtual environments for the various projects we need to work on:
-
-<center>
-  <a href="../../images/python-env.png">
-    <img src="../../images/python-env.png">
-  </a>
-</center>
-
-<center class="image-caption">_XKCD: right as always_</center>
-
-So here are the various alternatives we have to play with in 2019:
-
-- [Hatch](https://github.com/ofek/hatch)
-- [Poetry](https://github.com/sdispater/poetry)
-- [Pipenv](https://github.com/pypa/pipenv)
-
-I'll be showing you the last tool in the list: **Pipenv**. 
-
-Although _another_ alternative approach to the specific problem of virtual environments is to utilise docker containers for doing your development, but you'll need to be comfortable using a terminal editor like Vim (unless you want to jump through some X11 hoops). Using containers also doesn't eliminate the other issues with determining the right dependencies, so keep reading anyway.
-
-> Note: if using Docker with a terminal editor like Vim to solve this problem sounds like a good approach for you, then review [an older post of mine that explains how to do that](/posts/dev-environments-within-docker-containers/).
-
-Here are the commands necessary to install Pipenv on macOS:
-
-- `brew install pyenv`
-- `pip install pipenv`
-
-> Note: you'll need [Homebrew](https://brew.sh/) to install the [`pyenv`](https://github.com/pyenv/pyenv) command (a sub dependency) using `brew`, and macOS should have Python 2.7.x installed by default so you should have the `pip` command available already.
-
-Here are my quick steps for setting up a new project with Pipenv:
-
-- `mkdir foobar && cd foobar`
-- `pipenv --python 3.7`
-
-> Note: use `pyenv install --list` to find out what Python versions are available to install.
-
-Now when working on a Pipenv project:
-
-- `cd foobar`
-- `pipenv shell` or `pipenv run python ./app.py`
-
-> Note: use the `shell` subcommand to have your current terminal permanently use the chosen Python version (e.g. `python ./app.py` will work as if the current Python version is what you've defined), otherwise use the `run` subcommand to execute the given command (e.g. `python ./app.py`) within the chosen Python version temporarily.
-
-You can now install dependencies specifically for the project's specific Python environment:
-
-- `pipenv install tornado==5.0.2`
-- `pipenv install --dev mypy tox flake8`
-
-> Note: if you have an existing `requirements.txt` file, then you can generate a Pipfile from that using `pipenv install -r requirements.txt`, alternatively if you need to do the reverse (generate a requirements from a Pipfile): `pipenv lock --requirements`
-
-Now none of these new tools are perfect, and if you want a good run down of one engineer's perspective on them, [read here](https://chriswarrick.com/blog/2018/07/17/pipenv-promises-a-lot-delivers-very-little/).
 
 ## Type Hints and Static Analysis
 
@@ -356,6 +300,64 @@ It's important to understand that the use of an abstract class is subtly differe
 For example, our `Thing` class is a _concrete_ implementation, and so we can't provide the receiver with a _different_ class (even if the other class also happened to inherit from `Foo`) as it won't be equivalent to a `Thing` type.
 
 > Note: the mypy docs have [a good detailed breakdown](https://mypy.readthedocs.io/en/latest/kinds_of_types.html#the-type-of-class-objects) of how to indicate a dependency of a specific class type.
+
+## Dependency Management
+
+**UPDATE 2019.12.20**: I no longer use Pipenv (as per below). I've written an updated version of how best to handle dependencies [here](/posts/python-management/).
+
+Python has historically utilised a `requirements.txt` file for defining the dependencies required of your program, but there are [various](https://medium.com/knerd/the-nine-circles-of-python-dependency-hell-481d53e3e025) annoying [complications](https://realpython.com/pipenv-guide/#dependency-management-with-requirementstxt) that go along with the traditional model of handling dependencies which has meant we have a few new players in the field to help us.
+
+One such concern is the setting up of multiple virtual environments for the various projects we need to work on:
+
+<center>
+  <a href="../../images/python-env.png">
+    <img src="../../images/python-env.png">
+  </a>
+</center>
+
+<center class="image-caption">_XKCD: right as always_</center>
+
+So here are the various alternatives we have to play with in 2019:
+
+- [Hatch](https://github.com/ofek/hatch)
+- [Poetry](https://github.com/sdispater/poetry)
+- [Pipenv](https://github.com/pypa/pipenv)
+
+I'll be showing you the last tool in the list: **Pipenv**. 
+
+Although _another_ alternative approach to the specific problem of virtual environments is to utilise docker containers for doing your development, but you'll need to be comfortable using a terminal editor like Vim (unless you want to jump through some X11 hoops). Using containers also doesn't eliminate the other issues with determining the right dependencies, so keep reading anyway.
+
+> Note: if using Docker with a terminal editor like Vim to solve this problem sounds like a good approach for you, then review [an older post of mine that explains how to do that](/posts/dev-environments-within-docker-containers/).
+
+Here are the commands necessary to install Pipenv on macOS:
+
+- `brew install pyenv`
+- `pip install pipenv`
+
+> Note: you'll need [Homebrew](https://brew.sh/) to install the [`pyenv`](https://github.com/pyenv/pyenv) command (a sub dependency) using `brew`, and macOS should have Python 2.7.x installed by default so you should have the `pip` command available already.
+
+Here are my quick steps for setting up a new project with Pipenv:
+
+- `mkdir foobar && cd foobar`
+- `pipenv --python 3.7`
+
+> Note: use `pyenv install --list` to find out what Python versions are available to install.
+
+Now when working on a Pipenv project:
+
+- `cd foobar`
+- `pipenv shell` or `pipenv run python ./app.py`
+
+> Note: use the `shell` subcommand to have your current terminal permanently use the chosen Python version (e.g. `python ./app.py` will work as if the current Python version is what you've defined), otherwise use the `run` subcommand to execute the given command (e.g. `python ./app.py`) within the chosen Python version temporarily.
+
+You can now install dependencies specifically for the project's specific Python environment:
+
+- `pipenv install tornado==5.0.2`
+- `pipenv install --dev mypy tox flake8`
+
+> Note: if you have an existing `requirements.txt` file, then you can generate a Pipfile from that using `pipenv install -r requirements.txt`, alternatively if you need to do the reverse (generate a requirements from a Pipfile): `pipenv lock --requirements`
+
+Now none of these new tools are perfect, and if you want a good run down of one engineer's perspective on them, [read here](https://chriswarrick.com/blog/2018/07/17/pipenv-promises-a-lot-delivers-very-little/).
 
 ## Conclusion
 
