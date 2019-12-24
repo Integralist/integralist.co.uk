@@ -149,13 +149,14 @@ Here is a list of the apps I'll install:
 - `lepton`: GitHub Gist UI
 - `slack`: communication tool
 - `spotify`: music streaming service
+- `vlc`: video player with support of lots of codecs
 
 > † if you installed the docker 'package', then you _need_ the docker 'app' as well for it to work. You can't have one without the other (this is because the app sets up the interface for macOS to interact with the underlying docker client/server implementation).
 
 Here's a handy one-liner:
 
 ```bash
-brew cask install alfred caffeine dash docker google-backup-and-sync google-chrome keybase lepton slack spotify
+brew cask install alfred caffeine dash docker google-backup-and-sync google-chrome keybase lepton slack spotify vlc
 ```
 
 The [Dash](https://kapeli.com/dash) app will ask you what documentation you would like to download so it's available offline. I use the following docsets (I used to have _lots_ more but realised I never really used them, so this is my 'essential' docs list):
@@ -350,11 +351,13 @@ At this point, in order to have a sane Python setup, we should look towards 'vir
 
 There are three aproaches we'll look at (each of them rely on [`pyenv`](https://github.com/pyenv/pyenv)):
 
-1. [`pipenv`](https://pipenv.readthedocs.io/en/latest/install/)
-2. [Poetry](https://poetry.eustace.io)
-3. [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv)
+1. [Pipenv](#pipenv) ([docs](https://pipenv.readthedocs.io/en/latest/install/))
+2. [Poetry](#poetry) ([docs](https://poetry.eustace.io))
+3. [pyenv-virtualenv](#pyenv-virtualenv) ([docs](https://github.com/pyenv/pyenv-virtualenv))
 
-We'll start by showing you how to install [`pipenv`](https://pipenv.readthedocs.io/en/latest/install/) which is a high-level abstraction across multiple tools (inc. [`pyenv`](https://github.com/pyenv/pyenv) and [`virtualenv`](https://virtualenv.readthedocs.io/)), then we'll move onto installing [Poetry](https://poetry.eustace.io) (which I prefer for reasons I'll explain later).
+> Note: my preference is [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv) as it's simple and effective (read also my post: [Python Management and Project Dependencies](/posts/python-management/)).
+
+We'll start by showing you how to install [`pipenv`](https://pipenv.readthedocs.io/en/latest/install/) which is a high-level abstraction across multiple tools (inc. [`pyenv`](https://github.com/pyenv/pyenv) and [`virtualenv`](https://virtualenv.readthedocs.io/)), then we'll move onto installing [Poetry](https://poetry.eustace.io). Lastly, we'll demonstrate `pyenv-virtualenv`.
 
 ### Pipenv
 
@@ -648,7 +651,9 @@ curl -LSso ~/tmux.sh https://raw.githubusercontent.com/Integralist/dotfiles/mast
 
 Not every app can be installed via Homebrew. [Monosnap](https://monosnap.com/welcome) is one such example.
 
-Also, if you're into torrents, then `npm install -g t-get` might be of interest to you.
+If you want an easy way to hide menu bar items, then try the [hidden-bar](https://apps.apple.com/app/hidden-bar/id1452453066) app ([github](https://github.com/dwarvesf/hidden))
+
+Also, if you're into torrents, then the transmission server/client (`npm install -g t-get`) might be of interest to you.
 
 ## macOS
 

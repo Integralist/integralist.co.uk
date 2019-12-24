@@ -30,7 +30,7 @@ draft: false
   - [Limitations](#7-4)
 - [CSP](#8)
 - [Threads](#9)
-    - [CPU vs I/O](#9-1)
+    - [What is CPU bound vs I/O bound?](#9-0)
     - [Calculating the number of Threads](#9-2)
     - [Even workload distribution](#9-3)
 - [Conclusion](#10)
@@ -469,8 +469,29 @@ Again, it's important to realise that Channels are synchronous and can block/cau
 
 Threads are prevalent across both the "shared memory" and "message passing" models. The discussion of how many threads to create is an important one and depends on the type of tasks your application is expected to handle: CPU bound or I/O bound. In the following sections we'll cover this topic, as well as describing an algorithm for calculating this.
 
-<div id="9-1"></div>
-### CPU vs I/O
+<div id="9-0"></div>
+### What is CPU bound vs I/O bound?
+
+> Note: the following is credited to [yaoyao.codes](http://yaoyao.codes/os/2017/03/20/cpu-bound-vs-io-bound).
+
+- **CPU bound**: the rate at which a process progresses is limited by the speed of the CPU. 
+- **I/O bound**: the rate at which a process progresses is limited by the speed of the I/O subsystem.
+
+This means a task that performs calculations on a small set of numbers, for example multiplying small matrices, is likely to be CPU bound. While a task that processes data from disk, for example, counting the number of lines in a file is likely to be I/O bound.
+
+A program is CPU bound if it would go faster if the CPU were faster.
+
+A program is I/O bound if it would go faster if the I/O subsystem was faster.
+
+The following is an explanation from "Essentials of Computer Organization and Architecture"...
+
+> Input and output (I/O) devices allow us to communicate with the computer system. I/O is the transfer of data between primary memory and various I/O peripherals. These devices are not connected directly to the CPU. Instead, there is an interface that handles the data transfers. This interface converts the system bus signals to and from a format that is acceptable to the given device. The CPU communicates to these external devices via I/O registers.
+
+See also the following image that demonstrates how a CPU will allow interruptions for I/O based signals ([source](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/13_IOSystems.html)):
+
+<a href="../../images/cpu-io.jpg">
+   <img src="../../images/cpu-io.jpg">
+</a>
 
 A CPU/Processor can contain one or more cores. For example, a quad core processor that runs at speed of 3GHz will have 4 cores running at that speed.
 
