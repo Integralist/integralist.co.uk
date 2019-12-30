@@ -72,7 +72,9 @@ There are two closely related terms used here:
 - a _coroutine function_: an `async def` function.
 - a _coroutine object_: an object returned by calling a coroutine function.
 
-> Generator based coroutine functions (e.g. those defined by decorating a function with `@asyncio.coroutine`) are superseded by the `async`/`await` syntax, but will continue to be supported _until_ Python 3.10 -- [docs.python.org/3.8/library/asyncio-task.html](https://docs.python.org/3.8/library/asyncio-task.html#asyncio-generator-based-coro)
+> Generator based coroutine functions (e.g. those defined by decorating a function with `@asyncio.coroutine`) are superseded by the `async`/`await` syntax, but will continue to be supported _until_ Python 3.10 -- [docs.python.org/3.8/library/asyncio-task.html](https://docs.python.org/3.8/library/asyncio-task.html#asyncio-generator-based-coro). 
+> 
+> Refer to my post "[iterators, generators, coroutines](/posts/python-generators/)" for more details about generator based coroutines and their asyncio history.
 
 ### Tasks
 
@@ -153,7 +155,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 done
 ```
 
-> Notice we didn't need to import `asyncio` to use the `.sleep` function, that's because the REPL has been started with that module.
+> Notice the REPL automatically executes `import asyncio` when starting up so we're able to use any `asyncio` functions (such as the `.sleep` function) without having to manually type that import statement ourselves.
 
 ## Concurrent Functions
 
