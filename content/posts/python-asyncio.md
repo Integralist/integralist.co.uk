@@ -22,6 +22,7 @@ This is a _quick_ guide to Python's `asyncio` module and is based on Python vers
   - [Futures](#futures)
 - [Running an asyncio program](#running-an-asyncio-program)
   - [Running Async Code in the REPL](#running-async-code-in-the-repl)
+  - [Use another Event Loop](#use-another-event-loop)
 - [Concurrent Functions](#concurrent-functions)
 - [Deprecated Functions](#deprecated-functions)
 - [Examples](#examples)
@@ -156,6 +157,31 @@ done
 ```
 
 > Notice the REPL automatically executes `import asyncio` when starting up so we're able to use any `asyncio` functions (such as the `.sleep` function) without having to manually type that import statement ourselves.
+
+### Use another Event Loop
+
+If for some reason you didn't want to use the event loop provided by `asyncio` (which is a pure Python implementation), you can swap it out for another event loop such as [uvloop](https://github.com/MagicStack/uvloop/).
+
+> uvloop is a fast, drop-in replacement of the built-in asyncio event loop. uvloop is implemented in [Cython](https://cython.org/) and uses [libuv](https://libuv.org/) under the hood.
+
+According to the authors of uvloop, it is comparible in speed to that of [Go](https://golang.org/) programs! I recommend reading their [blog post](https://magic.io/blog/uvloop-blazing-fast-python-networking/) about its initial release.
+
+If you want to utilize uvloop then first install it with `pip install uvloop`, then add a call to `uvloop.install()` like so:
+
+```
+import asyncio
+import uvloop
+
+async def foo():
+    print("Foo!")
+
+async def hello_world():
+    await foo()
+    print("Hello World!")
+
+uvloop.install()
+asyncio.run(hello_world())
+```
 
 ## Concurrent Functions
 
