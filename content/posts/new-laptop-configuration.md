@@ -317,6 +317,35 @@ git branch --set-upstream-to=origin/master master
 
 > Note: I also like to ensure my encrypted datastore is sync'ed up to other online providers, and symlinked to `~/.password-store` as well so changes are backed up automatically in multiple places.
 
+### Mobile Password Store
+
+There is also a [mobile app for Android](https://github.com/android-password-store/Android-Password-Store) that you can download from the Google Play store (and other places) that allows you to access the Password Store if it has been pushed to a distributed version-control system such as GitHub (better still if the repository is private -- "out of sight, out of mind").
+
+To get set-up, go through the following steps:
+
+- Install Password Store app.
+- Select "Clone from Server" option.
+- Add in github credentials (e.g. `git@github.com:Foo/Bar.git`)
+- Create new SSH key via Password Store app (give it a password).
+- Encrypt your SSH key with symmetrical encryption (e.g. `gpg --symmetric`)
+- Email SSH key to self.
+- Decrypt SSH key and copy it into GitHub UI.
+- Password Store app will ask for SSH key password, then it'll clone the repo.
+
+Before you can access the content of the Password Store (remember all the content is individual GPG keys) you'll need the GPG _private_ key in order to decrypt files that would have been encrypted using your public key.
+
+- Export your private key as ASCII (via laptop: `gpg --armor --output passkey.txt --export-secret-keys <key_id>`).
+- Encrypt your exported private key with symmetrical encryption (`gpg --symmetric passkey.txt`)
+- Email your private key to yourself.
+- Download private key to your phone.
+- Install OpenKeychain app (via Google Play)
+- Locate the downloaded encrypted private key and open with OpenKeychain app.
+- Enter password used to encrypt the private key.
+- Then click into the extracted `passkey.txt` file and then click "Import".
+- In Password Store app set the options:
+  - Select "OpenPGP Provider" (choose: OpenKeychain)
+  - Select "OpenPGP Key id" (choose: the imported public key)
+
 ## Go
 
 We'll install the latest version of `go` (as far as Homebrew is concerned):
