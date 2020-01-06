@@ -595,6 +595,8 @@ Here are some packages I like to install as a general rule...
 - [boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html): AWS CLI tool
 - [tox](https://tox.readthedocs.io/en/latest/): generic virtualenv management and testing tool
 
+> Note: for an example of how to configure Flake8 and its plugins, see [this gist](https://gist.github.com/0ce27db1d7294f3af9896c0807ccfeed).
+
 ## Vim
 
 You can either install more recent version of vim via Homebrew:
