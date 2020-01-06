@@ -131,6 +131,67 @@ x.post()  # foo
 x.get()   # 2
 ```
 
+Things can get a little more confusing when you want to verify a specific nested method on a mocked object was called:
+
+```
+import unittest.mock as mock
+
+from tornado.ioloop import IOLoop
+
+@mock.patch("__main__.IOLoop")
+def foo(mock_ioloop):
+    IOLoop.current()
+    mock_ioloop.current.assert_called()  # will fail if assertion isn't True
+
+    IOLoop.current().start()
+    mock_ioloop.current().start.assert_called()  # will fail if assertion isn't True
+```
+
+The reason this can get more complicated is due to how a mock will return a new mock when accessing a property on a mock:
+
+```
+import unittest.mock as mock
+
+from tornado.httpserver import HTTPServer
+
+@mock.patch("__main__.HTTPServer")
+def bar(mock_httpserver):
+    server = HTTPServer()
+
+    server.listen(8080)
+    HTTPServer().listen(123)
+
+    mock_httpserver.assert_called()
+    mock_httpserver().listen.assert_called_with(8080)
+```
+
+The above code will error:
+
+```
+AssertionError: expected call not found.
+Expected: listen(8080)
+Actual: listen(123)
+```
+
+You'll need to make sure you assert the mock at the right time:
+
+```
+import unittest.mock as mock
+
+from tornado.httpserver import HTTPServer
+
+@mock.patch("__main__.HTTPServer")
+def bar(mock_httpserver):
+    server = HTTPServer()
+    mock_httpserver.assert_called()
+    
+    server.listen(8080)
+    mock_httpserver().listen.assert_called_with(8080)
+    
+    HTTPServer().listen(123)
+    mock_httpserver().listen.assert_called_with(123)
+```
+
 ## Verify Exceptions
 
 If we want to verify that some piece of code throws an `Exception` type when we need it to we can mock specific resources to throw an exception and then use `pytest.raises` as a context manager around the caller of our code to be verified.
