@@ -801,6 +801,43 @@ We can see above that we have a single Ethernet card (`eth0`) and a loop back in
 > In newer Linux OS' `eth<n>` is replaced by `p2p<n>`  
 > And on the Mac OS it becomes `en<n>`
 
+If you want to find out which interface your WiFi is associated with, then you can use:
+
+```
+$ networksetup -listallhardwareports
+
+Hardware Port: Wi-Fi
+Device: en0
+Ethernet Address: 38:f9:d3:9e:9f:2b
+
+Hardware Port: Bluetooth PAN
+Device: en6
+Ethernet Address: 38:f9:d3:95:5c:fc
+
+Hardware Port: Thunderbolt 1
+Device: en1
+Ethernet Address: 5a:00:5c:52:d9:01
+
+Hardware Port: Thunderbolt 2
+Device: en2
+Ethernet Address: 5a:00:5c:52:d9:00
+
+Hardware Port: Thunderbolt 3
+Device: en3
+Ethernet Address: 5a:00:5c:52:d9:05
+
+Hardware Port: Thunderbolt 4
+Device: en4
+Ethernet Address: 5a:00:5c:52:d9:04
+
+Hardware Port: Thunderbolt Bridge
+Device: bridge0
+Ethernet Address: 5a:00:5c:52:d9:01
+
+VLAN Configurations
+===================
+```
+
 For more information on Network ips and how they're created (i.e. CIDRs), then you might be interested in [this quick gist](https://gist.github.com/Integralist/cff468ba808fbca09602) (but it's only basic information, so you might have better luck with your own Googling)
 
 <div id="10"></div>
