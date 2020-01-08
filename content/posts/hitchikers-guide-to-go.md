@@ -1,5 +1,5 @@
 ---
-title: "Hitchikers Guide to Go"
+title: "Hitchhikers Guide to Go"
 date: 2016-12-02T13:00:00+01:00
 categories:
   - "code"
