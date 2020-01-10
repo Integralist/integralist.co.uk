@@ -268,7 +268,31 @@ This is because we're modifying a variable and not a direct function or 'callabl
 
 ## Mock Instance Method
 
-When needing to mock a class instance method, you can take advantage of the fact that a Mock will return a new mock instance when called:
+There are multiple ways to achieve mocking of an instance method. One common approach is to use `mock.patch.object`, like so:
+
+```
+from unittest import mock
+
+def test_foo():
+    with mock.patch.object(FooClass, 'method_of_class', return_value=None) as mock_method:
+        instance = SomeClass()
+        instance.method_of_class('arg')
+        mock_method.assert_called_with('arg')
+```
+
+Another approach is to mock the method like you would a normal function, but you reference the method via the classname:
+
+```
+def test_bar():
+    r = mock.Mock()
+    r.content = b'{"success": true}'
+
+    with mock.patch('requests.get', return_value=r) as get:  # Avoid doing actual GET request
+        some_function()  # internally calls requests.get
+        get.assert_called_once()
+```
+
+Another (although more heavy handed) approach for mocking a class instance method is to take advantage of the fact that a Mock will return a new mock instance when called:
 
 ```
 @mock.patch("foo.bar.SomeClass")
@@ -276,14 +300,28 @@ def test_stuff(mock_class):
     mock_class.return_value.made_up_function.return_value = "123"
 ```
 
+> Note: in the above example we mock the _entire_ class, which might not be what you want. If not, then use the previous `mock.patch.object` example instead.
+
 The reason the above example works is because we're setting `return_value` on our mock. Because this is a `MagicMock` every attribute referenced returns a new mock instance (a function or property you call on a mock doesn't have to exist) and so we call `made_up_function` on the returned mock, and on _that_ newly created mock we set the final `return_value` to `123`.
+
+But as mentioned in the above note, this approach might be a little _too_ blunt depending on what your needs are (whether you care whether you have a some what functioning class or not).
 
 ## Mock Class Method
 
-To mock a class method is a similar approach to mocking an instance method, in that you mock the entire class but you have one less `return_value` to assign to:
+To mock a class method is a similar approach to mocking an instance method.
+
+One approach might be that you mock the entire class (but now you have one less `return_value` to assign to):
 
 ```
 mock_class.ClassMethodName.return_value = "123"
+```
+
+Or better yet you should mock it like you would any normal function, but just reference the method via the class:
+
+```
+@mock.patch('myapp.Foo.class_method_name')
+def test_classmethod(self, mock_class_method):
+    mock_class_method.return_value = "foobar"
 ```
 
 ## Mock Entire Class
