@@ -96,6 +96,12 @@ I'd like to share the various things I've worked on over the years and the impac
 
 > Note: the large majority of my 'impact' has been as a _remote_ worker. My hope is that the following list demonstrates how I've successfully made a positive impact (both as an IC and as a Team Lead) while also being 100% remote.
 
+### 2020
+
+- **What**: Implemented 'graceful shutdown' within shared libraries for HTTP servers written in Go/Python.  
+  **Why**: EC2 updates (for servers we manage under ECS) were causing containerized services to fail.  
+  **Impact**: The use of graceful shutdowns meant in-flight requests had time to complete once a SIGTERM was issued to the service by EC2.
+
 ### 2019
 
 - **What**: Created an RFC for an updated Disaster Recovery plan.  

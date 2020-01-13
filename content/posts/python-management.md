@@ -103,7 +103,7 @@ What generates the `.python-version` file is the latter point.
 
 ## Virtual Environments for multiple Pythons
 
-To setup virtual environments with Python is actually very simple (see [next section](#only-virtual-environments)), but not compatible when using an external build tool such as `pyenv` because of where `pyenv` installs Python binaries and how it switches between versions.
+To setup virtual environments with Python is actually very simple (as we saw in the earlier part of this post), but not compatible when using an external build tool such as `pyenv` because of where `pyenv` installs Python binaries and how it switches between versions.
 
 But luckily there is an extension to `pyenv` called `pyenv-virtualenv` which can be installed like so:
 
