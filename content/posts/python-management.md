@@ -217,7 +217,16 @@ download-cache = $HOME/.pip/cache
 
 As a bonus section I'm going to quickly mention the tool [`pipx`](https://github.com/pipxproject/pipx) which allows us to install Python command line tools such that they are isolated binaries and so they don't clutter up our top-level Python runtime space.
 
-To install `pipx`, the official instructions are:
+To install `pipx`, the official instructions state you can install it via either Homebrew or via an existing Python interpreter.
+
+Homebrew install is as follows:
+
+```
+brew install pipx
+pipx ensurepath
+```
+
+Using an existing Python interpreter:
 
 ```
 python3 -m pip install --user pipx
