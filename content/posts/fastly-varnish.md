@@ -525,7 +525,7 @@ To make this easier to understand I've created a diagram...
 
 In this diagram we can see the various states available to Varnish, but also we can see that the states are separated by an "edge" and "cluster" section.
 
-> Note: this graph is a little misleading in that `vcl_error` should appear in both the "edge" sections, as well as the "cluster" section. We'll come back to this later on and explain why that is.
+> Note: this graph is a little misleading in two ways. First `vcl_error` should appear in both the "edge" section(s), as well as the "cluster" section. We'll come back to this later on and explain why that is. Secondly, `vcl_pass` does not necessarily run on the "cluster" section (it'll run on the "edge", see [UPDATE 2019.11.08](#update-2019-11-08) for more information).
 
 Now the directional lines drawn on the diagram represent the request flow you might see in a typical Varnish implementation (definitely in my case at any rate). 
 
