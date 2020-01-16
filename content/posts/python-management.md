@@ -252,3 +252,5 @@ Now you're able to safely install command line Python tools, like so:
 ```
 pipx install pycowsay
 ```
+
+> Note: if you use the `PIP_REQUIRE_VIRTUALENV` setting (mentioned earlier in this post) but you also installed `pipx` via Homebrew, then you'll find that doing so can cause problems because pipx can't use its internal list function (as no virtual environment is currently activated). So to fix the issue always set the environment variable to false: `PIP_REQUIRE_VIRTUALENV=false pipx list`.
