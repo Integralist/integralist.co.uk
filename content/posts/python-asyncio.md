@@ -528,3 +528,7 @@ Notice the placement of the call to `.shutdown()` is _before_ we've explictly wa
 This works because the default behaviour for the shutdown method is `wait=True` which means it'll wait for all scheduled tasks to complete before shutting down the executor pool. This also means it's a blocking call. 
 
 If we passed `.shutdown(wait=False)` instead, then the call to `future.done()` would indeed raise an exception as the scheduled task would still be running and so in that case we'd need to ensure that we use another mechanism for acquiring the results of the scheduled tasks (such as `concurrent.futures.as_completed` or `concurrent.futures.wait`).
+
+One final thing to mention is that a `concurrent.futures.Future` object is different from an `asyncio.Future`. The `asyncio.Future` is intended to be used with event loops and is _awaitable_, while the former isn't. Using `loop.run_in_executor` provides the necessary interoperability between the two.
+
+Since Python 3.5 we can use `asyncio.wrap_future` to convert a `concurrent.futures.Future` to an `asyncio.Future`.
