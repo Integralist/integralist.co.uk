@@ -36,11 +36,17 @@ Fastly utilizes free software and extends it to fit their purposes, but this ext
   - [UPDATE 2019.11.07](#update-2019-11-07)
 - [State Variables](#4.1)
   - [Anonymous Objects](#anonymous-objects)
-- [Persisting State](#4.2) (inc. clustering architecture)
-  - [UPDATE 2019.11.08](#update-2019-11-08)
+- [Clustering](#clustering)
   - [Terminology](#terminology)
-  - [Clustering](#clustering)
-  - [Shielding](#shielding)
+  - [Delivery node request flow](#delivery-node-request-flow)
+  - [Example without Clustering](#example-without-clustering)
+  - [Fetching node request flow](#fetching-node-request-flow)
+  - [Why are there different states running on different nodes?](#why-are-there-different-states-running-on-different-nodes)
+  - [Breaking clustering](#breaking-clustering)
+  - [Avoid breaking clustering](#avoid-breaking-clustering)
+  - [Legacy terminology](#legacy-terminology)
+  - [The problem of persisting state](#the-problem-of-persisting-state)
+- [Shielding](#shielding)
   - [Caveats of Fastly's Shielding](#caveats-of-fastly-s-shielding)
   - [Debugging Shielding](#debugging-shielding)
   - [`is_cluster` vs `is_origin` vs `is_shield`](#is-cluster-vs-is-origin-vs-is-shield)
@@ -48,7 +54,7 @@ Fastly utilizes free software and extends it to fit their purposes, but this ext
       - [`req.http.Fastly-FF`](#req-http-fastly-ff)
       - [`fastly_info.is_cluster_edge` and `fastly_info.is_cluster_shield`](#fastly-info-is-cluster-edge-and-fastly-info-is-cluster-shield)
       - [`fastly.ff.visits_this_service`](#fastly-ff-visits-this-service)
-  - [Breadcrumb Trail](#breadcrumb-trail)
+- [Breadcrumb Trail](#breadcrumb-trail)
   - [Header Overflow Errors](#header-overflow-errors)
 - [Hit for Pass](#5)
 - [Serving Stale](#6)
@@ -66,6 +72,7 @@ Fastly utilizes free software and extends it to fit their purposes, but this ext
 - [Restricting requests to another Fastly service](#8.1)
 - [Custom Error Pages](#custom-error-pages)
 - [Conclusion](#9)
+- [Reference material](#reference-material)
 
 <div id="1"></div>
 ## Introduction
@@ -511,102 +518,166 @@ The only difference between the behaviour of a `return(pass)` from `vcl_recv` an
 An early `return(pass)` from `vcl_recv` doesn't go through `vcl_hash` and so no hash (`req.digest`) is added to the anonymous object. If there is a hash (`req.digest`) available on the object inside of `vcl_pass`, it doesn't mean you retain a reference to the cache object.
 
 <div id="4.2"></div>
-## Persisting State
+## Clustering 
 
-Now that we know there are state variables available, and we understand generally when and why we would use them, let's now consider the problem of clustering (in the realm of Fastly's Varnish implementation) and how that plays an important part in understanding these behaviours. Because, if you don't understand Fastly's design you'll end up in a situation where data you're setting on these variables are being lost and you won't know why.
+Now that we know there are state variables available, and we understand generally when and why we would use them, let's now consider the problem of 'clustering'. Because if you don't understand Fastly's clustering design, then you'll end up in a situation where data you're setting on these variables are being lost and you won't know why.
 
-So let me give you a _real_ example: creating a HTTP header `X-VCL-Route` breadcrumb trail of the various states a request moves through (this is good for debugging, when you want to be sure your VCL logic is taking you down the correct path and through the expected state changes). 
+To help make clustering easier to understand I've created a diagram (below) of some Varnish internal 'states'. In this diagram are two sections 'cluster edge' and 'cluster shield'. Both represent individual cache servers running Varnish, but for the sake of simplicity I've omitted most of the Varnish states from the 'cluster shield' node.
 
-To make this easier to understand I've created a diagram...
-
+<div id="varnish-request-flow"></div>
 <a href="../../images/varnish-request-flow.png">
     <img src="../../images/varnish-request-flow.png">
 </a>
 
-In this diagram we can see the various states available to Varnish, but also we can see that the states are separated by an "edge" and "cluster" section.
+> Note: this diagram does not cover _all_ the states available to Fastly's implementation of Varnish. There is also `vcl_log` which is executed after `vcl_deliver`. There is also `vcl_error` which can be triggered from multiple other state functions.
 
-> Note: this graph is a little misleading in two ways. First `vcl_error` should appear in both the "edge" section(s), as well as the "cluster" section. We'll come back to this later on and explain why that is. Secondly, `vcl_pass` does not necessarily run on the "cluster" section (it'll run on the "edge", see [UPDATE 2019.11.08](#update-2019-11-08) for more information).
+The directional lines drawn on the diagram represent various request flows you _might_ see in a typical Varnish implementation (definitely in my case at any rate). Of course these aren't the _only_ request flows you might see; there are numerous ways for a request to flow through the Varnish state machine.
 
-Now the directional lines drawn on the diagram represent the request flow you might see in a typical Varnish implementation (definitely in my case at any rate). 
+Before we jump into some request flow examples (and then further onto the discussion of clustering), let's take a moment to define some terminology that will help us throughout the rest of this post...
 
-Let's consider one of the example routes given: we can see a request comes into `vcl_recv` and from there it could trigger a `return(pass)` and so it would result in the request skipping the cache and going straight to `vcl_pass`, where it will then fetch the content from origin and subsequently end up in `vcl_fetch`. From there the content fetched from origin is stored in the cache and the cached content delivered to the client via `vcl_deliver`. 
+## Terminology
 
-That's one example route that could be taken. As you can see there are many more shown on the diagram, and many more I've not included.
+The terminology I will use from here on, will be as follows:
 
-But what's important to understand is that Fastly's infrastructure means that `vcl_recv`, `vcl_hash` and `vcl_deliver` are all executed on an edge node (the node nearest the client). Whereas the other states are executed on a "cluster" node (or cache node).
+- delivery node (i.e. the 'cluster edge')
+- fetching node (i.e. the 'cluster shield')
+- primary node (i.e. fetching node for a specific object) 
 
-We can see in [Fastly's documentation](https://docs.fastly.com/guides/performance-tuning/request-collapsing), certain VCL subroutines run on the 'edge' node and some on the 'cluster' node (or _fetching_ node):
+To explain the terminology: 
 
-- Edge: 
-  - `vcl_recv`, `vcl_hash` †, `vcl_deliver`, `vcl_log`, `vcl_error`  
-- Cluster (fetching): 
-  - `vcl_miss`, `vcl_hit`, `vcl_pass`, `vcl_fetch`, `vcl_error`
+When a cache server within a Fastly POP receives a request for an object, that server is 'acting' as the delivery node (as it will be the server responsible for returning a response to the client).
 
-> † not documented, but Fastly support say that `vcl_hash` executes at the edge.
+If the delivery node has an empty cache, then the request won't immediately reach the origin. Instead the hash key for the requested resource/object will be used to identify a "primary" node, which is the node that will _always_ 'act' as a fetching node (i.e. it's the server that will be responsible for handling proxing the request to the origin).
 
-### UPDATE 2019.11.08
+> Note: in some cases you'll find the "fetching node" refered to as a "cluster node" and so this goes some way to explaining some of Fastly's APIs (e.g. `is_cluster`).
 
-Fastly's documentation is incorrect: `vcl_pass` does not run on the cluster-shield node and it will actually cause clustering behaviour to break. 
+To better understand why we have "primary" node and "fetching" node as two distinct terms, that will become clearer when we better understand how clustering works (but in essence, it's because a "primary" node might have to 'act', in some cases, _as_ a delivery node).
 
-The official Fastly response was:
+### Delivery node request flow
 
-> "if you pass in recv, you're saying no to cache lookup, and no to request collapsing, so there's no reason to cluster the request" 
+Let's now consider a _simple_ example request flow using that diagram. For this example, a node has been selected within the POP and it will start to process the request (so the server node is 'acting' as the delivery node).
 
-This was then followed with a...
+- client issues a request (and delivery node identified).
+- request is received and `vcl_recv` is called.
+- imagine the `vcl_recv` logic triggers the `return(pass)` directive.
+- the state will change to `vcl_pass` (skipping cache lookup).
+- after `vcl_pass` has completed, the request flows through to origin.
+- the origin responds and the state changes to `vcl_fetch`.
+- modifications to the response object will be cached.
+- after `vcl_fetch` has completed, response content is stored in the cache.
+- the state changes to `vcl_deliver` (modifications here are sent to client).
+- response is sent back to the client.
 
-> "big sigh, ok, I'm filing an issue" 
+That's just one example route that could be taken, and I conveniently chose that example because it meant only requiring one cache server to serve the response to a client (the fetching node, and the concept of clustering, didn't come into effect in that example).
 
-...when pointed to their documentation, which was _incorrectly_ suggesting that `vcl_pass` only executes on the cluster-shield. 
+### Example without Clustering
 
-You definitely _can_ end up in `vcl_pass` on a cluster-shield node, but admittedly it happens less frequently because you would have to `return(pass)` from either `vcl_hit` or `vcl_miss` (and that's not a typical state change flow for most people).
+What's important to understand though is the fact that Fastly's infrastructure does mean (in specific scenarios) a request could indeed be handled by _two_ separate cache servers. The initial cache server (the delivery node), and then potentially a second cache server (the fetching node). 
 
-### Terminology
+When that happens, it is referred to as "clustering" but to more easily understand clustering, let's consider what happens if it _didn't_ exist...
 
-Fastly _internally_ uses a different naming for these 'caching nodes'. 
+Without clustering what happens is this: the cache server that gets the request will generate a 'hash key' based upon the requested URL host and path. That hash key is then used to identify the resource in the cache that resides on the server. 
 
-What I call an 'edge node' is a 'cluster edge' node, and what I call a 'cluster node' (or 'fetching' node, the node that effectively does the fetching of content) they call a 'cluster shield' node. 
+If the cache doesn't contain the requested resource, then the cache server will allow the request to flow through to the origin server which will respond with the appropriate content and the cache will be populated with that content for the next time that resource is requested.
 
-We've not covered 'shielding' yet, but the concept of shielding is not the same thing as what they refer to as a 'shield' node! So you can see how there is an overlap in terminology that can cause great confusion!
+This all works, **but here's the problem...**
 
-That said it's _more_ confusing NOT to use their terminology (especially when talking with their engineering support teams) so I would recommend learning these nuances and becoming familiar with them rather than trying to fight against it.
+A Fastly POP contains 64 individual caching servers. All of them have a unique cache. That means every single cache server would at some point have to go back to the origin for the same resource that was already cached at a different cache server. That's not an efficient system design.
 
-### Clustering
+To solve that problem, Fastly came up with the concept of Clustering.
 
-Clustering is the co-ordination of two nodes within a POP to fulfill a request. The following image (and explanation) should help clarify this.
+Clustering is the coordination of _two_ nodes within a POP to fulfill a request. The following image (and explanation) should help to clarify why this design is much better.
 
+<div id="fastly-pop"></div>
 <a href="../../images/fastly-pop.png">
     <img src="../../images/fastly-pop.png">
 </a>
 
-With clustering enabled, the resource cache key/hash is used to identify a specific node (this is referred to as the "primary" node, or _fetching_ node). 
+With clustering, the hash key for a requested resource is used, firstly to lookup the content in the cache of the current server (e.g. the delivery node), but also to identify a specific node that will be used for fetching the content from origin (and is referred to as the "primary" node, or _fetching_ node) for when the content cannot be found in the delivery node's cache. 
 
-This clustering approach means multiple requests to different edge nodes would all go to the same "primary" cache node to _fetch_ the content from the origin (and _request collapsing_ would help protect the origin from traffic overload).
+This design means that multiple requests to different delivery nodes can all go to the same "primary" cache node (e.g. the fetching node) to _fetch_ the content from the origin if they themselves didn't have the requested resource cached. 
 
-> Note: for resiliency/redundancy Fastly also internally has a _secondary_ cache node that caches content in case of failures, but that's more an internal implementation detail.
+This way, if we had ten requests for the same resource, and each request ended up at a different delivery node (and each delivery node failed to locate the resource in their cache) then only one of those ten requests would need to go to the origin (via the fetching node). 
 
-The primary cache node will store the content on-disk, while the edge cache node will store the content in-memory. 
+When the fetching node gets the content from the origin, it sticks the response in its cache and the response is sent back to the delivery node which also caches the response but only in memory (not on disk!).
 
-Finally, any node within the cluster can be selected as the 'edge' node for an incoming request (its selected at random), hence the in-memory copy of the cached content could exist there and you only hit one cache server before a response is served back to the user.
+But how does the fetching node stop all ten requests from each delivery node from reaching the origin, I hear you ask? Well, this is what's referred to as "request collapsing". It's the process of blocking in-flight requests (for the same resource) until at least one request for that resource has completed.
 
-The benefit of clustering (summarized in [this fastly community support post](https://support.fastly.com/hc/en-us/community/posts/360046680252-What-is-Clustering-)) is that your request only ever goes through (at _most_) two cache server nodes (the 'cluster edge' node and a 'cluster shield' node). 
+In _most_ cases the cache server that initially receives the request will not be the "primary". But not always. Sometimes the cache server that initially handles the incoming client request _IS_ the primary (e.g. what was the fetching node)! 
 
-If clustering was disabled, then the server node the client request was sent to within the edge POP would have to handle the _complete_ state request life cycle (e.g. recv/hash/fetch/deliver).
+Why is that you ask? It's because the server that the request is initially sent to is picked at _random_. Because the first cache server is selected at random, you could find that the cache server ends up being the primary (e.g. fetching node). So what happens in that scenario?
 
-This would mean that _every_ node within the edge POP (and at the time of writing there are 64 nodes within a POP) would have to go through to origin in order to request your content. 
+This is where Fastly introduce the concept of a "secondary" node. It exists much like the "primary" does, to act as a cache layer before a request reaches the origin and exists for those specific times where the primary node is acting as the delivery node.
 
-That is _much_ less efficient. Hence Fastly designed their 'clustering' solution to help improve the request/caching/origin performance.
+> Note: for the most part you don't need to worry too much about primary and secondary nodes, and only really need to know about the general concept of clustering consisting of a delivery node and a fetching node.
 
-When we `return(restart)` a request, we _break_ 'clustering'. This means the request will go back to the 'cluster edge' node and that node will handle the full request cycle (this is done for reasons of performance, such as finding stale content in the `vcl_deliver` state on the 'cluster edge' node and wanting to serve that stale content). 
+### Fetching node request flow
 
-But sometimes breaking clustering might be something you want to avoid (note: I've never found a reason for this!). In order to avoid breaking the clustering process you'll need to utilize the `Fastly-Force-Shield: 1` request header. This header will re-enable clustering so that we again use multiple server nodes within a POP when executing the different VCL subroutine states.
+Now go back to [the earlier 'request flow' diagram](#varnish-request-flow). Try to imagine a request reaching a delivery node, and the node having an empty cache. 
 
-> Notice the naming in `Fastly-Force-Shield` is still the legacy 'shield' terminology.
+You'd find the state changes would be `vcl_recv`, `vcl_hash`, `vcl_miss` (the red one, which is an internal fastly operation that checks to see if A. clustering is enabled, which it is by default and also B. is the current server a fetching node). 
+ 
+In this case, clustering is enabled and we're not on the fetching node. So the request flows from the delivery node to the fetching node where that server's cache is checked and either the `vcl_hit` or `vcl_miss` states will be triggered.
 
-I use the terminology "cluster node" to describe cache server nodes that do the _fetching_ of content (i.e. with clustering the cluster node does _NOT_ handle recv/hash/deliver, as they are handled by the 'edge' node). 
+Also, because any node within the cluster can be selected as the delivery node, it means there _could_ be an in-memory copy of the cached content existing there. In that scenario the request would yield a cache HIT and thus only that one cache server is handling the request (e.g. no need to then go to the primary/fetching node).
 
-Fastly on the other hand has historically used the term "shield" node to describe that node, and although their documentation still refers to the behaviour as "shielding", it infact has changed verbally to being described as "clustering". 
+### Why are there different states running on different nodes?
 
-Subsequently I've purposely avoided the historical "shield" terminology because it overlaps with a more _recent_ fastly feature also called [Shielding](https://docs.fastly.com/guides/performance-tuning/shielding) (hence Fastly changed the historical process to "clustering", so as to not confuse the now two distinct concepts).
+One other thing to be aware of is that when a request flows from a delivery node to a fetching node (because the content isn't found in the cache on the delivery node) the request will have to flow _back_ to the delivery node in order for the client to receive a response! 
+
+Think about it, if the request is proxied from a delivery node to a fetching node, then it isn't possible for the fetching node to respond to the client because the caller wasn't the client but the delivery node.
+
+This is why for most standard request flows you'll find that the `vcl_recv`, `vcl_hash`, `vcl_pass`, `vcl_deliver` states are all handled by the delivery node, while `vcl_miss`, `vcl_hit` and `vcl_fetch` are documented as being executed on the fetching node. 
+
+This is because when the delivery node's cache lookup fails to find any cached content, the request is proxied to the fetching node where it will again attempt a cache lookup. From that point (let's say no content was cached there either) the fetching node will execute a `vcl_miss`, then `vcl_fetch` and ultimately it'll _have_ to stop there and return the response to the delivery node so it can change to the `vcl_deliver` state in order to send the response to the client.
+
+> Note: there are some subtle nuances I've not covered, which is that the fetching node _will_ execute `vcl_deliver` but it'll only execute Fastly's internal logic. It won't execute our own custom VCL. This is to avoid duplicating behaviour.
+
+Now as far as Fastly’s documentation is concerned (as of 2019.11.08) they A.) don't document the fact that `vcl_hash` runs on the delivery node, and B.) is incorrect with regards to `vcl_pass`, which they claim runs on the fetching node (which it doesn't, for the most part, as it is designed to [break clustering](#breaking-clustering)). 
+
+When I pointed Fastly to their documentation, their response was:
+
+> “if you pass in recv, you’re saying no to cache lookup, and no to request collapsing, so there’s no reason to cluster the request” 
+
+Which was then followed with...
+
+> “big sigh, ok, I’m filing an issue” 
+
+You definitely _can_ end up in `vcl_pass` on a fetching node, but admittedly it happens less frequently because you would have to `return(pass)` from either `vcl_hit` or `vcl_miss` (and that’s not a typical state change flow for most people).
+
+### Breaking clustering
+
+If we're on a delivery node and we have a state that executes a `return(restart)` directive, then we actually _break_ 'clustering'. 
+
+This means the request will go back to the delivery node and that node will handle the full request cycle. This is done for reasons of performance, such as finding stale content in the `vcl_deliver` state on the delivery node and wanting to serve that stale content †
+
+> † we'll learn about [serving stale](#6) later. 
+
+Now go back to [the earlier 'request flow' diagram](#varnish-request-flow). Try to imagine a request reaching a delivery node, and the node having an empty cache, but also that clustering has been broken (due to a `return(restart)` being triggered in `vcl_deliver` on the delivery node).
+
+You'd find the state changes would be `vcl_recv`, `vcl_hash`, `vcl_miss` (the red one, which is an internal fastly operation that checks to see if A. clustering is enabled, which it is by default and also B. is the current server a fetching node). 
+ 
+In this case, clustering is enabled and we're not on the fetching node. So the request flows from the delivery node to the fetching node where that server's cache is checked and either the `vcl_hit` or `vcl_miss` states will be triggered. But ultimately the request will flow back to the delivery node, where we'll reach its `vcl_deliver` state.
+
+From there the `vcl_deliver` triggers a `return(restart)`, which as we now know breaks clustering, and so we end up back in `vcl_recv` of the delivery node. 
+
+At this point the request will reach `vcl_hash` and we might find we again reach `vcl_miss` (the 'internal' red one), but this time clustering is broken so we now reach your own code's `vcl_miss` of the delivery node and thus the delivery node will proxy the request onto the origin and then execute the `vcl_fetch` state (instead of those steps happening on the fetching node).
+
+### Avoid breaking clustering
+
+So what if breaking clustering is something you want to avoid? Let me start by saying I personally have never found a reason to avoid breaking clustering when executing a `return(restart)` but that doesn't mean good reasons don't exist. 
+
+In order to avoid breaking the clustering process you'll need to utilize the `Fastly-Force-Shield: 1` request header. This header will re-enable clustering so that we again use multiple server nodes within a POP when executing the different VCL subroutine states.
+
+### Legacy terminology
+
+Notice the naming of this header (`Fastly-Force-Shield`), it uses what's considered by Fastly now to be _legacy_ terminology. 
+
+To explain: Fastly has historically used the term "shield" to describe the fetching node, as per the concept we now refer to as "clustering". But it wasn't always called clustering. 
+
+Long ago clustering was referred to as "shielding", but in more recent times Fastly designed an extension to clustering which became a new feature also called [Shielding](https://docs.fastly.com/guides/performance-tuning/shielding). Fastly changed the old "shielding" terminology to "clustering", thus allowing the new Shielding feature to be more easily distinguished (even though the underlying concepts are closely related).
+
+### The problem of persisting state
 
 OK, so two more _really_ important things to be aware of at this point:
 
@@ -615,21 +686,23 @@ OK, so two more _really_ important things to be aware of at this point:
 
 For number 1. that means: `req` data you set in `vcl_recv` and `vcl_hash` will be available in states like `vcl_pass` and `vcl_miss`.
 
-For number 2. that means: if you were in `vcl_deliver` and you set a value on `req` and then triggered a restart, the value would be available in `vcl_recv`. Yet, if you were in `vcl_miss` for example and you set `req.http.X-Foo` and let's say in `vcl_fetch` you look at the response from the origin and see the origin sent you back a 5xx status, you might decide you want to restart the request and try again. But if you were expecting `X-Foo` to be set on the `req` object when the code in `vcl_recv` was re-executed, you'd be wrong. That's because the header was set on the `req` object while it was in a state that is executed on a 'cluster shield' node; and so the `req` data set there doesn't persist a restart.
+For number 2. that means: if you were in `vcl_deliver` and you set a value on `req` and then triggered a restart, the value would be available in `vcl_recv`. Yet, if you were in `vcl_miss` for example and you set `req.http.X-Foo` and let's say in `vcl_fetch` you look at the response from the origin and see the origin sent you back a 5xx status, you might decide you want to restart the request and try again. But if you were expecting `X-Foo` to be set on the `req` object when the code in `vcl_recv` was re-executed, you'd be wrong. That's because the header was set on the `req` object while it was in a state that is executed on a fetching node; and so the `req` data set there doesn't persist a restart.
 
-> Summary: modifications on the 'cluster shield' node don't persist to 'cluster edge' node.
+> Summary: modifications on the fetching node don't persist to the delivery node.
 
 If you're starting to think: "this makes things tricky", you'd be right :-)
 
-The earlier diagram visualizes the approach for how a request inside of a POP will reach a specific cache node (i.e. "clustering") but it doesn't cover how "[shielding](https://docs.fastly.com/guides/performance-tuning/)" works, which effectively is a _nested_ clustering process. 
+The [earlier diagram](#fastly-pop) visualizes the approach for how a request inside of a POP will reach a specific cache node (i.e. "clustering") but it doesn't cover how "[shielding](https://docs.fastly.com/guides/performance-tuning/)" works, which effectively is a _nested_ clustering process. 
 
 Let's dig into Shielding next...
 
-### Shielding
+## Shielding
 
 Shielding is a designated POP that a request will flow through _before_ reaching your origin.
 
-As mentioned above, clustering is the co-ordination of two nodes within a POP, and this 'clustering' happens within every POP (so the shield POP is no different from any other POP in its fundamental behaviour). 
+As mentioned earlier, clustering is the coordination of two nodes within a POP, and this 'clustering' happens within every POP. The shield POP is no different from any other POP in its fundamental behaviour. 
+
+> Note: when people start talking about shielding and its "Shield POP", you'll usually find the terminology of "POP" changes to "Edge POP" as a way to help distinguish that there are two separate POPs involved in the discussion. I personally don't do that. I just call an Edge POP a POP and when talking about shielding I'll say "Shield POP".
 
 The purpose of shielding is to give extra protection to your origin, because multiple users will arrive at different POPs (due to their locality) and so a POP in the UK might not have a cached object, while a POP in the USA might have a cached version of the resource. To help prevent the UK user from making a request back to the origin, we can select a POP nearest the origin to act as a single point of access. 
 
@@ -649,11 +722,11 @@ Be careful with changes you make to a request as they could result in the lookup
 
 Also, be aware that the "backend" will change when shielding is enabled. Traditionally (i.e. without shielding) you defined your backend with a specific value (e.g. an S3 bucket or a domain such as `https://app.domain.com`) and it would stay set to that value unless you yourself implemented custom vcl logic to change its value. 
 
-But with shielding enabled, the 'cluster edge' node will dynamically change the backend to be a shield node value (as it's effectively _always_ going to pass through that node if there is no cached content found). Once on the 'cluster edge' node within the shield POP, _its_ "backend" value is set to whatever your actual origin is (e.g. an S3 bucket).
+But with shielding enabled, the delivery node will dynamically change the backend to be a shield node value (as it's effectively _always_ going to pass through that node if there is no cached content found). Once on the delivery node within the shield POP, _its_ "backend" value is set to whatever your actual origin is (e.g. an S3 bucket).
 
 It's probably best to only modify your backends dynamically whilst your VCL is executing on the shield (e.g. `if (!req.backend.is_shield)`, maybe abstract in a variable `declare local var.shield_node BOOL;`) and to also only `restart` a request in vcl_deliver when executing on a node within the shield POP. 
 
-You might also need to modify vcl_hash so that the generated hash is consistent with the edge POP's 'cluster edge' node if your shield POP nodes happen to modify the request! Remember that modifying either the host or the path will cause a different cache key to be generated and so modifying that in either the edge POP _or_ the shield POP means modifying the relevant vcl_hash subroutine so the hashes are _consistent_ between them.
+You might also need to modify vcl_hash so that the generated hash is consistent with the edge POP's delivery node if your shield POP nodes happen to modify the request! Remember that modifying either the host or the path will cause a different cache key to be generated and so modifying that in either the edge POP _or_ the shield POP means modifying the relevant vcl_hash subroutine so the hashes are _consistent_ between them.
 
 ```
 sub vcl_hash {
@@ -683,11 +756,11 @@ When using `Fastly-Debug:1` to inspect debug response headers, we might want to 
 < fastly-debug-ttl: (H cache-lhr6346-LHR -10.999 31536000.000 20)
 ```
 
-The `fastly-debug-path` suggests we delivered from the 'cluster edge' node `lhr6346`, while we fetched from the 'cluster shield' node `lhr6324`. The `fastly-debug-ttl` header suggests we got a HIT (`H`) from the 'cluster edge' node `lhr6346` but this is just a side-effect of the stale/cached content (coming back from the 'cluster shield' node) being stored in-memory on the 'cluster edge' node and so it's indicated as a HIT from the 'cluster edge' node when really it came from the 'cluster shield' node (the `fastly-debug-ttl` header is set on the 'cluster edge' node, which re-enforces this understanding).
+The `fastly-debug-path` suggests we delivered from the delivery node `lhr6346`, while we fetched from the fetching node `lhr6324`. The `fastly-debug-ttl` header suggests we got a HIT (`H`) from the delivery node `lhr6346` but this is just a side-effect of the stale/cached content (coming back from the fetching node) being stored in-memory on the delivery node and so it's indicated as a HIT from the delivery node when really it came from the fetching node (the `fastly-debug-ttl` header is set on the delivery node, which re-enforces this understanding).
 
-What makes it confusing is that you don't necessarily know if the request went to the 'cluster shield' node (i.e. the fetching node) or whether the stale content actually came from the 'cluster edge' node's in-memory cache. The only way to be sure is to check the `fastly-state` response header and see if you got back `HIT-STALE` or `HIT-STALE-CLUSTER`.
+What makes it confusing is that you don't necessarily know if the request went to the fetching node or whether the stale content actually came from the delivery node's in-memory cache. The only way to be sure is to check the `fastly-state` response header and see if you got back `HIT-STALE` or `HIT-STALE-CLUSTER`.
 
-> Note: it may take a few requests to see numbers populating the `Fastly-Debug-TTL`, as the request needs to either land on the cluster-shield node, or a cluster-edge node where the content exists in temporary memory. If you see `-` it might be because you arrived at a node that doesn't have it in-memory.
+> Note: it may take a few requests to see numbers populating the `Fastly-Debug-TTL`, as the request needs to either land on the fetching node, or a delivery node where the content exists in temporary memory. If you see `-` it might be because you arrived at a node that doesn't have it in-memory.
 
 Another confusing aspect to `fastly-debug-ttl` is that with regards to `stale-while-revalidate` you could end up seeing a `-` in the section where you might otherwise expect to see the grace period of the object (i.e. how long can it be served stale for while revalidating). This can occur when the origin server hasn't sent back either an `ETag` header or `Last-Modified` header. Fastly still serves stale content if the `stale-while-revalidate` TTL is still valid but the output of the `fastly-debug-ttl` can be confusing and/or misleading.
 
@@ -703,11 +776,11 @@ Additionally, there is [this](https://fiddle.fastlydemo.net/fiddle/d053c409) Fas
 
 There are a few properties hanging off the `req.backend` object in VCL...
 
-- `is_cluster`: indicates when the request has come from a clustering node (e.g. 'cluster shield' node).
+- `is_cluster`: indicates when the request has come from a clustering node (e.g. fetching node).
 - `is_origin`: indicates if the request will be proxied to an origin server (e.g. your own backend application).
 - `is_shield`: indicates if the request will be proxied to a shield POP (which happens when shielding is enabled).
 
-If you try to access `is_origin` from within the `vcl_recv` state subroutine, for example, it will be cause a compiler error. This is because that API is only available to 'cluster shield' nodes (and specifically only states that would result in a request being proxied, meaning although `vcl_hit` runs on a 'cluster shield' node, that state would not have access to `is_origin`).
+If you try to access `is_origin` from within the `vcl_recv` state subroutine, for example, it will be cause a compiler error. This is because that API is only available to fetching nodes (and specifically only states that would result in a request being proxied, meaning although `vcl_hit` runs on a fetching node, that state would not have access to `is_origin`).
 
 So depending on what you're trying to verify, it might be preferable to use the negated `is_shield` approach for checking if the request is going to be proxied to origin or a shield pop node.
 
@@ -730,12 +803,12 @@ Also, the use of `req.http.Fastly-FF` can become complicated if you have multipl
 
 With regards to `is_cluster` there are also some additional _undocumented_ APIs we can use:
 
-- `fastly_info.is_cluster_edge`: `true` if the current `vcl_` state subroutine is running on a 'cluster edge' node.
-- `fastly_info.is_cluster_shield`: `true` if the current `vcl_` state subroutine is running on a 'cluster shield' node.
+- `fastly_info.is_cluster_edge`: `true` if the current `vcl_` state subroutine is running on a delivery node.
+- `fastly_info.is_cluster_shield`: `true` if the current `vcl_` state subroutine is running on a fetching node.
 
 It's important to realize that `is_cluster_edge` will only ever report true from `vcl_deliver`, as (just like `req.backend.is_cluster`) we have to come _from_ a clustering/fetching node first. The `vcl_recv` state can't know if it's going to go into clustering at that stage of the request hence it reports as `false` there. 
 
-With `vcl_fetch` it knows it has come from the 'cluster edge' node and thus we've gone into 'clustering' mode, hence it can report `is_cluster_shield` as `true`.
+With `vcl_fetch` it knows it has come from the delivery node and thus we've gone into 'clustering' mode, hence it can report `is_cluster_shield` as `true`.
 
 So as a more fleshed out example, if we tried to log all three cluster APIs in all VCL subroutines (and imagine we have clustering enabled with Fastly, which is the default behaviour), then we would find the following results...
 
@@ -767,28 +840,28 @@ The last undocumented API we'll look at will be `fastly.ff.visits_this_service` 
 Let's see what this looks like in a clustering scenario like shown a moment ago...
 
 - `vcl_recv`:
-  - `fastly.ff.visits_this_service`: `0` (we're on a 'cluster edge' node and we've never seen this request before)
+  - `fastly.ff.visits_this_service`: `0` (we're on a delivery node and we've never seen this request before)
 - `vcl_hash`:
-  - `fastly.ff.visits_this_service`: `0` (we're still on the same 'cluster edge' node so the reported value is the same)
+  - `fastly.ff.visits_this_service`: `0` (we're still on the same delivery node so the reported value is the same)
 - `vcl_miss`:
-  - `fastly.ff.visits_this_service`: `1` (we've jumped to the 'cluster shield' node so we know it's been seen once before somewhere)
+  - `fastly.ff.visits_this_service`: `1` (we've jumped to the fetching node so we know it's been seen once before somewhere)
 - `vcl_fetch`:
-  - `fastly.ff.visits_this_service`: `1` (we're on the same 'cluster shield' node so the value is reported the same)
+  - `fastly.ff.visits_this_service`: `1` (we're on the same fetching node so the value is reported the same)
 - `vcl_deliver`:
-  - `fastly.ff.visits_this_service`: `0` (we're back onto the original 'cluster edge' node so the value is reported as 0 again).
+  - `fastly.ff.visits_this_service`: `0` (we're back onto the original delivery node so the value is reported as 0 again).
 
-> Note: when you introduce shielding you'll find that the value increases to `2` when we reach `vcl_recv` on the 'cluster edge' node inside the shield POP.
+> Note: when you introduce shielding you'll find that the value increases to `2` when we reach `vcl_recv` on the delivery node inside the shield POP.
 
 
-### Breadcrumb Trail
+## Breadcrumb Trail
 
-Let's now revisit our requirement, which was to create a breadcrumb trail using a HTTP header (this is where all this context becomes important).
+Let's now consider a requirement for creating a breadcrumb trail of the various states a request moves through (we'll do this by defining a `X-VCL-Route` HTTP header). Implementing this feature is great for debugging purposes as it'll validate your understanding of how your requests are flowing through the varnish state machine.
 
 First I'm going to show you the basic outline of the various vcl state subroutines and a set of function calls. Next I'll show you the code for those function calls and talk through what they're doing.
 
 > Note: the code examples will be simplified for sake of brevity and to highlight the calls related to the breadcrumb trail functionality.
 
-In essence though, we're using the understanding we have for the 'cluster edge' and 'cluster shield' _boundaries_ and ensuring that while on the 'cluster shield' we track information in Varnish objects (e.g. things like `req`, `obj`, `beresp` etc) that are able to persist crossing those boundaries.
+In essence though, we're using the understanding we have for the delivery node and fetching node _boundaries_ and ensuring that while on the fetching node we track information in Varnish objects (e.g. things like `req`, `obj`, `beresp` etc) that are able to persist crossing those boundaries.
 
 This means when going from `vcl_fetch` to `vcl_deliver` we can't track information on the `req` object because it'll be lost when we move over to `vcl_deliver` and so we track it in the `beresp` object that `vcl_fetch` has access to. We do this because we know that `beresp` is _copied_ over to `vcl_deliver` and exposed inside of `vcl_deliver` as the `resp` object. 
 
@@ -796,7 +869,7 @@ Similarly for `vcl_error`, we track information in its `obj` reference because w
 
 From `vcl_deliver` we're then free to copy the tracked information from the `X-VCL-Route` header (stored in the `resp` object) into the `req` object (in case we need to restart the request and keep tracking information after a restart).
 
-Remember that `vcl_pass` and `vcl_miss` both run on the 'cluster shield' and so again tracking information on the `req` object won't persist when moving over to `vcl_deliver`. That's why although we track information on the `req` object within those state subroutines, we in fact (once we've reached `vcl_fetch`) copy those tracked values into the `beresp` object available to `vcl_fetch` for the reasons we described earlier.
+Remember that `vcl_pass` and `vcl_miss` both run on the fetching node and so again tracking information on the `req` object won't persist when moving over to `vcl_deliver`. That's why although we track information on the `req` object within those state subroutines, we in fact (once we've reached `vcl_fetch`) copy those tracked values into the `beresp` object available to `vcl_fetch` for the reasons we described earlier.
 
 OK, enough talking, let's see the code...
 
@@ -886,7 +959,7 @@ Let's now take a look at that `debug_info` VCL and then we'll explain what the c
 # pop: <value>, node: <value>, state: <value>, host: <value>, path: <value>
 #
 # pop  = the POP where the request is currently passing through.
-# node  = whether the cache node is a 'cluster edge' or 'cluster shield' node (see: https://www.integralist.co.uk/posts/fastly-varnish/#4.2).
+# node  = whether the cache node is a delivery node or fetching node (see: https://www.integralist.co.uk/posts/fastly-varnish/#4.2).
 # state = internal fastly variable that reports state flow as well as whether a request waited for request collapsing or whether it was clustered.
 # host  = the full host name, without the path or query parameters.
 # path   = the full path, including query parameters.
@@ -1108,7 +1181,7 @@ if (resp.http.X-Track-VCL-Route && fastly_info.state ~ "^MISS") { track the data
 
 You'll also see in that same conditional block we then reconstruct a `X-VCL-Route` from the various temporary headers, such as `X-PreFetch-Pass`, `X-PreFetch-Miss` and `X-PostFetch`.
 
-Remember that in `vcl_hit` we have no object that we can track information on that will be persisted to the 'cluster edge' node where `vcl_deliver` is executed. This is because `vcl_hit` can go straight to `vcl_deliver` and there's no inbetween state like `vcl_fetch` where we can borrow a Varnish object for tracking purposes like we do with `vcl_miss` and `vcl_pass`.
+Remember that in `vcl_hit` we have no object that we can track information on that will be persisted to the delivery node where `vcl_deliver` is executed. This is because `vcl_hit` can go straight to `vcl_deliver` and there's no inbetween state like `vcl_fetch` where we can borrow a Varnish object for tracking purposes like we do with `vcl_miss` and `vcl_pass`.
 
 So to solve that problem you'll see that we check to see if we came from a cache HIT state...
 
@@ -1129,25 +1202,25 @@ In order then for the Fastly debug information to be included we have to do two 
 
 OK, let's go back and revisit `vcl_error`...
 
-The `vcl_error` subroutine is a tricky one because it exists on _both_ the 'cluster edge' and the 'cluster shield' nodes. 
+The `vcl_error` subroutine is a tricky one because it exists on _both_ the delivery node and the fetching node. 
 
-Meaning if you execute `error 401` from `vcl_recv`, then `vcl_error` will execute in the context of the 'cluster edge' node; whereas if you executed an `error` from a 'cluster shield' node state like `vcl_fetch`, then `vcl_error` would execute in the context of the 'cluster shield' node.
+Meaning if you execute `error 401` from `vcl_recv`, then `vcl_error` will execute in the context of the delivery node; whereas if you executed an `error` from a fetching node state like `vcl_fetch`, then `vcl_error` would execute in the context of the fetching node.
 
-Meaning, how you transition information between `vcl_error` and `vcl_deliver` could depend on whether you're on a 'cluster edge' node or a 'cluster shield' node.
+Meaning, how you transition information between `vcl_error` and `vcl_deliver` could depend on whether you're on a delivery node or a fetching node.
 
-This is why when on what are typically considered the 'cluster shield' nodes, I don't hardcode them a such. I use the following conditional check...
+This is why when on what are typically considered the fetching nodes, I don't hardcode them a such. I use the following conditional check...
 
 ```
 "node: cluster_" + if(fastly_info.is_cluster_shield, "shield", "edge") + ", " +
 ```
 
-...this check means if the request is restarted, which we know this causes Fastly's clustering behaviour to stop and for the request to flow through the same 'cluster edge' server for all states, then we can change the reported node to be the 'cluster edge' instead of a 'cluster shield' for states such as MISS/PASS/FETCH.
+...this check means if the request is restarted, which we know this causes Fastly's clustering behaviour to stop and for the request to flow through the same delivery node for all states, then we can change the reported node to be the delivery node instead of a fetching node for states such as MISS/PASS/FETCH.
 
 > Note: this conditional check could be improved by also checking for the existence of the `Fastly-Force-Shield` header (which we talked about earlier). This is because if someone uses that header then it would force Fastly's clustering behaviour to not be stopped.
 
 To help explain this I'm going to give another _real_ example, where I wanted to lookup some content in our cache and if it didn't exist I wanted to restart the request and use a different origin server to serve the content.
 
-To do this I expected the route to go from `vcl_recv`, to `vcl_hash` and the lookup to fail so we would end up in `vcl_miss`. Now from `vcl_miss` I could have triggered a restart, but anything I set on the `req` object at that point (such as any breadcrumb data appended to `X-VCL-Route`) would have been lost as we transitioned from the 'cluster shield' node back to the 'cluster edge' node (where `vcl_recv` is).
+To do this I expected the route to go from `vcl_recv`, to `vcl_hash` and the lookup to fail so we would end up in `vcl_miss`. Now from `vcl_miss` I could have triggered a restart, but anything I set on the `req` object at that point (such as any breadcrumb data appended to `X-VCL-Route`) would have been lost as we transitioned from the fetching node back to the delivery node (where `vcl_recv` is).
 
 I needed a way to persist the "miss" breadcrumb, so instead of returning a restart from `vcl_miss` I would trigger a custom error such as `error 901` and inside of `vcl_error` I would have the following logic:
 
@@ -1169,17 +1242,17 @@ if (obj.status == 901) {
 
 When we trigger an error an object is created for us. On that object I set our `X-VCL-Route` and assign it whatever was inside `req.http.X-VCL-Route` at that time †
 
-> † which would include `vcl_recv`, `vcl_hash` and `vcl_miss`. Remember the `req` object _does_ persist across the 'cluster edge'/'cluster shield' boundaries, but _only_ when going from `vcl_recv`. After that, anything set on `req` is lost when crossing boundaries.
+> † which would include `vcl_recv`, `vcl_hash` and `vcl_miss`. Remember the `req` object _does_ persist across the delivery node/fetching node boundaries, but _only_ when going from `vcl_recv`. After that, anything set on `req` is lost when crossing boundaries.
 
 Now we could have arrived at `vcl_error` from `vcl_recv` (e.g. if in our `vcl_recv` we had logic for checking Basic Authentication and none was found on the incoming request we could decide from `vcl_recv` to execute `error 401`) or we could have arrived at `vcl_error` from `vcl_miss` (as per our earlier example). So we need to check the internal Fastly state to identify this, hence checking `fastly_info.state ~ "^MISS"`.
 
 After that we append to the `obj` object's `X-VCL-Route` header our current state (i.e. so we know we came into `vcl_error`). Finally we look at the status on the `obj` object and see it's a 901 custom status code and so we append that information in order to know what happened.
 
-But you'll notice we don't restart the request from `vcl_error`, because if we did come from `vcl_miss` the data in `obj` would be lost because ultimately it was set on a 'cluster shield' node (as `vcl_error` would be running on the 'cluster shield' node when coming from `vcl_miss`).
+But you'll notice we don't restart the request from `vcl_error`, because if we did come from `vcl_miss` the data in `obj` would be lost because ultimately it was set on a fetching node (as `vcl_error` would be running on the fetching node when coming from `vcl_miss`).
 
-Instead we `return(deliver)`, because all that data assigned to `obj` is guaranteed to be copied into `resp` for us to reference when transitioning to `vcl_deliver` on the 'cluster edge' node.
+Instead we `return(deliver)`, because all that data assigned to `obj` is guaranteed to be copied into `resp` for us to reference when transitioning to `vcl_deliver` on the delivery node.
 
-Once we're at `vcl_deliver` we continue to set breadcrumb tracking onto `req.http.X-VCL-Route` as we know that will persist a restart (as we're still going to be executing code on the 'cluster edge' node).
+Once we're at `vcl_deliver` we continue to set breadcrumb tracking onto `req.http.X-VCL-Route` as we know that will persist a restart (as we're still going to be executing code on the delivery node).
 
 Phew! Well, that was NOT an easy task, and if you struggled to follow along. That's OK because it's hard to learn about all this stuff at once. Just keep coming back to this post as a reference point if you need to. 
 
@@ -1793,8 +1866,12 @@ So there we have it, a run down of how some important aspects of Varnish and VCL
 
 One thing I want to mention is that I am personally a HUGE fan of Fastly and the tools they provide. They are an amazing company and their software has helped BuzzFeed (and many other large organisations) to scale massively with ease.
 
-I would also highly recommend watching this talk by Rogier Mulhuijzen (Senior Varnish Engineer - who currently works for Fastly) on "Advanced VCL": [vimeo.com/226067901](https://vimeo.com/226067901). It goes into great detail about some complex aspects of VCL and Varnish and really does a great job of elucidating them.
+## Reference material
+
+I would highly recommend watching this talk by Rogier Mulhuijzen (Senior Varnish Engineer - who currently works for Fastly) on "Advanced VCL": [vimeo.com/226067901](https://vimeo.com/226067901). It goes into great detail about some complex aspects of VCL and Varnish and really does a great job of elucidating them.
 
 Also recommended is [this Fastly talk](https://vimeo.com/178057523) which details how 'clustering' works (see also [this fastly community support post](https://support.fastly.com/hc/en-us/community/posts/360040445272--Fastly-Force-Shield-AND-Fastly-No-Shield-Usage) that details how to utilize the request headers `Fastly-Force-Shield` and `Fastly-No-Shield`).
+
+Lastly there is [this](https://vimeo.com/showcase/6623864/video/376921467) talk about `vcl_fetch` that also covers clustering and shielding, that can help tie up any other loose ends related to Fastly's system design.
 
 Lastly, there was [a recent article from an engineer working at the Financial Times](https://medium.com/@samparkinson_/making-a-request-to-the-financial-times-b2119a2f422d), detailing the complete request flow from DNS to Delivery. It's very interesting and covers a lot of information about Fastly. Highly recommended reading.
