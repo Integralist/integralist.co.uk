@@ -357,7 +357,7 @@ Some of the extra headers you'll find in the response are:
 - `Surrogate-Key`
 - `X-Cache-Hits`
 - `X-Cache`
-- `X-Served-By`
+- `X-Served-By` (reports fetching node, see [Clustering](#clustering))
 
 > Note: the `Surrogate-*` response headers are typically set by an origin server and are otherwise stripped by Fastly.
 
@@ -765,6 +765,8 @@ What makes it confusing is that you don't necessarily know if the request went t
 Another confusing aspect to `fastly-debug-ttl` is that with regards to `stale-while-revalidate` you could end up seeing a `-` in the section where you might otherwise expect to see the grace period of the object (i.e. how long can it be served stale for while revalidating). This can occur when the origin server hasn't sent back either an `ETag` header or `Last-Modified` header. Fastly still serves stale content if the `stale-while-revalidate` TTL is still valid but the output of the `fastly-debug-ttl` can be confusing and/or misleading.
 
 > Something else to note, while I write this August 2019 update is that the `fastly-debug-ttl` only every displays the 'grace' value when it comes to `stale-if-error`, meaning if you're trying to check if you're serving `stale-while-revalidate` by looking at the grace period you might get confused when you see the `stale-if-error` grace period (or worse a `-` value), this is because the `fastly-debug-ttl` header isn't as granular as it should be. Fastly have indicated that they intend on making updates to this header in the future in order for the values to be much clearer.
+
+Lastly, when dealing with shielding the `fastly-debug-ttl` can be misleading in another sense which is: imagine the fetching node got a MISS (so it fetched content from origin and returned it to the delivery node). The delivery node will cache the response from the fetching node (including the MISS reported by `fastly-debug-ttl`) and so even if another request reaches the name delivery node, it will report a `MISS, HIT` combination.
 
 If you want to track extra information when using shielding, then using (in combination with either `req.backend.is_origin` or `!req.backend.is_shield`) the values from `server.datacenter` and `server.hostname` which can help you identify the POP as your shielding POP (remember there is only one POP that is designated as your shield, so this can come in handy).
 
