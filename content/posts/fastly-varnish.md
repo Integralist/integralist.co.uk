@@ -631,8 +631,6 @@ This is why for most standard request flows you'll find that the `vcl_recv`, `vc
 
 This is because when the delivery node's cache lookup fails to find any cached content, the request is proxied to the fetching node where it will again attempt a cache lookup. From that point (let's say no content was cached there either) the fetching node will execute a `vcl_miss`, then `vcl_fetch` and ultimately it'll _have_ to stop there and return the response to the delivery node so it can change to the `vcl_deliver` state in order to send the response to the client.
 
-> Note: there are some subtle nuances I've not covered, which is that the fetching node _will_ execute `vcl_deliver` but it'll only execute Fastly's internal logic. It won't execute our own custom VCL. This is to avoid duplicating behaviour.
-
 Now as far as Fastly’s documentation is concerned (as of 2019.11.08) they A.) don't document the fact that `vcl_hash` runs on the delivery node, and B.) is incorrect with regards to `vcl_pass`, which they claim runs on the fetching node (which it doesn't, for the most part, as it is designed to [break clustering](#breaking-clustering)). 
 
 When I pointed Fastly to their documentation, their response was:
