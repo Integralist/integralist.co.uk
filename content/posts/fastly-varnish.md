@@ -547,11 +547,11 @@ To explain the terminology:
 
 When a cache server within a Fastly POP receives a request for an object, that server is 'acting' as the delivery node (as it will be the server responsible for returning a response to the client).
 
-If the delivery node has an empty cache, then the request won't immediately reach the origin. Instead the hash key for the requested resource/object will be used to identify a "primary" node, which is the node that will _always_ 'act' as a fetching node (i.e. it's the server that will be responsible for handling proxing the request to the origin).
+If the delivery node has an empty cache, then the request won't immediately reach the origin. Instead the hash key for the requested resource/object will be used to identify a "primary" node, which is the node that will _always_ (†) 'act' as a fetching node (i.e. it's the server that will be responsible for handling the request for that specific resource/object).
 
-> Note: in some cases you'll find the "fetching node" refered to as a "cluster node" and so this goes some way to explaining some of Fastly's APIs (e.g. `is_cluster`).
+> † well, _almost_ always. Except when the delivery node that ends up being selected _is_ the "primary" node. Then the primary node is no longer acting as a fetching node, as it's forced to act as a delivery node instead. Requiring a "secondary" node to act as a backup for those scenarios.
 
-To better understand why we have "primary" node and "fetching" node as two distinct terms, that will become clearer when we better understand how clustering works (but in essence, it's because a "primary" node might have to 'act', in some cases, _as_ a delivery node).
+In some cases you'll notice a "fetching node" being refered to as a "cluster node". this can help to understand some of Fastly's APIs (e.g. `is_cluster`).
 
 ### Delivery node request flow
 
@@ -605,9 +605,9 @@ But how does the fetching node stop all ten requests from each delivery node fro
 
 In _most_ cases the cache server that initially receives the request will not be the "primary". But not always. Sometimes the cache server that initially handles the incoming client request _IS_ the primary (e.g. what was the fetching node)! 
 
-Why is that you ask? It's because the server that the request is initially sent to is picked at _random_. Because the first cache server is selected at random, you could find that the cache server ends up being the primary (e.g. fetching node). So what happens in that scenario?
+Why is that you ask? It's because the server that the request is initially sent to is picked at _random_. So what happens in that scenario?
 
-This is where Fastly introduce the concept of a "secondary" node. It exists much like the "primary" does, to act as a cache layer before a request reaches the origin and exists for those specific times where the primary node is acting as the delivery node.
+This is where Fastly introduce the concept of a "secondary" node. It exists much like the "primary" does, to act as a cache layer before a request reaches the origin and exists for those specific times where the primary node is forced to act as the delivery node (e.g. just because a primary node is acting as a delivery shouldn't mean it goes directly to the origin; the "secondary" helps to prevent that).
 
 > Note: for the most part you don't need to worry too much about primary and secondary nodes, and only really need to know about the general concept of clustering consisting of a delivery node and a fetching node.
 
