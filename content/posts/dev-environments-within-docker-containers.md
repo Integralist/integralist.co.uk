@@ -94,21 +94,21 @@ Next we have the Makefile:
 
 ```
 copy_vim_files:
-  @if [ ! -d "./.vim" ]; then cp -r "$$HOME/.vim" ./.vim; fi
-  @if [ ! -f "./.vimrc" ]; then cp "$$HOME/.vimrc" ./.vimrc; fi
+		@if [ ! -d "./.vim" ]; then cp -r "$$HOME/.vim" ./.vim; fi
+		@if [ ! -f "./.vimrc" ]; then cp "$$HOME/.vimrc" ./.vimrc; fi
 
 remove_vim_files:
-  @rm -rf ./.vim
-  @rm ./.vimrc
+		@rm -rf ./.vim
+		@rm ./.vimrc
 
 build: copy_vim_files
-  @docker build -t python-container-with-vim .
+		@docker build -t python-container-with-vim .
 
 run: build
-  @docker run -it -v "$$(pwd)":/app python-container-with-vim /bin/bash
+		@docker run -it -v "$$(pwd)":/app python-container-with-vim /bin/bash
 
 clean: remove_vim_files
-  -@docker rmi -f python-container-with-vim &> /dev/null || true
+		-@docker rmi -f python-container-with-vim &> /dev/null || true
 
 rebuild: clean run
 ```
