@@ -597,6 +597,8 @@ Here are some packages I like to install as a general rule...
 
 > Note: for an example of how to configure Flake8 and its plugins, see [this gist](https://gist.github.com/0ce27db1d7294f3af9896c0807ccfeed).
 
+I would also strongly recommend using `pipx` and installing programs from there, such as `isort` (which I then reference in my `.vimrc`).
+
 ## Vim
 
 You can either install more recent version of vim via Homebrew:
