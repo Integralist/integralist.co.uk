@@ -38,6 +38,7 @@ draft: false
 - [User Pool Configuration](#user-pool-configuration)
 - [IAM User](#iam-user)
 - [Lambda IAM Role](#lambda-iam-role)
+- [Example Python API code](#example-python-api-code)
 - [Example Cognito App Settings](#example-cognito-app-settings)
 - [Example Cognito User Pool “Federation: Identity Providers”](#example-cognito-user-pool-federation-identity-providers)
 - [Example Facebook App Configuration](#example-facebook-app-configuration)
@@ -492,6 +493,364 @@ Below is an example IAM role policy you can use for AWS Lambda (if you're using 
 It simply sets up CloudWatch logs access, and allows us (as an 'admin') to update user attributes within our User Pool.
 
 > Note: if you're 'copying and pasting', don't forget to update `aws_account_id` and `user_pool_id` in the code snippet.
+
+## Example Python API code
+
+This is a small slice of some Python code I wrote for abstracting away the API interactions with Cognito. Some readers might find it useful for understanding parts of Cognito (apologies if it's a bit ambiguous, as it's taken out of context).
+
+```
+# standard library modules
+
+import json
+import re
+from functools import reduce
+from typing import Dict, List, Optional, Tuple
+
+# application modules
+
+import app.exceptions as exceptions
+import app.network
+import app.security
+
+# external modules
+
+from bf_auth.utility import extract_status_code, instr_exc
+
+import boto3
+from botocore.exceptions import ClientError
+
+# configuration
+
+aws_access_key = config.get('aws_application_access_key')
+aws_region = config.get('cognito_region')
+aws_secret_key = config.get('aws_application_secret_key')
+client_id = config.get('app_client_id')
+client_secret = config.get('app_secret_key')
+cognito_domain = config.get('cognito_domain')
+default_redirect = config.get('default_redirect')
+credentials = {'aws_access_key_id': aws_access_key, 'aws_secret_access_key': aws_secret_key, 'region_name': aws_region}
+sdk = boto3.client('cognito-idp', **credentials)
+user_pool_id = config.get('cognito_user_pool_id')
+user_pool_jwk = f'https://cognito-idp.{aws_region}.amazonaws.com/{user_pool_id}/.well-known/jwks.json'
+
+
+def attr_adapter(attributes: dict) -> List[Dict[str, str]]:
+    """Convert dictionary into a Cognito compatible structure."""
+    return [{'Name': key, 'Value': value} for key, value in attributes.items()]
+
+
+def create_user(username: str,
+                password: str,
+                verified: bool,
+                email: str,
+                user_info_id: str) -> Optional[dict]:
+    """Create the user, then authenticate them to acquire their tokens.
+
+    If the record is created successfully, we'll return user tokens.
+
+    We use the 'Server Side Authentication Flow' for authenticating and
+    migrating users with Cognito (this means no need for generating an SRP)
+
+    Documentation:
+    https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminCreateUser.html
+    https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminInitiateAuth.html
+    https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminRespondToAuthChallenge.html
+    """
+
+    # default to forcing user to validate
+    message_action = {}  # type: ignore
+    cognito_password = app.security.random()
+    user_verified = False
+
+    if verified:
+        message_action = {'MessageAction': 'SUPPRESS'}
+        cognito_password = password
+        user_verified = True
+
+    attributes = {'email': email,
+                  'email_verified': str(verified).lower(),
+                  'custom:user_info_id': str(user_info_id)}
+
+    cognito_attributes = attr_adapter(attributes)
+
+    # we use admin_create_user so that we can choose to either suppress or
+    # trigger the sending of a 'verify your account' email.
+    #
+    # but in using this api call, cognito requires us to set a temporary
+    # password for the user.
+    #
+    # so in the case of a verified user we set their password to their actual
+    # password (so they notice no difference), where as with an unverified user
+    # we will generate them a random password as they'll then reset that
+    # password when cognito sends them the account verification email.
+    try:
+        sdk.admin_create_user(**{'UserPoolId': user_pool_id,
+                                 'UserAttributes': cognito_attributes,
+                                 'Username': username,
+                                 'TemporaryPassword': cognito_password,
+                                 **message_action})
+
+    except Exception as exc:
+        msg = 'USER_CREATE_FAILED'
+        instr_exc(exc, msg,
+                  metric_name='create.user',
+                  context='normal',
+                  scope='cognito',
+                  state='failed',
+                  verified=user_verified,
+                  user_info_id=user_info_id)
+        raise exceptions.CognitoException(msg, code=extract_status_code(exc))
+
+    # also for a verified user we'll try to authenticate and acquire their user
+    # pool tokens, which will be returned to the caller of this function.
+    if user_verified:
+        auth_params = {'USERNAME': username,
+                       'PASSWORD': password,
+                       'SECRET_HASH': app.security.hash(username)}
+
+        challenge_responses = {'USERNAME': username,
+                               'NEW_PASSWORD': password,
+                               'SECRET_HASH': auth_params['SECRET_HASH']}
+
+        try:
+            auth_response = sdk.admin_initiate_auth(UserPoolId=user_pool_id,
+                                                    ClientId=client_id,
+                                                    AuthFlow='ADMIN_NO_SRP_AUTH',
+                                                    AuthParameters=auth_params)
+
+            challenge_name = auth_response.get('ChallengeName')
+            session = auth_response.get('Session')
+
+            response = sdk.admin_respond_to_auth_challenge(UserPoolId=user_pool_id,
+                                                           ClientId=client_id,
+                                                           ChallengeName=challenge_name,
+                                                           ChallengeResponses=challenge_responses,
+                                                           Session=session)
+
+            result = response.get('AuthenticationResult', {})
+            tokens = {'id_token': result.get('IdToken'),
+                      'access_token': result.get('AccessToken'),
+                      'refresh_token': result.get('RefreshToken'),
+                      'token_type': result.get('TokenType')}
+
+            return tokens
+        except Exception as exc:
+            msg = 'USER_AUTH_FAILED'
+            instr_exc(exc, msg,
+                      metric_name='create.user',
+                      context='normal',
+                      scope='cognito',
+                      state='failed',
+                      verified=user_verified,
+                      user_info_id=user_info_id)
+            raise exceptions.CognitoException(msg, code=extract_status_code(exc))
+
+    # if we haven't returned some tokens already, then that means we
+    # successfully created a cognito account for an unverified user, and now we
+    # can raise the relevant exception that will be served back to the
+    # application JS to handle (i.e. display a message to the user)
+    msg = 'USER_MIGRATE_UNVERIFIED'
+    gen_exc = exceptions.CognitoException(msg, code=201)
+    raise gen_exc
+
+
+def delete_user(username) -> bool:
+    """Delete user record associated with the given username.
+
+    If the record is deleted successfully, we'll return True.
+
+    Documentation:
+    https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminDeleteUser.html
+    """
+
+    try:
+        sdk.admin_delete_user(**{'UserPoolId': user_pool_id,
+                                 'Username': username})
+
+    except ClientError as exc:
+        error = exc.response.get('Error', {})
+        error_code = error.get('Code')
+
+        msg = 'USER_DELETE_FAILED'
+        exc_tags = {'metric_name': 'user.delete',
+                    'state': 'failed',
+                    'scope': 'cognito'}
+
+        if error_code == 'UserNotFoundException':
+            instr_exc(exc, msg, **exc_tags)
+            raise exceptions.CognitoException(msg, code=404)
+        else:
+            instr_exc(exc, msg, **exc_tags)
+            raise exceptions.CognitoException(msg, code=extract_status_code(exc))
+
+    except Exception as exc:
+        msg = 'USER_DELETE_FAILED'
+        exc_tags = {'metric_name': 'user.delete',
+                    'state': 'failed',
+                    'scope': 'cognito'}
+        instr_exc(exc, msg, **exc_tags)
+        raise exceptions.CognitoException(msg, code=extract_status_code(exc))
+
+    return True
+
+
+@app.network.cache
+async def get_keys(endpoint=user_pool_jwk) -> dict:
+    """Retrieve JWK (for verifying tokens).
+
+    If successful we return a dict consisting of the cache-control response
+    header value and the actual list of JWKs.
+
+    If unsuccessful we return the standard dictionary error format.
+    """
+
+    response = await app.network.http_client.fetch(endpoint)
+    cache_control = response.headers.get('Cache-Control')
+
+    match = re.search(r'max-age=(\d+)', cache_control)
+
+    if not match or response.code != 200:
+        msg = 'JWK_RESPONSE_INVALID'
+        gen_exc = exceptions.AsyncFetchException(msg, code=response.code)
+        instr_exc(gen_exc, msg, cache_control=cache_control, scope='cognito')
+        raise gen_exc
+
+    try:
+        response_data = json.loads(response.body)
+    except Exception as exc:
+        msg = 'JSON_PARSING_FAILED'
+        instr_exc(exc, msg, endpoint=endpoint, body=response.body, scope='cognito')
+        return {'state': 'error',
+                'code': 500,
+                'message': msg}
+
+    return {'state': 'success',
+            'cache_control': match.group(1),
+            'response_body': response_data.get('keys', [])}
+
+
+async def get_key(kid: str) -> str:
+    """Extract signing key from JWK (for verifying tokens)."""
+
+    response = await get_keys()
+    keys = response.get('response_body')
+    key = list(filter(lambda x: x.get('kid') == kid, keys))
+
+    if len(key) < 1:
+        raise exceptions.NoJWK('JWK_FILTER_FAILED')
+
+    return key[0]
+
+
+def global_signout(access_token) -> bool:
+    """Sign out user from all devices.
+
+    If the user is signed out successfully, we'll return True.
+
+    Documentation:
+    https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_GlobalSignOut.html
+    """
+
+    try:
+        sdk.global_sign_out(AccessToken=access_token)
+    except Exception as exc:
+        msg = 'USER_GLOBAL_SIGNOUT_FAILED'
+        instr_exc(exc, msg, metric_name='user.global_signout.failed', scope='cognito')
+        raise exceptions.CognitoException(msg, code=extract_status_code(exc))
+
+    return True
+
+
+def admin_signout(username) -> bool:
+    """Sign out user from all devices as an administrator.
+
+    If the user is signed out successfully, we'll return True.
+
+    Documentation:
+    https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminUserGlobalSignOut.html
+    """
+
+    try:
+        sdk.admin_user_global_sign_out(**{'UserPoolId': user_pool_id,
+                                          'Username': username})
+    except Exception as exc:
+        msg = 'USER_SIGNOUT_FAILED'
+        instr_exc(exc, msg, metric_name='user.signout.failed', scope='cognito')
+        raise exceptions.CognitoException(msg, code=extract_status_code(exc))
+
+    return True
+
+
+def get_attribute(key, user_attrs) -> Optional[str]:
+    """Recursively search user attributes for given key."""
+
+    return reduce(lambda x, y: x if x.get('Name') == key else y, user_attrs)
+
+
+async def exchange_code_for_tokens(code, redirect_host, code_verifier=None) -> dict:
+    """Exchange the Facebook/Google authorization code for user tokens.
+
+    Documentation:
+    https://docs.aws.amazon.com/cognito/latest/developerguide/token-endpoint.html
+
+    Example response:
+
+    {
+      "access_token":"123",
+      "refresh_token":"456",
+      "id_token":"789",
+      "token_type":"Bearer",
+      "expires_in":3600
+    }
+    """
+
+    # Note: the `redirect_uri` field isn't used for redirecting, but for verification.
+    # the value needs to match what is configured within the allowed cognito
+    # callback endpoints
+    data = {'code': code,
+            'grant_type': 'authorization_code',
+            'client_id': client_id,
+            'redirect_uri': f'{redirect_host}/auth/signin/callback'}
+
+    if code_verifier:
+        data['code_verifier'] = code_verifier
+
+    metric_tags = {'metric_tags': {'scope': 'cognito', 'context': 'social', 'name': 'token_exchange'}}
+    endpoint = f'{cognito_domain}/oauth2/token'
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+
+    response = await app.network.fetch(endpoint, post_data=data,
+                                       headers=headers,
+                                       auth_username=client_id,
+                                       auth_password=client_secret,
+                                       **metric_tags)
+
+    if response.get('state') == 'error':
+        gen_exc = exceptions.AsyncFetchException(response.get('message'),
+                                                 code=response.get('code'))
+        raise gen_exc
+
+    return response
+
+
+async def resend_confirmation_code(username) -> bool:
+    """Resend account confirmation email
+
+    Documentation:
+    https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_ResendConfirmationCode.html
+    """
+
+    try:
+        sdk.resend_confirmation_code(**{'ClientId': client_id,
+                                        'SecretHash': app.security.hash(username),
+                                        'Username': username})
+    except Exception as exc:
+        msg = 'CONFIRMATION_RESEND_FAILED'
+        instr_exc(exc, msg, metric_name='user.confirmation_resend.failed', scope='cognito')
+        return False
+
+    return True
+```
 
 ## Example Cognito App Settings
 
