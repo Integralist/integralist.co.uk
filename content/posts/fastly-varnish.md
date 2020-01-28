@@ -1321,11 +1321,13 @@ The object it creates is called a "hit-for-pass" (if you look back at the Fastly
 
 > Note: the ttl can be changed using vcl but it should be kept small. Varnish implements a type known as a 'duration' and takes many forms: ms (milliseconds), s (seconds), m (minutes), h (hours), d (days), w (weeks), y (years). For example, `beresp.ttl = 1h`.
 
-The reason Varnish creates an object and caches it is because if it _didn't_, when `return(pass)` is executed and the content subsequently is not cached, then if another request is made for that same resource, we would find "request collapsing" causes a performance issue for users.
+The reason Varnish creates an object and caches it is because if it _didn't_, when `return(pass)` is executed and the content subsequently is not cached, then if another request is made for that same resource, we would find "request collapsing" causes a performance issue for users. What is 'request collapsing' I hear you ask? Well...
 
 Request collapsing is where Varnish blocks requests for what looks to be the same uncached resource. It does this in order to prevent overloading your origin. So for example, if there are ten requests for an uncached resource, it'll allow one request through to origin and block the other nine until the origin has responded and the content has been cached. The nine requests would then get the content from the cache. 
 
 But in the case of uncachable content (e.g. content that uses cookies typically will contain content that is unique to the user requesting the resource) users are blocked waiting for an existing request for that resource to complete, only to find that as the resource is uncacheable the request needs to be made again (this cycle would repeat for each user requesting this unique/uncacheable resource).
+
+i.e. out of 10 requests for a resource that is ultimately uncacheable, the first request would go through while nine are blocked waiting for the first request to complete. The first request completes and oh-no, it can't be cached, nevermind let's unblock the second request (while the other eight are blocked). When the second request comes back we again realise it can't be cached and the cycle repeats until all ten requests have completed.
 
 As you can imagine, this is very bad because the requests for this uncachable content has resulted in sequential processing. 
 
