@@ -80,9 +80,9 @@ We'll show you how to implement your own Context Manager in the following sectio
 
 ### `@contextlib.contextmanager`
 
-Python provides a decorator function `@contextlib.contextmanager` which is actually a callable class (i.e. it defines `__call__` magic method) that enables context managers to work as decorators. 
+Python provides a decorator function `@contextlib.contextmanager` which is actually a callable class (i.e. it defines `__call__` magic method) that enables custom context managers (e.g. your own code you want to act as a context manager) to use simpler code than the traditional 'class-based' implementation we previously mentioned. 
 
-This means if you have custom objects that need to implement clean-up logic (similar to how `open` does), then you can decorate your own function so it behaves like a Context Manager, but now instead of the more verbose 'class-based' implementation (which we'll look at in the next section) we can use a `yield` statement, like so:
+This means if you have custom objects that need to implement clean-up logic (similar to how `open` does), then you can decorate your own function so it _behaves_ like a Context Manager, while your function itself simply uses a `yield` statement, like so:
 
 ```
 from contextlib import contextmanager
