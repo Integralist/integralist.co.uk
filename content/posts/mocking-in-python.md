@@ -533,6 +533,41 @@ def test_valid_video(mock_datetime, input_date, input_url, valid):
     assert valid_video(input_date, input_url) is valid
 ```
 
+Another way to use `wrap` is like so:
+
+```
+from unittest import mock
+
+
+class Foo(object):
+    def bar(self, x, y):
+        return x + y + 1
+
+def test_bar():
+    foo = Foo()
+    with mock.patch.object(foo, 'bar', wraps=foo.bar) as wrapped_foo:
+        foo.bar(1, 3)
+        wrapped_foo.assert_called_with(1, 2)
+
+test_bar()
+```
+
+Another simplified version of the above that mocks the whole object, not just a single method:
+
+```
+from unittest import mock
+
+class Foo():
+    def bar(self, msg):
+        print(msg)
+
+f = Foo()
+spy = mock.MagicMock(wraps=f)
+
+spy.bar('baz')
+spy.bar.assert_called_with('beep')  # raises AssertionError
+```
+
 ## Mock builtin `open` function
 
 Python's mock library provides an abstraction for mocking the builtin `open` function a lot simpler...
