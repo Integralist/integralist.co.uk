@@ -129,3 +129,61 @@ for _ in range(100000):
 ```
 
 > Note: for more information, see [Context Manager Types](https://docs.python.org/3/library/stdtypes.html#typecontextmanager).
+
+## When to use one or the other?
+
+One thing I noticed recently was that the `contextmanager` variation wouldn't execute an 'exit' if an exception was raised during execution of the code, while the more verbose 'class-based' implementation _would_. See the following code for an example...
+
+```
+from contextlib import contextmanager
+
+@contextmanager
+def foo():
+    print("enter!")
+    yield "foobar"
+    print("exit!")
+
+try:
+    with foo() as f:
+        raise Exception("unexpected")
+        print(f"f was: {f}")
+except Exception as e:
+    print(f"whoops: {e}")
+```
+
+The output is not what I expected:
+
+```
+enter!
+whoops: unexpected
+```
+
+Notice how there is no `exit!` printed.
+
+Now compare this to a 'class-based' example...
+
+```
+class Foo():
+    def __enter__(self):
+        print("enter!")
+
+    def __exit__(self, *args):
+        print("exit!", args)
+
+try:
+    with Foo() as f:
+        raise Exception("unexpected")
+        print(f"f was: {f}")
+except Exception as e:
+    print(f"whoops: {e}")
+```
+
+The output is as expected:
+
+```
+enter!
+exit! (<class 'Exception'>, Exception('unexpected'), <traceback object at 0x108882d00>)
+whoops: unexpected
+```
+
+i.e. we see _both_ an enter and exit message. So this might be worth keeping in mind when using a `contextmanager`.
