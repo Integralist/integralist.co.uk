@@ -597,7 +597,30 @@ Here are some packages I like to install as a general rule...
 
 > Note: for an example of how to configure Flake8 and its plugins, see [this gist](https://gist.github.com/0ce27db1d7294f3af9896c0807ccfeed).
 
-I would also strongly recommend using `pipx` and installing programs from there, such as `isort` (which I then reference in my `.vimrc`).
+I would also strongly recommend using `pipx` and installing programs from there, such as: 
+
+- `isort`
+- `autopep8`
+- `unimport`
+
+I then reference these in my `.vimrc`:
+
+```
+" Execute Python isort
+autocmd BufWritePost *.py :execute '!isort %' | edit
+
+" Execute Python autopep8
+autocmd BufWritePost *.py :execute '!autopep8 --experimental --verbose --aggressive --aggressive --recursive --in-place %' | edit
+
+" Execute Python unimport
+autocmd BufWritePost *.py :execute '!unimport --remove %' | edit
+```
+
+Just be sure the `pipx ensurepath` call doesn't update the shell `PATH` by _appending_ the `/Users/integralist/.local/bin` but by _prepending_ it instead. This might require you to manually update your `~/.bash_profile` like so:
+
+```
+export PATH="/Users/integralist/.local/bin:$PATH"
+```
 
 ## Vim
 
