@@ -186,4 +186,35 @@ exit! (<class 'Exception'>, Exception('unexpected'), <traceback object at 0x1088
 whoops: unexpected
 ```
 
-i.e. we see _both_ an enter and exit message. So this might be worth keeping in mind when using a `contextmanager`.
+i.e. we see _both_ an enter and exit message. 
+
+We can get the `contextmanager` to behave as we might have expected it to (e.g. the same as the 'class-based' implementation) by ensuring the function that calls `yield` is wrapped in a `try/finally` block, like so:
+
+```
+from contextlib import contextmanager
+
+@contextmanager
+def foo():
+    print("enter!")
+    try:
+        yield "foobar"
+    finally:
+        print("exit!")
+
+try:
+    with foo() as f:
+        raise Exception("unexpected")
+        print(f"f was: {f}")
+except Exception as e:
+    print(f"whoops: {e}")
+```
+
+The output of this is now what we might expect...
+
+```
+enter!
+exit!
+whoops: unexpected
+```
+
+When choosing between the two options `contextmanager` and 'class-based' implementation, it might be worth keeping this caveat in mind.
