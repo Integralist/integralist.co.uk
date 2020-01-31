@@ -33,6 +33,8 @@ This is a _quick_ guide to Python's `asyncio` module and is based on Python vers
   - [`create_task`](#create-task)
   - [Callbacks](#callbacks)
 - [Pools](#pools)
+  - [`asyncio.Future` vs `concurrent.futures.Future`](#asyncio-future-vs-concurrent-futures-future)
+  - [`asyncio.wrap_future`](#asyncio-wrap-future)
 
 ## Introduction
 
@@ -529,6 +531,56 @@ This works because the default behaviour for the shutdown method is `wait=True` 
 
 If we passed `.shutdown(wait=False)` instead, then the call to `future.done()` would indeed raise an exception as the scheduled task would still be running and so in that case we'd need to ensure that we use another mechanism for acquiring the results of the scheduled tasks (such as `concurrent.futures.as_completed` or `concurrent.futures.wait`).
 
+### `asyncio.Future` vs `concurrent.futures.Future`
+
 One final thing to mention is that a `concurrent.futures.Future` object is different from an `asyncio.Future`. The `asyncio.Future` is intended to be used with event loops and is _awaitable_, while the former isn't. Using `loop.run_in_executor` provides the necessary interoperability between the two.
 
-Since Python 3.5 we can use `asyncio.wrap_future` to convert a `concurrent.futures.Future` to an `asyncio.Future`.
+### `asyncio.wrap_future`
+
+Since Python 3.5 we can use `asyncio.wrap_future` to convert a `concurrent.futures.Future` to an `asyncio.Future`. An example of this can be seen below...
+
+```
+import asyncio
+import random
+from concurrent.futures import ThreadPoolExecutor
+from time import sleep
+
+
+def return_after_5_secs(message):
+    sleep(5)
+    return message
+
+
+pool = ThreadPoolExecutor(3)
+
+
+async def doit():
+    identify = random.randint(1, 100)
+    future = pool.submit(return_after_5_secs, (f"result: {identify}"))
+    awaitable = asyncio.wrap_future(future)
+    print(f"waiting result: {identify}")
+    return await awaitable
+
+
+async def app():
+    # run some stuff multiple times
+    tasks = [doit(), doit()]
+
+    result = await asyncio.gather(*tasks)
+    print(result)
+
+print("waiting app")
+asyncio.run(app())
+```
+
+The output of this program would be:
+
+```
+waiting app
+waiting result: 62
+waiting result: 83
+
+# ...five seconds pass by...
+
+['result: 62', 'result: 83']
+```
