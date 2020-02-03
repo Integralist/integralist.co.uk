@@ -31,7 +31,7 @@ This is a _quick_ guide to Python's `asyncio` module and is based on Python vers
   - [`wait_for`](#wait-for)
   - [`as_completed`](#as-completed)
   - [`create_task`](#create-task)
-  - [Callbacks](#callbacks)
+- [Callbacks](#callbacks)
 - [Pools](#pools)
   - [`asyncio.Future` vs `concurrent.futures.Future`](#asyncio-future-vs-concurrent-futures-future)
   - [`asyncio.wrap_future`](#asyncio-wrap-future)
@@ -195,7 +195,7 @@ The following functions help to co-ordinate the running of functions concurrentl
 - `asyncio.wait_for`: wait for a single awaitable, until the given 'timeout' is reached.
 - `asyncio.as_completed`: similar to `gather` but returns Futures that are populated when results are ready.
 
-> Note: `gather` has specific options for handling errors and cancellations. For example, if `return_exceptions: False` then the first exception raised by one of the awaitables is returned to the caller of `gather`, where as if set to `True` then the exceptions are aggregated in the list alonside successful results. If `gather()` is cancelled, all submitted awaitables (that have not completed yet) are also cancelled.
+> Note: `gather` has specific options for handling errors and cancellations. For example, if `return_exceptions: False` then the first exception raised by one of the awaitables is returned to the caller of `gather`, where as if set to `True` then the exceptions are aggregated in the list alongside successful results. If `gather()` is cancelled, all submitted awaitables (that have not completed yet) are also cancelled.
 
 ## Deprecated functions
 
@@ -379,7 +379,7 @@ Within the `foo` Task we also sleep, but for a _longer_ period of time than `hel
 
 Finally, we sleep again for ten seconds. This is just so we can give the `foo` Task enough time to complete and print its own output. If we didn't do that then the `hello_world` task would finish and close down the event loop. The last line of `hello_world` is printing the `foo` Task, where we'll see the status of the `foo` Task will now show as  'finished'.
 
-### Callbacks
+## Callbacks
 
 When dealing with a Task, which really is a Future, then you have the ability to execute a 'callback' function once the Future has a value set on it.
 
@@ -533,7 +533,11 @@ If we passed `.shutdown(wait=False)` instead, then the call to `future.done()` w
 
 ### `asyncio.Future` vs `concurrent.futures.Future`
 
-One final thing to mention is that a `concurrent.futures.Future` object is different from an `asyncio.Future`. The `asyncio.Future` is intended to be used with event loops and is _awaitable_, while the former isn't. Using `loop.run_in_executor` provides the necessary interoperability between the two.
+One final thing to mention is that a `concurrent.futures.Future` object is _different_ from an `asyncio.Future`. 
+
+An `asyncio.Future` is intended to be used with the asyncio's event loop, and is [_awaitable_](#awaitables). A `concurrent.futures.Future` is _not_ awaitable. 
+
+Using the `.run_in_executor()` method of an event loop will provide the necessary interoperability between the two future types by wrapping the future type in a call to [`asyncio.wrap_future`](#asyncio-wrap-future) (see next section for details).
 
 ### `asyncio.wrap_future`
 

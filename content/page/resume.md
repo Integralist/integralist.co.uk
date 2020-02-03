@@ -60,11 +60,9 @@ You can find me online at the following locations:
 
 ### BuzzFeed (June 2016 - present)
 
-The journey has just begun...
+The journey has only just begun!
 
-BUT the story so far is that I joined as a Senior Software Engineer as part of a new core UK dev team being pushed to take on some important new projects for the company.
-
-Alongside that we were tasked with decommissioning a 10yr+ legacy Perl monolithic application stack over to various Python and Go services.
+The story so far is that I joined as a Senior Software Engineer as part of a new 'core' UK dev team. We were tasked with decommissioning a 10yr+ legacy Perl monolithic application stack over to various Python and Go services.
 
 I've worked primarily within BuzzFeed's OO-INFRA group which sits somewhere in-between traditional infrastructure/operation teams and engineering teams building user facing products. Our motivations were to make the lives of our fellow engineers easier by building tools, services and abstractions that enabled them to work more quickly and efficiently.
 
