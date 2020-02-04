@@ -195,6 +195,65 @@ python -m pip install -r requirements-to-freeze.txt --upgrade
 python -m pip freeze > requirements.txt
 ```
 
+To make the process easier (see notes below for details) we can utilize a bash shell script (and docker) to help us:
+
+```
+#!/bin/bash
+
+# A quick and easy way to exhaustively freeze a set of "top level" Python
+# dependencies for services following the "Better Pip Workflow" approach:
+#
+#     https://www.kennethreitz.org/essays/a-better-pip-workflow
+#
+# This script makes it easy to generate the frozen requirements without needing
+# to juggle fresh virtualenvs or compile-time dependencies by instead
+# installing the requirements in an ephemeral docker container.
+#
+# Example usage:
+#
+#     .freeze-requirements path/to/requirements-to-freeze.txt > path/to/requirements.txt
+#
+# To install extra base OS packages (e.g. mysql-dev), specify them in PACKAGES on the command line:
+#
+#     PACKAGES="mysql-dev" ./freeze-requirements ...
+
+set -e
+set -u
+set -o pipefail
+
+DEFAULT_PYTHON_VERSION=3.8
+PYTHON_VERSION="${PYTHON_VERSION:-$DEFAULT_PYTHON_VERSION}"
+
+DEFAULT_PACKAGES="gcc python-dev libssl-dev"
+PACKAGES="${DEFAULT_PACKAGES} ${PACKAGES:-}"
+
+TAG="freeze-requirements-${PYTHON_VERSION}"
+
+requirements_file="${1:-}"
+
+if [ "$requirements_file" == "" ]; then
+    echo "Usage: $(basename $0) REQUIREMENTS_FILE" >&2
+    exit 1
+fi
+
+if [ ! -f "$requirements_file" ] && [ "$requirements_file" != "-" ]; then
+    echo "File not found: $requirements_file" >&2
+    exit 1
+fi
+
+docker build -t $TAG - >&2 <<EOF
+FROM python:${PYTHON_VERSION}-slim
+
+RUN apt-get update && apt-get install -y ${PACKAGES}
+RUN pip install virtualenv && virtualenv /venv
+EOF
+
+cat $requirements_file | exec docker run --rm -i -a stdin -a stdout -a stderr $TAG sh -c '
+cat >/tmp/requirements-to-freeze.txt
+/venv/bin/pip install -r /tmp/requirements-to-freeze.txt >&2
+/venv/bin/pip freeze -r /tmp/requirements-to-freeze.txt'
+```
+
 ## Caching Dependencies
 
 Starting with pip version 6.0 you can prevent having to reinstall dependencies that are used across multiple virtual environments by caching them (this is especially useful with Continuous Integration builds).
