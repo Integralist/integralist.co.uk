@@ -181,6 +181,10 @@ The worst case scenario is if `x` happens to be a number that doesn't exist in t
 
 > Note: a much better algorithm to use (if the input was guaranteed to be ordered/sorted) would be a [binary search](/posts/big-o-for-beginners/#8).
 
+What's interesting to keep in mind is that there are algorithms that are slower still than the example we've given above but are _still_ considered to be 'linear time' (e.g. `O(n)`). Consider a collection of ten items that you loop over twice! That's twice as many operations as our initial example but it's still `O(n)` and not something like `O(n*2)`. 
+
+Why is that? Well, it stems from how you _calculate_ algorithmic complexity (see [my blog post on the subject](/posts/calculating-bigo/)). But in essence the calculation starts off very explicit until you identify which portion of the algorithm is the 'dominant' (e.g. as the size of the input grows, which part of the algorithm gets worse). In the case of `O(n*2)` the 'constant' value is `2`, but if the collection size changed from `10` to `1000` then (that being the `n` part) the `n` becomes the 'dominant' portion of the algorithm and so we can simplify big-o to just `O(n)`.
+
 ### Linearithmic Time
 
 An algorithm is 'linearithmic' when the number of operations increases by the number of elements (i.e. linear time) times the result of `log n` (i.e. logarithmic time).
