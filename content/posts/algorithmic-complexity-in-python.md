@@ -211,7 +211,7 @@ print("sorted:  ", quicksort(input))
 
 An algorithm is 'quadratic' when the number of operations become the square of the number of elements.
 
-Consider an algorithm whose implementation is looping over the same input twice:
+Consider an algorithm whose implementation is looping over some input and then nesting another loop of that same input:
 
 ```
 def search(input):
@@ -222,7 +222,11 @@ def search(input):
 search(range(10))
 ```
 
-This example `search` function will loop over every element in `input` and then it'll loop through it again, resulting in it having `O(n*n)` quadratic time complexity. Meaning: if the input range changed from `10` to `1000`, then the number of operations (i.e. total loop iterations) increases as a square of the number of elements.
+This example `search` function will loop over every element in `input` and then for each item iterated over it'll loop through the same top-level input collection again, resulting in it having `O(n*n)` quadratic time complexity. 
+
+In our example code our collection is a list of ten items. Item 1 is the initial list value `0`, and for that we'll loop again ten times. We move to Item 2 (which is the value `1`) and _again_ we'll end up looping ten times ...and so on.
+
+This means if the input range changed from `10` to `1000`, then the number of operations (i.e. total loop iterations) increases as a square of the number of elements.
 
 ### Polynomial Time
 
