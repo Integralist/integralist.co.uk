@@ -91,6 +91,8 @@ There are also various metric _types_ you can collect data as. Two common ones a
 - **Gauge**: a point-in-time value (can arbitrarily go up and down).
 - **Histogram**: samples observations and counts them in configurable buckets.
 
+> Histograms might require a little extra clarification: they sample observations (e.g. request durations) and count different perspectives on the data. In the case of 'request duration' you'd likely see the different 'perspectives' being: count, avg, median, max and 95percentile.
+
 For more information, see these Datadog articles: [Metric Types](https://docs.datadoghq.com/metrictypes/) and [DogStatsD](https://docs.datadoghq.com/guides/dogstatsd/).
 
 <div id="4"></div>
