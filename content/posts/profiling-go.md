@@ -23,6 +23,8 @@ draft: false
 - [Trace](#7)
 - [Conclusion](#8)
 
+> Note: I highly recommend also reading [this](https://golang.org/doc/diagnostics.html) official diagnostics documentation.
+
 <div id="1"></div>
 ## Memory Management
 
