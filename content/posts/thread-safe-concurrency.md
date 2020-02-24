@@ -90,7 +90,7 @@ Let's investigate each of these in turn:
 <div id="5"></div>
 ## Mutexes/Semaphores
 
-We'll be discussing specifically "mutexes" rather than "semaphores" (they have very similar purposes - in that they control access to specific data - although a mutex offers some additional guarantees which we won't go into here).
+We'll be discussing specifically "mutexes" rather than "semaphores" (they have very similar purposes - in that they control access to specific data - although a mutex offers some additional guarantees).
 
 When using a mutex, you can "lock" a piece of data so only that specific Thread has access to the data. When done manipulating the data you can "unlock" it, thus allowing another Thread to use a mutex to "lock" the data so it can make its own changes.
 
@@ -109,6 +109,12 @@ end
 > Note: for the full Mutex API see [http://www.ruby-doc.org/core-2.1.5/Mutex.html](http://www.ruby-doc.org/core-2.1.5/Mutex.html)
 
 This particular solution is the simplest of the three. BUT it doesn't take into account any logic for handling unexpected changes to data (we'll see what that means in the next section).
+
+### Mutex vs Semaphore?
+
+A semaphore is a construct which can be used to _constrain_ or _control_ access to a shared resource access via multiple threads. Think of it as a more generalized version of a mutex.
+
+A mutex ensures a single thread only ever has access to a segment of your code (it guards the 'critical section' of a piece of code), where as a semaphore is concerned with ensuring at most N threads can access your code.
 
 <div id="5-1"></div>
 ### Atomic operations
