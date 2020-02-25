@@ -18,6 +18,7 @@ draft: false
   - [Message Passing](#3)
 - [Various options](#4)
 - [Mutexes/Semaphores](#5)
+  - [Mutex vs Semaphore](#mutex-vs-semaphore)
   - [Atomic operations](#5-1)
 - [STM](#6)
   - [Clojure example](#6-1)
@@ -34,6 +35,12 @@ draft: false
     - [Calculating the number of Threads](#9-2)
     - [Even workload distribution](#9-3)
 - [Conclusion](#10)
+
+> **2020.02.25 UPDATE**: this post was written a long time ago and I realize now (upon reflection) that it dips hazardously in-and-out between various programming languages without really warning the user properly ahead of time. 
+>
+> The reason for using different languages was to highlight the fact that the various concurrency tools and mechanisms weren't fully supported across languages. 
+> 
+> Feel free to skip over these code examples if you like. The explanations that precede the examples should hopefully suffice.
 
 <div id="1"></div>
 ## Introduction
@@ -108,13 +115,48 @@ end
 
 > Note: for the full Mutex API see [http://www.ruby-doc.org/core-2.1.5/Mutex.html](http://www.ruby-doc.org/core-2.1.5/Mutex.html)
 
-This particular solution is the simplest of the three. BUT it doesn't take into account any logic for handling unexpected changes to data (we'll see what that means in the next section).
+This particular solution is the simplest of the three. BUT it doesn't take into account any logic for handling unexpected changes to data (we'll see what that means later on in the [STM](#6) section).
 
 ### Mutex vs Semaphore?
 
-A semaphore is a construct which can be used to _constrain_ or _control_ access to a shared resource access via multiple threads. Think of it as a more generalized version of a mutex.
+A semaphore is a construct which can be used to _constrain_ or _control_ access to a shared resource (typically this means access across multiple threads). Think of a semaphore as a more 'generalized' version of a mutex.
 
-A mutex ensures a single thread only ever has access to a segment of your code (it guards the 'critical section' of a piece of code), where as a semaphore is concerned with ensuring at most N threads can access your code.
+A mutex ensures a single thread only ever has access to a segment of your code (e.g. it guards the 'critical section' of a piece of code), where as a semaphore is concerned with ensuring that at _most_ N threads can access your code.
+
+Below is an example in golang:
+
+```
+// Package middleware provides wrapper functions around the http.Handler
+// interface, allowing for an incoming HTTP request to be modified or analysed.
+package middleware
+
+import (
+	"net/http"
+
+	"github.com/example/internal/pkg/settings"
+	"golang.org/x/sync/semaphore"
+)
+
+// LimitConcurrency will reject any new connections that exceed the service's
+// ability to continue functioning.
+func LimitConcurrency(handler http.Handler, config *settings.Config) http.Handler {
+  	s := semaphore.NewWeighted(int64(config.ConcurrencyLimit))
+
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !s.TryAcquire(1) {
+			http.Error(w, "TOO_MANY_CONCURRENT_CONNECTIONS", http.StatusServiceUnavailable)
+			return
+		}
+		defer func() {
+			s.Release(1)
+		}()
+
+		handler.ServeHTTP(w, r)
+	})
+}
+```
+
+Notice how we have a similar API to a mutex (e.g. with a mutex you have to acquire a 'lock' where as with a semaphore you have a number of 'spaces' the code is allowed to acquire). We attempt to 'acquire' one of the available semaphore spaces (e.g. when we created the semaphore we passed in a threshold of `config.ConcurrencyLimit` which could be set to a value of `100`). In the case of the threshold being `100` it means we have `100` semaphore 'spaces' available before our code starts to reject incoming connections.
 
 <div id="5-1"></div>
 ### Atomic operations
