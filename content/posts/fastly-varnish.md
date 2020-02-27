@@ -14,12 +14,13 @@ tags:
 draft: false
 ---
 
-In this post I'm going to be explaining how the [Fastly CDN](https://www.fastly.com/) works, with regards to their 'programmatic edge' feature (i.e. the ability to execute code on cache servers nearest to your users).
+In this post I'm going to be explaining how the [Fastly CDN](https://www.fastly.com/) works, with regards to their 'programmatic edge' feature (i.e. the ability to execute code on cache servers nearest to your users). 
 
-Fastly utilizes free software and extends it to fit their purposes, but this extending of existing software can make things confusing when it comes to understanding what underlying features work and how they work.
+We will be digging into quite a few different areas of their implementation, such as their clustering solution, shielding, and various gotchas and caveats to their service offering.
 
 - [Introduction](#1)
   - [Varnish Basics](#varnish-basics)
+  - [States vs Actions](#states-vs-actions)
 - [Varnish Default VCL](#2)
 - [Fastly Default VCL](#3)
 - [Custom VCL](#3.0)
@@ -78,7 +79,9 @@ Fastly utilizes free software and extends it to fit their purposes, but this ext
 <div id="1"></div>
 ## Introduction
 
-[Varnish](https://varnish-cache.org/) is an open-source HTTP accelerator.  
+Fastly utilizes 'free' software (Varnish) and extends it to fit their purposes, but this extending of existing software can make things confusing when it comes to understanding what underlying features work and how they work.
+
+In short: [Varnish](https://varnish-cache.org/) is an HTTP accelerator.  
 More concretely it is a web application that acts like a [HTTP reverse-proxy](https://en.wikipedia.org/wiki/Reverse_proxy). 
 
 You place Varnish in front of your application servers (those that are serving HTTP content) and it will cache that content for you. If you want more information on what Varnish cache can do for you, then I recommend reading through their [introduction article](https://varnish-cache.org/intro/index.html) (and watching the video linked there as well).
@@ -97,7 +100,7 @@ Ultimately this is not a "VCL 101". If you need help understanding anything ment
 - [Varnish Blog](https://info.varnish-software.com/blog)
 - [Fastly Blog](https://www.fastly.com/blog)
 
-> Fastly has a couple of _excellent_ articles on utilising the `Vary` HTTP header (highly recommended reading).
+> Fastly also has a couple of _excellent_ articles on utilising the `Vary` HTTP header, which is highly recommended reading.
 
 ### Varnish Basics
 
@@ -110,22 +113,30 @@ Varnish is a 'state machine' and it switches between these states via calls to a
 - `pass`: content should be fetched from origin, regardless of if it exists in cache or not, and response will not be cached.
 - `pipe`: content should be fetched from origin, and no other VCL will be executed.
 - `fetch`: content has been fetched, we can now inspect/modify it before delivering it to the user.
-- `deliver`: content has been cached (or not, if we had used `return(pass)`) and ready to be delivered to the user.
+- `deliver`: content has been cached (or not, depending on what you `return` in `vcl_fetch`) and ready to be delivered to the user.
 
 For each state there is a corresponding subroutine that is executed. It has the form `vcl_<state>`, and so there is a `vcl_recv`, `vcl_hash`, `vcl_hit` etc.
 
-So in `vcl_recv` to change state to "pass" you would execute `return(pass)`. If you were in `vcl_fetch` and wanted to move to `vcl_deliver`, then you would execute `return(deliver)`.
+As an example, in `vcl_recv` to change state to "pass" you would execute `return(pass)`. If you were in `vcl_fetch` and wanted to avoid caching the content (i.e. move to `vcl_pass` before moving to `vcl_deliver`), then you would execute `return(pass)` otherwise executing `return(deliver)` from `vcl_fetch` would cache the origin response and move you to `vcl_deliver` directly.
 
-For a state such as `vcl_miss` you'll discover shortly (when we look at a 'request flow' diagram of Varnish) that when `vcl_miss` finishes executing it will then trigger a request to the origin/backend service to acquire the requested content. Once the content is requested, _then_ we end up at `vcl_fetch` where we can then inspect the response from the origin. 
+For a state such as `vcl_miss`, when that state function finishes executing it will automatically trigger a request to the origin/backend service to acquire the requested content. Once the content is requested, _then_ we end up at `vcl_fetch` where we can then inspect the response from the origin. 
 
 This is why at the end of `vcl_miss` we change state by calling `return(fetch)`. It looks like we're telling Varnish to 'fetch' data but really we're saying move to the next logical state which is actually `vcl_fetch`.
 
-> Note: `vcl_hash` is the only exception to this rule because it's not a _state_ per se, so you don't execute `return(hash)` but `return(lookup)`. This helps distinguish that we're performing an action and not a state change (i.e. we're going to _lookup_ in the cache). We could argue `vcl_miss`'s `return(fetch)` is the same, but from my understanding that's not the case.
+Lastly, as Varnish is a state machine, we have the ability to 'restart' a request (while also keeping any modifications you might have made to the request intact). To do that you would call `return(restart)`.
+
+### States vs Actions
+
+According to Fastly `vcl_hash` is the only exception to the rule of `return(<state>)` because the value you provide to the `return` function is not a _state_ per se. The state function is called `vcl_hash` but you don't execute `return(hash)`. Instead you execute `return(lookup)`. 
+
+Fastly suggests this is to help distinguish that we're performing an action and not a state change (i.e. we're going to _lookup_ the requested resource within the cache). 
+
+Although `vcl_miss`'s `return(fetch)` is a bit ambiguous considering we _could_ maybe argue it's also performing an 'action' rather than a state change. Let's also not forget operations such as `return(restart)` which looks to be triggering an 'action' rather than a state change (in that example you might otherwise expect to execute something like `return(recv)`).
 
 <div id="2"></div>
 ## Varnish Default VCL
 
-When using the open-source version of Varnish, you'll typically implement your own custom VCL logic (e.g. add code to `vcl_recv` or any of the other common VCL subroutines). But it's important to be aware that if you don't `return` an action (e.g. `return(pass)`, or trigger any of the other available Varnish 'states'), then Varnish will continue to execute its own built-in VCL logic (i.e. its built-in logic is _appended_ to your custom VCL).
+When using the free version of Varnish, you'll typically implement your own custom VCL logic (e.g. add code to `vcl_recv` or any of the other common VCL subroutines). But it's important to be aware that if you don't `return` an action (e.g. `return(pass)`, or trigger any of the other available Varnish 'states'), then Varnish will continue to execute its own built-in VCL logic which sits beneath your custom VCL.
 
 You can view the 'default' (or 'builtin') logic for each version of Varnish via GitHub:
 
@@ -136,17 +147,18 @@ You can view the 'default' (or 'builtin') logic for each version of Varnish via 
 
 > Note: after v3 Varnish renamed the file from `default.vcl` to `builtin.vcl`.
 
-But things are slightly different with Fastly's Varnish implementation (which is based off Varnish open-source version 2.1.5).
+But things are slightly different with Fastly's Varnish implementation (which is based off Varnish version 2.1.5).
 
 Specifically:
 
 - no `return(pipe)` in `vcl_recv`, they do `pass` there
 - some modifications to the `synthetic` in `vcl_error`
+- ...and God knows what else.
 
 <div id="3"></div>
 ## Fastly Default VCL
 
-On top of the built-in VCL the open-source version of Varnish uses, Fastly also includes its own 'default' VCL logic alongside your own additions.
+On top of the built-in VCL the free version of Varnish uses, Fastly also includes its own 'default' VCL logic alongside your custom VCL.
 
 When creating a new Fastly 'service', this default VCL is added automatically to your new service. You are then free to remove it completely and replace it with your own custom VCL if you like.
 
@@ -190,9 +202,21 @@ It can be useful to know what the default VCL code does (see [links in previous 
 
 This is important because, for example, the default behaviours Fastly defines for `vcl_recv` is to set a backend for your service. Your custom VCL can of course override that backend, but where you define your custom code that does that overriding might not function correctly if placed in the wrong place. 
 
-In our case we had a conditional comment like `if (req.restarts == 0) { ...set backend... }` and then later on in our VCL we would trigger a request restart (e.g. `return(restart)`), but now `req.restarts` would be equal to `1` and not zero and so when the request restarted we wouldn't set the backend correctly and our request would end up being proxied to an unexpected backend that was selected by Fastly's default VCL!
+**Here is an example of why it's important to know what is happening inside of these macros**: we had a conditional comment that looked something like the following...
 
-Fastly selects the default backend based on the age of the backend. To quote Fastly directly...
+```
+if (req.restarts == 0) {
+  ...set backend...
+}
+``` 
+
+...later on in our VCL we would trigger a request restart (e.g. `return(restart)`), but now `req.restarts` would be equal to `1` and not zero and so when the request restarted we wouldn't set the backend.
+
+Now, this of course is a bug in our code and has nothing to do with the default Fastly VCL (yet). But what's important to now be aware of is that our requests didn't just 'fail' but were sent to a different origin altogether (which was extremely confusing to debug at the time).
+
+Turns out what was happening was that the default Fastly VCL was selecting a _default_ backend for us, and this selection was based on the _age_ of the backend! 
+
+To quote Fastly directly...
 
 > We choose the first backend that was created that doesn't have a conditional on it. If all of your backends have conditionals on them, I believe we then just use the first backend that was created. If a backend has a conditional on it, we assume it isn't a default. That backend is only set under the conditions defined, so then we look for the oldest backend defined that doesn’t have a conditional to make it the default.
 
@@ -266,7 +290,7 @@ Interestingly Fastly's default VCL _doesn't_ require us to also set `set req.has
 
 ### Example Boilerplate
 
-Here follows some example VCL boilerplate I typically start out with on a new project:
+Before we move on, while we're discussing custom VCL, I'd like to share with you some VCL boilerplate I typically start out all new projects with (which I then modify to suit the project's requirements, but ultimately this VCL consists of all the standard stuff you'd typically would need):
 
 ```
 ######################################################################################
@@ -276,6 +300,16 @@ Here follows some example VCL boilerplate I typically start out with on a new pr
 #
 # fastly custom vcl boilerplate:
 # https://docs.fastly.com/vcl/custom-vcl/creating-custom-vcl/#fastlys-vcl-boilerplate
+#
+# states defined in this file:
+# vcl_recv
+# vcl_error
+# vcl_hash
+# vcl_pass
+# vcl_miss
+# vcl_hit
+# vcl_fetch
+# vcl_deliver
 #
 ######################################################################################
 
@@ -313,14 +347,15 @@ sub vcl_recv {
     error 601 "Force SSL";
   }
 
-  # fastly tables and edge dictionaries:
-  # https://docs.fastly.com/en/guides/working-with-dictionaries-using-the-api
+  # fastly 'tables' are different to 'edge dictionaries':
+  # https://docs.fastly.com/en/guides/about-edge-dictionaries
   #
   if (table.lookup(deny_list, req.url.path)) {
     error 600 "Not found";
   }
 
-  if (req.method != "HEAD" && req.method != "GET" && req.method != "FASTLYPURGE") {
+  # don't bother doing a cache lookup for a request type that isn't cacheable
+  if (req.method !~ "(GET|HEAD|FASTLYPURGE)") {
     return(pass);
   }
 
@@ -454,7 +489,7 @@ sub vcl_deliver {
 <div id="3.1"></div>
 ## Fastly TTLs
 
-Fastly [has some rules](https://docs.fastly.com/guides/performance-tuning/controlling-caching) about how it determines a TTL for your content. In summary...
+When Fastly caches your content, it of course only caches it for a set period of time (known as the content's "Time To Live", or TTL). Fastly [has some rules](https://docs.fastly.com/guides/performance-tuning/controlling-caching) about how it determines a TTL for your content. 
 
 Their 'master' VCL sets a TTL of 120s ([this comes from Varnish](https://github.com/varnishcache/varnish-cache/blob/5.0/bin/varnishd/builtin.vcl#L158-L172) rather than Fastly) when no other VCL TTL has been defined and if no cache headers were sent by the origin.
 
