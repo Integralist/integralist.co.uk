@@ -486,6 +486,8 @@ sub vcl_deliver {
 }
 ```
 
+> UPDATE 2020.02.25: Fastly have published a blog post that details what they consider to be VCL anti-patterns and offer solutions/alternative patterns: https://www.fastly.com/blog/maintainable-vcl
+
 <div id="3.1"></div>
 ## Fastly TTLs
 
