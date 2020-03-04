@@ -38,6 +38,7 @@ We will be digging into quite a few different areas of their implementation, suc
   - [UPDATE 2019.11.07](#update-2019-11-07)
 - [State Variables](#4.1)
   - [Anonymous Objects](#anonymous-objects)
+  - [Forcing Request to Origin](#forcing-request-to-origin)
 - [Clustering](#clustering)
   - [Terminology](#terminology)
   - [Delivery node request flow](#delivery-node-request-flow)
@@ -59,6 +60,7 @@ We will be digging into quite a few different areas of their implementation, suc
 - [Breadcrumb Trail](#breadcrumb-trail)
   - [Header Overflow Errors](#header-overflow-errors)
 - [Hit for Pass](#5)
+  - [Request Collapsing](#request-collapsing)
 - [Serving Stale](#6)
   - [Why you might not be serving stale?](#why-you-might-not-be-serving-stale)
   - [Stale for Client Devices](#stale-for-client-devices)
@@ -741,6 +743,32 @@ In both cases, an anonymous object is created, and the next customer-accessible 
 The only difference between the behaviour of a `return(pass)` from `vcl_recv` and a `return(pass)` resulting from a hit-for-pass in the cache, is that `req.digest` will be set. Fastly's internal varnish engineering team state that `req.digest` is not an identifier for the object but rather a property of the request, which has been set simply because the request went through the hash process. 
 
 An early `return(pass)` from `vcl_recv` doesn't go through `vcl_hash` and so no hash (`req.digest`) is added to the anonymous object. If there is a hash (`req.digest`) available on the object inside of `vcl_pass`, it doesn't mean you retain a reference to the cache object.
+
+### Forcing Request to Origin
+
+While we're discussing state variables, I recently (2020.03.04) discovered that the `req` object has a set of properties exposed that will enable you to force a request through to the origin while allowing the response to be cached. 
+
+These properties are:
+
+- `req.hash_always_miss`
+- `req.hash_ignore_busy`
+
+You would need to set them to `true` in `vcl_recv`:
+
+```
+set req.hash_always_miss = true;
+set req.hash_ignore_busy = true;
+```
+
+It's important to realize that getting a request through to the origin is a _different_ scenario to using `return(pass)` in either `vcl_recv` and `vcl_fetch` (as might have been your first thought). 
+
+In the case of `vcl_recv` a `return(pass)` would cause the request to not only bypass a cache lookup (thus going to origin to fetch the content), but also the primary/fetching node wouldn't have executed `vcl_fetch`! The fetching of content would have happened on the delivery node and so another client (if they reached a different delivery node, might end up at the fetching node and find no cached content there). 
+
+In the case of `vcl_fetch` a `return(pass)` would mean the response isn't cached. So you can see how both the `vcl_recv` and `vcl_fetch` states executing `return(pass)` isn't the same thing as letting a request bypass the cache _but_ still having the origin response be cached!
+
+When using `hash_always_miss` we're causing the cache lookup to think it got a miss (rather than 'passing' it altogether). So this means features such as [request collapsing](#request-collapsing) are still intact. 
+
+Where as the use of `hash_ignore_busy` _disables_ request collapsing and so this will result in a 'last cached wins' scenario (e.g. if you have two requests now going simultaneously to origin, whichever responds first will be cached but then the one that responds last will overwrite the first cached response).
 
 <div id="4.2"></div>
 ## Clustering 
@@ -1547,6 +1575,8 @@ The object it creates is called a "hit-for-pass" (if you look back at the Fastly
 > Note: the ttl can be changed using vcl but it should be kept small. Varnish implements a type known as a 'duration' and takes many forms: ms (milliseconds), s (seconds), m (minutes), h (hours), d (days), w (weeks), y (years). For example, `beresp.ttl = 1h`.
 
 The reason Varnish creates an object and caches it is because if it _didn't_, when `return(pass)` is executed and the content subsequently is not cached, then if another request is made for that same resource, we would find "request collapsing" causes a performance issue for users. What is 'request collapsing' I hear you ask? Well...
+
+### Request Collapsing
 
 Request collapsing is where Varnish blocks requests for what looks to be the same uncached resource. It does this in order to prevent overloading your origin. So for example, if there are ten requests for an uncached resource, it'll allow one request through to origin and block the other nine until the origin has responded and the content has been cached. The nine requests would then get the content from the cache. 
 
