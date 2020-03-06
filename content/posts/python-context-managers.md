@@ -218,3 +218,43 @@ whoops: unexpected
 ```
 
 When choosing between the two options `contextmanager` and 'class-based' implementation, it might be worth keeping this caveat in mind.
+
+## Multiple Context Managers in a single With statement
+
+One interesting aspect of the `with` statement is that you can execute multiple context managers as part of its block control. Meaning when the `with` block completes, then all context managers will be cleaned up.
+
+```
+from contextlib import contextmanager
+
+@contextmanager
+def foo():
+    print("enter!")
+    try:
+        yield "foobar"
+    finally:
+        print("exit!")
+
+
+with foo() as f1, foo() as f2, foo() as f3:
+    print(f"f1 was: {f1}")
+    print(f"f2 was: {f2}")
+    print(f"f3 was: {f3}")
+```
+
+Alternatively you can utilize `contextlib.ExitStack`:
+
+```
+from contextlib import contextmanager, ExitStack
+
+@contextmanager
+def foo():
+    print("enter!")
+    try:
+        yield "foobar"
+    finally:
+        print("exit!")
+
+with ExitStack() as stack:
+    managers = [stack.enter_context(foo()) for cm in range(3)]
+    print(managers)  # ['foobar', 'foobar', 'foobar']
+```
