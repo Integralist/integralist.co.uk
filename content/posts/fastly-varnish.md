@@ -588,6 +588,45 @@ Some of the extra headers you'll find in the response are:
 
 > Note: the `Surrogate-*` response headers are typically set by an origin server and are otherwise stripped by Fastly.
 
+Some of the following information will make reference to 'delivery' and 'fetching' nodes. It's probably best you read ahead to the section on [clustering](#clustering) to understand what these concepts mean in the scope of Fastly's system design. Once you understand them, come back here and the next few sentences will make more sense. 
+
+The quick summary is this:
+
+- delivery node: the cache server your request is first routed to (and which sends the response back to you).
+- fetching node: the cache server that actually makes a request to your origin, before returning the origin response back to the delivery node.
+
+When using `Fastly-Debug:1` to inspect debug response headers, we might want to look at `fastly-state`, `fastly-debug-path` and `fastly-debug-ttl`. These would have values such as...
+
+```
+< fastly-state: HIT-STALE
+< fastly-debug-path: (D cache-lhr6346-LHR 1563794040) (F cache-lhr6324-LHR 1563794019)
+< fastly-debug-ttl: (H cache-lhr6346-LHR -10.999 31536000.000 20)
+```
+
+The `fastly-debug-path` suggests we delivered from the delivery node `lhr6346`, while we fetched from the fetching node `lhr6324`. 
+
+The `fastly-debug-ttl` header suggests we got a HIT (`H`) from the delivery node `lhr6346`, but this is a misleading header and one you need to be careful with. 
+
+> Note: it may take a few requests to see numbers populating the `Fastly-Debug-TTL`, as the request needs to either land on the fetching node, or a delivery node where the content exists in temporary memory. If you see `-` it might be because you arrived at a delivery node that doesn't have it in-memory.
+
+Why this header is misleading is actually quite a hard thing to explain, and Fastly has discussed the reasoning for the confusion in at least a couple different talks I've seen (one being: https://vimeo.com/showcase/6623864/video/37692146a7 which I highly recommend btw).
+
+In essence, the HIT state is recorded at the fetching node. When the response makes its way back to the delivery node, it will then set the `fastly-debug-ttl`. But this doesn't mean that the cache HIT _happened_ at the delivery node, only that the header was _set_ there.
+
+The reason this is a concern is that you don't necessarily know if the request did indeed go to the fetching node or whether the stale content actually came from the delivery node's in-memory cache. The only way to be sure is to check the `fastly-state` response header.
+
+The `fastly-state` header is ultimately what I use to verify where something has happened. If I see a `HIT` (or `HIT-STALE`), then I know I got a cache HIT from the delivery node (e.g. myself or someone else has already requested the resource via this delivery node). 
+
+> Note: a reported `HIT` can in some cases be because the first cache server your request was routed to _was_ the primary node (again, see [clustering](#clustering) for details of what a 'primary' node is in relation to a 'fetching' node).
+
+If I see instead a `HIT-CLUSTER` (or `HIT-STALE-CLUSTER`) it means I'm the first person to reach this delivery node and request this resource, and so there was nothing cached and thus we went to the fetching node and got a cache HIT there.
+
+Another confusing aspect to `fastly-debug-ttl` is that with regards to `stale-while-revalidate` you could end up seeing a `-` in the section where you might otherwise expect to see the grace period of the object (i.e. how long can it be served stale for while revalidating). This can occur when the origin server hasn't sent back either an `ETag` header or `Last-Modified` header. Fastly still serves stale content if the `stale-while-revalidate` TTL is still valid but the output of the `fastly-debug-ttl` can be confusing and/or misleading.
+
+> Something else to note, while I write this August 2019 update is that the `fastly-debug-ttl` only every displays the 'grace' value when it comes to `stale-if-error`, meaning if you're trying to check if you're serving `stale-while-revalidate` by looking at the grace period you might get confused when you see the `stale-if-error` grace period (or worse a `-` value), this is because the `fastly-debug-ttl` header isn't as granular as it should be. Fastly have indicated that they intend on making updates to this header in the future in order for the values to be much clearer.
+
+Lastly, when dealing with shielding the `fastly-debug-ttl` can be misleading in another sense which is: imagine the fetching node got a MISS (so it fetched content from origin and returned it to the delivery node). The delivery node will cache the response from the fetching node (including the MISS reported by `fastly-debug-ttl`) and so even if another request reaches the name delivery node, it will report a `MISS, HIT` combination.
+
 ### 304 Not Modified
 
 Although not specifically mentioned in the above diagram it's worth noting that Fastly doesn't execute `vcl_fetch` when it receives a `304 Not Modified` from origin, but it will use any `Cache-Control` or `Surrogate-Control` values defined on that response to determine how long the stale object should now be kept in cache.
@@ -999,27 +1038,7 @@ Lastly, when enabling shielding, make sure to deploy your VCL code changes first
 
 ### Debugging Shielding
 
-When using `Fastly-Debug:1` to inspect debug response headers, we might want to look at `fastly-state`, `fastly-debug-path` and `fastly-debug-ttl`. These would have values such as...
-
-```
-< fastly-state: HIT-STALE
-< fastly-debug-path: (D cache-lhr6346-LHR 1563794040) (F cache-lhr6324-LHR 1563794019)
-< fastly-debug-ttl: (H cache-lhr6346-LHR -10.999 31536000.000 20)
-```
-
-The `fastly-debug-path` suggests we delivered from the delivery node `lhr6346`, while we fetched from the fetching node `lhr6324`. The `fastly-debug-ttl` header suggests we got a HIT (`H`) from the delivery node `lhr6346` but this is just a side-effect of the stale/cached content (coming back from the fetching node) being stored in-memory on the delivery node and so it's indicated as a HIT from the delivery node when really it came from the fetching node (the `fastly-debug-ttl` header is set on the delivery node, which re-enforces this understanding).
-
-What makes it confusing is that you don't necessarily know if the request went to the fetching node or whether the stale content actually came from the delivery node's in-memory cache. The only way to be sure is to check the `fastly-state` response header and see if you got back `HIT-STALE` or `HIT-STALE-CLUSTER`.
-
-> Note: it may take a few requests to see numbers populating the `Fastly-Debug-TTL`, as the request needs to either land on the fetching node, or a delivery node where the content exists in temporary memory. If you see `-` it might be because you arrived at a node that doesn't have it in-memory.
-
-Another confusing aspect to `fastly-debug-ttl` is that with regards to `stale-while-revalidate` you could end up seeing a `-` in the section where you might otherwise expect to see the grace period of the object (i.e. how long can it be served stale for while revalidating). This can occur when the origin server hasn't sent back either an `ETag` header or `Last-Modified` header. Fastly still serves stale content if the `stale-while-revalidate` TTL is still valid but the output of the `fastly-debug-ttl` can be confusing and/or misleading.
-
-> Something else to note, while I write this August 2019 update is that the `fastly-debug-ttl` only every displays the 'grace' value when it comes to `stale-if-error`, meaning if you're trying to check if you're serving `stale-while-revalidate` by looking at the grace period you might get confused when you see the `stale-if-error` grace period (or worse a `-` value), this is because the `fastly-debug-ttl` header isn't as granular as it should be. Fastly have indicated that they intend on making updates to this header in the future in order for the values to be much clearer.
-
-Lastly, when dealing with shielding the `fastly-debug-ttl` can be misleading in another sense which is: imagine the fetching node got a MISS (so it fetched content from origin and returned it to the delivery node). The delivery node will cache the response from the fetching node (including the MISS reported by `fastly-debug-ttl`) and so even if another request reaches the name delivery node, it will report a `MISS, HIT` combination.
-
-If you want to track extra information when using shielding, then using (in combination with either `req.backend.is_origin` or `!req.backend.is_shield`) the values from `server.datacenter` and `server.hostname` which can help you identify the POP as your shielding POP (remember there is only one POP that is designated as your shield, so this can come in handy).
+If you want to track extra information when using shielding, then use (in combination with either `req.backend.is_origin` or `!req.backend.is_shield`) the values from `server.datacenter` and `server.hostname` which can help you identify the POP as your shielding POP (remember there is only one POP that is designated as your shield, so this can come in handy).
 
 > Note: remember that, although a statistically small chance, the edge POP that is reached by a client request could be the shield POP so your mechanism for checking if something is a shield needs to account for that scenario.
 
