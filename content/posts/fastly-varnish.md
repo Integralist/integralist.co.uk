@@ -2161,7 +2161,7 @@ sub vcl_recv {
     }
   }
 
-  // force caching for methods that are otherwise normally uncached
+  // force cache 'lookup' for methods that are otherwise normally uncached
   // and mimic the standard behaviour of disabling 'request collapsing'
   if (req.method ~ "(POST|PUT|DELETE)") {
     set req.http.X-PassMethod = "true";
@@ -2198,6 +2198,8 @@ sub vcl_fetch {
       set beresp.cacheable = false;
     }
   }
+
+  return(deliver);
 }
 ```
 
