@@ -2207,6 +2207,10 @@ One caveat to this approach (as noted by Fastly) is as follows:
 
 > POST requests are also ineligible for clustering, ie transferring the request to a consistently-hashed storage node. Since we don't expect POSTs to be cached, this is an optimisation and we unfortunately don't provide a way for you to override it. The effect of this is that even if you do enable POSTs to be cached, your cache hit ratio will be poor. This may be fine if your intention is just to use it for rate limiting.
 
+One thing you might be wondering is why I chose to allow `return(lookup)` on POST, PUT and DELETE methods, then set the response to cacheable in `vcl_fetch`, rather than keep the typical boilerplate logic which would check for those methods and then `return(pass)`. 
+
+This is because once a request has been 'passed' in `vcl_recv` then it can't be set to be cacheable later (in `vcl_fetch`) as we would have disabled caching completely. You'll be able to see tell this if you check the special `fastly_info.state` variable (or test the code via [fastly's fiddle tool](https://fiddle.fastlydemo.net/fiddle/47871720)) as this will report back a `pass` state. 
+
 <div id="9"></div>
 ## Conclusion
 
