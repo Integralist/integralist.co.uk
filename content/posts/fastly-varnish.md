@@ -75,6 +75,7 @@ We will be digging into quite a few different areas of their implementation, suc
   - [Logging Memory Exhaustion](#logging-memory-exhaustion)
 - [Restricting requests to another Fastly service](#8.1)
 - [Custom Error Pages](#custom-error-pages)
+- [Rate Limiting](#rate-limiting)
 - [Conclusion](#9)
 - [Reference material](#reference-material)
 
@@ -2134,6 +2135,77 @@ if(!resp.http.X-Cache-Hits) {
 Even though the second request gets a cache HIT for the origin's _original_ error response, the serving of the custom error page from the edge causes the Fastly internal state (i.e. `fastly_info.state`) to report as `ERROR` instead of a `HIT` (_that_ happens because we call `error` from within `vcl_recv` after restarting the request).
 
 This is why when we get back into `vcl_deliver` we override those headers according to the values we tracked within the initial request flow.
+
+## Rate Limiting
+
+Rate limiting clients at the edge currently (as of March 2020) isn't easy because we don't have a fully fledged programming environment to work with (although Fastly is releasing a new 'compute@edge' serverless service which aims to tackle that problem).
+
+In the mean time this leaves us with various ways of implementing rate limiting with Fastly's version of Varnish and VCL. One approach I have is a multi-pronged approach and it ultimately requires your origin (or at least some service _behind_ Fastly) to handle the rate limiting and to be able to return `429 Too Many Requests` for a client that is hitting certain exposed endpoints too hard.
+
+Once you have rate limiting in place, the next question becomes: how can I leverage the CDN and the edge to help protect my origin and its infrastructure from having to handle requests that my origin will just end up rejecting with a `429` response any way?
+
+For this, I present to you a solution that works like so:
+
+- We initially allow POST, PUT and DELETE requests to be looked up in the cache (they're typically uncached because they'll usually result in exposing sensitive data if otherwise cached and returned as a cache HIT to multiple clients).
+- Once we get a response back from the origin we check if the status was a `429` and if so we assign a `Vary` header and we set the response to be cacheable (because `429` status isn't cached by default).
+- If the response was a `200 OK` for a POST request, then we'll skip storing the response in the cache.
+- To ensure POST, PUT and DELETE requests don't become sequentially blocking requests when doing cache lookups, we'll utilize `req.hash_ignore_busy` to disable [request collapsing](#request-collapsing).
+
+Here's what the code looks like (it makes changes to two states: `vcl_recv` and `vcl_fetch`):
+
+```
+sub vcl_recv {
+  if (req.restarts == 0) {
+    if (!req.http.User-Agent) {
+      set req.http.UserAgent = "Fallback";
+    }
+  }
+
+  // force caching for methods that are otherwise normally uncached
+  // and mimic the standard behaviour of disabling 'request collapsing'
+  if (req.method ~ "(POST|PUT|DELETE)") {
+    set req.http.X-PassMethod = "true";
+    set req.hash_ignore_busy = true;
+    return(lookup);
+  }
+}
+    
+sub vcl_fetch {
+  // this conditional is used for testing the logic
+  // and isn't required for actual implementation
+  if (req.http.X-429) {
+    set beresp.status = 429;
+  }
+
+  declare local var.vary STRING;
+  set var.vary = "Fastly-Client-IP, User-Agent";
+
+  if (beresp.status == 429) {
+    if (!beresp.http.Vary) {
+      set beresp.http.Vary = var.vary;
+    } else {
+      set beresp.http.Vary = beresp.http.Vary + ", " + var.vary;
+    }
+
+    set beresp.cacheable = true;
+    if (!beresp.http.Surrogate-Control:max-age && !beresp.http.Cache-Control:max-age) {
+      set beresp.ttl = 1m; // 1 minute
+    }
+  }
+
+  if (req.http.X-PassMethod) {
+    if (beresp.status != 429) {
+      set beresp.cacheable = false;
+    }
+  }
+}
+```
+
+You should pay attention to the fact that we Vary on the client's IP and their User-Agent, both of which can be changed. So it's important to realize this solution doesn't solve DDoS attacks, and in some cases won't help with standard DoS attacks if the attacker is rotating their IP or User-Agent.
+
+One caveat to this approach (as noted by Fastly) is as follows:
+
+> POST requests are also ineligible for clustering, ie transferring the request to a consistently-hashed storage node. Since we don't expect POSTs to be cached, this is an optimisation and we unfortunately don't provide a way for you to override it. The effect of this is that even if you do enable POSTs to be cached, your cache hit ratio will be poor. This may be fine if your intention is just to use it for rate limiting.
 
 <div id="9"></div>
 ## Conclusion
