@@ -1007,6 +1007,8 @@ This also gives us extra nomenclature to distinguish POPs. Before we learnt abou
 
 I'll link [here](https://fiddle.fastlydemo.net/fiddle/72e0d619) to a Fastly-Fiddle (created by a Fastly engineer) that demonstrates the clustering/shielding flow. If that fiddle no longer exists by the time you read this then I've made a copy of it in a [gist](https://gist.github.com/Integralist/c08b1ab3e9dd508b1ccc5fe768d1a9b0). It's interesting to see how the various APIs for identifying a server node come together.
 
+Lastly we should be aware that if for some reason there is a network issue in the region of your selected 'shield' POP, then Fastly will first (from the 'edge' POP) check the health of the shield POP before forwarding the request there. If the shield is unhealthy (e.g. maybe there is a network outage in its region), then the request will be forwarded directly to your origin.
+
 ### Caveats of Fastly's Shielding
 
 Be careful with changes you make to a request as they could result in the lookup hash to change between the edge POP nodes and shield POP nodes. 
