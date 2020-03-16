@@ -536,7 +536,7 @@ Fastly [has some rules](https://docs.fastly.com/guides/tutorials/cache-control-t
 
 Next in line is `Surrogate-Control` (see [my post on HTTP caching](/posts/http-caching/) for more information on this cache header), which takes priority over `Cache-Control`. The `Cache-Control` header itself takes priority over `Expires`.
 
-> Note: if you ever want to debug Fastly and your custom VCL then it's recommended you create a 'reduced test case' using their [Fastly Fiddle](https://fiddle.fastlydemo.net/) tool. Be aware this tool shares code publicly so don't put secret codes or logic into it!
+> Note: if you ever want to debug Fastly and your custom VCL then it's recommended you create a 'reduced test case' using their [Fastly Fiddle](https://fiddle.fastlydemo.net/) tool. Be aware this tool shares code publicly so don't put secret codes or logic into it! Don't forget to add `return` statements to the functions in the Fiddle UI, otherwise the default Fastly boilerplate VCL will be executed and that can cause confusion if your service typically doesn't use it! e.g. httpbin origin was sending back a 500 and `vcl_fetch` was triggering a restart and I didn't know why. I discovered I had to add `return(deliver)` in `vcl_fetch` to prevent Fastly boilerplate from executing!
 
 <div id="3.2"></div>
 ## Fastly Default Cached Status Codes
@@ -1043,6 +1043,8 @@ sub vcl_hash {
 
 Be careful with non-idempotent changes. For example, things like the `Vary` header being modified on the shield POP and then again on the edge POP, as this _could_ result in the edge POP getting a poor HIT ratio due to the fact that the shield has appended a header and then that header is appended again as part of the edge POP execution.
 
+Consideration needs to be given to the use of `req.backend.is_shield` when you get a 5xx (or any other uncacheable error code) back from the origin to the shield POP, because it means an 'pass' state will be triggered. When the response reaches the delivery node within the edge POP, the pass state will cause clustering to be disabled and so the origin will no longer be the shield POP (as it was at the start of the request flow).
+
 Lastly, when enabling shielding, make sure to deploy your VCL code changes first _before_ enabling shielding. This way you avoid a race condition whereby a shield has old VCL (i.e. no conditional checks for either `Fastly-FF` or `req.backend.is_shield`) and thus tries to do something that should only happen on the edge cache node.
 
 ### Debugging Shielding
@@ -1149,6 +1151,8 @@ if (!req.backend.is_shield && fastly.ff.visits_this_service >= 2) {
 # one liner for variable assignment
 if(req.backend.is_shield, "edge", if(fastly.ff.visits_this_service < 2, "edge", "shield"))
 ```
+
+> Note: be careful with shielding because if the shield POP got a 5xx from the origin then it'll trigger an internal PASS state and so once we're back at the delivery node inside the edge POP, if we try to check if the backend is the 'shield' using `req.backend.is_shield` then it won't match because the origin for the edge POP will no longer be the shield (clustering has been disabled because of the 'pass state').
 
 ## Breadcrumb Trail
 
