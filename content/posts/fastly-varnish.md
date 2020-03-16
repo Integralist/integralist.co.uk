@@ -1011,11 +1011,15 @@ Lastly we should be aware that if for some reason there is a network issue in th
 
 ### Caveats of Fastly's Shielding
 
-Be careful with changes you make to a request as they could result in the lookup hash to change between the edge POP nodes and shield POP nodes. 
+Be careful with changes you make to a request as they could result in the lookup hash to change between the edge POP nodes and shield POP nodes (so it's likely best you make changes to the `bereq` object in `vcl_miss` rather than the `req` object within `vcl_recv`). Also the shield POP will be using the same Domain/Host UI configuration and so if you change the Host header, then proxying the request from the edge POP to the shield POP would result in a breakage as the shield POP won't recognize the Host of the incoming request and thus will not know which 'service' to direct the request onto.
 
 Also, be aware that the "backend" will change when shielding is enabled. Traditionally (i.e. without shielding) you defined your backend with a specific value (e.g. an S3 bucket or a domain such as `https://app.domain.com`) and it would stay set to that value unless you yourself implemented custom vcl logic to change its value. 
 
-But with shielding enabled, the delivery node will dynamically change the backend to be a shield node value (as it's effectively _always_ going to pass through that node if there is no cached content found). Once on the delivery node within the shield POP, _its_ "backend" value is set to whatever your actual origin is (e.g. an S3 bucket).
+But with shielding enabled, the delivery node will dynamically change the backend to be a shield node value (as it's effectively _always_ going to pass through that node if there is no cached content found). Once on the delivery node within the shield POP, _its_ "backend" value is set to whatever your actual origin is (e.g. an S3 bucket). 
+
+So, if you dynamically set your backend in VCL, be sure to A.) set it before the fastly recv macro is executed, and B.) be sure to only set it on the shield POP otherwise your request will go from the edge POP direct to your origin and not your shield POP.
+
+> Note: be careful with 'shared code' (e.g. VCL code you reuse across multiple services) because if you add a conditional such as `if (req.backend.is_shield) { /* execute code on edge POP */ }` then this is fine when executing this code on a service with shielding enabled, but it won't work as intended on a service that _doesn't_ use shielding! Because a service without shielding will not have the backend set to a shield, so that conditional will fail to match. 
 
 It's probably best to only modify your backends dynamically whilst your VCL is executing on the shield (e.g. `if (!req.backend.is_shield)`, maybe abstract in a variable `declare local var.shield_node BOOL;`) and to also only `restart` a request in vcl_deliver when executing on a node within the shield POP. 
 
@@ -1036,6 +1040,8 @@ sub vcl_hash {
 ```
 
 > Note: alternatively you could move rewriting of the URL to a state after the hash lookup, such as vcl_miss (e.g. modifying the `bereq` object).
+
+Be careful with non-idempotent changes. For example, things like the `Vary` header being modified on the shield POP and then again on the edge POP, as this _could_ result in the edge POP getting a poor HIT ratio due to the fact that the shield has appended a header and then that header is appended again as part of the edge POP execution.
 
 Lastly, when enabling shielding, make sure to deploy your VCL code changes first _before_ enabling shielding. This way you avoid a race condition whereby a shield has old VCL (i.e. no conditional checks for either `Fastly-FF` or `req.backend.is_shield`) and thus tries to do something that should only happen on the edge cache node.
 
@@ -1125,8 +1131,24 @@ Let's see what this looks like in a clustering scenario like shown a moment ago.
 - `vcl_deliver`:
   - `fastly.ff.visits_this_service`: `0` (we're back onto the original delivery node so the value is reported as 0 again).
 
+Even if you restart the request, the value of the variable will go back to zero on the delivery node. See [this fiddle](https://fiddle.fastlydemo.net/fiddle/913c397d) for an example.
+
 > Note: when you introduce shielding you'll find that the value increases to `2` when we reach `vcl_recv` on the delivery node inside the shield POP.
 
+The following code snippet demonstrates how to run code either on the edge POP or the shield POP whilst also protecting against the scenario where the code is copy/pasted into a service that doesn't have shielding enabled (see also: [Caveats of Fastly's Shielding](#caveats-of-fastly-s-shielding)).
+
+```
+if (req.backend.is_shield || fastly.ff.visits_this_service < 2) {
+  # edge POP
+}
+
+if (!req.backend.is_shield && fastly.ff.visits_this_service >= 2) {
+  # shield POP
+}
+
+# one liner for variable assignment
+if(req.backend.is_shield, "edge", if(fastly.ff.visits_this_service < 2, "edge", "shield"))
+```
 
 ## Breadcrumb Trail
 
