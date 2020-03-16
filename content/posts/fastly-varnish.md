@@ -1011,6 +1011,8 @@ Lastly we should be aware that if for some reason there is a network issue in th
 
 ### Caveats of Fastly's Shielding
 
+First thing to note is that if your service has a `restart` statement, then be warned that this doesn't just disable clustering but also shielding. To re-enable clustering you can use `Fastly-Force-Shield` but there is no way to re-enable shielding unless you manually copy/paste the relevant logic from Fastly's generated VCL.
+
 Be careful with changes you make to a request as they could result in the lookup hash to change between the edge POP nodes and shield POP nodes (so it's likely best you make changes to the `bereq` object in `vcl_miss` rather than the `req` object within `vcl_recv`). Also the shield POP will be using the same Domain/Host UI configuration and so if you change the Host header, then proxying the request from the edge POP to the shield POP would result in a breakage as the shield POP won't recognize the Host of the incoming request and thus will not know which 'service' to direct the request onto.
 
 Also, be aware that the "backend" will change when shielding is enabled. Traditionally (i.e. without shielding) you defined your backend with a specific value (e.g. an S3 bucket or a domain such as `https://app.domain.com`) and it would stay set to that value unless you yourself implemented custom vcl logic to change its value. 
