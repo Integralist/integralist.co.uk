@@ -364,6 +364,8 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ## Talks
 
+- [Living on the Edge (Video)](https://www.youtube.com/watch?v=Qz-sck-WIUQ): Presentation on our use of Fastly CDN and an internal service golang proxy service I built called "Perimeter".
+
 - [Site Router (Video)](https://www.youtube.com/watch?v=md4de3RyN-8): 80 minute presentation on BuzzFeed HTTP routing service abstraction.
 
 - [BBC Talks (Slides)](https://slides.com/markmcdonnell/): various presentations I gave while at the BBC.
