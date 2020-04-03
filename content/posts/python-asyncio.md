@@ -89,6 +89,8 @@ A coroutine function is expected to be passed to `asyncio.run`, while _internall
 
 The `run_until_complete` function expects a [Future](#futures) (see below section for what a Future is) and uses another helper function `futures.isfuture` to check the type provided. If not a Future, then the low-level API `ensure_future` is used to convert the coroutine into a Future (see [source code](https://github.com/python/cpython/blob/master/Lib/asyncio/tasks.py#L653)).
 
+> Note: [here](https://gist.github.com/1efc8dcfc0b1e9e8e8b89a4b2019f3af) is a comparison of the various methods for validating if a function is a coroutine. The results aren't necessarily what you might expect.
+
 In older versions of Python, if you were going to manually create your own Future and schedule it onto the event loop, then you would have used `asyncio.ensure_future` (now considered to be a low-level API), but with Python 3.7+ this has been superseded by `asyncio.create_task`. 
 
 Additionally with Python 3.7, the idea of interacting with the event loop directly (e.g. getting the event loop, creating a task with `create_task` and then passing it to the event loop) has been replaced with `asyncio.run`, which abstracts it all away for you (see '[Running an asyncio program](#running-an-asyncio-program)' to understand what that means).
