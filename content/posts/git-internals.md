@@ -12,6 +12,7 @@ draft: false
 ---
 
 - [Introduction](#introduction)
+- [General Concept](#general-concept)
 - [Subcommands: Porcelain and Plumbing](#subcommands-porcelain-and-plumbing)
 - [The `.git` directory](#the-git-directory)
 - [References and Objects](#references-and-objects)
@@ -20,7 +21,7 @@ draft: false
   - [Subcommands and References](#subcommands-and-references)
   - [Detached HEAD](#detached-head)
 - [Object Types](#object-types)
-  - [A commit is a snapshot of the entire project](#a-commit-is-a-snapshot-of-the-entire-project)
+  - [Snapshots, Not Differences](#snapshots-not-differences)
 - [Tags](#tags)
 - [Remotes](#remotes)
 
@@ -33,6 +34,20 @@ Yet, it is a tool that is still vastly misunderstood and feared. In this post I 
 My hope is that by better understanding how git works, and the concepts it is built upon, readers will feel more empowered and confident when working with git (especially when they have issues and would normally be unsure of what to do).
 
 > Note: this article isn't an introduction to git, and does presume that the reader is familiar with (i.e. a user of) git.
+
+## General Concept
+
+I wanted to take a quick moment just to clarify the terminology associated with the general concepts of how git works (so we're all on the same page):
+
+- **Working Directory**: your project files. 
+- **Staging Area**: a file that tracks the changes to your project files.
+- **Repository**: the location where your project files are stored.
+
+> Note: these bullet points are just summarizations, but I would like to extend upon it slightly in that: your 'working directory' can _change_ depending on what 'version' of the project you have 'checked out' from the git repository (i.e. this is what happens when you change your 'branch' with `git checkout <branch_name>`).
+
+So for example, commands like `git add` will copy objects from the working directory into the staging area (aka the 'index'), while `git reset` will _remove_ objects from the staging area. 
+
+A command such as `git diff` compares your working directory to your staging area, while using the `--staged` flag will change this behaviour such that git will compare your staging area to your actual repository state.
 
 ## Subcommands: Porcelain and Plumbing
 
@@ -332,7 +347,9 @@ $ git cat-file -p fcf0be4d7e45f0ef9592682ad68e42270b0366b4
 100644 blob 257cc5642cb1a054f08cc83f2d943e56fd3ebe99    foo.txt
 ```
 
-### A commit is a snapshot of the entire project
+What's also interesting is that when you execute command such as `git add`, git will 'conceptually' copy the file to your staging area, but internally it has created a 'blob' object. While a command such as `git commit` then creates the 'commit' and 'tree' objects to reference the already existing 'blob' object. I mention this because I wanted to be clear that these three objects don't all get created at the same time.
+
+### Snapshots, Not Differences
 
 We saw earlier an ascii graph that indicated the hierarchy of these objects. It showed that git reference types (e.g. remotes, branches and tags) all point to a 'commit' object. This commit object will include a pointer to a 'tree' object, and the tree object is a list of files (i.e. blobs) and directories (i.e. more trees).
 
@@ -500,3 +517,5 @@ Which itself is just a shortened way of doing:
 ```
 git diff master..c3865b72b019ced930cfc601b09b874685c29e72
 ```
+
+> Note: one last thing I wanted to mention (and there was no other place really to mention this) is that git comes with a UI! you can execute the command `gitk` to use it.

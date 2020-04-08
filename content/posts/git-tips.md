@@ -46,6 +46,11 @@ Hopefully you'll find them useful too.
 29. <a href="#29">Commiting only parts of a file rather than the whole file</a>
 30. <a href="#30">Modifying your Git history with `rebase`</a>
 31. <a href="#31">Push branch without specifying its name</a>
+32. [Display verbose branch information](#display-verbose-branch-information)
+33. [Display concise status information](#display-concise-status-information)
+34. [Staged files that were never commited](#staged-files-that-were-never-commited)
+35. [Finding commit that introduced a bug](#finding-commit-that-introduced-a-bug)
+36. [Finding a commit that added/removed content](#finding-a-commit-that-added-removed-content)
 
 <div id="1"></div>
 ## Show where Git is installed
@@ -565,3 +570,84 @@ Instead you can rely on the fact that git will retrieve the current branch name 
 ```
 git push origin head
 ```
+
+## Display verbose branch information
+
+```
+git branch -vv
+
+* integralist/2020_04_07_bf_metrics_distribution_tags             58a472b6e3a bump minor version
+  integralist/2020_04_07_video_search_monitoring_metric_reduction fc5184faaf3 no-op this service to see if anyone or anything complains
+  integralist/2020_04_07_weaver_api_distribution                  23a273f7001 move from timing metric to distribution
+  master                                                          d0cd3e3a334 [origin/master] 5.0.0 - remove write_stats (#57413)
+```
+
+## Display concise status information
+
+```
+git status -sb
+
+## master...origin/master
+ M content/posts/git-tips.md
+```
+
+## Staged files that were never commited
+
+```
+git fsck --lost-found
+
+Checking object directories: 100% (256/256), done.
+
+dangling blob 0d80705a8f09dbc9ef0dd9f5799061b9ec9c0f05
+dangling commit 20e04d00aa1eba1d0f19fa7d1865c6a011715288
+dangling blob 49c0238e07d183407466c54f8ac5f7aa89889ae2
+dangling blob 5380475369f22f6021d94c636ae4b778d3a0c050
+```
+
+> Note: git will extract data to `.git/lost-found`, use `--dangling` instead of `--lost-found` if you don't want that to happen.
+
+Useful when `git reflog` fails you (e.g. you executed `git reset --hard` while uncommitted files were staged).
+
+## Finding commit that introduced a bug
+
+```
+git bisect start
+git bisect bad           # to indicate current commit is broken
+git bisect good <commit> # to indicate the last good commit
+git bisect <bad|good>
+git bisect reset
+```
+
+But you can also automate this by calling `git bisect run` and passing a script:
+
+```
+git bisect run ./some-script
+```
+
+If you want to test specific directories and files then use `-- <dir>`:
+
+```
+git bisect start -- ./sub_directory
+```
+
+The bisect command uses a binary search which makes it very efficient, but if you want a linear search then you can use `git rebase`:
+
+```
+git rebase -i --exec "./some-script" d294ae9
+```
+
+Your script returning an error exit code will cause the rebase to stop on the commit that triggered the failure.
+
+## Finding a commit that added/removed content
+
+```
+git log -S "bisect"
+commit c38d5a5d7e5b32a8f6ef8d6ef2d84ad003537862
+Author: Integralist <mark.mcdx@gmail.com>
+Date:   Mon Mar 30 20:07:22 2020 +0100
+
+    git internals
+```
+
+If you're looking for a change that doesn't result in a new line being added/removed (e.g. a change to an _existing_ line), then you can use the `-G` flag instead which will accept a regex pattern to search (see `man git-log` for a useful example).
+
