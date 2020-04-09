@@ -342,6 +342,32 @@ git reset --hard
 
 Note: you can do a 'soft' reset `git reset --soft <hash>`. The difference between `--hard` and `--soft` is with `--hard` the specified commit hash's files are moved into the working directory and the staging area (as if there were no changes since that specified commit). But using `--soft` will leave whatever changes you've made in your working directory/staging area but will restore the specified commit you've selected.
 
+Imagine you have a file called `foo.txt` and your Git history looked like this: 
+
+```
+A -> B -> C (HEAD)
+```
+
+Let's see each commit we made:
+
+```
+A == foo
+B == FOO
+C == Foo
+```
+
+The following examples explain the different reset flags:
+
+```
+git reset --soft B  == move HEAD to B but keep C's changes staged (i.e. added to the index)
+
+git reset --mixed B == move HEAD to B but keep C's changes unstaged
+
+git reset --hard B  == move HEAD to B but completely delete C (you've lost those changes forever)
+```
+
+> Note: to undo a `reset` use `git reflog` to find the previous state (e.g. `HEAD@{1}`) and then reset again (e.g. `git reset HEAD@{1}`).
+
 <div id="15"></div>
 ## Unstaging files
 
