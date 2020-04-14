@@ -27,6 +27,7 @@ We will be digging into quite a few different areas of their implementation, suc
   - [Be Careful](#be-careful)
   - [Example Boilerplate](#example-boilerplate)
 - [Fastly TTLs](#3.1)
+  - [DNS TTL Caching](#dns-ttl-caching)
 - [Caching Priority List](#caching-priority-list)
 - [Fastly Default Cached Status Codes](#3.2)
 - [Fastly Request Flow Diagram](#4)
@@ -519,6 +520,15 @@ You can override this VCL with your own custom VCL, but it's also worth being aw
 4. `Expires: Fri, 28 June 2008 15:00:00 GMT` caches until this date has expired
 
 As we can see from the above list, setting a TTL via VCL takes ultimate priority even if caching headers are provided by the origin server.
+
+### DNS TTL Caching
+
+There are two fundamental pieces of information I'm about to describe...
+
+1. Fastly only uses the first IP returned from a DNS lookup, and will cache it until the DNS' TTL expires. A failed DNS lookup for a service without a Fastly 'health check' (see [docs](https://docs.fastly.com/en/guides/working-with-health-checks)) would lead to 600 seconds (10 minutes!) of stale IP use before attempting to requery the DNS.  
+  **An example of why this is bad**: we had a 60s DNS TTL to align with that of AWS load balancers, but we discovered we were getting Fastly errors for ten minutes instead of just 1 minute.
+
+2. Fastly does offer a 'High Availability' feature (on request) which allows for traffic distribution across _multiple_ IPs returned from a DNS lookup, rather than just using one until the next DNS lookup.
 
 ## Caching Priority List
 
