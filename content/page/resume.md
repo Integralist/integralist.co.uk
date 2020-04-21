@@ -96,6 +96,10 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ### 2020
 
+- **What**: wrote Python script that parsed any metrics produced by our ~600 microservices and cross-referenced them against our ~1000 dashboards and ~1000 monitors within Datadog to identify which metrics were actually being utilized.  
+  **Why**: in the face of the Covid-19 pandemic we needed to reduce our metric costs by ~$80k and this was one of many steps to achieve that goal.  
+  **Impact**: multiple teams were able to run the script to quickly and efficiently identify metrics that were unused and gave them direct links to the various monitors and dashboards (and even the specific graphs within those dashboards).
+
 - **What**: Implemented 'graceful shutdown' within shared libraries for HTTP servers written in Go/Python.  
   **Why**: EC2 updates (for servers we manage under ECS) were causing containerized services to fail.  
   **Impact**: The use of graceful shutdowns meant in-flight requests had time to complete once a SIGTERM was issued to the service by EC2.
