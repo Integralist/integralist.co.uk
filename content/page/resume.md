@@ -96,6 +96,12 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ### 2020
 
+- **What**: spent three weeks tackling problem of metric production across ~600 microservices.  
+- **Why**: we had run over our allotted threshold and were about to be billed ~$80k a month!
+- **Impact**: we saved the company a huge chunk of money! also we educated ourselves greatly on how Datadog determines 'custom metrics' and how to better utilize distribution metrics over standard histograms.
+
+<img src="../images/metric-reduction.png">
+
 - **What**: wrote Python script that parsed any metrics produced by our ~600 microservices and cross-referenced them against our ~1000 dashboards and ~1000 monitors within Datadog to identify which metrics were actually being utilized.  
   **Why**: in the face of the Covid-19 pandemic we needed to reduce our metric costs by ~$80k and this was one of many steps to achieve that goal.  
   **Impact**: multiple teams were able to run the script to quickly and efficiently identify metrics that were unused and gave them direct links to the various monitors and dashboards (and even the specific graphs within those dashboards).
