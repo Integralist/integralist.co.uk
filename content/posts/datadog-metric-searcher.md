@@ -13,7 +13,9 @@ tags:
 draft: false
 ---
 
-- [Introduction](#introduction)
+- [We're over our data limit!](#we-re-over-our-data-limit)
+- [Calculating Custom Metrics](#calculating-custom-metrics)
+- [Tracking Metrics](#tracking-metrics)
 - [Automation FTW](#automation-ftw)
 - [`DISTRIBUTION` metric type?](#distribution-metric-type)
   - [Metric Types](#metric-types)
@@ -23,7 +25,7 @@ draft: false
 - [Choosing `HISTOGRAM` or `DISTRIBUTION` ?](#choosing-histogram-or-distribution)
   - [The `DISTRIBUTION` percentile 'custom metric' difference](#the-distribution-percentile-custom-metric-difference)
 
-## Introduction
+## We're over our data limit!
 
 I've spent quite a bit of time on metrics the past month. Our contract with [Datadog](https://www.datadoghq.com/) was coming up for renewal and the feedback we had received was that our organization were vastly over our allotted data limits and we needed to address this in time for the contract renewal discussions.
 
@@ -36,6 +38,30 @@ I wish it was yer know `:make-it-rain:`
 ![make it rain](../../images/make-it-rain.webp).
 
 The solution to our problem was a multi-pronged approach, and what I'm going to focus on in this post is one small aspect of that. 
+
+Before we get into that, let's first take a moment to understand how costs are calculated. Datadog has various [pricing structures](https://docs.datadoghq.com/account_management/billing/pricing/) and one of the items it considers are the number of 'custom metrics' that your service(s) are generating.
+
+**So what constitutes a 'custom metric'?** Let's find out...
+
+## Calculating Custom Metrics
+
+The amount of metrics you 'report' does not equate to the same thing as the number of 'custom metrics' you are billed for.
+
+> A custom metric is uniquely identified by a combination of a metric name and tag values (including the host tag). — [Datadog](https://docs.datadoghq.com/account_management/billing/custom_metrics/)
+
+Consider a web server application that reports the time it takes for an incoming request to be served back to the client. Imagine we report this metric (`request.latency`) with no [tags](https://docs.datadoghq.com/tagging/). Reporting this metric would result in us being charged for a single 'custom metric'. 
+
+Now imagine we report `request.latency` with three tags (`host`, `endpoint`, `status`), then with the following combination of unique tag values, we'd end up with _four_ custom metrics:
+
+![custom-metric](../../images/custom-metric.png)
+
+The situation is made worse when using a `HISTOGRAM` metric type, as it ultimately produces five separate metrics. Meaning the `request.latency` example, if reported as a `HISTOGRAM`, would result in twenty custom metrics (`5 metrics * 4 tag combinations`). 
+
+If you were to add the URL request path as a tag to the `request.latency` metric, then you can imagine that having quite a 'high-cardinality' (i.e. a large number of variants) depending on the number of endpoints that service was handling.
+
+This demonstrates how we must be careful with the cardinality of any tags we apply to our metrics.
+
+## Tracking Metrics
 
 Datadog provides many tools to help us track down expensive metrics, but one particular problem we had was identifying whether the metrics we were reporting were actually being used. For example, were our metrics being referenced in a monitor or a dashboard? If not, they could be deleted.
 
@@ -204,7 +230,10 @@ def find_graphs(
         dashboard_url,
         metrics,
         matches=None):
-    """widgets can be nested multiple times, so this is a recursive function.
+    """recursively search dashboard graphs for those referencing our metrics.
+
+    Note: widgets can be nested multiple times, so this is a recursive function.
+
     because this function is run in isolation within its own process we pass in
     the dashboard title/url so we can report back within the main/parent process
     which dashboard the graphs are associated with (as the results are received
@@ -374,6 +403,7 @@ def filter_monitors(monitors):
 
 def process():
     """asynchronously acquire dashboards and update metric count.
+
     Note: the Datadog API is not asynchronous, so we must run API operations
     within a threadpool, while also running the metric 'searching' algorithm
     (a cpu heavy operation) within a processpool to help speed up the overall
@@ -515,7 +545,11 @@ There were two problems: the first was that there was only one API endpoint I co
 
 This might be an issue for you, but we were using Datadog's various UI based tools to help us identify 'big hitters' as far as our expensive custom metrics were concerned and these big hitters were producing lots of metrics on an hourly basis (so 24hrs was an acceptable caveat for our use case).
 
-The second issue we had was that the API endpoint wasn't supported for Python, only Curl (and possibly Ruby too? my kingdom for API consistency!) 
+The second issue we had was that the API endpoint wasn't supported for Python, only Curl (and possibly Ruby too?). 
+
+My kingdom for API consistency!
+
+![aaaah](../../images/aaaah.webp)
 
 This meant I needed a way to combine Python with some bash scripting. So let's start by looking at how we would call the Python script:
 
@@ -523,17 +557,26 @@ This meant I needed a way to combine Python with some bash scripting. So let's s
 time python3 searcher.py -m $(...)
 ```
 
-Everything within the subprocess `$(...)` will be me using the Curl API endpoint. There's a lot of `grep`, `sed` and other unix utilities at play, and I appreciate some of y'all probably could have done better with `awk` but I just struggle to get along with it most of the time and so I reach for my commonly understood tools. 
+Everything within the subprocess `$(...)` will be me using the Curl API endpoint. There's a lot of `grep`, `sed` and other unix utilities at play, and I appreciate some of y'all probably could have done better with `awk` but I just struggle to get along with `awk` most of the time and so I tend to reach for other more commonly understood unix tools. 
 
-Shield your eyes...
+**Shield your eyes...**
 
 ```
-export api_key=foo app_key=bar && curl -s -H "DD-API-KEY: ${api_key}" -H "DD-APPLICATION-KEY: ${app_key}" "https://api.datadoghq.com/api/v1/search?q=metrics:YOUR_METRIC_NAMESPACE" | jq -r '.results.metrics' | egrep '"' | sed -e 's/  //' | sed 's/"//g' | sed 's/,//' | grep r'^YOUR_METRIC_NAMESPACE\.' | gsed r's/\.\(avg\|count\|median\|95percentile\|max\)$//' | sort | uniq | tr "\n" "," | sed 's/, /,/g'
+export api_key=foo app_key=bar && \
+curl -s -H "DD-API-KEY: ${api_key}" -H "DD-APPLICATION-KEY: ${app_key}" \
+  "https://api.datadoghq.com/api/v1/search?q=metrics:YOUR_METRIC_NAMESPACE" | \
+  jq -r '.results.metrics' | \
+  egrep '"' | \
+  sed -e 's/  //' | sed 's/"//g' | sed 's/,//' | \
+  grep r'^YOUR_METRIC_NAMESPACE\.' | \
+  gsed r's/\.\(avg\|count\|median\|95percentile\|max\)$//' | \
+  sort | uniq | tr "\n" "," | \
+  sed 's/, /,/g'
 ```
 
-Ultimately it takes the JSON response from the API endpoint and coerces it into CSV that's passed into the `--metrics` flag.
+Ultimately it takes the JSON response from the API endpoint and coerces it into CSV that's then passed into the `--metrics` flag.
 
-Next are the remaining two sections of the Python script:
+There are two other key sections of the Python script:
 
 1. `process()`
 2. `find_graphs()`
@@ -542,7 +585,7 @@ The `process()` function is the coordinator. It controls spinning up a threadpoo
 
 > **Note**: my logic for tracking metrics was a lot simpler originally, but executing code within separate process pools (which unlike a threadpool weren't sharing memory) introduced their own unique challenges as far as data isolation was concerned, so things got a bit tricksy in places.
 
-I also got to use the `set` abstract data type (something I don't utilize enough I feel in my day-to-day working life, but this was a perfect scenario for it) to help identify the unused metrics by way of a intersection operation.
+I then use a `set` abstract data type to help identify the unused metrics by way of a intersection operation.
 
 The `find_graphs()` function also became a bit more complex once I introduced a process pool because I needed to pass in extra contextual data (e.g. dashboard title/url) that the function itself didn't require, but the main/parent process did need as part of the subprocess response/output.
 
@@ -557,8 +600,6 @@ I also won't explain that piece of the code, cause yer know
 
 OK, so earlier I mentioned that we were able to utilize the script output to help us identify places where we might be able to switch from a TIMER and/or HISTOGRAM metric to a DISTRIBUTION metric. 
 
-The following information is prefixed with the caution that I'm not a data expert and so I might not be explaining things quite as 'correctly' as maybe someone from Datadog. Hopefully it's still useful to you though.
-
 ### Metric Types
 
 Overall there are five distinct metric 'types' to be aware of ([docs](https://docs.datadoghq.com/developers/metrics/types/?tab=histogram#metric-types)).
@@ -568,7 +609,7 @@ Two of those metric types require additional clarification with regards to the c
 - `HISTOGRAM`
 - `DISTRIBUTION`
 
-> **Note**: there is also a `TIMER` metric type, which is a subset of `HISTOGRAM` ([docs](https://docs.datadoghq.com/developers/metrics/dogstatsd_metrics_submission/?tab=python#timer)).
+> **Note**: there is also a `TIMER` metric type, which is a subset of `HISTOGRAM` ([docs](https://docs.datadoghq.com/developers/metrics/dogstatsd_metrics_submission/?tab=python#timer)) so for the purpose of this post we'll consider them the same and just discuss `HISTOGRAM`.
 
 The key differences between `HISTOGRAM` and `DISTRIBUTION` are...
 
@@ -618,7 +659,7 @@ The `DISTRIBUTION` metric type allows tags to be filtered, thus reducing the pot
 
 The fact that the `DISTRIBUTION` metric type enables tag filtering is an important consideration when choosing between it and a `HISTOGRAM`. 
 
-We provide our services an abstraction over Datadog's client library in a shared 'metrics' package. We have a timer abstraction that uses the `DISTRIBUTION` metric type by default (see example code below).
+As an example, we provide our services an abstraction over Datadog's client library in a shared 'metrics' package. We provide a `timer()` abstraction that enables teams to measure the time it takes for their code to run. This timer abstraction uses the `DISTRIBUTION` metric type by default (see implementation below).
 
 ```
 import asyncio
@@ -685,10 +726,13 @@ class Timer():
 
 class Metrics(datadog.DogStatsd):
     """Statsd client with a better tagging interface.
+
     Supports passing tags as a list of colon separated strings (this is the
     Datadog client's expected format), while also suporting tags passed as a
     dictionary.
+
     If write_metrics is False, metrics will only be logged.
+
     Usage:
         # tags as a dictionary...
             metrics = bf_metrics.Metrics(
@@ -704,6 +748,10 @@ class Metrics(datadog.DogStatsd):
                 constant_tags=['foo:bar'},
             )
             metrics.incr('foo', tags=['baz:qux'])
+
+            metrics.timer("foo")
+            def slow_operation():
+                ...
     """
 
     def __init__(self, *args, **kwargs):
@@ -748,21 +796,13 @@ If you do require a percentile aggregation then the trade-off you need to make i
 
 ### The `DISTRIBUTION` percentile 'custom metric' difference
 
-The way Datadog calculates the number of 'custom metrics' is slightly different (and more costly) for percentile aggregations of a `DISTRIBUTION` metric type. 
+The way Datadog calculates the number of 'custom metrics' is slightly different (and more costly) for percentile aggregations of a `DISTRIBUTION` metric type. **It got me like...**
 
-**So what constitutes a 'custom metric'?** 
+![NO God NO](../../images/no-god-no.webp)
+
+Let's just recap what a 'custom metric' is...
 
 > A custom metric is uniquely identified by a combination of a metric name and tag values (including the host tag). — [Datadog](https://docs.datadoghq.com/account_management/billing/custom_metrics/)
-
-This means a metric like `request.latency` with no tags would be charged as a single 'custom metric'. 
-
-Where as if there were three tags (host, endpoint, status), then with the following combination of unique tag values, we'd end up with four custom metrics:
-
-![custom-metric](../../images/custom-metric.png)
-
-This demonstrates how we must be careful with the cardinality of any tags we apply to our metrics.
-
-The situation is made worse when using a `HISTOGRAM` metric type, as it ultimately produces five separate metrics. Meaning the `request.latency` example, if reported as a `HISTOGRAM`, would result in twenty custom metrics (`5 metrics * 4 tag combinations`). 
 
 Constrast this with the `DISTRIBUTION` percentiles, which take into account every _potentially_ queryable varation of a metric. 
 
