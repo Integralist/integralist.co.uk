@@ -489,6 +489,7 @@ def process():
 
     unused_dashboard_metrics = set()
     unused_monitor_metrics = set()
+    used_monitor_metrics = set()
 
     if not args.unused:
         format_title("unused metrics in dashboards")
@@ -509,8 +510,20 @@ def process():
                     print(monitor["url"], "\n")
                     print(monitor["query"], "\n")
                     print("---------\n")
+
+                used_monitor_metrics.add(metric["name"])
             else:
                 unused_monitor_metrics.add(metric["name"])
+
+    # avoid scenario where one monitor does reference the metric
+    # but a latter monitor DOES NOT reference it. when that happens
+    # we want to ensure we remove the metric name so it doesn't
+    # accidentally get marked later as being unused.
+    for metric in used_monitor_metrics:
+        try:
+            unused_monitor_metrics.remove(metric)
+        except KeyError:
+            pass
 
     if not args.unused:
         format_title("unused metrics in monitors")
