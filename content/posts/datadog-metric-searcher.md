@@ -24,6 +24,7 @@ draft: false
   - [Tag Filtering](#tag-filtering)
 - [Choosing `HISTOGRAM` or `DISTRIBUTION` ?](#choosing-histogram-or-distribution)
   - [The `DISTRIBUTION` percentile 'custom metric' difference](#the-distribution-percentile-custom-metric-difference)
+- [UPDATE 2020.05.07](#update-2020-05-07)
 
 ## We're over our data limit!
 
@@ -835,3 +836,34 @@ Imagine your metric has three tags A, B and C. Datadog calculates the number of 
 Datadog's rationale for this difference is...
 
 > The reason we have to store percentiles for each potentially queryable tag value combination is to preserve mathematical accuracy of your values; unlike the non-percentile aggregations which can be mathematically accurate when reaggregated (i.e the global max is the maximum of the maxes), you can't calculate the globally accurate p95 by recombining p95s.
+
+## UPDATE 2020.05.07
+
+Datadog recently turned on a feature for us that allows us to filter tags for all metric types (not just `DISTRIBUTION`) which is awesome! This means for metrics that are reported by third-party libraries (and for which we don't control) we are still able to reduce our custom metric numbers!
+
+For example, we use [NSQ](https://nsq.io/) and one of the biggest hitters for us was the metric `nsq.channel.timeout_count`.
+
+My process for handling expensive metrics (and this is how I handled the above metric) is now as follows...
+
+1. Go to your `/account/usage#billing_avg_metrics` page and find the metric at the top of the list (e.g. `nsq.channel.timeout_count`).
+2. Lookup the metric in the Metric Summary page and see the 'distinct metrics' number (e.g. this metric creates `12416` custom metrics!).
+3. Run my script (see earlier in this post) to search for the metric (e.g. `time python3 searcher.py -m nsq.channel.timeout_count`)
+4. Identify which tags are used and then filter by those in the Datadog UI (go to Distribution Metrics page and click on 'Configure Tags' †)
+
+> † Datadog now allows us to filter all metric types, not just DISTRIBUTION but the UI still needs updating so this filtering tag feature appears under the Metric Summary page. At the time of writing that hasn't happened so you still have to go through the Distribution Metrics page to find it.
+
+Check back in Metric Summary page to see how this reduces the number of custom metrics reported.
+
+e.g. we were seeing...
+
+```
+Currently reporting 12416 distinct metrics over 20 hosts and 593 tags
+```
+
+After filtering the tags for this third-party metric it now reports... 
+
+```
+Currently reporting 7326 distinct metrics over 548 tags
+```
+
+That's a reduction of `5090` custom metrics! Amazing.
