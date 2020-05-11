@@ -479,9 +479,9 @@ async def main():
 asyncio.run(main())
 ```
 
-There is also an alternative way of scheduling a task to be run concurrently within a pool, without having to acquire the current event loop and passing the pool into it (as the above example demonstrates). 
+There is also an alternative way of scheduling a task to be run concurrently within a pool, without having to acquire the current event loop and passing the pool into it (as the above example demonstrates) but it comes with a caveat which is the parent program won't wait for the task to be completed unless you explicitly tell it to (which I'll demonstrate).
 
-To do this we'll need to 'submit' a function to be run in the pool, as shown below:
+With that in mind, let's take a look at this alternative approach. It involves calling the threadpool's 'submit' function:
 
 ```
 import asyncio
@@ -501,6 +501,8 @@ async def main():
 
 asyncio.run(main())
 ```
+
+> Note: even without the use of `concurrent.futures.as_completed` we would have found the parent program would have not completed until the `time.sleep` function had completed because that particular operation blocks the thread (so granted this wasn't a great example).
 
 One thing worth noting here is that because we've not used the `with` statement (like we did in the earlier pool example) it means we're not shutting down the pool once it has finished its work, and so (depending on if your program continues running) you may discover resources aren't being cleaned up.
 
