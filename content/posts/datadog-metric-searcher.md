@@ -17,6 +17,7 @@ draft: false
 - [Calculating Custom Metrics](#calculating-custom-metrics)
 - [Tracking Metrics](#tracking-metrics)
 - [Automation FTW](#automation-ftw)
+- [Tag Parsing](#tag-parsing)
 - [`DISTRIBUTION` metric type?](#distribution-metric-type)
   - [Metric Types](#metric-types)
   - [Multiple Metrics](#multiple-metrics)
@@ -610,6 +611,43 @@ I also won't explain that piece of the code, cause yer know
 
 ![there be dragons](../../images/there-be-dragons.gif)
 
+## Tag Parsing
+
+One other thing I like to do is to filter out all the 'tags' that a metric uses (this helps me when it comes to [filtering tags](#tag-filtering) and thus reducing our number of custom metrics).
+
+The way I do this is to send the Python script output to a file and then have Vim parse the tags from the file. 
+
+I know. I should really do this within the Python script itself rather than using Vim but when I attempted to add this extra feature I realized it wasn't a trivial piece of work and this was something I thought of _after_ the project was finished (so my employer wasn't keen on me spending time adding this feature). 
+
+> Note: I tried to use my standard unix toolkit but again it was getting increasingly complex and I then realized that I'm a big Vim user (see my book: [Pro Vim](http://www.apress.com/9781484202517)) so I decided that would be much quicker for me to get the results I was after.
+
+I also have a young family so...
+
+![ain't nobody got time for that](../../images/no-time.webp)
+
+OK, so what does this look like? First we need to redirect the output to a file and then execute a bash script to cause Vim to parse the file (I could just pipe the output straight to Vim but the parsing Ex commands are quite long and it's easier to just have it listed more verbosely within a separate file).
+
+```
+time python3 searcher.py -m nsq.topic.message_count \
+  > /tmp/output && /tmp/parse-tags.sh && cat /tmp/output
+```
+
+Below is the bash script:
+
+```
+#!/usr/bin/env bash
+
+vim -E -s /tmp/output <<-EOF
+  :%s/\v\{([\$a-z][^}]+)}/\r\r>>> \1\r\r/g
+  :g!/^>>>/d
+  :%s/>>> //
+  :%s/,/\r/g
+  :sort u
+  :update
+  :quit
+EOF
+```
+
 ## `DISTRIBUTION` metric type?
 
 OK, so earlier I mentioned that we were able to utilize the script output to help us identify places where we might be able to switch from a TIMER and/or HISTOGRAM metric to a DISTRIBUTION metric. 
@@ -667,7 +705,7 @@ Each percentile aggregation for the `DISTRIBUTION` metric type is internally con
 
 ### Tag Filtering
 
-The `DISTRIBUTION` metric type allows tags to be filtered, thus reducing the potential number of custom metrics Datadog will charge us for. This is not possible with any other metric type.
+The `DISTRIBUTION` metric type allows tags to be filtered, thus reducing the potential number of custom metrics Datadog will charge us for. This is not possible with any other metric type ([update: that's not true anymore!](#update-2020-05-07))
 
 ## Choosing `HISTOGRAM` or `DISTRIBUTION` ?
 
