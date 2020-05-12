@@ -636,6 +636,9 @@ Below is the bash script:
 
 ```
 #!/usr/bin/env bash
+#
+# notice the sweet use of negative lookbehind @! syntax
+# see `:h @!`
 
 vim -E -s /tmp/output <<-EOF
   :%s/\v\{([\$a-z][^}]+)}/\r\r>>> \1\r\r/g
@@ -643,9 +646,15 @@ vim -E -s /tmp/output <<-EOF
   :%s/>>> //
   :%s/,/\r/g
   :sort u
+  :%s/\v(^nsq[.:](topic|channel)).+$/\1/ | :sort u
+  :%s/\v^(nsq[:.])@!([^:]+).*/\2/ | :sort u
   :update
   :quit
 EOF
+
+nsq:topic:website_metrics
+nsq_cluster:prod
+pixiedust_api:role
 ```
 
 ## `DISTRIBUTION` metric type?
