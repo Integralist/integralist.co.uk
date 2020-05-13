@@ -18,6 +18,10 @@ In this post I'm going to be explaining how the [Fastly CDN](https://www.fastly.
 
 We will be digging into quite a few different areas of their implementation, such as their clustering solution, shielding, and various gotchas and caveats to their service offering.
 
+**Be warned: this post is a monster!<br>It'll take a long time to digest this information.**
+
+<img src="../../images/no-time.webp" class="post-img" loading="lazy">
+
 - [Introduction](#1)
   - [Varnish Basics](#varnish-basics)
   - [States vs Actions](#states-vs-actions)
@@ -94,6 +98,10 @@ You place Varnish in front of your application servers (those that are serving H
 
 One stumbling block for Varnish is the fact that it only accelerates HTTP, not HTTPS. In order to handle HTTPS you would need a TLS/SSL termination process sitting in front of Varnish to convert HTTPS to HTTP. Alternatively you could use a termination process (such as nginx) _behind_ Varnish to fetch the content from your origins over HTTPS and to return it as HTTP for Varnish to then process and cache.
 
+**Simple, right?**
+
+<img src="../../images/confusing.webp" class="post-img" loading="lazy">
+
 > Note: Fastly helps both with the HTTPS problem, and also with scaling Varnish in general.
 
 The reason for this post is because when dealing with Varnish and VCL it gets very confusing having to jump between official documentation for VCL and Fastly's specific implementation of it. Even more so because the version of Varnish Fastly are using is now quite old and yet they've also implemented some features from more recent Varnish versions. Meaning you end up getting in a muddle about what should and should not be the expected behaviour (especially around the general request flow cycle).
@@ -105,6 +113,12 @@ Ultimately this is not a "VCL 101". If you need help understanding anything ment
 - [Fastly Blog](https://www.fastly.com/blog)
 
 > Fastly also has a couple of _excellent_ articles on utilising the `Vary` HTTP header, which is highly recommended reading.
+
+Lastly, as of May 2020, Fastly has started rolling out an updated developer portal which hopes to address some of the 'documentation' issues I've noted in this post. 
+
+Fastly reached out to me to review their updated developer portal (inc. the new layout of their reference and API documentation) and requested my feedback. I was happy to report that (other than a few minor comments) I found it to be a good start and I'm very much looking forward to many future improvements.
+
+OK, let's crack on...
 
 ### Varnish Basics
 
@@ -128,6 +142,9 @@ For a state such as `vcl_miss`, when that state function finishes executing it w
 This is why at the end of `vcl_miss` we change state by calling `return(fetch)`. It looks like we're telling Varnish to 'fetch' data but really we're saying move to the next logical state which is actually `vcl_fetch`.
 
 Lastly, as Varnish is a state machine, we have the ability to 'restart' a request (while also keeping any modifications you might have made to the request intact). To do that you would call `return(restart)`.
+
+<img src="../../images/varnish.webp" class="post-img" loading="lazy">
+<small class="img-caption">^^ Varnish in action</small>
 
 ### States vs Actions
 
@@ -186,6 +203,9 @@ Below are some useful links to see Fastly's default VCL:
 - [Fastly's Default VCL (each state split into separate files)](https://gist.github.com/Integralist/56cf991ae97551583d5a2f0d69f37788)
 
 > Note: Fastly also has what they call a 'master' VCL which runs outside of what we (as customers) can see, and this VCL is used to help Fastly scale varnish (e.g. handle things like their custom clustering solution).
+
+<img src="../../images/cant-see-me.webp" class="post-img" loading="lazy">
+<small class="img-caption">fastly's master VCL be all like ^^</small>
 
 <div id="3.0"></div>
 ## Custom VCL
@@ -291,6 +311,8 @@ sub vcl_hash {
 ```
 
 Interestingly Fastly's default VCL _doesn't_ require us to also set `set req.hash += "#####GENERATION#####";`, so they happily keep that part within their generated code 🤦
+
+<img src="../../images/ok-fine.webp" class="post-img post-img-small" loading="lazy">
 
 ### Example Boilerplate
 
@@ -638,6 +660,9 @@ Another confusing aspect to `fastly-debug-ttl` is that with regards to `stale-wh
 
 Lastly, when dealing with shielding the `fastly-debug-ttl` can be misleading in another sense which is: imagine the fetching node got a MISS (so it fetched content from origin and returned it to the delivery node). The delivery node will cache the response from the fetching node (including the MISS reported by `fastly-debug-ttl`) and so even if another request reaches the name delivery node, it will report a `MISS, HIT` combination.
 
+<img src="../../images/you-lose.webp" class="post-img" loading="lazy">
+<small class="img-caption">thanks Fastly, for this totally not confusing setup</small>
+
 ### 304 Not Modified
 
 Although not specifically mentioned in the above diagram it's worth noting that Fastly doesn't execute `vcl_fetch` when it receives a `304 Not Modified` from origin, but it will use any `Cache-Control` or `Surrogate-Control` values defined on that response to determine how long the stale object should now be kept in cache.
@@ -820,6 +845,9 @@ When using `hash_always_miss` we're causing the cache lookup to think it got a m
 
 Where as the use of `hash_ignore_busy` _disables_ request collapsing and so this will result in a 'last cached wins' scenario (e.g. if you have two requests now going simultaneously to origin, whichever responds first will be cached but then the one that responds last will overwrite the first cached response).
 
+<img src="../../images/collapse.webp" class="post-img post-img-small" loading="lazy">
+<small class="img-caption">request collapsing in action</small>
+
 <div id="4.2"></div>
 ## Clustering 
 
@@ -946,6 +974,9 @@ Which was then followed with...
 
 You definitely _can_ end up in `vcl_pass` on a fetching node, but admittedly it happens less frequently because you would have to `return(pass)` from either `vcl_hit` or `vcl_miss` (and that’s not a typical state change flow for most people).
 
+<img src="../../images/this-is-fine.webp" class="post-img" loading="lazy">
+<small class="img-caption">^^ whenever I learn something new about Fastly</small>
+
 ### Breaking clustering
 
 If we're on a delivery node and we have a state that executes a `return(restart)` directive, then we actually _break_ 'clustering'. 
@@ -1054,6 +1085,8 @@ sub vcl_hash {
 > Note: alternatively you could move rewriting of the URL to a state after the hash lookup, such as vcl_miss (e.g. modifying the `bereq` object).
 
 Be careful with non-idempotent changes. For example, things like the `Vary` header being modified on the shield POP and then again on the edge POP, as this _could_ result in the edge POP getting a poor HIT ratio due to the fact that the shield has appended a header and then that header is appended again as part of the edge POP execution.
+
+<img src="../../images/double.webp" class="post-img" loading="lazy">
 
 Consideration needs to be given to the use of `req.backend.is_shield` when you get a 5xx (or any other uncacheable error code) back from the origin to the shield POP, because it means an 'pass' state will be triggered. When the response reaches the delivery node within the edge POP, the pass state will cause clustering to be disabled and so the origin will no longer be the shield POP (as it was at the start of the request flow).
 
@@ -1169,6 +1202,8 @@ if(req.backend.is_shield, "edge", if(fastly.ff.visits_this_service < 2, "edge", 
 ## Breadcrumb Trail
 
 Let's now consider a requirement for creating a breadcrumb trail of the various states a request moves through (we'll do this by defining a `X-VCL-Route` HTTP header). Implementing this feature is great for debugging purposes as it'll validate your understanding of how your requests are flowing through the varnish state machine.
+
+<img src="../../images/debugging.webp" class="post-img" loading="lazy">
 
 First I'm going to show you the basic outline of the various vcl state subroutines and a set of function calls. Next I'll show you the code for those function calls and talk through what they're doing.
 
@@ -1571,6 +1606,8 @@ Phew! Well, that was NOT an easy task, and if you struggled to follow along. Tha
 
 Thankfully by going through this process there will be very little about Varnish's request flow that you won't now understand or have the ability to work around in future if the right problem scenario presents itself.
 
+<img src="../../images/genius.webp" class="post-img" loading="lazy">
+
 ### Header Overflow Errors
 
 One final thing to note about building a 'breadcrumb trail' like I've detailed above is that you'll need to be careful about how many times you restart your request flow. 
@@ -1630,6 +1667,8 @@ This content isn't cached simply because the backend has indicated (via the `Cac
 
 But you'll find that even though you've executed a `return(pass)` operation, Varnish will _still_ create an object and cache it.
 
+<img src="../../images/miss.webp" class="post-img" loading="lazy">
+
 The object it creates is called a "hit-for-pass" (if you look back at the Fastly request flow diagram above you'll see it referenced) and it is given a ttl of 120s (i.e. it'll be cached for 120 seconds).
 
 > Note: the ttl can be changed using vcl but it should be kept small. Varnish implements a type known as a 'duration' and takes many forms: ms (milliseconds), s (seconds), m (minutes), h (hours), d (days), w (weeks), y (years). For example, `beresp.ttl = 1h`.
@@ -1677,6 +1716,9 @@ If we get a 5xx error from our origins we don't cache them.
 But instead of serving that 5xx to the user (or even a custom 500 error page), we'll attempt to locate a 'stale' version of the content and serve that to the user instead (i.e. 'stale' in this case means a resource that was requested and cached previously, but the object was marked as being something that could be served stale if its 'stale ttl' has yet to expire).
 
 The reason we do this is because serving old (i.e. stale) content is better than serving an error.
+
+<img src="../../images/stale.webp" class="post-img" loading="lazy">
+<small class="img-caption">stale content is always better, right!</small>
 
 In order to serve stale we need to add some conditional checks into our VCL logic.
 
@@ -1924,6 +1966,8 @@ sub vcl_log {
 As you can probably tell, this recommended condition will never match and so the log call isn't executed.
 
 Mystery solved.
+
+<img src="../../images/sherlock.webp" class="post-img" loading="lazy">
 
 ### Logging Memory Exhaustion
 
@@ -2174,6 +2218,8 @@ if(!resp.http.X-Cache-Hits) {
 
 Even though the second request gets a cache HIT for the origin's _original_ error response, the serving of the custom error page from the edge causes the Fastly internal state (i.e. `fastly_info.state`) to report as `ERROR` instead of a `HIT` (_that_ happens because we call `error` from within `vcl_recv` after restarting the request).
 
+<img src="../../images/computer-says-no.webp" class="post-img" loading="lazy">
+
 This is why when we get back into `vcl_deliver` we override those headers according to the values we tracked within the initial request flow.
 
 ## Rate Limiting
@@ -2253,12 +2299,20 @@ One thing you might be wondering is why I chose to allow `return(lookup)` on POS
 
 This is because once a request has been 'passed' in `vcl_recv` then it can't be set to be cacheable later (in `vcl_fetch`) as we would have disabled caching completely. You'll be able to see tell this if you check the special `fastly_info.state` variable (or test the code via [fastly's fiddle tool](https://fiddle.fastlydemo.net/fiddle/47871720)) as this will report back a `pass` state. 
 
+<img src="../../images/banned.webp" class="post-img" loading="lazy">
+
 <div id="9"></div>
 ## Conclusion
 
 So there we have it, a run down of how some important aspects of Varnish and VCL work (and specifically for Fastly's implementation).
 
 One thing I want to mention is that I am personally a HUGE fan of Fastly and the tools they provide. They are an amazing company and their software has helped BuzzFeed (and many other large organisations) to scale massively with ease.
+
+You've been a wonderful audience. Hope you enjoyed this post. Be sure to tip your waiter.
+
+And remember...
+
+![](https://media.giphy.com/media/iIj82XyyYM12YT5Hlm/giphy.gif)
 
 ## Reference material
 

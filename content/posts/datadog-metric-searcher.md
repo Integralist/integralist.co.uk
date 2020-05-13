@@ -37,7 +37,8 @@ NO, this post is not sponsored by Datadog.
 
 I wish it was yer know `:make-it-rain:`
 
-![make it rain](../../images/make-it-rain.webp).
+<img src="../../images/make-it-rain.webp" class="post-img" loading="lazy">
+<small class="img-caption">where's my corporate sponsorship deal?</small>
 
 The solution to our problem was a multi-pronged approach, and what I'm going to focus on in this post is one small aspect of that. 
 
@@ -55,7 +56,7 @@ Consider a web server application that reports the time it takes for an incoming
 
 Now imagine we report `request.latency` with three tags (`host`, `endpoint`, `status`), then with the following combination of unique tag values, we'd end up with _four_ custom metrics:
 
-![custom-metric](../../images/custom-metric.png)
+<img src="../../images/custom-metric.png" class="post-img" loading="lazy">
 
 The situation is made worse when using a `HISTOGRAM` metric type, as it ultimately produces five separate metrics. Meaning the `request.latency` example, if reported as a `HISTOGRAM`, would result in twenty custom metrics (`5 metrics * 4 tag combinations`). 
 
@@ -562,9 +563,8 @@ This might be an issue for you, but we were using Datadog's various UI based too
 
 The second issue we had was that the API endpoint wasn't supported for Python, only Curl (and possibly Ruby too?). 
 
-My kingdom for API consistency!
-
-![aaaah](../../images/aaaah.webp)
+<img src="../../images/aaaah.webp" class="post-img" loading="lazy">
+<small class="img-caption">My kingdom for API consistency!</small>
 
 This meant I needed a way to combine Python with some bash scripting. So let's start by looking at how we would call the Python script:
 
@@ -609,7 +609,7 @@ Also the logic for locating the 'query' for a specific graph (e.g. where the met
 I also won't explain that piece of the code, cause yer know  
 **...there be dragons**.
 
-![there be dragons](../../images/there-be-dragons.gif)
+<img src="../../images/there-be-dragons.gif" class="post-img" loading="lazy">
 
 ## Tag Parsing
 
@@ -621,9 +621,9 @@ I know. I should really do this within the Python script itself rather than usin
 
 > Note: I tried to use my standard unix toolkit but again it was getting increasingly complex and I then realized that I'm a big Vim user (see my book: [Pro Vim](http://www.apress.com/9781484202517)) so I decided that would be much quicker for me to get the results I was after.
 
-I also have a young family so...
+**I also have a young family so...**
 
-![ain't nobody got time for that](../../images/no-time.webp)
+<img src="../../images/no-time.webp" class="post-img" loading="lazy">
 
 OK, so what does this look like? First we need to redirect the output to a file and then execute a bash script to cause Vim to parse the file (I could just pipe the output straight to Vim but the parsing Ex commands are quite long and it's easier to just have it listed more verbosely within a separate file).
 
@@ -859,7 +859,7 @@ If you do require a percentile aggregation then the trade-off you need to make i
 
 The way Datadog calculates the number of 'custom metrics' is slightly different (and more costly) for percentile aggregations of a `DISTRIBUTION` metric type. **It got me like...**
 
-![NO God NO](../../images/no-god-no.webp)
+<img src="../../images/no-god-no.webp" class="post-img post-img-small" loading="lazy">
 
 Let's just recap what a 'custom metric' is...
 
