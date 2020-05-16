@@ -886,7 +886,9 @@ Datadog's rationale for this difference is...
 
 ## UPDATE 2020.05.07
 
-Datadog recently turned on a feature for us that allows us to filter tags for all metric types (not just `DISTRIBUTION`) which is awesome! This means for metrics that are reported by third-party libraries (and for which we don't control) we are still able to reduce our custom metric numbers!
+Datadog recently turned on a _new_ feature for us (which isn't generally available, it's still in testing phase) which allows us to filter tags for _all_ metric types (not just `DISTRIBUTION`). 
+
+This is awesome! Because for metrics that are reported by third-party libraries (and for which we don't control) we are still able to reduce our custom metric numbers. It's like magic!
 
 For example, we use [NSQ](https://nsq.io/) and one of the biggest hitters for us was the metric `nsq.channel.timeout_count`.
 
