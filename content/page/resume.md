@@ -96,6 +96,10 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ### 2020
 
+- **What**: designed and communicated (via RFC), and was the sole engineer building a global rate limiting feature that integrated at various layers of our infrastructure (CDN, Routing + a new 'rate control' service).  
+- **Why**: teams across the organization were struggling to handle rate limiting within their services and Core Infrastructure (the team I work in) found through user feedback that this would be something worth us taking on.
+- **Impact**: I was able to release a feature that provided our organization with DoS level protection at 'the edge' (e.g. reduced load on our internal infrastructure) while decoupling rate limiting logic from our critical path, along with granular client identification context to be more useful than just a simple IP deny list.
+
 - **What**: spent three weeks tackling problem of metric production across ~600 microservices.  
 - **Why**: we had run over our allotted threshold and were about to be billed ~$80k a month!
 - **Impact**: we saved the company a huge chunk of money (~$40k)! also we educated ourselves greatly on how Datadog determines 'custom metrics' and how to better utilize distribution metrics over standard histograms.
