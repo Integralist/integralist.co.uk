@@ -1,5 +1,5 @@
 ---
-title: "Guide to Python 3.8 Asyncio"
+title: "Guide to Concurrency in Python with Asyncio"
 date: 2019-11-30T13:35:48Z
 categories:
   - "code"
@@ -15,6 +15,8 @@ draft: false
 This is a _quick_ guide to Python's `asyncio` module and is based on Python version 3.8.
 
 - [Introduction](#introduction)
+- [`asyncio`](#asyncio)
+- [`concurrent.futures`](#concurrent-futures)
 - [Event Loop](#event-loop)
 - [Awaitables](#awaitables)
   - [Coroutines](#coroutines)
@@ -33,14 +35,41 @@ This is a _quick_ guide to Python's `asyncio` module and is based on Python vers
   - [`create_task`](#create-task)
 - [Callbacks](#callbacks)
 - [Pools](#pools)
+  - [Executors](#executors)
   - [`asyncio.Future` vs `concurrent.futures.Future`](#asyncio-future-vs-concurrent-futures-future)
   - [`asyncio.wrap_future`](#asyncio-wrap-future)
 
 ## Introduction
 
+So let's start by addressing the elephant in the room: there are _many_ modules provided by the Python standard library for handling asynchronous/concurrent/multiprocess code...
+
+- [`_thread`](https://docs.python.org/3.8/library/_thread.html)
+- [`threading`](https://docs.python.org/3.8/library/threading.html)
+- [`multiprocessing`](https://docs.python.org/3.8/library/multiprocessing.html)
+- [`asyncio`](https://docs.python.org/3.8/library/asyncio.html)
+- [`concurrent.futures`](https://docs.python.org/3.8/library/concurrent.futures.html)
+
+In this post we're going to focus on the last two (primarily `asyncio`, and ending with `concurrent.futures`). The `threading` and `multiprocessing` modules sit beneath them, hence we won't cover them in detail.
+
+> Note: the `_thread` module is in fact a very low-level API that the `threading` module is built on top of (again, this is why we won't be covering that either).
+
+## `asyncio`
+
 > asyncio is a library to write concurrent code using the `async`/`await` syntax. -- [docs.python.org/3.8/library/asyncio.html](https://docs.python.org/3.8/library/asyncio.html)
 
 The asyncio module provides both high-level and low-level APIs. Library and Framework developers will be expected to use the low-level APIs, while all other users are encouraged to use the high-level APIs.
+
+It differs conceptually from the more traditional `threading` or `multiprocess` approach to asynchronous code execution in that it utilizes something called an [event loop](#event-loop) to handle the scheduling of these asynchronous tasks. 
+
+We'll explain the 'event loop' in just a moment but first let's briefly recap `concurrent.futures`.
+
+## `concurrent.futures`
+
+> The concurrent.futures module provides a high-level interface for asynchronously executing callables. -- [docs.python.org/3.8/library/concurrent.futures.html](https://docs.python.org/3.8/library/concurrent.futures.html)
+
+The `concurrent.futures` provides a high-level abstraction for the `threading` and `multiprocessing` modules, which is why we won't discuss them in detail within this post. 
+
+Generally speaking you'll utilize `concurrent.futures` when you want to execute code asynchronously within either a pool of threads or a pool of subprocesses, while also using a clean and modern Python API (as apposed to the more flexible but low-level `threading` or `multiprocessing` modules).
 
 ## Event Loop
 
@@ -428,14 +457,20 @@ got the result! Foo!
 
 ## Pools
 
-When dealing with lots of concurrent operations it might be wise to utilize a 'pool' of threads (or subprocesses) to prevent exhausting your application's host resources. Asyncio provides a concept referred to as a Executor to help with this (see: [Executor documentation](https://docs.python.org/3.8/library/concurrent.futures.html#concurrent.futures.Executor)).
+When dealing with lots of concurrent operations it might be wise to utilize a 'pool' of threads (and/or subprocesses) to prevent exhausting your application's host resources. 
+
+This is where the `concurrent.futures` module comes in. It provides a concept referred to as an Executor to help with this and which can be run standalone or be integrated into an existing asyncio event loop (see: [Executor documentation](https://docs.python.org/3.8/library/concurrent.futures.html#concurrent.futures.Executor)).
+
+### Executors
 
 There are two types of 'executors':
 
 - [`ThreadPoolExecutor`](https://docs.python.org/3.8/library/concurrent.futures.html#threadpoolexecutor)
 - [`ProcessPoolExecutor`](https://docs.python.org/3.8/library/concurrent.futures.html#processpoolexecutor)
 
-In order to execute code within one of these executors, you need to call the event loop's `.run_in_executor()` function and pass in the executor type as the first argument. If `None` is provided, then the _default_ executor is used (which is the `ThreadPoolExecutor`).
+Let's look at the first way to execute code within one of these executors, by using an asyncio event loop to schedule the running of the executor. 
+
+To do this you need to call the event loop's `.run_in_executor()` function and pass in the executor type as the first argument. If `None` is provided, then the _default_ executor is used (which is the `ThreadPoolExecutor`).
 
 The following example is copied verbatim from the [Python documentation](https://docs.python.org/3.8/library/asyncio-eventloop.html#executing-code-in-thread-or-process-pools):
 
@@ -479,61 +514,86 @@ async def main():
 asyncio.run(main())
 ```
 
-There is also an alternative way of scheduling a task to be run concurrently within a pool, without having to acquire the current event loop and passing the pool into it (as the above example demonstrates) but it comes with a caveat which is the parent program won't wait for the task to be completed unless you explicitly tell it to (which I'll demonstrate).
+The second way to execute code within one of these executors is to send the code to be executed directly to the pool. This means we don't have to acquire the current event loop to pass the pool into it (as the earlier example demonstrated), but it comes with a caveat which is the parent program won't wait for the task to be completed unless you explicitly tell it to (which I'll demonstrate next).
 
-With that in mind, let's take a look at this alternative approach. It involves calling the threadpool's 'submit' function:
+With that in mind, let's take a look at this alternative approach. It involves calling the executor's `submit()` method:
 
 ```
-import asyncio
 import concurrent.futures
 import time
+
+
+def slow_op(*args):
+    print(f"arguments: {args}")
+    time.sleep(5)
+    print("slow operation complete")
+    return 123
+
+
+def do_something():
+    with concurrent.futures.ProcessPoolExecutor() as pool:
+        future = pool.submit(slow_op, "a", "b", "c")
+
+        for fut in concurrent.futures.as_completed([future]):
+            assert future.done() and not future.cancelled()
+            print(f"got the result from slow_op: {fut.result()}")
+
+
+if __name__ == "__main__":
+    print("program started")
+    do_something()
+    print("program complete")
+```
+
+> Note: be careful with a global process executor (e.g. placing something like `PROCESS_POOL = concurrent.futures.ProcessPoolExecutor()` within the global scope and using that reference within our `do_something()` function) as this means when the program is copied into a _new_ process you'll get an error from the Python interpreter about a leaked semaphore. This is why I create the process pool executor within a function.
+
+One thing worth noting here is that if we hadn't used the `with` statement (like we do in the above example) it would mean we'd not be shutting down the pool once it has finished its work, and so (depending on if your program continues running) you may discover resources aren't being cleaned up.
+
+To solve that problem you can call the `.shutdown()` method which is exposed to both types of executors via its parent class `concurrent.futures.Executor`. 
+
+Below is an example that does that, but now using the threadpool executor:
+
+```
+import concurrent.futures
 
 THREAD_POOL = concurrent.futures.ThreadPoolExecutor(max_workers=5)
 
 
-async def main():
-    future = THREAD_POOL.submit(time.sleep, 5)
-
-    for result in concurrent.futures.as_completed([future]):
-        assert future.done() and not future.cancelled()
-        print("all done!")
+def slow_op(*args):
+    print(f"arguments: {args}")
+    print("some kind of slow operation")
+    return 123
 
 
-asyncio.run(main())
-```
-
-> Note: even without the use of `concurrent.futures.as_completed` we would have found the parent program would have not completed until the `time.sleep` function had completed because that particular operation blocks the thread (so granted this wasn't a great example).
-
-One thing worth noting here is that because we've not used the `with` statement (like we did in the earlier pool example) it means we're not shutting down the pool once it has finished its work, and so (depending on if your program continues running) you may discover resources aren't being cleaned up.
-
-To solve that problem we can call the `.shutdown()` method which is exposed to both types of executors via its parent class `concurrent.futures.Executor`. Below is an updated example that does that:
-
-```
-import asyncio
-import concurrent.futures
-import time
-
-THREAD_POOL = concurrent.futures.ThreadPoolExecutor(max_workers=5)
-
-
-async def main():
-    future = THREAD_POOL.submit(time.sleep, 5)
+def do_something():
+    future = THREAD_POOL.submit(slow_op, "a", "b", "c")
 
     THREAD_POOL.shutdown()
 
     assert future.done() and not future.cancelled()
 
-    print("all done!")
+    print(f"got the result from slow_op: {future.result()}")
 
 
-asyncio.run(main())
+if __name__ == "__main__":
+    print("program started")
+    do_something()
+    print("program complete")
 ```
 
-Notice the placement of the call to `.shutdown()` is _before_ we've explictly waited for the scheduled task to complete, and yet when we assert if the returned future is `.done()` we find that it is? 
+Now I haven't used `time.sleep()` this time in the example because we're using a threadpool and `time.sleep()` is a CPU bound operation that would otherwise block the thread from completing. 
 
-This works because the default behaviour for the shutdown method is `wait=True` which means it'll wait for all scheduled tasks to complete before shutting down the executor pool. This also means it's a blocking call. 
+This means our example is likely to always result in the `slow_op()` function completing before we get to checking `future.done()`. So yeah, it's not the best example. You can test this more realistically by incorporating a genuinely slow operation that doesn't block.
 
-If we passed `.shutdown(wait=False)` instead, then the call to `future.done()` would indeed raise an exception as the scheduled task would still be running and so in that case we'd need to ensure that we use another mechanism for acquiring the results of the scheduled tasks (such as `concurrent.futures.as_completed` or `concurrent.futures.wait`).
+But imagine we had a genuinely slow operation happening that meant the task wasn't complete by the time we check `future.done()`. 
+
+In that case we should note that the placement of the call to `.shutdown()` is _before_ we've explictly waited for the scheduled task to complete, and yet when we assert if the returned future is `.done()` we would have found that the task was marked as 'done' regardless of attempting to shutdown the threadpool. 
+
+This is because the default behaviour for the shutdown method is `wait=True` which means it would wait for all scheduled tasks to complete before shutting down the executor pool. 
+
+Thus the `.shutdown()` method is a synchronization call (i.e. it ensures all tasks are complete before shutting down, and thus we can guarantee all results will be available). 
+
+If we passed `.shutdown(wait=False)` instead, then the call to `future.done()` would have raised an exception (as the scheduled task would still be running as the threadpool was being closed) and so in that case we'd need to ensure that we use another mechanism for acquiring the results of the scheduled tasks (such as `concurrent.futures.as_completed` or `concurrent.futures.wait`).
 
 ### `asyncio.Future` vs `concurrent.futures.Future`
 
@@ -541,7 +601,7 @@ One final thing to mention is that a `concurrent.futures.Future` object is _diff
 
 An `asyncio.Future` is intended to be used with the asyncio's event loop, and is [_awaitable_](#awaitables). A `concurrent.futures.Future` is _not_ awaitable. 
 
-Using the `.run_in_executor()` method of an event loop will provide the necessary interoperability between the two future types by wrapping the future type in a call to [`asyncio.wrap_future`](#asyncio-wrap-future) (see next section for details).
+Using the `.run_in_executor()` method of an event loop will provide the necessary interoperability between the two future types by wrapping the `concurrent.futures.Future` type in a call to [`asyncio.wrap_future`](#asyncio-wrap-future) (see next section for details).
 
 ### `asyncio.wrap_future`
 
