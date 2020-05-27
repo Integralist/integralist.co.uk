@@ -6,17 +6,22 @@ categories:
   - "development"
   - "guide"
 tags:
-  - "concurrency"
   - "asyncio"
+  - "concurrency"
+  - "multiprocess"
+  - "multitask"
   - "python"
+  - "threads"
 draft: false
 ---
 
 This is a _quick_ guide to Python's `asyncio` module and is based on Python version 3.8.
 
 - [Introduction](#introduction)
-- [`asyncio`](#asyncio)
-- [`concurrent.futures`](#concurrent-futures)
+- [Why focus on asyncio?](#why-focus-on-asyncio)
+- [A quick `asyncio` summary](#a-quick-asyncio-summary)
+- [A quick `concurrent.futures` summary](#a-quick-concurrent-futures-summary)
+- [Green Threads?](#green-threads)
 - [Event Loop](#event-loop)
 - [Awaitables](#awaitables)
   - [Coroutines](#coroutines)
@@ -49,27 +54,55 @@ So let's start by addressing the elephant in the room: there are _many_ modules 
 - [`asyncio`](https://docs.python.org/3.8/library/asyncio.html)
 - [`concurrent.futures`](https://docs.python.org/3.8/library/concurrent.futures.html)
 
-In this post we're going to focus on the last two (primarily `asyncio`, and ending with `concurrent.futures`). The `threading` and `multiprocessing` modules sit beneath them, hence we won't cover them in detail.
+In this post we're going to focus on the last two. Primarily we will be focusing on `asyncio`, before wrapping up with a look at some useful features of `concurrent.futures`. 
 
-> Note: the `_thread` module is in fact a very low-level API that the `threading` module is built on top of (again, this is why we won't be covering that either).
+The motivation for this post is to understand why you will most likely want to use `asyncio` over the other available modules (e.g. `_thread` and `threading`) and when it's actually more appropriate to use either `multiprocessing` or `concurrent.futures`.
 
-## `asyncio`
+## Why focus on asyncio?
+
+One of the issues with writing concurrent code (using either the `_thread` or `threading` modules) is that you suffer the cost of 'CPU context switching' (as a CPU core can only run one thread at a time) which although quick, isn't free. 
+
+Multi-threaded code also has to deal with issues such as 'race conditions', 'dead/live locks' and 'resource starvation' (where some threads are over utilized and others are under utilized).
+
+Asyncio avoids these issues, so let's see how...
+
+## A quick `asyncio` summary
 
 > asyncio is a library to write concurrent code using the `async`/`await` syntax. -- [docs.python.org/3.8/library/asyncio.html](https://docs.python.org/3.8/library/asyncio.html)
 
 The asyncio module provides both high-level and low-level APIs. Library and Framework developers will be expected to use the low-level APIs, while all other users are encouraged to use the high-level APIs.
 
-It differs conceptually from the more traditional `threading` or `multiprocess` approach to asynchronous code execution in that it utilizes something called an [event loop](#event-loop) to handle the scheduling of these asynchronous tasks. 
+It differs conceptually from the more traditional `threading` or `multiprocess` approach to asynchronous code execution in that it utilizes something called an [event loop](#event-loop) to handle the scheduling of asynchronous 'tasks' instead of using more traditional threads or subprocesses.
 
-We'll explain the 'event loop' in just a moment but first let's briefly recap `concurrent.futures`.
+Importantly, asyncio is designed to solve I/O network performance, _not_ CPU bound operations (which is where multiprocessing should be used). So asyncio is not a replacement for all types of asynchronous execution.
 
-## `concurrent.futures`
+Asyncio is designed around the concept of 'cooperative multitasking', so you have complete control over when a CPU 'context switch' occurs (i.e. context switching happens at the application level and not the hardware level).
+
+When using threads the Python scheduler is responsible for this, and so your application may context switch at any moment (i.e. it becomes non-deterministic). 
+
+This means when using threads you'll need to also use some form of 'lock' mechanism to prevent multiple threads from accessing/mutating shared memory (which would otherwise subsequently cause your program to become non-thread safe).
+
+## A quick `concurrent.futures` summary
 
 > The concurrent.futures module provides a high-level interface for asynchronously executing callables. -- [docs.python.org/3.8/library/concurrent.futures.html](https://docs.python.org/3.8/library/concurrent.futures.html)
 
-The `concurrent.futures` provides a high-level abstraction for the `threading` and `multiprocessing` modules, which is why we won't discuss them in detail within this post. 
+The `concurrent.futures` provides a high-level abstraction for the `threading` and `multiprocessing` modules, which is why we won't discuss those modules in detail within this post. In fact the `_thread` module is a very low-level API that the `threading` module is itself built on top of (again, this is why we won't be covering that either).
 
-Generally speaking you'll utilize `concurrent.futures` when you want to execute code asynchronously within either a pool of threads or a pool of subprocesses, while also using a clean and modern Python API (as apposed to the more flexible but low-level `threading` or `multiprocessing` modules).
+Now we've already mentioned that asyncio helps us avoid using threads so why would we want to use `concurrent.futures` if it's just an abstraction on top of threads (and multiprocessing)? Well, because not all libraries/modules/APIs support the asyncio model.
+
+For example, if you use `boto3` and interact with AWS S3, then you'll find those are synchronous operations. You can wrap those calls in multi-threaded code, but it would be better to use `concurrent.futures` as it means you not only benefit from traditional threads but an asyncio friendly package.
+
+The `concurrent.futures` module is also designed to interop with the asyncio event loop, making it easier to work with a pool of threads/subprocesses within an otherwise asyncio driven application.
+
+Additionally you'll also want to utilize `concurrent.futures` when you require a pool of threads or a pool of subprocesses, while also using a clean and modern Python API (as apposed to the more flexible but low-level `threading` or `multiprocessing` modules).
+
+## Green threads?
+
+There are many ways to achieve asynchronous programming. There's the event loop approach (which asyncio implements), a 'callback' style historically favoured by single-threaded languages such as JavaScript, and more traditionally there has been a concept known as 'green threads'. 
+
+In essence a green thread looks and feels exactly like a normal thread, except that the threads are scheduled by application code rather than by hardware (so effectively working around the same issue of deterministic context switching as an event loop does). But the problem of handling shared memory still exists.
+
+So let's take a quick look now at what the 'event loop' is, as it's the foundation of what makes asyncio work and why we can avoid 'callback hell' and the problems inherent with 'green threads'...
 
 ## Event Loop
 
@@ -83,11 +116,17 @@ The core element of all asyncio applications is the 'event loop'. The event loop
   <a href="https://eng.paxos.com/python-3s-killer-feature-asyncio">Image Credit</a>
 </div>
 
-> Note: for more API information on the event loop, please refer to [the documentation](https://docs.python.org/3.8/library/asyncio-eventloop.html).
+What makes the asyncio event loop so effective is the fact that Python implements it around [generators](/posts/python-generators/). A generator enables a function to be partially executed, then halt its execution at a specific point, maintaining a stack of objects and exceptions, before resuming again.
+
+I've written about [iterators, generators and coroutines](/posts/python-generators/) recently, so if you're interested in those concepts, then I'll refer you to that post.
+
+> Note: for more API information on the event loop, please refer to [the official Python documentation](https://docs.python.org/3.8/library/asyncio-eventloop.html).
 
 ## Awaitables
 
-Something is _awaitable_ if it can be used in an `await` expression.
+The driving force behind asyncio is the ability to schedule asynchronous 'tasks'. There are a few different types of objects in Python that help support this, and they are generally grouped by the term 'awaitable'.
+
+Ultimately, something is _awaitable_ if it can be used in an `await` expression.
 
 There are three main types of awaitables:
 
