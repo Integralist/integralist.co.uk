@@ -642,7 +642,7 @@ The `fastly-debug-ttl` header suggests we got a HIT (`H`) from the delivery node
 
 > Note: it may take a few requests to see numbers populating the `Fastly-Debug-TTL`, as the request needs to either land on the fetching node, or a delivery node where the content exists in temporary memory. If you see `-` it might be because you arrived at a delivery node that doesn't have it in-memory.
 
-Why this header is misleading is actually quite a hard thing to explain, and Fastly has discussed the reasoning for the confusion in at least a couple different talks I've seen (one being: https://vimeo.com/showcase/6623864/video/37692146a7 which I highly recommend btw).
+Why this header is misleading is actually quite a hard thing to explain, and Fastly has discussed the reasoning for the confusion in at least a couple different talks I've seen (one being: https://vimeo.com/showcase/6623864/video/376921467 which I highly recommend btw).
 
 In essence, the HIT state is recorded at the fetching node. When the response makes its way back to the delivery node, it will then set the `fastly-debug-ttl`. But this doesn't mean that the cache HIT _happened_ at the delivery node, only that the header was _set_ there.
 
