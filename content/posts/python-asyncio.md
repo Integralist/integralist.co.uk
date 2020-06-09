@@ -106,7 +106,7 @@ So let's take a quick look now at what the 'event loop' is, as it's the foundati
 
 ## Event Loop
 
-The core element of all asyncio applications is the 'event loop'. The event loop is what schedules and runs asynchronous tasks (it also handles network IO operations and the running of subprocesses).
+The core element of all asyncio applications is the 'event loop'. The event loop is what schedules and runs asynchronous tasks.
 
 <a href="../../images/event-loop.png">
     <img src="../../images/event-loop.png">
@@ -599,9 +599,8 @@ THREAD_POOL = concurrent.futures.ThreadPoolExecutor(max_workers=5)
 
 
 def slow_op(*args):
-    print(f"arguments: {args}")
-    print("some kind of slow operation")
-    return 123
+    with open("/dev/urandom", "rb") as f:
+        return f.read(100000)
 
 
 def do_something():
@@ -611,7 +610,7 @@ def do_something():
 
     assert future.done() and not future.cancelled()
 
-    print(f"got the result from slow_op: {future.result()}")
+    print(f"got the result from slow_op: {len(future.result())}")
 
 
 if __name__ == "__main__":
@@ -620,19 +619,15 @@ if __name__ == "__main__":
     print("program complete")
 ```
 
-Now I haven't used `time.sleep()` this time in the example because we're using a threadpool and `time.sleep()` is a CPU bound operation that would otherwise block the thread from completing. 
+Pay attention to the placement of the call to `.shutdown()`. We no longer have any code to handle waiting for the task to complete. You might have expected calling `.shutdown()` and then immediately checking if the task is complete (e.g. `assert future.done()`) to cause an error to be raised as the future is unlikely to be finished.
 
-This means our example is likely to always result in the `slow_op()` function completing before we get to checking `future.done()`. So yeah, it's not the best example. You can test this more realistically by incorporating a genuinely slow operation that doesn't block.
+> Note: remember also if you call `.done()` on a future when a value has not yet been set, then you'll see an exception such as `asyncio.InvalidStateError`.
 
-But imagine we had a genuinely slow operation happening that meant the task wasn't complete by the time we check `future.done()`. 
-
-In that case we should note that the placement of the call to `.shutdown()` is _before_ we've explictly waited for the scheduled task to complete, and yet when we assert if the returned future is `.done()` we would have found that the task was marked as 'done' regardless of attempting to shutdown the threadpool. 
-
-This is because the default behaviour for the shutdown method is `wait=True` which means it would wait for all scheduled tasks to complete before shutting down the executor pool. 
+But no error is raised, and the future is indeed considered 'done' by the time we check it. This is because the shutdown method has a single argument defined called `wait` and its default value is set to `True`, which means it would wait for all scheduled tasks to complete before shutting down the executor pool. 
 
 Thus the `.shutdown()` method is a synchronization call (i.e. it ensures all tasks are complete before shutting down, and thus we can guarantee all results will be available). 
 
-If we passed `.shutdown(wait=False)` instead, then the call to `future.done()` would have raised an exception (as the scheduled task would still be running as the threadpool was being closed) and so in that case we'd need to ensure that we use another mechanism for acquiring the results of the scheduled tasks (such as `concurrent.futures.as_completed` or `concurrent.futures.wait`).
+Now if we had passed `.shutdown(wait=False)` instead, then the call to `future.done()` would have raised an exception (as the scheduled task would still be running as the threadpool was being closed), and so in that case we'd need to ensure that we use another mechanism for acquiring the results of the scheduled tasks (such as `concurrent.futures.as_completed` or `concurrent.futures.wait`).
 
 ### `asyncio.Future` vs `concurrent.futures.Future`
 
