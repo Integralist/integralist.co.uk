@@ -96,6 +96,10 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ### 2020
 
+- **What**: worked towards reducing our log production across our platform.  
+- **Why**: we had started to exceed our cost agreements with our provider (Datadog).
+- **Impact**: worked across many teams to help promote certain patterns to help reduce our logs. Specifically two things we did was: 1. sample our logs (and in some cases only sample `200 OK` responses), while 2. for web servers/proxies/APIs we would implement a middleware pattern where we only record a single log at the very end of a transaction while passing the log object throughout various code paths so we can append contextual data to it.
+
 - **What**: designed and communicated (via RFC), and was the sole engineer building a global rate limiting feature that integrated at various layers of our infrastructure (CDN, Routing + a new 'rate control' service).  
 - **Why**: teams across the organization were struggling to handle rate limiting within their services and Core Infrastructure (the team I work in) found through user feedback that this would be something worth us taking on.
 - **Impact**: I was able to release a feature that provided our organization with DoS level protection at 'the edge' (e.g. reduced load on our internal infrastructure) while decoupling rate limiting logic from our critical path, along with granular client identification context to be more useful than just a simple IP deny list.
