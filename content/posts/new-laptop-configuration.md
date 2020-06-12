@@ -654,7 +654,29 @@ make && make install
 
 The above code will copy the compiled vim binary into `/usr/local/bin` so `which vim` will show `/usr/local/bin/vim`
 
-> Note: you can also specify the path to the Python 3 interpreter if you don't want to rely on a global Python3 interpreter (`--with-python3-config-dir`). This gets more confusing when you have packages such as [Black](https://github.com/psf/black) that needs to be installed to that global interpreter.
+### UPDATE on install
+
+I believe that manual compiling will fail unless you use the same Python version that vim itself needs. This would explain why when I upgrade my Python version vim suddenly breaks. So when manually compiling I look at the `Python's install prefix...` output to see what version of Vim is needed and install using that version (which currently is 3.7.4 although my latest vim version is 3.7.7):
+
+```bash
+./configure --with-features=huge \
+  --enable-multibyte \
+  --enable-rubyinterp=yes \
+  --enable-python3interp=yes \
+  # --with-python3-config-dir \
+  --with-python3-command=/usr/local/Cellar/python/3.7.4/Frameworks/Python.framework/Versions/3.7/bin/python3.7 \
+  --enable-perlinterp=yes \
+  --enable-luainterp=yes \
+  --enable-gui=gtk2 \
+  --enable-cscope \
+  --prefix=/usr/local
+
+make && make install
+```
+
+Additionally you might get errors about missing header files so you might need something like `export CPLUS_INCLUDE_PATH=/usr/local/Cellar/python/3.7.4/Frameworks/Python.framework/Headers/`. Nothing is ever easy.
+
+> Note: This gets more confusing when you have packages such as [Black](https://github.com/psf/black) that needs to be installed to that global interpreter. 
 
 Configure vim with [vim-plug](https://github.com/junegunn/vim-plug) plugin manager:
 
