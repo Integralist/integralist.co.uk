@@ -77,6 +77,7 @@ We will be digging into quite a few different areas of their implementation, suc
   - [Test Serving Stale](#test-serving-stale)
 - [Disable Caching](#7)
 - [Logging](#8)
+  - [Filtering and Sampling Logs](#filtering-and-sampling-logs)
   - [Logging Memory Exhaustion](#logging-memory-exhaustion)
 - [Restricting requests to another Fastly service](#8.1)
 - [Custom Error Pages](#custom-error-pages)
@@ -1915,9 +1916,9 @@ In my experience I've found the following to be sufficient...
 <div id="8"></div>
 ## Logging
 
-With Fastly, to set-up logging you'll need to use their UI, as this means they can configure the relevant integration with your log aggregation provider. But what people don't realise is that by default Fastly will generate a subroutine called `vcl_log`.
+With Fastly, to set-up logging you'll need to use their UI, as this means they can configure the relevant integration with your log aggregation provider. This is fairly straight forward and obvious but what people _don't_ realise is that by default Fastly will generate a subroutine called `vcl_log`.
 
-Now, if you don't specify a "log format", then the generated subroutine will look like this:
+Now, as part of the log configuration in the Fastly UI you must specify a "log format" (think an Apache web server log format syntax). If you don't set a value for the log format (e.g. it's an empty field) then the VCL will have a `vcl_log` subroutine that looks something like the following:
 
 ```
 sub vcl_log {
@@ -1928,7 +1929,9 @@ sub vcl_log {
 }
 ```
 
-If you _do_ provide a log format value, then it could look something like the following:
+Effectively it's an empty log message :-/ 
+
+If you _do_ provide a log format value, then it _could_ look something like the following:
 
 ```
 sub vcl_log {
@@ -1939,15 +1942,21 @@ sub vcl_log {
 }
 ```
 
-The `vcl_log` subroutine executes _after_ `vcl_deliver`. So it's the _very last_ routine to be executed before Varnish completes the request (so this is even after it has delivered the response to the client). The reason this subroutine exists is because logging inside of `vcl_deliver` (which is how Fastly _used_ to work - i.e. they would auto-generate the log call inside of `vcl_deliver`) they wouldn't have certain response variables available, such as determining how long it took to send the first byte of the response to the client.
+OK, so another important thing to think about is that the `vcl_log` subroutine executes _after_ `vcl_deliver`. So it's the _very last_ routine to be executed before Varnish completes the request (so this is even after it has delivered the response to the client). 
 
-What confused me about the logging set-up was the fact that I didn't realise I was looking at things too much from an 'engineering' perspective. By that I mean, not all of the UI features Fastly provides exist just for my benefit :-) 
+The reason this subroutine exists is because logging inside of `vcl_deliver` (which is how Fastly _used_ to work, i.e. they would auto-generate the log call inside of `vcl_deliver`) Fastly wouldn't have certain response variables available, such as determining how long it took to send the first byte of the response to the client.
 
-So what I was confusedly thinking was: "why is Fastly generating a single log call in `vcl_log`, is there a technical reason for that or a limitation with Varnish?" and it ended up simply just being that some Fastly users don't want to write their own VCL (or don't know anything about writing code) and so they are quite happy with knowing that the UI will trigger a single log call at the end of each request cycle.
+What confused _me_ about the logging set-up was the fact that I didn't realise I was looking at things too much from an 'engineering' perspective. By that I mean, not all of the UI features Fastly provides exist just for my benefit :-) and I should probably elaborate on what I mean by that...
 
-Where (as a programmer) I was expecting to add log calls all over the place! But I never realised a `vcl_log` was being auto-generated for me by Fastly. Meaning... I never realised that an extra log call (after all the log calls I was manually adding to my custom VCL) was being executed.
+So what I was confusedly thinking was: "why is Fastly generating only a _single_ log call in `vcl_log`, is there a technical reason for that or a limitation with Varnish? I want to make multiple log calls throughout my request/response flow, I don't want just a single log at the end as that's not very useful to me!". 
 
-So when I eventually stumbled across a Fastly documentation page talking about "duplicate logs", I started digging deeper into why that might be ...and that's where I discovered `vcl_log` was a thing.
+Well it ended up simply just being that some Fastly users don't want to write their own VCL (or don't know anything about writing code) and so they are quite happy with knowing that the UI will trigger a single log call at the end of each request cycle.
+
+Where (as a programmer) I was expecting to add log calls all over the place! Turns our this was possible of course, but I also never realised a `vcl_log` subroutine existed nor that it was being _auto-generated_ for me by Fastly once I had configured my logging endpoint in their UI. 
+
+This meant I also never realised that an _extra_ log call (after all the log calls I was manually adding to my custom VCL) was being executed! 
+
+So when I eventually stumbled across a Fastly documentation page talking about "duplicate logs", I started digging deeper into why that might be ...and that's where I discovered `vcl_log` was a thing and I needed to read up on it and how it worked and why it existed.
 
 Now, the documentation then goes on to mention using the UI to create a custom 'condition' to prevent Fastly's auto-generated log from being executed. This intrigued me. I was thinking "what is this magical 'condition feature' they have?". Well, turns out that I was again thinking too much like an engineer and not enough like a normal Joe Bloggs user who knows nothing about programming, as this 'feature' just generates a standard conditional 'if statement' code block around the auto-generated log call, like so:
 
@@ -1963,11 +1972,31 @@ sub vcl_log {
 }
 ```
 
-As you can probably tell, this recommended condition will never match and so the log call isn't executed.
+As you can probably tell, this recommended condition will never match and so the final log call isn't executed, thus avoiding an unneccessary duplicate log call.
 
 Mystery solved.
 
 <img src="../../images/sherlock.webp" class="post-img" loading="lazy">
+
+### Filtering and Sampling Logs
+
+I want to also mention that logging can be expensive if you're sending _ALL_ your Fastly traffic logs to a log aggregation/analysis service (such as [Datadog](https://www.datadoghq.com/)), and so two things we did to help combat this problem was...
+
+1. only send 'uncacheable request' logs
+2. only send a sample of our logs
+
+The following VCL snippet demonstrates how to do this...
+
+```
+vcl_log {
+  ...
+
+  // 75% of uncacheable logs will be sampled
+  if (fastly_info.state ~ "^(MISS|PASS)" && randombool(3,4)) {
+    log ...;
+  }
+}
+```
 
 ### Logging Memory Exhaustion
 
