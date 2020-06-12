@@ -634,6 +634,8 @@ Or you can manually compile vim yourself:
 
 > Note: I manually compile vim as I need Python3 support baked in, which Homebrew's version no longer does (it used to, but not any more). Python3 support means my Python linting tools will work as expected.
 
+So let's start at the beginning. To manually compile Vim you would think to do something like the following...
+
 ```bash
 git clone https://github.com/vim/vim.git
 
@@ -654,17 +656,21 @@ make && make install
 
 The above code will copy the compiled vim binary into `/usr/local/bin` so `which vim` will show `/usr/local/bin/vim`
 
-### UPDATE on install
+This works but I've found that it only works when the `python3` interpreter is the same version as what Vim is itself internally expecting to be available. 
 
-I believe that manual compiling will fail unless you use the same Python version that vim itself needs. This would explain why when I upgrade my Python version vim suddenly breaks. So when manually compiling I look at the `Python's install prefix...` output to see what version of Vim is needed and install using that version (which currently is 3.7.4 although my latest vim version is 3.7.7):
+What I mean by that is I recently upgraded my Python version to `3.7.7` and Vim suddenly broke. I tried the above compilation and it didn't work. I could see from the errors being printed that Vim was looking around my system for a Python version `3.7.4` which didn't exist (hence Python3 support wasn't compiled into vim).
+
+The solution was to firstly to tell Vim what version of Python3 to use, and secondly (and just as important) to ignore any previously cached aspects of a compilation (e.g. if I tell you to use Python `3.7.7` don't then go and try to be helpful and use a cached run where I was using `3.7.4` -- which really confused me for a long time!):
 
 ```bash
+make clean distclean
+
 ./configure --with-features=huge \
   --enable-multibyte \
   --enable-rubyinterp=yes \
   --enable-python3interp=yes \
-  # --with-python3-config-dir \
-  --with-python3-command=/usr/local/Cellar/python/3.7.4/Frameworks/Python.framework/Versions/3.7/bin/python3.7 \
+  --with-python3-command=/usr/local/Cellar/python/3.7.7/Frameworks/Python.framework/Versions/3.7/bin/python3.7 \
+  --with-python3-config-dir=/usr/local/Cellar/python/3.7.7/Frameworks/Python.framework/Versions/3.7/lib/python3.7/config-3.7m-darwin/ \
   --enable-perlinterp=yes \
   --enable-luainterp=yes \
   --enable-gui=gtk2 \
@@ -674,9 +680,15 @@ I believe that manual compiling will fail unless you use the same Python version
 make && make install
 ```
 
-Additionally you might get errors about missing header files so you might need something like `export CPLUS_INCLUDE_PATH=/usr/local/Cellar/python/3.7.4/Frameworks/Python.framework/Headers/`. Nothing is ever easy.
+The key flags are...
 
-> Note: This gets more confusing when you have packages such as [Black](https://github.com/psf/black) that needs to be installed to that global interpreter. 
+- `--enable-python3interp`: tell the compilation you want Python3 support
+- `--with-python3-command`: give it a path to a Python3 interpreter/binary (†)
+- `--with-python3-config-dir`: a configuration directory used by the version of Python3 you want to use.
+
+> † e.g. if I run that full path in my terminal shell it'll actually run the Python3 REPL so I know it's a valid path to provide.
+
+> Note: Things get even more confusing when you have packages such as [Black](https://github.com/psf/black) that needs to be installed to that particular Python3 interpreter. 
 
 Configure vim with [vim-plug](https://github.com/junegunn/vim-plug) plugin manager:
 
