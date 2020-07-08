@@ -12,27 +12,25 @@ tags:
 draft: false
 ---
 
-- [Introduction](#1)
-- [Bit](#2)
-- [Byte](#3)
-- [RAM](#4)
-- [Bit and RAM Visualisation](#5)
-- [Bits and ASCII](#5.1)
-- [Bits and Numbers](#6)
-- [IPs](#7)
-- [Base Numbers](#8)
-  - [Convert Base-10 into Base-2/8](#8.1)
-  - [Convert Base-10 into Base-16](#8.2)
-  - [Convert Any Base to Base-10](#8.3)
-- [CIDR](#9)
-- [Conclusion](#10)
+- [Introduction](#introduction)
+- [Bit](#bit)
+- [Byte](#byte)
+- [RAM](#ram)
+- [Bit and RAM Visualisation](#bit-and-ram-visualisation)
+- [Bits and ASCII](#bits-and-ascii)
+- [Bits and Numbers](#bits-and-numbers)
+- [IPs](#ips)
+- [Base Numbers](#base-numbers)
+  - [Convert Base-10 into Base-2/8](#convert-base-10-into-base-28)
+  - [Convert Base-10 into Base-16](#convert-base-10-into-base-16)
+  - [Convert Any Base to Base-10](#convert-any-base-to-base-10)
+- [CIDR](#cidr)
+- [Conclusion](#conclusion)
 
-<div id="1"></div>
 ## Introduction
 
 So this is a bit of a random journey through some different computer based subjects. Things that I felt I should try to better understand. Some of it will be very basic, but hopefully it'll be useful to those who are new to tech, and are interested in learning these things (or old dogs like me who should know better).
 
-<div id="2"></div>
 ## Bit
 
 The word _bit_ is short for _binary digit_.
@@ -43,14 +41,12 @@ Computers only understand the binary format (i.e. base-2)
 
 > We discuss 'base' numbers [below](#8)
 
-<div id="3"></div>
 ## Byte
 
 A grouping of eight _bits_ is called a _byte_.
 
 > Read the next section to realise why I mention this tidbit of information
 
-<div id="4"></div>
 ## RAM
 
 The word _ram_ is an acronym for _random access memory_.
@@ -67,7 +63,6 @@ Bytes are uniquely numbered to allow easy lookup of their contents.
 
 A byte's unique number is also referred to as its _address_.
 
-<div id="5"></div>
 ## Bit and RAM Visualisation
 
 <a href="../../images/bits-visualised.png">
@@ -110,14 +105,12 @@ Similarly, if we start with the bit value `1` and move to the left by `15` bits 
 
 For more bitwise operators, refer to these posts: https://wiki.python.org/moin/BitwiseOperators and https://medium.com/learning-the-go-programming-language/bit-hacking-with-go-e0acee258827
 
-<div id="5.1"></div>
-### Bits and ASCII
+## Bits and ASCII
 
 ASCII is a set of codes where each 'code point' represents a textual character such as a `1`, `a`, `z`, `!`, `?` etc.
 
 Each code point has an associated binary number. For example, `a` has the binary number `0110 0001` which if we add up the values associated with those specific bits we'll find it'll yield the code point number `97`. In ASCII the character `a` is code point `97`.
 
-<div id="6"></div>
 ## Bits and Numbers
 
 1 kilobyte (or 1KB) is 1,024 bytes.
@@ -130,7 +123,6 @@ The following explanation is taken from "Beginning C" by Apress Publishing...
 
 So if we add up `512+256+128+64+32+16+8+4+2+1` (notice this takes the existing 8 bit calculation from the above image and continues it for another two bits) we get `1023`.
 
-<div id="7"></div>
 ## IPs
 
 Here is an example IPv4 IP:
@@ -168,7 +160,6 @@ We can see the decimal represenation of an IPv4 IP is made up of four base-10 nu
 
 > If you're unsure of what base numbers are and how they work, then read on...
 
-<div id="8"></div>
 ## Base Numbers
 
 It's worth quickly covering what base numbers are as they help us understand the other different protocols we use on a regular basis, such as binary and things like IPs.
@@ -240,7 +231,6 @@ This is the number `75` and we're stating the base it represents is `10`.
 
 This is useful when you've converted a number like `75` into a different base (let's say base-8, which would be `113`) and you want to give that number in the proper context to someone else. You could write it as 113<sub>8</sub>.
 
-<div id="8.1"></div>
 ### Convert Base-10 into Base-2/8
 
 > Note: the steps are the same for converting to base-2 and base-8
@@ -260,7 +250,6 @@ In long form this looks like this:
 
 Meaning 75 evaluated in base-8 would be `113` (all the remainders concatenated together, 'bottom up')
 
-<div id="8.2"></div>
 ### Convert Base-10 into Base-16
 
 The algorithm for converting from base-10 into base-2 and base-8 works basically the same for converting into base-16. But there is one caveat whereby a remainder can be in the double digits, and apparently (for reasons I don't completely understand) we don't want that, and so the number system was designed to replace the six instances where this can occur (the remainders being: 10, 11, 12, 13, 14, 15) with a alpha-numeric equivalent:
@@ -291,7 +280,6 @@ We know that we need to replace `11` with the letter `B`.
 
 Meaning 411 evaluated in base-16 would be `19B`
 
-<div id="8.3"></div>
 ### Convert Any Base to Base-10
 
 What if you want to convert a base-8 number (let's say `113`, why not) into base-10? The algorithm is to multiple the individual numbers by their associated power of the base and then add the numbers together.
@@ -325,7 +313,6 @@ Let's try one more conversion between base-16 to base-10. The number is `1A4`:
 - 1 x 16<sup>2</sup> = 256
 - 4 + 160 + 256 = 420
 
-<div id="9"></div>
 ## CIDR
 
 A CIDR is a range of IP addresses. We can use our understanding of bits, bytes and octets to understand the format of a CIDR.
@@ -361,237 +348,129 @@ I've reproduced it below with a HTML table:
 > Note: you'll likely need to scroll to the right to see the start of the 32-bit
 
 <table border="1" id="table10" bordercolor="#000080" style="text-align: center; font-family: Verdana; font-size: 8pt; color: #000000">
-    <tbody>
+  <tbody>
+  <tr>
+      <th width="15%">IP</th>
+      <td colspan="8">10</td>
+      <td colspan="8">0</td>
+      <td colspan="8">0</td>
+      <td colspan="8">1</td>
+    </tr>
     <tr>
-        <th width="15%">IP</th>
+      <th>8 Bit Blocks</th>
+      <td colspan="8">8 bits [24-31]</td>
+      <td colspan="8">8 bits [16-23]</td>
+      <td colspan="8">8 bits [08-15]</td>
+      <td colspan="8">8 bits [00-07]</td>
+    </tr>
+    <tr>
+      <th>32 Bit #</th>
+      <td>31</td>
+      <td>30</td>
+      <td>29</td>
+      <td>28</td>
+      <td>27</td>
+      <td>26</td>
+      <td>25</td>
+      <td>24</td>
+      <td>23</td>
+      <td>22</td>
+      <td>21</td>
+      <td>20</td>
+      <td>19</td>
+      <td>18</td>
+      <td>17</td>
+      <td>16</td>
+      <td>15</td>
+      <td>14</td>
+      <td>13</td>
+      <td>12</td>
+      <td>11</td>
+      <td>10</td>
+      <td>09</td>
+      <td>08</td>
+      <td>07</td>
+      <td>06</td>
+      <td>05</td>
+      <td>04</td>
+      <td>03</td>
+      <td>02</td>
+      <td>01</td>
+      <td>00</td>
+    </tr>
+    <tr>
+      <th>Decimal</th>
+      <td>128</td>
+      <td>64</td>
+      <td>32</td>
+      <td>16</td>
+      <td>8</td>
+      <td>4</td>
+      <td>2</td>
+      <td>1</td>
+      <td>128</td>
+      <td>64</td>
+      <td>32</td>
+      <td>16</td>
+      <td>8</td>
+      <td>4</td>
+      <td>2</td>
+      <td>1</td>
+      <td>128</td>
+      <td>64</td>
+      <td>32</td>
+      <td>16</td>
+      <td>8</td>
+      <td>4</td>
+      <td>2</td>
+      <td>1</td>
+      <td>128</td>
+      <td>64</td>
+      <td>32</td>
+      <td>16</td>
+      <td>8</td>
+      <td>4</td>
+      <td>2</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>Binary</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td><font color="#DC143C">1</font></td>
+      <td>0</td>
+      <td><font color="#DC143C">1</font></td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td><font color="#DC143C">1</font></td>
+    </tr>
+  </tbody>
+</table>
 
-        <td colspan="8">10</td>
-
-        <td colspan="8">0</td>
-
-        <td colspan="8">0</td>
-
-        <td colspan="8">1</td>
-      </tr>
-      <tr>
-        <th>8 Bit Blocks</th>
-
-        <td colspan="8">8 bits [24-31]</td>
-
-        <td colspan="8">8 bits [16-23]</td>
-
-        <td colspan="8">8 bits [08-15]</td>
-
-        <td colspan="8">8 bits [00-07]</td>
-      </tr>
-
-      <tr>
-        <th>32 Bit #</th>
-
-        <td>31</td>
-
-        <td>30</td>
-
-        <td>29</td>
-
-        <td>28</td>
-
-        <td>27</td>
-
-        <td>26</td>
-
-        <td>25</td>
-
-        <td>24</td>
-
-        <td>23</td>
-
-        <td>22</td>
-
-        <td>21</td>
-
-        <td>20</td>
-
-        <td>19</td>
-
-        <td>18</td>
-
-        <td>17</td>
-
-        <td>16</td>
-
-        <td>15</td>
-
-        <td>14</td>
-
-        <td>13</td>
-
-        <td>12</td>
-
-        <td>11</td>
-
-        <td>10</td>
-
-        <td>09</td>
-
-        <td>08</td>
-
-        <td>07</td>
-
-        <td>06</td>
-
-        <td>05</td>
-
-        <td>04</td>
-
-        <td>03</td>
-
-        <td>02</td>
-
-        <td>01</td>
-
-        <td>00</td>
-      </tr>
-
-      <tr>
-        <th>Decimal</th>
-
-        <td>128</td>
-
-        <td>64</td>
-
-        <td>32</td>
-
-        <td>16</td>
-
-        <td>8</td>
-
-        <td>4</td>
-
-        <td>2</td>
-
-        <td>1</td>
-
-        <td>128</td>
-
-        <td>64</td>
-
-        <td>32</td>
-
-        <td>16</td>
-
-        <td>8</td>
-
-        <td>4</td>
-
-        <td>2</td>
-
-        <td>1</td>
-
-        <td>128</td>
-
-        <td>64</td>
-
-        <td>32</td>
-
-        <td>16</td>
-
-        <td>8</td>
-
-        <td>4</td>
-
-        <td>2</td>
-
-        <td>1</td>
-
-        <td>128</td>
-
-        <td>64</td>
-
-        <td>32</td>
-
-        <td>16</td>
-
-        <td>8</td>
-
-        <td>4</td>
-
-        <td>2</td>
-
-        <td>1</td>
-      </tr>
-
-      <tr>
-        <th>Binary</th>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td><font color="#DC143C">1</font></td>
-
-        <td>0</td>
-
-        <td><font color="#DC143C">1</font></td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td>0</td>
-
-        <td><font color="#DC143C">1</font></td>
-      </tr>
-    </tbody>
-  </table>
-
-<div id="10"></div>
 ## Conclusion
 
 There you go. A whirlwind ride through different basic computer tech topics. As always, if I've gotten anything wrong then just let me know on twitter.

@@ -21,7 +21,6 @@ draft: false
 - [MultiFactor Authentication](#7)
 - [Conclusion](#8)
 
-<div id="1"></div>
 ## Introduction
 
 I'm guessing that you have an app like [1Password](https://1password.com/) or [KeePassX](https://www.keepassx.org/) to manage your passwords and other login credentials and you're now looking for a cheaper alternative, and also one that doesn't rely on a GUI (although as you'll see that's still possible).
@@ -38,7 +37,6 @@ On the plus side, Pass is based on standardised unix technology. Specifically [G
 
 > Note: if you need a refresher on encryption and GPG, then I'll refer you to an [earlier blog post of mine](http://www.integralist.co.uk/posts/security-basics/) that covers the basics on this topic
 
-<div id="2"></div>
 ## Installation
 
 Installation on macOS is easy with [Homebrew](http://brew.sh/), and let's face it, if you're using macOS then Homebrew has become a de facto standard:
@@ -77,7 +75,6 @@ pub   1234A/AB123C4D
 
 Your GPG id is the bit after the forward slash: `AB123C4D`
 
-<div id="3"></div>
 ## Example Usage
 
 So here's the super quick run down on how to use Pass:
@@ -133,12 +130,10 @@ So `app2` is the file containing the password, and `app2.meta` is the file that 
 
 But to be honest, that last style seems a bit pointless as having a `.meta` file is still a manual process for copying out data (unless your metadata consists of one additional secret question password, which could be on the first line of that file for easy copying, and then all other data is contact numbers and things like that).
 
-<div id="4"></div>
 ## Exporting Data
 
 If you want to automate the migration of data out of a GUI based app such as 1Password, then the Pass community [has you covered](https://www.passwordstore.org/#migration).
 
-<div id="5"></div>
 ## Synchronisation
 
 I wanted to be able to backup my encrypted password store, in case my laptop melted one day. So the simplest solution was to move the directory `~/.password-store` into a cloud provider space for synchronisation and then symlinking the directory into my home directory:
@@ -151,7 +146,6 @@ Yes this means that your encrypted data is now only as secure as the passphrase 
 
 Security and Convenience, these two always dance around each other.
 
-<div id="6"></div>
 ## Mobile and GUI Applications
 
 I've no need for a desktop/laptop GUI, as that's what the terminal shell is for and I'm happy using that. But if you check the introduction text on the Pass website, you'll find details on some different community built GUIs that are available.
@@ -162,7 +156,6 @@ Instead the Android app expects you to configure your Pass store to be a git rep
 
 Now there's no reason why I couldn't do this beause I've already conceded that security aspect when I exposed the files by syncing them to a cloud provider (a little less visible than a public git repo for some people), but again, if you're confident in your key encryption and its passphrase then this might work fine for you.
 
-<div id="7"></div>
 ## MultiFactor Authentication
 
 The purpose of multifactor authentication (also known as 2FA: two factor authentication) is to add additional security to the process of accessing a service. 
@@ -207,7 +200,6 @@ That's all there is to it.
 
 > Note: see [this gist](https://gist.github.com/NapoleonWils0n/4005467) for more details on the Google 2FA setup process
 
-<div id="8"></div>
 ## Conclusion
 
 Compared to the pricing of something like 1Password:

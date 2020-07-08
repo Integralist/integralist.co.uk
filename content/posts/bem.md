@@ -178,7 +178,6 @@ And lastly, the word 'modifier' again is a simple but fully understood and famil
 
 But with this simplified terminology/structure it gives us all the tools we need to write maintainable and easily understandable code. BEM easily scales with the size of a project.
 
-<div id="5"></div>
 ## Conclusion
 
 I know I've said it before about SMACSS ("*wow, I think this is it!*") but even when I first started using SMACSS I still had niggling feelings about "*hmm, it's a little complicated getting this all in place, but it seems to work well*". With BEM I've not had any of those concerns. The only initial concern I had was with the look of it. I didn't like the double underscores or the double dashes. But now I actually like them!

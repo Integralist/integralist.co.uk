@@ -12,19 +12,18 @@ tags:
 draft: false
 ---
 
-- [Quick Summary](#1)
-- [Introduction](#2)
-- [Objects](#3)
-- [Class Analysis](#4)
-- [Dependencies](#5)
-- [Flexible Interfaces](#6)
-- [Duck Typing](#7)
-- [Inheritance](#8)
-- [Inheritance vs Composition](#9)
-- [Further good rules of development from Sandi Metz](#10)
-- [Summary](#11)
+- [Quick Summary](#quick-summary)
+- [Introduction](#introduction)
+- [Objects](#objects)
+- [Class Analysis](#class-analysis)
+- [Dependencies](#dependencies)
+- [Flexible Interfaces](#flexible-interfaces)
+- [Duck Typing](#duck-typing)
+- [Inheritance](#inheritance)
+- [Inheritance vs Composition](#inheritance-vs-compostion)
+- [Further good rules of development from Sandi Metz](#further-good-rules-of-development-from-sandi-metz)
+- [Summary](#summary)
 
-<div id="1"></div>
 ## Quick Summary
 
 Here is a short summary for those of you who prefer to see a quick bullet-point list of items covered... 
@@ -52,14 +51,12 @@ e.g. for each class write down a single line description and try to avoid the wo
     - Make sure sub classes inherit only what they need
     - Avoid calling `super` as it's a code smell
 
-<div id="2"></div>
 ## Introduction
 
 All of the following information has been distilled from Sandi Metz' [Practical Object-Oriented Design in Ruby](http://www.poodr.info/), and although the code in this post is based on the Ruby language, don't worry - the concepts are applicable for any object-oriented language.
 
 I would highly recommend you read [Practical Object-Oriented Design in Ruby](http://www.poodr.info/) as the author goes into far more code detail and background information (as well as covering other subjects such as test-driven development and the process of writing efficient unit tests) which will help you understand the concepts better than I could in this single post. But hopefully the following distilled version should be a sufficient starting point for your journey into writing more flexible and maintainable code.
 
-<div id="3"></div>
 ## Objects
 
 The best description I have ever read regarding good Object-Oriented design goes like this... 
@@ -70,7 +67,6 @@ This single line quote perfectly captures the intention behind good Object-Orien
 
 It seems our focus on objects has been wrong. We should be thinking primarily about the messages we want to send. This way we build up classes based on good clean interfaces and so our subsequent objects are clearer and more direct in their message handling.
 
-<div id="4"></div>
 ## Class Analysis
 
 We want our classes to be as decoupled as possible. The benefit of this is to allow changes to occur over time with little to no side-effects. If your classes have too many dependencies, which are likely too tightly coupled to the class, then any design/code changes in the future could potentially have a negative knock-on effect on the rest of your code.
@@ -133,7 +129,6 @@ class Gear
 end
 ```
 
-<div id="5"></div>
 ## Dependencies
 
 Dependencies can be many things, for example: external class references or arguments passed to methods.
@@ -267,7 +262,6 @@ And to quote another...
 
 > "Depend on things that change less often than you do"
 
-<div id="6"></div>
 ## Flexible Interfaces
 
 Object-Oriented applications are made up of objects(classes) but are defined by the messages that pass between these objects. 
@@ -326,7 +320,6 @@ Your interface defines your application and determines its future.
 
 Object-Oriented applications are defined by messages that pass between objects. This is handled via public interfaces. Ask for what you want and don't include any 'hows' as part of the request which would be telling the receiving object how to behave rather than it handling the how itself. 
 
-<div id="7"></div>
 ## Duck Typing
 
 Duck Typing is the process of making code more flexible and less tightly coupled by taking into consideration that if an object "sounds like a duck, and quacks like a duck" then it stands to reason the object must indeed be (or act like) a duck.
@@ -339,7 +332,6 @@ Instead, for each object create a generically named method (same name for each o
 
 Also, any where you see the use of `is_a?` or `responds_to?` then that is an indication of a potential code smell because the principle issue identical to the switch statement. 
 
-<div id="8"></div>
 ## Inheritance
 
 ### Abstract your base class
@@ -408,7 +400,6 @@ The composition pattern is effectively the same as using modules (where you copy
 
 But composition from a design perspective is more about the resulting 'whole', than the subsequent parts that make up the whole. 
 
-<div id="9"></div>
 ## Inheritance vs Composition
 
 Inheritance is the more appropriate solution if your design dictates that the objects have a well defined concrete class of functionality and that most of that base functionality is the same for all other objects. With inheritance you would write only small amounts of new code to extend the base functionality so the extending objects become more specialised.
@@ -421,7 +412,6 @@ If on the other hand your objects are all different and the design of the object
 > Use composition when the behaviour is more than the sum of it's parts  
 *Grady Booch, Object-Oriented Analysis and Design*
 
-<div id="10"></div>
 ## Further good rules of development from Sandi Metz
 
 1. Your class can be no longer than a hundred lines of code.
@@ -431,7 +421,6 @@ If on the other hand your objects are all different and the design of the object
 5. Your view can only know about one instance variable.
 6. Rules are meant to be broken if by breaking them you produce better code. [ ...where "better code" is validated by explaining why you want to break the rule to someone else. ]
 
-<div id="11"></div>
 ## Summary
 
 So just to quickly recap on some of the important points covered... 

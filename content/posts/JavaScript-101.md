@@ -10,33 +10,30 @@ tags:
 draft: false
 ---
 
-- [Introduction](#1)
-- [What is JavaScript](#2)
-- [Terminology](#3)
-- [Global Object](#4)
-- [Variables](#5)
-- [Types](#6)
-- [Objects](#7)
-- [Arrays](#8)
-- [Conditional Statements](#9)
-- [Coercion](#10)
-- [Functions](#11)
-- [Code Reuse (inheritance)](#12)
-- [Conclusion](#13)
+- [Introduction](#introduction)
+- [What is JavaScript](#what-is-javascript)
+- [Terminology](#terminology)
+- [Global Object](#global-objects)
+- [Variables](#variables)
+- [Types](#types)
+- [Objects](#objects)
+- [Arrays](#arrays)
+- [Conditional Statements](#conditional-statements)
+- [Coercion](#coercion)
+- [Functions](#functions)
+- [Code Reuse (inheritance)](#code-reuse-inheritance)
+- [Conclusion](#conclusion)
 
-<div id="1"></div>
 ## Introduction
 
 I've written this *very* brief guide to JavaScript just as an aid for people new to the language and who need a basic starting point to see what the syntax looks like and to get a feeling for some of its features.
 
 This article's main purpose is to give readers new to the language a glimpse of the JavaScript environment and to hopefully spur them onto further reading/learning. 
 
-<div id="2"></div>
 ## What is JavaScript
 
 JavaScript is a *scripting language* - this means it is not *compiled* (like traditional software languages like C or C++) but is executed 'line by line' via its host environment at run time (the host environment can be: Web Browser, Server, Command Line, Desktop).
 
-<div id="3"></div>
 ## Terminology
 
 <table>
@@ -90,7 +87,6 @@ Examples of JavaScript 'statements':
 * `while (condition) { /* code */ }`
 * `return`, `break`, `throw` are single command statements
 
-<div id="4"></div>
 ## Global Object
 
 When the JavaScript interpreter starts up it creates a Global object and any properties/methods added to the Global object are available to the entire JavaScript program.
@@ -136,7 +132,6 @@ app.do_something(); // => 'Private'
 
 Another pattern is to use AMD (Asynchronous Module Definition) which is a module based pattern (see: [Beginners guide to AMD and RequireJS](https://github.com/Integralist/Blog-Posts/blob/master/Beginners-guide-to-AMD-and-RequireJS.md))
 
-<div id="5"></div>
 ## Variables
 
 Variables hold values/data. 
@@ -195,7 +190,6 @@ Global properties aren't completely avoidable. A library will generally set one 
 
 Most companies name their global namespace after their company: `var mycompany_app = /* code */;`
 
-<div id="6"></div>
 ## Types
 
 JavaScript types are split into two groups: `primitive` types and `reference` types. 
@@ -219,7 +213,6 @@ new_arr.push('d');
 
 So be careful.
 
-<div id="7"></div>
 ## Objects
 
 To create a new `Object` use the syntax: `{}`
@@ -312,7 +305,6 @@ That previous sentence probably didn't make a lot of sense because we've not cov
 
 The way this trick works actually requires a deep level understanding of how JavaScript handles its conversion of data types: something I definitely wont go into here).
 
-<div id="8"></div>
 ## Arrays
 
 Arrays are like a simplified Object.
@@ -400,7 +392,6 @@ Below are some examples of each…
     </tr>
 </table>
 
-<div id="9"></div>
 ## Conditional Statements
 
 Conditional statements are 'control logic'. This means that depending on the result of a specified condition the corresponding branch of logic will be executed.
@@ -502,7 +493,6 @@ var x = 'abc';
 var y = (x === 'abc') ? 'def' : 'xyz'; // y will equal a String value of 'def'
 ```
 
-<div id="10"></div>
 ## Coercion
 
 One of the areas of most confusion in JavaScript is its ability to coerce data 'types'.
@@ -552,7 +542,6 @@ An empty String wil coerce to false.
 
 There is a lot to learn about JavaScript's coercion process, so for full details please see the following article: [http://webreflection.blogspot.co.uk/2010/10/javascript-coercion-demystified.html](http://webreflection.blogspot.co.uk/2010/10/javascript-coercion-demystified.html)
 
-<div id="11"></div>
 ## Functions
 
 Functions make it easier to create re-useable code. They are simply blocks of JavaScript code that can be called/executed multiple times.
@@ -625,7 +614,6 @@ obj2.speak.call(obj1); // => 'My name is Bob'
 
 …you can see how by using the `call` method we can make better use of existing functions and so we become more productive as well as have smaller and more efficient code.
 
-<div id="12"></div>
 ## Code Reuse (inheritance)
 
 The final subject I want to briefly cover is 'code reuse'. In most object-oriented programming languages the main principle of code reuse is done via *inheritance* (this is where you have a base object that all other objects inherit properties/methods from - much like how JavaScript already works! i.e. all objects inherit properties/methods from the top level `Object.prototype`).
@@ -748,7 +736,6 @@ extend(person, people); // copy properties from `people` to `person`
 person.speak(1); // => 'Hi, my name is Neil'
 ```
 
-<div id="13"></div>
 ## Conclusion
 
 OK, this has been a super brief/quick run through of different JavaScript concepts and language features.

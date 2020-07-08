@@ -18,17 +18,16 @@ tags:
 draft: false
 ---
 
-- [Introduction](#1)
-- [Directory Structure](#2)
-- [Configuration](#3)
-- [Building](#4)
-- [Running](#5)
-- [Verifying](#6)
-- [Revocation](#7)
-- [References](#8)
-- [Conclusion](#9)
+- [Introduction](#introduction)
+- [Directory Structure](#directory-structure)
+- [Configuration](#configuration)
+- [Building](#building)
+- [Running](#running)
+- [Verifying](#verifying)
+- [Revocation](#revocation)
+- [References](#references)
+- [Conclusion](#conclusion)
 
-<div id="1"></div>
 ## Introduction
 
 The purpose of this post is to demonstrate how to configure nginx to use client certificates for authenticated access to your back-end service (in this example: a Ruby/Sinatra application).
@@ -43,7 +42,6 @@ If you need a refresher on TLS/SSL then please read: [Security basics with GPG, 
 
 So let's get started...
 
-<div id="2"></div>
 ## Directory Structure
 
 First things first, we're going to need the following set of files and folders:
@@ -78,7 +76,6 @@ I say "most" because the `docker-nginx/certs` folder no longer exists in the rep
 
 The reason the `docker-nginx/certs` folder no longer exists is due to the last portion of this article where by we switch to another format for generating certificates and self-signing (specifically the "[Revocation/CRL Management](#7)" section).
 
-<div id="3"></div>
 ## Configuration
 
 As far as configuration is concerned, the main part comes down to the `nginx.conf` file:
@@ -175,7 +172,6 @@ openssl x509 -req -days 365 -in client.csr -CA ca.crt -CAkey ca.key -set_serial 
 
 That's it, that's all the different certificates set-up and ready to be used. Let's move onto building our Docker set-up and running some containers...
 
-<div id="4"></div>
 ## Building
 
 This section's nice and short because I provide the `Dockerfile` for both the Ruby and nginx applications (just make sure you `cd ../` back up into the project's root directory before executing the following commands):
@@ -185,7 +181,6 @@ docker build -t my-ruby-app ./docker-app
 docker build -t my-nginx ./docker-nginx
 ```
 
-<div id="5"></div>
 ## Running
 
 This section is also nice and short. First let's run the Ruby application:
@@ -211,7 +206,6 @@ OK so the nginx `docker run` command was a little bit more involved, but really 
 
 You'll also notice I'm linking the running Ruby container to the nginx container. This is important because it allows nginx to utilise the Ruby container as a back-end service.
 
-<div id="6"></div>
 ## Verifying
 
 Now the containers are built and running, we should verify that the services themselves are doing what they should be. But before we do that, it's worth me mentioning now that when I reference `<ip>` and `<nginx_port>` below, you'll need to swap these references for actual values. 
@@ -349,7 +343,6 @@ If you were to try and provide a different cert/key (one that wasn't signed by t
 
 Which is great. That is exactly what we want to see: denying access to our service unless properly authorised.
 
-<div id="7"></div>
 ## Revocation
 
 Now before we close, we should consider what happens when we want to prevent a user from accessing our content after we have issued them a certificate. In order to do this we need to provide a CRL (Certificate Revocation List) to nginx. The purpose of the CRL is to identify which certificates issued by the CA have since been revoked and should no longer allow access to the service.
@@ -860,14 +853,12 @@ Now when you try to access the `/app/cert` endpoint you'll find that you cannot:
 
 Job done.
 
-<div id="8"></div>
 ## References
 
 - [nginx http ssl module](http://nginx.org/en/docs/http/ngx_http_ssl_module.html)
 - [mad-hacking.net/ssl-tls](http://www.mad-hacking.net/documentation/linux/security/ssl-tls/creating-ca.xml)
 - [Openssl.conf Walkthru](https://www.phildev.net/ssl/opensslconf.html)
 
-<div id="9"></div>
 ## Conclusion
 
 There are many side effects and issues we've not covered, such as: how to handle multiple CRLs (generated from different CA's). This is a problem where by nginx's `ssl_crl` setting only allows you to point to a single CRL "file" (rather than a directory of CRLs). To work around this issue you would need to concatenate all your CRLs together into a single file (which is a bit of a pain).

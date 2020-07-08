@@ -15,7 +15,6 @@ draft: false
 - [Levels](#2)
 - [Quality](#3)
 
-<div id="1"></div>
 ## Logs?
 
 Applications should record information/events to help make debugging (and understanding) what a program is doing easier.
@@ -34,7 +33,6 @@ You may discover that some log information is better off not logged but recorded
 
 It can also, depending on the tools you use to analyse your log data (e.g. external log analysis system, such as [Papertrail](https://papertrailapp.com/)), be better to log data in a more structured format in order to provide better contextual information and to make filtering logs easier. For more information on structured logging, I recommend [this article](https://kartar.net/2015/12/structured-logging/) inspired from "The Art of Monitoring".
 
-<div id="2"></div>
 ## Levels
 
 When recording log data, there are various 'levels' you can utilise that indicate different [severities](https://en.wikipedia.org/wiki/Syslog#Severity_level).
@@ -63,7 +61,6 @@ Below are some common log levels along with a short description that describes w
 
 <p class="ll-debug">Fill my hard-drive with stack traces.</p>
 
-<div id="3"></div>
 ## Quality
 
 There are many "logging best practice" articles, below is a short bullet list pulled from [Splunk](http://dev.splunk.com/view/logging/SP-CAAAFCK).

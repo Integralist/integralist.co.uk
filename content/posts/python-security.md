@@ -24,7 +24,6 @@ draft: false
 - [Implementation](#8)
 - [Conclusion](#9)
 
-<div id="1"></div>
 ## Introduction
 
 I recently implemented a Python library which acts as an abstraction layer on top of an existing security algorithm (in this case [scrypt](https://www.tarsnap.com/scrypt.html)). 
@@ -39,7 +38,6 @@ The library provides three functions:
 2. `decrypt_digest`
 3. `validate_digest`
 
-<div id="2"></div>
 ## KDF or PBKDF2 ?
 
 Before we start looking at the three functions provided by this library/interface, let's very briefly talk about KDF and PBKDF2.
@@ -56,7 +54,6 @@ Originally I had two separate functions to distinguish them a bit more clearly b
 
 Because KDF accepts a key and is able to return the original message (given the same key) it's acting as a form of symmetrical encryption, whereas a PBKDF2 is more like a one-way hash function. Hence I named the function in this library `generate_digest` rather than something like `encrypt_message` which wouldn't have made sense when dealing with PBKDF2.
 
-<div id="3"></div>
 ## generate_digest
 
 This is a multi-arity function that will generate a digest using either a password-based key derivation function ([KDF](https://en.wikipedia.org/wiki/Key_derivation_function)) or a [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2) depending on the input given.
@@ -67,12 +64,10 @@ If a `salt` is provided, then a PBKDF2 will be used to generate a _deterministic
 
 > Note: salts should be a minimum of 128bits (~16 characters) in length. Also, when specifying a maxtime with `generate_digest`, ensure you include that same value when decrypting with `decrypt_digest` or validating via `validate_digest`.
 
-<div id="4"></div>
 ## decrypt_digest and validate_digest
 
 The `decrypt_digest` and `validate_digest` functions only apply to digests that have been generated using a password (i.e. KDF). Given the right password `decrypt_digest` will return the original message, and thus is considered more a form of symmetrical encryption than a straight one-way hash function. The `validate_digest` function will return a boolean true or false if the given password was able to decrypt the message.
 
-<div id="5"></div>
 ## Dependencies
 
 This abstraction library requires `scrypt`, which itself requires the following dependencies to be installed within the context of your service: `build-essential`, `libssl-dev`, and `python-dev`. If your service has a Dockerfile, adding these dependencies should be as simple as adding a line like the following: 
@@ -81,14 +76,12 @@ This abstraction library requires `scrypt`, which itself requires the following 
 RUN apt-get update && apt-get install -y build-essential libssl-dev python-dev
 ```
 
-<div id="6"></div>
 ## Usage
 
 I suggest looking at the test suite (see below) to get an idea of how you would use the functions in this library.
 
 > Note: for a glossary of security terms, refer to [this document](https://docs.google.com/document/d/1qs3jEIQvocdVhSxCSPLF1BoLnp91aLnuUIasvl-maYo/edit?usp=sharing).
 
-<div id="7"></div>
 ## Tests
 
 Before we look at the implementation of the library, let's take a moment to sift through its test suite.
@@ -175,7 +168,6 @@ def test_decrypt_digest():
     assert decrypt_digest(digest, password) == message
 ```
 
-<div id="8"></div>
 ## Implementation
 
 OK, time to see the library code itself.
@@ -235,7 +227,6 @@ def validate_digest(digest: bytes,
         return False
 ```
 
-<div id="9"></div>
 ## Conclusion
 
 Let me know what you think on twitter. Have fun.

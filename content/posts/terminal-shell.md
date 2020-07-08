@@ -12,17 +12,17 @@ tags:
 draft: false
 ---
 
-- [Kernel](#1)
-- [Program](#1.5)
-- [Executables](#5)
-- [Terminal](#2)
-- [Shell](#3)
-- [Shell Builtins](#4)
-- [Documentation](#6)
-- [Explicit Requests](#6.1)
-- [Locating programs](#7)
-- [Hashed Types](#8)
-- [List of all builtins vs executables](#9)
+- [Kernel](#kernal)
+- [Program](#program)
+- [Executables](#executables)
+- [Terminal](#terminal)
+- [Shell](#shell)
+- [Shell Builtins](#shell-builtins)
+- [Documentation](#documentation)
+- [Explicit Requests](#explicit-requests)
+- [Locating programs](#locating-programs)
+- [Hashed Types](#hashed-types)
+- [List of all builtins vs executables](#list-of-all-builtins-vs-executables)
 
 Before we get started, here's a diagram to give you an overview of what we will be covering in this post:
 
@@ -30,7 +30,6 @@ Before we get started, here's a diagram to give you an overview of what we will 
   <img src="../../images/terminals-kernals-shells.png">
 </a>
 
-<div id="1"></div>
 ## Kernel
 
 A computer has a kernel.
@@ -41,7 +40,6 @@ The kernel has no user interface.
 
 To interact with the kernel you use an intermediary "program".
 
-<div id="1.5"></div>
 ## Program
 
 A "[program](https://simple.wikipedia.org/wiki/Computer_program)" is a structured collection of instructions (machine code) that a computer can execute.
@@ -52,7 +50,6 @@ Your computer has many programs. One such example would be the 'terminal emulato
 
 Depending on the programming language used to create the program, either the program is _compiled_ down into binary so it can be understood by the computer, or it'll be _interpreted_ by another program that then generates machine code out of the human readable program.
 
-<div id="5"></div>
 ## Executables
 
 Executables (or 'executable binaries') are programs.
@@ -73,7 +70,6 @@ $ echo $PATH
 
 > Note: separate the output by `:` and you see there are six directories
 
-<div id="2"></div>
 ## Terminal
 
 A terminal is an input/output device.
@@ -90,7 +86,6 @@ Terminal emulators ironically (or confusingly) are part of the computer they wou
 
 If you don't want to use a GUI (graphical user interface) to interact with your computer, you can use a terminal emulator.
 
-<div id="3"></div>
 ## Shell
 
 A shell is a program which is accessed _via_ a terminal emulator.
@@ -109,7 +104,6 @@ or
 
 - execute a 'builtin' function
 
-<div id="4"></div>
 ## Shell Builtins
 
 A 'builtin' function is one that is provided by the shell.
@@ -122,7 +116,6 @@ This is why a command such as `cd` _must_ be part of the shell (i.e. a builtin),
 
 Other commands, like `echo`, might be (and are in this case) built into the shell for the sake of performance (it's quicker to call the builtin `echo` than it is to load and manage the external executable `echo`).
 
-<div id="6"></div>
 ## Documentation
 
 Most people are aware of '[manuals](/posts/understanding-man-pages/)'.
@@ -198,7 +191,6 @@ type: type [-afptP] name [name ...]
     Returns success if all of the NAMEs are found; fails if any are not found.
 ```
 
-<div id="6.1"></div>
 ## Explicit Requests
 
 When we used the `type` command earlier on the `exit` command it returned a single response (`exit is a shell builtin`).
@@ -240,7 +232,6 @@ $ command echo foo
 foo
 ```
 
-<div id="7"></div>
 ## Locating programs
 
 To locate a program you use the `which` executable.
@@ -267,7 +258,6 @@ The `which` command _isn't_ a builtin, and so it has no idea of where to look fo
 
 Because, by nature, builtins are built _into_ the shell itself.
 
-<div id="8"></div>
 ## Hashed Types
 
 If you open a fresh terminal screen and execute `type man` you would see the response `man is /usr/bin/man`.
@@ -354,7 +344,6 @@ declare -A BASH_CMDS=([which]="/usr/bin/which" [man]="/usr/bin/man" [clear]="/us
 
 > Note: it's not as clear to read as the `hash` output, but this is probably more useful for interacting with programatically.
 
-<div id="9"></div>
 ## List of all builtins vs executables
 
 For a list of builtins you can use (in the Bash shell at least):

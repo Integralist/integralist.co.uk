@@ -16,14 +16,12 @@ draft: false
 - [Vulnerabilities?](#4)
 - [Conclusion](#5)
 
-<div id="1"></div>
 ## Introduction
 
 Just a quick post to cover the key architecture I'm using currently. I'm very interested to know how others are doing things in the hope that I can improve the security of my setup.
 
 > Note: I'm not a security paranoia nut, so I'm not looking for the most concrete solution. But definitely want to be sure I'm not missing anything obvious either
 
-<div id="2"></div>
 ## Visual
 
 Here is a high-level view of what I have currently:
@@ -32,7 +30,6 @@ Here is a high-level view of what I have currently:
     <img src="../../images/key-architecture.png">
 </a>
 
-<div id="3"></div>
 ## Breakdown
 
 Let's start at the top...
@@ -67,7 +64,6 @@ If my laptop was lost, then I'd need to rely on the service provider's ability t
 
 I mention replacing the SSH key because I don't back it up. I feel this SSH key doesn't need to be a long lasting key (unlike my private GPG key which I intend to keep as safe as possible + the offline backup as a fallback).
 
-<div id="4"></div>
 ## Vulnerabilities?
 
 There are a few layers to this architecture and so I'm hoping this makes it harder for a compromise to be effective. 
@@ -82,7 +78,6 @@ If someone compromises the private git repository, they again can't do anything 
 
 > Note: when exporting a private key from GPG, it is by default encrypted with its passphrase (it's not the raw key)
 
-<div id="5"></div>
 ## Conclusion
 
 So what do you think? Is this good, bad or just plain terrible?

@@ -18,7 +18,6 @@ draft: false
 - [Linking your app to nginx](#5)
 - [Conclusion](#6)
 
-<div id="1"></div>
 ## Introduction
 
 I wanted to learn about how to use the popular proxy server [nginx](http://nginx.org) for handling "reverse proxy" duties on a Ruby project I was working on. So I decided the easiest thing to do in order to play around with nginx (as I work on a MacBook Pro laptop), would be to install and run it (and my back-end application) within [Docker](http://docker.com/) containers.
@@ -33,12 +32,10 @@ In this post we'll be primarily focusing on using nginx as a reverse proxy, alth
 
 Lastly, I'm going to take you on the same journey I took while setting this all up; so rather than work through a perfect scenario you'll get to see some of the errors I stumbled across along the way. If you'd prefer to just read the (small amount of) code then the next section is for you.
 
-<div id="2"></div>
 ## Just give me the code
 
 [github.com/integralist/docker-examples/nginx](https://github.com/Integralist/Docker-Examples/tree/master/Nginx)
 
-<div id="3"></div>
 ## Setting up nginx
 
 So to begin with, I went to [Docker Hub](https://hub.docker.com/) and found the [official nginx Docker image](https://registry.hub.docker.com/_/nginx/). It suggested the easiest thing to do to get started was to download and run the image; so knowing not a lot about nginx, that's exactly what I did:
@@ -254,7 +251,6 @@ Just so you know, the `index.html` file I created looks like this:
 <p>This is my home page</p>
 ```
 
-<div id="4"></div>
 ## Setting up the Ruby application
 
 The Ruby application we'll be creating is a super simple [Sinatra](http://sinatrarb.com/) web application with two routes defined:
@@ -304,7 +300,6 @@ Date: Sun, 02 Aug 2015 09:20:47 GMT
 Connection: Keep-Alive
 ```
 
-<div id="5"></div>
 ## Linking your app to nginx
 
 OK, so we're nearing the finish line now. We've got a working nginx container and a working Ruby container. We need to gel them together by making a request and having nginx proxy the request on to the Ruby container (if the request was aimed at that) or have nginx serve a static file if the request was relevant to that.
@@ -612,7 +607,6 @@ With this change made, we can now make the following requests successfully:
 - `curl http://$(boot2docker ip):<dynamic_port_number>/app/`
 - `curl http://$(boot2docker ip):<dynamic_port_number>/app/foo`
 
-<div id="6"></div>
 ## Conclusion
 
 This was a bit of a whirlwind run through to getting a simple nginx reverse proxy set-up with Docker. You can obviously swap out the Ruby backend with whatever technology stack is more appropriate (e.g. Node, Clojure, Scala... whatever).

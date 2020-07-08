@@ -13,39 +13,38 @@ tags:
 draft: false
 ---
 
-- [Introduction](#1)
-- [Languages](#2)
-- [Why refactor?](#3)
-- [When should refactor?](#4)
-- [Tests](#5)
-- [Refactoring Techniques](#6)
-	- [Rename Method](#7)
-	- [Introduce Explaining Variable](#8)
-	- [Inline Temp](#9)
-	- [Split Temp Variable](#10)
-	- [Replace Temp With Query](#11)
-	- [Replace Temp With Chain](#12)
-	- [Extract Method](#13)
-	- [Inline Method](#14)
-	- [Move Method](#15)
-	- [Replace Method With Method Object](#16)
-	- [Replace Loop With Collection Closure Method](#17)
-	- [Pull Up Method](#18)
-	- [Form Template Method](#19)
-	- [Extract Surrounding Method](#20)
-	- [Self Encapsulate Field](#21)
-	- [Introduce Named Parameter](#22)
-  - [Remove Redundancy](#23)
-	- [Dynamic Method Definition](#24)
-	- [Extract Class](#25)
-	- [Hide Delegate](#26)
-	- [Replace Array with Object](#27)
-	- [Replace Conditional with Polymorphism](#28)
-	- [Decompose Conditional](#29)
-	- [Introduce Null Object](#30)
-- [Conclusion](#31)
+- [Introduction](#introduction)
+- [Languages](#languages)
+- [Why refactor?](#why-refactor)
+- [When should you refactor?](#when-should-you-refactor)
+- [Tests](#tests)
+- [Refactoring Techniques](#refactoring-techniques)
+	- [Rename Method](#rename-method)
+	- [Introduce Explaining Variable](#introduce-explaining-variable)
+	- [Inline Temp](#inline-temp)
+	- [Split Temp Variable](#split-temp-variable)
+	- [Replace Temp With Query](#replace-temp-with-query)
+	- [Replace Temp With Chain](#replace-temp-with-chain)
+	- [Extract Method](#extract-method)
+	- [Inline Method](#inline-method)
+	- [Move Method](#move-method)
+	- [Replace Method With Method Object](#replace-method-with-method-object)
+	- [Replace Loop With Collection Closure Method](#replace-loop-with-collection-closure-method)
+	- [Pull Up Method](#pull-up-method)
+	- [Form Template Method](#form-template-method)
+	- [Extract Surrounding Method](#extract-surrounding-method)
+	- [Self Encapsulate Field](#self-encapsulate-field)
+	- [Introduce Named Parameter](#introduce-named-parameter)
+  - [Remove Redundancy](#remove-redundancy)
+	- [Dynamic Method Definition](#dynamic-method-definition)
+	- [Extract Class](#extract-class)
+	- [Hide Delegate](#hide-delegate)
+	- [Replace Array with Object](#replace-array-with-object)
+	- [Replace Conditional with Polymorphism](#replace-conditional-with-polymorphism)
+	- [Decompose Conditional](#decompose-conditional)
+	- [Introduce Null Object](#introduce-null-object)
+- [Conclusion](#conclusion)
 
-<div id="1"></div>
 ## Introduction
 
 Let's begin by considering: "What is Refactoring?"
@@ -62,16 +61,14 @@ In 2009 both Martin and Kent helped with a rewrite of the book that focused more
 
 Since reading the Ruby edition I wanted to have a short summarised version of some of the more commonly used refactoring techniques (mainly for my own reference). By that I mean the techniques described in the book that I find interesting and use a lot in my day to day programming life.
 
-<div id="2"></div>
 ## Languages
 
-These refactoring techniques aren't specific to the Ruby language. You can use them when working with JavaScript or PHP (or any other language for that matter). 
+These refactoring techniques aren't specific to the Ruby language (although my _implementation_ examples are). You can use them when working with JavaScript or PHP (or any other language for that matter). 
 
 Programming languages don't all offer identical APIs and so sometimes you might need to tweak the examples slightly to fit your environment. 
 
 Regardless, the idioms and syntax differences between languages become redundant when you just focus on the pattern(s) behind the proposed solution.
 
-<div id="3"></div>
 ## Why refactor?
 
 The purpose of refactoring is to improve the quality, clarity and maintainability of your code. Simple really.
@@ -82,7 +79,6 @@ Think about it, if you inherit a poorly designed code base that you've not seen 
 
 Otherwise you would be forced to retro fit your new code on top of a poorly designed foundation and that would be the start of a very unhappy relationship.
 
-<div id="4"></div>
 ## When should you refactor?
 
 You'll usually find the time you start refactoring the most is when you are fixing bugs or adding new features.
@@ -99,7 +95,6 @@ As the great [Uncle Bob](http://www.cleancoder.com/) once said:
 
 ...what this suggests is that refactoring is essential to your daily coding process.
 
-<div id="5"></div>
 ## Tests
 
 Before we get started, it's important to mention that you should have tests in place when you're refactoring. 
@@ -120,7 +115,6 @@ Code should be tested regularly while refactoring to ensure you don't break anyt
 
 So although I won't explicitly mention it below when discussing the different refactoring techniques, it is implied that on every change to your code you should really be running the relevant tests to ensure no broken code appears.
 
-<div id="6"></div>
 ## Refactoring Techniques
 
 There are many documented refactoring techniques and I do not attempt to cover them all, as this post would end up becoming a book in itself. So I've picked what I feel are the most common and useful refactoring techniques and I try my best to explain them in a short and concise way.
@@ -131,7 +125,6 @@ Final note: with some of the techniques I have provided a basic code example, bu
 
 So without further ado, let's begin...
 
-<div id="7"></div>
 ### Rename Method
 
 The single most effective and simple refactoring you can implement is to rename a property/attribute, method or object.
@@ -142,7 +135,6 @@ You'll find that renaming things is a fundamental part of other refactoring tech
 
 This technique relies on giving items a descriptive name to ensure the developer knows at a glance exactly what it does. The following technique [Introduce Explaining Variable](#introduce-explaining-variable) is effectively the same.
 
-<div id="8"></div>
 ### Introduce Explaining Variable
 
 So here is a technique specifically based around the premise of renaming. 
@@ -173,7 +165,6 @@ Also, don't worry about performance until you know you have a performance issue 
 
 So if you are considering using the [Introduce Explaining Variable](#introduce-explaining-variable) technique, first decide whether the temp would be more useful if it was available to other methods (that way you could use [Extract Method](#extract-method) instead and avoid defining a temp altogether).
 
-<div id="9"></div>
 ### Inline Temp
 
 Temp variables are a bit of a code smell as they make methods longer and can make the [Extract Method](#extract-method) more awkward (as you'd have to pass through more data to the extracted method).
@@ -209,7 +200,6 @@ Note: a temp by itself doesn't do any harm, and in some instances can actually m
 
 But most likely you'll end up using this technique to aid the [Extract Method](#extract-method) technique as less temp vars means less requirement to pass through additional parameters to the extracted method.
 
-<div id="10"></div>
 ### Split Temp Variable
 
 This technique aims to resolve the concern of violating the SRP (Single Responsibility Principle), although slightly tamer in the sense that SRP is aimed more at Classes/Objects and methods, not typically variable assignments.
@@ -232,7 +222,6 @@ area = height * width
 
 As you can see, the temp variable was handling more responsibility than it should be and so by creating two appropriately distinct temps we ensure greater code clarity.
 
-<div id="11"></div>
 ### Replace Temp With Query
 
 This technique has a very similar intent to [Inline Temp](#inline-temp) in that one of its primary focuses is to aid the [Extract Method](#extract-method).
@@ -292,7 +281,6 @@ Note: this technique can sometimes be made easier to implement once you've used 
 
 Remember this technique (as with other techniques) is an incremental step towards removing non-essential temps, so consider using [Inline Temp](#inline-temp) afterwards, thus removing the need for the temp altogether.
 
-<div id="12"></div>
 ### Replace Temp With Chain
 
 This is yet another technique designed to rid your code of temp variables. 
@@ -346,7 +334,6 @@ college = College.create_course
                  .add_student
 ```
 
-<div id="13"></div>
 ### Extract Method
 
 Here it is! In my opinion '*The*' most used and important refactoring technique.
@@ -405,14 +392,12 @@ end
 
 But be careful with handling local variables as you'll need to pass them through to the extracted method and that can be difficult if there are lots of temps in use. Sometimes to facility the Extract Method you'll need to first incorporate other techniques such as [Replace Temp With Query](#replace-temp-with-query) and [Inline Temp](#inline-temp).
 
-<div id="14"></div>
 ### Inline Method
 
 Sometimes you want the opposite of the [Extract Method](#extract-method) technique. Imagine a method exists whose content is already simple and clear, and whose identifier adds no extra benefit. In this instance we're just making an extra call for no real benefit.
 
 So to fix this problem we'll convert the method invocation into an inlined piece of code (unless of course the method is used in multiple places, in that case leave it where it is as having it in a separate method keeps our code DRY).
 
-<div id="15"></div>
 ### Move Method
 
 In a previous post about [Object-Oriented Design](http://www.integralist.co.uk/posts/object-oriented-design-ood/#class-analysis) I explained that you should query your classes/objects to ensure the methods they define are actually where they should be (another reason is 'feature envy', if a method is asking another class a lot of questions then it may be an indication the method is on the wrong object).
@@ -483,7 +468,6 @@ From the original class/object keep the original method in place while you test 
 
 Finally, remove the old method altogether and the tests should tell you if you missed a replacement somewhere.
 
-<div id="16"></div>
 ### Replace Method With Method Object
 
 You may run into a problem where you have a long method you want to use [Extract Method](#extract-method) on, but the number of temporary local variables are too great to allow you to utilise the [Extract Method](#extract-method) technique (because passing around that many variables would be just as messy as the long method itself).
@@ -554,7 +538,6 @@ end
 
 From here we're now in a better state to use both the [Extract Method](#extract-method) and [Replace Conditional with Polymorphism](/posts/even-more-refactoring-techniques/#replace-conditional-with-polymorphism) techniques to refactor the `Baz` class.
 
-<div id="17"></div>
 ### Replace Loop With Collection Closure Method
 
 If you write a loop that parses a collection and interacts with the individual elements within the collection then move that interaction out into a separate closure based method (meaning you replace the loop with an Enumerable method). 
@@ -582,7 +565,6 @@ JavaScript has a couple of accumulators: `Array#reduce` and `Array#reduceRight` 
 
 Note: in JavaScript you can implement a similar effect with clever use of closures.
 
-<div id="18"></div>
 ### Pull Up Method
 
 When you have duplicated code across two separate classes then the best refactoring technique to implement is to pull that duplicate code up into a super class so we DRY (Don't Repeat Yourself) out the code and allow it to be used in multiple places without duplication (meaning changes in future only have to happen in one place).
@@ -652,7 +634,6 @@ class FemalePerson < Person
 end
 ```
 
-<div id="19"></div>
 ### Form Template Method
 
 The technique is reliant on inheritance: a parent class and two sub classes of
@@ -758,7 +739,6 @@ puts bar.qux
 puts baz.qux
 ```
 
-<div id="20"></div>
 ### Extract Surrounding Method
 
 If you find you have different methods which contain almost identical code but with a slight variant in the middle, then pull up the duplicated code into a single method and pass a code block to the newly created method which it yields to in order to execute the unique behaviour...
@@ -791,7 +771,6 @@ doSomething(function(){
 
 ...although in the latest versions of Node (as of November 2013) Generators are implemented and would allow JavaScript code to `yield` similar to how Ruby works.
 
-<div id="21"></div>
 ### Self Encapsulate Field
 
 When inheriting properties from a parent class/object then it can be more flexible if the parent class only allows access to the properties from within a getter/setter.
@@ -818,7 +797,6 @@ def total
 end
 ```
 
-<div id="22"></div>
 ### Introduce Named Parameter
 
 When method arguments are unclear then convert them into named parameters so they become clearer (and easier to remember). 
@@ -851,7 +829,6 @@ turnOnTheTV({ channel: 101, volume: 10 });
 
 Note: ECMAScript 6.0 (the latest JavaScript specification - which is still being worked on as of Nov 2013) implements named parameters.
 
-<div id="23"></div>
 ### Remove Redundancy
 
 This isn't an explicit technique, more a grouping of techniques.
@@ -868,7 +845,6 @@ This principle applies with other refactoring techniques.
 
 Imagine an earlier refactoring included implementing a default parameter value for a method call. As your code evolves, if you discover you now only ever call the method *with* an argument then the default value becomes redundant and makes the code more complex than it needs to be by providing a default value. So just remove the redundant code.
 
-<div id="24"></div>
 ### Dynamic Method Definition
 
 Sometimes defining multiple methods can be wasteful when functionally they carry out similar steps. 
@@ -942,7 +918,6 @@ module Presenters
 end 
 ```
 
-<div id="25"></div>
 ### Extract Class
 
 This is a pretty standard technique which helps ensure your objects abide by the SRP (Single Responsibility Principle). 
@@ -951,7 +926,6 @@ If you find your classes are doing too much then simply create a new class and m
 
 Doing so you'll end up with two small, focused and clean classes which are easier to manage. 
 
-<div id="26"></div>
 ### Hide Delegate
 
 This technique focuses on the principle of object encapsulation. Specifically decoupling two or more objects by reducing the context the objects have of each other. 
@@ -989,7 +963,6 @@ The implementation details of `do_somthing` (in this case the delegation off to 
 
 If we changed `include Bar` for `include Baz`, or maybe we don't mixin a module at all and just write some code inside of `do_something`, it doesn't matter because the public interface is set as far as the user is concerned.
 
-<div id="27"></div>
 ### Replace Array with Object
 
 The motivation for this technique is to convert a simple data container which holds multiple data types into an object with clear and descriptive identifiers. 
@@ -1056,7 +1029,6 @@ obj.do_something
 
 ...here we convert the Array into an object and instead can more easily and safely reference the data we're interested in via recognisable property identifiers. This doesn't mean if the data source changes that we'll totally avoid all problems but it'll be clearer where the problem is arising.
 
-<div id="28"></div>
 ### Replace Conditional with Polymorphism
 
 This is one of the most useful refactoring techniques available to you, and there are two ways it can help: 
@@ -1142,7 +1114,6 @@ foo_qux.do_something
 
 Notice we have removed the need for a conditional and just sent the message to the relevant object to be handled. Much cleaner and easier to maintain and scale.
 
-<div id="29"></div>
 ### Decompose Conditional
 
 Not all conditional statements can be avoided through the use of polymorphism. In those cases you can simplify the conditional logic (and the subsequent statements) by [extracting them into external methods](/posts/refactoring-techniques/#extract-method). 
@@ -1169,7 +1140,6 @@ end
 
 ...much better.
 
-<div id="30"></div>
 ### Introduce Null Object
 
 The motivation behind this technique is to avoid using a conditional whose purpose is to check whether a property exists or not before using it.
@@ -1244,7 +1214,6 @@ Post.find_and_publish(1) # displays true
 
 This way we're using objects to handle our logic. Yes, we end up with more code (one extra Class) but ultimately this is more maintainable and understandable than lots of inline logic.
 
-<div id="31"></div>
 ## Conclusion
 
 There are still many different refactoring techniques that I've not included. But hopefully you've found this quick reference useful so far.

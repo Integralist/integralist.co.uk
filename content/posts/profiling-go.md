@@ -13,26 +13,24 @@ tags:
 draft: false
 ---
 
-- [Memory Management](#1)
-- [Types of Profiling](#2)
-- [Tools Matrix](#2.1)
-- [Analysis Steps](#3)
-- [Base Example](#4)
-- [ReadMemStats](#5)
-- [Pprof](#6)
-- [Trace](#7)
-- [Conclusion](#8)
+- [Memory Management](#memory-management)
+- [Types of Profiling](#types-of-profiling)
+- [Tools Matrix](#tools-matrix)
+- [Analysis Steps](#analysis-steps)
+- [Base Example](#base-example)
+- [ReadMemStats](#readmemstats)
+- [Pprof](#pprof)
+- [Trace](#trace)
+- [Conclusion](#conclusion)
 
 > Note: I highly recommend also reading [this](https://golang.org/doc/diagnostics.html) official diagnostics documentation.
 
-<div id="1"></div>
 ## Memory Management
 
 Before we dive into the techniques and tools available for profiling Go applications, we should first understand a little bit about its memory model as this can help us to understand what it is we’re seeing in relation to memory consumption.
 
 Go’s implementation is a _parallel_ [mark-and-sweep garbage collector](http://wiki.c2.com/?MarkAndSweep). In the _traditional_ mark-and-sweep model, the garbage collector would stop the program from running (i.e. “stop the world”) while it detects unreachable objects and again while it clears them (i.e. deallocates the memory). This is to prevent complications where the running program could end up moving references around during the identification/clean-up phase. This would also cause latency and other issues for users of the program while the GC ran. With Go the [GC is executed concurrently](https://blog.golang.org/go15gc), so users don’t notice pauses or delays even though the GC is running.
 
-<div id="2"></div>
 ## Types of Profiling
 
 There are a couple of approaches available to us for monitoring performance...
@@ -40,7 +38,6 @@ There are a couple of approaches available to us for monitoring performance...
 - **Timers**: useful for benchmarking, as well as comparing _before_ and _after_ fixes.
 - **Profilers**: useful for high-level verification.
 
-<div id="2.1"></div>
 ## Tools Matrix
 
 ||Pros|Cons|
@@ -49,7 +46,6 @@ There are a couple of approaches available to us for monitoring performance...
 |[pprof](#6)|- Details CPU and Memory.<br>- Remote analysis possible.<br>- Image generation.|- Requires code change.<br>- More complicated API.|
 |[trace](#7)|- Helps analyse data over time.<br>- Powerful debugging UI.<br>- Visualise problem area easily.|- Requires code change.<br>- UI is complex.<br>- Takes time to understand.|
 
-<div id="3"></div>
 ## Analysis Steps
 
 Regardless of the tool you use for analysis, a general rule of thumb is to:
@@ -66,7 +62,6 @@ Think about more performant algorithms or data structures.
 There may also be simpler solutions.  
 Take a pragmatic look at your code.
 
-<div id="4"></div>
 ## Base Example
 
 Let’s begin with a simple program written using Go 1.9.2…
@@ -98,7 +93,6 @@ Running this program can take ~0.2 seconds to execute.
 
 So this isn’t a slow program, we’re just using it as a base to measure memory consumption.
 
-<div id="5"></div>
 ## ReadMemStats
 
 The easiest way to look what our application is doing with regards to memory allocation is by utilising the `MemStats` from the `runtime` package.
@@ -158,7 +152,6 @@ The total allocations shows us the total amount of memory accumulated (this valu
 
 Take a look at the [MemStats docs](https://golang.org/pkg/runtime/#MemStats) for more properties (inc. `Mallocs` or `Frees`).
 
-<div id="6"></div>
 ## Pprof
 
 [Pprof](https://github.com/google/pprof) is a tool for visualization and analysis of profiling data.  
@@ -604,7 +597,6 @@ See [this post](https://rakyll.org/pprof-ui/) for more details.
 
 But in short you can get the updated pprof tool from GitHub and then execute it with the new flag `-http` (e.g. `-http=:8080`).
 
-<div id="7"></div>
 ## Trace
 
 [Trace](https://golang.org/cmd/trace/) is a tool for visualization and analysis of trace data.  
@@ -720,7 +712,6 @@ If you were to “View Options” and then tick “Flow events” you’ll see a
 
 So it’s good to be able to visually see the correlation between first of all the `main.main.func1` goroutine running and the memory allocation occurring at that time, but also being able to see the cause and effect (i.e. the _flow_) of the program (i.e. knowing _what_ exactly triggered the new goroutine to be spun up).
 
-<div id="8"></div>
 ## Conclusion
 
 That's our tour of various tools for profiling your Go code. Take a look at my earlier article on profiling Python for more of the same.

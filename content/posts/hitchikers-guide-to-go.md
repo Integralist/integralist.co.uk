@@ -9,54 +9,53 @@ tags:
 draft: false
 ---
 
-- [Introduction](#1)
-- [Private Repo Access](#2)
-- [Build and Compilation](#3)
-- [Build Time Dynamic Variables](#3.1)
-- [Dependency Information](#4)
-- [Dependency Management](#5)
-- [Documentation](#6)
-- [Testing](#7)
-- [Logging](#8)
-- [Godo](#9)
-- [Import Race Conditions](#10)
-- [New vs Make](#11)
-- [Custom Types](#12)
-- [Custom Errors](#12.5)
-- [Function Types](#13)
-- [Enumerator IOTA](#14)
-- [Struct: Var vs Type](#15)
-- [Embedded Structs](#16)
-- [Reference vs Value](#17)
-- [See all methods on `<Type>`](#18)
-- [Convert Struct into JSON](#19)
-- [Pretty Printing JSON String](#20)
-- [Convert Struct into YAML](#21)
-- [Sorting Structs](#22)
-- [Read Users Input](#23)
-- [HTTP Middleware](#24)
-- [Sessions](#25)
-- [HTTPS TLS Request](#26)
-- [HTTP GET Web Page](#27)
-- [Custom HTTP Request Methods](#28)
-- [Pointers](#29)
-- [Type Assertion](#30)
-- [Line Counting](#31)
-- [Reading File in Chunks](#32)
-- [Time](#33)
-- [Starting and Stopping things with Channels](#34)
-- [Channel Pipelines](#35)
-- [Templating](#36)
-- [Error handling](#37)
-- [Socket Programming](#38)
-- [Comparing Maps](#39)
-- [Zip File Contents](#40)
-- [Shell Commands](#41)
-- [New Instance Idiom](#42)
-- [JSON Connection Draining](#43)
-- [Writing your own Marshal/Unmarshal functions](#44)
+- [Introduction](#introduction)
+- [Private Repo Access](#private-repo-access)
+- [Build and Compilation](#build-and-compilation)
+- [Build Time Dynamic Variables](#build-time-dynamic-variables)
+- [Dependency Information](#dependency-information)
+- [Dependency Management](#dependency-management)
+- [Documentation](#documentation)
+- [Testing](#testing)
+- [Logging](#logging)
+- [Godo](#godo)
+- [Import Race Conditions](#import-race-conditions)
+- [New vs Make](#new-vs-make)
+- [Custom Types](#custom-types)
+- [Custom Errors](#custom-errors)
+- [Function Types](#function-types)
+- [Enumerator IOTA](#enumerator-iota)
+- [Struct: Var vs Type](#struct-var-vs-type)
+- [Embedded Structs](#embedded-structs)
+- [Reference vs Value](#reference-vs-value)
+- [See all methods on `<Type>`](#see-all-methods-on-type)
+- [Convert Struct into JSON](#convert-struct-into-json)
+- [Pretty Printing JSON String](#pretty-printing-json-string)
+- [Convert Struct into YAML](#convert-struct-into-yaml)
+- [Sorting Structs](#sorting-structs)
+- [Read Users Input](#read-users-input)
+- [HTTP Middleware](#http-middleware)
+- [Sessions](#sessions)
+- [HTTPS TLS Request](#https-tls-request)
+- [HTTP GET Web Page](#http-get-web-page)
+- [Custom HTTP Request Methods](#custom-http-request-methods)
+- [Pointers](#pointers)
+- [Type Assertion](#type-assertion)
+- [Line Counting](#line-counting)
+- [Reading File in Chunks](#reading-file-in-chunks)
+- [Time](#time)
+- [Starting and Stopping things with Channels](#starting-and-stopping-things-with-channels)
+- [Channel Pipelines](#channel-pipelines)
+- [Templating](#templating)
+- [Error handling](#error-handling)
+- [Socket Programming](#socket-programming)
+- [Comparing Maps](#comparing-maps)
+- [Zip File Contents](#zip-file-contents)
+- [Shell Commands](#shell-commands)
+- [New Instance Idiom](#new-instance-idiom)
+- [JSON Connection Draining](#json-connection-draining)
+- [Writing your own Marshal/Unmarshal functions](#writing-your-own-marshalunmarshal-functions)
 
-<div id="1"></div>
 ## Introduction
 
 A few years ago when I was learning the [Go programming language](https://golang.org/) I created a gist and updated it on a regular basis as a sort of cheat sheet. I stumbled across this gist recently and decided I'd try and port it over to some form of semi-coherent blog post.
@@ -73,7 +72,6 @@ Most of this Go code is old, so you may find some packages or information possib
 
 Take this as what it is, a sharing exercise. Take what you need and leave the rest. I wont be offended.
 
-<div id="2"></div>
 ## Private Repo Access
 
 `go get` uses HTTPS so to be able to pull dependencies from a private repository, you'll need to force it to use SSH so it can access your keys and authorise the connection:
@@ -94,7 +92,6 @@ So when you want a private dependency like: `git@github.com:foo/private.git`:
 go get github.com/foo/private
 ```
 
-<div id="3"></div>
 ## Build and Compilation
 
 As of Go 1.5 you can use:
@@ -156,7 +153,6 @@ Use the `-a` flag when running `go build`.
 
 In short, if you dont' use `go build -a -v .` then Go won't know if any packages are missing (you can find the gory details [here](https://medium.com/@felixge/why-you-should-use-go-build-a-or-gb-c469157d5c1b#.jf5orcwrj))
 
-<div id="3.1"></div>
 ## Build Time Dynamic Variables
 
 Imagine you have a global variable called `version` in your `main` package and you want to update that value at build time:
@@ -189,14 +185,12 @@ You would compile the above `version` variable using:
 go build -tags prod
 ```
 
-<div id="3.2"></div>
 ## Package Naming
 
 In Go, the name of the package is used to refer to the exported item: `fmt.Println`, `http.RegisterFunc` etc. Because the package name is so visible, the package name should describe what the exported items are. Meaning, we shouldn't have packages named `util` (as a common example of bad package naming) because `util.JSONMarshal` isn't as efficient and effective as `json.Marshal`.
 
 Another example of this that I found in my own code was `utils.CreateUser`. Later on during the project I had added `utils.CreateLegacyUser`. When I discovered what I had done I went back and made two separate packages `legacy` and `aws` so that I could have a consistent `CreateUser` function within both (e.g. `aws.CreateUser` and `legacy.CreateUser`).
 
-<div id="4"></div>
 ## Dependency Information
 
 To see a list of dependencies for a given Go package you can utilise the `go list` command:
@@ -317,7 +311,6 @@ compress/lzw -> bufio errors fmt io
 compress/zlib -> bufio compress/flate errors fmt hash hash/adler32 io
 ```
 
-<div id="5"></div>
 ## Dependency Management
 
 > Update (August 2017): there is an official tool now called [dep](https://github.com/golang/dep).
@@ -375,7 +368,6 @@ go test $(glide novendor)           # test only your package (not vendored packa
 
 > Note: to add a new dependency `glide get <pkg_name>`
 
-<div id="6"></div>
 ## Documentation
 
 `Godoc` is the original implementation for viewing documentation. Previous to `Godoc` there was `go doc`, but that was removed and then added *back* with totally different functionality.
@@ -482,7 +474,6 @@ You can also have the playground available if you need it in the browser, but it
 godoc -http ':6060' -play
 ```
 
-<div id="7"></div>
 ## Testing
 
 > Note: see also [examples here](https://gist.github.com/Integralist/cf76668bc46d75058ab5f566d96ce74a)
@@ -950,7 +941,6 @@ func err(response, expected string, t *testing.T) {
 }
 ```
 
-<div id="8"></div>
 ## Logging
 
 Using the standard Logger:
@@ -1008,7 +998,6 @@ func main() {
 }
 ```
 
-<div id="9"></div>
 ## Godo
 
 Godo is a build tool in a similar vein to rake or gulp. 
@@ -1040,7 +1029,6 @@ func main() {
 }
 ```
 
-<div id="10"></div>
 ## Import Race Conditions
 
 When you import a package within a Go script, only the public functions and variables are exposed for the caller to utilise. So if you need a package to execute some bootstrapping code at the point of it being _loaded_, then you'll need to stick it inside of an `init` function.
@@ -1062,7 +1050,6 @@ The reason this was an issue was because `main.go` was loading some environment 
 
 The solution was to rename all the `init` functions to `Init` and explicitly call them to bootstrap the package when needed (i.e. they didn't automatically bootstrap themselves and so we avoided that race condition).
 
-<div id="11"></div>
 ## New vs Make
 
 - `func new(Type) *Type`: allocate memory for custom-user type
@@ -1088,7 +1075,6 @@ func main() {
 }
 ```
 
-<div id="12"></div>
 ## Custom Types
 
 ```
@@ -1150,7 +1136,6 @@ func (f *foo) Bar() {
 }
 ```
 
-<div id="12.5"></div>
 ## Custom Errors
 
 ```
@@ -1216,7 +1201,6 @@ return errCustom{
 }
 ```
 
-<div id="13"></div>
 ## Function Types
 
 ```
@@ -1280,7 +1264,6 @@ func main() {
 }
 ```
 
-<div id="14"></div>
 ## Enumerator IOTA
 
 Within a constant declaration, the predeclared identifier `iota` represents successive untyped integer constants. It is reset to 0 whenever the reserved word `const` appears in the source.
@@ -1308,7 +1291,6 @@ func main() {
 }
 ```
 
-<div id="15"></div>
 ## Struct: Var vs Type
 
 A variable of Struct type doesn't need to be instantiated like a type struct:
@@ -1342,7 +1324,6 @@ func main() {
 }
 ```
 
-<div id="16"></div>
 ## Embedded Structs
 
 The first example demonstrates a 'named' field utilising an embedded Struct:
@@ -1541,7 +1522,6 @@ func main() {
 }
 ```
 
-<div id="17"></div>
 ## Reference vs Value
 
 Summary: limit passing by reference unless the size of the copied value is a problem (i.e. memory allocations).
@@ -1670,7 +1650,6 @@ func main() {
 }
 ```
 
-<div id="18"></div>
 ## See all methods on `<Type>`
 
 ```
@@ -1681,7 +1660,6 @@ for i := 0; i < errType.NumMethod(); i++ {
 }
 ```
 
-<div id="19"></div>
 ## Convert Struct into JSON
 
 ```
@@ -1709,7 +1687,6 @@ func main() {
 }
 ```
 
-<div id="20"></div>
 ## Pretty Printing JSON String
 
 ```
@@ -1740,7 +1717,6 @@ func main() {
 }
 ```
 
-<div id="21"></div>
 ## Convert Struct into YAML
 
 ```
@@ -1811,7 +1787,6 @@ func main() {
 }
 ```
 
-<div id="22"></div>
 ## Sorting Structs
 
 ```
@@ -1911,7 +1886,6 @@ Which results in:
 [{Jill 9} {Jack 10}]
 ```
 
-<div id="23"></div>
 ## Read Users Input
 
 ```
@@ -1921,7 +1895,6 @@ text, _ := reader.ReadString('\n')
 fmt.Println(text)
 ```
 
-<div id="24"></div>
 ## HTTP Middleware
 
 This code was modified from [@matryer](https://medium.com/@matryer/writing-middleware-in-golang-and-how-go-makes-it-so-much-fun-4375c1246e81):
@@ -2007,7 +1980,6 @@ server: middleware.go:38: after
 after
 ```
 
-<div id="25"></div>
 ## Sessions
 
 ```
@@ -2094,7 +2066,6 @@ func admin(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-<div id="26"></div>
 ## HTTPS TLS Request
 
 ```
@@ -2158,7 +2129,6 @@ req.Header.Set("Content-Type", "application/json")
 resp, err := client.Do(req)
 ```
 
-<div id="27"></div>
 ## HTTP GET Web Page
 
 ```
@@ -2301,7 +2271,6 @@ func main() {
 }
 ```
 
-<div id="28"></div>
 ## Custom HTTP Request Methods
 
 Go doesn't provide abstractions for all the various HTTP request types, so for things like `PUT` you have to implement it yourself. The following is an example that creates a secure (TLS/HTTPS) `PUT` abstraction...
@@ -2352,7 +2321,6 @@ func configureTLS() *http.Transport {
 }
 ```
 
-<div id="29"></div>
 ## Pointers
 
 ```
@@ -2479,7 +2447,6 @@ func main() {
 }
 ```
 
-<div id="30"></div>
 ## Type Assertion
 
 ```
@@ -2501,7 +2468,6 @@ if ae, ok := e.(*argError); ok {
 }
 ```
 
-<div id="31"></div>
 ## Line Counting
 
 Demonstrates how to use `bufio` package to scan a file and read it line by line, and then how to increment a map integer value using the shortcut `map[key]++`. Finally, demonstrates nested maps and ranging over them:
@@ -2554,7 +2520,6 @@ func countLines(f *os.File, filename string, counts map[string]map[string]int) {
 }
 ```
 
-<div id="32"></div>
 ## Reading File in Chunks
 
 ```
@@ -2629,7 +2594,6 @@ func main() {
 }
 ```
 
-<div id="33"></div>
 ## Time
 
 ```
@@ -2777,7 +2741,6 @@ Ticker ticked
 Done
 ```
 
-<div id="34"></div>
 ## Starting and Stopping things with Channels
 
 I would imagine that for most cases you'll want to use a `time.NewTimer` as seen in previous examples if you want to stop a goroutine that's processing a long running program. The following example is more for stopping a goroutine that's running code at a set interval (although using `time.NewTicker` would probably be more appropriate):
@@ -2880,7 +2843,6 @@ func main() {
 }
 ```
 
-<div id="35"></div>
 ## Channel Pipelines
 
 The principle of a pipeline, is to take data from one function and pass it into another function, that receiving function will process the received data and then that result is returned and subsequently passed onto another function... rinse and repeat for however long your pipeline needs to be.
@@ -2957,7 +2919,6 @@ func main() {
 }
 ```
 
-<div id="36"></div>
 ## Templating
 
 Here is a basic program that uses a Struct for its data source:
@@ -3056,7 +3017,6 @@ The output would be:
 <p>B: <b>Hello</b></p>
 ```
 
-<div id="37"></div>
 ## Error handling
 
 The following code outputs: 
@@ -3103,7 +3063,6 @@ func main() {
 }
 ```
 
-<div id="38"></div>
 ## Socket Programming
 
 There are two main types of sockets:
@@ -3220,7 +3179,6 @@ func main() {
 }
 ```
 
-<div id="39"></div>
 ## Comparing Maps
 
 This code demonstrates how to be careful about false positives!
@@ -3261,7 +3219,6 @@ func main() {
 }
 ```
 
-<div id="40"></div>
 ## Zip File Contents
 
 ```
@@ -3335,7 +3292,6 @@ func main() {
 }
 ```
 
-<div id="41"></div>
 ## Shell Commands
 
 Here is a simple example that writes the output of a command to a file:
@@ -3385,7 +3341,6 @@ if cmdOut, err = exec.Command(cmdName, cmdArgs...).Output(); err != nil {
 fmt.Println(string(cmdOut))
 ```
 
-<div id="42"></div>
 ## New Instance Idiom
 
 ```
@@ -3412,7 +3367,6 @@ func main() {
 }
 ```
 
-<div id="43"></div>
 ## JSON Connection Draining
 
 When using `json.NewDecoder`:
@@ -3447,7 +3401,6 @@ defer func() {
 
 > Note: [https://github.com/google/go-github/pull/317](https://github.com/google/go-github/pull/317)
 
-<div id="44"></div>
 ## Writing your own Marshal/Unmarshal functions
 
 ```

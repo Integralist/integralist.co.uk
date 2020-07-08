@@ -19,7 +19,6 @@ draft: false
 - [NGINX-Lite (not-really)](#6)
 - [Conclusion](#7)
 
-<div id="1"></div>
 ## Introduction
 
 I was struggling to find a good (or just simple) reverse proxy solution written in [Go](https://golang.org/), so I decided to take what I had learnt from a work colleague of mine and put together a simple example for others to build upon if they needed a quick reference point.
@@ -28,7 +27,6 @@ In this example I have an origin server written in Python (for no other reason t
 
 Each origin handler will print the http request headers, followed by sending a response body that correlates to the handler name (so for example, the `FooHandler` class will respond with `FOO!`, while the `BarHandler` class will response with `BAR!`).
 
-<div id="2"></div>
 ## Example Python Origin Code
 
 Here is our Python code using the [Tornado](http://www.tornadoweb.org/) web framework.
@@ -70,7 +68,6 @@ if __name__ == "__main__":
     tornado.ioloop.IOLoop.current().start()
 ```
 
-<div id="3"></div>
 ## Example Golang Proxy Code
 
 There are two versions of the code, a simple version and a more advanced version that aims to handle more specific use cases.
@@ -175,7 +172,6 @@ func main() {
 }
 ```
 
-<div id="4"></div>
 ## Demonstration
 
 In order to run this example you should follow these instructions:
@@ -203,7 +199,6 @@ X-Forwarded-Host: localhost:9001
 X-Origin-Host: localhost:9000
 ```
 
-<div id="5"></div>
 ## Explanation
 
 OK, so let's step through the `main` function of the advanced example code to see what's going on.
@@ -271,7 +266,6 @@ router.Handle("GET", path, func(w http.ResponseWriter, r *http.Request, p httpro
 logger.Fatal(http.ListenAndServe(":9001", router))
 ```
 
-<div id="5.1"></div>
 ## Handling Errors
 
 In order to handle errors the reverse proxy needs to construct a _new_ response object, which means if you wanted the error response you generate to have all the same response headers as were provided by the upstream service, then you'd have to programmatically add those to the new response object.
@@ -366,7 +360,6 @@ From there we use the `http.ResponseWriter` to create a _new_ response. In this 
 
 If you needed the original response object that came from the upstream then you'd need to make sure the error you returned from `ModifyResponse` was a custom error type so that you attach a field such as `OriginalResponse` to it and thus assign it the original `http.Response` that was available to you within `ModifyResponse`.
 
-<div id="6"></div>
 ## NGINX-Lite (not-really)
 
 Below is an example that demonstrates using [httpbin](https://httpbin.org/) as our origin.
@@ -494,7 +487,6 @@ func main() {
 }
 ```
 
-<div id="7"></div>
 ## Conclusion
 
 That's all there is to it.

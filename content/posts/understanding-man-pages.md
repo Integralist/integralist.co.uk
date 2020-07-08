@@ -14,7 +14,6 @@ draft: false
 - [Sub sections](#3)
 - [Accessing different sections](#4)
 
-<div id="1"></div>
 ## Introduction
 
 Your operating system provides manual pages that explain what specific commands do and where they can be located on your computer.
@@ -35,7 +34,6 @@ man chmod(2)
 
 So let's understand why that is and what it means.
 
-<div id="2"></div>
 ## Sections
 
 So the manual pages are separated into 'sections'. This is what the number within the parentheses represents (i.e. `chmod(2)` represents the `chmod` command from section 2 of the OS manual).
@@ -88,7 +86,6 @@ If you wanted to know 'at a glance' what commands were available, then you could
 │   ├── aio_read.2
 ```
 
-<div id="3"></div>
 ## Sub sections
 
 You'll notice that most page files within each manual section have an extension that matches the section they're contained within (e.g. `ab.1` for `ab` command inside manual 1 or `aio_read.2` for `aio_read` command inside manual 2).
@@ -111,7 +108,6 @@ By looking back at the [online macOS manual pages reference](https://developer.a
 - <u>Section n</u>: contains documentation about Tcl/Tk
 - <u>Section ntcl</u>: contains documentation about Tcl/Tk
 
-<div id="4"></div>
 ## Accessing different sections
 
 Typically when we type `man <some_command>`, the `man` command will search all the sections looking for the specified command.

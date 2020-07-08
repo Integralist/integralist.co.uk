@@ -13,27 +13,26 @@ tags:
 draft: false
 ---
 
-- [Introduction](#1)
-- [Information vs Data](#2)
-- [Frequency](#3)
-- [Watch out for misleading data](#4)
-- [Pie Chart](#5)
-- [Bar Chart](#6)
-  - [Stacked Bars](#6.1)
-  - [Split Bars](#6.2)
-- [Histograms](#7)
-  - [Differences?](#7.1)
-  - [Calculating dimensions](#7.2)
-  - [Frequency Density?](#7.3)
-- [Line Graphs](#8)
-- [Averages](#9)
-- [Which average to use?](#10)
-- [Ranges](#11)
-- [Percentiles](#12)
-- [Variance](#13)
-- [Conclusion](#14)
+- [Introduction](#introduction)
+- [Information vs Data](#information-vs-data)
+- [Frequency](#frequency)
+- [Watch out for misleading data](#watch-out-for-misleading-data)
+- [Pie Chart](#pie-chart)
+- [Bar Chart](#bar-chart)
+  - [Stacked Bars](#stacked-bars)
+  - [Split Bars](#split-bars)
+- [Histograms](#histogram)
+  - [Differences?](#differences)
+  - [Calculating dimensions](#calculating-dimensions)
+  - [Frequency Density?](#frequency-density)
+- [Line Graphs](#line-graphs)
+- [Averages](#averages)
+- [Which average to use?](#which-average-to-use)
+- [Ranges](#ranges)
+- [Percentiles](#percentiles)
+- [Variance](#variance)
+- [Conclusion](#conclusion)
 
-<div id="1"></div>
 ## Introduction
 
 I started learning about statistics because I found myself doing a lot of operational monitoring (i.e. making systems more observable, instrumenting individual services, and monitoring that data via custom built dashboards).
@@ -52,7 +51,6 @@ So let's begin by defining what 'statistics' means...
 
 OK, that seems reasonable enough. Statistics is an 'umbrella' term that encapsulates the complete pipeline of how data is acquired, analysed and visualised. So what _is_ data and what does it look like? Let's move onto the next section where we can begin to clarify and understand it a bit more...
 
-<div id="2"></div>
 ## Information vs Data
 
 If you're like me, you may well have confused the words "data" and "information" as being the same thing. But there are actually important differences that should be understood:
@@ -77,7 +75,6 @@ Age
 
 > Note: data is either "numerical" (dealing with numbers), "quantitative" (describing quantities) or "categorical" (data is split into categories that describe qualities or characteristics - also referred to as "qualitative").
 
-<div id="3"></div>
 ## Frequency
 
 When dealing with statistical data, the first thing you typically learn about is data "frequency". Let's start with a definition...
@@ -108,7 +105,6 @@ The data/information can be visualised in many ways depending on the graph type 
 
 We'll take a look at some different graph types to see how they work, but first let's take a moment to consider how data can trick us...
 
-<div id="4"></div>
 ## Watch out for misleading data
 
 The following example is very contrived and silly, but it does illustrate the point about being aware of how data can be manipulated to represent what you want it to.
@@ -129,7 +125,6 @@ This is because the first graph is zoomed in from the starting point `2.0` where
 >
 > So the data isn't lying, it's just the view the user has of the data isn't accurately portrayed due to purposeful data ommission (this is a trick newspapers and academic papers use to represent a point of view they wish to push).
 
-<div id="5"></div>
 ## Pie Chart
 
 A graph, such as a pie chart, will split your data up into distinct 'groups'. These groups are represented as relative percentages of the total group, meaning the total area adds up to 100%. 
@@ -182,7 +177,6 @@ So you have to be careful with data to make sure it's as inclusive as possible o
 
 Earlier we mentioned a problem of data groups percentages being too close together resulting in a graph that was hard to distinguish subtle differences. In those scenarios you might find a more suitable option would be the bar chart...
 
-<div id="6"></div>
 ## Bar Chart
 
 If you wanted to see the 'programming language' data in a format that is more suitable for subtle differences, then one option would be a bar chart. 
@@ -206,7 +200,6 @@ One thing to notice about a bar chart is that the _width_ of the bar is the same
 
 This is because the length represents the frequency of the group's data. This can trip people up, as they might mistake a bar chart for a 'histogram', where the width of the bar _does_ change in relation to the frequency (don't worry, we'll come back to histograms later).
 
-<div id="6.1"></div>
 ### Stacked Bars
 
 Now imagine you wanted to visualise data that represented how much people liked or disliked specific programming languages (this is different to the previous data which was the general usage of programming languages). 
@@ -232,19 +225,16 @@ You can see for the groups "Go" and "Bash" we've had a consistent number of repo
 
 Whereas the "Python" group has less data frequency compared to the other groups (only 250 in total, where the other groups were 300), and so although it correctly represents that data as a percentage (60% were "like" vs 40% "dislike") it's still not as representative as a whole in comparison to the other data groups we have. Ideally each group would have consistent frequencies.
 
-<div id="6.2"></div>
 ### Split Bars
 
 Another type of bar chart is called 'split-category' and is useful for _comparing frequencies_ (unlike the stacked/segmented bar chart which compares frequency but represents them visually in percentages).
 
 <canvas id="splitBar"></canvas>
 
-<div id="7"></div>
 ## Histograms
 
 I've yet to find a charting library that let's me create an actual histogram in the strict definition (most libraries seem to call standard bar charts 'histograms'?), which makes it hard for me to visually demonstrate them, unless I hand draw a chart (which is what I've had to resort to below). 
 
-<div id="7.1"></div>
 ### Differences?
 
 Based on what I've read, there are some key differences between histograms and standard bar charts. These are:
@@ -256,7 +246,6 @@ The reason for histogram bar sizes being proportional (unlike a traditional bar 
 
 > † remember: with a traditional bar chart, each bar width is the same and only the bar 'length' is relevant (as it's determined by the frequency).
 
-<div id="7.2"></div>
 ### Calculating dimensions
 
 When constructing a histogram, you'll place the groups on the x axis and make the width of each bar the same as the range it covers; while placing the frequencies for each group on the y axis and make the length of the bar match the frequency value for that group.
@@ -318,7 +307,6 @@ Example: the group `20-22` had a range of 2 and a frequency density of 5.
 
 If we were to look at the graph by itself, which only shows the proportional area relative to the other groups (i.e. it only shows the frequency density and the range) we could reverse engineer/calculate the actual _frequency value_ with the abstract calculation above (`2 * 5 = 10`).
 
-<div id="7.3"></div>
 ### Frequency Density?
 
 As alluded to earlier, the height of each bar indicates the frequency density, which itself is best explained via an analogy: 
@@ -331,7 +319,6 @@ If we wanted to calculate the _total frequency_ for the entire dataset then we w
 
 > Note: this is as far as I got with histograms, as I felt I had learnt enough to be dangerous in a conversation. There may well be nuances, pros/cons and other aspects to histograms I've not fully understood. I'd welcome anyone who knows more to educate me on this :-)
 
-<div id="8"></div>
 ## Line Graphs
 
 We've already seen a couple of example line graphs at the start of this post. To create a line graph you require two axis (x and y) and the data to be mapped onto different points across these axis' which allow us to plot a line between the dots we mark.
@@ -375,7 +362,6 @@ We can now plot these onto a line graph by placing the cumulative frequencies on
 
 > In the above example graph, if we asked "how many people were playing for up to 21 hours?" the answer would be approximately 11 people.
 
-<div id="9"></div>
 ## Averages
 
 When looking at data and graphs, people are generally interested in 'averages' because they help us better gauge what/where the majority is. But there are actually three different types of 'average', and each one has a different purpose:
@@ -530,7 +516,6 @@ Frequency: 3, 7, 7
 
 The above dataset actually contains multiple modes (i.e. multiple modes with the same frequency which happens to be the highest in the set). The modes being `2` and `3` (whose frequency is `7`).
 
-<div id="10"></div>
 ## Which average to use?
 
 Imagine we have staff, managers and a CEO and they're all determining how pay rises should be calculated when based on the average salary. Below is a suggestion as to which average each one of them might suggest using and why:
@@ -546,7 +531,6 @@ Imagine we have staff, managers and a CEO and they're all determining how pay ri
 
 > Note: the median is the most 'fair' when calculating a pay rise in this example scenario.
 
-<div id="11"></div>
 ## Ranges
 
 Averages help identify the center of our data (and via various perspectives as we've already seen: mean, median and mode). But this isn't useful when it comes to understanding how the data itself varies.
@@ -652,7 +636,6 @@ So this would be `3 x 2.75`, which gives us the result of `8.25` that we then ro
 
 Meaning the interquartile range can be found in-between the lower/upper quartile positions, thus giving us the central 50% of the data to focus on.
 
-<div id="12"></div>
 ## Percentiles
 
 When dealing with quartiles (see above), you're splitting your data into quarters. When dealing with percentiles, you're splitting your data into percentages. Each percentage is a percentile. For example, the 20th percentile is the value that is found 20% into your data.
@@ -681,7 +664,6 @@ For example, if you have 125 numbers in a dataset and you wished to see the 10th
 
 So the 10th percentile would be the value at position 13 in your dataset.
 
-<div id="13"></div>
 ## Variance
 
 Measuring the 'spread' of data isn't always as useful as being able to measure the consistency of that spread, in that if our data represented player scores in a game, then we might want to identify how consistent (or reliable) a player was. Did they perform better and more reliably than another player?
@@ -758,7 +740,6 @@ Some other real-world examples would be a company that manufactures machine part
 
 Standard deviation is also measured in the same units as your data. So if your dataset values are, for example, centimeters and the standard deviation is `1`, this means that the values are typically 1 centimeter away from the mean.
 
-<div id="14"></div>
 ## Conclusion
 
 So there we have it, a run through of some statistic basics. We've covered a few different graph types (pie, bar, histograms, line) and explained what averages are and how they're calculated in different scenarios. We've also looked at how data is distributed and how you might measure that to identify whether some results are more consistent than others.

@@ -11,21 +11,20 @@ tags:
 draft: false
 ---
 
-- [Introduction](#1)
-- [`git merge`](#2)
-- [`git merge --no-ff --edit`](#3)
-  - [`git reset`](#3.1)
-  - [Force the merge commit](#3.2)
-  - [`git branch --contains`](#3.3)
-  - [Losing useful history](#3.4)
-- [`git merge --squash`](#4)
-- [`git rebase`](#5)
-- [`git rebase --interactive`](#6)
-- [`git rebase --onto`](#7)
-- [`git format-patch`](#8)
-- [Conclusion](#9)
+- [Introduction](#introduction)
+- [`git merge`](#git-merge)
+- [`git merge --no-ff --edit`](#git-merge---no-ff---edit)
+  - [`git reset`](#git-reset)
+  - [Force the merge commit](#force-the-merge-commit)
+  - [`git branch --contains`](#git-branch---contains)
+  - [Losing useful history](#losing-useful-history)
+- [`git merge --squash`](#git-merge---squash)
+- [`git rebase`](#git-rebase)
+- [`git rebase --interactive`](#git-rebase---interactive)
+- [`git rebase --onto`](#git-rebase---onto)
+- [`git format-patch`](#git-format-patch)
+- [Conclusion](#conclusion)
 
-<div id="1"></div>
 ## Introduction
 
 Imagine I have a `master` branch with one commit:
@@ -62,7 +61,6 @@ Just to quickly clarify, you'll notice throughout this post that I use the comma
 log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
 ```
 
-<div id="2"></div>
 ## `git merge`
 
 So `git merge` is the standard workhorse for merging branches in git. It'll try to resolve the differences between the two branches the best way it can.
@@ -86,7 +84,6 @@ We can see all the commits from `feat/foo` were replayed onto `master` successfu
 
 > Note: you might not realise that there is a short cut to checking out a branch and then merging another branch into it: `git merge <source> <destination>`, which is the same as doing `git checkout <destination>` followed by `git merge <source>`
 
-<div id="3"></div>
 ## `git merge --no-ff --edit`
 
 Let's say you wanted a "merge commit" to happen (i.e. merge commits typically only occur if there has been a divergence between the branches which means git has to resolve the problem for you), then you can force git to use a "merge commit" even when there is no need for one (as is the case for me here).
@@ -99,7 +96,6 @@ git reset --hard 75eb1cb
 
 > Note: `75eb1cb` being my first commit in `master`
 
-<div id="3.1"></div>
 ### `git reset`
 
 It's important to understand how `git reset` works, as it has three flags and if not used correctly could have bad side effects. The flags are:
@@ -118,7 +114,6 @@ When using `--hard` though, any of the changes that came after the commit being 
 
 So be careful whenever using the `--hard` flag.
 
-<div id="3.2"></div>
 ### Force the merge commit
 
 Now we're back to where we were originally (a separate `feat/foo` branch and a `master` branch with a single commit), we can look at how to force a merge commit.
@@ -149,7 +144,6 @@ We can see all the commits from `feat/foo` were replayed onto `master` successfu
 > a field like `Merge: 75eb1cb 8e7965e 9e5626c 41d4115`  
 > Which helps (at a glance) to know more about what commits are inside the merge commit
 
-<div id="3.3"></div>
 ### `git branch --contains`
 
 The following command can be useful in locating where a commit has come from:
@@ -162,7 +156,6 @@ In our case this will indicate that the commit we specified is part of our `mast
 
 > † until you delete the branch (e.g. `git branch -D feat/foo`)
 
-<div id="3.4"></div>
 ### Losing useful history
 
 It's also worth mentioning, that even after the `feat/foo` branch has been deleted, git will still show (via `git log --graph`) those commits from our `feat/foo` branch as coming from an alternative path/branch history.
@@ -191,7 +184,6 @@ commit ff7e7dabf745ac4d73b52644c3d29ea05d5c318f
 commit 36f1c5bc5949f01117c1d57e6ab12f05c2a202f5
 ```
 
-<div id="4"></div>
 ## `git merge --squash`
 
 So what if you don't want all those commits in your `master`? You could instead "squash" all the commits down into a single commit using the `--squash` command:
@@ -208,7 +200,6 @@ These collection of changes _now_ appear as a single change to the file. They ar
 git commit -m "your own custom commit message"
 ```
 
-<div id="5"></div>
 ## `git rebase`
 
 The `git rebase` feature in essence is solving the same problem as `git merge` (they both integrate a set of changes), but they do them in fundamentally different ways.
@@ -319,7 +310,6 @@ This shows that the changes from `feat/foo` where replayed directly on top of `7
 
 Notice the `feat/foo` commits are on top of the `A to 9` commit and that might not necessarily be what we want to have happen.
 
-<div id="6"></div>
 ## `git rebase --interactive`
 
 The `--interactive` flag is useful for letting us rewrite our git history. We're able to move the order of our commits as well as squash commits down and change their recorded message.
@@ -422,7 +412,6 @@ Now if we run `git lg -p` we'll see the new squashed commit does indeed contain 
 | +- C: 3
 ```
 
-<div id="7"></div>
 ## `git rebase --onto`
 
 Imagine we've merged our `feat/foo` branch at this point into `master` using:
@@ -460,7 +449,6 @@ For more information see the documentation for `git rebase`:
 - `man git-rebase`
 - [git-scm.com/docs/git-rebase](https://git-scm.com/docs/git-rebase)
 
-<div id="8"></div>
 ## `git format-patch`
 
 At this point you're likely using a service such as [GitHub](https://github.com/) or [GitLab](https://about.gitlab.com/) for creating projects and opening pull requests, as apposed to Git's own native pull request feature which is substantially less feature rich than these commercial abstraction layers.
@@ -541,7 +529,6 @@ The other difference is that `git am` only accepts patch files, whereas `git app
 curl https://gist.githubusercontent.com/anonymous/x/raw/x/test.diff | git apply
 ```
 
-<div id="9"></div>
 ## Conclusion
 
 There are so many aspects to merging commits and dealing with git's commit history, that it's difficult to cover everything without people having to mentally store too much information that most of the time you wont utilise.

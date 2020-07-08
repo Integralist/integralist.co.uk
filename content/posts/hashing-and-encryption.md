@@ -24,30 +24,29 @@ I've [written previously](/posts/security-basics/) (and in-depth) on the subject
 
 Before we get started, let's see what we'll be covering:
 
-* [Terminology](#1)
-* [Hashing vs Encryption](#2)
-* [MAC vs HMAC](#2.1)
-* [Base64 Encoding](#3)
-* [Random Password Generation](#4)
-* [Hash Functions](#5)
+* [Terminology](#terminology)
+* [Hashing vs Encryption](#hashing-vs-encryption)
+* [MAC vs HMAC](#mac-vs-hmac)
+* [Base64 Encoding](#base64-encoding)
+* [Random Password Generation](#random-password-generation)
+* [Hash Functions](#hash-functions)
   * shasum
   * hashlib
   * cksum
-* [OpenSSH](#6)
-* [OpenSSL](#7)
+* [OpenSSH](#openssh)
+* [OpenSSL](#openssl)
   * Generating a key pair
   * Encrypting and Decrypting
   * Randomness
-* [GPG](#8)
+* [GPG](#gpg)
   * Generating a key pair
   * Automate
   * Asymmetrical Encryption and Decryption
   * Symmetrical Encryption and Decryption
   * Signing keys
   * Signing encrypted files
-* [Keybase](#9)
+* [Keybase](#keybase)
 
-<div id="1"></div>
 ## Terminology
 
 OK, so using the correct terminology is essential and helps us to be explicit and clear with what we really mean.
@@ -72,7 +71,6 @@ OK, so using the correct terminology is essential and helps us to be explicit an
 
 > For a longer "Security Glossary", please see [this Google doc](https://docs.google.com/document/d/1qs3jEIQvocdVhSxCSPLF1BoLnp91aLnuUIasvl-maYo/edit?usp=sharing) I created.
 
-<div id="2"></div>
 ## Hashing vs Encryption
 
 In essence:
@@ -94,7 +92,6 @@ In order to verify this 'signature' the recipient of the encrypted message would
 
 If the digest you generated is the same as the decrypted digest, then we can be sure the message was delivered unmodified whilst in transit (e.g. 'man-in-the-middle').
 
-<div id="3"></div>
 ## Base64 Encoding
 
 Base64 is a way of taking binary data and transforming it into a text-based format. It is commonly used when there is a need to transfer the binary data over a medium that only supports textual data (e.g. you can Base64 encode images so they can be inlined into HTML).
@@ -104,7 +101,6 @@ How it works: Base64 encoding takes three bytes, each consisting of eight bits, 
 > Note: Base64 encoded strings are NOT secure.  
 > Remember, it _encodes_ data, not _encrypt_ it.
 
-<div id="2.1"></div>
 ## MAC vs HMAC
 
 A 'MAC' (Message Authentication Code) uses symmetrical cryptography with an encryption algorithm (such as AES †) to verify the integrity of a message, whereas a 'HMAC' will use a hash function (such as SHA256) internally instead of an encryption algorithm.
@@ -157,7 +153,6 @@ cat plaintext.txt | openssl dgst -sha512 -binary | base64
 
 > Note: `base64` could be replaced with openssl's base64 encoding command: `openssl enc -base64 -A`
 
-<div id="4"></div>
 ## Random Password Generation
 
 Generating random passwords that are complex enough to make automated attacks difficult can be a bit tedious, yet important. But if you install a program such as `pwgen` (`brew install pwgen`) you'll be able to generate random and complex passwords very easily. 
@@ -174,7 +169,6 @@ Now when you execute `psw` you'll get output that looks something like the follo
 |93<3(M;r?~40c$A@>{\
 ```
 
-<div id="5"></div>
 ## Hash Functions
 
 There are many different ways of accessing a hash function, two options we'll look at will be using the executable `shasum` (provided by macOS) and the `hashlib` package provided by the [Python](https://www.python.org/) programming language.
@@ -230,7 +224,6 @@ Which outputs:
 
 The first number is the checksum and the second number is the amount of data in bytes.
 
-<div id="6"></div>
 ## OpenSSH
 
 OpenSSH provides secure and encrypted tunneling capabilities and is typically used to enable secure shell connections from your machine to external servers.
@@ -259,7 +252,6 @@ alias sshagent='eval "$(ssh-agent -s)" && ssh-add -K ~/.ssh/github_rsa'
 
 > Note: the use of the `-K` flag is macOS specific, it means it'll add the key into the macOS keychain program.
 
-<div id="7"></div>
 ## OpenSSL
 
 OpenSSL is designed to provide a method for securing web based communication (think HTTPS/TLS/SSL).
@@ -378,7 +370,6 @@ JIPU5SiCgKP3XVrnef1gY+PxjBvjdQgSN+OJoBAdWmCa/cRvDdFl01GQiSwFimQ5
 1lVa/7hfYIK6Z5jjHNauaQ==
 ```
 
-<div id="8"></div>
 ## GPG
 
 GPG is a tool which provides encryption and signing capabilities, and supports both symmetrical and asymmetrical encryption + digital signing of your encrypted content to ensure the integrity.
@@ -544,7 +535,6 @@ gpg:                using RSA key F2G91BE243E405E5B64B08A1CB5EBDB2561C861B
 gpg: Good signature from "Bob <bob@example.com>" [ultimate]
 ```
 
-<div id="9"></div>
 ## Keybase
 
 [Keybase](https://keybase.io/) is a public-key directory that maps social media identities to encryption keys in a publicly auditable manner. Keybase offers an end-to-end encrypted chat and cloud storage system, called Keybase Chat and the Keybase filesystem.

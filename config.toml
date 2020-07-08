@@ -40,10 +40,10 @@ preserveTaxonomyNames = true
 [permalinks]
   page = "/:slug/"
 
-[[menu.main]]
-  name = "Home "
-  url = "/"
-  weight = 100
+# [[menu.main]]
+#   name = "Home "
+#   url = "/"
+#   weight = 100
 
 [[menu.main]]
   name = "About "
@@ -79,3 +79,6 @@ defaultContentLanguage = "en"
     lang = "en"
     languageName = "English"
     weight = 1
+
+[markup.goldmark.renderer]
+  unsafe= true

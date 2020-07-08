@@ -9,23 +9,22 @@ tags:
 draft: false
 ---
 
-- [Introduction](#1)
-- [Understanding Big O](#2)
-  - [Logarithms](#3) 
-  - [Logarithm Example](#4) 
-  - [Factorials](#5) 
-- [Back to Big O](#6)
-- [Simple Search](#7)
-- [Binary Search](#8)
-- [The Travelling Salesperson](#9)
-- [Calculating Operation Speed](#10) 
-- [Arrays vs Linked Lists](#11) 
-- [Selection Sort](#12) 
-- [Quick Sort](#13) 
-- [Conclusion](#14) 
-- [References](#15) 
+- [Introduction](#introduction)
+- [Understanding Big O](#understanding-big-o)
+  - [Logarithms](#logarithms) 
+  - [Logarithm Example](#logarithm-example) 
+  - [Factorials](#factorials) 
+- [Back to Big O](#back-to-big-o)
+- [Simple Search](#simple-search)
+- [Binary Search](#binary-search)
+- [The Travelling Salesperson](#the-travelling-salesperson)
+- [Calculating Operation Speed](#calculating-operation-speed) 
+- [Arrays vs Linked Lists](#arrays-vs-linked-lists) 
+- [Selection Sort](#selection-sort) 
+- [Quick Sort](#quick-sort) 
+- [Conclusion](#conclusion) 
+- [References](#references)
 
-<div id="1"></div>
 ## Introduction
 
 When you first start learning algorithms (Binary Search, Quick Sort, Breadth-first Search etc), you'll quickly realise that in order to take advantage of these algorithms, you need to know how fast they are. 
@@ -34,7 +33,6 @@ Otherwise, when presented with a programming problem in which you want to select
 
 One way to know how fast an algorithm is, would be to use the [Big O](https://en.wikipedia.org/wiki/The_Big_O) notation. 
 
-<div id="2"></div>
 ## Understanding Big O
 
 Big O doesn't tell you how fast in time (e.g. seconds) an algorithm is. Instead it informs you of the number of _operations_, and how those operations will grow over time.
@@ -52,7 +50,6 @@ Effectively there are two math concepts we need to know:
 
 You don't even need to know that much about them. Only the bare minimum is required. So let's make a start with Logarithms and then move onto Factorials afterwards. Once we understand those two concepts we can go back to Big O and start tying together some examples.
 
-<div id="3"></div>
 ### Logarithms
 
 As I said, in order to understand Big O, you'll need to understand how [Logarithms](https://en.wikipedia.org/wiki/Logarithm) work.
@@ -69,7 +66,6 @@ Log n (х)
 
 ...where the `n` is what's called the "base" and `х` is the number you're aiming for. But really what we're interested in is the _result_ of this calculation.
 
-<div id="4"></div>
 ### Logarithm Example
 
 Imagine we have the following Logarthim:
@@ -104,7 +100,6 @@ The number `100` in this case represents the number of items we have to execute 
 
 We'll see how this is useful in measuring an algorithm's _speed_ in a later section of this post. But for now let's go and understand Factorials...
 
-<div id="5"></div>
 ### Factorials
 
 Factorials are one of those things that can come in handy for a number of reasons. But generally they're really useful for identifying 'variations'.
@@ -141,7 +136,6 @@ Although Factorials serve a useful purpose (the example given in the book "Grokk
 
 So if you see `n!` you should be wary.
 
-<div id="6"></div>
 ## Back to Big O
 
 So now we understand how Logarithms and Factorials work we can come back to the Big O notation and understand that it's really a simple visual wrapper around these different mathematical calculations.
@@ -174,7 +168,6 @@ See how this gives us a common language. It's similar to Design Patterns. Patter
 
 Now my mention of 'Simple Search' and 'Binary Search' might not mean much to you, as you might not know how these algorithms work. So let's look at these two algorithms next and then after that you'll hopefully understand why Big O helps us understand the performance of these algorithms.
 
-<div id="7"></div>
 ## Simple Search
 
 Simple Search is probably the simplest algorithm you'll ever learn. You'll see why in just a moment... 
@@ -203,7 +196,6 @@ Big O is telling us that this algorithm performs in 'linear' time. This means th
 
 So in effect, the bigger the collection, the more _expensive_ this algorithm becomes. With a very small collection it's fast because of its simplicity, but beyond a small collection it's a poor performing choice of algorithm. This is what Big O is telling us here.
 
-<div id="8"></div>
 ## Binary Search
 
 Consider the same example as before, a collection of 12 items. The Binary Search algorithm is quite straight forward: you set the start and end indexes (usually zero for 'start', and the length of the collection for the 'end'). 
@@ -242,7 +234,6 @@ So if you have a collection of 1000 items, then that would result in (worst case
 
 How about a collection of a million items? That would be result in (worst case) `20` (yes 20!) operations to find the item you were looking for amongst one million items. That's incredible.
 
-<div id="9"></div>
 ## The Travelling Salesperson
 
 Not much to say here that we haven't already mentioned earlier when talking about Factorials. This problem is about calculating the number of different routes someone can take in order to ensure they reach all the specified number of cities, and then working out which route was quickest.
@@ -259,7 +250,6 @@ Big O is telling us this algorithm results in 'factorial time', and this is one 
 
 So as we saw earlier, if there were ten cities to visit and we need to identify the quickest route to visit all ten cities, it would take us approximately `3,628,800` operations to just calculate all the variations, before we could identify which one was quickest.
 
-<div id="10"></div>
 ## Calculating Operation Speed
 
 In order to calculate the speed of an algorithm, we need to know the worst case number of operations. This is what Big O in effect gives us (whether it be linear time, log time or factorial time). So how do we calculate the speed based on the number of operations?
@@ -308,7 +298,6 @@ If we were using the Simple Search algorithm (which is `O(n)`) on a collection o
 0.1 * 16 operations = 1.6
 ```
 
-<div id="11"></div>
 ## Arrays vs Linked Lists
 
 Let's consider what Big O looks like for the Array and Linked List data structures.
@@ -325,7 +314,6 @@ But what about new data insertions? Well, with an Array you insert new items at 
 
 Linked List insertions are generally `O(1)` if inserting at the beginning or end of the list, but more like `O(n) + O(1)` if inserting into the middle of the list because you have to traverse the list first and then insert your new item.
 
-<div id="12"></div>
 ## Selection Sort
 
 The 'selection sort' algorithm sorts an unordered list by looping over the list `n` number of times, and for each loop it identifies either the smallest or largest element (which - smallest/largest - depends on how you're hoping to sort your list: do you want ascending or descending order). But ultimately you'll end up constructing a _new_ 'ordered' list.
@@ -343,7 +331,6 @@ So if your collection is 10 items long, then it would calculate as follows:
 0.1 * 100 = 10 seconds
 ```
 
-<div id="13"></div>
 ## Quick Sort
 
 The 'quick sort' algorithm achieves the same result as 'selection sort', but is much faster. This particular algorithm sorts an unordered list using recusion instead. 
@@ -386,7 +373,6 @@ But in the worst case scenario, if your collection was 10 items long, then it co
 0.1 * 100 = 10 seconds
 ```
 
-<div id="14"></div>
 ## Conclusion
 
 This has been a very basic introduction to the concept of Big O. Hopefully you've found it useful and have a greater appreciation for what Big O offers in the way of understanding the performance of particular algorithms (although we've only really looked at a very small selection).
@@ -402,7 +388,6 @@ We've seen the following Big O types:
 
 There are many more algorithms and calculations for Big O, and as I learn them I'll be sure to update this blog post accordingly. If in the mean time you notice any mistakes, then please feel free to let me know.
 
-<div id="15"></div>
 ## References
 
 - [Gist: Algorithms in Python](https://gist.github.com/Integralist/9763bded76e7d826535a3caeafc3bdff)

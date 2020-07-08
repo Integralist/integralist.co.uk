@@ -21,7 +21,6 @@ draft: false
 - [Steps](#3)
 - [Setup](#4)
 
-<div id="1"></div>
 ## Introduction
 
 You have a statically generated website (like mine!) and you want to implement some kind of search facility that is:
@@ -36,7 +35,6 @@ You might be wondering about Lunr's origins? Well, it's based loosely on the ide
 
 Since then we've also seen the release and rise of [ElasticSearch](https://www.elastic.co/products/elasticsearch), which is an open-source, distributed, and RESTful search engine built on top of the Apache Lucene library.
 
-<div id="2"></div>
 ## Background
 
 I'll explain this from the perspective of [Hugo](https://gohugo.io/), which is the static site generator I use to produce this website. Hugo stores the metadata for each post (e.g. title, date, categories, tags etc) in something it calls [Front Matter](https://gohugo.io/content-management/front-matter/).
@@ -67,7 +65,6 @@ draft: false
 
 What typically follows the front matter is the content of your post.
 
-<div id="3"></div>
 ## Tasks
 
 OK, so here are the tasks we have to get a working solution:
@@ -80,7 +77,6 @@ OK, so here are the tasks we have to get a working solution:
 
 > Note: I'm not a JavaScript fan, but needs must.
 
-<div id="4"></div>
 ## Setup
 
 **Step 1**, generate an `index.json` file. To do that I'm going to use [Grunt](https://gruntjs.com/) because it ties easily into NPM's `package.json` format and luckily for me someone had already done a lot of the (no pun intended) 'grunt' work and I just needed to modify the code to suit my needs.

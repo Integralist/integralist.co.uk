@@ -22,26 +22,26 @@ We will be digging into quite a few different areas of their implementation, suc
 
 <img src="../../images/no-time.webp" class="post-img" loading="lazy">
 
-- [Introduction](#1)
+- [Introduction](#introduction)
   - [Varnish Basics](#varnish-basics)
   - [States vs Actions](#states-vs-actions)
-- [Varnish Default VCL](#2)
-- [Fastly Default VCL](#3)
-- [Custom VCL](#3.0)
+- [Varnish Default VCL](#varnish-default-vcl)
+- [Fastly Default VCL](#fastly-default-vcl)
+- [Custom VCL](#custom-vcl)
   - [Be Careful](#be-careful)
   - [Example Boilerplate](#example-boilerplate)
-- [Fastly TTLs](#3.1)
+- [Fastly TTLs](#fastly-ttls)
   - [DNS TTL Caching](#dns-ttl-caching)
 - [Caching Priority List](#caching-priority-list)
-- [Fastly Default Cached Status Codes](#3.2)
-- [Fastly Request Flow Diagram](#4)
+- [Fastly Default Cached Status Codes](#fastly-default-cached-status-codes)
+- [Fastly Request Flow Diagram](#fastly-request-flow-diagram)
   - [Fastly-Debug](#fastly-debug)
   - [304 Not Modified](#304-not-modified)
   - [UPDATE 2019.08.10](#update-2019-08-10)
-- [Error Handling](#4.0)
+- [Error Handling](#error-handling)
   - [Unexpected State Change](#unexpected-state-change)
   - [UPDATE 2019.11.07](#update-2019-11-07)
-- [State Variables](#4.1)
+- [State Variables](#state-variables)
   - [Anonymous Objects](#anonymous-objects)
   - [Forcing Request to Origin](#forcing-request-to-origin)
 - [Clustering](#clustering)
@@ -64,9 +64,9 @@ We will be digging into quite a few different areas of their implementation, suc
       - [`fastly.ff.visits_this_service`](#fastly-ff-visits-this-service)
 - [Breadcrumb Trail](#breadcrumb-trail)
   - [Header Overflow Errors](#header-overflow-errors)
-- [Hit for Pass](#5)
+- [Hit for Pass](#hit-for-pass)
   - [Request Collapsing](#request-collapsing)
-- [Serving Stale](#6)
+- [Serving Stale](#serving-stale)
   - [Why you might not be serving stale?](#why-you-might-not-be-serving-stale)
   - [Stale for Client Devices](#stale-for-client-devices)
   - [Different actions for different states](#different-actions-for-different-states)
@@ -75,17 +75,16 @@ We will be digging into quite a few different areas of their implementation, suc
   - [The longer path (stale found in vcl_deliver)](#the-longer-path-stale-found-in-vcl-deliver)
   - [The unhappy path (stale not found anywhere)](#the-unhappy-path-stale-not-found-anywhere)
   - [Test Serving Stale](#test-serving-stale)
-- [Disable Caching](#7)
-- [Logging](#8)
+- [Disable Caching](#disable-caching)
+- [Logging](#logging)
   - [Filtering and Sampling Logs](#filtering-and-sampling-logs)
   - [Logging Memory Exhaustion](#logging-memory-exhaustion)
-- [Restricting requests to another Fastly service](#8.1)
+- [Restricting requests to another Fastly service](#restricting-requests-to-another-fastly-service)
 - [Custom Error Pages](#custom-error-pages)
 - [Rate Limiting](#rate-limiting)
-- [Conclusion](#9)
+- [Conclusion](#conclusion)
 - [Reference material](#reference-material)
 
-<div id="1"></div>
 ## Introduction
 
 Fastly utilizes 'free' software (Varnish) and extends it to fit their purposes, but this extending of existing software can make things confusing when it comes to understanding what underlying features work and how they work.
@@ -155,7 +154,6 @@ Fastly suggests this is to help distinguish that we're performing an action and 
 
 Although `vcl_miss`'s `return(fetch)` is a bit ambiguous considering we _could_ maybe argue it's also performing an 'action' rather than a state change. Let's also not forget operations such as `return(restart)` which looks to be triggering an 'action' rather than a state change (in that example you might otherwise expect to execute something like `return(recv)`).
 
-<div id="2"></div>
 ## Varnish Default VCL
 
 When using the free version of Varnish, you'll typically implement your own custom VCL logic (e.g. add code to `vcl_recv` or any of the other common VCL subroutines). But it's important to be aware that if you don't `return` an action (e.g. `return(pass)`, or trigger any of the other available Varnish 'states'), then Varnish will continue to execute its own built-in VCL logic which sits beneath your custom VCL.
@@ -177,7 +175,6 @@ Specifically:
 - some modifications to the `synthetic` in `vcl_error`
 - ...and God knows what else.
 
-<div id="3"></div>
 ## Fastly Default VCL
 
 On top of the built-in VCL the free version of Varnish uses, Fastly also includes its own 'default' VCL logic alongside your custom VCL.
@@ -208,7 +205,6 @@ Below are some useful links to see Fastly's default VCL:
 <img src="../../images/cant-see-me.webp" class="post-img" loading="lazy">
 <small class="img-caption">fastly's master VCL be all like ^^</small>
 
-<div id="3.0"></div>
 ## Custom VCL
 
 When adding your own custom VCL code you'll need to ensure that you add Fastly's critical default behaviours, otherwise things might not work as expected.
@@ -515,7 +511,6 @@ sub vcl_deliver {
 
 > UPDATE 2020.02.25: Fastly have published a blog post that details what they consider to be VCL anti-patterns and offer solutions/alternative patterns: https://www.fastly.com/blog/maintainable-vcl
 
-<div id="3.1"></div>
 ## Fastly TTLs
 
 When Fastly caches your content, it of course only caches it for a set period of time (known as the content's "Time To Live", or TTL). Fastly [has some rules](https://docs.fastly.com/guides/performance-tuning/controlling-caching) about how it determines a TTL for your content. 
@@ -571,7 +566,6 @@ Next in line is `Surrogate-Control` (see [my post on HTTP caching](/posts/http-c
 
 > Note: if you ever want to debug Fastly and your custom VCL then it's recommended you create a 'reduced test case' using their [Fastly Fiddle](https://fiddle.fastlydemo.net/) tool. Be aware this tool shares code publicly so don't put secret codes or logic into it! Don't forget to add `return` statements to the functions in the Fiddle UI, otherwise the default Fastly boilerplate VCL will be executed and that can cause confusion if your service typically doesn't use it! e.g. httpbin origin was sending back a 500 and `vcl_fetch` was triggering a restart and I didn't know why. I discovered I had to add `return(deliver)` in `vcl_fetch` to prevent Fastly boilerplate from executing!
 
-<div id="3.2"></div>
 ## Fastly Default Cached Status Codes
 
 The CDN (Fastly) [doesn't cache all responses](https://docs.fastly.com/en/guides/http-status-codes-cached-by-default). It will not cache any responses with a status code in the `5xx` range, and it will only cache a tiny subset of responses with a status code in the `4xx` and `3xx` range.
@@ -588,7 +582,6 @@ The status codes it will cache by default are:
 
 > Note: in VCL you can allow _any_ response status code to be cached by executing `set beresp.cacheable = true;` within `vcl_fetch` (you can also change the status code if you like to _look_ like it was a different code with `set beresp.status = <new_status_code>;`).
 
-<div id="4"></div>
 ## Fastly Request Flow Diagram
 
 There are various request flow diagrams for Varnish ([example](http://book.varnish-software.com/4.0/_images/simplified_fsm.svg)) and generally they separate the request flow into two sections: request and backend. 
@@ -696,7 +689,6 @@ What this ultimately means is there is some redundant code later on in this blog
 
 > Note: this `vcl_hit` code logic is still part of the free Varnish software, but it has been made redundant by Fastly's version.
 
-<div id="4.0"></div>
 ## Error Handling
 
 In Varnish you can trigger an error using the `error` directive, like so:
@@ -757,7 +749,6 @@ According to Fastly the 900 code is often a dangeous code to use in custom VCL. 
 
 6xx and 7xx are clean. 600, 601 and 750 are by far the most popular codes used in customer configs apparently. In the standards range, we have a special case attached to 550, for some reason, lost in the mists of time, but otherwise errors in the standards range are interpreted as specified in the IETF spec
 
-<div id="4.1"></div>
 ## State Variables
 
 Each Varnish 'state' has a set of built-in variables you can use.
@@ -849,7 +840,6 @@ Where as the use of `hash_ignore_busy` _disables_ request collapsing and so this
 <img src="../../images/collapse.webp" class="post-img post-img-small" loading="lazy">
 <small class="img-caption">request collapsing in action</small>
 
-<div id="4.2"></div>
 ## Clustering 
 
 Now that we know there are state variables available, and we understand generally when and why we would use them, let's now consider the problem of 'clustering'. Because if you don't understand Fastly's clustering design, then you'll end up in a situation where data you're setting on these variables are being lost and you won't know why.
@@ -1635,7 +1625,6 @@ So it's more likely that we _were_ hitting the http header size limit, but it wa
 
 At any rate this is something to keep in mind and be mindful of.
 
-<div id="5"></div>
 ## Hit for Pass
 
 You may notice in Varnish's built-in `vcl_fetch` the following logic:
@@ -1709,7 +1698,6 @@ It's important to note that an object can't be _re-cached_ (let's say the origin
 
 > See [this Varnish blog post](https://info.varnish-software.com/blog/hit-for-pass-varnish-cache) for the full details.
 
-<div id="6"></div>
 ## Serving Stale
 
 If we get a 5xx error from our origins we don't cache them.
@@ -1900,7 +1888,6 @@ Having a different backend was something we had already done in the past and hel
 
 > Note: [here](https://gist.github.com/Integralist/f7a6abdd946ad5b3b06907069f79cc48) is an example Python3 script that demonstrates how we verify these behaviours.
 
-<div id="7"></div>
 ## Disable Caching
 
 It's possible to disable caching for either the client or fastly, or both! But it gets confusing with all the various documentation pages fastly provides to know which one is the source of truth (useful information is spread across all of them).
@@ -1913,7 +1900,6 @@ In my experience I've found the following to be sufficient...
 - Disable CDN Caching: `Cache-Control: private` ([docs](https://docs.fastly.com/guides/tutorials/cache-control-tutorial#do-not-cache))
 - Disable ALL Caching: `Cache-Control: no-cache, no-store, private, must-revalidate, max-age=0, max-stale=0, post-check=0, pre-check=0` + `Pragma: no-cache` + `Expires: 0` ([docs](https://docs.fastly.com/guides/debugging/temporarily-disabling-caching))
 
-<div id="8"></div>
 ## Logging
 
 With Fastly, to set-up logging you'll need to use their UI, as this means they can configure the relevant integration with your log aggregation provider. This is fairly straight forward and obvious but what people _don't_ realise is that by default Fastly will generate a subroutine called `vcl_log`.
@@ -2078,7 +2064,6 @@ if (fastly.error != "ESESOOM") {
 
 > Note: `logs_to_s3` and `logs_to_gcs` are references to the two different log streams we setup within the Fastly UI.
 
-<div id="8.1"></div>
 ## Restricting requests to another Fastly service
 
 We had a requirement where by we had a request flow that looked something like the following...
@@ -2330,7 +2315,6 @@ This is because once a request has been 'passed' in `vcl_recv` then it can't be 
 
 <img src="../../images/banned.webp" class="post-img" loading="lazy">
 
-<div id="9"></div>
 ## Conclusion
 
 So there we have it, a run down of how some important aspects of Varnish and VCL work (and specifically for Fastly's implementation).

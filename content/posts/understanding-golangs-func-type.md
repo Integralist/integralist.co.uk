@@ -17,7 +17,6 @@ draft: false
 - [Why is this interesting?](#4)
 - [Summary/Breakdown](#summary-breakdown)
 
-<div id="1"></div>
 ## Introduction
 
 Here is some code that demonstrates the typical 'hello world' for a Go based web server:
@@ -48,7 +47,6 @@ In this blog post I will demonstrate a few different ways of creating a web serv
 
 It was never really that clear to me and so it's just something I 'cargo cult'ed and subsequently replicated every single time I needed a web server. I realised I needed to know what its purpose was in order to feel like I wasn't going through the motions unnecessarily or missing out on additional functionality (which it turns out I was).
 
-<div id="2"></div>
 ## Four ways to skin a cat
 
 There are currently four ways, that I know of, to create a web server with Go (well, actually only three - the first two examples are effectively the same - but we add a little more code to demonstrate different ways incoming requests can be handled).
@@ -303,7 +301,6 @@ func main() {
 
 Again, we have a convenience method `HandleFunc` which allows an arbitrary function to be adapted so it fits the interface requirements that `ListenAndServe`'s second argument enforces.
 
-<div id="3"></div>
 ## How does the adapter work?
 
 The 'adapter' here being the `http.HandleFunc` function. How does it take an arbitrary function and enable it to support the relevant interface so it can be passed to `ListenAndServe`?
@@ -375,7 +372,6 @@ type Handler interface {
 
 We know now that we've utilised Go's `func` type to adapt/transform our incoming function into a type that has the required method `ServeHTTP` associated with it, thus allowing it to pass the `Handler` interface requirement.
 
-<div id="4"></div>
 ## Why is this interesting?
 
 Really understanding what initially looked to be a simple web server abstraction ended up being a complex mix of types and interfaces that work together to allow seemingly incompatible types to be adapted to fit. Demonstrating how flexible and dynamic your code can be when working in an idiomatic way with the Go principles.

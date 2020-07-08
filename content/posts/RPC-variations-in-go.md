@@ -21,14 +21,12 @@ draft: false
 - [Calling from Ruby](#8)
 - [gRPC](#9)
 
-<div id="1"></div>
 ## Introduction
 
 Let's begin by understanding what an RPC (Remote Procedure Call) actually is:
 
 > RPC is a way of connecting two separate services via a raw TCP socket
 
-<div id="2"></div>
 ### Outline
 
 The fundamental principle behind RPC is to create a service that exposes a function behind that service.
@@ -46,7 +44,6 @@ From here we would need to have a client that calls the RPC service:
 - Call the function via a TCP socket with a specific ip/port
 - The resulting 'message' can be passed back in different formats (e.g. JSON)
 
-<div id="3"></div>
 ### Variations
 
 With this understanding we can now start to look at the [Go](https://golang.org/) programming language and the different variations of its RPC package(s) that it offers. Effectively they consist of behaviour such as:
@@ -67,7 +64,6 @@ In most cases the backend will be unaffected. By this I mean, it's just a packag
 > † unless the client is implemented in another language,  
 > then you'll use whatever is best suited to that language
 
-<div id="4"></div>
 ### Requirements
 
 Only methods that satisfy the following criteria will be made available for remote access, all other methods will be ignored (so if you hit a problem in the below code, chances are you're not exporting the expected items):
@@ -78,7 +74,6 @@ Only methods that satisfy the following criteria will be made available for remo
 - the method's second argument is a pointer
 - the method has return type error
 
-<div id="5"></div>
 ## RPC over HTTP
 
 I've yet to find a justification for using HTTP over TCP, but *you* may have your reasons. If that's the case, then here is an example of how to achieve this in Go.
@@ -196,7 +191,6 @@ Args received: &{A:4 B:2}
 The reply pointer value has been changed to: 8
 ```
 
-<div id="6"></div>
 ## RPC over TCP
 
 Most of the time when you're exposing functionality and behaviour remotely, you'll want to have the least amount of overhead as possible and so you'll resort to stripping out the HTTP application layer and moving down to using just the TCP layer.
@@ -378,7 +372,6 @@ Args received: &{Foo:Foo! Bar:Bar!}
 The 'reply' pointer value has been changed to: Blah!
 ```
 
-<div id="7"></div>
 ## JSON
 
 There is another option available when creating an RPC and that is to expose a JSON formatted variation (which is *required*† if you're planning on using a different programming language to communicate with your Go RPC service - as we'll see below when we write a client using the Ruby programming language).
@@ -393,7 +386,6 @@ If we look back at our TCP example from earlier (the one which utilised `rpc.Ser
 - In the service: swap `rpc.ServeConn` to `jsonrpc.ServeConn`
 - In the client: swap `rpc.Dial` to `jsonrpc.Dial`
 
-<div id="8"></div>
 ## Calling from Ruby
 
 If you want to utilise a client written in another programming language (such as Ruby), you'll need to have the Go service setup to use `net/rpc/jsonrpc`. Once that's done, your client can connect via a raw TCP socket and pass over JSON data, as shown in the below example:
@@ -424,7 +416,6 @@ The output from this program would be:
 {"id"=>"0", "result"=>"Blah!", "error"=>nil}
 ```
 
-<div id="9"></div>
 ## gRPC
 
 Google has started work on a new package called gRPC which, as per the site: [grpc.io](http://www.grpc.io/), states...

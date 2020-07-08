@@ -15,32 +15,31 @@ tags:
 draft: false
 ---
 
-- [Introduction](#1)
-- [What are keys and how do they work?](#2)
-- [Understanding PKI](#3)
-- [OpenSSL vs OpenSSH](#4)
-- [What is GPG?](#5)
-- [Creating your own keys](#6)
-  - [OpenSSH](#6.1)
-  - [OpenSSL](#6.2)
-  - [GPG](#6.3)
-      - [Multiple Keys?](#6.3.1)
-- [How to encrypt data using GPG, OpenSSL and Keybase](#7)
-  - [GPG encryption](#7.1)
-      - [Asymmetrical encryption](#7.1.1)
-      - [Symmetrical encryption](#7.1.2)
-      - [Key Signing](#7.1.3)
-      - [Digital Signatures](#7.1.4)
-      - [Revoking Keys](#7.1.5)
-  - [OpenSSL encryption](#7.2)
-  - [Keybase](#7.3)
-  - [Which _should_ I use?](#7.4)
-- [Creating, self-signing, issuing and revoking certificates](#8)
-- [Conclusion](#9)
+- [Introduction](#introduction)
+- [What are keys and how do they work?](#what-are-keys-and-how-do-they-work)
+- [Understanding PKI](#understanding-pki)
+- [OpenSSL vs OpenSSH](#openssl-vs-openssh)
+- [What is GPG?](#what-is-gpg)
+- [Creating your own keys](#creating-your-own-keys)
+  - [OpenSSH](#openssh)
+  - [OpenSSL](#openssl)
+  - [GPG](#gpg)
+      - [Multiple Keys?](#multiple-keys)
+- [How to encrypt data using GPG, OpenSSL and Keybase](#how-to-encrypt-data-using-gpg-openssl-and-keybase)
+  - [GPG encryption](#gpg-encryption)
+      - [Asymmetrical encryption](#asymmetrical-encryption)
+      - [Symmetrical encryption](#symmetrical-encryption)
+      - [Key Signing](#key-signing)
+      - [Digital Signatures](#digital-signatures)
+      - [Revoking Keys](#revoking-keys)
+  - [OpenSSL encryption](#openssl-encryption)
+  - [Keybase](#keybase)
+  - [Which _should_ I use?](#which-should-i-use)
+- [Creating, self-signing, issuing and revoking certificates](#creating-self-signing-issuing-and-revoking-certificates)
+- [Conclusion](#conclusion)
 
 > UPDATE: for those short on time, read the following [Introduction](#1), [What are keys and how do they work?](#2) and then skip over the sections "Understanding PKI" and "OpenSSL vs OpenSSH" as these just go into more depth on the technical aspect of different encryption concepts. Just skip until [What is GPG?](#5) (in there are two sub sections about "OpenSSH", "SSH Agent" and "OpenSSL", just skip those until you get to the next "GPG" section and continue all the way from there)
 
-<div id="1"></div>
 ## Introduction
 
 This post **isn't** meant to be "this is how you do security". I'm not a security expert. I'm not even a security intermediate! When I titled this post "security basics" I wasn't kidding. If you're working with applications and/or servers in production then *please* consult someone better equipped on the subject of security.
@@ -69,7 +68,6 @@ Throughout this post you'll see me use words like "plaintext" and "cipher". It's
 
 When a file is said to be plaintext it simply means that it's unencrypted, whereas a cipher is a noun that refers to a plaintext that has been encrypted. That's it.
 
-<div id="2"></div>
 ## What are keys and how do they work?
 
 Imagine you have a plaintext file which contains a password, and you want to share this file with someone else across the internet (let's say this someone is our friend "Bob").
@@ -133,7 +131,6 @@ You might think for everyone to securely identify themselves they could publish 
 
 But unless you're talking (in real-life or over the phone) with the actual person you want to communicate with, then how do you *really* know who published the key was the person you think it is? Authenticating people is a difficult problem to solve and this is where PKI (Public-key infrastructure) comes in.
 
-<div id="3"></div>
 ## Understanding PKI
 
 Public key infrastructure is built on top of Public-key cryptography. The difference is that PKI introduces the concept of "certificates", and these certificates are used in the software realm much like we would use a passport.
@@ -496,7 +493,6 @@ So there you have it, that's pretty much how PKI (and subsequently SSL/TLS) work
 
 Let's move on!
 
-<div id="4"></div>
 ## OpenSSL vs OpenSSH
 
 If you want to generate your own keys and certificates, which will enable you to connect and transmit data more securely across the internet; then you're going to need to install the [OpenSSL](https://openssl.org/) command line toolkit. OpenSSL is a library designed to implement the SSL/TLS protocols
@@ -525,7 +521,6 @@ Below are a list of tools that are built upon the OpenSSH protocol:
 - `sftp-server`
 - `sshd`
 
-<div id="5"></div>
 ## What is GPG?
 
 [GPG](https://gnupg.org/) is a tool which provides encryption and signing capabilities. Its full name is "GNU Privacy Guard".
@@ -538,7 +533,6 @@ In the next section "[Creating your own keys](#6)" I'll demonstrate how to actua
 
 You may have also heard of PGP and wondered what the differences are between that and GPG: PGP is the protocol standard (defined under the name "Open PGP") which GPG implements. So PGP isn't a tool itself, but merely a specification for other tools (such as GPG) to build upon.
 
-<div id="6"></div>
 ## Creating your own keys
 
 OK, up until this point we've only been talking in a theorectical sense. Time to see some pratical use cases by demonstrating how to generate your own keys using the three different toolkits we've described up until this point (OpenSSH, OpenSSL and GPG).
@@ -549,7 +543,6 @@ Also, generating keys is one thing. But for the OpenSSL and GPG utilities, it's 
 
 So let's begin...
 
-<div id="6.1"></div>
 ### OpenSSH
 
 In the following example we're generating a new set of keys (public and private) using the RSA type and using 4096 bits for the key length. This is considered quite a secure set-up (anything less than 2048 bits is easily crackable in todays digital age):
@@ -603,7 +596,6 @@ So what's happening here is:
 
 > Note: I also use the `-K` flag with `ssh-add` as that's specific to Mac OS X
 
-<div id="6.2"></div>
 ### OpenSSL
 
 Like with the OpenSSH example in the previous sub section, here we'll be generating a new set of keys (public and private) using the RSA type and using 4096 bits for the key length. The difference is that you have to generate the private key first and then extract the public key from it:
@@ -619,7 +611,6 @@ You can also print out some additional details contained inside your pem file by
 openssl rsa -text -in private_key.pem
 ```
 
-<div id="6.3"></div>
 ### GPG
 
 > Note: [here is a great and detailed article](https://alexcabal.com/creating-the-perfect-gpg-keypair/) on how to make the most secure key pair process possible
@@ -736,7 +727,6 @@ default-key 62DBDF62           # Personal
 default-recipient some-user-id # In case you happen to only ever communicate with one person
 ```
 
-<div id="6.3.1"></div>
 #### Multiple Keys?
 
 Here's a quick question that people seem to ask a lot:
@@ -757,17 +747,14 @@ gpg --list-sigs
 
 I recommend reading [https://alexcabal.com/creating-the-perfect-gpg-keypair/](https://alexcabal.com/creating-the-perfect-gpg-keypair/) to learn how to create your own sub signing keys and improve the security of your key process/setup.
 
-<div id="7"></div>
 ## How to encrypt data using GPG, OpenSSL and Keybase
 
 Outside of PKI and SSL/TLS, the most common task people are interested in is encrypting specific files that contain sensitive information that they would prefer to be protected either from everyone or allow only a select few people to be able to access. The interface for encrypting data is different for each tool used and so we'll be looking at those we've discussed so far: GPG and OpenSSL
 
-<div id="7.1"></div>
 ### GPG encryption
 
 GPG offers two forms of encryption: asymmetrical and symmetrical...
 
-<div id="7.1.1"></div>
 #### Asymmetrical encryption
 
 With GPG you'll need the recipients public key in order to encrypt files. So once you have the recipients public key you'll need to import it into GPG so you can reference it. To do that you'll use the following command:
@@ -821,7 +808,6 @@ In the above example, it'll display the contents of the file in stdout; so you'l
 gpg -o output_file -d some_encrypted_file.gpg
 ```
 
-<div id="7.1.2"></div>
 #### Symmetrical encryption
 
 If you don't want to encrypt a file using your own key pair, you can use standard symmetrical encryption:
@@ -870,7 +856,6 @@ Hash: MD5, SHA1, RIPEMD160, SHA256, SHA384, SHA512, SHA224
 Compression: Uncompressed, ZIP, ZLIB, BZIP2
 ```
 
-<div id="7.1.3"></div>
 #### Key Signing
 
 GPG let's you "sign" a key, and which tells GPG you _trust_ this key you have been provided (i.e. you have verified it belongs to who you think it should belong to). To sign a key you've imported, simply run the following command and change the email to something relevant:
@@ -893,7 +878,6 @@ This will send their public key to `stdout` along with your signature and so the
 gpg --import <file path>
 ```
 
-<div id="7.1.4"></div>
 #### Digital Signatures
 
 Earlier, when discussing PKI, we mentioned the use of a MAC which was a form of 'digital signature'. The benefit of a signature is to allow you to verify that the file (encrypted _or_ plaintext) was indeed created by the person you think it was.
@@ -1018,7 +1002,6 @@ All other uses of `--decrypt` simply meant _decompress_ the file, hence no passp
 > Note: in all these examples I use `--local-user` to change the GPG profile.  
 > But you could also use `--default-key` if you wanted
 
-<div id="7.1.5"></div>
 #### Revoking Keys
 
 If you've pulled keys from a public server:
@@ -1035,7 +1018,6 @@ gpg --refresh-keys
 
 > Note: you can specify `--keyserver` when refreshing key data
 
-<div id="7.2"></div>
 ### OpenSSL encryption
 
 The easiest way to encrypt a file using OpenSSL is like so (the password for the file is `foobar` and is specified at the end of the command; you'll also see we're using a [`-salt`](https://en.wikipedia.org/wiki/Salt_(cryptography)) with the password to help improve the security):
@@ -1089,7 +1071,6 @@ openssl rsautl -decrypt -inkey id_rsa.pem -in key.bin.enc -out key.bin
 openssl enc -d -aes-256-cbc -in SECRET_FILE.enc -out SECRET_FILE -pass file:./key.bin
 ```
 
-<div id="7.3"></div>
 ### Keybase
 
 [Keybase](https://keybase.io/) was mentioned earlier when we were discussing the problem of 'authentication' and that there are many public repositories where you can locate a person's public key. [Keybase](https://keybase.io/) is a recent attempt at trying to solve this problem in a modern way.
@@ -1192,12 +1173,10 @@ The recipient can now decrypt the file:
 gpg -d secret.txt.gpg
 ```
 
-<div id="7.4"></div>
 ### Which *should* I use?
 
 OpenSSL is not considered secure enough in today's digital age. There are known bugs with the implementation of the OpenSSL `enc` command, and so the recommendation in the security community seems to be to ditch OpenSSL for GPG (at least for these types of scenarios where we're simply encrypting a file that we want to share with someone else).
 
-<div id="8"></div>
 ## Creating, self-signing, issuing and revoking certificates
 
 OK, so I _was_ going to go through the process of creating a new CA root and then self-signing the certificate so we can then go ahead and issue certificates from our own personal CA. The idea was to indicate how you might do this for an organisation that doesn't want to pay for a CA to provide them a certificate (e.g. services that only allow access via client certificates doesn't have to worry about being trusted; as long the employees have trusted the organisation's self-signed certificate then it's fine).
@@ -1225,7 +1204,6 @@ openssl x509 -req -days 365 -in csr.pem -signkey my-private-key.pem -out my-cert
 
 OK so I ended up writing about this any way [in this article](http://www.integralist.co.uk/posts/client-cert-authentication/) where I discuss how to handle Client Certificate Authentication using Docker.
 
-<div id="9"></div>
 ## Conclusion
 
 Hopefully, you've stuck with me until the end here and that you found the information contained useful, or dare say even enlightening. I wrote this post to help solidify my own knowledge and for this to become a future reference point for myself; but I ended up really enjoying diving into aspects such as the PKI and SSL handshake process, as it's an area that has confused me for the longest time.

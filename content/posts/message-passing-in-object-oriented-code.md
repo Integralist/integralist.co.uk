@@ -17,7 +17,6 @@ draft: false
 - [Implementing `method_missing`](#5)
 - [Conclusion](#6)
 
-<div id="1"></div>
 ## Introduction
 
 In my [previous post](http://www.integralist.co.uk/posts/object-oriented-design/) I quoted the following description of object-oriented design…
@@ -30,7 +29,6 @@ Since then I've been reading through [Design Patterns in Ruby](http://designpatt
 
 His comments really nailed home for me the design benefits of thinking more about 'messages' being passed to objects, and it's that point which I want to elaborate on below.
 
-<div id="2"></div>
 ## Quick example
 
 Imagine the following code example: `account.deposit(50)`
@@ -41,7 +39,6 @@ But in a dynamically typed language (such as Ruby) this doesn't make a lot of se
 
 > "we're sending a deposit message to an account object"
 
-<div id="3"></div>
 ## The Proxy Design Pattern
 
 The Proxy design pattern is where we place an object between the user and the actual object the user wishes to interact with.
@@ -56,14 +53,12 @@ The reason 'message passing' came up in the Proxy design pattern (specifically w
 
 This isn't necessarily an issue for all types of objects. But if you look at built-in objects such as the `Array` object, that has approximately 118 (maybe more) methods! So for us to implement a proxy for that object we'd theorectically need to implement 118 stub methods, each of which would simply forward on the request to the corresponding method on the real object to handle. That would not only be tedious but an inefficient way to implement our proxy object.
 
-<div id="4"></div>
 ## How Ruby handles method calls
 
 In Ruby if you pass a message (e.g. call a method) to an object and that method doesn't exist, then Ruby will try to find another method on that object: `method_missing`. 
 
 If `method_missing` doesn't exist then Ruby will try to lookup the method on the parent object, and will keep moving up the inheritance chain until it reaches the core `Object` object (which does implement `method_missing`) and which simply raises a `NoMethodError` exeception.
 
-<div id="5"></div>
 ## Implementing `method_missing`
 
 If you implement `method_missing` on your proxy object then you can pass on the message to the real object more efficiently than stubbing the method.
@@ -103,7 +98,6 @@ end
 
 You can see from the above example that we're using the [send](http://ruby-doc.org/core-2.0/Object.html#method-i-send) method to pass the message (i.e. the method invoked by the user on the proxy object) directly to the real object.
 
-<div id="6"></div>
 ## Conclusion
 
 As you can see, focusing on passing messages not only helps inform us of better interfaces when designing our application but also makes us more efficient by utilising features unique to dynamically typed languages.

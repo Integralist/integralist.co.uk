@@ -18,14 +18,12 @@ draft: false
 - [Explanation](#5)
 - [Conclusion](#6)
 
-<div id="1"></div>
 ## Introduction
 
 This is a quick post to demonstrate how I use a simple [Bash](https://www.gnu.org/software/bash/) shell script to report when web pages are failing (e.g. returning a non-200 HTTP status code). It does this by sending notifications of the URL which returned a non-200 status code into a remote application (in my case [Slack](https://slack.com/); but you could modify the script to suit whatever service you happen to be using).
 
 I run this script via [Jenkins CI](https://jenkins-ci.org/) on a five minute cron. The inspiration came from [Charlie Revett](https://twitter.com/charlierevett) who wrote a [nodejs](https://nodejs.org/) package called [Watchtower](http://github.com/revett/watchtower/). I like shell scripts (not so much Node) and so I decided, for no real good reason, to replicate his package in Bash.
 
-<div id="2"></div>
 ## How does it work?
 
 The script has the following steps:
@@ -34,7 +32,6 @@ The script has the following steps:
 2. Retrieve: curl the remote endpoints in parallel
 3. Notify: parse the responses and send notification for any that fail
 
-<div id="3"></div>
 ## Comparison
 
 Well, the Node package has quite a few layers to it (e.g. Dockerfile, package.json, dependencies, multiple nested files that take some time to navigate around) whereas my 'Bash Watchtower' is a single shell script. So it's actually a lot easier and quicker (in my opinion at least) to understand what's going on and how things work.
@@ -48,7 +45,6 @@ I'd argue (in theory, I haven't actually tested) that performance would be equal
 
 > Note: because of the background processes, this script will not scale and be as performant once the number of URLs you're looking to check against becomes very large. So if you're looking to validate 100's of URLs, then you'll likely hit performance issues
 
-<div id="4"></div>
 ## Code
 
 So here is the code:
@@ -119,7 +115,6 @@ parse results.txt
 
 > Note: I've multilined the `curl` request here for readability (but I prefer one liners)
 
-<div id="5"></div>
 ## Explanation
 
 The script is broken out into functions:
@@ -181,7 +176,6 @@ At this point we use [Awk](https://en.wikipedia.org/wiki/AWK) to check each line
 
 Again, like the `pull` function, we utilise `wait` to ensure all the child subprocesses finish before doing some final displaying and cleanup of the `temp.txt` file and then returning the function back to the caller.
 
-<div id="6"></div>
 ## Conclusion
 
 That's it. Fairly standard Bash scripting. I'm sure they'll be some unix/linux neck-beard wizards in the audience ready to 'shred me a new one' because my chops aren't as *wizardy* as theirs. If that's the case: feel free to get in contact as I'd love to know how I could make this code simpler or easier to work with (or just more idiomatic).

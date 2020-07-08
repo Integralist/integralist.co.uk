@@ -13,21 +13,20 @@ tags:
 draft: false
 ---
 
-- [Memory Management](#1)
-- [Types of Profiling](#2)
-- [Tools Matrix](#2.1)
-- [Analysis Steps](#3)
-- [Base Example](#4)
-- [Timer](#5)
-- [Built-in module: timeit](#6)
-- [Built-in module: profiler](#7)
-- [Line Profiler](#8)
-- [Basic Memory Profiler](#9)
-- [Tracemalloc](#10)
-- [PyFlame (Flame Graphs)](#11)
-- [Conclusion](#12)
+- [Memory Management](#memory-management)
+- [Types of Profiling](#types-of-profiling)
+- [Tools Matrix](#tools-matrix)
+- [Analysis Steps](#analysis-steps)
+- [Base Example](#base-example)
+- [Timer](#timer)
+- [Built-in module: timeit](#built-in-module-timeit)
+- [Built-in module: profiler](#built-in-module-profiler)
+- [Line Profiler](#line-profiler)
+- [Basic Memory Profiler](#basic-memory-profiler)
+- [Tracemalloc](#tracemalloc)
+- [PyFlame (Flame Graphs)](#pyflame-flame-graphs)
+- [Conclusion](#conclusion)
 
-<div id="1"></div>
 ## Memory Management
 
 Before we dive into the techniques and tools available for profiling Python applications, we should first understand a little bit about its memory model as this can help us to understand what it is we’re seeing in relation to memory consumption.
@@ -38,7 +37,6 @@ Now this can cause [problems](http://engineering.hearsaysocial.com/2013/06/16/ci
 
 > Note: for lots of details of how Python allocates memory, I highly recommend [this presentation](https://dmalcolm.fedorapeople.org/presentations/PyCon-US-2011/MemoryUsage.pdf).
 
-<div id="2"></div>
 ## Types of Profiling
 
 There are a couple of approaches available to us for monitoring performance...
@@ -46,7 +44,6 @@ There are a couple of approaches available to us for monitoring performance...
 - **Timers**: useful for benchmarking, as well as comparing _before_ and _after_ fixes.
 - **Profilers**: useful for high-level verification.
 
-<div id="2.1"></div>
 ## Tools Matrix
 
 |   |Pros|Cons|
@@ -59,7 +56,6 @@ There are a couple of approaches available to us for monitoring performance...
 |[tracemalloc](#10)|- Built-in memory package.|- Requires code change.<br>- More complicated API.|
 |[pyflame](#11)|- Visualise problem area easily.<br>- Details CPU and Memory|- Requires Linux.<br>- Most complex to setup.|
 
-<div id="3"></div>
 ## Analysis Steps
 
 Regardless of the tool you use for analysis, a general rule of thumb is to:
@@ -76,7 +72,6 @@ Think about more performant algorithms or data structures.
 There may also be simpler solutions.  
 Take a pragmatic look at your code.
 
-<div id="4"></div>
 ## Base Example
 
 Let’s begin with a simple program written using Python 3…
@@ -104,7 +99,6 @@ Running this program can take ~1.8 seconds and returns the value:
 some result! 9999999
 ```
 
-<div id="5"></div>
 ## Timer
 
 We can use a simple decorator to time the length of our `expensive_function` call...
@@ -128,7 +122,6 @@ def timefn(fn):
 
 The problem with this approach is that the decorator results in additional latency. Meaning the program takes slightly longer to complete. Not a lot, but if you’re after precision then this can skew the results (which is a common theme when benchmarking or profiling).
 
-<div id="6"></div>
 ## Built-in module: timeit
 
 The built-in [`timeit`](https://docs.python.org/3/library/timeit.html) module is another simple way of benchmarking the time it takes for a function to execute. Simply import the module and call its interface.
@@ -161,7 +154,6 @@ In this case result would contain something like:
 Finally, there is also a command line version you can utilise:  
 `python -m timeit`
 
-<div id="7"></div>
 ## Built-in module: profiler
 
 There are two flavours of [profiler](https://docs.python.org/3/library/profile.html), a pure Python version (`import profile`) and a C extension version (`import cProfile`) which is preferred, as the former is remarkably slower. 
@@ -201,7 +193,6 @@ Instead of printing the results you can pass the run method a second argument wh
 Finally, there is also a command line version you can utilise:  
 `python -m cProfile [-o output_file] [-s sort_order] <your_script.py>`
 
-<div id="8"></div>
 ## Line Profiler
 
 The [Line Profiler](https://pypi.python.org/pypi/line_profiler) option gives much more granular detail than the built-in profile module, but it is an external package and so needs to be installed:
@@ -302,7 +293,6 @@ If you omit the `-l` flag, then you can view the results at a later time using:
 python -m line_profiler <your_script.py>.lprof
 ```
 
-<div id="9"></div>
 ## Basic Memory Profiler
 
 There is a module called `memory_profiler` which is very simple to use, although with the example code we’ve been using it was so painfully slow it was pretty much unusable (I gave up after 5 minutes of waiting). So, because of that issue, I’ll demonstrate a simpler example.
@@ -344,7 +334,6 @@ Line #    Mem usage    Increment   Line Contents
 
 The second column “Mem usage” indicates the memory consumption for the Python interpreter after that line was executed. The third column “Increment” indicates the difference in increased memory compared to the previous line that was executed. So you can see, for example, when we delete the `b` variable we are able to reclaim the memory it was holding on to.
 
-<div id="10"></div>
 ## Tracemalloc
 
 There is another basic memory profiler that provides similar features called [tracemalloc](https://docs.python.org/3/library/tracemalloc.html) but this particular tool is part of the standard library in Python so it might be preferable to the external library [memory_profiler](#9) (shown earlier).
@@ -389,7 +378,6 @@ tracemalloc_example.py:17: size=106 B, count=2, average=53 B
 
 > Note: You might also consider [Pympler](https://pythonhosted.org/Pympler/muppy.html) or [ObjGraph](http://mg.pov.lt/objgraph/) for tracking memory usage & object refs.
 
-<div id="11"></div>
 ## PyFlame (Flame Graphs)
 
 Flame graphs are a visualization of profiled software (stack traces), allowing the most frequent code-paths to be identified quickly and accurately. Flame graphs allows hot code-paths to be identified quickly.
@@ -443,7 +431,6 @@ If we now open `output_stripped.svg` we should see the following interactive fla
     <img src="../../images/pyflame.png">
 </a>
 
-<div id="12"></div>
 ## Conclusion
 
 That's our tour of various tools for profiling your Python code. I'll follow this article up with a Go based one in the very near future. But if you're interested in further reading then the following blog posts from rushter.com are worth a look: 

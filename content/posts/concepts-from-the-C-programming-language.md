@@ -9,24 +9,23 @@ tags:
 draft: false
 ---
 
-- [Introduction](#1)
-- [Compilation](#2)
-    - [Compilers](#2.1)
-    - [C11 safe functions](#2.2)
-- [Hello World](#3)
-- [Constants vs Directives](#4)
-- [Quotations](#5)
-- [Char Type](#6)
-- [Null Terminator](#7)
-- [Pointers](#8)
-- [Arrays](#9)
-- [Enumerators](#10)
-- [Memory Allocation with different Types](#11)
-- [Reallocating Memory](#12)
-- [Function Prototypes](#13)
-- [Conclusion](#14)
+- [Introduction](#introduction)
+- [Compilation](#compilation)
+    - [Compilers](#compilers)
+    - [C11 safe functions](#c11-safe-functions)
+- [Hello World](#hello-world)
+- [Constants vs Directives](#constants-vs-directives)
+- [Quotations](#quotations)
+- [Char Type](#char-type)
+- [Null Terminator](#null-terminator)
+- [Pointers](#pointers)
+- [Arrays](#arrays)
+- [Enumerators](#enumerators)
+- [Memory Allocation with different Types](#memory-allocation-with-different-types)
+- [Reallocating Memory](#reallocating-memory)
+- [Function Prototypes](#function-prototypes)
+- [Conclusion](#conclusion)
 
-<div id="1"></div>
 ## Introduction
 
 I decided recently to read a book on the C programming language. The idea was to learn some more low-level concepts that other higher-level languages were abstracting away from me.
@@ -37,7 +36,6 @@ Some of the stuff covered will be obvious, but I appreciate some concepts won't 
 
 In other words: your mileage may vary...
 
-<div id="2"></div>
 ## Compilation
 
 When writing a program in a language like [C](https://en.wikipedia.org/wiki/C_(programming_language)), you'll find that by itself it is not executable (i.e. you can't run a C file directly). You need to convert the C source code into [machine code](https://en.wikipedia.org/wiki/Machine_code) (i.e. something the computer's CPU can understand).
@@ -53,7 +51,6 @@ In order to convert C code into machine code, we need a compiler.
 
 > Strictly speaking you also need a [linker](https://en.wikipedia.org/wiki/Linker_(computing)) which takes multiple compiled objects and places them into a single executable file. Generally speaking, when we say "compile a C file", we're really combining two separate steps (compiling and linking) into the single generic term "compile"
 
-<div id="2.1"></div>
 ### Compilers
 
 To compile C source code into an executable you need a compiler, of which there are many options. The two most popular being LLVM's `clang` and GNU's `gcc`. You might also find on your computer a `cc` command, but typically this is aliased to an existing compiler.
@@ -97,7 +94,6 @@ LLVM's licensing is BSD, meaning Apple can embed it within their own software th
 
 > For more comparison details see [http://clang.llvm.org/comparison.html](http://clang.llvm.org/comparison.html)
 
-<div id="2.2"></div>
 ### C11 safe functions?
 
 You'll likely be told that some functions provided within C aren't safe (usually around string manipulation). For example, some string functions allow for overflow of data because they don't check that the underlying array data structure is able to contain the strings being manipulated.
@@ -132,7 +128,6 @@ If your compiler supports these optional (safe) string functions, then to _enabl
 
 If you don't set `__STDC_WANT_LIB_EXT1__` to `1`, then the header `string.h` will utilise the old (unsafe) string functions.
 
-<div id="3"></div>
 ## Hello World
 
 Below is a simple 'hello world' C example:
@@ -167,7 +162,6 @@ Now you have a macOS compatible executable:
 > To cross-compile for another OS (e.g. Linux) then use Docker or a VM  
 > Other modern languages like [Go](https://golang.org/) or [Rust](https://www.rust-lang.org/) allow you to cross-compiler without a VM
 
-<div id="4"></div>
 ## Constants vs Directives
 
 We saw in the above 'Hello World' example the use of the directive `#define` which allowed us to use a single identifier (`NAME` in this case) throughout our program. The benefit is that we can change the value once and have it updated everywhere.
@@ -188,7 +182,6 @@ int main(void) {
 
 What this gives you is a variable that has an actual type assigned to it (`char`). Meaning the compiler will help you identify an incorrect value if necessary, much more easily than using the `#define` directive.
 
-<div id="5"></div>
 ## Quotations
 
 In C single quotes denote a `char` type and double quotes denote a string.
@@ -215,7 +208,6 @@ printf("foo: %s\n", &foo);
 
 We'll come back to the `&` operator (and understand what `*` means) later, when we discuss [pointers](#8).
 
-<div id="6"></div>
 ## Char Type
 
 When creating a variable, and assigning a string to it, the value assigned is really a pointer to a location in memory. The `char` type is used when storing characters such as `'a'`, but it also allows storing of strings such as `"abc"`. 
@@ -253,7 +245,6 @@ int main(void) {
 }
 ```
 
-<div id="7"></div>
 ## Null Terminator
 
 Consider the following code:
@@ -272,7 +263,6 @@ The last element is known as the [null terminator](https://en.wikipedia.org/wiki
 
 > Note: you can set your variable to be the actual length of the content (e.g. `char my_string[1] = "a";`) but in some instances this can cause strange overlaps of data and strictly speaking isn't valid code either
 
-<div id="8"></div>
 ## Pointers
 
 When declaring a variable, the computer sets aside some memory for the variable. 
@@ -433,7 +423,6 @@ int *const pcount = &count;
 
 We prefix the `const` keyword with the value-at operator `*` and not the variable name.
 
-<div id="9"></div>
 ## Arrays
 
 Consider the following code (which is broken by the way):
@@ -501,7 +490,6 @@ char foobar[] = "No dimension provided!";
 
 What this does is leave the decision of how much memory to allocate to the compiler. But you can only do this when you initialize the variable with a value. Although you couldn't do `char foobar[];` as there is no value for the compiler to utilise to know how much memory to allocate.
 
-<div id="10"></div>
 ## Enumerators
 
 Enumerators allow you to define new variable types. They automatically assign numerical values to each of the identifiers within the enumerator (although you do also have control over the specific values as well). 
@@ -544,7 +532,6 @@ printf("on: %d\n", on);   // 1
 printf("off: %d\n", off); // 2
 ```
 
-<div id="11"></div>
 ## Memory Allocation with different Types
 
 > Read [this article](http://www.integralist.co.uk/posts/bits-and-bytes/) if you need a refresher on understanding RAM, bits, binary and stuff like that
@@ -629,7 +616,6 @@ The latter (`unsigned`) is an integer that can only be positive. So if you need 
 
 So although the underlying memory allocation is the same for signed or unsigned, the actual values represented are slightly different, in that unsigned allows for storing values that are twice the size of signed, because half of signed's values have to account for negatives.
 
-<div id="12"></div>
 ## Reallocating Memory
 
 With strings you typically define them as follows (i.e. the underlying data structure is an array):
@@ -732,7 +718,6 @@ char *lsh_read_line(void)
 }
 ```
 
-<div id="13"></div>
 ## Function Prototypes
 
 A compiler will error if you try to call a function before it has been defined. This can be mitigated by utilising function prototypes that let you define the signature of the function up front and defer the definition until a later point in time (sort of like defining an interface type):
@@ -750,7 +735,6 @@ int main(void) {
 // Definitions for Foo() and Bar()
 ```
 
-<div id="14"></div>
 ## Conclusion
 
 So that covers most of what I found interesting about C over the last few days. I'm not planning on writing any C code in the future (why bother when I can get pretty compariable performance + great tooling etc etc with a language like [Go](https://golang.org)).

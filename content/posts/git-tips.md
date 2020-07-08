@@ -52,21 +52,18 @@ Hopefully you'll find them useful too.
 35. [Finding commit that introduced a bug](#finding-commit-that-introduced-a-bug)
 36. [Finding a commit that added/removed content](#finding-a-commit-that-added-removed-content)
 
-<div id="1"></div>
 ## Show where Git is installed
 
 ```
 which git
 ```
 
-<div id="2"></div>
 ## Show the Git version installed
 
 ```
 git version
 ```
 
-<div id="3"></div>
 ## Update your global user details
 
 ```
@@ -75,7 +72,6 @@ git config --global user.email "Your Email"
 git config --global apply.whitespace nowarn # ignore white space changes!
 ```
 
-<div id="4"></div>
 ## Set-up a global ignore file
 
 First create the global ignore file…
@@ -148,14 +144,12 @@ nano ~/.gitconfig
 git config --global core.excludesfile ~/.gitignore_global
 ```
 
-<div id="5"></div>
 ## Adding all files (inc. those marked as deleted)
 
 ```
 git add -A
 ```
 
-<div id="6"></div>
 ## Writing a long commit
 
 A short git commit message would look like this…
@@ -183,21 +177,18 @@ After I've written my commit I just need to save the commit and exit Vim…
 * Press `Esc`
 * Press `:wq` (the colon means you can execute more commands, w = write, q = quit)
 
-<div id="7"></div>
 ## Viewing file changes while writing your commit
 
 ```
 git commit -v
 ```
 
-<div id="8"></div>
 ## Viewing what files have been committed
 
 ```
 git ls-files
 ```
 
-<div id="9"></div>
 ## Improving `git log` with `git lg`
 
 To get a better looking `git log` we need to write an alias called `git lg` that is just made up of standard Git commands/flags but when put together (along with specific colour settings) means we can have a short git command that provides us lots of useful information.
@@ -209,7 +200,6 @@ What we need to do is open the `~/.gitconfig` file and then add the following co
     lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 ```
 
-<div id="10"></div>
 ## Shorter `git status`
 
 As per the above tip, we can create two extra alias' which give us a shorter command to type (I don't know about you but when typing really fast I seem to always misspell the word 'status') and doesn't show us all the unnecessary crap that someone new to Git needs to see.
@@ -226,7 +216,6 @@ What we need to do is open the `~/.gitconfig` file and then add the following co
 
 Now typing `git st` will be the same as `git status`, and typing `git sts` will be the same as `git status -sb`.
 
-<div id="11"></div>
 ## Finding a commit that includes a specific phrase
 
 ```
@@ -241,14 +230,12 @@ git log --grep=CSS
 
 ...will display all commits that contain the word 'CSS' in the message.
 
-<div id="12"></div>
 ## Only merging the files you want
 
 ```
 git checkout <branch-name> <file1> <file2> <file3>
 ```
 
-<div id="13"></div>
 ## Stashing changes you're not ready to commit
 
 If you make changes to your branch and then want to quickly change branches without first having to commit your current 'dirty state' then run:
@@ -333,7 +320,6 @@ git stash --keep-index
 
 ...finally you can then `git reset` the files you originally added (if you don't plan on committing them yet).
 
-<div id="14"></div>
 ## Revert all changes back to last commit
 
 ```
@@ -368,7 +354,6 @@ git reset --hard B  == move HEAD to B but completely delete C (you've lost those
 
 > Note: to undo a `reset` use `git reflog` to find the previous state (e.g. `HEAD@{1}`) and then reset again (e.g. `git reset HEAD@{1}`).
 
-<div id="15"></div>
 ## Unstaging files
 
 To unstage files we've added to the staging area we need to run the command `reset HEAD` but that's a bit ugly and awkward to remember. What would be easier is if we could just say `git unstage`, so let's create an alias to help make that easier!
@@ -396,7 +381,6 @@ git rm --cached <file>
 
 > Note: you might need to replace `--cached` with `--staged` in newer versions of git.
 
-<div id="16"></div>
 ## Untrack a file without deleting it
 
 If you want to have Git stop tracking a file it's already tracking then you would think to run:
@@ -413,7 +397,6 @@ The work around to that issue is to use the `--cached` flag:
 git rm --cached <file>
 ```
 
-<div id="17"></div>
 ## Amend your last commit
 
 If you make a commit and then realise that you want to amend the commit message then don't make any changes to the files and just run…
@@ -426,14 +409,12 @@ git commit --amend
 
 If on the other hand you decide that after you've written a commit that you want to amend the commit by adding some more files to it then just add the files as normal and run the same command as above and when Vim opens to let you edit the commit message you'll see the extra files you added as part of that commit.
 
-<div id="18"></div>
 ## Show the files within a commit
 
 ```
 git show <hash> --name-only
 ```
 
-<div id="19"></div>
 ## See differences between files
 
 To see the difference between the current working directory and the last commit:  
@@ -470,35 +451,30 @@ To see the difference between branches:
 git diff <branch-1>..<branch-2>
 ```
 
-<div id="20"></div>
 ## See changes between two commits
 
 ```
 git diff <more-recent-hash> <older-hash>
 ```
 
-<div id="21"></div>
 ## Creating a branch and moving to it at the same time
 
 ```
 git checkout -b <branch-name>
 ```
 
-<div id="22"></div>
 ## Deleting a branch
 
 ```
 git branch -D <branch-name>
 ```
 
-<div id="23"></div>
 ## Viewing all branches of a remote
 
 ```
 git branch -a
 ```
 
-<div id="24"></div>
 ## Checkout a remote branch
 
 What normally happens is this: you clone down a repository from GitHub and this repo will have multiple branches, but if you run `git branch` locally all you see is the `master` branch.
@@ -513,14 +489,12 @@ git checkout -b <new-local-branch-name> origin/<remote-branch-name>
 
 …this will create a new branch named whatever you called it and contains the content of the remote branch you specified.
 
-<div id="25"></div>
 ## Remove a remote
 
 ```
 git remove rm <remote>
 ```
 
-<div id="26"></div>
 ## Revert a specific file back to an earlier version
 
 ```
@@ -529,14 +503,12 @@ git checkout <hash|tag|HEAD> <file-name>
 
 Note if you've staged your file and then started making changes to the file which you no longer want applied you can use: `git checkout -- <file-name>` to revert to the version of the file in the staging area.
 
-<div id="27"></div>
 ## Viewing all commits for a file and who made those changes
 
 ```
 git blame <file>
 ```
 
-<div id="28"></div>
 ## Viewing complete history of a file (even when deleted)
 
 ```
@@ -547,7 +519,6 @@ To see the last change you’d use a negative numeral like so --full-history -1 
 
 > Note: if you didn’t use `--full-history` I believe that git gives you a _modified_ version of its history where the deleted file doesn’t even show up (e.g. if you had done `git log -- <path/to/file>`).
 
-<div id="29"></div>
 ## Commiting only parts of a file rather than the whole file
 
 If you have a file with lots of changes made, you might not want to have all the changes logged under one single commit.
@@ -569,7 +540,6 @@ Sometimes you can't split a hunk into more hunks automatically, you have to do i
 
 So if you have a line removed that you want to keep as part of the commit then you'll remove the `-` so there is just a space instead, and if you have a line added that you want to not have included as part of the commit then you remove the entire line. BUT the most important part it also updating the line numbers at the top of the file so that the number of lines in the file match what you are looking to commit (otherwise the commit will fail). To make the edit to the hunk final (pre-commit) press `esc` then `:wq` and then you'll be able to commit the selected changes.
 
-<div id="30"></div>
 ## Modifying your Git history with `rebase`
 
 To change multiple commits you must use the interactive mode of the `rebase` command and you must tell Git how many commits back you want to go (because it'll start from there and keep moving through the commits until it reaches the `HEAD`).
@@ -582,7 +552,6 @@ The principle is if you want to merge two commits then you'll need to have a com
 
 You can also re-order commits and other things like change commits (add files, rename the message) and remove commits completely.
 
-<div id="31"></div>
 ## Push branch without specifying its name
 
 If you have a long branch name then you'll know how tedious it is to type out:
