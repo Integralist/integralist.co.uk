@@ -688,9 +688,29 @@ The key flags are...
 
 > † e.g. if I run that full path in my terminal shell it'll actually run the Python3 REPL so I know it's a valid path to provide.
 
-> Note: Things get even more confusing when you have packages such as [Black](https://github.com/psf/black) that needs to be installed to that particular Python3 interpreter. 
+Things get even more confusing when you have packages such as [Black](https://github.com/psf/black) that needs to be installed to that particular Python3 interpreter. Especially as I use pyenv for installing Python versions and pyenv-virtualenvs for handling virtual environments for those Python versions.
 
-Configure vim with [vim-plug](https://github.com/junegunn/vim-plug) plugin manager:
+The approach I take with Vim, is in a project repo I'll activate a specific virtual environment that I create with the Homebrew version of Python (which is the Python version I compile Vim to support).
+
+```
+# in a new shell where pyenv has no affect on the python interpreter
+
+python3 -m venv venv/vim
+source venv/vim/bin/activate
+python3 -m pip install isort autopep8 unimport tox mypy flake8 flake8-import-order
+```
+
+Now I know that if I start up a new shell and `cd` to my project repo, even if pyenv has set the python interpreter I can activate the virtual environment I created via the Homebrew python and Vim will know about the packages installed in that virtual environment.
+
+> Note: even if I do `python3 --version` it'll now report the Homebrew version of Python.
+
+To check the Python version used by Vim you can execute the following Ex command:
+
+```
+:py3 import sys; print(sys.version)
+```
+
+Next, I configure vim with [vim-plug](https://github.com/junegunn/vim-plug) plugin manager:
 
 ```bash
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
