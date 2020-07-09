@@ -21,7 +21,7 @@ draft: false
 
 Rate Limiting is a technique used to control the rate of requests received.
 
-It exists to help a online services to stay up and running even when clients of the service are issuing lots of requests. 
+It exists to help online services to stay up and running even when clients of the service are issuing lots of requests. 
 
 Think of an API such as the [GitHub API](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting). If they didn't rate limit their clients, then it's very possible a single client could consume most of their resources (either accidentally or intentionally, i.e. a "bad actor").
 
