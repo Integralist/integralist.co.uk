@@ -27,14 +27,16 @@ Think of an API such as the [GitHub API](https://docs.github.com/en/rest/overvie
 
 ## Problems with Rate Limiting
 
-There are two key issues that we needed to address. The first is very specific to the needs "we" were trying to solve, and the other is a general issue...
+There are two key issues that I needed to address for my employer. The first is very specific to the needs we were trying to solve, and the other is a general issue...
 
 1. our service is public, not private.
 2. avoid overloading our internal infrastructure.
 
 Let's consider the first point: most exposed APIs will expect a client to provide a 'key' in order to access the API (this allows the API service to keep a track of individual clients and to ensure they aren't being overly aggressive with their requests).
 
-But with a public website we can't do that. We don't know who our clients are, and so we can't expect them to have signed up to get a key to access our content (unless our content was sat behind a paywall, which it isn't). 
+But I work for a well known online publisher, and so our customers are public users visiting our public website, which means we can't rate limit using a 'key'. 
+
+This is because we don't know who our clients are, and so we can't expect them to have signed up to get a key to access our content (unless our content was sat behind a paywall, which it isn't). 
 
 This means we have to identify clients another way. The typical approach here is to identify a client by their IP address.
 
