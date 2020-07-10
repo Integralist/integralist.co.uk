@@ -17,6 +17,7 @@ draft: false
 - [Creating Virtual Environments](#creating-virtual-environments)
 - [Installing Python Versions](#installing-python-versions)
 - [Virtual Environments for multiple Pythons](#virtual-environments-for-multiple-pythons)
+- [Shell Configuration](#shell-configuration)
 - [Managing Dependencies](#managing-dependencies)
 - [Caching Dependencies](#caching-dependencies)
 - [Command Line Packages](#command-line-packages)
@@ -116,6 +117,19 @@ Once installed, setting up a new virtual environment is as simple as:
 ```
 pyenv virtualenv foobar
 pyenv activate foobar
+pyenv deactivate foobar
+```
+
+> Note: if you want you can specify the Python version to create the virtual environment for: `pyenv virtualenv <version> <name>`.
+
+## Shell Configuration
+
+This is just a quick summary of the configuration lines added to my `.bashrc`:
+
+```
+eval "$(python3 -m pip completion --bash)"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
 ```
 
 ## Managing Dependencies

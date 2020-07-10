@@ -376,56 +376,7 @@ Now when running `pip --version` we should see:
 pip 19.0.3 from /Library/Python/2.7/site-packages/pip-19.0.3-py2.7.egg/pip (python 2.7)
 ```
 
-At this point, in order to have a sane Python setup, we should look towards 'virtual environments'.
-
-There are many tools that can help us. Below are three you might come across (and each of them rely on [`pyenv`](https://github.com/pyenv/pyenv)):
-
-1. [Pipenv](https://pipenv.readthedocs.io/en/latest/install/)
-2. [Poetry](https://poetry.eustace.io)
-3. [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv)
-
-My preference is `pyenv-virtualenv` as it's simple and effective (read also my post: [Python Management and Project Dependencies](/posts/python-management/)) so that's the tool we'll be covering.
-
-### pyenv-virtualenv
-
-This tool is a plugin for pyenv and is designed to manage virtual environments _only_, where as pipenv and poetry are toolkits designed for solving many different problems (one of which is virtual environments).
-
-You install the plugin via Homebrew:
-
-```
-brew install pyenv-virtualenv
-```
-
-Next you add the following lines to your `~/.bashrc`:
-
-```bash
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
-```
-
-Now within some directory you can define a new virtual environment using:
-
-```bash
-pyenv virtualenv 3.7.1 testing-plugin-with-3.7.1
-```
-
-To see the available virtual environments:
-
-```bash
-$ pyenv virtualenvs
-
-3.7.1/envs/testing-plugin-with-3.7.1 (created from /Users/integralist/.pyenv/versions/3.7.1)
-testing-plugin-with-3.7.1 (created from /Users/integralist/.pyenv/versions/3.7.1)
-```
-
-To activate and deactivate the virtual environment:
-
-```bash
-pyenv activate testing-plugin-with-3.7.1
-pyenv deactivate
-```
-
-Simple.
+At this point I'm going to ask you to read [Python Management and Project Dependencies](/posts/python-management/) which is separate/dedicated post I wrote about installing multiple Python versions and how to utilize virtual environments.
 
 ### Python Packages
 
@@ -444,7 +395,7 @@ Here are some packages I like to install as a general rule...
 
 > Note: for an example of how to configure Flake8 and its plugins, see [this gist](https://gist.github.com/0ce27db1d7294f3af9896c0807ccfeed).
 
-I would also strongly recommend using `pipx` and installing programs from there, such as: 
+I would also strongly recommend installing the following tools: 
 
 - `isort`
 - `autopep8`
@@ -469,7 +420,7 @@ autocmd BufWritePost *.py :execute '!autopep8 --experimental --verbose --aggress
 autocmd BufWritePost *.py :execute '!unimport --remove %' | edit
 ```
 
-Just be sure the `pipx ensurepath` call doesn't update the shell `PATH` by _appending_ the `/Users/integralist/.local/bin` but by _prepending_ it instead. This might require you to manually update your `~/.bash_profile` like so:
+If you're using pipx (a tool that helps to install packages as self isolated binaries) just be sure the `pipx ensurepath` call doesn't update the shell `PATH` by _appending_ the `/Users/integralist/.local/bin` but by _prepending_ it instead. This might require you to manually update your `~/.bash_profile` like so:
 
 ```
 export PATH="/Users/integralist/.local/bin:$PATH"
