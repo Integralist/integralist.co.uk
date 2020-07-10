@@ -664,6 +664,8 @@ What I mean by that is I recently upgraded my Python version to `3.7.7` and Vim 
 
 The solution was to firstly to tell Vim what version of Python3 to use, and secondly (and just as important) to ignore any previously cached aspects of a compilation (e.g. if I tell you to use Python `3.7.7` don't then go and try to be helpful and use a cached run where I was using `3.7.4` -- which really confused me for a long time!):
 
+> Note: now I should say, that if you can use the above example compilation code, but just run `make clean distclean` first, then do that! I suspect I could have done that and Vim would have been compiled with Python `3.7.7` just by using the `--enable-python3interp` flag set. I didn't think about that at the time though, hence the following still worked.
+
 ```bash
 make clean distclean
 
