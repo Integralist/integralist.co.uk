@@ -622,6 +622,8 @@ Just be sure the `pipx ensurepath` call doesn't update the shell `PATH` by _appe
 export PATH="/Users/integralist/.local/bin:$PATH"
 ```
 
+> Note: if you install pipx via Homebrew then it'll be attached to that Python version. Meaning if you upgrade your Python version, then pipx could break (e.g. none of the installed packages will work). The solution is to run `pipx reinstall-all --python python3`.
+
 ## Vim
 
 You can either install more recent version of vim via Homebrew:
