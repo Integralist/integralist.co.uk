@@ -378,166 +378,13 @@ pip 19.0.3 from /Library/Python/2.7/site-packages/pip-19.0.3-py2.7.egg/pip (pyth
 
 At this point, in order to have a sane Python setup, we should look towards 'virtual environments'.
 
-There are three aproaches we'll look at (each of them rely on [`pyenv`](https://github.com/pyenv/pyenv)):
+There are many tools that can help us. Below are three you might come across (and each of them rely on [`pyenv`](https://github.com/pyenv/pyenv)):
 
-1. [Pipenv](#pipenv) ([docs](https://pipenv.readthedocs.io/en/latest/install/))
-2. [Poetry](#poetry) ([docs](https://poetry.eustace.io))
-3. [pyenv-virtualenv](#pyenv-virtualenv) ([docs](https://github.com/pyenv/pyenv-virtualenv))
+1. [Pipenv](https://pipenv.readthedocs.io/en/latest/install/)
+2. [Poetry](https://poetry.eustace.io)
+3. [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv)
 
-> Note: my preference is [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv) as it's simple and effective (read also my post: [Python Management and Project Dependencies](/posts/python-management/)).
-
-We'll start by showing you how to install [`pipenv`](https://pipenv.readthedocs.io/en/latest/install/) which is a high-level abstraction across multiple tools (inc. [`pyenv`](https://github.com/pyenv/pyenv) and [`virtualenv`](https://virtualenv.readthedocs.io/)), then we'll move onto installing [Poetry](https://poetry.eustace.io). Lastly, we'll demonstrate `pyenv-virtualenv`.
-
-### Pipenv
-
-There is a brew install:
-
-```bash
-brew install pipenv
-```
-
-This will install Python 3.7.3 for you and so it'll be made available via `python3` and `pip3`.
-
-Pipenv can't install Python versions for you. You'll need a tool such as `pyenv` which can be installed like so:
-
-```bash
-brew install pyenv
-```
-
-> Note: pyenv will also install `python-build` (no need to install that separately), but it's useful to know because the version of Python you want to install will be based on what's available from `python-build --definitions`.
-
-So let's set-up a new Python environment (remember installing `pipenv` resulted in `python3` command being installed, and that's specifically version `3.7.3`, so we'll install a different Python3 version to that):
-
-```bash
-mkdir -p ~/Code/Python/3.7.1
-cd ~/Code/Python/3.7.1
-
-pyenv install 3.7.1
-
-pipenv --python 3.7.1
-pipenv install boto3 pytest structlog tornado
-pipenv install --dev flake8 flake8-import-order mypy tox ipython
-
-# notice the following command will fail as we haven't installed
-# anything into the python3 version 3.7.3 that was installed when
-# we installed pipenv...
-ipython
-
-# instead you can use pipenv's `run` subcommand to use Python 3.7.1
-pipenv run python --version
-pipenv run ipython
-
-# pipenv's `shell` subcommand is an alternative to `pipenv run <command>`
-# it'll drop you into a new shell which uses the relevant Python version
-pipenv shell
-
-# now these commands will work as they'll be using 3.7.1
-python --version
-ipython
-```
-
-If you don't have your `~/.bashrc` setup with `eval "$(pyenv init -)"`, then you won't have `/Users/integralist/.pyenv/shims` prefixed to your `$PATH` and so `pipenv` won't be able to locate your installed Python versions. 
-
-If you don't want to modify your `$PATH` then you can manually specify the location of the Python interpreter version you want to use: 
-
-```bash
-pipenv --python /Users/integralist/.pyenv/versions/3.7.1/bin/python
-```
-
-> Note: virtual environments (and their `.project` files can be found here: `/Users/integralist/.local/share/virtualenvs`).
-
-If you [have problems](https://github.com/pyenv/pyenv/wiki/Common-build-problems#build-failed-error-the-python-zlib-extension-was-not-compiled-missing-the-zlib) installing a Python version then you might need to reinstall XCode. The following is one solution that works for macOS Mojave:
-
-```bash
-xcode-select --install
-sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
-```
-
-> Note: it's also useful to set-up autocompletion for pipenv in your `.bashrc` configuration file `eval "$(pipenv --completion)"`.
-
-### Poetry
-
-Poetry is better in that it's a cleaner and more isolated installation process (unlike Pipenv which requires us to `brew install python3`)
-
-```bash
-# install
-curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
-
-# reload .bash_profile and check poetry version
-poetry --version
-
-# update poetry to latest version
-poetry self:update
-
-# generate auto-complete for Homebrew installed version of bash
-poetry completions bash > $(brew --prefix)/etc/bash_completion.d/poetry.bash-completion
-
-# install python version
-pyenv install 2.7.15
-
-# check help for poetry init (which generates a `pyproject.toml`)
-# poetry doesn't allow installing packages via cli (they need to be specified in toml)
-poetry init -h
-
-# create pyproject.toml interactively (see below for generated `pyproject.toml`)
-# 
-# notice [tool.poetry.dependencies] specifies the Python version used (this is required!).
-poetry init
-
-# install dependencies
-poetry install
-
-# add additional dependencies (use --dev for dev dependency)
-poetry add requests <...>
-poetry add --dev requests <...>
-
-# execute commands within the virtual environment (e.g. dev dependency ipython was installed)
-poetry run ipython
-
-# load virtual environment permanently for the current shell (e.g. now python version will be the expected environment, not the OS version)
-poetry shell
-python --version
-
-# here is a shortened Python3 example, as the above uses the OS default of Python2 for installing `2.7.15`
-# where as if you tried to set the Python version in the `pyproject.toml` to `^3.7` it would fail as that Python version wouldn't be available
-# it means whenever you want to setup a new Python3 environment, you'll need a compatible Python interpreter running first.
-# e.g. if you want to install 3.7.1 you'll need 3.7.3 running first to execute Poetry (this isn't necessary with Python2 as we already had 2.7 available by the OS)
-pyenv install 3.7.3
-pyenv local 3.7.3
-poetry add boto3 pytest structlog tornado
-poetry add --dev flake8 flake8-import-order mypy tox ipython
-```
-
-Here is an example configuration file I use (`pyproject.toml`):
-
-```toml
-[tool.poetry]
-name = "3.7.3"
-version = "0.1.0"
-description = ""
-authors = ["Integralist"]
-
-[tool.poetry.dependencies]
-python = "^3.7"
-boto3 = "^1.9"
-pytest = "^4.4"
-structlog = "^19.1"
-tornado = "^6.0"
-
-[tool.poetry.dev-dependencies]
-black = { version = "*", allows-prereleases = true }
-flake8 = "^3.7"
-flake8-import-order = "^0.18.1"
-mypy = "^0.701.0"
-tox = "^3.9"
-ipython = "^7.5"
-
-[build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
-```
-
-> Note: an older iteration of Black install was `black = { python=">3.6", version=">=19.3b0", allow_prereleases=true}` but `poetry check` would fail, so switched to updated version shown above.
+My preference is `pyenv-virtualenv` as it's simple and effective (read also my post: [Python Management and Project Dependencies](/posts/python-management/)) so that's the tool we'll be covering.
 
 ### pyenv-virtualenv
 
@@ -602,6 +449,12 @@ I would also strongly recommend using `pipx` and installing programs from there,
 - `isort`
 - `autopep8`
 - `unimport`
+
+Here's a one liner to install some of these packages that I'm guaranteed to use in all projects...
+
+```
+python3 -m pip install isort autopep8 unimport tox mypy flake8 flake8-import-order
+```
 
 I then reference these in my `.vimrc`:
 
