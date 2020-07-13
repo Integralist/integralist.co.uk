@@ -137,3 +137,83 @@ OK, so let's review the benefits of this design...
   - Toggle on/off rate limiting at the edge.
 
 > Note: although not done yet, I intend on building an internal UI service for 'Rate Control' that will make interfacing with the various components easier (inc. all features currently present in the CLI).
+
+## Example Code
+
+Let's see some example VCL code to understand the CDN edge implementation a bit better...
+
+> Note: for brevity I've removed chunks of logic so we can more easily focus in on the 'control flow'.
+
+```
+sub ratelimit_trigger {
+  // client is rate limited, so attempt to find cached version of the content
+  //
+  set req.http.X-Reject = "true";
+  return(lookup);
+}
+
+sub ratelimit_recv {
+  // client_key generates a key from the contextual data we're looking for
+  //
+  set var.client_hash = digest.hash_sha1(var.client_key);
+
+  if (table.lookup(ratelimit, var.client_hash) == "true") {
+    call ratelimit_trigger;
+  }
+
+  // if we're unable to find the current key, then before we allow the normal request flow to continue
+  // we'll first check if we can find a 'bad actor' (e.g. web scraper/fuzzer) in the rate limit table
+  //
+  // NOTE: it's at this point we'd change the client_key and regenerate the client_hash.
+  //
+  if (table.lookup(ratelimit, var.client_hash) == "true") {
+    call ratelimit_trigger;
+  }
+}
+
+sub ratelimit_miss {
+  // we were unable to find cached content, so move to vcl_error
+  // where we'll attempt to serve stale if it exists, otherwise
+  // we'll serve a synthetic '429 Too Many Requests'
+  //
+  error 601;
+}
+
+sub ratelimit_error {
+  if (obj.status == 601) {
+    if (stale.exists) {
+      return(deliver_stale);
+    }
+
+    set obj.status = 429;
+    set obj.response = "Too Many Requests";
+    set obj.http.Content-Type = "text/html";
+    synthetic {"<h1>Too Many Requests</h1>"};
+    return(deliver);
+  }
+}
+```
+
+The above code would typically be a separate code file which we'd include in our standard VCL file and then call within the relevant state subroutines...
+
+> Note: again I've omitted chunks of code for the sake of brevity.
+
+```
+include "rate_limiting"
+
+sub vcl_recv {
+  unset req.http.X-Reject;
+
+  call ratelimit_recv;
+}
+
+sub vcl_miss {
+  if (req.http.X-Reject == "true") {
+    call ratelimit_miss;
+  }
+}
+
+sub vcl_error {
+  call ratelimit_error;
+}
+```
