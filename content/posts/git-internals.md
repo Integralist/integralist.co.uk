@@ -35,6 +35,8 @@ My hope is that by better understanding how git works, and the concepts it is bu
 
 > Note: this article isn't an introduction to git, and does presume that the reader is familiar with (i.e. a user of) git.
 
+{{< adverts/quickclojure >}}
+
 ## General Concept
 
 I wanted to take a quick moment just to clarify the terminology associated with the general concepts of how git works (so we're all on the same page):

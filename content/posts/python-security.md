@@ -38,6 +38,8 @@ The library provides three functions:
 2. `decrypt_digest`
 3. `validate_digest`
 
+{{< adverts/pythonforprogrammers >}}
+
 ## KDF or PBKDF2 ?
 
 Before we start looking at the three functions provided by this library/interface, let's very briefly talk about KDF and PBKDF2.

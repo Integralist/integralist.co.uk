@@ -19,7 +19,7 @@ This post is going to cover a few tools and features I plan on using when writin
 - [Interfaces, Protocols and Abstract Methods](#interfaces-protocols-and-abstract-methods)
 - [Dependency Management](#dependency-management)
 
-> Note: if you want to learn the basics of Python, then I recommend reading "[Python for Programmers](https://leanpub.com/pythonforprogrammers)"
+{{< adverts/pythonforprogrammers >}}
 
 ## Type Hints and Static Analysis
 

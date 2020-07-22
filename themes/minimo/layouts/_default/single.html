@@ -4,6 +4,7 @@
   <article lang='{{ .Params.Lang | default .Lang }}' class='entry'>
     {{ partial "entry/header" . }}
     {{ partial "entry/content" . }}
+    {{ partial "adverts/general" . }}
     {{ partial "entry/footer" . }}
   </article>
 

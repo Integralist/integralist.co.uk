@@ -16,6 +16,8 @@ draft: false
 
 In this post I wanted to discuss a relatively simple, but important topic: Context Managers. I want to cover the what, the why and the how.
 
+{{< adverts/pythonforprogrammers >}}
+
 ## Summary
 
 - Content Managers abstract away 'clean-up' logic.
