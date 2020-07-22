@@ -165,11 +165,22 @@ blockquote code {
   margin-top: .5em;
 }
 
+.home-advert-apology {
+  margin-top: 4rem;
+}
+
 .advert {
   position: relative;
-  margin-bottom: 50px;
-  top: 45px;
+  top: -7px;
   width: 100%;
+}
+
+.advert-post {
+  top: 0px;
+}
+
+.advert-post a {
+  border-bottom: 0;
 }
 
 .advert a {

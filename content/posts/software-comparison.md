@@ -17,6 +17,16 @@ You're also likely to discover that there are many tools available that claim to
 
 You should carefully compare the value of each individual tool that is under consideration, and to do _that_ we typically utilize a comparative table.
 
+<hr>
+<p><b>But before we get into it...</b> time for some self-promotion 🙊</p>
+<div class="advert advert-post">
+  <section class="box">
+    <div class="box__inner">
+      <a target="_blank" href="https://leanpub.com/pythonforprogrammers">Want to be up and running <b><u>quickly</u></b> with <b><u>Python</u></b>? Get started here with my book<br>"<b>Python for Programmers</b>"!</a>
+    </div>
+  </section>
+</div>
+
 ## Comparison Matrix
 
 A comparison matrix table should take into consideration the following properties:
