@@ -69,6 +69,8 @@ Programming languages don't all offer identical APIs and so sometimes you might 
 
 Regardless, the idioms and syntax differences between languages become redundant when you just focus on the pattern(s) behind the proposed solution.
 
+{{< adverts/pythonforprogrammers >}}
+
 ## Why refactor?
 
 The purpose of refactoring is to improve the quality, clarity and maintainability of your code. Simple really.

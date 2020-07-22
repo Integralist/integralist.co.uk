@@ -42,6 +42,8 @@ draft: false
 > 
 > Feel free to skip over these code examples if you like. The explanations that precede the examples should hopefully suffice.
 
+{{< adverts/quickclojure >}}
+
 ## Introduction
 
 Concurrency is a difficult concept. Regardless of programming language or idiom that you use, the practice of programming a "thread-safe" application can be harder than you think.

@@ -27,6 +27,8 @@ In this example I have an origin server written in Python (for no other reason t
 
 Each origin handler will print the http request headers, followed by sending a response body that correlates to the handler name (so for example, the `FooHandler` class will respond with `FOO!`, while the `BarHandler` class will response with `BAR!`).
 
+{{< adverts/quickclojure >}}
+
 ## Example Python Origin Code
 
 Here is our Python code using the [Tornado](http://www.tornadoweb.org/) web framework.

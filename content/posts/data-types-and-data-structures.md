@@ -31,6 +31,8 @@ In this post we will be looking briefly at, and at a high-level, the various dat
 
 There are _many_ data structures, and even the ones that are covered here have many nuances that make it impossible to cover every possible detail. But my hope is that this will give you an interest to research them further.
 
+{{< adverts/pythonforprogrammers >}}
+
 ## Data Types
 
 A data type is an [attribute](https://english.stackexchange.com/a/28098/334144) of data which tells the compiler (or interpreter) how the programmer intends to use the data.

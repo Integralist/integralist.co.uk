@@ -31,6 +31,8 @@ draft: false
 
 In this post we're going to review some different algorithmic time complexities. Let me begin by clarifying, when I say 'algorithm' I mean: 'logic written in code' and when I say 'operation' I mean: 'a unit of code was evaluated', and that operation could be something as simple as `x + y`.
 
+{{< adverts/pythonforprogrammers >}}
+
 ## Asymptotic Analysis
 
 Asymptotic analysis is the computing of an algorithm's running time, and there are actually a few different variations that allow us to measure different aspects of that running time:

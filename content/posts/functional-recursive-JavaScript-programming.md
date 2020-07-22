@@ -26,6 +26,8 @@ This post isn't about [Functional Programming](http://en.wikipedia.org/wiki/Func
 
 What we do cover is recursion and a problem known as "tail call optimisation" and how to work around it in JavaScript. 
 
+{{< adverts/quickclojure >}}
+
 ## The problem
 
 In JavaScript, if a function calls itself recursively then the JavaScript engine has to create what's called a new 'stack'. A stack is a chunk of memory allocated to help keep track of all the information related to the function at the point of execution (such as its arguments and their initialised values). 

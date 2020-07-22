@@ -19,9 +19,29 @@ draft: false
 
 > This post was originally written for [David Walsh back in 2015](https://davidwalsh.name/designing-simplicity). I've since decided to reproduce it here for my own records - Integralist: August, 2017.
 
+- [Complexity vs Complicated](#complexity-vs-complicated)
+- [Promoting simplicity](#promoting-simplicity)
+- [Naming things](#naming-things)
+- [Growth](#growth)
+- [The micro fallacy?](#the-micro-fallacy)
+- [Decoupling systems](#decoupling-systems)
+- [Broker/Renderers](#brokerrenderers)
+- [How low can you (or should you) go?](#how-low-can-you-or-should-you-go)
+- [Language agnostic templates](#language-agnostic-templates)
+- [Automation and Duplication](#automation-and-duplication)
+- [Tooling](#tooling)
+- [FP, OOP and MVC](#fp-oop-and-mvc)
+- [Inherent complexity](#inherent-complexity)
+- [Containerization](#containerization)
+- [Optimizing user experience](#optimizing-user-experience)
+- [Where have we succeeded/failed?](#where-have-we-succeededfailed)
+- [Summary](#summary)
+
 Before we get started, it's worth me spending a brief moment introducing myself to you. My name is Mark (or [@integralist](https://twitter.com/integralist) if Twitter happens to be your communication tool of choice) and I currently work for BBC News in London England as a principal engineer/tech lead; and I'm also the author of "[Pro Vim](http://www.apress.com/9781484202517)".
 
 > Quick shout out to [Steven Jack](https://twitter.com/stevenjack85) who took the time to review this post. A lot of what we've done right, he either helped instigate or was a fundamental part of its success
+
+{{< adverts/quickclojure >}}
 
 The "responsive" BBC News website receives approximately 8 million visits per day (that's on average for a quiet news day). Those numbers will go much higher once the responsive site replaces the current static desktop offering and starts to incur many more users. But for the moment that gives a rough idea of the sort of traffic we get on a daily basis.
 

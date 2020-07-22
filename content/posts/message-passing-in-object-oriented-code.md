@@ -29,6 +29,8 @@ Since then I've been reading through [Design Patterns in Ruby](http://designpatt
 
 His comments really nailed home for me the design benefits of thinking more about 'messages' being passed to objects, and it's that point which I want to elaborate on below.
 
+{{< adverts/pythonforprogrammers >}}
+
 ## Quick example
 
 Imagine the following code example: `account.deposit(50)`

@@ -34,6 +34,8 @@ Model, View, Controller (MVC). This is a pretty standard architectural pattern a
 
 The basic principle of the pattern is to separate the different areas of logic from your application into distinct compartments.
 
+{{< adverts/pythonforprogrammers >}}
+
 ### Model
 
 The model holds your business data. Typically this will be data that is pulled in from a database or external data service of some kind.

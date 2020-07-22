@@ -32,6 +32,8 @@ In this post we'll be primarily focusing on using nginx as a reverse proxy, alth
 
 Lastly, I'm going to take you on the same journey I took while setting this all up; so rather than work through a perfect scenario you'll get to see some of the errors I stumbled across along the way. If you'd prefer to just read the (small amount of) code then the next section is for you.
 
+{{< adverts/quickclojure >}}
+
 ## Just give me the code
 
 [github.com/integralist/docker-examples/nginx](https://github.com/Integralist/Docker-Examples/tree/master/Nginx)
