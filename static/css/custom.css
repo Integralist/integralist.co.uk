@@ -164,3 +164,44 @@ blockquote code {
   font-weight: bold;
   margin-top: .5em;
 }
+
+.advert {
+  position: relative;
+  margin-bottom: 50px;
+  top: 45px;
+  width: 100%;
+}
+
+.advert a {
+  display: block;
+  font-size: 1.5rem;
+  padding: 1rem 2rem 2.5rem;
+  position: relative;
+  top: 12px;
+  text-align: center;
+}
+
+.box {
+  position: relative;
+  display: block;
+  margin: auto;
+  max-width: 600px;
+}
+.box__inner:before, .box__inner:after {
+  content: '';
+  position: absolute;
+  display: block;
+  height: 12px;
+  width: 100%;
+  background: #cb5a5e;
+  background: repeating-linear-gradient(-45deg, red, red 12px, transparent 10px, transparent 23px);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-bottom: 0;
+}
+.box__inner:before {
+  top: 0;
+}
+.box__inner:after {
+  bottom: 0;
+}
