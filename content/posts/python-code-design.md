@@ -17,7 +17,9 @@ This post is going to cover a few tools and features I plan on using when writin
 
 - [Type Hints and Static Analysis](#type-hints-and-static-analysis)
 - [Interfaces, Protocols and Abstract Methods](#interfaces-protocols-and-abstract-methods)
-- [Dependency Management](#dependency-management)
+- [Dependency Management (with pipenv)](#dependency-management-with-pipenv) (OUTDATED! †)
+
+> † read my post "[Python Management and Project Dependencies](/posts/python-management/)".
 
 {{< adverts/pythonforprogrammers >}}
 
@@ -115,13 +117,20 @@ Python not being a statically typed language means it has no support for traditi
 
 ### Protocols
 
-Python provides '[protocols](https://docs.python.org/3.7/library/collections.abc.html#module-collections.abc)' as part of their 'collections' module and are homed alongside their 'abstract base classes' (which we'll also look at shortly). Protocols are similar in spirit to interfaces in other languages, but in practice act more like _guidelines_.
+Python provides '[protocols](https://docs.python.org/3.7/library/collections.abc.html#module-collections.abc)' as part of their 'collections' module, which are also homed alongside another concept in Python called 'abstract base classes' (this is something we'll look at shortly as ABC's are designed to play nicely with protocols). 
 
+Protocols are similar in spirit to interfaces in other languages, but in practice act more like _guidelines_ (this is because Python is a dynamic language and so strictly speaking it isn't able to validate code correctness because there's no compilation step with Python).
+
+In essence a protocol _is_ an interface (it defines expected behaviours), while Python's 'Abstract Base Classes' provide a way to offer a form of runtime safety for the interface.
+
+But to understand 'protocols' and how we can utilize either MyPy or Abstract Base Classes with them, you'll need to know a bit about 'magic methods' in Python...
+
+**Magic Methods**:  
 If one of your custom defined objects implements specific ['magic' methods](https://rszalski.github.io/magicmethods/) (e.g. `__len__`, `__del__` etc), then you'll find a selection of builtin Python functions become available to use on those objects that otherwise those builtin functions wouldn't necessarily support.
 
 For example, if we implement the `__len__` magic method, then our object will be able to utilise the builtin `len` function. 
 
-Also, once we have protocols in place we can use mypy along with type hinting to implement a development time interface check. 
+If we utilize protocols, then we can use mypy along with type hinting to implement a development time interface check. 
 
 Consider the following code snippet:
 
@@ -137,7 +146,9 @@ t.members  # ['foo', 'bar', 'baz']
 len(t)  # TypeError: object of type 'Team' has no len()
 ```
 
-This code doesn't work because the `len` function provided by the Python standard library doesn't work on custom classes _unless_ the class defines a `__len__` magic method. In doing so (see the following example) the `Team` class is now supporting the [collections.abc.Sized protocol](https://docs.python.org/3.7/library/collections.abc.html#collections.abc.Sized) and so the `len` function will be able to work when given an instance of `Team`:
+This code doesn't work because the `len` function provided by the Python standard library doesn't work on custom classes _unless_ the class defines a `__len__` magic method. 
+
+If we add a `__len__` method to the above example (see below), then we would find the `Team` class now supports the [collections.abc.Sized protocol](https://docs.python.org/3.7/library/collections.abc.html#collections.abc.Sized) and so the `len` function will be able to work when given an instance of `Team`:
 
 ```
 class Team:
@@ -154,7 +165,7 @@ t.members  # ['foo', 'bar', 'baz']
 len(t)  # 3
 ```
 
-If we want to utilise mypy to help verifying our code at development time, let's say we want a function to accept anything that we can use the `len` function on (i.e. anything that supports the `collections.abc.Sized` protocol), then we can do so using the `typing.Sized` type:
+Now if we want to utilise mypy to help verifying our code at development time, let's say we have a function that we want to accept any argument type that supports the `len` function (i.e. anything that supports the `collections.abc.Sized` protocol), then we can do so using the `typing.Sized` type (see below example which adds such a function called `print_size`):
 
 ```
 import typing
@@ -179,6 +190,12 @@ print_size(t)
 ```
 
 Notice that in the above example we state that the first argument to `print_size` should be a type of the `typing.Sized`, which is actually a mapping to the `collections.abc.Sized` protocol.
+
+If we use the mypy static analysis tool as part of our application testing process (e.g. we only deploy the code if mypy is happy), then we can feel confident our code will be safe. 
+
+This is because if we were ever to change the code in a way where we were passing something to `print_size` that _didn't_ support calling `len()` on it, then the mypy analysis would fail.
+
+**Custom Protocols**
 
 The Python typing module also let's you define your own protocols using `typing.NewType`. In the following example we create a new custom protocol called `CustomProtocol`:
 
@@ -301,7 +318,7 @@ For example, our `Thing` class is a _concrete_ implementation, and so we can't p
 
 > Note: the mypy docs have [a good detailed breakdown](https://mypy.readthedocs.io/en/latest/kinds_of_types.html#the-type-of-class-objects) of how to indicate a dependency of a specific class type.
 
-## Dependency Management
+## Dependency Management (with pipenv)
 
 **UPDATE 2019.12.20**: I no longer use Pipenv (as per below). I've written an updated version of how best to handle dependencies [here](/posts/python-management/).
 
