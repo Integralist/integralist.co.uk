@@ -197,7 +197,25 @@ This is because if we were ever to change the code in a way where we were passin
 
 **Custom Protocols**
 
-The Python typing module also let's you define your own protocols using `typing.NewType`. In the following example we create a new custom protocol called `CustomProtocol`:
+The Python typing module also let's you define your own protocols using `typing.NewType`. 
+
+Let's look at a simple example first to understand the use of `NewType`:
+
+```
+from typing import NewType
+
+I = NewType('I', int)
+
+def foo() -> I:
+   return I(123)
+```
+
+Notice a few things in the above example:
+
+1. the first argument to `typing.NewType` needs to match the name of the variable it is assigned to.
+2. we can't just return an integer, it needs to be casted to the new type `I` first.
+
+Now we have a basic understanding of `NewType` let's consider the following example where we create a new custom protocol called `CustomProtocol`:
 
 ```
 import typing
@@ -227,7 +245,7 @@ cp = CustomProtocol(Team(['beep', 'boop']))  # <class '__main__.Team'>
 print_size(cp)  # prints '2'
 ```
 
-> Note: the first argument to `typing.NewType` needs to match the name of the variable it is assigned to. Also, when we create an instance of `CustomProtocol` the underlying 'type' is `Team`.
+> Note: when we create an instance of `CustomProtocol` the underlying 'type' is `Team`.
 
 The mypy static analysis tool can subsequently be used to verify code for both native protocols _and_ custom protocols, like so (see the type hint annotation added to the `print_size` function, which mypy is happy with):
 
@@ -243,7 +261,7 @@ class Team:
 CustomProtocol = typing.NewType('CustomProtocol', Team)
 
 
-def print_size(s: CustomProtocol):  # use could also set type to `Team` 
+def print_size(s: CustomProtocol):  # we could also set type to `Team` 
     print(len(s))  # prints '2'
 
 
