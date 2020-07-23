@@ -69,9 +69,12 @@ commands =
     {posargs:py.test --cov=bf_tornado}
 
 [testenv:lint]
-deps = flake8==3.7.9
+deps =
+    flake8==3.8.3
+    mypy==0.782
 commands =
     flake8 bf_tornado
+    mypy --verbose --ignore-missing-imports --package bf_tornado
 ```
 
 > Note: the name after `testenv:` is the _name_ of the virtual environment that will be created (e.g. `testenv:foo` will create a "foo" virtual environment).
