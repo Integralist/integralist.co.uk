@@ -215,9 +215,9 @@ slice:  []int
 
 > Note: the `append` function _always_ returns a new slice.
 
-Notice how `s` is showing an updated 'view' (e.g. `2, 3, 4, 5, 6`), but the underlying array must have changed as the printed array (`a`) isn't showing the appended value (`6`).
+Notice how `s` is showing an updated 'view' (e.g. `2, 3, 4, 5, 6`). What's interesting here is the new slice must have also resulted in a new array being allocated (and subsequently the new slice is pointing to it) because the original array (`a`) isn't showing the appended value (`6`).
 
-We can check this with some overly complicated code that reflects into the internal go code to locate the slice's pointer and to dereference that pointer to access the underlying array:
+Now we can check this with some overly complicated code that 'reflects' into the internal go code (this will enable us to locate the slice's pointer and to dereference that pointer to access the underlying array):
 
 ```
 s := []int{1, 2, 3, 4}
