@@ -36,6 +36,8 @@ I'm also a published author with Apress and LeanPub:
 - [Python for Programmers](https://leanpub.com/pythonforprogrammers)
 - [Programming in Clojure](https://leanpub.com/programming-clojure/)
 
+> **Status Update**: I'm currently working on a new book called 'Python 101' which will replace 'Python for Programmers'.
+
 ## Working Together
 
 > "as smart as developers are, they are not always good at explaining things in a way that makes human sense. not you. you are an exception. you are A+".
@@ -64,7 +66,7 @@ The journey has only just begun!
 
 The story so far is that I joined as a Senior Software Engineer as part of a new 'core' UK dev team. We were tasked with decommissioning a 10yr+ legacy Perl monolithic application stack over to various Python and Go services.
 
-I've worked primarily within BuzzFeed's OO-INFRA group which sits somewhere in-between traditional infrastructure/operation teams and engineering teams building user facing products. Our motivations were to make the lives of our fellow engineers easier by building tools, services and abstractions that enabled them to work more quickly and efficiently.
+I was working primarily within BuzzFeed's OO-INFRA group, which sits somewhere in-between traditional infrastructure/operation teams and engineering teams building user facing products. Our motivations were to make the lives of our fellow engineers easier by building tools, services and abstractions that enabled them to work more quickly and efficiently.
 
 January 2018 I was promoted to Staff Software Engineer, after helping to design/architect, develop and maintain some of BuzzFeed's key infrastructure and software (CDN, caching strategies, routing behaviours, and security/authentication related concerns).
 
@@ -96,13 +98,13 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ### 2020
 
-- **What**: worked towards reducing our log production across our platform.  
+- **What**: worked across multiple teams promoting certain patterns to help reduce our logs (e.g. sampling 2xx's & single-log context middleware for http servers).  
   **Why**: we had started to exceed our cost agreements with our provider (Datadog).  
-  **Impact**: worked across many teams to help promote certain patterns to help reduce our logs. Specifically two things we did was: 1. sample our logs (and in some cases only sample `200 OK` responses), while 2. for web servers/proxies/APIs we would implement a middleware pattern where we only record a single log at the very end of a transaction while passing the log object throughout various code paths so we can append contextual data to it.
+  **Impact**: managed to reach our log production goal, while having the opportunity to work and share ideas with lots of different teams across the org.
 
-- **What**: designed and communicated (via RFC), and was the sole engineer building a global rate limiting feature that integrated at various layers of our infrastructure (CDN, Routing + a new 'rate control' service).  
-  **Why**: teams across the organization were struggling to handle rate limiting within their services and Core Infrastructure (the team I work in) found through user feedback that this would be something worth us taking on.  
-  **Impact**: I was able to release a feature that provided our organization with DoS level protection at 'the edge' (e.g. reduced load on our internal infrastructure) while decoupling rate limiting logic from our critical path, along with granular client identification context to be more useful than just a simple IP deny list.
+- **What**: I was the sole engineer designing, communicating (via RFC process) and building a global rate limiting feature ([read my post about it](/posts/rate-limiting-at-the-cdn-edge/)) that integrated at various layers of our infrastructure (CDN, Routing + a new 'rate control' service).  
+  **Why**: teams across the organization were struggling to handle rate limiting within their services and Core Infrastructure (the team I work in) found through user feedback that this would be a valuable task to take on.  
+  **Impact**: I was able to release [a feature](/posts/rate-limiting-at-the-cdn-edge/) that provided our organization with DoS level protection at 'the edge' (e.g. reduced load on our internal infrastructure) while decoupling rate limiting logic from our critical path, along with granular client identification context to be more useful than just a simple IP deny list.
 
 - **What**: spent three weeks tackling problem of metric production across ~600 microservices.  
   **Why**: we had run over our allotted threshold and were about to be billed ~$80k a month!  
