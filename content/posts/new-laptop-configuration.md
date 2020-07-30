@@ -578,7 +578,7 @@ Not every app can be installed via Homebrew. [Monosnap](https://monosnap.com/wel
 
 If you want an easy way to hide menu bar items, then try the [hidden-bar](https://apps.apple.com/app/hidden-bar/id1452453066) app ([github](https://github.com/dwarvesf/hidden))
 
-Also, if you're into torrents, then the transmission server/client (`npm install -g t-get`) might be of interest to you.
+Also, if you're into torrents, then the [transmission server/client](https://cli-ck.io/transmission-cli-user-guide/) (or alternatively `npm install -g t-get`) might be of interest to you.
 
 ## macOS
 
