@@ -173,6 +173,11 @@ The [Dash](https://kapeli.com/dash) app will ask you what documentation you woul
 - Tornado
 - vim
 
+A couple of apps probably worth mentioning are:
+
+- https://github.com/dwarvesf/hidden
+- https://github.com/leits/MeetingBar
+
 ## Curl
 
 I like to use a more modern version of `curl` (e.g. supports HTTP/2, and other features):
