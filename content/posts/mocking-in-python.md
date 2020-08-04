@@ -442,6 +442,52 @@ def test_confirm_email_change_failure(self, mock_thing):
 
 If the above approach doesn't work for you, here are some alternatives...
 
+### AsyncMock
+
+> Note: this utilizes the package `pytest-asyncio` to help with testing asyncio code
+
+Let's start with the code to be mocked...
+
+```python
+import asyncio
+
+async def sum(x, y):
+    await asyncio.sleep(1)
+    return x + y
+```
+
+Now here's how we'd mock it...
+
+```python
+import pytest
+import asyncio
+
+# create a new pytest fixture called mock_sum
+#
+@pytest.fixture()
+def mock_sum(mocker):
+    async_mock = AsyncMock()
+    mocker.patch('app.sum', side_effect=async_mock)
+    return async_mock
+
+    # Python <3.8 would have used
+    #
+    # future = asyncio.Future()
+    # mocker.patch('app.sum', return_value=future)
+    # return future
+
+@pytest.mark.asyncio
+async def test_sum(mock_sum):
+    mock_sum.return_value = 4
+
+    # Python <3.8 would have used
+    #
+    # mock_sum.set_result(4)
+
+    result = await sum(1, 2)
+    assert result == 4
+```
+
 ### Monkey Patch
 
 ```
