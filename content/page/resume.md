@@ -57,7 +57,7 @@ I care a lot about the people I work with, and aim to build meaningful relations
 >
 > Another of Mark’s major achievements was consolidating the organization’s DataDog metrics. In late March 2020, BuzzFeed urgently needed to drastically reduce the number of metrics published to DataDog; if we did not, our DataDog contract would grow prohibitively costly when it renewed at the end of April. BuzzFeed could not justify $1000s/per month new spend on monitoring, especially during a pandemic. From this nebulous problem, Mark formed an actionable plan: He audited the metrics published throughout the org, worked with teams to consolidate their monitoring, and prevented regression by configuring alerts to notify when our DataDog usage approaches the threshold of what’s affordable. Had Mark not succeeded here, Core Infra would have likely derailed its entire roadmap to migrate to a different provider.
 
--- Team Lead @BuzzFeed Core Infra.
+-- Ex Googler and Team Lead @BuzzFeed (for the Core Infra squad).
 
 ## Connect
 
