@@ -51,13 +51,21 @@ I care a lot about the people I work with, and aim to build meaningful relations
 
 ## Testimonials
 
-> Given the lack of a formal mid-year review process, I wanted to take a moment to detail Mark’s several recent wins for Core Infra. Mark has designed, implemented, and delivered multiple crucial projects during 2020.
+> Thanks for pushing forward the 'Metric Standardization/Unification' and 'CDN Automation' RFCs. They're great. The first one could really unlock a lot of possibilities and the second needed a champion to get it moving. Awesome work.
+
+-- Software Architect @BuzzFeed.
+
+> Fun and educational, as always, to watch you methodically pick apart complex problems @integralist.
+
+-- Team Lead @BuzzFeed.
+
+> I wanted to take a moment to detail Mark’s several recent wins for Core Infra. Mark has designed, implemented, and delivered multiple crucial projects during 2020.
 >
 > Mark’s arguably most prominent project was Rate Limiting: He solicited ideas from team members (myself, Dan M), drafted an RFC, defended the design through an Architecture Review, and built a high-quality implementation. This required a new service (rate_control), nontrivial latency-sensitive changes to our edge-proxy (perimeter), and complex integration with our third-party CDN (Fastly). The project landed with no interruptions, but most impressive was how Mark then followed up with teams whose service architectures inhibited Rate Limiting. This then led Mark to extend his original design to avert a broader class of attacks. The importance of this work cannot be overstated, especially prior to a US election that we anticipate will bring an increase of attacks.
 >
 > Another of Mark’s major achievements was consolidating the organization’s DataDog metrics. In late March 2020, BuzzFeed urgently needed to drastically reduce the number of metrics published to DataDog; if we did not, our DataDog contract would grow prohibitively costly when it renewed at the end of April. BuzzFeed could not justify $1000s/per month new spend on monitoring, especially during a pandemic. From this nebulous problem, Mark formed an actionable plan: He audited the metrics published throughout the org, worked with teams to consolidate their monitoring, and prevented regression by configuring alerts to notify when our DataDog usage approaches the threshold of what’s affordable. Had Mark not succeeded here, Core Infra would have likely derailed its entire roadmap to migrate to a different provider.
 
--- Ex Googler and Team Lead @BuzzFeed (for the Core Infra squad).
+-- Ex Googler and Principal Engineer @BuzzFeed.
 
 ## Connect
 
@@ -70,6 +78,10 @@ You can find me online at the following locations:
 - [linkedin.com/mark-mcdonnell](https://www.linkedin.com/in/mark-mcdonnell-08800565)
 
 ## Brief History
+
+- [BuzzFeed (2016-present)](#buzzfeed-june-2016---present)
+- [BBC (2013-2016)](#bbc-jan-2013---june-2016)
+- [Storm Creative (2001-2012)](#storm-creative-feb-2001---dec-2012)
 
 ### BuzzFeed (June 2016 - present)
 
