@@ -59,6 +59,10 @@ I care a lot about the people I work with, and aim to build meaningful relations
 
 -- Team Lead @BuzzFeed.
 
+> So basically start with the assumption @integralist is not crazy and all his code is correct, usually a good assumption!
+
+-- Staff Software Engineer @BuzzFeed after hours of debugging 🙂
+
 > I wanted to take a moment to detail Mark’s several recent wins for Core Infra. Mark has designed, implemented, and delivered multiple crucial projects during 2020.
 >
 > Mark’s arguably most prominent project was Rate Limiting: He solicited ideas from team members (myself, Dan M), drafted an RFC, defended the design through an Architecture Review, and built a high-quality implementation. This required a new service (rate_control), nontrivial latency-sensitive changes to our edge-proxy (perimeter), and complex integration with our third-party CDN (Fastly). The project landed with no interruptions, but most impressive was how Mark then followed up with teams whose service architectures inhibited Rate Limiting. This then led Mark to extend his original design to avert a broader class of attacks. The importance of this work cannot be overstated, especially prior to a US election that we anticipate will bring an increase of attacks.
@@ -74,7 +78,6 @@ You can find me online at the following locations:
 - [integralist.co.uk](http://www.integralist.co.uk/)
 - [github.com/integralist](https://github.com/integralist)
 - [twitter.com/integralist](http://www.twitter.com/integralist)
-- [keybase.io/integralist](https://keybase.io/integralist)
 - [linkedin.com/mark-mcdonnell](https://www.linkedin.com/in/mark-mcdonnell-08800565)
 
 ## Brief History

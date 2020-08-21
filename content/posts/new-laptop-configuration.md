@@ -145,7 +145,6 @@ Here is a list of the apps I'll install:
 - `docker`: this is the counter-part to the 'package' installed earlier † 
 - `google-backup-and-sync`: syncs files between computer and Google Drive
 - `google-chrome`: web browser
-- `keybase`: encryption tool
 - `lepton`: GitHub Gist UI
 - `slack`: communication tool
 - `spotify`: music streaming service
@@ -156,7 +155,7 @@ Here is a list of the apps I'll install:
 Here's a handy one-liner:
 
 ```bash
-brew cask install alfred caffeine dash docker google-backup-and-sync google-chrome keybase lepton slack spotify vlc
+brew cask install alfred caffeine dash docker google-backup-and-sync google-chrome lepton slack spotify vlc
 ```
 
 The [Dash](https://kapeli.com/dash) app will ask you what documentation you would like to download so it's available offline. I use the following docsets (I used to have _lots_ more but realised I never really used them, so this is my 'essential' docs list):
@@ -284,7 +283,6 @@ gpg --export <key-id> # public key by default
 
 > Note: don't forget you can _sign_ your git commits:  
 > `git config --global user.signingkey <key-id>`  
-> But you might prefer to use a Keybase key for that instead.
 
 Next, install `pass` and `pass otp` commands:
 

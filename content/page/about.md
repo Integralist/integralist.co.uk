@@ -8,8 +8,6 @@ comments: false
 
 Hello, my name is Mark and I work @[BuzzFeed](https://www.buzzfeed.com/) as a Staff Software Engineer (formerly Principal Engineer @[BBCNews](http://www.bbc.co.uk/news)).
 
-> [keybase.io/integralist](https://keybase.io/integralist)
-
 I'm a published author of five books (three through Apress and two self-published via Leanpub):
 
 - [Pro Vim](http://www.amazon.co.uk/Pro-Vim-Mark-McDonnell/dp/1484202511/ref=sr_1_1)
