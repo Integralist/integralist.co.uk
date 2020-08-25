@@ -63,13 +63,26 @@ I care a lot about the people I work with, and aim to build meaningful relations
 
 -- Staff Software Engineer @BuzzFeed after hours of debugging 🙂
 
+
+> Mark is an expert on fields in our site infrastructure that are essential to our business, specifically our edge layer. I am sad that I have not had the opportunity to directly work with Mark too much in his time on Core Infra, but he has been a mentor to me and others during the long running mentorship program and I have direct experience of his work through trans-squad meetings.
+>
+> Mark prioritizes depth in technical understanding that makes every team member feel secure and safe in making changes to anything that he has built. Mark is also always generous with his time and will walk through any piece of an implementation you don't understand. I always appreciate Mark's feedback and questions on my work.
+>
+> In fact, any constructive feedback I have for Mark is around wishing I could hear more of his thoughts and opinions in my – and more broadly squad west's –  work. I hope to find ways in the next quarter to have more conversations across the two core infrastructure squads about how we can work together and I think Mark would be an invaluable voice in leading or participating in those conversations, especially with the departure of our Director of Engineering.
+>
+> Overall, I think Mark is doing a fantastic job. He delivers impact consistently, is an expert in technical domains for us, and helps us navigate complicated problems. I really love having Mark on the team.
+
+-- Senior Software Engineer @BuzzFeed  
+-- She is part of a squad based in US-west
+
 > I wanted to take a moment to detail Mark’s several recent wins for Core Infra. Mark has designed, implemented, and delivered multiple crucial projects during 2020.
 >
 > Mark’s arguably most prominent project was Rate Limiting: He solicited ideas from team members (myself, Dan M), drafted an RFC, defended the design through an Architecture Review, and built a high-quality implementation. This required a new service (rate_control), nontrivial latency-sensitive changes to our edge-proxy (perimeter), and complex integration with our third-party CDN (Fastly). The project landed with no interruptions, but most impressive was how Mark then followed up with teams whose service architectures inhibited Rate Limiting. This then led Mark to extend his original design to avert a broader class of attacks. The importance of this work cannot be overstated, especially prior to a US election that we anticipate will bring an increase of attacks.
 >
 > Another of Mark’s major achievements was consolidating the organization’s DataDog metrics. In late March 2020, BuzzFeed urgently needed to drastically reduce the number of metrics published to DataDog; if we did not, our DataDog contract would grow prohibitively costly when it renewed at the end of April. BuzzFeed could not justify $1000s/per month new spend on monitoring, especially during a pandemic. From this nebulous problem, Mark formed an actionable plan: He audited the metrics published throughout the org, worked with teams to consolidate their monitoring, and prevented regression by configuring alerts to notify when our DataDog usage approaches the threshold of what’s affordable. Had Mark not succeeded here, Core Infra would have likely derailed its entire roadmap to migrate to a different provider.
 
--- Ex Googler and Principal Engineer @BuzzFeed.
+-- Ex Googler and Principal Engineer @BuzzFeed  
+-- Also the Team Lead for my squad based in US-east.
 
 ## Connect
 
