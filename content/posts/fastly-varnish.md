@@ -21,6 +21,7 @@ We will be digging into quite a few different areas of their implementation, suc
 **Be warned: this post is a monster!<br>It'll take a long time to digest this information.**
 
 <img src="../../images/no-time.webp" class="post-img" loading="lazy">
+<br>
 
 - [Introduction](#introduction)
   - [Varnish Basics](#varnish-basics)
@@ -81,7 +82,9 @@ We will be digging into quite a few different areas of their implementation, suc
   - [Logging Memory Exhaustion](#logging-memory-exhaustion)
 - [Restricting requests to another Fastly service](#restricting-requests-to-another-fastly-service)
 - [Custom Error Pages](#custom-error-pages)
-- [Rate Limiting](#rate-limiting)
+- [Security](#security)
+  - [Rate Limiting](#rate-limiting)
+  - [Path Traversal](#path-traversal)
 - [Conclusion](#conclusion)
 - [Reference material](#reference-material)
 
@@ -2236,9 +2239,15 @@ Even though the second request gets a cache HIT for the origin's _original_ erro
 
 This is why when we get back into `vcl_deliver` we override those headers according to the values we tracked within the initial request flow.
 
-## Rate Limiting
+## Security
+
+There are some aspects of the CDN where you need to take extra precautions to protect your upstreams (and in some cases your customers data!). Let's dig into some of the concepts...
+
+### Rate Limiting
 
 Rate limiting clients at the edge currently (as of March 2020) isn't easy because we don't have a fully fledged programming environment to work with (although Fastly is releasing a new 'compute@edge' serverless service which aims to tackle that problem).
+
+> Note: there's an alternative approach to what I discuss below, and it is slightly more involved because it attempts to handle web scraper/fuzzer tools. I've blogged about it as a separate article here: [Rate Limiting at the CDN Edge](/posts/rate-limiting-at-the-cdn-edge/).
 
 In the mean time this leaves us with various ways of implementing rate limiting with Fastly's version of Varnish and VCL. One approach I have is a multi-pronged approach and it ultimately requires your origin (or at least some service _behind_ Fastly) to handle the rate limiting and to be able to return `429 Too Many Requests` for a client that is hitting certain exposed endpoints too hard.
 
@@ -2314,6 +2323,80 @@ One thing you might be wondering is why I chose to allow `return(lookup)` on POS
 This is because once a request has been 'passed' in `vcl_recv` then it can't be set to be cacheable later (in `vcl_fetch`) as we would have disabled caching completely. You'll be able to see tell this if you check the special `fastly_info.state` variable (or test the code via [fastly's fiddle tool](https://fiddle.fastlydemo.net/fiddle/47871720)) as this will report back a `pass` state. 
 
 <img src="../../images/banned.webp" class="post-img" loading="lazy">
+
+### Path Traversal
+
+A path traversal vulnerability is the ability to craft a request that will cause the server to make a request to somewhere different to what the request would initially suggest.
+
+This is best explained by a real example. This isn't a real example in the sense of a real vulnerability, we're just going to utilize two separate tools (curl and httpbin.org) to help us understand the _concept_ of the vulnerability.
+
+So we'll use the popular [httpbin.org](https://httpbin.org/) service as an upstream server. The service provides (among many others) the endpoint `/status/200` which will return a `200 OK` response, but it also provides an `/anything` endpoint which will display JSON data about the incoming request (including the path you specified).
+
+If I made a request to `https://httpbin.org/anything/foo` then it would show `/anything/foo` as the request path.
+
+Below is the request we're going to make (pay attention to the path):
+
+```
+curl -v "https://httpbin.org/status/200/../../anything/status/404/"
+```
+
+This ^^ request has `../../` inside of it, which curl (and this all depends on the server and/or the software you test with/against) will _collapse_ down. This means the request path becomes `/anything/status/404`. 
+
+We can see the response from httpbin.org was:
+
+```
+{
+  "args": {},
+  "data": "",
+  "files": {},
+  "form": {},
+  "headers": {
+    "Accept": "*/*",
+    "Host": "httpbin.org",
+    "User-Agent": "curl/7.64.1",
+    "X-Amzn-Trace-Id": "Root=1-5f48c827-200a853c97290c8e6fce74ca"
+  },
+  "json": null,
+  "method": "GET",
+  "origin": "185.192.70.151",
+  "url": "https://httpbin.org/anything/status/404/"
+}
+```
+
+> Note: you can actually tell curl to _not_ collapse the path when it sees `../../`, by using the `--path-as-is` flag, and so if we made the earlier request with this flag added, then httpbin.org would have rejected the request as it wouldn't have a route defined on the server end that recognized the full path.
+
+We can now see how this might be a very dangerous attack because you could construct a request to a server and trick it into communicating with any private/internal APIs it has access to. In essence this type of attack could enable the caller to access whatever data the server would normally only have direct access to.
+
+So how can we prevent this from happening? Well the solution is to parse the request looking for invalid characters such as `..` or the encoded variation of a `.` which is `%2E`. This can happen at the application layer but I prefer to handle this at the edge so our upstream services and infrastructure don't have to deal with the request at all.
+
+Here is an example of some VCL that handles this:
+
+```
+sub vcl_recv {
+  #FASTLY recv
+  if (req.url.path ~ {"(?i)(%2E%2E|\.\.)"}) {
+    error 699 "Bad Request";
+  }
+  return(lookup);
+}
+
+sub vcl_error {
+  #FASTLY error
+  if (obj.status == 699) {
+    set obj.status = 400;
+    synthetic {"Bad Request"};
+    return(deliver);
+  }
+}
+
+sub vcl_deliver {
+  #FASTLY deliver
+  set resp.http.X-OriginalPath = req.url.path;
+  return(deliver);
+}
+```
+
+> Note: CAREFUL! when VCL statically compiles a regex it will attempt to 'interpret' it unless the string literal (used to provide the regex pattern) is a 'long string' such as `{"..."}`. Please refer to the [`string` documentation](https://developer.fastly.com/reference/vcl/types/string/).
 
 ## Conclusion
 
