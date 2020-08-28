@@ -53,6 +53,9 @@ I care a lot about the people I work with, and aim to build meaningful relations
 
 -- Staff Software Engineer @BuzzFeed after hours of debugging 🙂
 
+> One of the best experiences I ever had in this regard was working on some @fastly varnish code with @integralist. Seeing him say "I don't know, let's research it" was a platonic model of how I want to approach learning as my career progresses.
+
+-- Senior Software Engineer @BuzzFeed (she now works for HashiCorp)
 
 > Mark is an expert on fields in our site infrastructure that are essential to our business, specifically our edge layer. I am sad that I have not had the opportunity to directly work with Mark too much in his time on Core Infra, but he has been a mentor to me and others during the long running mentorship program and I have direct experience of his work through trans-squad meetings.
 >
