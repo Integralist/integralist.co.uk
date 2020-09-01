@@ -1,32 +1,3 @@
-{{ partial "header" . }}
-
-<script>
-  window.location.href = "/posts";
-</script>
-<main class='main'>
-  {{ if .Content }}
-  <article class='entry'>
-    {{ partial "entry/content" . }}
-  </article>
-  {{ end }}
-  <!--
-  <section id='list' class='list-container'>
-    <h2 class='list-title title'>{{ i18n "recentPosts" }}</h2>
-    <div class='list'>
-      {{ range ( first 5 ( where .Data.Pages "Section" "ne" "page" ) ) }}
-        {{ .Render "li" }}
-      {{ end }}
-    </div>
-  </section>
-  -->
-  <p class="home-advert-apology"><b>Please forgive the following self-promotion...</b> 🙊</p>
-  <div class="advert">
-    <section class="box">
-      <div class="box__inner">
-        <a target="_blank" href="https://leanpub.com/pythonforprogrammers">Want to be up and running <b><u>quickly</u></b> with <b><u>Python</u></b>? Get started here with my book<br>"<b>Python for Programmers</b>"!</a>
-      </div>
-    </section>
-  </div>
-</main>
-
-{{ partial "footer" . }}
+{{ if .Site.Home.Content }}
+    {{ with .GetPage "/posts" }}{{.Render}}{{ end }}
+{{ end }}
