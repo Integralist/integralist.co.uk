@@ -2369,30 +2369,67 @@ We can now see how this might be a very dangerous attack because you could const
 
 So how can we prevent this from happening? Well the solution is to parse the request looking for invalid characters such as `..` or the encoded variation of a `.` which is `%2E`. This can happen at the application layer but I prefer to handle this at the edge so our upstream services and infrastructure don't have to deal with the request at all.
 
-Here is an example of some VCL that handles this:
+Here is an example of some VCL that handles this (it's a separate file `security.vcl`):
 
 ```
-sub vcl_recv {
-  #FASTLY recv
-  if (req.url.path ~ {"(?i)(%2E%2E|\.\.)"}) {
+// services that include this shared VCL should ensure they do not utilize the
+// same error code, otherwise they may end up sending the wrong response.
+//
+
+sub security_recv {
+  // we want to prevent path traversal vulnerabilities such as:
+  //
+  // curl -v "https://httpbin.org/status/200/../../anything/status/404/"
+  //
+  // this ^^ would cause the server to go to /anything/status/404/ not /status/200
+  //
+  // this could be an issue because the upstream server might be able to
+  // communicate with private/internal APIs, and so this type of attack could
+  // enable the caller to access whatever data the server would normally only
+  // have access to.
+  //
+  // example pattern match:
+  // https://regex101.com/r/RYhmwW/2
+  //
+  // NOTES:
+  // we utilize a 'long string' {"..."} instead of a string literal "..."
+  // to avoid interpretting the %2E as a period character when VCL statically
+  // compiles a regex (which would change the pattern quite significantly!)
+  //
+  // DOCUMENTATION:
+  // https://developer.fastly.com/reference/vcl/types/string/
+  //
+  if (req.url.path ~ {"(?i)(\.|%2E){2}(/|%2F)"}) {
     error 699 "Bad Request";
   }
-  return(lookup);
 }
 
-sub vcl_error {
-  #FASTLY error
+sub security_error {
   if (obj.status == 699) {
     set obj.status = 400;
     synthetic {"Bad Request"};
     return(deliver);
   }
 }
+```
 
-sub vcl_deliver {
-  #FASTLY deliver
-  set resp.http.X-OriginalPath = req.url.path;
-  return(deliver);
+You can then include this file into your `main.vcl` like so:
+
+```
+include "security"
+
+sub vcl_recv {
+  #FASTLY recv
+
+  call security_recv;
+
+  return(lookup);
+}
+
+sub vcl_error {
+  #FASTLY error
+
+  call security_error;
 }
 ```
 
