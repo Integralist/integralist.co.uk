@@ -261,7 +261,30 @@ Knowing that, we would also know that it is possible to use a partial reference 
 
 All these variations work fine, but we typically use `git log origin/master` for convenience (because it's less typing). 
 
-But using a shortened 'reference' isn't possible with a command like `git checkout` as its internal logic will cause a `detached HEAD` state if you were to do something like `git checkout refs/heads/master` instead of `git checkout master`. 
+But using a shorted 'reference' isn't possible with commands like `git checkout` and `git pull` for different reasons. With `git pull` if we look at `man git-pull` we see we need to provide a `<repository> <refspec>` and that means the refspec we provide will be scoped to `.git/refs/remote/`.
+
+If I look at `.git/refs/remote/` I'll see only a single directory `origin`, and inside of that are all the branches (i.e. refspecs) for the `origin` remote. So if I attempted to do something like `git pull origin HEAD` this wouldn't work because there's a `HEAD` file inside of that `origin` directory (and it points to a different commit from our local `HEAD` in `.git/HEAD`)! 
+
+This means we'd end up trying to pull the changes from the remote `master`!! Which happens because `HEAD` on the remote is setup to track the `master` branch...
+
+```
+$ git remote show origin
+
+* remote origin
+  Fetch URL: git@github.com:example/repo.git
+  Push  URL: git@github.com:example/repo.git
+  HEAD branch: master
+  Remote branches:
+    ...
+```
+
+So subsequently doing `git pull origin HEAD` would bring in _lots_ of unexpected changes to your local branch 😬 
+
+> Note: using `HEAD` isn't a problem when doing something like `git push origin HEAD` because it's a fundamentally different operation and so git knows to reference the local `HEAD` file to get the commit range before _pushing_ to the remote.
+
+Similarly, using a shortened 'reference' isn't possible with a command like `git checkout` as its internal logic will cause a `detached HEAD` state (e.g. if you were to do something like `git checkout refs/heads/master` instead of `git checkout master`). 
+
+Let's now understand what a 'detacted HEAD' means, and why it is a `git checkout` would cause that when using a refspec...
 
 ### Detached HEAD
 
