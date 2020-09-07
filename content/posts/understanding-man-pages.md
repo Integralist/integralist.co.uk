@@ -9,10 +9,11 @@ tags:
 draft: false
 ---
 
-- [Introduction](#1)
-- [Sections](#2)
-- [Sub sections](#3)
-- [Accessing different sections](#4)
+- [Introduction](#introduction)
+- [Sections](#sections)
+- [Sub sections](#sub-sections)
+- [Accessing different sections](#accessing-different-sections)
+- [Searching by phrase](#searching-by-phrase)
 
 ## Introduction
 
@@ -133,4 +134,18 @@ The above command will search through only sections 1 and 2, but it will still s
 But if you know for sure that the command you're looking for is somewhere within either the system call or C library manual pages, then `man -S 2:3 <your_command>` would prevent a command from manual section 1 getting matched first.
 
 > Note: to see the intro page for a section use `man <n> intro`
+
+## Searching by phrase
+
+In case you're unsure where to find a specific piece of information, you can use the `-K` flag which will search _all_ manuals for the given search term/phrase. This can be slow, so it's best to also provide a manual to scope the search down to.
+
+For example, I wanted to lookup `refspec` in the git manual. I didn't know where to look so I ran the following lookup:
+
+```
+man -K "refspec" git
+```
+
+This then presented a manual name along with the options of `y/n/q`. 
+
+If I type `y` then the listed manual page would be opened. Once I 'quit' the page (e.g. `q`) then the next manual page found to contain the phrase `refspec` would be listed along with the `y/n/q` options. Anytime you want to stop going through the list of matches, you type `q`.
 
