@@ -80,6 +80,7 @@ We will be digging into quite a few different areas of their implementation, suc
 - [Logging](#logging)
   - [Filtering and Sampling Logs](#filtering-and-sampling-logs)
   - [Logging Memory Exhaustion](#logging-memory-exhaustion)
+  - [JSON Structured Logging](#json-structured-logging)
 - [Restricting requests to another Fastly service](#restricting-requests-to-another-fastly-service)
 - [Custom Error Pages](#custom-error-pages)
 - [Security](#security)
@@ -1997,7 +1998,14 @@ The 'workspace' is the amount of memory allocated to _each_ in-flight request, a
 
 So ultimately be wary of making too many HTTP modifcations as you might discover you'll end up losing log data.
 
-> Note: we have two seperate services, one production and one staging and we run the same VCL code in both. This requires us to have logic that checks whether our code is running in the stage environment or not.
+### JSON Structured Logging
+
+Generating JSON structured output is not easy in VCL. The below VCL snippet demonstrates the 'manual' approach (encoding `"` as `%22` and concatenating across multiple lines). This was the best solution for us as the alternatives were unsuitable:
+
+1. [github.com/fastly/vcl-json-generate](https://github.com/fastly/vcl-json-generate) is wildly verbose in comparison, although it's supposed to make things easier?
+2. using a "long string" to avoid encoding nested double quote, but then everything must be all on _one_ line!?, e.g. `{"{  "foo":""} req.http.X-Foo {"",  "bar":"} req.http.X-Bar {" }"};`
+
+> Note: we have two seperate services, one production and one staging and we run the same VCL code in both. This requires us to have logic that checks whether our code is running in the stage environment or not (see below for example).
 
 ```
 declare local var.stage_service_id STRING;
@@ -2045,10 +2053,39 @@ set var.json = "{" +
 "}";
 ```
 
-Generating JSON structured output is not easy in VCL. The above VCL snippet demonstrates the 'manual' approach (encoding `"` as `%22` and concatenating across multiple lines). This was the best solution for us as the alternatives were unsuitable:
+There was a way to combine long strings (`{"..."}`, e.g. to use double quote inside of a string:`{"""}`) over multiple lines (demonstrated below) but I'd argue it's still not as readable as you might imagine, and missing just one opening or closing bracket will cause you nothing but pain and heartache:
 
-1. [github.com/fastly/vcl-json-generate](https://github.com/fastly/vcl-json-generate) is wildly verbose in comparison, although it's supposed to make things easier?
-2. using "long string" variation (everything must be all on _one_ line!?), e.g. `{"{  "foo":""} req.http.X-Foo {"",  "bar":"} req.http.X-Bar {" }"};`
+```
+declare local var.json STRING;
+
+set var.json = "{" +
+  {""http": {"} +
+    {""body_size": ""} + resp.body_bytes_written + {"","} +
+    {""content_type": ""} + resp.http.Content-Type + {"","} +
+    {""host": ""} + req.http.host + {"","} +
+    {""method": ""} + req.method + {"","} +
+    {""path": ""} + json.escape(req.url) + {"","} +
+    {""protocol": ""} + req.proto + {"","} +
+    {""request_time": "} + time.to_first_byte + "," +
+    {""status_code": "} + resp.status + "," +
+    {""tls_version": ""} + tls.client.protocol + {"","} +
+    {""uri": ""} + json.escape(if(req.http.Fastly-SSL, "https", "http") + "://" + req.http.host + req.url) + {"","} +
+    {""user_agent": ""} + json.escape(req.http.User-Agent) + {"""} +
+  "}," +
+  {""network": {"} +
+    {""client": {"} +
+      {""ip": ""} + req.http.Fastly-Client-IP + {"""} +
+    "}," +
+    {""server": {"} +
+      {""state": ""} + fastly_info.state + {"""} +
+    "}" +
+  "}," +
+  {""timestamp": "} + time.start.msec + "," +
+  {""timestamp_sec": "} + time.start.sec + # exists to support BigQuery
+"}";
+
+log var.json;
+```
 
 So manually constructing the JSON was what we opted for, and once you get used to the endless `%22` it's actually quite readable IMHO (when compared to the alternatives we just described).
 
