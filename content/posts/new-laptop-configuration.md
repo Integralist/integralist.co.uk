@@ -110,7 +110,6 @@ Here is a list of the packages I'll install:
 - `pwgen`: generates random passwords
 - `reattach-to-user-namespace`: used by tmux for clipboard storage
 - `shellcheck`: bash linter
-- `sift`: another command line search tool
 - `transmission`: torrent client † (alt. `npm install -g t-get`)
 - `tree`: displays directory heirarchy structures as a tree
 - `watch`: executes given command every N seconds
@@ -120,7 +119,7 @@ Here is a list of the packages I'll install:
 Here's a handy one-liner:
 
 ```
-brew install ag gnu-sed jq docker hugo node pwgen reattach-to-user-namespace shellcheck sift tree watch
+brew install ag gnu-sed jq docker hugo node pwgen reattach-to-user-namespace shellcheck tree watch
 ```
 
 ## Essential Apps
@@ -246,6 +245,10 @@ rm /tmp/Integralist.terminal
 ```
 
 > Note: don't forget to change the terminal font to menlo (if not already set) and also set `Integralist` theme as your default. I used to do this via `defaults write com.apple.Terminal "Default Window Settings" Integralist` and `defaults write com.apple.Terminal "Startup Window Settings" Integralist` but those have changed now in the latest macOS (see `defaults read`).
+
+### UPDATE 2020.09.08
+
+I've reverted to using the "Basic" theme provided by macOS, and just modifying the font to be "Menlo Regular 16 pt."
 
 ## GitHub
 
