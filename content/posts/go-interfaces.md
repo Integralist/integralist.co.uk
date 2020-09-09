@@ -15,10 +15,9 @@ draft: false
 - [Name Your Interface Arguments](#name-your-interface-arguments)
 - [Keep Interfaces Small](#keep-interfaces-small)
 - [Accept Interfaces, Return Concrete Types](#accept-interfaces-return-concrete-types)
-- [Don't Return Concrete Types](#don-t-return-concrete-types)
-- [Return Values not Pointers](#return-values-not-pointers)
+- [Don't Return Concrete Types](#dont-return-concrete-types)
 - [Use existing interfaces](#use-existing-interfaces)
-- [Don't Force Interfaces](#don-t-force-interfaces)
+- [Don't Force Interfaces](#dont-force-interfaces)
 - [Upgrading Interfaces](#upgrading-interfaces)
 - [Standard Library Interfaces](#standard-library-interfaces)
 - [Tight Coupling](#tight-coupling)
@@ -173,15 +172,21 @@ If your function accepts a concrete type then you've limited the consumers abili
 
 Consider a function only accepting the concrete type `*os.File` instead of the `io.Writer` interface. Now try swapping out the `os.File` implementation in a test environment, you'll have a hard time vs mocking this using a struct that has the relevant interface methods.
 
-Try to return concrete types instead of interfaces, as interfaces have a tendendency to add an unnecessary layer of indirection for consumers of your package. 
-
-Interfaces ultimately do not protect your underlying API from change. For example if your interface changes, then the returned struct will likely need to change as well (unless the interface is removing a method which your struct continues to implement, but even then, returning a concrete type will be better as it removes the indirection of having to go through an interface to access the underlying methods they want to use).
+Try to return concrete types instead of interfaces, as interfaces have a tendendency to add an unnecessary layer of indirection for consumers of your package (although we'll discover a few valid scenarios where returning an interface is more appropriate).
 
 ## Don't Return Concrete Types
 
 This is to keep you on your toes 😉
 
-If your function needs to return _multiple types_, then returning an interface can be an appropriate solution.
+I want to highlight an important 'design' decision, which is: if your code returns a pointer to some data, then it means once that pointer has been passed around a few different functions, we now have multiple entities that are able to mutate that data.
+
+So be careful about whether you return a value (immutable) vs a pointer (mutable) as it could help reduce confusion with regards to how the data is modified by your program.
+
+Returning an interface in these cases _could_ be an appropriate solution. 
+
+**By this I mean**: although you might return a pointer to a data structure, by defining an interface around the behaviours attached to that data structure, it means a caller of your function won't be able to access the internal fields of the struct but it _can_ call the methods defined in the returned interface!
+
+Another example might be that your function needs to return a different type depending on a runtime condition (`*cough* generics *cough*`). If that's the case, then returning an interface could again be an appropriate workaround to the lack of generics in the Go 1.x language.
 
 The following code example highlights the principle:
 
@@ -213,7 +218,7 @@ func (ti TextItem) GetItemValue(){
 }
 
 func FindItem(ID int) ItemInterface {
-  // ...
+  // returns either a URLItem or a TextItem
 }
 ```
 
@@ -222,12 +227,6 @@ The `FindItem` could be an internal library function that attempts to locate an 
 In this instance returning an interface allows the consumer to not have to worry about the change in underlying data types.
 
 > Note: it's possible the returned types could be consolidated into a single generic type struct, which means we can avoid returning an interface, but it depends on the exact scenario/use case.
-
-## Return Values not Pointers
-
-This section isn't directly related to the conversation about interface design, but it does highlight an important 'design' decision, which is: if your code returns a pointer to some data, then it means once that pointer has been passed around a few different functions, we now have multiple entities that are able to mutate that data.
-
-So be careful about whether you return a value (immutable) vs a pointer (mutable) as it could help reduce confusion with regards to how the data is modified by your program.
 
 ## Use Existing Interfaces
 
