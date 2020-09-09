@@ -40,14 +40,6 @@ preserveTaxonomyNames = true
 [permalinks]
   page = "/:slug/"
 
-# NOTE: in local development this shows twice,
-# but when pushed to Netlify it only shows once?
-# so maybe a difference in Hugo versions.
-[[menu.main]]
-  name = "Home "
-  url = "/"
-  weight = 100
-
 [[menu.main]]
   name = "About "
   url = "/about"
