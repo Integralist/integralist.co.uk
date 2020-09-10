@@ -206,7 +206,7 @@ The `git rebase` feature in essence is solving the same problem as `git merge` (
 
 With `git merge` a merge commit is utilised to resolve conflicts and so is considered _non-destructive_. What this means is that the commits within either branch (destination or source) aren't modified in any way.
 
-With `git rebase` the source branch commits are placed _before_ the destination branch's commits, but also the commits themselves are from the source are recreated inside the destination branch.
+With `git rebase` the source branch commits are placed _before_ the destination branch's commits, but also the source commits are recreated inside the destination branch.
 
 Let's look and see what this does for us:
 
