@@ -310,6 +310,8 @@ This shows that the changes from `feat/foo` where replayed directly on top of `7
 
 Notice the `feat/foo` commits are on top of the `A to 9` commit and that might not necessarily be what we want to have happen.
 
+> Note: it's usually better to use `git pull --rebase <remote> <branch>` as this will ensure that you get the latest copy of changes for the specified branch (as apposed to `git rebase <branch>` which will just be the local copy of that branch (remember `git pull` is an abstraction on top of `git fetch`, then `git merge`).
+
 ## `git rebase --interactive`
 
 The `--interactive` flag is useful for letting us rewrite our git history. We're able to move the order of our commits as well as squash commits down and change their recorded message.
