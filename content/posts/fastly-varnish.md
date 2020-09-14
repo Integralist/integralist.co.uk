@@ -38,10 +38,10 @@ We will be digging into quite a few different areas of their implementation, suc
 - [Fastly Request Flow Diagram](#fastly-request-flow-diagram)
   - [Fastly-Debug](#fastly-debug)
   - [304 Not Modified](#304-not-modified)
-  - [UPDATE 2019.08.10](#update-2019-08-10)
+  - [UPDATE 2019.08.10](#update-20190810)
 - [Error Handling](#error-handling)
   - [Unexpected State Change](#unexpected-state-change)
-  - [UPDATE 2019.11.07](#update-2019-11-07)
+  - [UPDATE 2019.11.07](#update-20191107)
 - [State Variables](#state-variables)
   - [Anonymous Objects](#anonymous-objects)
   - [Forcing Request to Origin](#forcing-request-to-origin)
@@ -81,6 +81,7 @@ We will be digging into quite a few different areas of their implementation, suc
   - [Filtering and Sampling Logs](#filtering-and-sampling-logs)
   - [Logging Memory Exhaustion](#logging-memory-exhaustion)
   - [JSON Structured Logging](#json-structured-logging)
+    - [Fixing the Memory Issue](#fixing-the-memory-issue)
 - [Restricting requests to another Fastly service](#restricting-requests-to-another-fastly-service)
 - [Custom Error Pages](#custom-error-pages)
 - [Security](#security)
@@ -1998,7 +1999,9 @@ The 'workspace' is the amount of memory allocated to _each_ in-flight request, a
 
 So ultimately be wary of making too many HTTP modifcations as you might discover you'll end up losing log data.
 
-### JSON Structured Logging
+#### JSON Structured Logging
+
+> Note: see the [update](#update-20200914) for a way to use 'long strings' to construct easier to read JSON logs.
 
 Generating JSON structured output is not easy in VCL. The below VCL snippet demonstrates the 'manual' approach (encoding `"` as `%22` and concatenating across multiple lines). This was the best solution for us as the alternatives were unsuitable:
 
@@ -2089,6 +2092,8 @@ log var.json;
 
 So manually constructing the JSON was what we opted for, and once you get used to the endless `%22` it's actually quite readable IMHO (when compared to the alternatives we just described).
 
+#### Fixing the Memory Issue
+
 Now here's how we worked-around the memory issue causing a `(null)` log line: before we trigger our `log` call we first check that Fastly's workspace hasn't been exhausted (the variable contains the error code raised by the last function). If we find an 'out of memory' error, then we won't attempt to call the `log` function (as that would result in the `(null)` for a log line).
 
 > Documentation: [docs.fastly.com/vcl/variables/fastly-error/](https://docs.fastly.com/vcl/variables/fastly-error/)
@@ -2103,6 +2108,53 @@ if (fastly.error != "ESESOOM") {
 ```
 
 > Note: `logs_to_s3` and `logs_to_gcs` are references to the two different log streams we setup within the Fastly UI.
+
+### Update 2020.09.14
+
+Whilst reading through a fastly blog post on NEL "Network Error Logging" I noticed the secret sauce that makes using long strings for JSON formatting actually work! You have to remove the line breaks introduced by the long strings 🤦🏼‍♂️
+
+Specifically:
+
+```
+set var.json = regsuball(var.json, {"\s(?=([^"]*\"[^"]*")*[^"]*$)"},"");
+```
+
+Here's the full example:
+
+```
+declare local var.json STRING;
+
+set var.json = {"{
+  "http": {
+    "body_size": ""} resp.body_bytes_written {"",
+    "content_type": ""} resp.http.Content-Type {"",
+    "host": ""} req.http.host {"",
+    "method": ""} req.method {"",
+    "path": ""} json.escape(req.url) {"",
+    "protocol": ""} req.proto {"",
+    "request_time": "} time.to_first_byte {",
+    "status_code": "} resp.status {",
+    "tls_version": ""} tls.client.protocol {"",
+    "uri": ""} json.escape(if(req.http.Fastly-SSL, "https", "http") + "://" + req.http.host + req.url) + {"",
+    "user_agent": ""} json.escape(req.http.User-Agent) {"",
+  },
+  "network": {
+    "client": {
+      "ip": ""} req.http.Fastly-Client-IP {"",
+    "server": {
+      "state": ""} fastly_info.state {""
+    },
+  },
+  "timestamp": "} time.start.msec {",
+  "timestamp_sec": "} time.start.sec /* exists to support BigQuery */ {"}
+}"};
+
+set var.json = regsuball(var.json, {"\s(?=([^"]*\"[^"]*")*[^"]*$)"},"");
+
+log var.json;
+```
+
+I'll admit this is definitely easier to read than the HTML encoding equivalent. It's still a bit confusing to get right, when creating big nested structures, but no worse than a bunch of `%22` throughout the structure 😬
 
 ## Restricting requests to another Fastly service
 
