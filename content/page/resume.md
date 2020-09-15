@@ -581,12 +581,14 @@ Node Build Script for serving HTML components
 
 I don't profess mastery, but I'm adept with most of the below, and I have an aptitude towards learning what I need to get the job done right:
 
-- AWS CloudFormation
+> Note: with any static list, this is likely to go stale. For example, I've not worked with JavaScript for _many_ years (I'm aware of the various client-side platform changes, react, virtual doms etc) but at one point in time of my career I was considered a deep dive expert. So take this list with a 'pinch of salt'.
+
+- AWS CloudFormation (and the AWS platform in general)
 - CSS
 - Clojure
-- [Design Patterns](https://github.com/Integralist/Ruby-Design-Patterns)
+- Design Patterns
 - Docker
-- [Functional Programming](/posts/functional-recursive-javascript-programming/)
+- Functional Programming
 - Git
 - Go
 - HTML
@@ -595,21 +597,22 @@ I don't profess mastery, but I'm adept with most of the below, and I have an apt
 - Jenkins
 - Jira
 - Make
-- [Meta Programming](https://gist.github.com/Integralist/a29212a8eb10bc8154b7)
-- Node
+- Meta Programming (aka Reflection, Macro Systems)
 - NGINX
+- NSQ
+- Node
 - PHP
 - Python
-- [Refactoring](/posts/refactoring-techniques/)
+- Refactoring Techniques
 - Regular Expressions
 - Sass
-- [Shell Scripting](/posts/basic-shell-scripting/)
+- Shell Scripting
 - Terraform
 - Tmux
 - Trello
+- VCL
 - Vagrant
 - Varnish
-- VCL
 - Vim
 
 ## Summary
