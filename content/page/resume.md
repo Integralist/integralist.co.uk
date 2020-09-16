@@ -57,6 +57,10 @@ I care a lot about the people I work with, and aim to build meaningful relations
 
 -- Senior Software Engineer @BuzzFeed (she now works for HashiCorp)
 
+> It was great to see Mark so willingly invest in improving work outside of a project he owned. Work he did not have to do, but knew it would help the cause to further standardize logging/observability at BuzzFeed. This is only one example of several similar initiatives Mark has undertaken this year. 
+
+-- Principal Engineer @BuzzFeed
+
 > Mark is an expert on fields in our site infrastructure that are essential to our business, specifically our edge layer. I am sad that I have not had the opportunity to directly work with Mark too much in his time on Core Infra, but he has been a mentor to me and others during the long running mentorship program and I have direct experience of his work through trans-squad meetings.
 >
 > Mark prioritizes depth in technical understanding that makes every team member feel secure and safe in making changes to anything that he has built. Mark is also always generous with his time and will walk through any piece of an implementation you don't understand. I always appreciate Mark's feedback and questions on my work.
