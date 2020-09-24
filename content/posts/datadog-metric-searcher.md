@@ -13,7 +13,7 @@ tags:
 draft: false
 ---
 
-- [We're over our data limit!](#we-re-over-our-data-limit)
+- [We're over our data limit!](#were-over-our-data-limit)
 - [Calculating Custom Metrics](#calculating-custom-metrics)
 - [Tracking Metrics](#tracking-metrics)
 - [Automation FTW](#automation-ftw)
@@ -23,9 +23,9 @@ draft: false
   - [Multiple Metrics](#multiple-metrics)
   - [Percentile Aggregations](#percentile-aggregations)
   - [Tag Filtering](#tag-filtering)
-- [Choosing `HISTOGRAM` or `DISTRIBUTION` ?](#choosing-histogram-or-distribution)
+- [Choosing `HISTOGRAM` or `DISTRIBUTION` ?](#choosing-histogram-or-distribution-)
   - [The `DISTRIBUTION` percentile 'custom metric' difference](#the-distribution-percentile-custom-metric-difference)
-- [UPDATE 2020.05.07](#update-2020-05-07)
+- [UPDATE 2020.05.07](#update-20200507)
 
 ## We're over our data limit!
 
@@ -714,7 +714,7 @@ Each percentile aggregation for the `DISTRIBUTION` metric type is internally con
 
 ### Tag Filtering
 
-The `DISTRIBUTION` metric type allows tags to be filtered, thus reducing the potential number of custom metrics Datadog will charge us for. This is not possible with any other metric type ([update: that's not true anymore!](#update-2020-05-07))
+The `DISTRIBUTION` metric type allows tags to be filtered, thus reducing the potential number of custom metrics Datadog will charge us for. This is not possible with any other metric type ([update: that's not true anymore!](#update-20200507))
 
 ## Choosing `HISTOGRAM` or `DISTRIBUTION` ?
 
