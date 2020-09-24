@@ -153,9 +153,11 @@ blockquote code {
 }
 
 .post-img {
+  border: 1px solid #666;
   display: block;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 1em;
   width: 100%;
 }
 
@@ -167,7 +169,7 @@ blockquote code {
   display: block;
   text-align: center;
   font-weight: bold;
-  margin-top: .5em;
+  margin-bottom: 2em;
 }
 
 .home-advert-apology {
