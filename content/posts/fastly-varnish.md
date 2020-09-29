@@ -18,9 +18,9 @@ In this post I'm going to be explaining how the [Fastly CDN](https://www.fastly.
 
 We will be digging into quite a few different areas of their implementation, such as their clustering solution, shielding, and various gotchas and caveats to their service offering.
 
-**Be warned: this post is a monster!<br>It'll take a long time to digest this information.**
+**Be warned: this post is a monster!<br>It'll take a long time to digest this information...**
 
-<img src="../../images/no-time.webp" class="post-img" loading="lazy">
+<img src="../../images/asleep.webp" class="post-img" loading="lazy">
 <br>
 
 - [Introduction](#introduction)
@@ -56,13 +56,13 @@ We will be digging into quite a few different areas of their implementation, suc
   - [Legacy terminology](#legacy-terminology)
   - [The problem of persisting state](#the-problem-of-persisting-state)
 - [Shielding](#shielding)
-  - [Caveats of Fastly's Shielding](#caveats-of-fastly-s-shielding)
+  - [Caveats of Fastly's Shielding](#caveats-of-fastlys-shielding)
   - [Debugging Shielding](#debugging-shielding)
-  - [`is_cluster` vs `is_origin` vs `is_shield`](#is-cluster-vs-is-origin-vs-is-shield)
+  - [`is_cluster` vs `is_origin` vs `is_shield`](#is_cluster-vs-is_origin-vs-is_shield)
   - [Undocumented APIs](#undocumented-apis)
-      - [`req.http.Fastly-FF`](#req-http-fastly-ff)
-      - [`fastly_info.is_cluster_edge` and `fastly_info.is_cluster_shield`](#fastly-info-is-cluster-edge-and-fastly-info-is-cluster-shield)
-      - [`fastly.ff.visits_this_service`](#fastly-ff-visits-this-service)
+      - [`req.http.Fastly-FF`](#reqhttpfastly-ff)
+      - [`fastly_info.is_cluster_edge` and `fastly_info.is_cluster_shield`](#fastly_infois_cluster_edge-and-fastly_infois_cluster_shield)
+      - [`fastly.ff.visits_this_service`](#fastlyffvisits_this_service)
 - [Breadcrumb Trail](#breadcrumb-trail)
   - [Header Overflow Errors](#header-overflow-errors)
 - [Hit for Pass](#hit-for-pass)
@@ -72,8 +72,8 @@ We will be digging into quite a few different areas of their implementation, suc
   - [Stale for Client Devices](#stale-for-client-devices)
   - [Different actions for different states](#different-actions-for-different-states)
   - [Why the difference?](#why-the-difference)
-  - [The happy path (stale found in vcl_fetch)](#the-happy-path-stale-found-in-vcl-fetch)
-  - [The longer path (stale found in vcl_deliver)](#the-longer-path-stale-found-in-vcl-deliver)
+  - [The happy path (stale found in vcl_fetch)](#the-happy-path-stale-found-in-vcl_fetch)
+  - [The longer path (stale found in vcl_deliver)](#the-longer-path-stale-found-in-vcl_deliver)
   - [The unhappy path (stale not found anywhere)](#the-unhappy-path-stale-not-found-anywhere)
   - [Test Serving Stale](#test-serving-stale)
 - [Disable Caching](#disable-caching)
