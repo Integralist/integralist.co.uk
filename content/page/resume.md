@@ -93,7 +93,7 @@ You can find me online at the following locations:
 
 ## Brief History
 
-- [Fastly (2020-present)](#buzzfeed-october-2020---present)
+- [Fastly (2020-present)](#fastly-october-2020---present)
 - [BuzzFeed (2016-2020)](#buzzfeed-june-2016---october-2020)
 - [BBC (2013-2016)](#bbc-jan-2013---june-2016)
 - [Storm Creative (2001-2012)](#storm-creative-feb-2001---dec-2012)
