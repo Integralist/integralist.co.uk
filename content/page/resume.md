@@ -102,7 +102,7 @@ You can find me online at the following locations:
 
 The journey has only just begun!
 
-### BuzzFeed (June 2016 - present)
+### BuzzFeed (June 2016 - October 2020)
 
 I joined as a Senior Software Engineer as part of a new 'core' UK dev team. We were tasked with decommissioning a 10yr+ legacy Perl monolithic application stack over to various Python and Go services.
 
