@@ -6,7 +6,7 @@ comments: false
 
 <img src="../images/profile.jpg">
 
-Hello, my name is Mark and I work @[BuzzFeed](https://www.buzzfeed.com/) as a Staff Software Engineer.
+Hello, my name is Mark and I work @[Fastly](https://www.fastly.com/) as a Staff Software Engineer.
 
 I'm also a published author with Apress and LeanPub:
 
