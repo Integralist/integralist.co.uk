@@ -1,6 +1,6 @@
 ---
 title: Resume
-description: Staff Software Engineer @BuzzFeed
+description: Staff Software Engineer @Fastly
 comments: false
 ---
 
@@ -22,10 +22,11 @@ comments: false
 
 ## Hello!
 
-Hello, my name is Mark and I work @[BuzzFeed](https://www.buzzfeed.com/) as a Staff Software Engineer.
+Hello, my name is Mark and I work @[Fastly](https://www.fastly.com/) as a Staff Software Engineer.
 
 ### Previously
 
+- Staff Software Engineer @[BuzzFeed](http://www.buzzfeed.com/)
 - Principal Engineer @[BBCNews](http://www.bbcnews.co.uk/news)
 - Principal Engineer @[StormCreative](http://www.stormcreative.co.uk/)
 
@@ -92,15 +93,18 @@ You can find me online at the following locations:
 
 ## Brief History
 
-- [BuzzFeed (2016-present)](#buzzfeed-june-2016---present)
+- [Fastly (2020-present)](#buzzfeed-october-2020---present)
+- [BuzzFeed (2016-2020)](#buzzfeed-june-2016---october-2020)
 - [BBC (2013-2016)](#bbc-jan-2013---june-2016)
 - [Storm Creative (2001-2012)](#storm-creative-feb-2001---dec-2012)
 
-### BuzzFeed (June 2016 - present)
+### Fastly (October 2020 - present)
 
 The journey has only just begun!
 
-The story so far is that I joined as a Senior Software Engineer as part of a new 'core' UK dev team. We were tasked with decommissioning a 10yr+ legacy Perl monolithic application stack over to various Python and Go services.
+### BuzzFeed (June 2016 - present)
+
+I joined as a Senior Software Engineer as part of a new 'core' UK dev team. We were tasked with decommissioning a 10yr+ legacy Perl monolithic application stack over to various Python and Go services.
 
 I was working primarily within BuzzFeed's OO-INFRA group, which sits somewhere in-between traditional infrastructure/operation teams and engineering teams building user facing products. Our motivations were to make the lives of our fellow engineers easier by building tools, services and abstractions that enabled them to work more quickly and efficiently.
 
