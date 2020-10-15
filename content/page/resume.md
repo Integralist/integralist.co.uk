@@ -6,7 +6,6 @@ comments: false
 
 - [Hello!](#hello)
 - [Working Together](#working-together)
-- [Testimonials](#testimonials)
 - [Connect](#connect)
 - [Brief History](#brief-history)
 - [Impact!](#impact)
@@ -39,48 +38,6 @@ I ❤️ this feedback. It came from someone I was mentoring who worked in Produ
 Her feedback also hints at something bigger which I strive for: to help others to do their best work and to push/promote the good work other engineers do (especially those from either a diverse background or minority).
 
 I care a lot about the people I work with, and aim to build meaningful relationships with people across the company. In doing so I hope to ensure that we collectively are able to work as a cohesive unit, and thus provide great value to our users.
-
-## Testimonials
-
-> Thanks for pushing forward the 'Metric Standardization/Unification' and 'CDN Automation' RFCs. They're great. The first one could really unlock a lot of possibilities and the second needed a champion to get it moving. Awesome work.
-
--- Software Architect @BuzzFeed.
-
-> Fun and educational, as always, to watch you methodically pick apart complex problems @integralist.
-
--- Team Lead @BuzzFeed.
-
-> So basically start with the assumption @integralist is not crazy and all his code is correct, usually a good assumption!
-
--- Staff Software Engineer @BuzzFeed after hours of debugging 🙂
-
-> One of the best experiences I ever had in this regard was working on some @fastly varnish code with @integralist. Seeing him say "I don't know, let's research it" was a platonic model of how I want to approach learning as my career progresses.
-
--- Senior Software Engineer @BuzzFeed (she now works for HashiCorp)
-
-> It was great to see Mark so willingly invest in improving work outside of a project he owned. Work he did not have to do, but knew it would help the cause to further standardize logging/observability at BuzzFeed. This is only one example of several similar initiatives Mark has undertaken this year. 
-
--- Principal Engineer @BuzzFeed
-
-> Mark is an expert on fields in our site infrastructure that are essential to our business, specifically our edge layer. I am sad that I have not had the opportunity to directly work with Mark too much in his time on Core Infra, but he has been a mentor to me and others during the long running mentorship program and I have direct experience of his work through trans-squad meetings.
->
-> Mark prioritizes depth in technical understanding that makes every team member feel secure and safe in making changes to anything that he has built. Mark is also always generous with his time and will walk through any piece of an implementation you don't understand. I always appreciate Mark's feedback and questions on my work.
->
-> In fact, any constructive feedback I have for Mark is around wishing I could hear more of his thoughts and opinions in my – and more broadly squad west's –  work. I hope to find ways in the next quarter to have more conversations across the two core infrastructure squads about how we can work together and I think Mark would be an invaluable voice in leading or participating in those conversations, especially with the departure of our Director of Engineering.
->
-> Overall, I think Mark is doing a fantastic job. He delivers impact consistently, is an expert in technical domains for us, and helps us navigate complicated problems. I really love having Mark on the team.
-
--- Senior Software Engineer @BuzzFeed  
--- She is part of a squad based in US-west
-
-> I wanted to take a moment to detail Mark’s several recent wins for Core Infra. Mark has designed, implemented, and delivered multiple crucial projects during 2020.
->
-> Mark’s arguably most prominent project was Rate Limiting: He solicited ideas from team members (myself, Dan M), drafted an RFC, defended the design through an Architecture Review, and built a high-quality implementation. This required a new service (rate_control), nontrivial latency-sensitive changes to our edge-proxy (perimeter), and complex integration with our third-party CDN (Fastly). The project landed with no interruptions, but most impressive was how Mark then followed up with teams whose service architectures inhibited Rate Limiting. This then led Mark to extend his original design to avert a broader class of attacks. The importance of this work cannot be overstated, especially prior to a US election that we anticipate will bring an increase of attacks.
->
-> Another of Mark’s major achievements was consolidating the organization’s DataDog metrics. In late March 2020, BuzzFeed urgently needed to drastically reduce the number of metrics published to DataDog; if we did not, our DataDog contract would grow prohibitively costly when it renewed at the end of April. BuzzFeed could not justify $1000s/per month new spend on monitoring, especially during a pandemic. From this nebulous problem, Mark formed an actionable plan: He audited the metrics published throughout the org, worked with teams to consolidate their monitoring, and prevented regression by configuring alerts to notify when our DataDog usage approaches the threshold of what’s affordable. Had Mark not succeeded here, Core Infra would have likely derailed its entire roadmap to migrate to a different provider.
-
--- Ex Googler and Principal Engineer @BuzzFeed  
--- Also the Team Lead for my squad based in US-east.
 
 ## Connect
 
@@ -147,13 +104,13 @@ I'd like to share the various things I've worked on over the years and the impac
   **Impact**: I was able to release [a feature](/posts/rate-limiting-at-the-cdn-edge/) that provided our organization with DoS level protection at 'the edge' (e.g. reduced load on our internal infrastructure) while decoupling rate limiting logic from our critical path, along with granular client identification context to be more useful than just a simple IP deny list.
 
 - **What**: spent three weeks tackling problem of metric production across ~600 microservices.  
-  **Why**: we had run over our allotted threshold and were about to be billed ~$80k a month!  
-  **Impact**: we saved the company a huge chunk of money (~$40k)! also we educated ourselves greatly on how Datadog determines 'custom metrics' and how to better utilize distribution metrics over standard histograms.
+  **Why**: we had run over our allotted threshold 
+  **Impact**: we saved the company a huge chunk of money (~$40k)! also we educated ourselves greatly on how our provider determines 'custom metrics' and how to better utilize distribution metrics over standard histograms.
 
 <img src="../images/metric-reduction.png">
 
-- **What**: wrote Python script that [parsed any metrics produced](/posts/datadog-metric-searcher/) by our ~600 microservices and cross-referenced them against our ~1000 dashboards and ~1000 monitors within Datadog to identify which metrics were actually being utilized.  
-  **Why**: in the face of the Covid-19 pandemic we needed to reduce our metric costs by ~$80k and this was one of many steps to achieve that goal.  
+- **What**: wrote Python script that [parsed any metrics produced](/posts/datadog-metric-searcher/) by our ~600 microservices and cross-referenced them against our ~1000 dashboards and ~1000 monitors to identify which metrics were actually being utilized.  
+  **Why**: in the face of the Covid-19 pandemic we needed to reduce our metric costs and this was one of many steps to achieve that goal.  
   **Impact**: multiple teams were able to run the script to quickly and efficiently identify metrics that were unused and gave them direct links to the various monitors and dashboards (and even the specific graphs within those dashboards).
 
 - **What**: Implemented 'graceful shutdown' within shared libraries for HTTP servers written in Go/Python.  
