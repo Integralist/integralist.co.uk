@@ -107,9 +107,7 @@ I'd like to share the various things I've worked on over the years and the impac
   **Why**: we had run over our allotted threshold 
   **Impact**: we saved the company a huge chunk of money (~$40k)! also we educated ourselves greatly on how our provider determines 'custom metrics' and how to better utilize distribution metrics over standard histograms.
 
-<img src="../images/metric-reduction.png">
-
-- **What**: wrote Python script that [parsed any metrics produced](/posts/datadog-metric-searcher/) by our ~600 microservices and cross-referenced them against our ~1000 dashboards and ~1000 monitors to identify which metrics were actually being utilized.  
+- **What**: wrote Python script that parsed any metrics produced by our ~600 microservices and cross-referenced them against our ~1000 dashboards and ~1000 monitors to identify which metrics were actually being utilized.  
   **Why**: in the face of the Covid-19 pandemic we needed to reduce our metric costs and this was one of many steps to achieve that goal.  
   **Impact**: multiple teams were able to run the script to quickly and efficiently identify metrics that were unused and gave them direct links to the various monitors and dashboards (and even the specific graphs within those dashboards).
 
