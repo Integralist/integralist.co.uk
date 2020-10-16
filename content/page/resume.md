@@ -96,7 +96,7 @@ I'd like to share the various things I've worked on over the years and the impac
 ### 2020
 
 - **What**: worked across multiple teams promoting certain patterns to help reduce our logs (e.g. sampling 2xx's & single-log context middleware for http servers).  
-  **Why**: we had started to exceed our cost agreements with our provider (Datadog).  
+  **Why**: we had started to exceed our cost agreements with our metric/log aggregation provider.  
   **Impact**: managed to reach our log production goal, while having the opportunity to work and share ideas with lots of different teams across the org.
 
 - **What**: I was the sole engineer designing, communicating (via RFC process) and building a global rate limiting feature ([read my post about it](/posts/rate-limiting-at-the-cdn-edge/)) that integrated at various layers of our infrastructure (CDN, Routing + a new 'rate control' service).  
