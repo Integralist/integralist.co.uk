@@ -762,6 +762,16 @@ Below is a list of available variables and which states they're available to:
 
 > Based on Varnish 3.0 (which is the only explicit documentation I could find on this), although you can see in various request flow diagrams for different Varnish versions the variables listed next to each state. But [this](http://book.varnish-software.com/3.0/VCL_functions.html#variable-availability-in-vcl) was the first explicit list I found. Fastly themselves recommend [this Varnish reference](https://varnish-cache.org/docs/2.1/reference/vcl.html#variables) but that doesn't indicate which variables are read vs write.
 
+---
+
+### UPDATE 2020.12.11
+
+The Fastly 'Developer Hub' now has an official reference 🎉
+
+[developer.fastly.com/reference/vcl/variables/](https://developer.fastly.com/reference/vcl/variables/)
+
+---
+
 Here's a quick key for the various states:
 
 - *R*: recv
