@@ -138,6 +138,20 @@ $ type exit
 exit is a shell builtin
 ```
 
+One other reason I like to use `type` is when trying to figure out what a shell alias is set to (in case you're unfamiliar, in most shells you can assign a long or hard to remember command to a short variable name). Imagine I've created an alias like so:
+
+```
+alias gb="git branch --list 'integralist*'"
+```
+
+I can find out later what I assigned to the alias using the `type` command:
+
+```
+$ type gb
+
+gb is aliased to `git branch --list 'integralist*''
+```
+
 To read the documentation for a builtin, you need to use the `help` command:
 
 ```
@@ -156,6 +170,84 @@ The `help` command is itself a builtin (hence it knows about builtins, unlike `m
 $ type help
 
 help is a shell builtin
+```
+
+You can use the `help` command to read its documentation:
+
+```
+$ help help
+
+help: help [-dms] [pattern ...]
+    Display information about builtin commands.
+
+    Displays brief summaries of builtin commands.  If PATTERN is
+    specified, gives detailed help on all commands matching PATTERN,
+    otherwise the list of help topics is printed.
+
+    Options:
+      -d        output short description for each topic
+      -m        display usage in pseudo-manpage format
+      -s        output only a short usage synopsis for each topic matching
+                PATTERN
+
+    Arguments:
+      PATTERN   Pattern specifying a help topic
+
+    Exit Status:
+    Returns success unless PATTERN is not found or an invalid option is given.
+```
+
+If you run the `help` command by itself you'll see a list of commands that can be passed to `help` (you'll see in the list `exit`, hence why we could run `help exit` earlier):
+
+```
+$ help
+
+GNU bash, version 5.0.18(1)-release (x86_64-apple-darwin19.5.0)
+These shell commands are defined internally.  Type `help' to see this list.
+Type `help name' to find out more about the function `name'.
+Use `info bash' to find out more about the shell in general.
+Use `man -k' or `info' to find out more about commands not in this list.
+
+A star (*) next to a name means that the command is disabled.
+
+ job_spec [&]                                                                                                           history [-c] [-d offset] [n] or history -anrw [filename] or history -ps arg [arg...]
+ (( expression ))                                                                                                       if COMMANDS; then COMMANDS; [ elif COMMANDS; then COMMANDS; ]... [ else COMMANDS; ] fi
+ . filename [arguments]                                                                                                 jobs [-lnprs] [jobspec ...] or jobs -x command [args]
+ :                                                                                                                      kill [-s sigspec | -n signum | -sigspec] pid | jobspec ... or kill -l [sigspec]
+ [ arg... ]                                                                                                             let arg [arg ...]
+ [[ expression ]]                                                                                                       local [option] name[=value] ...
+ alias [-p] [name[=value] ... ]                                                                                         logout [n]
+ bg [job_spec ...]                                                                                                      mapfile [-d delim] [-n count] [-O origin] [-s count] [-t] [-u fd] [-C callback] [-c quantum] [array]
+ bind [-lpsvPSVX] [-m keymap] [-f filename] [-q name] [-u name] [-r keyseq] [-x keyseq:shell-command] [keyseq:readlin>  popd [-n] [+N | -N]
+ break [n]                                                                                                              printf [-v var] format [arguments]
+ builtin [shell-builtin [arg ...]]                                                                                      pushd [-n] [+N | -N | dir]
+ caller [expr]                                                                                                          pwd [-LP]
+ case WORD in [PATTERN [| PATTERN]...) COMMANDS ;;]... esac                                                             read [-ers] [-a array] [-d delim] [-i text] [-n nchars] [-N nchars] [-p prompt] [-t timeout] [-u fd] [name ...]
+ cd [-L|[-P [-e]] [-@]] [dir]                                                                                           readarray [-d delim] [-n count] [-O origin] [-s count] [-t] [-u fd] [-C callback] [-c quantum] [array]
+ command [-pVv] command [arg ...]                                                                                       readonly [-aAf] [name[=value] ...] or readonly -p
+ compgen [-abcdefgjksuv] [-o option] [-A action] [-G globpat] [-W wordlist]  [-F function] [-C command] [-X filterpat>  return [n]
+ complete [-abcdefgjksuv] [-pr] [-DEI] [-o option] [-A action] [-G globpat] [-W wordlist]  [-F function] [-C command]>  select NAME [in WORDS ... ;] do COMMANDS; done
+ compopt [-o|+o option] [-DEI] [name ...]                                                                               set [-abefhkmnptuvxBCHP] [-o option-name] [--] [arg ...]
+ continue [n]                                                                                                           shift [n]
+ coproc [NAME] command [redirections]                                                                                   shopt [-pqsu] [-o] [optname ...]
+ declare [-aAfFgilnrtux] [-p] [name[=value] ...]                                                                        source filename [arguments]
+ dirs [-clpv] [+N] [-N]                                                                                                 suspend [-f]
+ disown [-h] [-ar] [jobspec ... | pid ...]                                                                              test [expr]
+ echo [-neE] [arg ...]                                                                                                  time [-p] pipeline
+ enable [-a] [-dnps] [-f filename] [name ...]                                                                           times
+ eval [arg ...]                                                                                                         trap [-lp] [[arg] signal_spec ...]
+ exec [-cl] [-a name] [command [arguments ...]] [redirection ...]                                                       true
+ exit [n]                                                                                                               type [-afptP] name [name ...]
+ export [-fn] [name[=value] ...] or export -p                                                                           typeset [-aAfFgilnrtux] [-p] name[=value] ...
+ false                                                                                                                  ulimit [-SHabcdefiklmnpqrstuvxPT] [limit]
+ fc [-e ename] [-lnr] [first] [last] or fc -s [pat=rep] [command]                                                       umask [-p] [-S] [mode]
+ fg [job_spec]                                                                                                          unalias [-a] name [name ...]
+ for NAME [in WORDS ... ] ; do COMMANDS; done                                                                           unset [-f] [-v] [-n] [name ...]
+ for (( exp1; exp2; exp3 )); do COMMANDS; done                                                                          until COMMANDS; do COMMANDS; done
+ function name { COMMANDS ; } or name () { COMMANDS ; }                                                                 variables - Names and meanings of some shell variables
+ getopts optstring name [arg]                                                                                           wait [-fn] [id ...]
+ hash [-lr] [-p pathname] [-dt] [name ...]                                                                              while COMMANDS; do COMMANDS; done
+ help [-dms] [pattern ...]                                                                                              { COMMANDS ; }
 ```
 
 If we want to see the documentation for the `type` builtin, use `help type`:

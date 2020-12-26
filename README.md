@@ -11,7 +11,9 @@ Website built using [Go](https://golang.org/), [Hugo](https://gohugo.io/) and d
 - `npm audit fix`
 - `npm install` 
 
-> † it will modify your shell profile (`.bash_profile` or `.bashrc`) so I prefer to move to a `.localrc` instead and also append `--no-use` after the sourcing of the `nvm.sh` script.
+> † nvm will modify your shell profile (`.bash_profile` or `.bashrc`) so I prefer to move to a `.localrc` instead and also append `--no-use` after the sourcing of the `nvm.sh` script.
+
+When trying to run the site locally you'll need to remember to run `nvm use node` first otherwise neither `node` nor the `npm` commands will be available!
 
 ## New Post
 
