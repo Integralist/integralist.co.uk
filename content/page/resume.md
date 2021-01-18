@@ -93,7 +93,23 @@ I'd like to share the various things I've worked on over the years and the impac
 
 > Note: the large majority of my 'impact' has been as a _remote_ worker. My hope is that the following list demonstrates how I've successfully made a positive impact (both as an IC and as a Team Lead) while also being 100% remote.
 
+### 2021
+
+- **What**: Defined a new retro process.  
+  **Why**: There was none defined.  
+  **Impact**: We now have effective and valuable retros 🎉.
+
 ### 2020
+
+- **What**: Reaching out to our customers (and _potential_ customers).  
+  **Why**: To help answer complex questions related to the fastly platform.  
+  **Impact**: The fastly organisation is more approachable and better understood from a technical perspective.
+
+- **What**: Coordinated wide net of user feedback (both internally and externally).  
+  **Why**: To help drive decisions around which API client libraries we should maintain (or which new languages should be supported).  
+  **Impact**: We have a clearer understanding of where we should focus our resources.
+
+> BuzzFeed...
 
 - **What**: worked across multiple teams promoting certain patterns to help reduce our logs (e.g. sampling 2xx's & single-log context middleware for http servers).  
   **Why**: we had started to exceed our cost agreements with our metric/log aggregation provider.  

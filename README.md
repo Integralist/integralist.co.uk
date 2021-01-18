@@ -20,6 +20,8 @@ When trying to run the site locally you'll need to remember to run `nvm use node
 - `hugo new ./posts/<name-of-post>.md`
 - `npm run dev` (which internally executes `hugo server`)
 
+> Note: might need to remove vim swap files, e.g. `find . -path "*.swp" -exec rm {} \;`.
+
 ## Site Search
 
 The search capabilities are provided by [lunr.js](https://lunrjs.com/).
