@@ -59,6 +59,10 @@ You can find me online at the following locations:
 
 The journey has only just begun!
 
+I was a former customer of Fastly, and had become well known for publishing probably the longest known article on the subject of Varnish, VCL and Fastly's implementation. 
+
+I joined Fastly to work within its new (at the time) Developer Relations team helping to manage and support their current set of API clients (inc. orchestration tools such as Terraform and Fastly's own Terraform provider). 
+
 ### BuzzFeed (June 2016 - October 2020)
 
 I joined as a Senior Software Engineer as part of a new 'core' UK dev team. We were tasked with decommissioning a 10yr+ legacy Perl monolithic application stack over to various Python and Go services.
@@ -94,6 +98,14 @@ I'd like to share the various things I've worked on over the years and the impac
 > Note: the large majority of my 'impact' has been as a _remote_ worker. My hope is that the following list demonstrates how I've successfully made a positive impact (both as an IC and as a Team Lead) while also being 100% remote.
 
 ### 2021
+
+- **What**: I designed, wrote and coordinated the release of a Terraform training module that also focuses on integration with Fastly.  
+  **Why**: We had noticed an ever growing increase in interest with Terraform.  
+  **Impact**: Our customers can feel confident and supported when thinking of managing their services using Terraform.
+
+- **What**: Wrote a custom golang program to parse a bunch of OpenAPI schemas and to auto-generate a golang based API client.  
+  **Why**: To identify potential problems with our OpenAPI schemas and to validate whether we can offer custom generated API clients to our customers.  
+  **Impact**: We have a viable solution that will ensure our API endpoints and API clients stay in-sync with very minimal effort/cost.
 
 - **What**: Defined a new retro process.  
   **Why**: There was none defined.  
