@@ -63,6 +63,10 @@ module.exports = function(grunt) {
 
             var href = S(abspath).chompLeft(CONTENT_PATH_PREFIX).chompRight(".md").s;
 
+            if (filename.endsWith(".swp")) {
+              return
+            }
+
             if (filename === ".DS_Store") {
               return
             }
