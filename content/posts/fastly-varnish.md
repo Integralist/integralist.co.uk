@@ -14,6 +14,18 @@ tags:
 draft: false
 ---
 
+## UPDATE
+
+As of October 2020 I joined the Fastly team to help improve Developer Relations 🎉
+
+This means one of my many responsibilities will be to make this blog post redundant by ensuring the [developer.fastly.com](https://developer.fastly.com/) content is as relevant and valuable as possible.
+
+But until that time, remember that this post was written (and updated), from the perspective of a long time customer, over many years and so the tone and personality of this blog post doesn't represent the opinions of Fastly in any way.
+
+If you have any questions, then feel free to reach out to me.
+
+---
+
 In this post I'm going to be explaining how the [Fastly CDN](https://www.fastly.com/) works, with regards to their 'programmatic edge' feature (i.e. the ability to execute code on cache servers nearest to your users). 
 
 We will be digging into quite a few different areas of their implementation, such as their clustering solution, shielding, and various gotchas and caveats to their service offering.
