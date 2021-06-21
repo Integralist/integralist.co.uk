@@ -472,6 +472,7 @@ I'm a print published and self-published author; I'm also a tech reviewer and am
 
 The following links are to some of my more 'popular' articles. My main focus when writing is to take a complicated or confusing topic and attempt to distil it, in order for the subject to be more easily understood.
 
+- [Infrequent (and advanced) Vim topics, tips and tricks](/posts/vim/) (2021)
 - [Git Internals](/posts/git-internals/) (2020)
 - [Python Management and Project Dependencies](/posts/python-management/) (2019)
 - [Guide to Concurrency in Python with Asyncio](/posts/python-asyncio/) (2019)
