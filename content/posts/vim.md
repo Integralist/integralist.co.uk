@@ -14,13 +14,13 @@ draft: false
 
 I see a lot of posts on Vim 'tips and tricks' and decided I'd have a go at putting together my own list of things that don't typically see the light of day, but are super powerful and useful to know about.
 
-**IMPORTANT**: I want people to realise that they don't need super complex vim configurations with lots of third-party plugins, and this entire post is built on that motivation. This means you'll find nearly everything described here is just plain Vim (no plugins). Don't get me wrong, I use [a few plugins](https://github.com/Integralist/dotfiles/blob/master/.vimrc#L120-L142), but I try to keep them to a minimum and rely more on the fundamentals of how Vim works.
+**IMPORTANT**: I want people to realise that they don't need super complex Vim configurations with lots of third-party plugins, and this entire post is built on that motivation. This means you'll find nearly everything described here is just plain Vim (no plugins). Don't get me wrong, I use [a few plugins](https://github.com/Integralist/dotfiles/blob/master/.vimrc#L120-L142), but I try to keep them to a minimum and rely more on the fundamentals of how Vim works.
 
 **Let's take a look at what we'll be covering...**
 
 - [Using Vim with no plugins](#using-vim-with-no-plugins)
 - [Vim's start-up process](#vims-start-up-process)
-- [Debugging vim issues](#debugging-vim-issues)
+- [Debugging Vim issues](#debugging-vim-issues)
 - [Modifying content with `global` command](#modifying-content-with-global-command)
 - [Substitutions, magic regex mode and other flags](#substitutions-magic-regex-mode-and-other-flags)
 - [Searching and filtering content](#searching-and-filtering-content)
@@ -29,7 +29,7 @@ I see a lot of posts on Vim 'tips and tricks' and decided I'd have a go at putti
 - [Processing files with `<T>do`](#processing-files-with-tdo)
 - [Automating content modification using Ex commands from the shell](#automating-content-modification-using-ex-commands-from-the-shell)
 - [Autocomplete with no plugins](#autocomplete-with-no-plugins)
-- [Understanding line feed and carriage returns in vim](#understanding-line-feed-and-carriage-returns-in-vim)
+- [Understanding line feed and carriage returns in Vim](#understanding-line-feed-and-carriage-returns-in-vim)
 - [Auto highlighting keywords (and creating your own custom highlighting)](#auto-highlighting-keywords-and-creating-your-own-custom-highlighting)
 - [Sorting and filtering duplicates](#sorting-and-filtering-duplicates)
 - [Conclusion](#conclusion)
@@ -38,7 +38,7 @@ I see a lot of posts on Vim 'tips and tricks' and decided I'd have a go at putti
 
 ## Using Vim with no plugins
 
-OK we're going to start super basic here and demonstrate a simple, but completely usable, vim configuration which will keep _purists_ happy. 
+OK we're going to start super basic here and demonstrate a simple, but completely usable, Vim configuration which will keep _purists_ happy. 
 
 ```viml
 set nocompatible number cursorline expandtab hlsearch visualbell tabstop=2 shiftwidth=2
@@ -57,7 +57,7 @@ syntax on
 
 > † Example: Using arrow keys in INSERT mode will send key sequences that are misinterpreted by `vi`.
 
-To try out this basic configuration use Vim's [`-u`](https://vimhelp.org/starting.txt.html#-u) flag. For example, you can start Vim with no configuration `vim -u NONE` and then manually apply the configuration as shown above, or you can put it into a separate file and start vim with that configuration instead of your normal one `vim -u ~/.vimrc-basic`.
+To try out this basic configuration use Vim's [`-u`](https://vimhelp.org/starting.txt.html#-u) flag. For example, you can start Vim with no configuration `vim -u NONE` and then manually apply the configuration as shown above, or you can put it into a separate file and start Vim with that configuration instead of your normal one `vim -u ~/.vimrc-basic`.
 
 <a href="../../images/vimbasic.png">
     <img src="../../images/vimbasic.png">
@@ -66,7 +66,7 @@ To try out this basic configuration use Vim's [`-u`](https://vimhelp.org/startin
 
 In the above screenshot you can see I'm just using the basic configuration (looks quite nice) along with a couple of split buffer windows ([`:vs`](https://vimhelp.org/windows.txt.html#%3Avs)). 
 
-I'm also a big user of vim's built-in tabs feature [`:tabnew`](https://vimhelp.org/tabpage.txt.html#%3Atabnew) (not shown in the screenshot) and also [`:lcd`](https://vimhelp.org/editing.txt.html#%3Alcd) for changing each tab's root location (which allows me to easily switch between multiple projects).
+I'm also a big user of Vim's built-in tabs feature [`:tabnew`](https://vimhelp.org/tabpage.txt.html#%3Atabnew) (not shown in the screenshot) and also [`:lcd`](https://vimhelp.org/editing.txt.html#%3Alcd) for changing each tab's root location (which allows me to easily switch between multiple projects).
 
 In the screen shot you can see I'm also using [`:vimgrep`](https://vimhelp.org/quickfix.txt.html#%3Avimgrep) to search for code in my current project (e.g. `:vimgrep /func/j **/*` followed with [`:copen`](https://vimhelp.org/quickfix.txt.html#%3Acopen)). 
 
@@ -83,7 +83,7 @@ And the great thing about all of this is that there are _no_ plugins required fo
 
 ## Vim's start-up process
 
-The vim documentation explains all the various steps that are gone through during 'start-up', see [`:h startup`](https://vimhelp.org/starting.txt.html#startup).
+The Vim documentation explains all the various steps that are gone through during 'start-up', see [`:h startup`](https://vimhelp.org/starting.txt.html#startup).
 
 In short, Vim executes `:runtime! plugin/**/*.vim` meaning any directories listed in the runtime path ([`:h runtimepath`](https://vimhelp.org/options.txt.html#%27runtimepath%27)) will be searched for a `plugin` sub-directory and all files ending in ".vim" will be sourced (in alphabetical order per directory).
 
@@ -382,7 +382,7 @@ You can also use a prior `/` search pattern like so:
 :vimgrep /<C-r>// *
 ```
 
-To clarify the above command, imagine you have a complex pattern you want to play around with and test with a single file so you use `/` to get vim to jump into search mode for the current buffer content and then type in your complex pattern.
+To clarify the above command, imagine you have a complex pattern you want to play around with and test with a single file so you use `/` to get Vim to jump into search mode for the current buffer content and then type in your complex pattern.
 
 Once happy with your pattern, you now want to use it again for multiple files but you don't want to have to type the pattern out again (especially in case it's complex enough to easily include an unexpected typo).
 
@@ -573,7 +573,7 @@ This is why I always use [`cdo`](https://vimhelp.org/quickfix.txt.html#%3Acdo) w
 
 What's interesting about 'quickfix' and 'location' lists is that you can further filter their results. Now, admittedly if you're using a third-party plugin like [Ack](https://github.com/mileszs/ack.vim), then you have complete control over the search pattern with additional flags that help to filter the number of results. 
 
-But if you're using the built-in vim search (e.g. `vimgrep`/`lvimgrep` or even a custom configured `grep` to use an external command) then the amount of control you have can be limited.
+But if you're using the built-in Vim search (e.g. `vimgrep`/`lvimgrep` or even a custom configured `grep` to use an external command) then the amount of control you have can be limited.
 
 So if that's a position you find yourself in, then you can utilise either [`Cfilter`](https://vimhelp.org/quickfix.txt.html#%3ACfilter) or [`Lfilter`](https://vimhelp.org/quickfix.txt.html#%3ALfilter) to filter your search results. These two commands are internal Vim plugins that need to be loaded using Vim's [`packadd`](https://vimhelp.org/repeat.txt.html#%3Apackadd) command (I actually have this added to my [`.vimrc`](https://github.com/Integralist/dotfiles/blob/master/.vimrc#L73-L75) as I always forget to call `packadd`).
 
@@ -638,13 +638,13 @@ Vim: Error reading input, exiting...
 Vim: Finished.
 ```
 
-If you pass `-` to vim, then it will accept the stdin and copy it to a new buffer...
+If you pass `-` to Vim, then it will accept the stdin and copy it to a new buffer...
 
 ```bash
 $ echo foo | vim -
 ```
 
-Before we look ahead at how to handle stdin a bit better, let's consider the `+` flag which tells Vim what line to start on (the following example tells vim to jump to line 10):
+Before we look ahead at how to handle stdin a bit better, let's consider the `+` flag which tells Vim what line to start on (the following example tells Vim to jump to line 10):
 
 ```bash
 $ vim ~/.vimrc +10
