@@ -16,6 +16,8 @@ I see a lot of posts on Vim 'tips and tricks' and decided I'd have a go at putti
 
 **IMPORTANT**: I want people to realise that they don't need super complex Vim configurations with lots of third-party plugins, and this entire post is built on that motivation. This means you'll find nearly everything described here is just plain Vim (no plugins). Don't get me wrong, I use [a few plugins](https://github.com/Integralist/dotfiles/blob/master/.vimrc#L120-L142), but I try to keep them to a minimum and rely more on the fundamentals of how Vim works.
 
+> **NOTE**: Remember that `:help <some_phrase>` is your friend! So if you don't know about any features I mention (and I don't explain them in this post), then use Vim's help feature. You can also try https://vimhelp.org/ too, which is a nice UI with autocomplete search box.
+
 **Let's take a look at what we'll be covering...**
 
 - [Using Vim with no plugins](#using-vim-with-no-plugins)
@@ -70,7 +72,7 @@ I'm also a big user of Vim's built-in tabs feature [`:tabnew`](https://vimhelp.o
 
 In the screen shot you can see I'm also using [`:vimgrep`](https://vimhelp.org/quickfix.txt.html#%3Avimgrep) to search for code in my current project (e.g. `:vimgrep /func/j **/*` followed with [`:copen`](https://vimhelp.org/quickfix.txt.html#%3Acopen)). 
 
-Although not shown in the screenshot I also use the built-in file/directory explorer, AKA 'netrw', by executing [`:Ex`](https://vimhelp.org/pi_netrw.txt.html#%3AExplore). This let's me manually traverse the current project directory (see also [`:Vex`](https://vimhelp.org/pi_netrw.txt.html#%3AVexplore) for vertical split and [`Sex`](https://vimhelp.org/pi_netrw.txt.html#%3ASexplore), no sniggering at the back, for a horizontal split). When using netrw I like to configure it to ignore certain files, which you can do like so:
+Although not shown in the screenshot I also use the built-in file/directory explorer, AKA 'netrw', by executing [`:Ex`](https://vimhelp.org/pi_netrw.txt.html#%3AExplore). This let's me manually traverse the current project directory (see also [`:Vex`](https://vimhelp.org/pi_netrw.txt.html#%3AVexplore) for vertical split and [`:Sex`](https://vimhelp.org/pi_netrw.txt.html#%3ASexplore), no sniggering at the back, for a horizontal split). When using netrw I like to configure it to ignore certain files, which you can do like so:
 
 ```viml
 " don't display .swp files
@@ -78,8 +80,6 @@ let g:netrw_list_hide= '.*\.swp$'
 ```
 
 And the great thing about all of this is that there are _no_ plugins required for any of this stuff. It's all standard Vim features. You just need to know they exist.
-
-> **NOTE**: Remember that `:help <some_phrase>` is your friend! So if you don't know about any of the aforementioned features (or any other features I mention after this), then use Vim's help feature. Example: `:h tabnew` and scroll down to see what you can do with tabs, or `:h vimgrep` or `:h copen` or `:h quickfix` etc). You can also try https://vimhelp.org/ too.
 
 ## Vim's start-up process
 
