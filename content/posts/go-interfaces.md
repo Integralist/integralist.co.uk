@@ -744,6 +744,8 @@ If we look at the implementation of `Buffer` though, we will see that it does ac
 
 Great! Our test can now call the `process` function and process the mocked dependency and the code/test works as intended.
 
+> **NOTE**: Yes, we should probably use something more obvious and replace `bytes.NewBufferString` with something like `bytes.NewReader`, `strings.NewReader`.
+
 ## More flexible solutions?
 
 OK, so we've already explained why this implementation might not be the best we could do. Let's now consider an alternative implementation:
