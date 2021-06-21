@@ -21,8 +21,6 @@ I see a lot of posts on Vim 'tips and tricks' and decided I'd have a go at putti
 **Let's take a look at what we'll be covering...**
 
 - [Using Vim with no plugins](#using-vim-with-no-plugins)
-- [Vim's start-up process](#vims-start-up-process)
-- [Debugging Vim issues](#debugging-vim-issues)
 - [Modifying content with `global` command](#modifying-content-with-global-command)
 - [Substitutions, magic regex mode and other flags](#substitutions-magic-regex-mode-and-other-flags)
 - [Searching and filtering content](#searching-and-filtering-content)
@@ -30,6 +28,8 @@ I see a lot of posts on Vim 'tips and tricks' and decided I'd have a go at putti
 - [Filtering quickfix and location list results](#filtering-quickfix-and-location-list-results)
 - [Processing files with `<T>do`](#processing-files-with-tdo)
 - [Automating content modification using Ex commands from the shell](#automating-content-modification-using-ex-commands-from-the-shell)
+- [Vim's start-up process](#vims-start-up-process)
+- [Debugging Vim issues](#debugging-vim-issues)
 - [Autocomplete with no plugins](#autocomplete-with-no-plugins)
 - [Understanding line feed and carriage returns in Vim](#understanding-line-feed-and-carriage-returns-in-vim)
 - [Auto highlighting keywords (and creating your own custom highlighting)](#auto-highlighting-keywords-and-creating-your-own-custom-highlighting)
@@ -80,113 +80,6 @@ let g:netrw_list_hide= '.*\.swp$'
 ```
 
 And the great thing about all of this is that there are _no_ plugins required for any of this stuff. It's all standard Vim features. You just need to know they exist.
-
-## Vim's start-up process
-
-The Vim documentation explains all the various steps that are gone through during 'start-up', see [`:h startup`](https://vimhelp.org/starting.txt.html#startup).
-
-In short, Vim executes `:runtime! plugin/**/*.vim` meaning any directories listed in the runtime path ([`:h runtimepath`](https://vimhelp.org/options.txt.html#%27runtimepath%27)) will be searched for a `plugin` sub-directory and all files ending in ".vim" will be sourced (in alphabetical order per directory).
-
-If you want to see what's in your runtime path you can execute:
-
-```viml
-:set runtimepath?
-```
-
-> **NOTE**: if you want to debug the start-up process: [`vim --startuptime some_log_filename`](https://vimhelp.org/starting.txt.html#--startuptime).
-
-To learn more about the various directories Vim uses, then refer to the `:help` documentation, for example:
-
-- `~/.vim/autoload/...` ([`:h autoload`](https://vimhelp.org/eval.txt.html#autoload))
-- `~/.vim/plugin/...` ([`:h plugin`](https://vimhelp.org/usr_05.txt.html#plugin))
-- `~/.vim/ftplugin/...` ([`:h ftplugin`](https://vimhelp.org/usr_41.txt.html#ftplugin))
-- `~/.vim/after/...` ([`:h after-directory`](https://vimhelp.org/options.txt.html#after-directory))
-
-Although I will take a brief detour through that last item...
-
-### The `after` directory
-
-The `after` directory can used by both Vim 'users' _and_ by Vim 'plugin authors' to override specific plugin configuration (that could be either `~/.vim/plugin/...` or `~/.vim/ftplugin/...`).
-
-For example, the Vim plugin author for `vim-polyglot` adds this file: `~/.vim/plugin/vim-polyglot/after/ftdetect/rspec.vim` which overrides the filetype configuration for `rspec` files.
-
-Where as a Vim user might want to override the behaviour of a plugin they're using (e.g. the FZF plugin) by adding the file `~/.vim/after/plugin/config/fzf.vim`, and due to how Vim loads 'after' scripts, that file would get loaded. Although it's important to add a guard into the code to ensure it only executes if the FZF plugin actually is loaded (otherwise this after script could cause an error)...
-
-```viml
-" include guard; quit if fzf isn't loaded
-if ! exists(':FZF')
-    finish
-endif
-```
-
-## Debugging Vim issues
-
-To check a specific setting and who (i.e. which plugin or script) last modified it, use [`:verbose set <setting>?`](https://vimhelp.org/various.txt.html#%3Averbose).
-
-For example, `:verbose set shiftwidth?` returns...
-
-```viml
-shiftwidth=2
-      Last set from ~/.vimrc
-```
-
-You can also see what mappings have been configured using the [`map`](https://vimhelp.org/map.txt.html#%3Amap) command.
-
-For example, to see all mappings with the leader key...
-
-```viml
-:verbose map <leader>
-
-x  \y            :Buffers<CR>
-        Last set from ~/.vimrc
-   \t            :FZF<CR>
-        Last set from ~/.vimrc
-        
-n  \z            :ALEPrevious<CR>
-        Last set from ~/.vimrc
-n  \x            :ALENext<CR>
-        Last set from ~/.vimrc
-```
-
-> **NOTE**: see `:h map-listing` for the various modes (`n` = normal, `x` = visual, etc).
-
-The same principle works with other mappings like `<Ctrl-k>` and `<Ctrl-j`...
-
-```viml
-:verbose map <c-k>
-
-n  <C-K>         <Plug>MoveLineUp
-        Last set from ~/.vim/plugged/vim-move/plugin/move.vim
-v  <C-K>         <Plug>MoveBlockUp
-        Last set from ~/.vim/plugged/vim-move/plugin/move.vim
-
-:verbose map <c-j>
-
-n  <NL>          <Plug>MoveLineDown
-        Last set from ~/.vim/plugged/vim-move/plugin/move.vim
-v  <NL>          <Plug>MoveBlockDown
-        Last set from ~/.vim/plugged/vim-move/plugin/move.vim
-```
-
-> **NOTE**: Vim also has a debugger you can use: `vim -D ~/.vimrc` (see reference below for details).
-
-Lastly, there is the `-V<N>` flag that sets the verbosity of Vim output when starting up...
-
-```txt
-" >= 1  When the viminfo file is read or written.
-" >= 2  When a file is ":source"'ed.
-" >= 5  Every searched tags file and include file.
-" >= 8  Files for which a group of autocommands is executed.
-" >= 9  Every executed autocommand.
-" >= 12 Every executed function.
-" >= 13 When an exception is thrown, caught, finished, or discarded.
-" >= 14 Anything pending in a ":finally" clause.
-" >= 15 Every executed Ex command (truncated at 200 characters).
-```
-
-> **NOTE**: see `:h vbs` for details.
-
-Usage example: `vim -V9 ~/.vimrc`, but you can also write the output to a log file instead (pro tip: use the log file approach) such as `vim -V9foo ~/.vimrc` which will write the output to the log file `foo`.
 
 ## Modifying content with `global` command
 
@@ -680,6 +573,113 @@ FOO
 ```
 
 > **NOTE**: `norm` says execute the following characters as if the user is typing them, so `V` selects the entire line and `gU` uppercases the selection. We then print the output to stdout `%p` and then quit without trying to save the modifications.
+
+## Vim's start-up process
+
+The Vim documentation explains all the various steps that are gone through during 'start-up', see [`:h startup`](https://vimhelp.org/starting.txt.html#startup).
+
+In short, Vim executes `:runtime! plugin/**/*.vim` meaning any directories listed in the runtime path ([`:h runtimepath`](https://vimhelp.org/options.txt.html#%27runtimepath%27)) will be searched for a `plugin` sub-directory and all files ending in ".vim" will be sourced (in alphabetical order per directory).
+
+If you want to see what's in your runtime path you can execute:
+
+```viml
+:set runtimepath?
+```
+
+> **NOTE**: if you want to debug the start-up process: [`vim --startuptime some_log_filename`](https://vimhelp.org/starting.txt.html#--startuptime).
+
+To learn more about the various directories Vim uses, then refer to the `:help` documentation, for example:
+
+- `~/.vim/autoload/...` ([`:h autoload`](https://vimhelp.org/eval.txt.html#autoload))
+- `~/.vim/plugin/...` ([`:h plugin`](https://vimhelp.org/usr_05.txt.html#plugin))
+- `~/.vim/ftplugin/...` ([`:h ftplugin`](https://vimhelp.org/usr_41.txt.html#ftplugin))
+- `~/.vim/after/...` ([`:h after-directory`](https://vimhelp.org/options.txt.html#after-directory))
+
+Although I will take a brief detour through that last item...
+
+### The `after` directory
+
+The `after` directory can used by both Vim 'users' _and_ by Vim 'plugin authors' to override specific plugin configuration (that could be either `~/.vim/plugin/...` or `~/.vim/ftplugin/...`).
+
+For example, the Vim plugin author for `vim-polyglot` adds this file: `~/.vim/plugin/vim-polyglot/after/ftdetect/rspec.vim` which overrides the filetype configuration for `rspec` files.
+
+Where as a Vim user might want to override the behaviour of a plugin they're using (e.g. the FZF plugin) by adding the file `~/.vim/after/plugin/config/fzf.vim`, and due to how Vim loads 'after' scripts, that file would get loaded. Although it's important to add a guard into the code to ensure it only executes if the FZF plugin actually is loaded (otherwise this after script could cause an error)...
+
+```viml
+" include guard; quit if fzf isn't loaded
+if ! exists(':FZF')
+    finish
+endif
+```
+
+## Debugging Vim issues
+
+To check a specific setting and who (i.e. which plugin or script) last modified it, use [`:verbose set <setting>?`](https://vimhelp.org/various.txt.html#%3Averbose).
+
+For example, `:verbose set shiftwidth?` returns...
+
+```viml
+shiftwidth=2
+      Last set from ~/.vimrc
+```
+
+You can also see what mappings have been configured using the [`map`](https://vimhelp.org/map.txt.html#%3Amap) command.
+
+For example, to see all mappings with the leader key...
+
+```viml
+:verbose map <leader>
+
+x  \y            :Buffers<CR>
+        Last set from ~/.vimrc
+   \t            :FZF<CR>
+        Last set from ~/.vimrc
+        
+n  \z            :ALEPrevious<CR>
+        Last set from ~/.vimrc
+n  \x            :ALENext<CR>
+        Last set from ~/.vimrc
+```
+
+> **NOTE**: see `:h map-listing` for the various modes (`n` = normal, `x` = visual, etc).
+
+The same principle works with other mappings like `<Ctrl-k>` and `<Ctrl-j`...
+
+```viml
+:verbose map <c-k>
+
+n  <C-K>         <Plug>MoveLineUp
+        Last set from ~/.vim/plugged/vim-move/plugin/move.vim
+v  <C-K>         <Plug>MoveBlockUp
+        Last set from ~/.vim/plugged/vim-move/plugin/move.vim
+
+:verbose map <c-j>
+
+n  <NL>          <Plug>MoveLineDown
+        Last set from ~/.vim/plugged/vim-move/plugin/move.vim
+v  <NL>          <Plug>MoveBlockDown
+        Last set from ~/.vim/plugged/vim-move/plugin/move.vim
+```
+
+> **NOTE**: Vim also has a debugger you can use: `vim -D ~/.vimrc` (see reference below for details).
+
+Lastly, there is the `-V<N>` flag that sets the verbosity of Vim output when starting up...
+
+```txt
+" >= 1  When the viminfo file is read or written.
+" >= 2  When a file is ":source"'ed.
+" >= 5  Every searched tags file and include file.
+" >= 8  Files for which a group of autocommands is executed.
+" >= 9  Every executed autocommand.
+" >= 12 Every executed function.
+" >= 13 When an exception is thrown, caught, finished, or discarded.
+" >= 14 Anything pending in a ":finally" clause.
+" >= 15 Every executed Ex command (truncated at 200 characters).
+```
+
+> **NOTE**: see `:h vbs` for details.
+
+Usage example: `vim -V9 ~/.vimrc`, but you can also write the output to a log file instead (pro tip: use the log file approach) such as `vim -V9foo ~/.vimrc` which will write the output to the log file `foo`.
 
 OK, time for the short sections... 🙂
 
