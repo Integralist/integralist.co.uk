@@ -261,7 +261,9 @@ Example usage (we're searching for any reference to `class` anywhere in the proj
 :copen
 ```
 
-> **NOTE**: `copen` will open Vim's 'quickfix' window, while `lopen` will open the 'location list' (refer to `:h copen` and `:h lopen` to find related commands).
+For anyone unfamiliar, the `copen` command will open Vim's 'quickfix' window, while the `lopen` command will open the 'location list' (refer to `:h copen` and `:h lopen` to find related commands).
+
+> **NOTE**: a nice trick if you're using the _append_ version of `vimgrep` (i.e. [`vimgrepa`](https://vimhelp.org/quickfix.txt.html#%3Avimgrepa)), is if you make a mistake populating the quickfix window, then you can use `:cex []` to clear it! See [`:cex`](https://vimhelp.org/quickfix.txt.html#%3Acex) for details.
 
 One interesting feature of `:vimgrep` is that you can use the result of a backtick expression to be the file source:
 
@@ -500,6 +502,18 @@ We've already seen `:cdo` and `:cfdo`, but there's so many more 'do' commands th
 - [`:argdo`](https://vimhelp.org/editing.txt.html#%3Aargdo): apply action to all arguments in the [`:h arglist`](https://vimhelp.org/editing.txt.html#arglist).
 
 Now admittedly I mostly use `:cdo`/`:cfdo` over any of the above because they are, for me, the most practical tools that give me massive value in my day-to-day work. That said, I do like to use `:bufdo` as well (I don't think I ever use `:tabdo` or `:windo` to be honest, although it's good to know they exist in my toolbox), and the _action_ I do the most when using `:bufdo` is when I want to clear out a bunch of buffers. So I'll run `:bufdo bd` ([`:h bd`](https://vimhelp.org/windows.txt.html#%3Abd)).
+
+I'll give you another example of how you might want to use something like `:bufdo` which came in handy for me recently. I had a git project which caused a bunch of conflicts in my files when I had rebased another branch. So I opened up all the conflicting files so I could locate the specific git syntax `<<< HEAD` that surrounds where the conflicts were.
+
+At this point I went through each file and was fixing the issues, but then I realised I wasn't sure if I had fixed all occurrences of `<<< HEAD` in each file I had edited. I guess I could have just run `vimgrep` over the whole project, but it's a large project and it would have taken a lot longer than I would have liked because of the fact it was a _very_ large project.
+
+the solution in this case was to search over the files that I had open using `:bufdo` mixed with the [`:execute`](https://vimhelp.org/eval.txt.html#%3Aexecute) command and the _append_ specific version of `vimgrep` (i.e. [`vimgrepa`](https://vimhelp.org/quickfix.txt.html#%3Avimgrepa)):
+
+```viml
+:bufdo execute "vimgrepa /<<< HEAD/ %"
+```
+
+As you can see I was also able to utilise the [`%` register](https://vimhelp.org/change.txt.html#%3Aregisters) to access the current file name. So for each iteration of `bufdo` through the buffer list, the `%` register would be updated to reflect the name of the file.
 
 Each of these 'do' commands are all fairly self-explanatory, but let's take a moment to look at `argdo` as it has some interesting extra considerations. When you open Vim for the first time there is an 'argument list' that gets populated. All files open in the argument list will match what's in your buffer list, unless you start opening/closing buffers. But regardless of changes to the buffer list, the arglist will stay the same, which means just because you have a file name in the argument list doesn't mean you have a buffer open for that file. 
 
