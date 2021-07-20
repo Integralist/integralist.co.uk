@@ -392,7 +392,10 @@ let g:ack_mappings = {
   \ "v": "<C-W><CR>:exe 'wincmd ' (&splitright ? 'L' : 'H')<CR><C-W>p<C-W>J<C-W>p"}
 ```
 
-> **NOTE**: There is one _small_ plugin I really like that's related to this section: [vim-searchindex](https://github.com/google/vim-searchindex) which shows how many times a search pattern, such as `/your_pattern`, occurs in the current buffer. After each search, it displays total number of matches, as well as the index of a current match.
+Now it's probably worth me quickly mentioning that there are two _small_ plugins I really like that's related to this section: 
+
+1. [vim-searchindex](https://github.com/google/vim-searchindex) which shows how many times a search pattern, such as `/your_pattern`, occurs in the current buffer. After each search, it displays total number of matches, as well as the index of a current match. 
+2. [quick-scope](https://github.com/unblevable/quick-scope) which highlights a unique character in every word on a line to help you more efficiently jump around on a single line using the standard `f`, `F`, `t` and `T` motions.
 
 ## Processing search results with `cdo` and `cfdo`
 
