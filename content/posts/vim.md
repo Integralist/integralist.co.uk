@@ -28,6 +28,7 @@ I see a lot of posts on Vim 'tips and tricks' and decided I'd have a go at putti
 - [Filtering quickfix and location list results](#filtering-quickfix-and-location-list-results)
 - [Processing files with `<T>do`](#processing-files-with-tdo)
 - [Automating content modification using Ex commands from the shell](#automating-content-modification-using-ex-commands-from-the-shell)
+- [Starting Vim with your last workspace](#starting-vim-with-your-last-workspace)
 - [Vim's start-up process](#vims-start-up-process)
 - [Debugging Vim issues](#debugging-vim-issues)
 - [Autocomplete with no plugins](#autocomplete-with-no-plugins)
@@ -80,6 +81,43 @@ let g:netrw_list_hide= '.*\.swp$'
 ```
 
 And the great thing about all of this is that there are _no_ plugins required for any of this stuff. It's all standard Vim features. You just need to know they exist.
+
+Now, there may be times where you want a minimal config but with some extra treats, I'll typically have a `~/.vimrc-core` file with the following configuration that gives me the above 'basic' configuration (with some other configuration which isn't essential but also isn't superfluous either) along with some _core_ plugins I like to use):
+
+```viml
+set nocompatible number autoread cursorline expandtab hlsearch visualbell tabstop=2 shiftwidth=2 clipboard+=unnamed wildmenu hidden noswapfile
+syntax on
+packadd cfilter
+
+call plug#begin('~/.vim/plugged')
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim' " <Tab> to select multiple results
+Plug 'mileszs/ack.vim'
+Plug 'unblevable/quick-scope'
+call plug#end()
+
+map <leader>f :FZF<CR>
+map <leader>b :Buffers!<CR>
+map <leader>g :GFiles?<CR>
+map <leader>w :Windows<CR>
+map <leader>l :Lines<CR>
+map <leader>t :AgC<CR>
+
+set wildignore+=*/.git/*,*/node_modules/*,*/.hg/*,*/.svn/*.,*/.DS_Store
+set wildmode=list:longest,list:full
+
+autocmd VimEnter * command! -nargs=* -bang AgC call fzf#vim#ag(<q-args>, '--path-to-ignore ~/.ignore --hidden --ignore "node_modules" --ignore-dir="vendor" --skip-vcs-ignores', <bang>0)
+
+let g:ackprg = 'ag --vimgrep --smart-case --path-to-ignore ~/.ignore --hidden --ignore-dir=node_modules --ignore-dir=vendor --skip-vcs-ignores'
+
+let g:ack_mappings = {
+  \ "h": "<C-W><CR>:exe 'wincmd ' (&splitbelow ? 'J' : 'K')<CR><C-W>p<C-W>J<C-W>p",
+  \ "v": "<C-W><CR>:exe 'wincmd ' (&splitright ? 'L' : 'H')<CR><C-W>p<C-W>J<C-W>p"}
+  
+silent! tnoremap <Esc> <C-\><C-n>
+```
+
+Yes it's bigger than the 'basic' version, but remember this is still only 30 lines of configuration and it gives me a much richer experience. Again, the motivation for this post is about _not_ needing plugins, and you should aim for understanding the fundamentals of Vim, but this gives you a little bit of both worlds 😉
 
 ## Modifying content with `global` command
 
@@ -145,7 +183,9 @@ You can also use the `!` to cause `:global` to behave in the reverse (i.e. anyth
 
 Most people know how to use Vim's [`:substitute`](https://vimhelp.org/change.txt.html#%3Asubstitute) command, but it seems people are less familiar with the use of [`\v`](https://vimhelp.org/pattern.txt.html#%2F%5Cv) as a way to enable 'magic mode'.
 
-Magic mode just means your regex pattern works like you would expect it to from an engine supporting [PCRE](https://www.pcre.org/) (Perl Compatible Regular Expressions, probably the most common implementation).
+For me 'magic mode' really just means my regex pattern works doesn't require escaping characters like `+` or `()` which is quite frustrating. I just prefix my pattern with `\v` and I can forget that for the most part (†). more like I'd expect it to from an engine supporting [PCRE](https://www.pcre.org/) (Perl Compatible Regular Expressions, probably the most common implementation).
+
+> † One caveat when using magic mode is that you _do_ need to escape curly brackets as most regex engines treat `{}` as a 'quantifier' such as `{1,3}` and so if I'm programming/coding and I need to search for a `{` (which is common in programming languages), then I have to escape it `\{`. You can learn more about Vim's regex engine via the help but also via [vimregex.com](http://vimregex.com/).
 
 Let's start off by looking at `\v` not using a substitution but with a standard [`/`](https://vimhelp.org/pattern.txt.html#%2F) search.
 
@@ -469,13 +509,13 @@ This is why I always use [`cdo`](https://vimhelp.org/quickfix.txt.html#%3Acdo) w
 
 ## Filtering quickfix and location list results
 
-What's interesting about 'quickfix' and 'location' lists is that you can further filter their results. Now, admittedly if you're using a third-party plugin like [Ack](https://github.com/mileszs/ack.vim), then you have complete control over the search pattern with additional flags that help to filter the number of results. 
+What's interesting about 'quickfix' and 'location' lists is that you can further filter their results. Now, admittedly if you're using a third-party plugin like [Ack](https://github.com/mileszs/ack.vim), then yes you do have more control over the search pattern using additional flags provided by a third-party plugin that will help to filter the number of results, but I'd argue there are still situations where you need even _more_ fine grained control over what's displayed in the quickfix/location lists. 
 
-But if you're using the built-in Vim search (e.g. `vimgrep`/`lvimgrep` or even a custom configured `grep` to use an external command) then the amount of control you have can be limited.
+If you've taken the purist (i.e. no plugins) approach, then using the built-in Vim search (e.g. `vimgrep`/`lvimgrep` or even a custom configured `grep` to use an external command) will not offer much in the way of configuring the filtering of results (at the end of the day these built-in tools are useful but limited).
 
-So if that's a position you find yourself in, then you can utilise either [`Cfilter`](https://vimhelp.org/quickfix.txt.html#%3ACfilter) or [`Lfilter`](https://vimhelp.org/quickfix.txt.html#%3ALfilter) to filter your search results. These two commands are internal Vim plugins that need to be loaded using Vim's [`packadd`](https://vimhelp.org/repeat.txt.html#%3Apackadd) command (I actually have this added to my [`.vimrc`](https://github.com/Integralist/dotfiles/blob/master/.vimrc#L73-L75) as I always forget to call `packadd`).
+So what additional tools does Vim provide to us? In this case you can utilise either [`Cfilter`](https://vimhelp.org/quickfix.txt.html#%3ACfilter) or [`Lfilter`](https://vimhelp.org/quickfix.txt.html#%3ALfilter) to filter your search results. These two commands are internal Vim plugins that need to be loaded using Vim's [`packadd`](https://vimhelp.org/repeat.txt.html#%3Apackadd) command (I actually have this added to my [`.vimrc`](https://github.com/Integralist/dotfiles/blob/master/.vimrc#L75-L77) as I always forget to call `packadd`).
 
-Here is an example of how to use it. I'm going to search for the phrase "vim" across my blog, which ends up returning quite a few results across multiple files. Turns out I'm only interested in files that are Markdown files and so I need to filter the results to only show me those files...
+Here is an example of how to use `Cfilter`. I'm going to search for the phrase "vim" across my blog, which ends up returning quite a few results across multiple files. Turns out I'm only interested in files that are Markdown files and so I need to filter the results to only show me those files...
 
 > **NOTE**: Sure you could use [`wildignore`](https://vimhelp.org/options.txt.html#%27wildignore%27) (or maybe even [`suffixes`](https://vimhelp.org/options.txt.html#%27suffixes%27), although it won't solve our problem, only alleviate it slightly) but it's really a _hammer_ solution, where we want a scalpel.
 
@@ -590,6 +630,26 @@ FOO
 ```
 
 > **NOTE**: `norm` says execute the following characters as if the user is typing them, so `V` selects the entire line and `gU` uppercases the selection. We then print the output to stdout `%p` and then quit without trying to save the modifications.
+
+## Starting Vim with your last workspace
+
+Now this feature I'm going to describe I don't use that often, but there's been a few occasions where it's saved me a lot of hassle. The feature i'm going to talk about is [`:mksession`](https://vimhelp.org/starting.txt.html#%3Amksession). There are lots of things you can do with `:mksession` so read the help documents, but I'm only going to cover the basics here because that's mostly all I ever need to use.
+
+The summary of this Ex command is that it will take a snapshot of your working environment inside Vim and will reproduce it the next time you startup Vim. 
+
+The way it does this is to stick every buffer, window, window size and layout configuration into a `Session.vim` file (don't forget to add this file to your `.gitignore`). 
+
+So if you need to stop Vim suddenly (for whatever reason) and you don't want to lose your workspace layout because you've got lots of files open that you'd have to write down filename/paths to, and maybe you have specific window splits setup to work on multiple files in a specific order and you don't want to have to remember what the layout was (especially if like me you have multiple Vim tabs open and each one has its own window splits etc) then you just need to run `:mksession` before closing Vim.
+
+To start Vim with the session snapshot you would run:
+
+```bash
+vim -S Session.vim
+```
+
+That's it! Your entire workspace is spun up exactly how you left it. 
+
+Once you open Vim again you might want to change some of your workspace. If that's the case and you want the `Session.vim` file to record that updated layout in its snapshot, then run the `:mksession!` command (notice the extra `!` at the end to force overwriting the original `Session.vim` file).
 
 ## Vim's start-up process
 
