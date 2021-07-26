@@ -691,6 +691,8 @@ endif
 
 ## Debugging Vim issues
 
+First thing first, run [`:se`](https://vimhelp.org/options.txt.html#%3Ase) to see all the Vim options that have changed from the Vim defaults. This can be a good 'at a glance' perspective on what might be wrong or why you're seeing some sort of unexpected behaviour.
+
 To check a specific setting and who (i.e. which plugin or script) last modified it, use [`:verbose set <setting>?`](https://vimhelp.org/various.txt.html#%3Averbose).
 
 For example, `:verbose set shiftwidth?` returns...
