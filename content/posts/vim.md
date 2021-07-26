@@ -738,6 +738,8 @@ v  <NL>          <Plug>MoveBlockDown
         Last set from ~/.vim/plugged/vim-move/plugin/move.vim
 ```
 
+If you want to know what the default commands that Vim defines, then take a look at [`:h index`](https://vimhelp.org/index.txt.html#index) and drill down into the various commands per 'mode'.
+
 > **NOTE**: Vim also has a debugger you can use: `vim -D ~/.vimrc` (see reference below for details).
 
 Lastly, there is the `-V<N>` flag that sets the verbosity of Vim output when starting up...
