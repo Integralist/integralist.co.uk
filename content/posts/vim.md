@@ -77,7 +77,7 @@ Although not shown in the screenshot I also use the built-in file/directory expl
 
 ```viml
 " don't display .swp files
-let g:netrw_list_hide= '.*\.swp$'
+let g:netrw_list_hide= '.*\.swp$,.*\.DS_Store'
 ```
 
 And the great thing about all of this is that there are _no_ plugins required for any of this stuff. It's all standard Vim features. You just need to know they exist.
