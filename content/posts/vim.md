@@ -80,6 +80,25 @@ Although not shown in the screenshot I also use the built-in file/directory expl
 let g:netrw_list_hide= '.*\.swp$,.*\.DS_Store'
 ```
 
+Another core feature of Vim I like to use is [`:marks`](https://vimhelp.org/motion.txt.html#%3Amarks) which is a bookmark feature (see [`:h bookmark`](https://vimhelp.org/usr_03.txt.html#bookmark) for more details). This can be useful for jumping around multiple locations within a single large file. The cool thing about marks is that they are unique to each file, so I tend to create marks using the registers a, b, c ...etc as it's easier to remember, and then I can use those same registers in each file (meaning I don't have to jump to another file and be like "oh was I using d, e, f in this file or a, b, c?).
+
+As well as using [`!`](https://vimhelp.org/change.txt.html#%21) which lets me filter content through an external program. So for example, if I have the following lines...
+
+```
+foo
+foobar
+baz
+quxfoo
+```
+
+...and I want to filter out any lines that contains `foo`, then I can visually select those lines and pass the selection through to my shell's `grep` command like so:
+
+```viml
+:'<,'>!grep -v foo
+```
+
+This would result in those lines being replaced with the single line containing `baz`, as all the other lines were containing `foo`. Now a more Vim idiomatic approach to this particular problem is demonstrated in the next section "[Modifying content with `global` command](#modifying-content-with-global-command)", but the takeaway is that the `!` command is awesome.
+
 And the great thing about all of this is that there are _no_ plugins required for any of this stuff. It's all standard Vim features. You just need to know they exist.
 
 Now, there may be times where you want a minimal config but with some extra treats, I'll typically have a `~/.vimrc-core` file with the following configuration that gives me the above 'basic' configuration (with some other configuration which isn't essential but also isn't superfluous either) along with some _core_ plugins I like to use):
