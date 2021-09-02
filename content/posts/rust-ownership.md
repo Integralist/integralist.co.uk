@@ -266,7 +266,7 @@ fn borrow(s: &mut String) {
 
 Multiple immutable references are safe because you're only able to _read_ the data and not mutate it, but you cannot have an immutable reference while also holding a mutable reference because this otherwise could change the value of the immutable reference (and that would be unexpected for the part of the program using the immutable reference).
 
-The only way this would be allowed is if the immutable reference goes out of scope before the immutable reference(s) were assigned:
+The only way this would be allowed is if the immutable reference goes out of scope before the mutable reference(s) were assigned:
 
 ```
 fn main() {
