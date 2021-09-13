@@ -37,11 +37,13 @@ There are _many_ data structures, and even the ones that are covered here have m
 
 A data type is an [attribute](https://english.stackexchange.com/a/28098/334144) of data which tells the compiler (or interpreter) how the programmer intends to use the data.
 
-- **Primitive**: basic building block (boolean, integer, float, char etc.)
-- **Composite**: any data type (struct, array, string etc.) composed of primitives or composite types.
+- **Scalar**: basic building block (boolean, integer, float, char etc.)
+- **Composite**: any data type (struct, array, string etc.) composed of scalars or composite types (also referred to as a 'compound' type).
 - **Abstract**: data type that is defined by its behaviour (tuple, set, stack, queue, graph etc).
 
-If we consider a composite type, such as a 'string', it _describes_ a data structure which contains a sequence of char primitives (characters), and as such is referred to as being a 'composite' type. Whereas the underlying _implementation_ of the string composite type is typically implemented using an array data structure (we'll cover [data structures](#data-structures) shortly).
+> **NOTE**: You might also have heard of a 'primitive' type, which is sometimes confused with the 'scalar' type. A primitive is typically used to represent a 'value type' (e.g. pass-by-value semantics) and this contrasts with 'reference types' (e.g. pass-by-reference semantics).
+
+If we consider a composite type, such as a 'string', it _describes_ a data structure which contains a sequence of char scalars (characters), and as such is referred to as being a 'composite' type. Whereas the underlying _implementation_ of the string composite type is typically implemented using an array data structure (we'll cover [data structures](#data-structures) shortly).
 
 > Note: in a language like C the length of the string's underlying array will be the number of characters in the string followed by a '[null terminator](/posts/concepts-from-the-c-programming-language/#7)'.
  
@@ -53,7 +55,7 @@ An abstract data type (ADT) describes the expected _behaviour_ associated with a
 
 A data structure is a collection of data type 'values' which are stored and organized in such a way that it allows for efficient access and modification. In some cases a data structure can become the underlying implementation for a particular data type. 
 
-For example, composite data types are data structures that are composed of primitive data types and/or other composite types, whereas an abstract data type will define a set of behaviours (almost like an 'interface' in a sense) for which a particular data structure can be used as the concrete implementation for that data type.
+For example, composite data types are data structures that are composed of scalar data types and/or other composite types, whereas an abstract data type will define a set of behaviours (almost like an 'interface' in a sense) for which a particular data structure can be used as the concrete implementation for that data type.
 
 When we think of data structures, there are generally four forms:
 
