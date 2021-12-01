@@ -97,6 +97,12 @@ quxfoo
 :'<,'>!grep -v foo
 ```
 
+A more practical example would be the need to take a single line of JSON and pipe it into a tool that pretty prints the data (the following example uses the `%` range to send the whole buffer to the program):
+
+```viml
+:%!python -m json.tool
+```
+
 This would result in those lines being replaced with the single line containing `baz`, as all the other lines were containing `foo`. Now a more Vim idiomatic approach to this particular problem is demonstrated in the next section "[Modifying content with `global` command](#modifying-content-with-global-command)", but the takeaway is that the `!` command is awesome.
 
 And the great thing about all of this is that there are _no_ plugins required for any of this stuff. It's all standard Vim features. You just need to know they exist.
