@@ -99,6 +99,14 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ### 2021
 
+- **What**: Published a [best practices guide](https://developer.fastly.com/learning/integrations/orchestration/terraform/) for writing Terraform using the Fastly Terraform provider.  
+  **Why**: We noticed an increase in customer support queries related to Terraform and that it was a complex topic to understand.  
+  **Impact**: Customers reported an appreciation for the official guidance as it helped to elucidate an otherwise confusing combination of tools and concepts.
+
+- **What**: Acted as an embassador for Fastly support on Stack Overflow ([Fastly Stack Overflow profile](https://stackoverflow.com/users/14849316/integralist)).  
+  **Why**: To help the community of Fastly users.  
+  **Impact**: Customers were unblocked and able to become productive, as well as just generally feeling supported.
+
 - **What**: I designed, wrote and coordinated the release of a Terraform training module that also focuses on integration with Fastly.  
   **Why**: We had noticed an ever growing increase in interest with Terraform.  
   **Impact**: Our customers can feel confident and supported when thinking of managing their services using Terraform.
@@ -132,7 +140,7 @@ I'd like to share the various things I've worked on over the years and the impac
   **Impact**: I was able to release [a feature](/posts/rate-limiting-at-the-cdn-edge/) that provided our organization with DoS level protection at 'the edge' (e.g. reduced load on our internal infrastructure) while decoupling rate limiting logic from our critical path, along with granular client identification context to be more useful than just a simple IP deny list.
 
 - **What**: spent three weeks tackling problem of metric production across ~600 microservices.  
-  **Why**: we had run over our allotted threshold 
+  **Why**: we had run over our allotted threshold  
   **Impact**: we saved the company a huge chunk of money (~$40k)! also we educated ourselves greatly on how our provider determines 'custom metrics' and how to better utilize distribution metrics over standard histograms.
 
 - **What**: wrote Python script that parsed any metrics produced by our ~600 microservices and cross-referenced them against our ~1000 dashboards and ~1000 monitors to identify which metrics were actually being utilized.  
