@@ -103,7 +103,7 @@ I'd like to share the various things I've worked on over the years and the impac
   **Why**: We noticed an increase in customer support queries related to Terraform and that it was a complex topic to understand.  
   **Impact**: Customers reported an appreciation for the official guidance as it helped to elucidate an otherwise confusing combination of tools and concepts.
 
-- **What**: Acted as an embassador for Fastly support on Stack Overflow ([Fastly Stack Overflow profile](https://stackoverflow.com/users/14849316/integralist)).  
+- **What**: Acted as an ambassador for Fastly support on Stack Overflow ([Fastly Stack Overflow profile](https://stackoverflow.com/users/14849316/integralist)).  
   **Why**: To help the community of Fastly users.  
   **Impact**: Customers were unblocked and able to become productive, as well as just generally feeling supported.
 
