@@ -28,9 +28,6 @@ I've been using GitHub Actions a lot recently and I've found it to be immensely 
 - [Third Party Actions](#third-party-actions)
 - [Conditions](#conditions)
 - [Persisting Data](#persisting-data)
-  - [Using shared job data to determine if subsequent job should run](#using-shared-job-data-to-determine-if-subsequent-job-should-run)
-  - [Persist data using `strategy.matrix`](#persist-data-using-strategymatrix)
-  - [Clarify the cache action](#clarify-the-cache-action)
 - [Reusable Workflows](#reusable-workflows)
 
 ## Terminology
