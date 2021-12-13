@@ -581,6 +581,25 @@ jobs:
           status: ${{ steps.validator.outputs.status }}
 ```
 
+Notice that in the reusable workflow we have a new event `workflow_call` that helps us to define _inputs_ for the job being called.
+
+In this reusable job we define a bunch of inputs which helps us to control whether the steps in the job are run (making the reusable job even more flexible) by utilising a step's `if` condition and interpolating the input value.
+
+For example, we don't always install the Node.js programming language, only if the caller requests it:
+
+```yaml
+- if: ${{ inputs.install_node }}
+  uses: actions/setup-node@v2
+  id: node-yarn
+  with:
+    node-version: "${{ env.NODE_VERSION }}"
+    cache: yarn
+```
+
+Now one important consideration is that the reusable workflow will not inherit the parent workflow's environment. This means secrets and environment variables need to be passed in via either `workflow_call.inputs` or `workflow_call.secrets`. 
+
+Annoyingly you can't just set an input with `${{ env.FOO }}` because the `env` context object can't be referenced. So if your reusable job is used a lot then you either have to hardcode the value as an `input` to the reusable workflow or you store the environment variable as a secret in the GitHub UI so that you can reference it from the `workflow_call.secrets` property.
+
 ## Conclusion
 
 There is so much more to explore with GitHub Actions. The bits I've mentioned here are just the tip of the iceberg. I strongly recommend you read the documentation and have a play around with these, and other features. Let me know on twitter what you think of GitHub Actions and whether you're using it in your projects.

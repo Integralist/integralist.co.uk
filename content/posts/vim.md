@@ -21,6 +21,7 @@ I see a lot of posts on Vim 'tips and tricks' and decided I'd have a go at putti
 **Let's take a look at what we'll be covering...**
 
 - [Using Vim with no plugins](#using-vim-with-no-plugins)
+- [Recording repeatable steps with macros](#recording-repeatable-steps-with-macros)
 - [Modifying content with `global` command](#modifying-content-with-global-command)
 - [Substitutions, magic regex mode and other flags](#substitutions-magic-regex-mode-and-other-flags)
 - [Searching and filtering content](#searching-and-filtering-content)
@@ -144,6 +145,47 @@ silent! tnoremap <Esc> <C-\><C-n>
 
 Yes it's bigger than the 'basic' version, but remember this is still only 30 lines of configuration and it gives me a much richer experience. Again, the motivation for this post is about _not_ needing plugins, and you should aim for understanding the fundamentals of Vim, but this gives you a little bit of both worlds 😉
 
+## Recording repeatable steps with macros
+
+Vim allows you to [record](https://vimhelp.org/repeat.txt.html#recording) any typed characters so that you can then replay them again. This makes applying a set of complex changes multiple times across a code base much easier.
+
+The workflow is actually really simple...
+
+1. Press `q` followed by any valid [register](https://vimhelp.org/change.txt.html#registers) to start recording (you should see something like `recording @<register>` in the status bar).
+2. Start typing the changes you need to make.
+3. Press `q` again to stop recording.
+4. Press `@<register>` to replay the recorded steps.
+
+I typically use the `q` register as it's the quickest way to start recording a macro, as my finger already has to be over the `q` key to start recording any way (e.g. `qq` to record into `q`).
+
+Now you might be wondering what happens if your steps need to include the `q` character (if that character is what stops a macro recording). Well luckily `q` only triggers the macro to stop recording if it's the first character pressed as part of a new operation. 
+
+So to demonstrate, if I want a macro that deletes all occurrences of the letter `q` from the current line, then I would type the following:
+
+```
+qq0V:s/q//g<Enter>q
+```
+
+Let's break these steps down...
+
+- `qq`: record into the `q` register.
+- `0`: move to the start of the line.
+- `V`: select the entire line.
+- `:`: start Ex mode
+- `s/q//g`: a substitution that deletes `q` 'globally' (i.e. multiple times)
+- `<Enter>`: I press the Enter key to have the substitution applied to the current line.
+- `q`: I stop recording.
+
+If you execute `:reg` you'll see the `q` register contains something very similar...
+
+```
+0V:s/q//g^M
+```
+
+> **NOTE**: Once you've replayed a macro (e.g. `@q`) you can trigger it again without having to specify the register by typing `@` again, e.g. `@@` will rerun the last used macro.
+
+If you need to run a macro a certain number of times then just prefix it with that number. For example, to run a macro six times I'd type `6@<register>`.
+
 ## Modifying content with `global` command
 
 There are times when you want to execute an [Ex](https://vimhelp.org/cmdline.txt.html#%3A) command for any lines that match a specific pattern. That is where the [`:global`](hhttps://vimhelp.org/intro.txt.html#Exttps://vimhelp.org/repeat.txt.html#%3Aglobal) comes in handy (this is different to [substitution](https://vimhelp.org/change.txt.html#%3As), which we'll look at after).
@@ -208,7 +250,7 @@ You can also use the `!` to cause `:global` to behave in the reverse (i.e. anyth
 
 Most people know how to use Vim's [`:substitute`](https://vimhelp.org/change.txt.html#%3Asubstitute) command, but it seems people are less familiar with the use of [`\v`](https://vimhelp.org/pattern.txt.html#%2F%5Cv) as a way to enable 'magic mode'.
 
-For me 'magic mode' really just means my regex pattern works doesn't require escaping characters like `+` or `()` which is quite frustrating. I just prefix my pattern with `\v` and I can forget that for the most part (†). more like I'd expect it to from an engine supporting [PCRE](https://www.pcre.org/) (Perl Compatible Regular Expressions, probably the most common implementation).
+For me 'magic mode' really just means my regex pattern doesn't require escaping characters like `+` or `()` which is quite frustrating. I just prefix my pattern with `\v` and I can forget that for the most part (†). more like I'd expect it to from an engine supporting [PCRE](https://www.pcre.org/) (Perl Compatible Regular Expressions, probably the most common implementation).
 
 > † One caveat when using magic mode is that you _do_ need to escape curly brackets as most regex engines treat `{}` as a 'quantifier' such as `{1,3}` and so if I'm programming/coding and I need to search for a `{` (which is common in programming languages), then I have to escape it `\{`. You can learn more about Vim's regex engine via the help but also via [vimregex.com](http://vimregex.com/).
 
@@ -701,7 +743,7 @@ Although I will take a brief detour through that last item...
 
 ### The `after` directory
 
-The `after` directory can used by both Vim 'users' _and_ by Vim 'plugin authors' to override specific plugin configuration (that could be either `~/.vim/plugin/...` or `~/.vim/ftplugin/...`).
+The `after` directory can be used by both Vim 'users' _and_ by Vim 'plugin authors' to override specific plugin configuration (that could be either `~/.vim/plugin/...` or `~/.vim/ftplugin/...`).
 
 For example, the Vim plugin author for `vim-polyglot` adds this file: `~/.vim/plugin/vim-polyglot/after/ftdetect/rspec.vim` which overrides the filetype configuration for `rspec` files.
 
