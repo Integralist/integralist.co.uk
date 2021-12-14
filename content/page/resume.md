@@ -75,7 +75,7 @@ January 2019 I moved over to the Core Infrastructure team (which is split up int
 
 Each year I would also participate in the various working groups and mentoring programs, and become part of the 'on-call' rota and handle interactions with the Hackerone program.
 
-> Note: I'm a remote worker and currently my team is based in New York, so good communication (+ focus and work ethic) is essential.
+> **NOTE**: I'm a remote worker and currently my team is based in New York, so good communication (+ focus and work ethic) is essential.
 
 ### BBC (Jan 2013 - June 2016)
 
@@ -95,9 +95,13 @@ I progressed upwards through the organisation, moving from initially being a cli
 
 I'd like to share the various things I've worked on over the years and the impact/value this work has provided.
 
-> Note: the large majority of my 'impact' has been as a _remote_ worker. My hope is that the following list demonstrates how I've successfully made a positive impact (both as an IC and as a Team Lead) while also being 100% remote.
+> **NOTE**: the large majority of my 'impact' has been as a _remote_ worker. My hope is that the following list demonstrates how I've successfully made a positive impact (both as an IC and as a Team Lead) while also being 100% remote.
 
 ### 2021
+
+- **What**: Migrated from Travis CI to GitHub Actions, which included general refactoring of scripts, implementing reusable jobs and figuring out how to efficiently persist data between jobs (I also added lots of internal documentation).  
+  **Why**: To reduce complexity in our CI/CD pipelines.  
+  **Impact**: Our CI is much easier to understand, maintain and contribute to for internal staff (I also [wrote about GitHub Actions](/posts/github-actions/) as a side-effect).
 
 - **What**: Published a [best practices guide](https://developer.fastly.com/learning/integrations/orchestration/terraform/) for writing Terraform using the Fastly Terraform provider.  
   **Why**: We noticed an increase in customer support queries related to Terraform and that it was a complex topic to understand.  
@@ -447,6 +451,21 @@ I'm a print published and self-published author; I'm also a tech reviewer and am
 - [Programming in Clojure](https://leanpub.com/programming-clojure/) (Jul 2015)
 - [Python for Programmers](https://leanpub.com/pythonforprogrammers) (Jun 2016)
 
+### Fastly Blog
+
+- Author Overview: [https://www.fastly.com/blog/mark-mcdonnell](https://www.fastly.com/blog/mark-mcdonnell)
+
+### BuzzFeed Tech
+
+- I wrote a three part series on BuzzFeed's core HTTP routing service (built upon NGINX+) called "Scalable Request Handling: An Odyssey":
+  - [Part 1](https://tech.buzzfeed.com/scalable-request-handling-an-odyssey-part-1-d91a295af4d8)
+  - [Part 2](https://tech.buzzfeed.com/scalable-request-handling-an-odyssey-part-2-ad2433b2f6ed)
+  - [Part 3](https://tech.buzzfeed.com/scalable-request-handling-an-odyssey-part-3-c29aac9c39a)
+
+### InfoQ
+
+- Interview: [How BuzzFeed Migrated from a Perl Monolith to Go and Python Microservices](https://www.infoq.com/articles/buzzfeed-microservices-migration)
+
 ### NET Magazine
 
 - [8 ways to improve your grunt set-up](http://www.creativebloq.com/tutorial/8-ways-improve-your-grunt-set-111413407) (Nov 2014) ([PDF](https://dl.dropboxusercontent.com/u/3687270/NetMag%20-%20Grunt.pdf))
@@ -465,21 +484,11 @@ I'm a print published and self-published author; I'm also a tech reviewer and am
 - [Testing Your Ruby Code With Guard, RSpec & Pry (Part 1 - Ruby/Guard/RSpec)](http://code.tutsplus.com/tutorials/testing-your-ruby-code-with-guard-rspec-pry--cms-19974)
 - [Testing Your Ruby Code With Guard, RSpec & Pry (Part 2 - RSpec/Pry/Travis-CI)](http://code.tutsplus.com/tutorials/testing-your-ruby-code-with-guard-rspec-pry-part-2--cms-20290)
 
-### BuzzFeed Tech
-
-- I wrote a three part series on BuzzFeed's core HTTP routing service (built upon NGINX+) called "Scalable Request Handling: An Odyssey":
-  - [Part 1](https://tech.buzzfeed.com/scalable-request-handling-an-odyssey-part-1-d91a295af4d8)
-  - [Part 2](https://tech.buzzfeed.com/scalable-request-handling-an-odyssey-part-2-ad2433b2f6ed)
-  - [Part 3](https://tech.buzzfeed.com/scalable-request-handling-an-odyssey-part-3-c29aac9c39a)
-
-### InfoQ
-
-- Interview: [How BuzzFeed Migrated from a Perl Monolith to Go and Python Microservices](https://www.infoq.com/articles/buzzfeed-microservices-migration)
-
 ## Popular articles
 
 The following links are to some of my more 'popular' articles. My main focus when writing is to take a complicated or confusing topic and attempt to distil it, in order for the subject to be more easily understood.
 
+- [GitHub Actions](/posts/github-actions/) (2021)
 - [Infrequent (and advanced) Vim topics, tips and tricks](/posts/vim/) (2021)
 - [Git Internals](/posts/git-internals/) (2020)
 - [Python Management and Project Dependencies](/posts/python-management/) (2019)
@@ -527,7 +536,9 @@ The following links are to some of my more 'popular' articles. My main focus whe
 
 ## Open-Source
 
-> Note: listed alphabetically (i.e. not 'prioritized' in any way)
+> **NOTE**: The following repositories are listed alphabetically (i.e. are not 'prioritized' in any way) and are also likely very stale at this point. 
+
+The reality of life is that I have a family and so, outside of work, I have no time for open-source contributions. Anything I have worked on has been either done as part of an employer's own motivation to contribute to open-source or something I found 5 minutes to spare to share some code I was hacking together.
 
 - [BBC Alephant](https://github.com/BBC-News/alephant):  
 The Alephant framework is a collection of isolated Ruby gems, which interconnect to offer powerful message passing functionality built up around the "Broker" pattern.  
@@ -537,6 +548,9 @@ Responsive images while we wait for srcset to finish cooking
 
 - [Bash Headers](https://github.com/Integralist/Bash-Headers):  
 CLI tool, written in Bash script, for sorting and filtering HTTP Response Headers  
+
+- [Carbon](https://github.com/Integralist/carbon):  
+HTTP Response Header Sorting and Filtering written in Go.
 
 - [DOMReady](https://github.com/Integralist/DOMready):  
 Cross browser 'DOM ready' function  
@@ -550,11 +564,17 @@ CLI tool, built in Go, for interacting with the Fastly API
 - [Go Find Root](https://github.com/Integralist/go-findroot):  
 Locate the root directory of a project using Git via the command line  
 
+- [Go Flags](https://github.com/Integralist/go-flags):  
+Abstraction for command-line flag parsing (with no dependencies outside of the Standard Library).
+
 - [Go Requester](https://github.com/Integralist/Go-Requester):  
 HTTP service that accepts a collection of "components", fans-out requests and returns aggregated content  
 
 - [Go Reverse Proxy](https://github.com/Integralist/go-reverse-proxy):  
 A configuration-driven reverse proxy written in Go (no dependencies outside of the standard library).  
+
+- [Go Web Crawler](https://github.com/Integralist/go-web-crawler):  
+A simple web crawler built in Go.
 
 - [Grunt Boilerplate](https://github.com/Integralist/Grunt-Boilerplate):  
 Original Grunt Boilerplate  
@@ -564,6 +584,9 @@ HTML5 Canvas Game
 
 - [MVCP](https://github.com/Integralist/MVCP):  
 MVC + 'Presenter' pattern in Ruby  
+
+- [Terraform Provider Mock](https://github.com/Integralist/terraform-provider-mock):  
+An empty boilerplate repository for creating a terraform provider.
 
 - [Sinderella](https://github.com/Integralist/Sinderella):  
 Ruby gem for transforming data object for specified time frame  
@@ -579,9 +602,19 @@ Node Build Script for serving HTML components
 
 ## Tools, Languages and Tech
 
-I don't profess mastery, but I'm adept with most of the below, and I have an aptitude towards learning what I need to get the job done right:
+I don't profess mastery, but I'm adept with most of the below, and I have an aptitude towards learning what I need to get the job done right.
 
-> Note: with any static list, this is likely to go stale. For example, I've not worked with JavaScript for _many_ years (I'm aware of the various client-side platform changes, react, virtual doms etc) but at one point in time of my career I was considered a deep dive expert. So take this list with a 'pinch of salt'.
+> **NOTE**: with any static list, this is likely to go stale. For example, I've not worked with JavaScript for _many_ years (I'm aware of the various client-side platform changes, react, virtual doms etc) but at one point in time of my career I was considered a deep dive expert. So take this list with a 'pinch of salt'.
+
+**The _slightly_ more up-to-date, and ordered, list would be**:
+
+- Go
+- Python
+- Shell Scripting (Bash)
+- GitHub Actions (CI/CD pipelines)
+- VCL
+
+**The longer and more stale version**:
 
 - AWS CloudFormation (and the AWS platform in general)
 - CSS
@@ -590,6 +623,7 @@ I don't profess mastery, but I'm adept with most of the below, and I have an apt
 - Docker
 - Functional Programming
 - Git
+- GitHub Actions (CI/CD)
 - Go
 - HTML
 - JRuby/MRI Ruby
@@ -605,8 +639,9 @@ I don't profess mastery, but I'm adept with most of the below, and I have an apt
 - Python
 - Refactoring Techniques
 - Regular Expressions
+- Rust
 - Sass
-- Shell Scripting
+- Shell Scripting (Bash)
 - Terraform
 - Tmux
 - Trello
