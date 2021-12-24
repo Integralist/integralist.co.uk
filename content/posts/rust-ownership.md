@@ -66,7 +66,7 @@ So here are some of the gotchas that trip people up:
 
 As an example, consider the following code, which compiles correctly because we're dealing with primitives and so the `println!()` macro used is safely able to reference both the variable `a` and `b`.
 
-```
+```rust
 fn main() {
     let a = 123;
     let b = a;
@@ -77,7 +77,7 @@ fn main() {
 
 Now consider a similar example which _doesn't_ work because we're dealing with a complex type (`String`). The value assigned to `a` is _moved_ to `b`. The `b` variable has now become the new _owner_ of the data, and this means `a` is not allowed to be used again (e.g. we can't reference it in `println!()`).
 
-```
+```rust
 fn main() {
     let a = String::from("foo");
     let b = a;
@@ -88,7 +88,7 @@ fn main() {
 
 This will generate the following compiler error:
 
-```
+```rust
 error[E0382]: borrow of moved value: `a`
  --> src/main.rs:5:30
   |
@@ -103,7 +103,7 @@ error[E0382]: borrow of moved value: `a`
 
 The only solution here is to manually _copy_ the value using the [`.clone()`](https://doc.rust-lang.org/alloc/string/struct.String.html#impl-Clone) method of the `String` type, which means `b` no longer becomes the new owner of the data (the data itself is duplicated and so it's _new_ data that `b` is the owner of):
 
-```
+```rust
 fn main() {
     let a = String::from("foo");
     let b = a.clone();
@@ -124,7 +124,7 @@ The concept of borrowing is designed to make dealing with ownership changes easi
 
 To pass a reference instead of passing over ownership, all you have to do is prefix your variable with an ampersand:
 
-```
+```rust
 fn main() {
     let s = String::from("foo");
     
@@ -144,7 +144,7 @@ Notice in the below example code we not only define the `main` function's `s` va
 
 Also notice that after borrowing the value, we call `take_ownership()` and we don't pass a 'reference', meaning the function is the new owner of the data that was belonging to `s`:
 
-```
+```rust
 fn main() {
     let mut s = String::from("foo");
     
@@ -170,7 +170,7 @@ fn take_ownership(s: String) {
 
 It's also important at this point to understand that defining a variable as being 'mutable' and passing a 'mutable reference' are two different things. You can see in the below example code that we have said `s` is mutable and then we pass it as an immutable reference to `borrow_no_mut()` and then as a mutable reference to `borrow_with_mut()`:
 
-```
+```rust
 fn main() {
     let mut s = String::from("foo");
     
@@ -191,13 +191,75 @@ fn borrow_with_mut(s: &mut String) {
 
 ### Gotchas
 
+- You can't take a reference and then modify the original variable's value.
+
+Here's an example that doesn't compile:
+
+```rust
+fn main() {
+    let mut x;
+    x = 42;
+    let y = &x;
+    x = 43;
+    println!("{:?}", y);
+}
+```
+
+In the above example we define `x` and assign the value `42`. Next we define `y` and take a reference to `x` (i.e. we 'borrow' it). Lastly we try to reassign a new value to `x` while still holding a reference to it, which isn't allowed because it would potentially invalidate the reference.
+
+This would result in the following compiler error:
+
+```bash
+$ cargo run
+   Compiling chapter1 v0.1.0 (/Users/integralist/Code/rust/rust-for-rustaceans/chapter1)
+warning: value assigned to `x` is never read
+ --> src/main.rs:5:5
+  |
+5 |     x = 43;
+  |     ^
+  |
+  = note: `#[warn(unused_assignments)]` on by default
+  = help: maybe it is overwritten before being read?
+
+error[E0506]: cannot assign to `x` because it is borrowed
+ --> src/main.rs:5:5
+  |
+4 |     let y = &x;
+  |             -- borrow of `x` occurs here
+5 |     x = 43;
+  |     ^^^^^^ assignment to borrowed `x` occurs here
+6 |     println!("{:?}", y);
+  |                      - borrow later used here
+
+For more information about this error, try `rustc --explain E0506`.
+warning: `chapter1` (bin "chapter1") generated 1 warning
+error: could not compile `chapter1` due to previous error; 1 warning emitted
+```
+
+To solve this problem you need `y` to fall out of scope (or alternatively create a function so that when the function is called with a reference the reference drops out of scope at the end). This can be done using block scope syntax like so:
+
+```rust
+fn main() {
+    let mut x;
+    x = 42;
+    {
+        let y = &x;
+        println!("{:?}", y); // 42
+    }
+    x = 43;
+    println!("{:?}", x); // 43
+}
+```
+
+Another _gotcha_:
+
 - You can have only **one** mutable reference (i.e. this prevents data races).
 
 ..._unless_! the scope allows for it.
 
 So here is an example where it _isn't_ allowed:
 
-```
+```rust
 fn main() {
     let mut s = String::from("foo");
     
@@ -220,7 +282,7 @@ fn borrow(s: &mut String) {
 
 To make this example work we need the scope rules to allow for it, which means moving the first mutable reference assignment into its own block where the end of the newly defined block's scope will cause `a` to be dropped:
 
-```
+```rust
 fn main() {
     let mut s = String::from("foo");
     
@@ -246,7 +308,7 @@ Another _gotcha_:
 
 Here's an example where the compiler complains:
 
-```
+```rust
 fn main() {
     let mut s = String::from("foo");
     
@@ -268,7 +330,7 @@ Multiple immutable references are safe because you're only able to _read_ the da
 
 The only way this would be allowed is if the immutable reference goes out of scope before the mutable reference(s) were assigned:
 
-```
+```rust
 fn main() {
     let mut s = String::from("foo");
     
@@ -293,7 +355,7 @@ One last gotcha:
 
 Here's what that might look like:
 
-```
+```rust
 fn main() {
     let r = return_ref();
     println!("r: {}", r); // foo
@@ -309,7 +371,7 @@ fn return_ref<'a>() -> &'a String {
 
 The above code will cause the following compiler error:
 
-```
+```bash
 error[E0515]: cannot return reference to local variable `s`
  --> src/main.rs:8:12
   |
@@ -323,7 +385,7 @@ If you look at the compiler explanation for the error (`rustc --explain E0515`) 
 
 So the solution to this problem is to 'move' ownership of the data to whoever is calling the function, like so:
 
-```
+```rust
 fn main() {
     let r = return_ref();
     println!("r: {}", r); // foo
@@ -355,7 +417,7 @@ Without the lifetime feature this would be a problem for the compiler because it
 
 The below code example highlights how defining a single lifetime called `'a` and assigning it to both arguments (and to the return value) allows the compiler to track these references and ensure they both live long enough to prevent any errors at runtime.
 
-```
+```rust
 fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
     if x.len() > y.len() {
         x
@@ -371,7 +433,7 @@ This means that if either of the arguments `x` or `y` don't live long enough to 
 
 Here is an example that demonstrates the potential error when the code is poorly designed:
 
-```
+```rust
 fn main() {
     let string1 = String::from("a very long string");
     let result;
@@ -393,7 +455,7 @@ fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
 
 The above code will cause the following compiler error:
 
-```
+```bash
 error[E0597]: `string2` does not live long enough
  --> src/main.rs:6:44
   |
