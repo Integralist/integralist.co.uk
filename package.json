@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "index": "hugo && grunt lunr-index",
-    "dev": "npm run index && hugo server"
+    "dev": "npm run index && hugo server --disableFastRender"
   },
   "repository": {
     "type": "git",
