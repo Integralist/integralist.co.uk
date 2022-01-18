@@ -221,7 +221,7 @@ When we define a function that accepts a pointer (e.g. `changeName(p *Person)`) 
 
 Your functions should have concise/relevant arguments passed in.
 
-Don't, for example, pass in an argument whose type is a large object and which the function then has to know how that object is structured as that's violating the Law of Demeter. Instead choose a field from the object to pass in as it'll likely have a simpler type (like a `string` or `int`).
+Don't, for example, pass in an argument whose type is a large and deeply nested object. Firstly, this means the consuming function has to know the structure well enough to dip into it (and arguably it could be argued that this violates the Law of Demeter). Secondly, it makes testing such a function tedious, and thirdly managing such a data structure is equally tedious. Instead choose a field from the object to pass in as it'll likely have a simpler type (like a `string` or `int`).
 
 Three approaches to dealing with functions that potentially could have a large number of arguments...
 
