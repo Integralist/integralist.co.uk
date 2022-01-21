@@ -6,6 +6,7 @@ comments: false
 
 - [Hello!](#hello)
 - [Working Together](#working-together)
+- [Summary](#summary)
 - [Connect](#connect)
 - [Brief History](#brief-history)
 - [Impact!](#impact)
@@ -15,7 +16,6 @@ comments: false
 - [Popular articles](#popular-articles)
 - [Open-Source](#open-source)
 - [Tools, Languages and Tech](#tools-languages-and-tech)
-- [Summary](#summary)
 
 <img src="../images/profile.jpg">
 
@@ -38,6 +38,13 @@ I ❤️ this feedback. It came from someone I was mentoring who worked in Produ
 Her feedback also hints at something bigger which I strive for: to help others to do their best work and to push/promote the good work other engineers do (especially those from either a diverse background or minority).
 
 I care a lot about the people I work with, and aim to build meaningful relationships with people across the company. In doing so I hope to ensure that we collectively are able to work as a cohesive unit, and thus provide great value to our users.
+
+## Summary
+
+I ideally want to get across two fundamental things about me:
+
+1. I'm very passionate about programming and the openness of the web
+2. I love getting the chance to learn and experience new things
 
 ## Connect
 
@@ -488,6 +495,7 @@ I'm a print published and self-published author; I'm also a tech reviewer and am
 
 The following links are to some of my more 'popular' articles. My main focus when writing is to take a complicated or confusing topic and attempt to distil it, in order for the subject to be more easily understood.
 
+- [Go Style Guide](/posts/go-style-guide/) (2022)
 - [GitHub Actions](/posts/github-actions/) (2021)
 - [Infrequent (and advanced) Vim topics, tips and tricks](/posts/vim/) (2021)
 - [Git Internals](/posts/git-internals/) (2020)
@@ -649,10 +657,3 @@ I don't profess mastery, but I'm adept with most of the below, and I have an apt
 - Vagrant
 - Varnish
 - Vim
-
-## Summary
-
-I ideally want to get across two fundamental things about me:
-
-1. I'm very passionate about programming and the openness of the web
-2. I love getting the chance to learn and experience new things
