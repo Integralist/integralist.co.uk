@@ -37,6 +37,7 @@ The following reference materials are my 'go to' whenever I'm unsure of somethin
 - [Comments](https://github.com/golang/go/wiki/Comments)
 - [Slice Gotchas](https://blogtitle.github.io/go-slices-gotchas/)
 - [Thinking about interfaces](https://www.integralist.co.uk/posts/go-interfaces/)
+- [Understanding memory allocation](https://gist.github.com/Integralist/22ced4b4700df1e6cbec88c1074c8b2d)
 
 > **NOTE**: Refer to the [specification](https://golang.org/ref/spec) if ever confused about what the expected behaviour is. 
 
