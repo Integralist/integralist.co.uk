@@ -102,7 +102,27 @@ I progressed upwards through the organisation, moving from initially being a cli
 
 I'd like to share the various things I've worked on over the years and the impact/value this work has provided.
 
-> **NOTE**: the large majority of my 'impact' has been as a _remote_ worker. My hope is that the following list demonstrates how I've successfully made a positive impact (both as an IC and as a Team Lead) while also being 100% remote.
+**NOTE**: The large majority of my 'impact' has been as a _remote_ worker. My hope is that the following list demonstrates how I've successfully made a positive impact (both as an IC and as a Team Lead) while also being a 100% remote worker with a family to support and balance against.
+
+- [Impact at Fastly](#impact-fastly)
+- [Impact at BuzzFeed](#impact-buzzfeed)
+- [Impact at BBC](#impact-bbc)
+
+<div id="impact-fastly"></div>
+
+> **Fastly**...
+
+### 2022
+
+- **What**: Developed features and bug fixes for, as well as managed and coordinated, [a major v1.0.0 release of the Fastly Terraform provider](https://github.com/fastly/terraform-provider-fastly/releases/tag/v1.0.0).  
+  **Why**: The provider had been stuck in 0.x Hell for many years and more generally was not in a great state.  
+  **Impact**: A greatly simplified user experience (UX) via a more consistent interface, the fixing of multitude bugs, and resolving a potential issue that otherwise could trigger data loss, resulted in a much improved product for Fastly customers.
+
+> "This is a HUGE milestone for the provider, it's come a long way since we adopted it and we've always been building up to being able to cut this v1 release.
+> 
+> Congrats to @integralist for his hard work, dedication, and commitment to navigate us through this project."  
+>
+> -- **Principal Engineer @Fastly**
 
 ### 2021
 
@@ -140,7 +160,9 @@ I'd like to share the various things I've worked on over the years and the impac
   **Why**: To help drive decisions around which API client libraries we should maintain (or which new languages should be supported).  
   **Impact**: We have a clearer understanding of where we should focus our resources.
 
-> BuzzFeed...
+<div id="impact-buzzfeed"></div>
+
+> **BuzzFeed**...
 
 - **What**: worked across multiple teams promoting certain patterns to help reduce our logs (e.g. sampling 2xx's & single-log context middleware for http servers).  
   **Why**: we had started to exceed our cost agreements with our metric/log aggregation provider.  
@@ -317,6 +339,10 @@ I'd like to share the various things I've worked on over the years and the impac
 - **What**: Proposed usage of specific Python linters and related tooling.   
   **Why**: Code consistency and easier debugging of code.  
   **Impact**: Improved overall code quality.
+
+<div id="impact-bbc"></div>
+
+> **BBC**...
 
 - **What**: Defined "[The Perfect Developer Qualities](https://gist.github.com/Integralist/3f8089345a1236b374a7a5b8a13591a1)".   
   **Why**: To inspire and motivate my colleagues.  
@@ -612,7 +638,7 @@ Node Build Script for serving HTML components
 
 I don't profess mastery, but I'm adept with most of the below, and I have an aptitude towards learning what I need to get the job done right.
 
-> **NOTE**: with any static list, this is likely to go stale. For example, I've not worked with JavaScript for _many_ years (I'm aware of the various client-side platform changes, react, virtual doms etc) but at one point in time of my career I was considered a deep dive expert. So take this list with a 'pinch of salt'.
+> **NOTE**: With any static list, this is likely to go stale. For example, I've not worked with JavaScript for _many_ years (I'm aware of the various client-side platform changes, react, virtual doms etc) but at one point in time of my career I was considered a deep dive expert. So take this list with a 'pinch of salt'.
 
 **The _slightly_ more up-to-date, and ordered, list would be**:
 
