@@ -61,7 +61,7 @@ preserveTaxonomyNames = true
   weight = 500
 
 [[menu.main]]
-  name = "Night Mode"
+  name = "Day Mode"
   url = "#theme"
   weight = 600
 
