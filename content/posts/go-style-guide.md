@@ -107,9 +107,13 @@ if {
 
 Not always obvious but be wary of returning concrete types when building a package to be used as a library.
 
-Here is an example of why this might be problematic: we had a library that defined a constructor that returned a struct of type `*T`. This struct had methods attached and inside of those methods were API calls. We built a separate CLI that consumed the package library and realised our CLI's test suite wasn't able to mock the type appropriately as some of the fields on the struct were private and would determine if an attached method would make an API call.
+Here is an example of why this might be problematic: we had a library that defined a constructor that returned a struct of type `*T`. This struct had methods attached and inside of those methods were API calls. 
 
-The solution was for us to return an interface. This made it simple to mock the behaviours we wanted (e.g. pretend there was an API error, how does our CLI handle it).
+The reason the returning of that struct was a problem was because when we built a separate CLI to consume the package library, we realised our CLI's test suite wasn't able to _mock_ the returned type appropriately as some of the fields on the struct were private (these would determine if an attached method would make an API call), and so we were forced to make real API calls!
+
+The solution was for us to return an interface. This made it simple to mock the behaviours we wanted (e.g. we could write our tests to pretend there was an API error, and see how our CLI handled that scenario).
+
+I recommend reading my other post ["Thinking about Interfaces in Go"](https://www.integralist.co.uk/posts/go-interfaces/).
 
 ## Quick guide to Error wrapping
 

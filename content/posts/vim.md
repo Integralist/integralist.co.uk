@@ -81,6 +81,8 @@ Although not shown in the screenshot I also use the built-in file/directory expl
 let g:netrw_list_hide= '.*\.swp$,.*\.DS_Store'
 ```
 
+As mentioned earlier, using `:h` is a great way to learn about native features. As an example, I only recently discovered `:cq` which quits Vim without writing to any files _and_ it will return an error exit code (this is useful in scenarios like writing `git` commit messages where you want to bail out at the last minute).
+
 Another core feature of Vim I like to use is [`:marks`](https://vimhelp.org/motion.txt.html#%3Amarks) which is a bookmark feature (see [`:h bookmark`](https://vimhelp.org/usr_03.txt.html#bookmark) for more details). This can be useful for jumping around multiple locations within a single large file. The cool thing about marks is that they are unique to each file, so I tend to create marks using the registers a, b, c ...etc as it's easier to remember, and then I can use those same registers in each file (meaning I don't have to jump to another file and be like "oh was I using d, e, f in this file or a, b, c?).
 
 As well as using [`!`](https://vimhelp.org/change.txt.html#%21) which lets me filter content through an external program. So for example, if I have the following lines...
