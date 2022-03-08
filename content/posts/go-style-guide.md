@@ -175,11 +175,11 @@ The resolution to the above bad code is: only include information the caller doe
 
 When taking a slice of a slice you might stumble into behaviour which appears confusing at first. The `cap`, `len` and `data` fields might change, but the underlying array is not re-allocated, nor copied over and so modifications to the slice will modify the original backing array.
 
-> Refer to the golang language specification section on ["full slice expressions"](https://golang.org/ref/spec#Slice_expressions) syntax (`[low : high : max]`) for controlling the capacity of a slice.
+> **NOTE**: There are more examples/explanations in https://blogtitle.github.io/go-slices-gotchas/
 
 ### Ghost update 1
 
-The underlying array is modified after updating an element on the slice:
+The underlying array is modified after updating an element on the slice as there is no re-allocation of the underlying array:
 
 ```go
 a := []int{1, 2}
@@ -187,6 +187,18 @@ b := a[:1]     /* [1]     */
 b[0] = 42      /* [42]    */
 fmt.Println(a) /* [42, 2] */
 ```
+
+It's likely you'll want to set the capacity when taking a slice of `a` to assign to `b`. This will cause a new backing array to be created for the `b` slice:
+
+```go
+a := []int{1, 2}
+b := a[:1:2]   // [1]
+b[0] = 42
+fmt.Println(a) // [42, 2]
+fmt.Println(b) // [42]
+```
+
+> **NOTE**: Refer to the golang language specification section on ["full slice expressions"](https://golang.org/ref/spec#Slice_expressions) syntax (`[low : high : max]`) for controlling the capacity of a slice.
 
 ### Ghost update 2
 
@@ -202,9 +214,7 @@ fmt.Println(b) /* [1 2 5]   */
 fmt.Println(c) /* [5 4]     */
 ```
 
-The fix is `b := a[:2:2]` which sets the capacity of the `b` slice such that `append` will cause a new array to be allocated. This means `a` will not be modified, nor will the `c` slice of `a`.
-
-> **NOTE**:  there are more examples/explanations in https://blogtitle.github.io/go-slices-gotchas/
+The 'fix', like shown earlier, is `b := a[:2:2]` which sets the capacity of the `b` slice such that `append` will cause a new array to be allocated. This means `a` will not be modified, nor will the `c` slice of `a`.
 
 ## Quick guide to pass-by-value vs pass-by-pointer
 
