@@ -67,7 +67,7 @@ If you implement `method_missing` on your proxy object then you can pass on the 
 
 So instead of this…
 
-```
+```ruby
 class AccountProxy
     def initialize(real_object)
         @real_object = real_object
@@ -87,7 +87,7 @@ proxy.deposit(50)
 
 …we should really take advantage of the dynamic nature of the Ruby language to avoid having to manually write out these methods by hand, like so… 
 
-```
+```ruby
 class AccountProxy
     def initialize(real_account)
         @subject = real_account

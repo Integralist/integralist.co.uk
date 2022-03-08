@@ -35,7 +35,7 @@ While treading what might seem like familiar ground to some readers, this is a f
 
 An 'interface' is a contract which describes _behaviour_ (not _data_), and in Go it looks something like the following:
 
-```
+```go
 type Foo interface {
     Bar(s string) (string, error)
 }
@@ -45,7 +45,7 @@ If an object in your code implements a `Bar` function, with the exact same signa
 
 An example of this would be:
 
-```
+```go
 type thing struct{}
 
 func (l *thing) Bar(s string) (string, error) {
@@ -55,13 +55,13 @@ func (l *thing) Bar(s string) (string, error) {
 
 Now you can define a function that will accept that object, as long as it fulfils the `Foo` interface, like so:
 
-```
+```go
 func doStuffWith(thing Foo)
 ```
 
 This is different to other languages, where you have to _explicitly_ assign an interface type to an object, like with Java:
 
-```
+```java
 class testClass implements Foo
 ```
 
@@ -69,7 +69,7 @@ Because of this flexibility in how interfaces are 'applied', it also means that 
 
 For example, imagine we have the following two interfaces:
 
-```
+```go
 type Foo interface {
   Bar(s string) (string, error)
 }
@@ -81,7 +81,7 @@ type Beeper interface {
 
 We can define an object that fulfils _both_ interfaces simply by implementing the functions they define:
 
-```
+```go
 type thing struct{}
 
 func (l *thing) Bar(s string) (string, error) {
@@ -93,13 +93,13 @@ func (l *thing) Beep(s string) (string, error) {
 }
 ```
 
-> Note: this is a bit of silly example, and so you'll notice the method signature for each type is effectively the same. Be careful when designing your interfaces, because in this case we could possibly combine these two interfaces into a single (more generic) interface.
+> **NOTE**: This is a bit of silly example, and so you'll notice the method signature for each type is effectively the same. Be careful when designing your interfaces, because in this case we could possibly combine these two interfaces into a single (more generic) interface.
 
 ## Name Your Interface Arguments
 
 Consider the following interface:
 
-```
+```go
 type Mover interface {
   Move(context.Context, string, string) error
 }
@@ -109,7 +109,7 @@ Do you know what the second and third arguments refer to and how the function wi
 
 Now consider this refactored version where the arguments have names associated with them:
 
-```
+```go
 type Mover interface {
   Move(context.Context, source string, destination string) error
 }
@@ -127,7 +127,7 @@ The reason for this is due to how interfaces are designed in Go and the fact tha
 
 By making an interface too big, we reduce an object's ability to support it. Consider the following example:
 
-```
+```go
 type FooBeeper interface {
   Bar(s string) (string, error)
   Beep(s string) (string, error)
@@ -172,7 +172,11 @@ If your function accepts a concrete type then you've limited the consumers abili
 
 Consider a function only accepting the concrete type `*os.File` instead of the `io.Writer` interface. Now try swapping out the `os.File` implementation in a test environment, you'll have a hard time vs mocking this using a struct that has the relevant interface methods.
 
-Try to return concrete types instead of interfaces, as interfaces have a tendendency to add an unnecessary layer of indirection for consumers of your package (although we'll discover a few valid scenarios where returning an interface is more appropriate).
+Try to return concrete types instead of interfaces, as interfaces have a tendendency to add an unnecessary layer of indirection for consumers of your package (although we'll discover a few valid scenarios where returning an interface is more appropriate):
+
+```go
+
+```
 
 ## Don't Return Concrete Types
 
@@ -190,7 +194,7 @@ Another example might be that your function needs to return a different type dep
 
 The following code example highlights the principle:
 
-```
+```go
 type ItemInterface interface {
 	GetItemValue() string
 }
@@ -226,7 +230,7 @@ The `FindItem` could be an internal library function that attempts to locate an 
 
 In this instance returning an interface allows the consumer to not have to worry about the change in underlying data types.
 
-> Note: it's possible the returned types could be consolidated into a single generic type struct, which means we can avoid returning an interface, but it depends on the exact scenario/use case.
+> **NOTE**: It's possible the returned types could be consolidated into a single generic type struct, which means we can avoid returning an interface, but it depends on the exact scenario/use case.
 
 ## Use Existing Interfaces
 
@@ -257,7 +261,7 @@ This can be really useful for identifying (for example) whether a new interface 
 
 To demonstrate this, consider the following example...
 
-```
+```go
 // this is a duplicate of fmt.Stringer interface
 type stringit interface {
 	String() string
@@ -283,7 +287,7 @@ So using Guru via my Vim editor I can see (when I have my cursor over the `testt
 
 Now whether you continue to define a new interface is up to you. There are actually quite a few places in the Go standard library where interfaces are duplicated for (what I believe to be) semantic reasoning, but otherwise if you don't need to make an explicit/semantic distinction, then I'd opt to reuse an existing interface.
 
-> Note: for more details on how to use Guru, see [this gist](https://gist.github.com/Integralist/20ff7427d3df5cc02d5a619ca0cd9695).
+> **NOTE**: For more details on how to use Guru, see [this gist](https://gist.github.com/Integralist/20ff7427d3df5cc02d5a619ca0cd9695).
 
 ## Don't Force Interfaces
 
@@ -291,9 +295,9 @@ If your code doesn't require interfaces, then don't use them.
 
 No point making the design of your code more complicated for no reason. Consider the following code which returns an interface
 
-> Note: the following example is modified from a much older post by [William Kennedy](https://www.ardanlabs.com/blog/2016/10/avoid-interface-pollution.html).
+> **NOTE**: The following example is modified from a much older post by [William Kennedy](https://www.ardanlabs.com/blog/2016/10/avoid-interface-pollution.html).
 
-```
+```go
 package main
 
 import "fmt"
@@ -332,7 +336,7 @@ Unfortunately there isn't a completely clean solution to this problem. In essenc
 
 Below is an example of this problem in action:
 
-```
+```go
 package main
 
 import "fmt"
@@ -365,7 +369,7 @@ func main() {
 
 In the above code we can see we have added a new method `baz` to our `foo` interface which means the concrete implementation `pt` is no longer satisfying the `foo` interface as it has no `baz` method.
 
-> Note: I appreciate the example is a bit silly because we could just update the code to support the new interface, but we have to imagine a world where your interface is provided as part of a public package that is consumed by lots of users.
+> **NOTE**: I appreciate the example is a bit silly because we could just update the code to support the new interface, but we have to imagine a world where your interface is provided as part of a public package that is consumed by lots of users.
 
 To solve this problem we need an intermediate interface. The following example demonstrates the process. The steps are...
 
@@ -373,7 +377,7 @@ To solve this problem we need an intermediate interface. The following example d
 2. add the method to the concrete type implementation
 3. document the new interface and ask your interface consumers to type assert for it
 
-```
+```go
 package main
 
 import "fmt"
@@ -431,7 +435,7 @@ func main() {
 }
 ```
 
-> Note: again, the example is a bit silly in that we're handling everything within a single file, whereas in reality the consumer won't have access to the original interface/implementation code like we do here (so just use your imagination 🙂).
+> **NOTE**: Again, the example is a bit silly in that we're handling everything within a single file, whereas in reality the consumer won't have access to the original interface/implementation code like we do here (so just use your imagination 🙂).
 
 The output of the above code is as follows:
 
@@ -449,7 +453,7 @@ Imagine if the go standard library just updated the `ResponseWriter` with the ne
 
 In fact this is exactly what the go standard library authors have done with the [`Flusher`](https://golang.org/pkg/net/http/#Flusher) and [`Hijacker`](https://golang.org/pkg/net/http/#Hijacker) interfaces. The following code demonstrates the use of a type assertion to access the additional behaviour defined by those interfaces:
 
-```
+```go
 func(w http.ResponseWriter, r *http.Request) {
         io.WriteString(w, "This will arrive before... ")
 
@@ -466,7 +470,7 @@ func(w http.ResponseWriter, r *http.Request) {
 
 Imagine we have a function `process`, whose responsibility is to make a HTTP request and do something with the response data:
 
-```
+```go
 package main
 
 import (
@@ -515,7 +519,7 @@ The `http.Get` function returns a pointer to a `http.Response` struct, and from 
 
 The `Body` field's 'type' is set to the [`io.ReadCloser`](https://golang.org/src/io/io.go?s=4977:5022#L116) interface. If we look at that interface we'll see it's made up of _nested_ interface types:
 
-```
+```go
 type ReadCloser interface {
     Reader
     Closer
@@ -524,7 +528,7 @@ type ReadCloser interface {
 
 If we now look at the [`io.Reader`](https://golang.org/src/io/io.go?s=3303:3363#L67) and [`io.Closer`](https://golang.org/src/io/io.go?s=4043:4083#L88) interfaces, we'll find:
 
-```
+```go
 type Reader interface {
     Read(p []byte) (n int, err error)
 }
@@ -564,9 +568,9 @@ The _how_ is not the responsibility of the `process` function, especially if we 
 
 Meaning, we need to provide that functionality to the `process` function. Let's see what this might look like in practice:
 
-> Note: this is just a first iteration, and is a poor design because although it shifts the problem slightly, there will still be tight coupling. I'll come back to this code later and refactor away the coupling completely. The reason I've not done that upfront is because there are learnings to be had from trying to write tests for this code (which we'll see in a minute).
+> **NOTE**: This is just a first iteration, and is a poor design because although it shifts the problem slightly, there will still be tight coupling. I'll come back to this code later and refactor away the coupling completely. The reason I've not done that upfront is because there are learnings to be had from trying to write tests for this code (which we'll see in a minute).
 
-```
+```go
 package main
 
 import (
@@ -625,7 +629,7 @@ func main() {
 
 Let's start by looking at the interface we've defined:
 
-```
+```go
 type dataSource interface {
 	Get(url string) (*http.Response, error)
 }
@@ -639,7 +643,7 @@ Meaning, that although the refactored code is _better_, it is far from perfect.
 
 Next we define our own object for handling the implementation of the `Get` method, which internally is going to use `http.Get` to acquire the data:
 
-```
+```go
 type httpbin struct{}
 
 func (l *httpbin) Get(url string) (*http.Response, error) {
@@ -661,7 +665,7 @@ How far you take your interface design is up to you. You don't necessarily have 
 
 Meaning, this refactor _could_ be considered 'good enough' for your use cases. Alternatively your values and standards may differ, and so you need to consider your options for how you might what to design this solution in such a way that it would allow the code to not be so reliant on HTTP as the transport mechanism.
 
-> Note: we'll revisit this code later and consider another refactor that will help clean up this first pass of code decoupling.
+> **NOTE**: We'll revisit this code later and consider another refactor that will help clean up this first pass of code decoupling.
 
 But first, let's look at how we might want to test this initial code refactor (as testing this code allows us to learn some interesting things when it comes to needing to mock interfaces).
 
@@ -669,7 +673,7 @@ But first, let's look at how we might want to test this initial code refactor (a
 
 Below is a simple test suite that demonstrates how we're now able to construct our own object, with a stubbed response, and pass that to the `process` function:
 
-```
+```go
 package main
 
 import (
@@ -710,7 +714,7 @@ The difference now, and what allows us to test our code is that we're manually c
 
 One part of this code that requires some extra explanation would be the value assigned to the response `Body` field:
 
-```
+```go
 ioutil.NopCloser(bytes.NewBufferString(body))
 ```
 
@@ -720,7 +724,7 @@ If we remember from earlier:
 
 This means when mocking the `Body` value we need to return something that has both a `Read` and `Close` method. So we've used `ioutil.NopCloser` which, if we look at its signature, we see returns an `io.ReadCloser` interface:
 
-```
+```go
 func NopCloser(r io.Reader) io.ReadCloser
 ```
 
@@ -734,7 +738,7 @@ The reason we do this is because the returned type is something that supports th
 
 But that might not be immediately obvious when looking at the signature for `bytes.NewBufferString`:
 
-```
+```go
 func NewBufferString(s string) *Buffer
 ```
 
@@ -750,7 +754,7 @@ Great! Our test can now call the `process` function and process the mocked depen
 
 OK, so we've already explained why this implementation might not be the best we could do. Let's now consider an alternative implementation:
 
-```
+```go
 package main
 
 import (
@@ -809,7 +813,7 @@ All we've really done here is move more of the logic related to HTTP up into the
 
 Now the `process` function has even _less_ responsibility as far as acquiring data is concerned. This also means our test suite benefits by having a much simpler implementation:
 
-```
+```go
 package main
 
 import "testing"

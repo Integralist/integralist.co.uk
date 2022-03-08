@@ -17,7 +17,8 @@ preserveTaxonomyNames = true
   copyrightStartYear = "2017"
   # hideEntryNavigation = false
   customCSS = ["css/custom.css", "css/highlight.github.css"]
-  customJS = ["js/custom.js", "js/highlight.pack.js", "js/highlight-trigger.js"]
+  # customJS = ["js/custom.js", "js/highlight.pack.js", "js/highlight-trigger.js"] # DISABLED as the highlight caused colour issues.
+  customJS = ["js/custom.js", "js/highlight.pack.js"]
   # hideSocialMenu = false
   showReadTime = true
 

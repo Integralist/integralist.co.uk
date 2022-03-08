@@ -33,6 +33,11 @@ code, kbd, samp {
   font-size: .8em;
 }
 
+.highlight pre {
+  /* background: pink !important; */
+  border: 1px solid #999;
+}
+
 td > code,
 h1 > code,
 h2 > code,
