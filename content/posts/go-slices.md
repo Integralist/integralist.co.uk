@@ -27,7 +27,7 @@ Let's recap on what we're talking about when we say "array" and "slice":
 
 An array uses subscript notation to access elements, and is zero-indexed. Here is an example of both those concepts:
 
-```
+```go
 a := [3]string{"a", "b", "c"}
 
 fmt.Println(a[1]) // "b"
@@ -35,7 +35,7 @@ fmt.Println(a[1]) // "b"
 
 If you define an array without using the 'literal' syntax (as demonstrated in the above example program), then the values will be initialized with the zero value of the given type, for example:
 
-```
+```go
 var a [3]string
 
 fmt.Printf("%#v", a) // [3]string{"", "", ""}
@@ -43,7 +43,7 @@ fmt.Printf("%#v", a) // [3]string{"", "", ""}
 
 The size of the array is actually part of its 'type' definition, for example the following two arrays have unique types:
 
-```
+```go
 a := [3]string{"a", "b", "c"}
 b := [2]string{"a", "b"}
 
@@ -52,7 +52,7 @@ fmt.Printf("a: %T, b: %T", a, b) // a: [3]string, b: [2]string
 
 If you don't want to have to count the number of elements you're defining, then you can use an ellipsis `...` instead: 
 
-```
+```go
 a := [...]int{1, 2, 3}
 
 fmt.Printf("%T %#v", a, a) // [3]int [3]int{1, 2, 3}
@@ -80,7 +80,7 @@ The slice data structure consists of the following fields:
 
 Here is an example program that creates an array and then makes a slice of a subsequence of the original array:
 
-```
+```go
 a := [3]int{1, 2, 3}
 fmt.Printf("array:  %T\n\t%#v\n\n", a, a)
 
@@ -90,7 +90,7 @@ fmt.Printf("slice:  %T\n\t%#v\n", s, s)
 
 The output from the above code would be as follows (notice how the slice provides a narrower 'view' of the original array):
 
-```
+```go
 array: [3]int
        [3]int{1, 2, 3}
 
@@ -104,7 +104,7 @@ Slices, much like arrays, cannot dynamically grow larger at runtime. When a slic
 
 When modifying a slice you are infact modifying the underlying array, as demonstrated below:
 
-```
+```go
 a := [3]int{1, 2, 3}
 s := a[1:]
 
@@ -116,7 +116,7 @@ fmt.Printf("slice:  %T\n\t%#v\n", s, s)
 
 The above code results in the following output:
 
-```
+```go
 array: [3]int
        [3]int{1, 4, 3}
 
@@ -130,7 +130,7 @@ Although a lot of people refer to this as "updating a slice" when talking about 
 
 Additionally, it's important to realize that because a slice contains a pointer to an underlying array, it means _multiple_ slices can point to the _same_ array in memory (as demonstrated below).
 
-```
+```go
 a := [3]int{1, 2, 3}
 s1 := a[:2]
 s2 := a[1:]
@@ -150,7 +150,7 @@ fmt.Printf("slice2: %T\n\t%#v\n\n", s2, s2)
 
 The output of the above program is shown below. Notice how the two slices, `s1` and `s2` both point at the _same_ underlying array and so although we make a modification via the first slice we can see that both slices will highlight the changed value:
 
-```
+```go
 array:  [3]int
 	[3]int{1, 2, 3}
 
@@ -176,7 +176,7 @@ slice2: []int
 
 You'll find in a lot of situations code that needs to append data to a slice. This results in code that uses the builtin `append` function, but interestingly will nearly always reassign the returned value back to the slice variable itself:
 
-```
+```go
 a := [...]int{1, 2, 3, 4, 5}
 s := a[1:]
 
@@ -191,7 +191,7 @@ fmt.Printf("slice:  %T\n\t%#v\n\tlen: %d\n\tcap: %d\n\n", s, s, len(s), cap(s))
 
 In the above program we have an array that contains five elements. We take a slice of it which is the last four elements. We then attempt to append a new value (`6`) to the slice (which should mean appending it to the underlying array). The output of that program is as follows:
 
-```
+```go
 array:  [5]int
 	[5]int{1, 2, 3, 4, 5}
 	len: 5
@@ -219,7 +219,7 @@ Notice how `s` is showing an updated 'view' (e.g. `2, 3, 4, 5, 6`). What's inter
 
 Now we can check this with some overly complicated code that 'reflects' into the internal go code (this will enable us to locate the slice's pointer and to dereference that pointer to access the underlying array):
 
-```
+```go
 s := []int{1, 2, 3, 4}
 
 hdr := (*reflect.SliceHeader)(unsafe.Pointer(&s))
@@ -243,7 +243,7 @@ fmt.Printf("data2: %#v\n", data2) // [8]int{1, 2, 3, 4, 5, 0, 0, 0}
 
 The output of the above program is as follows:
 
-```
+```go
 slice:  []int
 	[]int{1, 2, 3, 4}
 	len: 4
@@ -271,7 +271,7 @@ So what has happened is that `append` has returned a _new_ slice (which is expec
 
 If the underlying array had enough capacity for the appended value(s), then `append` would have still returned a new slice (because remember a slice cannot grow beyond its defined capacity) but the underlying array would still be the same array in memory. Let's see an example of that below:
 
-```
+```go
 a := [6]int{1, 2, 3, 4, 5, 6}
 s := a[1:4]
 x := append(s, 0)
@@ -283,7 +283,7 @@ fmt.Printf("slice2 x: %T\n\t  %#v\n\t  len: %d\n\t  cap: %d\n\n", x, x, len(x), 
 
 The output of that program is as follows:
 
-```
+```go
 array:    [6]int
 	  [6]int{1, 2, 3, 4, 0, 6}
 	  len: 6

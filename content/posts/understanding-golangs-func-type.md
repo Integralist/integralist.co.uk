@@ -21,7 +21,7 @@ draft: false
 
 Here is some code that demonstrates the typical 'hello world' for a Go based web server:
 
-```
+```go
 package main
 
 import (
@@ -68,7 +68,7 @@ The most basic implementation (and by basic I don't mean 'simplest', more... 'ra
 
 This first section will give us enough background and grounding to build upon in the latter sections:
 
-```
+```go
 package main
 
 import (
@@ -107,7 +107,7 @@ We can also see that `pounds` is itself a type of `float32` and has a custom `St
 
 The `ServeHTTP` is required in order to satisfy the `ListenAndServe` method signature, which states the second argument should be a type of `Handler`:
 
-```
+```go
 func ListenAndServe(addr string, handler Handler) error
 ```
 
@@ -115,7 +115,7 @@ func ListenAndServe(addr string, handler Handler) error
 
 If we look at the source code for the `Handler` type (below) we can clearly see it requires a `ServeHTTP` method to be available (hence why our `database` type associates its own `ServeHTTP` method):
 
-```
+```go
 type Handler interface {
     ServeHTTP(ResponseWriter, *Request)
 }
@@ -140,7 +140,7 @@ bar: £2.00
 
 OK, so now we've got the above example written. Let's enhance it by allowing our application to handle different routes as apposed to serving the same content all the time. To do this we'll modify our `ServeHTTP` method to interrogate the incoming request object and parse out the URL, as demonstrated in the below code sample:
 
-```
+```go
 package main
 
 import (
@@ -193,7 +193,7 @@ Instead it would be nice if you could just pick an arbitrary function and allow 
 
 The following code sample demonstrates this in action, by removing the `ServeHTTP` method from the `database` type and instead implementing individual methods for our defined routes to call.
 
-```
+```go
 package main
 
 import (
@@ -255,7 +255,7 @@ Typically you'll have your code split up into separate packages. So in order to 
 
 The following code sample demonstrates this:
 
-```
+```go
 package main
 
 import (
@@ -314,7 +314,7 @@ OK, let's look back at the two functions and their respective signatures to refr
 
 We can see the `Handle` signature requires a type that satisfies the `Handler` interface (which is defined as follows):
 
-```
+```go
 type Handler interface {
   ServeHTTP(ResponseWriter, *Request)
 }
@@ -324,7 +324,7 @@ In other words, as long as you pass in a type that has a `ServeHTTP` method then
 
 So how does it do that conversion? Firstly it defines a `func` type called `http.HandlerFunc`, like so:
 
-```
+```go
 type HandlerFunc func(ResponseWriter, *Request)
 ```
 
@@ -332,7 +332,7 @@ This says that for a function to match this type it should have the same signatu
     
 Inside the `HandleFunc` function you'll see it actually *calls* this `func` type and passes it your user defined function. This will look something like the following in the Go implementation source code:
 
-```
+```go
 func (mux *ServeMux) HandleFunc(pattern string, handler func(ResponseWriter, *Request)) {
   mux.Handle(pattern, HandlerFunc(handler))
 }
@@ -344,7 +344,7 @@ So how does that help us? How does passing in a function that *looks* like a `Ha
 
 Well, once you convert your user defined function into a `HandlerFunc` you'll find it now *does* have a `ServeHTTP` method available. If we look at the Go source code, just after the definition of the `HandlerFunc` func type, you'll also find the following snippet of code:
 
-```
+```go
 func (f HandlerFunc) ServeHTTP(w ResponseWriter, r *Request) {
   f(w, r)
 }
@@ -356,7 +356,7 @@ Also remember that when you associate a method with a type/object the receiver i
 
 Let's now take a quick look at that `mux.Handle` function to see what it expects:
 
-```
+```go
 func (mux *ServeMux) Handle(pattern string, handler Handler) {
   ...
 }
@@ -364,7 +364,7 @@ func (mux *ServeMux) Handle(pattern string, handler Handler) {
 
 As we can see it expects a type of `Handler` to be provided. What is `Handler`? Well remember from earlier this is an interface which states there should be a `ServeHTTP` function available:
 
-```
+```go
 type Handler interface {
   ServeHTTP(ResponseWriter, *Request)
 }

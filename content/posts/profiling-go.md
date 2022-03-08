@@ -66,7 +66,7 @@ Take a pragmatic look at your code.
 
 Let’s begin with a simple program written using Go 1.9.2…
 
-```
+```go
 package main
 
 import (
@@ -99,7 +99,7 @@ The easiest way to look what our application is doing with regards to memory all
 
 In the following snippet we modify the `main` function to print out specific memory statistics.
 
-```
+```go
 func main() {
     var mem runtime.MemStats
 
@@ -180,7 +180,7 @@ We’ll start with CPU profiling.
 
 In the following example we’ve modified the application to import `"runtime/pprof"` and added the relevant API calls in order to record CPU data:
 
-```
+```go
 package main
 
 import (
@@ -284,7 +284,7 @@ Before we move on, let’s look at how to profile our memory consumption.
 
 To do this we’ll change our application slightly so that `StartCPUProfile` becomes `WriteHeapProfile` (we’ll also move this call to the bottom of our `main` function otherwise if we keep it at the top of the function no memory has been allocated at that point). We’ll also remove the `StopCPUProfile` call altogether (as recording the heap is done as a _snapshot_ rather than an ongoing process like with the CPU profiling):
 
-```
+```go
 package main
 
 import (
@@ -371,7 +371,7 @@ In the following example we’ve modified the application to start up a web serv
 
 > Note: if your application already uses a web server, then you don’t need to start another. The pprof package will hook into your web server’s multiplexer.
 
-```
+```go
 package main
 
 import (
@@ -448,7 +448,7 @@ The web server can also generate a “trace” file, which you can access via [h
 
 If you're using a custom URL router, you'll need to register the individual `pprof` endpoints:
 
-```
+```go
 package main
 
 import (
@@ -541,7 +541,7 @@ This indicates where all our memory is allocated on a “line-by-line” basis.
 
 I noted earlier that the default “type” for the heap analysis was “memory still in use”. But there is an alternative type which indicates the amount of memory that was allocated in total throughout the lifetime of the program. You can switch to that mode using the `-alloc_space` flag like so:
 
-```
+```bash
 go tool pprof -alloc_space http://localhost:6060/debug/pprof/heap
 ```
 
@@ -577,7 +577,7 @@ The reason to choose either `-inuse_space` or `-alloc_space` will depend on wher
 
 You can also generate an image of your analysis data using either the flag `-png`, `-gif` or `-svg` and then redirecting stdout to a filename like so: 
 
-```
+```bash
 go tool pprof -png http://localhost:6060/debug/pprof/heap > data.png
 ```
 
@@ -606,7 +606,7 @@ It’s suited at finding out what your program is doing over time, not in aggreg
 
 Let’s first modify our application to utilise tracing…
 
-```
+```go
 func main() {
 	trace.Start(os.Stdout)
 	defer trace.Stop()
@@ -639,7 +639,7 @@ Additionally we create a goroutine and allocate a large 500mb slice of bytes. We
 
 Now let’s re-compile our application, generate the trace data and open it with the trace tool… 
 
-```
+```bash
 $ go build -o app
 $ time ./app > app.trace
 $ go tool trace app.trace

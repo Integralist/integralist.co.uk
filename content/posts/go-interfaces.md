@@ -41,6 +41,8 @@ type Foo interface {
 }
 ```
 
+> **NOTE**: If a field name is capitalised, then it is considered public, otherwise it's considered private.
+
 If an object in your code implements a `Bar` function, with the exact same signature (e.g. accepts a string and returns either a string or an error), then that object is said to _implement_ the `Foo` interface.
 
 An example of this would be:
@@ -172,11 +174,56 @@ If your function accepts a concrete type then you've limited the consumers abili
 
 Consider a function only accepting the concrete type `*os.File` instead of the `io.Writer` interface. Now try swapping out the `os.File` implementation in a test environment, you'll have a hard time vs mocking this using a struct that has the relevant interface methods.
 
-Try to return concrete types instead of interfaces, as interfaces have a tendendency to add an unnecessary layer of indirection for consumers of your package (although we'll discover a few valid scenarios where returning an interface is more appropriate):
+Unless there is a good reason to, you should return concrete types instead of interfaces. This is because an interface has a tendendency to add an unnecessary layer of indirection for consumers of your package (although we'll discover a few valid scenarios where returning an interface is more appropriate).
+
+Below is an example of what I mean by _indirection_. We have a function `foo` that returns the interface `fooer`, and yet we want to access a field on the underlying type of the interface (which we can see is a `S` struct type):
 
 ```go
+package main
 
+import (
+	"fmt"
+	"log"
+)
+
+type Fooer interface {
+	Bar()
+}
+
+type S struct {
+	Debug bool
+}
+
+func (s S) Bar() {
+	fmt.Println("bar called")
+}
+
+func foo() Fooer {
+	return S{true}
+}
+
+func main() {
+	f := foo()
+	fmt.Printf("Type: %T\n", f) // main.S
+	fmt.Printf("Representation: %+v\n", f) // {Debug:true}
+	f.Bar()
+	fmt.Println(f.Debug) // ERROR: f.Debug undefined (type Fooer has no field or method Debug)
+}
 ```
+
+We can see from the above code that we're able to call the `Bar` method (as it's part of the public interface) but we can't access the `Debug` field, even though it's declared as a public field. 
+
+So how can we access the `Debug` field? We need to use a [type assertion](https://go.dev/tour/methods/15) to get access to the interface's underlying value:
+
+```go
+s, ok := f.(S)
+if !ok {
+  log.Fatal("couldn't coerce f to S")
+}
+fmt.Println(s.Debug) // true
+```
+
+This is the 'indirection' I was referring to, and is a tedious step for a consumer of this code. They wouldn't need to do this if our `foo` function had returned the concrete `S` type.
 
 ## Don't Return Concrete Types
 
