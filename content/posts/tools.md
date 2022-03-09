@@ -37,6 +37,7 @@ I don't know who needs to hear this but:
 - **File Space Usage**: [Dust](https://github.com/bootandy/dust/blob/master/README.md)
 - **Fuzzy Finder**: [FZF](https://github.com/junegunn/fzf/blob/master/README.md)
 - **Network Reachability**: [Gping](https://github.com/orf/gping/blob/master/readme.md)
+- **Network Utilisation**: [Bandwhich](https://github.com/imsnif/bandwhich/blob/main/README.md)
 - **Process Status**: [Procs](https://github.com/dalance/procs/blob/master/README.md)
 - **Process/System Monitor**: [Bottom](https://github.com/ClementTsang/bottom/blob/master/README.md)
 - **Shell Autocomplete**: [Fig](https://fig.io/)
