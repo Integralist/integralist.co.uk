@@ -114,6 +114,10 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ### 2022
 
+- **What**: Designed and developed a CLI based strategy (in [go](https://go.dev/)) for integrating an OAuth user flow. This included co-authoring the relevant Rust work (in a separate internal auth service) to support multiple Fastly clients (i.e. a client might be one of Fastly's existing web properties like [developer.fastly.com](https://developer.fastly.com) or the [Fastly CLI](https://github.com/fastly/cli)).  
+  **Why**: Users of the Fastly CLI only had the ability to configure a single token, once. This would mean the token typically, for convenience, would be a long-lived token (e.g. no expiry). This was a tedious flow for users as they needed to manually interact with multiple areas of the Fastly UI before then having to go back to the CLI to apply a token.  
+  **Impact**: Users have a slick and easy authentication flow that is more secure and provides better best practices (i.e. using short-lived tokens that are regenerated frequently).
+
 - **What**: Developed features and bug fixes for, as well as managed and coordinated, [a major v1.0.0 release of the Fastly Terraform provider](https://github.com/fastly/terraform-provider-fastly/releases/tag/v1.0.0).  
   **Why**: The provider had been stuck in 0.x Hell for many years and more generally was not in a great state.  
   **Impact**: A greatly simplified user experience (UX) via a more consistent interface, the fixing of multitude bugs, and resolving a potential issue that otherwise could trigger data loss, resulted in a much improved product for Fastly customers.
