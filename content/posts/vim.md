@@ -100,15 +100,21 @@ quxfoo
 :'<,'>!grep -v foo
 ```
 
-A more practical example would be the need to take a single line of JSON and pipe it into a tool that pretty prints the data (the following example uses the `%` range to send the whole buffer to the program):
+This would result in those lines being replaced with the single line containing `baz`, as all the other lines were containing `foo`. Now a more Vim idiomatic approach to this particular problem is demonstrated in the section "[Modifying content with `global` command](#modifying-content-with-global-command)", but the takeaway is that the `!` command is awesome.
+
+Now a more practical example of using `!` might be to take a single line of JSON and pipe it into a tool that pretty prints the data (the following example uses the `%` range to send the whole buffer to the program):
 
 ```viml
 :%!python -m json.tool
 ```
 
-This would result in those lines being replaced with the single line containing `baz`, as all the other lines were containing `foo`. Now a more Vim idiomatic approach to this particular problem is demonstrated in the next section "[Modifying content with `global` command](#modifying-content-with-global-command)", but the takeaway is that the `!` command is awesome.
+Or if you didn't want to replace the current buffer, but instead _append_ a pretty printed version on the line(s) after the current line, then you would use `:read` like so:
 
-And the great thing about all of this is that there are _no_ plugins required for any of this stuff. It's all standard Vim features. You just need to know they exist.
+```viml
+:read !cat % | python -m json.tool
+```
+
+And the great thing about all of this is that there are _no_ plugins required. It's all standard Vim features. You just need to know they exist.
 
 Now, there may be times where you want a minimal config but with some extra treats, I'll typically have a `~/.vimrc-core` file with the following configuration that gives me the above 'basic' configuration (with some other configuration which isn't essential but also isn't superfluous either) along with some _core_ plugins I like to use):
 
