@@ -39,6 +39,8 @@ I don't know who needs to hear this but:
 - **Network Reachability**: [Gping](https://github.com/orf/gping/blob/master/readme.md)
 - **Network Utilisation**: [Bandwhich](https://github.com/imsnif/bandwhich/blob/main/README.md)
 - **Process Status**: [Procs](https://github.com/dalance/procs/blob/master/README.md)
-- **Process/System Monitor**: [Bottom](https://github.com/ClementTsang/bottom/blob/master/README.md)
+- **Process/System Monitor**: [Htop](https://github.com/htop-dev/htop/#readme) †
 - **Shell Autocomplete**: [Fig](https://fig.io/)
 - **Shell Prompt**: [Starship](https://starship.rs/)
+
+> † I had switched to [Bottom](https://github.com/ClementTsang/bottom/blob/master/README.md) but `htop` is just so much more flexible and configurable, and although the graphs in `btm` are nice I just don't _need_ them.
