@@ -116,6 +116,8 @@ Or if you didn't want to replace the current buffer, but instead _append_ a pret
 
 And the great thing about all of this is that there are _no_ plugins required. It's all standard Vim features. You just need to know they exist.
 
+> **NOTE**: If you do decide to use plugins, then don't forget to `vim -c ":helptags ALL" -c ":q"` to ensure you get all the relevant help information loaded.
+
 Now, there may be times where you want a minimal config but with some extra treats, I'll typically have a `~/.vimrc-core` file with the following configuration that gives me the above 'basic' configuration (with some other configuration which isn't essential but also isn't superfluous either) along with some _core_ plugins I like to use):
 
 ```viml
