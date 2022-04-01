@@ -114,6 +114,18 @@ Or if you didn't want to replace the current buffer, but instead _append_ a pret
 :read !cat % | python -m json.tool
 ```
 
+Want to populate the Vim quickfix list with output from some shell command? No problem: Vim already supports `make` by default so that `:make <target>` will execute the specified Makefile target for you (you'll need to manually open the quickfix window `:copen`).
+
+But you can also change the default program using `set makeprg=<whatever>`! Now you can pass your current buffer to it using `:make %`.
+
+You can also do clever things like:
+
+```viml
+autocmd BufWritePost *.go :cex system('revive '..expand('%:p')) | copen
+```
+
+...which executes a command (in this case `revive`, a golang code linter) and passes it the current file path, and opens the results up in the quickfix window!
+
 And the great thing about all of this is that there are _no_ plugins required. It's all standard Vim features. You just need to know they exist.
 
 > **NOTE**: If you do decide to use plugins, then don't forget to `vim -c ":helptags ALL" -c ":q"` to ensure you get all the relevant help information loaded.
