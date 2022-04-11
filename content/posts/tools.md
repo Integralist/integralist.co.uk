@@ -19,7 +19,7 @@ I don't know who needs to hear this but:
 - **Package Manager**: [Homebrew](https://brew.sh/)
 - **Terminal**: [Alacritty](https://alacritty.org/)
 - **Terminal Multiplexer**: [tmux](https://github.com/tmux/tmux/wiki)
-- **Code Editor**: [Vim](https://en.wikipedia.org/wiki/Vim_(text_editor))
+- **Code Editor**: [Neovim](https://neovim.io)
 
 ## Supplementary
 
