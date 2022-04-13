@@ -44,3 +44,14 @@ I don't know who needs to hear this but:
 - **Shell Prompt**: [Starship](https://starship.rs/)
 
 > † I had switched to [Bottom](https://github.com/ClementTsang/bottom/blob/master/README.md) but `htop` is just so much more flexible and configurable, and although the graphs in `btm` are nice I just don't _need_ them.
+
+## Browser
+
+Controversial, but I've moved away from [Firefox](https://www.mozilla.org/en-GB/firefox/new/) with a whole suite of security/privacy minded tools to [Apple's Safari](https://www.apple.com/uk/safari/) browser.
+
+Extensions installed are:
+
+- AdBlock One
+- Dark Reader for Safari
+- Super Agent for Safari (Cookie Consent Automation)
+- Tab Sessions (although Safari's "Tab Group" feature would suffice).
