@@ -6,14 +6,11 @@ Website built using [Go](https://golang.org/), [Hugo](https://gohugo.io/) and d
 
 - `brew install go`
 - `brew install hugo`
-- `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash` (†)
-- `nvm install node`
+- `brew install fnm` (+ `eval "$(fnm env)"`)
+- `fnm install <version>`
+- `fnm use <version>`
 - `npm audit fix`
 - `npm install` 
-
-> † nvm will modify your shell profile (`.bash_profile` or `.bashrc`) so I prefer to move to a `.localrc` instead and also append `--no-use` after the sourcing of the `nvm.sh` script.
-
-When trying to run the site locally you'll need to remember to run `nvm use node` first otherwise neither `node` nor the `npm` commands will be available!
 
 ## New Post
 
