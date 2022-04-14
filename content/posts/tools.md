@@ -49,9 +49,10 @@ I don't know who needs to hear this but:
 
 Controversial, but I've moved away from [Firefox](https://www.mozilla.org/en-GB/firefox/new/) with a whole suite of security/privacy minded tools to [Apple's Safari](https://www.apple.com/uk/safari/) browser.
 
+I also use Safari's ["Tab Group"](https://twitter.com/integralist/status/1514526555275501569?s=20&t=BJu3WlWq6dhoeAarJf91ig) feature.
+
 Extensions installed are:
 
 - AdBlock One
 - Dark Reader for Safari
 - Super Agent for Safari (Cookie Consent Automation)
-- Tab Sessions (although Safari's "Tab Group" feature would suffice).
