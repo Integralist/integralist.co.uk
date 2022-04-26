@@ -55,4 +55,5 @@ Extensions installed are:
 
 - AdBlock One
 - Dark Reader for Safari
+- SimplyJSON for Safari
 - Super Agent for Safari (Cookie Consent Automation)
