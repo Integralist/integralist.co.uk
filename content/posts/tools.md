@@ -40,6 +40,7 @@ I don't know who needs to hear this but:
 - **Network Utilisation**: [Bandwhich](https://github.com/imsnif/bandwhich/blob/main/README.md)
 - **Process Status**: [Procs](https://github.com/dalance/procs/blob/master/README.md)
 - **Process/System Monitor**: [Htop](https://github.com/htop-dev/htop/#readme) †
+- **Shell**: [Zsh](https://www.zsh.org)
 - **Shell Autocomplete**: [Fig](https://fig.io/)
 - **Shell Prompt**: [Starship](https://starship.rs/)
 

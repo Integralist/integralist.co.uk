@@ -22,17 +22,26 @@ Once you have Go installed, you can then use the `go` command to either install 
 > **NOTE**: Additionally, you can automate the install via a terminal using the following shell function (only tested on macOS):
 
 ```bash
+# you can swap `ag` for `grep` if you prefer
+alias golatest="curl -L https://github.com/golang/go/tags 2>&1 | ag '/golang/go/releases/tag/go[\w.]+' -o | cut -d '/' -f 6 | awk NR==1 | ag '\d.+' -o"
+
 function go_install {
   if [ -z "$1" ]; then
-    echo USAGE: go_install 1.18.1
+    echo USAGE: go_install 1.18.1 OR go_install \$\(golatest\)
     return
   fi
   v=$1
   osname=$(uname -s | tr '[:upper:]' '[:lower:]')
   hardware=$(uname -m)
-  curl -L -o ~/Downloads/go$v.$osname-$hardware.pkg https://go.dev/dl/go$v.$osname-$hardware.pkg
-  sudo rm -rf /usr/local/go; sudo installer -pkg ~/Downloads/go$v.$osname-$hardware.pkg -target /usr/local/
-  rm ~/Downloads/go$v.$osname-$hardware.pkg
+  mkdir -p ~/goversions
+  if ! test -f "~/goversions/go$v.$osname-$hardware.pkg"; then
+    printf "\nDownloading %s\n\n" "go$v.$osname-$hardware"
+    curl -L -o ~/goversions/go$v.$osname-$hardware.pkg https://go.dev/dl/go$v.$osname-$hardware.pkg
+  fi
+  echo ""
+  sudo rm -rf /usr/local/go; sudo installer -pkg ~/goversions/go$v.$osname-$hardware.pkg -target /usr/local/
+  clear
+  go version
 }
 ```
 
