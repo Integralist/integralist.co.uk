@@ -17,16 +17,24 @@ This is the second edition to ["New Laptop Configuration"](/posts/new-laptop-con
 
 ## Backup
 
+When moving laptops I will temporarily backup my existing GPG and SSH keys (encrypted) to an external data storage device.
+
 ```bash
 cd ~/
 mkdir /tmp/keys
+
+# Backup GPG data
 gpg --export-secret-keys --armor <NAME> > /tmp/keys/<NAME>.asc
 gpg --symmetric /tmp/keys/<NAME>.asc
 gpg --export-ownertrust > /tmp/keys/trustdb.txt 
+mv /tmp/keys/<NAME>.asc.gpg /Volumes/.../<NAME>.asc.gpg
+mv /tmp/keys/trustdb.txt /Volumes/.../trustdb.txt
 
+# Backup SSH data
 zip -r /tmp/keys/sshbackup ~/.ssh/
 unzip -l /tmp/keys/sshbackup.zip
 gpg --symmetric /tmp/keys/sshbackup.zip
+mv /tmp/keys/sshbackup.zip.gpg /Volumes/.../sshbackup.zip.gpg
 
 rm -rf /tmp/keys
 ```
