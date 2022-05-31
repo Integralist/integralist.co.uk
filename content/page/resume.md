@@ -594,6 +594,9 @@ CLI tool, written in Bash script, for sorting and filtering HTTP Response Header
 - [Carbon](https://github.com/Integralist/carbon):  
 HTTP Response Header Sorting and Filtering written in Go.
 
+- [crs](https://github.com/Integralist/crs):  
+HTTP Response Header Sorting and Filtering written in Rust (supersedes Carbon).
+
 - [DOMReady](https://github.com/Integralist/DOMready):  
 Cross browser 'DOM ready' function  
 
@@ -651,6 +654,7 @@ I don't profess mastery, but I'm adept with most of the below, and I have an apt
 **The _slightly_ more up-to-date, and ordered, list would be**:
 
 - Go
+- Rust
 - Python
 - Shell Scripting (Bash)
 - GitHub Actions (CI/CD pipelines)
