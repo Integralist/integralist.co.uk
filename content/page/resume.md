@@ -114,6 +114,10 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ### 2022
 
+- **What**: Implemented retry behaviour for critical section of [customer facing platform software](https://fiddle.fastlydemo.net).  
+  **Why**: A hard to reproduce, and intermittent, network failure would cause services to be restarted at the infrastructure layer, which was a very slow and costly process.   
+  **Impact**: Developers wouldn't waste cycles having to manually re-start flaky/failing CI jobs, and a large reduction in service remediation latency.
+
 - **What**: Designed a [PKCE](https://pragmaticwebsecurity.com/articles/oauthoidc/from-implicit-to-pkce.html) (Proof Key for Code Exchange) OAuth flow for existing authentication systems.  
   **Why**: We wanted multiple public clients to be able to support OAuth.  
   **Impact**: We increase the security and flexibility of our authentication systems.
