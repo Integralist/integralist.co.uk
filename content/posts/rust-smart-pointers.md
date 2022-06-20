@@ -15,32 +15,35 @@ draft: false
 
 ## Summary
 
-- `Box<T>`: A pointer type for heap allocation.
-  - Enables recursion where a type with a fixed size is required.
-- `Rc<T>`: A single-threaded reference-counting pointer.
-  - Enables multiple owners (READ-ONLY).
-  - Supports mutability by wrapping value in another type.
-    - `Cell<T>` or `RefCell<T>`.
-- `Arc<T>`: A thread-safe reference-counting pointer.
-  - Enables multiple owners (READ-ONLY).
-  - Thread safety means there is an additional performance overhead.
-  - Supports mutability by wrapping value in another type.
-    - `Mutex<T>`, `RwLock<T>` or one of the `Atomic*` types.
-- `Cell<T>`: A single-threaded mutable memory location for 'values'.
-  - Behaves like an exclusive borrow, aka a `&mut T`.
-  - The contained value is _moved_ in and out of the cell.
-- `RefCell<T>`: A single-threaded mutable memory location for 'references'. 
-  - Removes the compile-time borrow-checks that `Cell<T>` has.
-  - Rust's borrow rules are dynamically checked at _runtime_.
-  - More flexible than `Cell<T>` but with possible 'runtime panic' cost.
+The five types covered: `Box`, `Rc`, `Arc`, `Cell`, `RefCell`.
 
-> **NOTE**: Not discussed here are `Mutex<T>` and `RwLock<T>`, which provide mutual-exclusion.
+> **NOTE**: Not discussed are `Mutex<T>` and `RwLock<T>`,  
+> which provide mutual-exclusion.
+
+- `Box<T>`: A pointer type for heap allocation.
+- `Rc<T>`: Single-threaded 'multiple owners' pointer (immutable).
+- `Arc<T>`: Thread-safe 'multiple owners' pointer (immutable).
+- `Cell<T>`: Single-threaded mutability for `Copy` types.
+- `RefCell<T>`: Single-threaded mutability for any type. 
+
+### Quick notes
+
+`Rc<T>` and `Arc<T>` both support mutability by wrapping the inner value with another type. `Cell<T>` or `RefCell<T>` for `Rc`, and `Mutex<T>`, `RwLock<T>` or one of the `Atomic*` types for `Arc`.
+
+`Arc<T>`'s thread-safety comes at a cost: additional performance overhead.  
+So choose `Rc` whenever possible.
+
+`Cell<T>` behaves like an exclusive borrow, aka a `&mut T` (meaning the compiler won't let you have multiple mutable borrows), while `RefCell<T>` removes the compile-time borrow-checks so that it can provide more flexibility than `Cell<T>` has (which is constrained to `Copy` types only). 
+
+Subsequently `RefCell` introduces the possibility of ending up with multiple mutable borrows. The borrow rules for `RefCell` aren't statically checked at compile time but dynamically checked at _runtime_, which means this type is capable of triggering a panic if multiple mutable borrows is detected.
 
 ## IMPORTANT
 
 I'm not the author of the _following_ content. 
 
-In order to better understand the topic of smart pointers in Rust, I read through the official Rust documentation and simply cherry-picked useful subsets of that information and grouped it in a way that helps make the topic easier to understand. 
+My own summary/quick notes (above) are sufficient for my own reference, but in case it's not, then the following content may be useful to you.
+
+Rather than link off to various intertwined documentation pages, with lots of extra cruft that can muddy the essentials of what you need to know. I read through the official Rust documentation and cherry-picked useful subsets of that information and grouped it in a way that helped me to more easily make sense of the topic. 
 
 This means I take no credit for the following content.  
 It was written by many people much smarter than me.
