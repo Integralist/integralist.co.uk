@@ -24,7 +24,7 @@ The five types covered: `Box`, `Rc`, `Arc`, `Cell`, `RefCell`.
 - `Rc<T>`: Single-threaded 'multiple owners' pointer (immutable).
 - `Arc<T>`: Thread-safe 'multiple owners' pointer (immutable).
 - `Cell<T>`: Single-threaded mutability for `Copy` types.
-- `RefCell<T>`: Single-threaded mutability for any type. 
+- `RefCell<T>`: Single-threaded mutability for reference types. 
 
 ### Quick notes
 
