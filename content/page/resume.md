@@ -17,7 +17,7 @@ comments: false
 - [Open-Source](#open-source)
 - [Tools, Languages and Tech](#tools-languages-and-tech)
 
-<img src="../images/profile.jpg">
+<img src="../images/profile-2022.jpg" class="profile">
 
 ## Hello!
 

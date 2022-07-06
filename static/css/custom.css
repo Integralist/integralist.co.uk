@@ -229,3 +229,10 @@ blockquote code {
 .box__inner:after {
   bottom: 0;
 }
+
+.profile {
+  border: 10px solid #000000;
+}
+.night .profile {
+  border-color: #CCCCCC;
+}
