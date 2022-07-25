@@ -167,7 +167,7 @@ Email through free providers such as Google's [Gmail](https://gmail.com/) are de
 
 If you are not paying for the service then you're not a 'customer'. You are in fact a 'target'.
 
-An alternative is to use an email provider that encrypts your messages and doesn't have access to their content in any way. A good option (which has a free tier, but obviously you'll use up that free tier pretty quickly) is [Protonmail](https://mail.protonmail.com/).
+An alternative is to use an email provider that encrypts your messages and doesn't have access to their content in any way. A good option (which has a free tier, but obviously you'll use up that free tier pretty quickly) is [Proton](https://proton.me).
 
 > Note: due to how they encrypt your data, if you forget your password and try to reset it, you'll lose _all_ your email because they don't have a means to decrypt those files unless you provide the relevant password.
 
