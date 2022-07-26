@@ -114,6 +114,10 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ### 2022
 
+- **What**: Implemented a new code-generated Rust API client with the help of [openapi-generator.tech](https://openapi-generator.tech).  
+  **Why**: Part of a larger initiative to use the OpenAPI specification to code-generate multiple language API clients.   
+  **Impact**: We have a lot of customers interested in Rust who are able to more easily interact with our platform now.
+
 - **What**: Implemented retry behaviour for critical section of [customer facing platform software](https://fiddle.fastlydemo.net).  
   **Why**: A hard to reproduce, and intermittent, network failure would cause services to be restarted at the infrastructure layer, which was a very slow and costly process.   
   **Impact**: Developers wouldn't waste cycles having to manually re-start flaky/failing CI jobs, and a large reduction in service remediation latency.
