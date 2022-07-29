@@ -11,15 +11,17 @@ tags:
   - "vim"
 ---
 
-I don't know who needs to hear this but:  
+I don't know who needs to hear this but:
 **I love my developer tools**.
 
 ## Core
 
 - **Package Manager**: [Homebrew](https://brew.sh/)
 - **Terminal**: [Alacritty](https://alacritty.org/)
-- **Terminal Multiplexer**: [tmux](https://github.com/tmux/tmux/wiki)
+- **Terminal Multiplexer**: [Zellij](https://zellij.dev)
 - **Code Editor**: [Neovim](https://neovim.io)
+
+> **NOTE**: I used [tmux](https://github.com/tmux/tmux/wiki) for years but colour issues forced me to Zellij.
 
 ## Supplementary
 
