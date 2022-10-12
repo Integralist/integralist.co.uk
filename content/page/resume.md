@@ -39,7 +39,7 @@ Her feedback also hints at something bigger which I strive for: to help others t
 
 > "Hi Mark, your name keeps coming up (in a good way 😉) and I wanted to put a face to a name. Folks on the team like working with you. You're responsive and provide good and timely feedback."
 
-I like to be helpful, it brings me joy, so this was a nice (and _unexpected_) bit of feedback from a Fastly colleague ❤️
+This feedback came from an Engineering Manager at Fastly. I like to be helpful, it brings me joy, so this was a very nice (and _unexpected_) bit of feedback ❤️
 
 I care a lot about the people I work with, and aim to build meaningful relationships with people across the company. In doing so I hope to ensure that we collectively are able to work as a cohesive unit, and thus provide great value to our users.
 
