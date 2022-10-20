@@ -108,6 +108,8 @@ Now a more practical example of using `!` might be to take a single line of JSON
 :%!python -m json.tool
 ```
 
+> **NOTE**: If you use [jq](https://stedolan.github.io/jq/) you can both prettify `%!jq` _and_ minify `%!jq -c`.
+
 Or if you didn't want to replace the current buffer, but instead _append_ a pretty printed version on the line(s) after the current line, then you would use `:read` like so:
 
 ```viml
