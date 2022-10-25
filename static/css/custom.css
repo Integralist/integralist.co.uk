@@ -209,7 +209,7 @@ blockquote code {
   position: relative;
   display: block;
   margin: auto;
-  max-width: 600px;
+  max-width: 800px;
 }
 .box__inner:before, .box__inner:after {
   content: '';
