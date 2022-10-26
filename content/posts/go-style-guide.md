@@ -20,7 +20,7 @@ This is my own personal style guide for Go.
 - [Naming](#naming)
 - [Whitespace](#whitespace)
 - [Quick note on Code Design](#quick-note-on-code-design)
-- [Quick guide to Error wrapping](#quick-guide-to-error-wrapping)
+- [Quick guide to Errors](#quick-guide-to-errors)
 - [Quick guide to `panic`](#quick-guide-to-panic)
 - [Quick guide to slice 'gotchas'](#quick-guide-to-slice-gotchas)
 - [Quick guide to pass-by-value vs pass-by-pointer](#quick-guide-to-pass-by-value-vs-pass-by-pointer)
@@ -115,7 +115,7 @@ The solution was for us to return an interface. This made it simple to mock the 
 
 I recommend reading my other post ["Thinking about Interfaces in Go"](https://www.integralist.co.uk/posts/go-interfaces/).
 
-## Quick guide to Error wrapping
+## Quick guide to Errors
 
 When you wrap errors your message **should include**:
 
@@ -155,6 +155,22 @@ func business(ids []string) error {
 ```
 
 The resolution to the above bad code is: only include information the caller doesn’t have. The caller is free to annotate your errors with information such as the name of your function, arguments they passed in, etc. There is no need for you to provide that information to them, as its obvious up front. If this same logic is applied consistently you'll end up with error messages that are high-signal and to-the-point.
+
+See also the article "[When life gives you lemons, write better error messages](https://scribe.rip/when-life-gives-you-lemons-write-better-error-messages-46c5223e1a2f)", from which the following images are sourced.
+
+**Bad error message**:
+
+<a href="../../images/error-message-bad.png">
+    <img src="../../images/error-message-bad.png">
+</a>
+<p></p>
+
+**Good error message**:
+
+<a href="../../images/error-message-good.png">
+    <img src="../../images/error-message-good.png">
+</a>
+<p></p>
 
 ## Quick guide to `panic`
 
