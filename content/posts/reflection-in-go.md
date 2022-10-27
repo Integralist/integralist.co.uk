@@ -39,7 +39,7 @@ There will be a summarized version of that information here, but ultimately what
 
 In Go an 'interface type' is a collection of methods which can be defined like so:
 
-```
+```go
 type Foo interface {
 	Bar(s string)
 	Baz(i int)
@@ -52,7 +52,7 @@ Conceptually the variable containing the assigned value can be thought of as a t
 
 This is best demonstrated in an example. Below we create an interface type `Foo`, and then we define a struct type that will implement that interface. We'll assign an instance of the struct to a variable defined as being an interface type of `Foo` and we'll inspect the code at runtime using the `reflect` package to see what it can tell us about the variable and what it contains:
 
-```
+```go
 package main
 
 import (
@@ -88,7 +88,7 @@ func main() {
 
 The output of the above program is:
 
-```
+```go
 ({s:testing i:123}, main.T)
 ```
 
@@ -139,7 +139,7 @@ So thus [`go-flags`](https://github.com/integralist/go-flags) was born.
 
 Here's an example of how you would use it:
 
-```
+```go
 package main
 
 import (
@@ -190,7 +190,7 @@ We can also see that we've defined two separate commands (`Foo` and `Bar`), and 
 
 An example of how a user might then run this program would be:
 
-```
+```bash
 my_cli_app -debug -n 123 -m "something here" foo -a beepboop -b 666
 ```
 
@@ -208,7 +208,7 @@ The reason for this is because we want the schema for the flags to be defined by
 
 Once we've got this unknown value we'll execute the following code to get at the actual value:
 
-```
+```go
 v := reflect.Indirect(reflect.ValueOf(s))
 ```
 
@@ -218,7 +218,7 @@ It's also safe to use `Indirect()` because if you give it a non-pointer value it
 
 Next we acquire a `reflect.Type` type from the given argument: 
 
-```
+```go
 st := v.Type()
 ```
 
@@ -226,7 +226,7 @@ We get the type structure from the `reflect.Value` type returned from calling `r
 
 Now it's at this point we do some runtime type validation:
 
-```
+```go
 if v.Kind() != reflect.Struct {
   return ErrWrongType
 }
@@ -265,7 +265,7 @@ Once we have the number of struct fields, we'll create a loop for that number an
 
 > **Note**: you'll find that when you call methods on a `reflect.Value` type you'll likely end up with ...another `reflect.Value` type!
 
-```
+```go
 for i := 0; i < v.NumField(); i++ {
   field := v.Field(i)
 
@@ -277,7 +277,7 @@ Next we call the `.Field()` method again but this time on the `reflect.Type` typ
 
 We have at this point a if/else condition which I'm going to skip over the `if` block briefly and move onto discussing the `else` block which states:
 
-```
+```go
 if !recurse && field.CanSet() {
 	callback(field, sf)
 }
@@ -287,7 +287,7 @@ You'll see we call `.CanSet()` on the `field` variable which (as noted earlier) 
 
 Let's jump back up to the `if` statement, in there we're checking the condition:
 
-```
+```go
 if field.Kind() == reflect.Struct {
   ...
 }
@@ -303,7 +303,7 @@ That said, there is one aspect of the `if` block we should look at which is the 
 
 To get at that struct value we do:
 
-```
+```go
 reflect.TypeOf(field.Interface())
 ```
 
@@ -319,7 +319,7 @@ At this point in time we've explained some key bits as far as looping _safely_ o
 
 One thing we do is access the struct field's tags, and we do this by calling `.Tag.Get()` on the `reflect.StructField` type. So in go-flags we ask users to add struct tags like so:
 
-```
+```go
 short:"..." usage:"..."
 ```
 
@@ -327,7 +327,7 @@ That's two tags 'short' and 'usage'. So if I want the 'short' tag I'd call `.Tag
 
 When it comes to setting the field values we have to check the kind of the field (remember this is a `reflect.Value` type). The following switch statement demonstrates this:
 
-```
+```go
 switch field.Kind() {
 case reflect.Bool:
 	if b, ok := getter.Get().(bool); ok {
