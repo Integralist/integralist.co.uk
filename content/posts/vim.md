@@ -33,9 +33,10 @@ I see a lot of posts on Vim 'tips and tricks' and decided I'd have a go at putti
 - [Vim's start-up process](#vims-start-up-process)
 - [Debugging Vim issues](#debugging-vim-issues)
 - [Autocomplete with no plugins](#autocomplete-with-no-plugins)
-- [Understanding line feed and carriage returns in Vim](#understanding-line-feed-and-carriage-returns-in-vim)
+- [Understanding line feed and carriage returns](#understanding-line-feed-and-carriage-returns)
 - [Auto highlighting keywords (and creating your own custom highlighting)](#auto-highlighting-keywords-and-creating-your-own-custom-highlighting)
 - [Sorting and filtering duplicates](#sorting-and-filtering-duplicates)
+- [Miscellaneous tips and tricks](#miscellaneous-tips-and-tricks)
 - [Conclusion](#conclusion)
 
 {{< adverts/provim >}}
@@ -982,6 +983,21 @@ bar
 baz
 foo
 ```
+
+
+## Miscellaneous tips and tricks
+
+If you need your cursor to always be in the middle of the screen (this is modifying the 'scroff offset' option):
+
+```
+:set so=999
+```
+
+Move the cursor to the top, middle, bottom of the visible screen:
+
+- `H`: high (i.e. top of the screen)
+- `M`: middle
+- `L`: low (i.e. bottom of the screen)
 
 ## Conclusion
 
