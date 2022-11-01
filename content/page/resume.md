@@ -519,6 +519,7 @@ I'm a print published and self-published author; I'm also a tech reviewer and am
 
 ### Fastly dev.to
 
+- [Better Fastly API clients with OpenAPI Generator](https://dev.to/fastly/better-fastly-api-clients-with-openapi-generator-3lno)
 - [How Fastly deploys Gatsby CMS websites to GCS using GitHub Actions](https://dev.to/fastly/how-fastly-manages-its-software-with-github-actions-3p0i)
 
 ### BuzzFeed Tech

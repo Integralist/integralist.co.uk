@@ -13,6 +13,16 @@ tags:
 draft: false
 ---
 
+## UPDATE November 2022
+
+Not long after I wrote this post I had switched from VimScript to using Lua and also making large sets of changes and tweaks to my configuration. The source of truth is:
+
+https://github.com/Integralist/dotfiles/tree/main/.config/nvim
+
+This post is being kept for posterity, but ultimately I would recommend you look at the above dotfiles repo instead.
+
+---
+
 This is going to be a very focused post because when you're looking to get your code editor configured you typically just want answers. Let's go...
 
 > **NOTE**: I configure Neovim with `~/.config/nvim/init.vim`.
