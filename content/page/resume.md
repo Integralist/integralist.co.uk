@@ -43,6 +43,12 @@ This feedback came from an Engineering Manager at Fastly. I like to be helpful, 
 
 I care a lot about the people I work with, and aim to build meaningful relationships with people across the company. In doing so I hope to ensure that we collectively are able to work as a cohesive unit, and thus provide great value to our users.
 
+> "Thanks, I'm amazed that you always deliver top notch answers."
+
+This feedback came from a Senior Sales Engineer at Fastly and was both unexpected and nice. I actually _didn't_ have the answer they needed. I just wanted to redirect this person to where I thought would be the best place for them to get a solution (so it included as much historical context as I could provide, and multiple signposts along the way). 
+
+A kind smile, a compassionate ear, and a bit of effort goes a long way in life.
+
 ## Summary
 
 I ideally want to get across two fundamental things about me:
