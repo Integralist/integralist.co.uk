@@ -124,6 +124,10 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ### 2022
 
+- **What**: Implemented a new code-generated Go API client with the help of [openapi-generator.tech](https://openapi-generator.tech).  
+  **Why**: Part of a larger initiative to use the OpenAPI specification to code-generate multiple language API clients.  
+  **Impact**: We have a lot of customers interested in Go who are able to more easily interact with our platform now.  
+
 - **What**: Implemented a solution to reduce API calls in the Fastly Terraform provider ([PR](https://github.com/fastly/terraform-provider-fastly/pull/593)).  
   **Why**: The provider was making unnecessary API calls that was causing problems for multiple scenarios.  
   **Impact**: I reduced the time for a 'plan' (and the time it takes to run the integration tests) by ~70%! This improves the quality of life for our customers, while also helping to protect the Fastly API, and finally benefits the developers working on the provider.  
