@@ -124,6 +124,10 @@ I'd like to share the various things I've worked on over the years and the impac
 
 ### 2022
 
+- **What**: Implemented a proof-of-concept [PKCE](https://pragmaticwebsecurity.com/articles/oauthoidc/from-implicit-to-pkce.html) (Proof Key for Code Exchange) OAuth flow for the [Fastly CLI](https://github.com/fastly/cli) ([example gist](https://gist.github.com/Integralist/76f8be7cd5bb6e75587d58146daf0ab5)).  
+  **Why**: Part of a larger initiative to upgrade our authentication and authorization model, so that we can offer more features to customers.  
+  **Impact**: Customers will get more flexible and advanced sign-in features.  
+
 - **What**: Implemented a new code-generated Go API client with the help of [openapi-generator.tech](https://openapi-generator.tech).  
   **Why**: Part of a larger initiative to use the OpenAPI specification to code-generate multiple language API clients.  
   **Impact**: We have a lot of customers interested in Go who are able to more easily interact with our platform now.  
