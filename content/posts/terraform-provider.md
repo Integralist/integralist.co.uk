@@ -56,6 +56,8 @@ Hashicorp is working on a replacement to the terraform-plugin-sdk called the [Te
 
 > **NOTE**: It's worth clarifying that the terraform-plugin-sdk isn't going anywhere any time soon and in the meantime Hashicorp provides guidelines for [which SDK you should use](https://developer.hashicorp.com/terraform/plugin/which-sdk), so I recommend reading that if you're unsure of which route to take.
 
+**UPDATE**: I have since discovered there is a 'scaffold' project that Hashicorp provides here https://github.com/hashicorp/terraform-provider-scaffolding that is similar to my mock provider! So I would recomend, once you finish reading this post, giving that a read to see how their hierarchy compares to my mock provider (there's also one for the new plugin framework, which I'll be checking out: https://github.com/hashicorp/terraform-provider-scaffolding-framework).
+
 ## main.go
 
 Now let's take a look at our `main` package entry point, which is 'short and sweet'...
@@ -643,6 +645,8 @@ that release, which might help you address this problem.
 This error is expected because we've not actually published this provider to the Terraform registry, so indeed it cannot be found. But the error doesn't prevent you from consuming the local provider binary still.
 
 > **NOTE**: don't use `Print` functions from the `fmt` package in the Terraform provider as, depending on the execution flow, Terraform can treat it as input to its internal program and treat it as an error. So use `Print` functions from the `log` package instead.
+
+**UPDATE**: I've since discovered https://pkg.go.dev/github.com/hashicorp/terraform-plugin-log/tflog
 
 ## Debugging a Terraform Provider
 
