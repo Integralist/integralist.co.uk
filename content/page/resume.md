@@ -76,7 +76,9 @@ You can find me online at the following locations:
 
 I was a former customer of Fastly, and had become well known for publishing probably the longest known article on the subject of Varnish, VCL and Fastly's implementation.
 
-I joined Fastly to work within its new (at the time) Developer Relations team helping to manage and support their current set of API clients (inc. orchestration tools such as Terraform and Fastly's own Terraform provider).
+I joined Fastly to work within its new (at the time) Developer Relations team helping to manage, support and be the core developer for their suite of API clients (inc. orchestration tools such as Terraform and Fastly's own [Terraform provider](https://github.com/fastly/terraform-provider-fastly), and the [Fastly CLI](https://github.com/fastly/cli)).
+
+I've since had the opportunity to work on critical Rust projects such as https://fiddle.fastly.dev and to work cross-team to develop a new authentication model for customer services.
 
 ### BuzzFeed (June 2016 - October 2020)
 
