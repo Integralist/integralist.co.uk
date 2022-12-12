@@ -11,13 +11,16 @@ tags:
 draft: false
 ---
 
+> **UPDATE**: I moved on from BuzzFeed October 2020 and Joined [Fastly](https://www.fastly.com).  
+> See my [resume](/resume) for details.
+
 ## Introduction
 
-I was approached recently by an organisation about whether I'd be interested in working for them. The focus of this post **_isn't_** that company (hence I've not mentioned their name), but more about a set of experiences I've had when changing jobs and how I think they're important to keep in mind, along with specific topics of interest you should look to include, when considering future opportunities.
+An organisation reached out to me about whether I would like to work for them. The focus of this post **_isn't_** that company (hence I've not mentioned their name), but more about a set of experiences I've had when changing jobs and how I think they're important to keep in mind, along with specific topics of interest you should look to include, when considering future opportunities.
 
 ## What Happened?
 
-A recruiter, let's say they were calling on behalf of the "Foo" company, contacted me to say they (and their CTO) had stumbled across and enjoyed a selection of my blog posts, and found my profile on LinkedIn to fit the type of candidate they were looking for.
+A recruiter, let's say they were calling on behalf of the "Foo" company, contacted me to say they (and their CTO) had stumbled across and enjoyed a selection of my blog posts, and found my profile on LinkedIn to fit the candidate they were looking for.
 
 ## My current work situation
 
@@ -27,13 +30,13 @@ I've been here for almost two years now, and I came to them from the [BBC](http:
 
 ## Am I happy at BuzzFeed?
 
-Yes, very. 🙂
+Yes. 🙂
 
 BuzzFeed is the first company I've worked for where they:
 
+- Treat me fair.
 - Treat me like a human being.
-- Treat me fairly.
-- Support my need to work almost exclusively remotely.
+- Support my need to work remotely.
 - Are truly diverse and culturally supportive.
 
 As far as interviewing, BuzzFeed also got brownie points for...
@@ -46,51 +49,51 @@ As far as interviewing, BuzzFeed also got brownie points for...
 
 ## Did you talk to the Foo company?
 
-Yes. Because I was interested to see how they compared.
+Yes. I wanted to see how they compared.
 
 ## How _did_ they compare?
 
 Well, I didn't get past the initial conversation because they didn't have a "remote role" for me, so I couldn't say with 100% certainty how they would have compared.
 
-But that said, there were a few key things I took away from the conversation that I feel are worth mentioning, as these things were specifically firing my internal alarm bell...
+But that said, there were some key aspects I took away from the conversation that I feel are worth mentioning, as these were specifically firing my internal alarm bell...
 
 - They tried to sell me on "we're **all engineers** here", which for me isn't something we should be aspiring to (conversation for another day, but to me it's an unhealthy attitude).
-- There was a seeming **lack of post-mortems and/or blameless culture**. I was given a response, if you can imagine, that was similar to a confused raised eye brow.
-- The concept of teams functioning differently to each other (which is fine), seemed to be confused with **inconsistency and lack of direction**.
-- **Money focused**. The biggest takeaway by far was that I was asked _constantly_ "What would it take for you to leave BuzzFeed?" †.
+- There was a seeming **lack of post-mortems and/or blameless culture**. Their response, if you can imagine it, was like a confused raised eye brow.
+- They confused the concept of teams functioning differently to each other (which is fine) with **inconsistency and lack of direction**.
+- **Money focused**. The biggest takeaway by far was they asked _constantly_ "What would it take for you to leave BuzzFeed?" †.
 - **No interest** in techniques that could help improve their ability to work more efficiently.
 
-> † I realised they cared less about me as a 'person', someone the company could build a long term relationship with, and more about me as a 'number'. I was just a resource, an entity they could acquire.
+> † I realised they cared less about me as a 'person', someone the company could build a long term relationship with, and more about me as a 'number'. I was a resource, an entity they could own.
 
 ## What was the problem?
 
-This company is clearly (as they themselves stated) entirely made up of engineers, with the lightest touch of management. Through my discussion it became apparent that building new products with new tech was the focus and drive for those working there. But in that type of environment, being able to work _effectively_, _efficiently_ and with _good communication_ (along with making sure you're working on _the right thing_ and _at the right time_) is rarely the case in my experience.
+This company is (as they themselves stated) entirely made up of engineers, with the lightest touch of management. Through my discussion it became obvious that building new products with new tech was the focus and drive for those working there. But in that environment, being able to work _effectively_, _efficiently_ and with _good communication_ (along with making sure you're working on _the right thing_ and _at the right time_) is not usually the case (in my experience).
 
-For me, I'm at a point in my career where discussions about programming languages or tech stack X just isn't something I worry about or get giddy about, because most of the time it's _how_ you solve a problem that's important. 
+For me, I'm at a point in my career where discussions about programming languages or tech stack X isn't something I worry about too much, or get giddy about, because most of the time it's _how_ you solve a problem that's important/interesting. 
 
-In most situations, if you do your due diligence and exhaust all means available to you to make the given tech work, you should be able to empirically prove it's not working, and thus are in a better position to justify a more appropriate language or tech stack. This all becomes fairly trivial.
+In most situations, if you do your due diligence and exhaust all means available to you to make the given tech work, you should be able to empirically prove it's not working, and thus are in a better position to justify a more appropriate language or tech stack. This all becomes trivial.
 
-> Note: in my experience, people tend to fall back on subjective opinions and hand wavey 'facts' rather than just cracking on with solving the problem at hand.
+> Note: in my experience, people tend to fall back on subjective opinions and hand wavey 'facts' rather than cracking on with solving the problem at hand.
 
-Remember, we're engineers, we can solve a lot of these issues in many different ways. But I personally find the 'human' problem is something that is typically much harder to solve and ultimately will cause a lot more detrimental effect on our ability to learn, progress in, and emotionally stay connected to our jobs.
+Remember, we're engineers, we can solve these issues in different ways. But I personally find the 'human' problem is something that is typically much harder to solve and ultimately will cause a lot more detrimental effect on our ability to learn, progress in, and emotionally stay connected to our jobs.
 
 After my conversation with the Foo company I already had an unsettling feeling about them, but decided that I would do some research on Glassdoor to see if my gut feelings, stemming from the feedback I received, were correlating to other people's past experiences working at the company. †
 
-> † it's important to realise that with sites like Glassdoor you're only getting half the story, so take it with a pinch of salt. For me, I already had a lengthy conversation with the company and so I felt like I had sufficient information on which to corroborate my experience against.
+> † it's important to realise that with sites like Glassdoor you're getting half the story, so take it with a pinch of salt. For me, I already had a lengthy conversation with the company and so I felt like I had enough information on which to corroborate my experience against.
 
-Turns out my gut instincts were reciprocated by others, and by that I mean: engineers either working still (or who used to work) at Foo had voiced concerns that if you want to get paid lots of money to work on software with lots of tech debt, and with management that doesn't care about improving the situation with how teams collaborate and/or communicate with each other, then company Foo might be the place for you.
+Turns out my gut instincts right. Others, and by that I mean: engineers either working still (or who used to work), at Foo had voiced concerns that if you want to get paid lots of money to work on software with lots of tech debt, and with management that doesn't care about improving the situation with how teams collaborate and/or communicate with each other, then company Foo might be the place for you.
 
 Now, what I'm about to say, I can say because of privilege (I'm totally aware of that and I try to keep that in check wherever possible)...
 
-For me, getting paid is important (because ultimately it allows me to look after my family), but in truth there's a whole world outside of just getting paid which is equally (if not more) important for being happy. 
+For me, getting paid is important (because ultimately it allows me to look after my family), but in truth there's more to life than getting paid which is (if not more) important for being happy. 
 
-I've been fortunate enough with my privilege to _be able_ to have that opinion, and I appreciate that for others this isn't necessarily going to be the case, and so for those of you who don't feel that way because of circumstances: that's of course absolutely ok and valid. So with that in mind, I will cover what I feel are those _other_ important topics next...
+I've been fortunate enough with my privilege to _be able_ to have that opinion, and I appreciate that for others this isn't necessarily going to be the case, and so for those of you who don't feel that way because of circumstances: that's of course ok and valid. So with that in mind, I will cover what I feel are those _other_ important topics next...
 
 ## What's important to _you_?
 
-First, I just want to take a moment to re-iterate, that you need to find what's important _to you_.
+First, I want to take a moment to re-iterate, that you need to find what's important _to you_.
 
-If you're just starting out in your career, or your mid-way through, or you're 20 years in like me, _your_ priorities, _your_ standards, and _your_ values are going to be different depending on the stage of life you're at.
+If you're starting out in your career, or your mid-way through, or you're 20+ years in like me, then _your_ priorities, _your_ standards, and _your_ values are going to be different depending on the stage of life you're at.
 
 For me (in a general sense), I'm looking for:
 
@@ -104,11 +107,11 @@ Now let's be honest, who of us _isn't_ looking for those qualities? Everyone wan
 
 At any rate, figure out _your_ priorities, _your_ standards and _your_ values, when considering working opportunities.
 
-But also remember that these things will change over time, and that's ok too (sometimes we just need stability).
+But also remember that these perspectives will change over time, and that's ok too (sometimes we need stability in a fragile industry and nothing else).
 
 ## What should you talk about?
 
-Well, first things first. It's a good idea, at the start of _any_ conversation, to ask:
+It's a good idea, at the start of _any_ conversation, to ask:
 
 > What's the focus of today's conversation?  
 
@@ -117,17 +120,17 @@ i.e. What's important to the company (or individual) you're talking with, and wh
 Otherwise, here are the list of questions/topics I like to cover...
 
 - **What is the company's story?**  
-  - Give me an insight into the company's history/background and how we've reached this point in time.
+  - Give me an insight into the company's history/background.
 - **Presence**  
-  - How many offices do you have and what are their locality?
+  - What number of offices do you have and what are their locality?
 - **Culture and Diversity**  
-  - The company's "values" will help indicate what's _important_ to them.
+  - The company's "values" will highlight what's _important_ to them.
 - **Hierarchy and Organisation Structure**
-  - Are you fairly 'flat and lean' or 'tall and fragmented'?
+  - Are you 'flat and lean' or 'tall and fragmented'?
 - **Visibility & Openness**
   - How does leadership share and handle critical/internal business topics?
 - **Collaboration**
-  - Building new features across multiple cross-discipline teams (avoiding duplication)
+  - Building new features across different cross-discipline teams (avoiding duplication)
   - Distributed Timezones
 - **Community**
   - How do internal & external staff interact?
@@ -135,7 +138,7 @@ Otherwise, here are the list of questions/topics I like to cover...
 - **Process**
   - What's your 'onboarding' process?
   - How are new features discussed, designed, evolved, released?
-      - How do you prioritize (e.g. impact/value for end-users)?
+      - How do you deterimine a priority (e.g. impact/value for end-users)?
   - What is the leadership like?
   - How is documentation handled here?
       - Do they care about documentation? 
@@ -164,7 +167,7 @@ Otherwise, here are the list of questions/topics I like to cover...
   - How are remotes kept feeling included?
 - **Work life balance and support**
   - How do staff balance their work-life? 
-  - How do things work in a multi-region/distributed organisation?
+  - How do you work in a multi-region/distributed organisation?
       - e.g. cross-over hours between UK and US?
 - **Tech**
   - _Finally_ we get to something engineering related...
@@ -181,4 +184,4 @@ Otherwise, here are the list of questions/topics I like to cover...
 
 I think that pretty much covers everything of interest. To me at least these broad topics will give you a good indicator of what an organisation is like (or the _potential_ they have), depending on how they answer these questions.
 
-What are the sorts of things you ask in an interview? What matters to you? Let me know on twitter.
+What do you ask in an interview? What matters to you? Let me know on twitter.
