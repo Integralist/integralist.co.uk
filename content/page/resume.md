@@ -18,6 +18,7 @@ comments: false
 - [Tools, Languages and Tech](#tools-languages-and-tech)
 
 <img src="../images/profile-2022.jpg" class="profile">
+<center><small><b>NOTE:</b> The kids are older now 🙂</small></center>
 
 ## Hello!
 
@@ -121,6 +122,11 @@ I'd like to share the projects I've worked on over the years and the impact/valu
 <div id="impact-fastly"></div>
 
 > **Fastly**...
+
+### 2023
+- **What**: Rewrote Fastly's (very complex) Terraform provider from scratch (https://github.com/Integralist/terraform-provider-fastly-framework).  
+  **Why**: New HashiCorp framework was incompatible with their previous SDK and so it was important we started migrating before HashiCorp published a deprecation notice.  
+  **Impact**: Customers will benefit from a more modern provider implementation and a whole bunch of long standing bugs resolved.  
 
 ### 2022
 
