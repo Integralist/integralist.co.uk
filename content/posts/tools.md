@@ -17,11 +17,11 @@ I don't know who needs to hear this but:
 ## Core
 
 - **Package Manager**: [Homebrew](https://brew.sh/)
-- **Terminal**: [Alacritty](https://alacritty.org/)
-- **Terminal Multiplexer**: [Zellij](https://zellij.dev)
+- **Terminal**: [Warp](https://www.warp.dev/)
 - **Code Editor**: [Neovim](https://neovim.io)
 
-> **NOTE**: I used [tmux](https://github.com/tmux/tmux/wiki) for years but colour issues forced me to Zellij.
+**NOTES:**  
+I was using a multiplexer ([tmux](https://github.com/tmux/tmux/wiki)) for years but colour issues forced me to switch to [Zellij](https://zellij.dev). I then switched from [Alacritty](https://alacritty.org/) and Zellij to using Warp as my terminal (helping to consolidate the number of tools I needed to install and configure) as Warp provided a lot of what I was using Zellij for. My switch to Warp also meant I could drop support for [FZF](https://github.com/junegunn/fzf/blob/master/README.md) as Warp provided fuzzy searching my history, while `fd` (see below) allowed me to easily locate files.
 
 ## Supplementary
 
@@ -37,7 +37,6 @@ I don't know who needs to hear this but:
 - **File Lister**: [Exa](https://github.com/ogham/exa/blob/master/README.md)
 - **File Removal**: [Rip](https://github.com/nivekuil/rip/blob/master/README.org)
 - **File Space Usage**: [Dust](https://github.com/bootandy/dust/blob/master/README.md)
-- **Fuzzy Finder**: [FZF](https://github.com/junegunn/fzf/blob/master/README.md)
 - **Network Reachability**: [Gping](https://github.com/orf/gping/blob/master/readme.md)
 - **Network Utilisation**: [Bandwhich](https://github.com/imsnif/bandwhich/blob/main/README.md)
 - **Process Status**: [Procs](https://github.com/dalance/procs/blob/master/README.md)
