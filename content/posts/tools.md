@@ -49,13 +49,13 @@ I was using a multiplexer ([tmux](https://github.com/tmux/tmux/wiki)) for years 
 
 ## Browser
 
-Controversial, but I've moved away from [Firefox](https://www.mozilla.org/en-GB/firefox/new/) with a whole suite of security/privacy minded tools to [Apple's Safari](https://www.apple.com/uk/safari/) browser.
+Controversial, but I had started to move away from [Firefox](https://www.mozilla.org/en-GB/firefox/new/) with a whole suite of security/privacy minded tools to [Apple's Safari](https://www.apple.com/uk/safari/) browser.
 
-I also use Safari's ["Tab Group"](https://twitter.com/integralist/status/1514526555275501569?s=20&t=BJu3WlWq6dhoeAarJf91ig) feature.
-
-Extensions installed are:
+I _was_ using Safari's ["Tab Group"](https://twitter.com/integralist/status/1514526555275501569?s=20&t=BJu3WlWq6dhoeAarJf91ig) feature, which I _really_ liked along with the following extensions...
 
 - AdBlock One
 - Dark Reader for Safari
 - SimplyJSON for Safari
 - Super Agent for Safari (Cookie Consent Automation)
+
+...but ultimately the Tab Groups feature ended up being super buggy and duplicating bookmarks and groups etc and I couldn't get the issue resolved, so I ended up back with Google Chrome.
