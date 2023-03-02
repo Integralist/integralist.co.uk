@@ -17,7 +17,7 @@ draft: false
 
 Not long after I wrote this post I had switched from VimScript to using Lua and also making large sets of changes and tweaks to my configuration. The source of truth is:
 
-https://github.com/Integralist/dotfiles/tree/main/.config/nvim
+https://github.com/integralist/nvim (which is a submodule within https://github.com/integralist/dotfiles)
 
 This post is being kept for posterity, but ultimately I would recommend you look at the above dotfiles repo instead.
 
