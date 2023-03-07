@@ -50,6 +50,10 @@ This feedback came from a Senior Sales Engineer at Fastly and was both unexpecte
 
 A kind smile, a compassionate ear, and a bit of effort goes a long way in life.
 
+> "Hey Man… you are a true powerhouse in fixing issues and handling customers… i’m truly impressed by you! Thanks and keep it up!"
+
+Well, this bit of feedback from a Senior Sales Engineer was unexpected but appreciated. I do try to go the extra mile to ensure customers get the support they need.
+
 ## Summary
 
 I ideally want to get across two fundamental aspects about me:
