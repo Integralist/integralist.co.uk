@@ -54,7 +54,7 @@ The following is a summary of how to name things in Go, gleaned from either my o
   - Prefer `buf` to `buffer`.
   - Prefer `cfg` to `config`.
   - Prefer `dst, src` to `destination, source`.
-  - Prefer `in, out` when referring to stdin/stdout.
+  - Prefer `in, out` when referring to stdin/stdout (more flexible for mocked objects).
   - Prefer `rx, tx` when dealing with channels.
     - i.e. receiver, transmitter.
   - Prefer `data` when referring to file content.
@@ -74,6 +74,8 @@ The following is a summary of how to name things in Go, gleaned from either my o
 - `Set<T>` vs `Register<T>`
   - **Set**: use when flipping a bit (e.g. setting an int, string etc).
   - **Register**: use when operation is going _into_ something (e.g. registering a CLI flag inside a command).
+- Tests:
+  - Prefer `got, want` over alternatives like `have, want` ([official reference](https://github.com/golang/go/wiki/TestComments#got-before-want)).
 
 > **NOTE**: Refer also to https://github.com/kettanaito/naming-cheatsheet
 
@@ -236,17 +238,58 @@ The 'fix', like shown earlier, is `b := a[:2:2]` which sets the capacity of the 
 
 > Reference articles: [goinbigdata.com](https://goinbigdata.com/golang-pass-by-pointer-vs-pass-by-value/) and [dave.cheney.net](https://dave.cheney.net/2017/04/29/there-is-no-pass-by-reference-in-go).
 
-In essence when people say 'pass by reference', the point they're trying to get across is: "this _isn't_ a copy of the value being passed". Where as 'pass by reference' is a very _specific_ type of behaviour.
+You'll commonly hear people use the phrase 'pass-by-reference'. What they're describing is: "you're not receiving a _copy_ of the thing being passed, but in fact you're getting _direct access_ to the thing". 
 
-All primitive/basic types (int and its variants, float and its variants, boolean, string, array, and struct) in Go are passed by value.
+In Go this behaviour is called 'pass-by-pointer'. Whereas the phrase 'pass by reference' is actually a very _specific_ type of behaviour (not supported in Go), and it's not the same thing as 'pass-by-pointer'.
 
-Maps and slices are passed by pointer (sometimes incorrectly called pass-by-reference). This is where a new copy of the 'pointer' to the same memory address is created.
+All the following primitive/basic types in Go are passed as a value (i.e. copied):
 
-Go does not have pass-by-reference semantics because Go does not have 'reference variables' (which is something you'd find in C++). 
+- array
+- boolean
+- float
+- int
+- string
+- struct
 
-In C++ you can create `a = 10` and then _alias_ `b` to `a` (`&b = a`) such that updating `b` would _affect_ `a`. Go doesn't have this behaviour. Every variable is stored in its own memory space. Meaning if we had `b := &a` and updated `b` then we wouldn't cause any change to `a`.
+Whereas maps and slices are passed by pointer. 
 
-When we define a function that accepts a pointer (e.g. `changeName(p *Person)`) and we pass a pointer to it (e.g. `changeName(&person)`) the variable person is modified inside the `changeName` function. This happens because `&person` and `p` are two _different_ pointers to the _same_ struct which is stored at the same memory address. This is quite different to C++'s reference variables.
+A pointer is something that _points to_ a memory address. Go doesn't pass a pointer, instead it will create a _copy_ of the pointer and pass that. This still means the receiver can deference the copy of the pointer its given, to get at the underlying memory address.
+
+Go does not have pass-by-reference semantics because Go does not have 'reference variables', which is something you'd find in C++. 
+
+In C++ you can define:
+
+```c++
+a = 10
+```
+
+Then you can 'alias' `b` to `a`:
+```c++
+&b = a
+``` 
+
+In C++ this would mean updating `b` would _affect_ `a`. Go doesn't have this behaviour. 
+
+In Go, every variable is stored in its own memory space. Meaning, if we had `b := &a` and updated `b` then we wouldn't cause any change to `a`.
+
+In Go, imagine we define a function that accepts a pointer:
+
+```go
+func changeName(p *Person) {
+    //
+}
+```
+
+Now imagine we pass a pointer to that function:
+
+```go
+changeName(&person)
+```
+
+We now know that Go will not pass the `&person` pointer, but a _copy_ of the pointer.
+
+So, if the `changeName` function were to modify the `p` argument variable it receives, this would actually cause the `person` variable to be updated.
+This happens because although the `&person` pointer was copied into the function argument, the `&person` and `p` are two _different_ pointers to the _same_ struct which is stored at the same memory address. This is quite different to C++'s reference variables.
 
 ## Quick guide to functions with large signature
 
@@ -267,26 +310,34 @@ The problem with option 2 is that it can become quite cumbersome to construct an
 Using option 3 can be helpful when you want to make the function signature clear, by accepting a couple of concrete arguments that are _required_ for the function to work, while shifting _optional_ arguments into separate functions, as demonstrated below...
 
 ```go
+// Client is the complex type that needs to be constructed.
 type Client struct {
-  host, proxy string
+  host string
   port int
 }
 
-type Option func(*Client) // call this function to apply the option
+// Option is a function that is passed a pointer to the Client type.
+// This is so the function can modify the Client.
+type Option func(*Client)
 
+// WithPort returns an Option
 func WithPort(port int) Option {
   return func(c *Client) { c.port = port }
 }
 
-func WithProxy(proxy string) Option {
-  return func(c *Client) { c.proxy = proxy }
-}
-
+// NewClient will set the 'host' while attempting to call all 'Option' functions.
 func NewClient(host string, options ...Option) *Client {
   c := &Client{host: host, port: 80} // default values
   for _, option := range options {
     option(c) // apply the options by calling each one of them
+
+    // Essentially, for this example code, there is noly one Option passed.
+    // The Option being called is: 
+    // func(c *Client) { c.port = port }
   }
   return c
 }
+
+c := NewClient("httpbin.org") // only 'host' is required 
+c := NewClient("httpbin.org", WithPort(443)) // WithPort is called and returns an Option type
 ```
