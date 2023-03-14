@@ -32,27 +32,41 @@ Hello, my name is Mark and I work @[Fastly](https://www.fastly.com/) as a Staff 
 
 ## Working Together
 
-> "as smart as developers are, they are not always good at explaining things in a way that makes human sense. not you. you are an exception. you are A+".
+The following quotes are from people I've worked with. All of which was unsolicited and unexpected feedback, which is nice! I never ask anyone to "please write something nice about me". All of these things were genuine and I really appreciate anyone who takes the time to say nice things about me as a colleague.
 
-I ❤️ this feedback. It came from someone I was mentoring who worked in Product Support at BuzzFeed. She was interested in getting a better understanding of how to design and architect software systems, and also how to know what types of questions she should ask when investigating technical incidents.
+> "As smart as developers are, they are not always good at explaining things in a way that makes human sense. not you. you are an exception. you are A+"  
+>
+> -- Product Support at BuzzFeed.
+
+I ❤️ this feedback. It came from someone I was mentoring. She was interested in getting a better understanding of how to design and architect software systems, and also how to know what types of questions she should ask when investigating technical incidents.
 
 Her feedback also hints at something bigger which I strive for: to help others to do their best work and to push/promote the good work other engineers do (including those from either a diverse background or minority).
 
 > "Hi Mark, your name keeps coming up (in a good way 😉) and I wanted to put a face to a name. Folks on the team like working with you. You're responsive and provide good and timely feedback."
+>
+> -- Engineering Manager at Fastly.
 
-This feedback came from an Engineering Manager at Fastly. I like to be helpful, it brings me joy, so this was a nice (and _unexpected_) bit of feedback ❤️
-
-I care a lot about the people I work with, and aim to build meaningful relationships with people across the company. In doing so I hope to ensure that we collectively are able to work as a cohesive unit, and thus provide great value to our users.
+I always aim to build meaningful relationships with the people I work with across an organisation. In doing so I hope to ensure that we are able to work as a cohesive unit, and provide great value to our users. But ultimately I like to be helpful (it makes me feel good), so this was a nice bit of unexpected feedback ❤️
 
 > "Thanks, I'm amazed that you always deliver top notch answers."
+>
+> -- Senior Sales Engineer at Fastly.
 
-This feedback came from a Senior Sales Engineer at Fastly and was both unexpected and nice. I actually _didn't_ have the answer they needed. I wanted to redirect this person to where I thought would be the best place for them to get a solution (so it included as much historical context, and as many signposts, as I could provide). 
+Funnily enough I actually _didn't_ have the answer they needed. I wanted to redirect this person to where I thought would be the best place for them to get a solution (so it included as much historical context, and as many signposts, as I could provide). 
 
 A kind smile, a compassionate ear, and a bit of effort goes a long way in life.
 
 > "Hey Man… you are a true powerhouse in fixing issues and handling customers… i’m truly impressed by you! Thanks and keep it up!"
+>
+> -- Senior Sales Engineer at Fastly.
 
-Well, this bit of feedback from a Senior Sales Engineer was unexpected but appreciated. I do try to go the extra mile to ensure customers get the support they need.
+I work hard to ensure customers get the support they need. This feedback was the result of another example of my work ethic.
+
+> Hey Mark, thanks again for releasing the 4.0.0 version, last week! The customer already provided positive feedback. It's a pleasure to work in such a smooth way! 🙇
+>
+> -- Senior Solutions Architect at Fastly.
+
+In this case my colleague was unfamiliar with writing Go and he was trying to contribute to a couple of different code bases that I was the core maintainer of, and for which I was helping guide him through and supporting/educating him on the various technical aspects of. It was a small change but one I really appreciated him taking the time to dig in and help implement.
 
 ## Summary
 
