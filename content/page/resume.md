@@ -97,7 +97,9 @@ I was a former customer of Fastly, and had become well known for publishing prob
 
 I joined Fastly to work within its new (at the time) Developer Relations team helping to manage, support and be the core developer for their suite of API clients (inc. orchestration tools such as Terraform and Fastly's own [Terraform provider](https://github.com/fastly/terraform-provider-fastly), and the [Fastly CLI](https://github.com/fastly/cli)).
 
-I've since had the opportunity to work on critical Rust projects such as https://fiddle.fastly.dev and to work cross-team to develop a new authentication model for customer services.
+While working within the Developer Relations team I had the opportunity to work on critical Rust projects such as https://fiddle.fastly.dev and to work cross-team to develop a new authentication model for customer services.
+
+In 2023 it became apparent that the tools I was responsible for maintaining were becoming even more important for our customers and so I was able to move from DevRel into my own dedicated team to continue to support them without having to also support the various DevRel related projects and services.
 
 ### BuzzFeed (June 2016 - October 2020)
 
