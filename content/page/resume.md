@@ -99,7 +99,7 @@ I joined Fastly to work within its new (at the time) Developer Relations team he
 
 While working within the Developer Relations team I had the opportunity to work on critical Rust projects such as https://fiddle.fastly.dev and to work cross-team to develop a new authentication model for customer services.
 
-In 2023 it became apparent that the tools I was responsible for maintaining were becoming even more important for our customers and so I was able to move from DevRel into my own dedicated team to continue to support them without having to also support the various DevRel related projects and services.
+In 2023 it became apparent that the tools I was responsible for maintaining were becoming even more important for our customers and so I was able to move from DevRel into my own dedicated team (Customer Developer Tools) to continue to support them without having to also support the various DevRel related projects and services.
 
 ### BuzzFeed (June 2016 - October 2020)
 
@@ -144,6 +144,15 @@ I'd like to share the projects I've worked on over the years and the impact/valu
 > **Fastly**...
 
 ### 2023
+
+- **What**: Moved into a new "Customer Developer Tools" team, responsible for managing, developing and maintaining/supporting the various tools Fastly customers use to interact with our platform.  
+  **Why**: My responsibilities were growing beyond the boundaries of the Developer Relations team.  
+  **Impact**: I was able to focus more of my time and energy on supporting these critical customer developer tools.  
+
+- **What**: Invited to join internal API Working Guild.  
+  **Why**: I'm the core maintainer for Fastly's Terraform provider(s), CLI and multiple API clients, so my insight and expertise in those areas were important for ensuring the quality of our new API design.   
+  **Impact**: I've been able to help guide the design of the API to account for specialised consumer cases that otherwise would have been neglected.  
+
 - **What**: Rewrote Fastly's (very complex) Terraform provider from scratch (https://github.com/Integralist/terraform-provider-fastly-framework).  
   **Why**: New HashiCorp framework was incompatible with their previous SDK and so it was important we started migrating before HashiCorp published a deprecation notice.  
   **Impact**: Customers will benefit from a more modern provider implementation and a whole bunch of long standing bugs resolved.  
