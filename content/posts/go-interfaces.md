@@ -18,6 +18,7 @@ draft: false
 - [Don't Return Concrete Types](#dont-return-concrete-types)
 - [Use existing interfaces](#use-existing-interfaces)
 - [Don't Force Interfaces](#dont-force-interfaces)
+- [Embedding Interfaces](#embedding-interfaces)
 - [Upgrading Interfaces](#upgrading-interfaces)
 - [Standard Library Interfaces](#standard-library-interfaces)
 - [Tight Coupling](#tight-coupling)
@@ -374,6 +375,53 @@ func main() {
 ```
 
 The use of an interface here is a bit pointless. We should instead just return a pointer to an exported version of the server struct because the user is gaining no benefits from an interface being returned by `NewServer` (see [Don't Return Concrete Types](#don-t-return-concrete-types) for a possible use case for returning interfaces, but the above example is not one of them).
+
+## Embedding Interfaces
+
+Sometimes a code base will define a very large interface. Now we can probably agree it's not a good idea but let's just accept that in the real-world this kind of thing happens.
+
+One place where a large interface can cause problems is with testing.
+
+If a function accepts an interface but in reality only uses one method from the interface, then you might find yourself getting frustrated at the idea of having to implement a mock version of each method!
+
+Well, to avoid that situation try taking advantage of Go's ability to embed an interface into a struct.
+
+By embedding the interface into your struct, you automatically _promote_ all of the methods to the embedding struct. Now, you can pass your mock struct to the function and the compiler will be happy. You now only need to implement the methods you need to assert the test scenario you're trying to validate.
+
+```go
+type Example interface {
+	Foo() error
+	Bar() error
+	Baz() error
+	// ...lots more...
+}
+
+func example(e Example) error {
+  err := e.Foo()
+  if err != nil {
+    return err
+  }
+
+  // ...other stuff...
+
+  return nil
+}
+
+type mock struct{
+  Example // embedded interface
+}
+
+// We're only implementing one method, not all three!
+func (m *mock) Foo() error {
+  return errors.New("whoops")
+}
+
+func TestExample(t *testing.T) {
+    example(&mock{}) // we expect the function to fail due to our mock behaviour
+}
+```
+
+But be aware that because you're not providing a concrete implementation of the interface when instantiating your struct, it means that the value of that embedded field will be `nil`. This means that if the function you pass your struct into calls any of the interface methods _not_ implemented by your mock struct, then there will be a runtime 'nil pointer dereference' error.
 
 ## Upgrading Interfaces
 
