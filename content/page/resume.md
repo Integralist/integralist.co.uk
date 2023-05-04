@@ -68,6 +68,18 @@ I work hard to ensure customers get the support they need. This feedback was the
 
 In this case my colleague was unfamiliar with writing Go and he was trying to contribute to a couple of different code bases that I was the core maintainer of, and for which I was helping guide him through and supporting/educating him on the various technical aspects of. It was a small change but one I really appreciated him taking the time to dig in and help implement.
 
+> Thank you for your output and all the information you've provided. We really appreciate it. We have applied your latest release on all our production environments and it's looking great and there are no unexpected diffs in our Terraform plans anymore. Again, thank you for your time and your help to understand and resolve this issue as your insights were really helpful.
+>
+> -- Customer
+>
+> Hey Mark, just wanted to say thanks a lot for helping out with the Terraform issue, really appreciated! 🙂
+>
+> -- CSE (Customer Support Engineer) at Fastly
+
+We had a strange bug materialize in the Fastly Terraform provider that was causing some issues for customers. I investigated on behalf of CSE as I'm the core SME (Subject Matter Expert) for Terraform and I not only resolved the specific issue but managed to identify a couple of other unnoticed bugs elsewhere in the system which I worked cross-team to help get resolved.
+
+It was important to me that this customer (like all our customers) got their issues resolved as quickly as possible, with frequent updates to keep them in the loop and extra detailed explanations so they were better informed. It was a tough set of bugs to identify but I was pleased for the customer when they confirmed their services were all good again.
+
 ## Summary
 
 I ideally want to get across two fundamental aspects about me:
