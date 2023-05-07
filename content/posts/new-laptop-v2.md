@@ -19,23 +19,51 @@ This is the second edition to ["New Laptop Configuration"](/posts/new-laptop-con
 
 When moving laptops I will temporarily backup my existing GPG and SSH keys (encrypted) to an external data storage device.
 
-```bash
-cd ~/
-mkdir /tmp/keys
+We start by making a directory to hold the files temporarily:
 
-# Backup GPG data
+```bash
+mkdir /tmp/keys
+```
+
+Next I start backing up my GPG data:
+
+```shell
+# Export the secret key that encrypts all the data in my 'password store'.
+# I encode the binary data in a ASCII armored file (.asc).
 gpg --export-secret-keys --armor <NAME> > /tmp/keys/<NAME>.asc
+
+# Once exported I add a password to the file so people are unable to open it.
+# This will produce a .asc.gpg file.
 gpg --symmetric /tmp/keys/<NAME>.asc
+
+# To prevent having to trust all the same keys as before I'll export the trust database.
 gpg --export-ownertrust > /tmp/keys/trustdb.txt 
+
+# Lastly, I move the files to my external flash drive (USB).
 mv /tmp/keys/<NAME>.asc.gpg /Volumes/.../<NAME>.asc.gpg
 mv /tmp/keys/trustdb.txt /Volumes/.../trustdb.txt
+```
 
-# Backup SSH data
+Next, I backup my SSH data:
+
+```shell
+# Recursively copy all files into a zip archive.
 zip -r /tmp/keys/sshbackup ~/.ssh/
-unzip -l /tmp/keys/sshbackup.zip
-gpg --symmetric /tmp/keys/sshbackup.zip
-mv /tmp/keys/sshbackup.zip.gpg /Volumes/.../sshbackup.zip.gpg
 
+# I list the contents of the zip archive to be sure I have everything in there.
+unzip -l /tmp/keys/sshbackup.zip
+
+# Once archived I add a password to the file so people are unable to open it.
+# This will produce a .zip.gpg file.
+gpg --symmetric /tmp/keys/sshbackup.zip
+
+# Lastly, I move the file to my external flash drive (USB).
+mv /tmp/keys/sshbackup.zip.gpg /Volumes/.../sshbackup.zip.gpg
+```
+
+Then I clear out the temporary directory:
+
+```shell
 rm -rf /tmp/keys
 ```
 
@@ -71,6 +99,8 @@ rm -rf /tmp/keys
   eval "$(ssh-agent -s)"
   ssh-add --apple-use-keychain ~/.ssh/github
   ```
+  > **NOTE:** I've since moved to https://www.warp.dev/ (see my [Dev Tools post](/posts/tools/))  
+  > so I no longer use Alacritty or Fig (steps 5 and 6 below).
 5. Install Alacritty.
   ```bash
   # https://github.com/alacritty/alacritty/releases
@@ -91,11 +121,15 @@ rm -rf /tmp/keys
   echo /opt/homebrew/bin/zsh | sudo tee -a /etc/shells
   chsh -s /opt/homebrew/bin/zsh
   ```
+  > **NOTE:** I've since moved to https://neovim.io/ (see my [Dev Tools post](/posts/tools/))  
+  > so I no longer use Vim-Plug (step 9 below).
 9. Configure Vim-Plug.
   ```bash
   sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   ```
+  > **NOTE:** I no longer use tmux (see my [Dev Tools post](/posts/tools/))  
+  > so a bunch of the following step 10 has changed.
 10. Setup dotfiles.
   > **NOTE**: Don't forget to execute 'prefix + I' in tmux to install plugins.
   ```bash
@@ -117,6 +151,8 @@ rm -rf /tmp/keys
   pass git remote add origin git@github.com:<private/repo>
   pass git pull
   ```
+  > **NOTE:** I no longer use Safari (see my [Dev Tools post](/posts/tools/))  
+  > so step 12 is redundant now.
 12. Safari extensions.
   ```txt
   AdBlock One
