@@ -157,6 +157,10 @@ I'd like to share the projects I've worked on over the years and the impact/valu
 
 ### 2023
 
+- **What**: Asked to lead the internal 'API Versioning' Working Guild.  
+  **Why**: Lack of direction meant we weren't making as much progress as the organisation would like.   
+  **Impact**: I researched, documented and presented a slide deck that architected a complete (green field) solution for an automated API versioning system that used satellite systems to run a scheduled release cycle with a pull model to acquire individual API application metadata, which inturn would publish a new external consumer API interface version at the appropriate time (yeah, that was a mouthful I know 😄).  
+
 - **What**: Moved into a new "Customer Developer Tools" team, responsible for managing, developing and maintaining/supporting the various tools Fastly customers use to interact with our platform.  
   **Why**: My responsibilities were growing beyond the boundaries of the Developer Relations team.  
   **Impact**: I was able to focus more of my time and energy on supporting these critical customer developer tools.  
