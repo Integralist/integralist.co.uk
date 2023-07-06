@@ -746,14 +746,15 @@ I don't profess mastery, but I'm adept with most of the below, and I have an apt
 
 > **NOTE**: With any static list, this will go stale. For example, I've not worked with JavaScript for _many_ years (I'm aware of the different client-side platform changes, react, virtual doms etc) and although I was a deep dive expert, that is no longer the case. Take this list with a 'pinch of salt'.
 
-**The _slightly_ more up-to-date, and ordered, list would be**:
+**The _slightly_ more up-to-date list would be**:
 
 - Go
 - Rust
 - Python
+- VCL
 - Shell Scripting (Bash)
 - GitHub Actions (CI/CD pipelines)
-- VCL
+- OpenAPI specifications
 
 **The longer and more stale version**:
 
