@@ -80,6 +80,17 @@ We had a strange bug materialize in the Fastly Terraform provider that was causi
 
 It was important to me that this customer (like all our customers) got their issues resolved as quickly as possible, with frequent updates to keep them in the loop and extra detailed explanations so they were better informed. It was a tough set of bugs to identify but I was pleased for the customer when they confirmed their services were all good again.
 
+> I want to call out this great thread in the fastly dev forum and give a huge bravo to @integralist for being there, being responsive, and guiding the customer to the solution. Overall the thread is `:chefkiss:` because... 
+>
+> * It makes for a great image optimization use case/support-driven tutorial.
+> * Is a display of how engaged our dev rel team is with the Community.
+> * Is a display of how smart and kind our users are.
+> * Uses the Fastly platform tools (like https://fiddle.fastly.dev/) to show our work!
+>
+> -- Director of Community
+
+This was a really nice (and unexpected) compliment. I like to go the extra mile to ensure customers feel seen/heard and that they're supported (even if it means I can't give them an immediate answer and need to refer to another team's expertise first).
+
 ## Summary
 
 I ideally want to get across two fundamental aspects about me:
