@@ -91,6 +91,12 @@ It was important to me that this customer (like all our customers) got their iss
 
 This was a really nice (and unexpected) compliment. I like to go the extra mile to ensure customers feel seen/heard and that they're supported (even if it means I can't give them an immediate answer and need to refer to another team's expertise first).
 
+> I just wanted to say that the care and attention you're putting into this work is making me enjoy my work, and I appreciate you. 
+>
+> -- Developer Relations Engineer at Fastly
+
+I was touched by this feedback as I had been battling a particularly difficult project and this came at a time where I was emotionally and mentally exhausted. Just the pickup I needed 💖
+
 ## Summary
 
 I ideally want to get across two fundamental aspects about me:
