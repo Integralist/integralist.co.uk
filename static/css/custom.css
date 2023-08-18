@@ -236,3 +236,47 @@ blockquote code {
 .night .profile {
   border-color: #CCCCCC;
 }
+
+/* /* Style for the external link */ */
+/* .external-link { */
+/*   position: relative; */
+/* } */
+/**/
+/* /* Style for the emoji icon */ */
+/* .external-link::after { */
+/*   content: "🔗"; /* Change to the emoji you want to use */ */
+/*   margin-left: 0.25em; /* Adjust spacing between the link text and emoji */ */
+/*   font-size: 1.2em; /* Adjust the emoji size as needed */ */
+/* } */
+/**/
+/* /* Style for the "open in new window" emoji */ */
+/* .external-link[target="_blank"]::after { */
+/*   content: "🌍"; /* Emoji for indicating a new window */ */
+/*   margin-left: 0.25em; /* Adjust spacing between the link text and emoji */ */
+/*   font-size: 1.2em; /* Adjust the emoji size as needed */ */
+/* } */
+
+/* Style for the external link */
+.external-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Style for the SVG icon */
+.external-link::after {
+  content: "";
+  display: inline-block;
+  width: 1em; /* Adjust the icon size as needed */
+  height: 1em;
+  margin-left: 0.25em; /* Adjust spacing between the link text and icon */
+  background-image: url('external-link.svg'); /* Replace with the path to your SVG icon */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+}
+
+/* Style for the "open in new window" SVG icon */
+.external-link[target="_blank"]::after {
+  background-image: url('external-link.svg'); /* Replace with the path to your new window SVG icon */
+}

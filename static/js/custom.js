@@ -44,3 +44,44 @@ function themeSwitch(e) {
 var menu = document.getElementById("navmenu");
 
 menu.addEventListener("click", themeSwitch);
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// The following script ensures all external links open in a new window.
+//
+///////////////////////////////////////////////////////////////////////////////
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Get all anchor elements on the page
+  var anchors = document.querySelectorAll('a[href]');
+
+  // Loop through each anchor element
+  anchors.forEach(function(anchor) {
+    // Get the value of the "href" attribute
+    var href = anchor.getAttribute('href');
+
+    // Check if the link is external
+    if (isExternalLink(href)) {
+      // Add target="_blank" to open the link in a new tab
+      anchor.setAttribute('target', '_blank');
+      anchor.setAttribute('class', 'external-link');
+    }
+  });
+});
+
+// Function to check if a link is external
+function isExternalLink(url) {
+  // Define the allowed domains (integralist.co.uk and localhost)
+  var allowedDomains = ['integralist.co.uk', 'localhost'];
+
+  // Check if the URL is valid
+  try {
+    var hostname = new URL(url).hostname;
+
+    // Check if the hostname is not in the allowed domains
+    return allowedDomains.indexOf(hostname) === -1;
+  } catch (error) {
+    // Handle invalid URLs here (e.g., relative paths)
+    return false;
+  }
+}
