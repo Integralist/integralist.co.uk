@@ -52,8 +52,8 @@ menu.addEventListener("click", themeSwitch);
 ///////////////////////////////////////////////////////////////////////////////
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Get all anchor elements on the page
-  var anchors = document.querySelectorAll('a[href]');
+  // Get all anchor elements on the page (excepts those that are listing blog posts, like on the home page)
+  var anchors = document.querySelectorAll('a[href]:not(.list-item)');
 
   // Loop through each anchor element
   anchors.forEach(function(anchor) {
