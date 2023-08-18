@@ -77,6 +77,8 @@ function isExternalLink(url) {
   // Check if the URL is valid
   try {
     var hostname = new URL(url).hostname;
+    console.log(url);
+    console.log(hostname);
 
     // Check if the hostname is not in the allowed domains
     return allowedDomains.indexOf(hostname) === -1;
