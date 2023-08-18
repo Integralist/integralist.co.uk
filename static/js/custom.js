@@ -53,6 +53,7 @@ menu.addEventListener("click", themeSwitch);
 
 document.addEventListener('DOMContentLoaded', function() {
   // Get all anchor elements on the page (excepts those that are listing blog posts, like on the home page)
+  // NOTE: The :not() doesn't look to work :-(
   var anchors = document.querySelectorAll('a[href]:not(.list-item)');
 
   // Loop through each anchor element
@@ -72,13 +73,11 @@ document.addEventListener('DOMContentLoaded', function() {
 // Function to check if a link is external
 function isExternalLink(url) {
   // Define the allowed domains (integralist.co.uk and localhost)
-  var allowedDomains = ['integralist.co.uk', 'localhost'];
+  var allowedDomains = ['www.integralist.co.uk', 'localhost'];
 
   // Check if the URL is valid
   try {
     var hostname = new URL(url).hostname;
-    console.log(url);
-    console.log(hostname);
 
     // Check if the hostname is not in the allowed domains
     return allowedDomains.indexOf(hostname) === -1;
