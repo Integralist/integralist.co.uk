@@ -123,8 +123,8 @@ When you wrap errors your message **should include**:
 
 - A pointer to where within your method the failure occurred.
 - Values that will be useful during debugging (e.g ids).
-- (sometimes) details about why the error occurred.
-- Other relevant info the caller doesnt know.
+- (sometimes) Details about why the error occurred.
+- Other relevant info the caller doesn't know.
 
 And your message **should NOT include**:
 
@@ -173,6 +173,8 @@ See also the article "[When life gives you lemons, write better error messages](
     <img src="../../images/error-message-good.png">
 </a>
 <p></p>
+
+Essentially, the error "message" shouldn't necessarily be formatted like "error doing x" or "failed to do x" (as I had been led to believe the former was the standard way of writing an error message). After reviewing "good" examples of Go code (e.g. at the time of writing [this was one such example](https://github.com/search?q=repo%3Agoogle%2Fexposure-notifications-server%20errors.New&type=code)) it seems there is no 'format' for the error message other than to be direct/specific.
 
 ## Quick guide to `panic`
 
