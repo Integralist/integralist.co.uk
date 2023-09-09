@@ -87,7 +87,7 @@ It was important to me that this customer (like all our customers) got their iss
 > * Is a display of how smart and kind our users are.
 > * Uses the Fastly platform tools (like https://fiddle.fastly.dev/) to show our work!
 >
-> -- Director of Community
+> -- Director of Community at Fastly
 
 This was a really nice (and unexpected) compliment. I like to go the extra mile to ensure customers feel seen/heard and that they're supported (even if it means I can't give them an immediate answer and need to refer to another team's expertise first).
 
@@ -96,6 +96,12 @@ This was a really nice (and unexpected) compliment. I like to go the extra mile 
 > -- Developer Relations Engineer at Fastly
 
 I was touched by this feedback as I had been battling a particularly difficult project and this came at a time where I was emotionally and mentally exhausted. Just the pickup I needed 💖
+
+> I want to thank @integralist for always answering any questions I (or others) have with so much detail and attention. Your answers usually long and full of thought and for that I am extremely grateful!
+>
+> -- Tier 3 Customer Support Engineer at Fastly
+
+This was posted in a Fastly #gratitude Slack channel and got lots of nice emoji reactions to go with it 💖
 
 ## Summary
 
