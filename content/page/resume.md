@@ -103,6 +103,16 @@ I was touched by this feedback as I had been battling a particularly difficult p
 
 This was posted in a Fastly #gratitude Slack channel and got lots of nice emoji reactions to go with it 💖
 
+> Thank you so much Mark for going above and beyond. I appreciate the details you provided.
+>
+> <...later the next day...>
+>
+> Wow, this is amazing work Mark! Thank you so much for this thorough analysis.
+>
+> -- Senior Customer Support Engineer at Fastly
+
+A customer had reported an issue that we initially were not able to replicate. But after some thorough debugging (through _multiple_ internal systems) I was able to identify, explain, and document the source of the problem, then provide a resolution for the customer.
+
 ## Summary
 
 I ideally want to get across two fundamental aspects about me:
