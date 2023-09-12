@@ -253,7 +253,7 @@ All the following primitive/basic types in Go are passed as a value (i.e. copied
 - string
 - struct
 
-Whereas maps and slices are passed by pointer. 
+Whereas maps, slices, and channels are all passed by pointer. 
 
 A pointer is something that _points to_ a memory address. Go doesn't pass a pointer, instead it will create a _copy_ of the pointer and pass that. This still means the receiver can deference the copy of the pointer its given, to get at the underlying memory address.
 
