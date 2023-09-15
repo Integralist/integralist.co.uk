@@ -113,6 +113,12 @@ This was posted in a Fastly #gratitude Slack channel and got lots of nice emoji 
 
 A customer had reported an issue that we initially were not able to replicate. But after some thorough debugging (through _multiple_ internal systems) I was able to identify, explain, and document the source of the problem, then provide a resolution for the customer.
 
+> Man, it’s nice working with you
+>
+> -- Security Architect at Fastly
+
+This certainly came out of nowhere 🙂. He needed a bunch of information related to some security work I was doing (I was [implementing SSO Single Sign-On using an OAuth PKCE flow for Fastly's CLI tool](https://github.com/fastly/cli/pull/1010)) so I gave it to him whilst also pointing out some oddities about the platform that I felt should be addressed.
+
 ## Summary
 
 I ideally want to get across two fundamental aspects about me:
