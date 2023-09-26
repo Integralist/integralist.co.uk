@@ -121,10 +121,11 @@ This certainly came out of nowhere 🙂. He needed a bunch of information relate
 
 ## Summary
 
-I ideally want to get across two fundamental aspects about me:
+I ideally want to get across three fundamental aspects about me:
 
-1. I'm passionate about programming and the openness of the web
-2. I love getting the chance to learn and experience new technology
+1. I care. I care about the people I work with, the organisation I work for, and our customers.
+2. I'm passionate about programming and the openness of the web
+3. I love getting the chance to learn and experience new technology
 
 ## Connect
 
