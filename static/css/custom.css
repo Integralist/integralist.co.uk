@@ -280,3 +280,31 @@ blockquote code {
 .external-link[target="_blank"]::after {
   background-image: url('external-link.svg'); /* Replace with the path to your new window SVG icon */
 }
+
+/* Control page fades:
+*
+* chrome://flags#view-transition
+* chrome://flags#view-transition-on-navigation
+*
+* https://daverupert.com/2023/05/getting-started-view-transitions/
+*
+* */
+
+/* Old stuff going out */
+::view-transition-old(hero) {
+  animation: fade 1s linear forwards;
+}
+
+/* New stuff coming in */
+::view-transition-new(hero) {
+  animation: fade 1s linear reverse;
+}
+
+@keyframes fade {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
