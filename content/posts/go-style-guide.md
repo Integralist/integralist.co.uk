@@ -30,6 +30,7 @@ This is my own personal style guide for Go.
 
 The following reference materials are my 'go to' whenever I'm unsure of something (they're mostly official resources).
 
+- [Project structure](https://go.dev/doc/modules/layout)
 - [Effective Go](https://golang.org/doc/effective_go)
 - [Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments)
 - [What's in a name?](https://talks.golang.org/2014/names.slide)
@@ -65,7 +66,7 @@ The following is a summary of how to name things in Go, gleaned from either my o
   - Values: `Err<T>` (e.g. `var ErrFoo = errors.New("bar: baz")`).
 - Interfaces:
   - When an interface includes multiple methods, choose a name that accurately describes its purpose.
-  - Interfaces that specify just one method are usually just that function name with 'er' appended to it.
+  - Interfaces defining one method are named the same as the method with 'er' appended.
     - Sometimes the result isn't correct English, that's OK.
     - Sometimes we use English to make it nicer.
 - Return values on exported functions should only be named for documentation purposes.
