@@ -32,92 +32,136 @@ Hello, my name is Mark and I work @[Fastly](https://www.fastly.com/) as a Staff 
 
 ## Working Together
 
-The following quotes are from people I've worked with. All of which was unsolicited and unexpected feedback, which is nice! I never ask anyone to "please write something nice about me". All of these things were genuine and I really appreciate anyone who takes the time to say nice things about me as a colleague.
+The following quotes are from people I've worked with. Everything quoted below was unsolicited and unexpected feedback, which is nice! I've never asked anyone to "please write something nice about me". **All of these wonderful comments were genuine and truly appreciated.**
 
-> "As smart as developers are, they are not always good at explaining things in a way that makes human sense. not you. you are an exception. you are A+"  
->
-> -- Product Support at BuzzFeed.
+<details>
+ <summary>Product Support at BuzzFeed</summary>
 
-I ❤️ this feedback. It came from someone I was mentoring. She was interested in getting a better understanding of how to design and architect software systems, and also how to know what types of questions she should ask when investigating technical incidents.
+  > "As smart as developers are, they are not always good at explaining things in a way that makes human sense. not you. you are an exception. you are A+"  
+  >
+  > -- Product Support at BuzzFeed.
+  
+  I ❤️ this feedback. It came from someone I was mentoring. She was interested in getting a better understanding of how to design and architect software systems, and also how to know what types of questions she should ask when investigating technical incidents.
+  
+  Her feedback also hints at something bigger which I strive for: to help others to do their best work and to push/promote the good work other engineers do (including those from either a diverse background or minority).
+</details>
 
-Her feedback also hints at something bigger which I strive for: to help others to do their best work and to push/promote the good work other engineers do (including those from either a diverse background or minority).
+<details>
+ <summary>Engineering Manager at Fastly</summary>
 
-> "Hi Mark, your name keeps coming up (in a good way 😉) and I wanted to put a face to a name. Folks on the team like working with you. You're responsive and provide good and timely feedback."
->
-> -- Engineering Manager at Fastly.
+  > "Hi Mark, your name keeps coming up (in a good way 😉) and I wanted to put a face to a name. Folks on the team like working with you. You're responsive and provide good and timely feedback."
+  >
+  > -- Engineering Manager at Fastly.
+  
+  I always aim to build meaningful relationships with the people I work with across an organisation. In doing so I hope to ensure that we are able to work as a cohesive unit, and provide great value to our users. But ultimately I like to be helpful (it makes me feel good), so this was a nice bit of unexpected feedback ❤️
+</details>
 
-I always aim to build meaningful relationships with the people I work with across an organisation. In doing so I hope to ensure that we are able to work as a cohesive unit, and provide great value to our users. But ultimately I like to be helpful (it makes me feel good), so this was a nice bit of unexpected feedback ❤️
+<details>
+ <summary>Senior Sales Engineer at Fastly</summary>
 
-> "Thanks, I'm amazed that you always deliver top notch answers."
->
-> -- Senior Sales Engineer at Fastly.
-
-Funnily enough I actually _didn't_ have the answer they needed. I wanted to redirect this person to where I thought would be the best place for them to get a solution (so it included as much historical context, and as many signposts, as I could provide). 
+  > "Thanks, I'm amazed that you always deliver top notch answers."
+  >
+  > -- Senior Sales Engineer at Fastly.
+  
+  Funnily enough I actually _didn't_ have the answer they needed. I wanted to redirect this person to where I thought would be the best place for them to get a solution (so it included as much historical context, and as many signposts, as I could provide). 
 
 A kind smile, a compassionate ear, and a bit of effort goes a long way in life.
+</details>
 
-> "Hey Man… you are a true powerhouse in fixing issues and handling customers… i’m truly impressed by you! Thanks and keep it up!"
->
-> -- Senior Sales Engineer at Fastly.
+<details>
+ <summary>Senior Sales Engineer at Fastly</summary>
 
-I work hard to ensure customers get the support they need. This feedback was the result of another example of my work ethic.
+  > "Hey Man… you are a true powerhouse in fixing issues and handling customers… i’m truly impressed by you! Thanks and keep it up!"
+  >
+  > -- Senior Sales Engineer at Fastly.
+  
+  I work hard to ensure customers get the support they need. This feedback was the result of another example of my work ethic.
+</details>
 
-> Hey Mark, thanks again for releasing the 4.0.0 version, last week! The customer already provided positive feedback. It's a pleasure to work in such a smooth way! 🙇
->
-> -- Senior Solutions Architect at Fastly.
+<details>
+ <summary>Senior Solutions Architect at Fastly</summary>
 
-In this case my colleague was unfamiliar with writing Go and he was trying to contribute to a couple of different code bases that I was the core maintainer of, and for which I was helping guide him through and supporting/educating him on the various technical aspects of. It was a small change but one I really appreciated him taking the time to dig in and help implement.
+  > Hey Mark, thanks again for releasing the 4.0.0 version, last week! The customer already provided positive feedback. It's a pleasure to work in such a smooth way! 🙇
+  >
+  > -- Senior Solutions Architect at Fastly.
+  
+  In this case my colleague was unfamiliar with writing Go and he was trying to contribute to a couple of different code bases that I was the core maintainer of, and for which I was helping guide him through and supporting/educating him on the various technical aspects of. It was a small change but one I really appreciated him taking the time to dig in and help implement.
+</details>
 
-> Thank you for your output and all the information you've provided. We really appreciate it. We have applied your latest release on all our production environments and it's looking great and there are no unexpected diffs in our Terraform plans anymore. Again, thank you for your time and your help to understand and resolve this issue as your insights were really helpful.
->
-> -- Customer
->
-> Hey Mark, just wanted to say thanks a lot for helping out with the Terraform issue, really appreciated! 🙂
->
-> -- CSE (Customer Support Engineer) at Fastly
+<details>
+ <summary>Customer + CSE (Customer Support Engineer) at Fastly</summary>
 
-We had a strange bug materialize in the Fastly Terraform provider that was causing some issues for customers. I investigated on behalf of CSE as I'm the core SME (Subject Matter Expert) for Terraform and I not only resolved the specific issue but managed to identify a couple of other unnoticed bugs elsewhere in the system which I worked cross-team to help get resolved.
+  > Thank you for your output and all the information you've provided. We really appreciate it. We have applied your latest release on all our production environments and it's looking great and there are no unexpected diffs in our Terraform plans anymore. Again, thank you for your time and your help to understand and resolve this issue as your insights were really helpful.
+  >
+  > -- Customer
+  >
+  > Hey Mark, just wanted to say thanks a lot for helping out with the Terraform issue, really appreciated! 🙂
+  >
+  > -- CSE (Customer Support Engineer) at Fastly
+  
+  We had a strange bug materialize in the Fastly Terraform provider that was causing some issues for customers. I investigated on behalf of CSE as I'm the core SME (Subject Matter Expert) for Terraform and I not only resolved the specific issue but managed to identify a couple of other unnoticed bugs elsewhere in the system which I worked cross-team to help get resolved.
+  
+  It was important to me that this customer (like all our customers) got their issues resolved as quickly as possible, with frequent updates to keep them in the loop and extra detailed explanations so they were better informed. It was a tough set of bugs to identify but I was pleased for the customer when they confirmed their services were all good again.
+</details>
 
-It was important to me that this customer (like all our customers) got their issues resolved as quickly as possible, with frequent updates to keep them in the loop and extra detailed explanations so they were better informed. It was a tough set of bugs to identify but I was pleased for the customer when they confirmed their services were all good again.
+<details>
+ <summary>Director of Community at Fastly</summary>
 
-> I want to call out this great thread in the fastly dev forum and give a huge bravo to @integralist for being there, being responsive, and guiding the customer to the solution. Overall the thread is `:chefkiss:` because... 
->
-> * It makes for a great image optimization use case/support-driven tutorial.
-> * Is a display of how engaged our dev rel team is with the Community.
-> * Is a display of how smart and kind our users are.
-> * Uses the Fastly platform tools (like https://fiddle.fastly.dev/) to show our work!
->
-> -- Director of Community at Fastly
+  > I want to call out this great thread in the fastly dev forum and give a huge bravo to @integralist for being there, being responsive, and guiding the customer to the solution. Overall the thread is `:chefkiss:` because... 
+  >
+  > * It makes for a great image optimization use case/support-driven tutorial.
+  > * Is a display of how engaged our dev rel team is with the Community.
+  > * Is a display of how smart and kind our users are.
+  > * Uses the Fastly platform tools (like https://fiddle.fastly.dev/) to show our work!
+  >
+  > -- Director of Community at Fastly
+  
+  This was a really nice (and unexpected) compliment. I like to go the extra mile to ensure customers feel seen/heard and that they're supported (even if it means I can't give them an immediate answer and need to refer to another team's expertise first).
+</details>
 
-This was a really nice (and unexpected) compliment. I like to go the extra mile to ensure customers feel seen/heard and that they're supported (even if it means I can't give them an immediate answer and need to refer to another team's expertise first).
+<details>
+ <summary>Developer Relations Engineer at Fastly</summary>
 
-> I just wanted to say that the care and attention you're putting into this work is making me enjoy my work, and I appreciate you. 
->
-> -- Developer Relations Engineer at Fastly
+  > I just wanted to say that the care and attention you're putting into this work is making me enjoy my work, and I appreciate you. 
+  >
+  > -- Developer Relations Engineer at Fastly
+  
+  I was touched by this feedback as I had been battling a particularly difficult project and this came at a time where I was emotionally and mentally exhausted. Just the pickup I needed 💖
+</details>
 
-I was touched by this feedback as I had been battling a particularly difficult project and this came at a time where I was emotionally and mentally exhausted. Just the pickup I needed 💖
+<details>
+ <summary>Tier 3 Customer Support Engineer at Fastly</summary>
 
-> I want to thank @integralist for always answering any questions I (or others) have with so much detail and attention. Your answers usually long and full of thought and for that I am extremely grateful!
->
-> -- Tier 3 Customer Support Engineer at Fastly
+  > I want to thank @integralist for always answering any questions I (or others) have with so much detail and attention. Your answers usually long and full of thought and for that I am extremely grateful!
+  >
+  > -- Tier 3 Customer Support Engineer at Fastly
+  
+  This was posted in a Fastly #gratitude Slack channel and got lots of nice emoji reactions to go with it 💖
+</details>
 
-This was posted in a Fastly #gratitude Slack channel and got lots of nice emoji reactions to go with it 💖
+<details>
+ <summary>Senior Customer Support Engineer at Fastly</summary>
 
-> Thank you so much Mark for going above and beyond. I appreciate the details you provided.
->
-> <...later the next day...>
->
-> Wow, this is amazing work Mark! Thank you so much for this thorough analysis.
->
-> -- Senior Customer Support Engineer at Fastly
+  > Thank you so much Mark for going above and beyond. I appreciate the details you provided.
+  >
+  > <...later the next day...>
+  >
+  > Wow, this is amazing work Mark! Thank you so much for this thorough analysis.
+  >
+  > -- Senior Customer Support Engineer at Fastly
+  
+  A customer had reported an issue that we initially were not able to replicate. But after some thorough debugging (through _multiple_ internal systems) I was able to identify, explain, and document the source of the problem, then provide a resolution for the customer.
+</details>
 
-A customer had reported an issue that we initially were not able to replicate. But after some thorough debugging (through _multiple_ internal systems) I was able to identify, explain, and document the source of the problem, then provide a resolution for the customer.
+<details>
+ <summary>Security Architect at Fastly</summary>
 
-> Man, it’s nice working with you
->
-> -- Security Architect at Fastly
-
-This certainly came out of nowhere 🙂. He needed a bunch of information related to some security work I was doing (I was [implementing SSO Single Sign-On using an OAuth PKCE flow for Fastly's CLI tool](https://github.com/fastly/cli/pull/1010)) so I gave it to him whilst also pointing out some oddities about the platform that I felt should be addressed.
+  > Man, it’s nice working with you
+  >
+  > -- Security Architect at Fastly
+  
+  This certainly came out of nowhere 🙂. He needed a bunch of information related to some security work I was doing (I was [implementing SSO Single Sign-On using an OAuth PKCE flow for Fastly's CLI tool](https://github.com/fastly/cli/pull/1010)) so I gave it to him whilst also pointing out some oddities about the platform that I felt should be addressed.
+</details>
 
 ## Summary
 

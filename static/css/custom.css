@@ -309,6 +309,12 @@ blockquote code {
   }
 }
 
+details {
+  border-top: 1px solid #ffcd00;
+  padding: 1em 1em 0 1em;
+  margin-bottom: 1em;
+}
+
 details summary {
   cursor: pointer;
 }
