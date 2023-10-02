@@ -308,3 +308,11 @@ blockquote code {
     opacity: 0;
   }
 }
+
+details summary {
+  cursor: pointer;
+}
+
+summary {
+  margin-bottom: 1em;
+}
