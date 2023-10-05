@@ -4,8 +4,17 @@ description: Staff Software Engineer @Fastly
 comments: false
 ---
 
-- [Hello!](#hello)
-- [Working Together](#working-together)
+## Hello!
+
+Hello, my name is Mark and I work @[Fastly](https://www.fastly.com/) as a Staff Software Engineer.
+
+<img src="../images/profile-2022.jpg" class="profile">
+<center><small><b>NOTE:</b> Circa: 2021 - So the kids are a bit older now 🙂</small></center>
+
+### TOC
+
+- [Previously](#previously)
+- [Working Together / Testimonials](#working-together--testimonials)
 - [Summary](#summary)
 - [Connect](#connect)
 - [Brief History](#brief-history)
@@ -17,22 +26,16 @@ comments: false
 - [Open-Source](#open-source)
 - [Tools, Languages and Tech](#tools-languages-and-tech)
 
-<img src="../images/profile-2022.jpg" class="profile">
-<center><small><b>NOTE:</b> The kids are older now 🙂</small></center>
-
-## Hello!
-
-Hello, my name is Mark and I work @[Fastly](https://www.fastly.com/) as a Staff Software Engineer.
-
 ### Previously
 
 - Staff Software Engineer @[BuzzFeed](http://www.buzzfeed.com/)
 - Principal Engineer @[BBCNews](http://www.bbcnews.co.uk/news)
 - Principal Engineer @[StormCreative](http://www.stormcreative.co.uk/)
 
-## Working Together
 
-The following quotes are from people I've worked with. Everything quoted below was unsolicited and unexpected feedback, which is nice! I've never asked anyone to "please write something nice about me". **All of these wonderful comments were genuine and truly appreciated.**
+## Working Together / Testimonials
+
+The following quotes (all very kind) are from people I've worked with. Everything quoted below was unsolicited and unexpected feedback, which is just so lovely! I've never asked anyone to "please write something nice about me". **All of these wonderful comments were genuine and truly appreciated.**
 
 <details>
  <summary>Product Support at BuzzFeed</summary>
@@ -161,6 +164,30 @@ A kind smile, a compassionate ear, and a bit of effort goes a long way in life.
   > -- Security Architect at Fastly
   
   This certainly came out of nowhere 🙂. He needed a bunch of information related to some security work I was doing (I was [implementing SSO Single Sign-On using an OAuth PKCE flow for Fastly's CLI tool](https://github.com/fastly/cli/pull/1010)) so I gave it to him whilst also pointing out some oddities about the platform that I felt should be addressed.
+</details>
+
+<details>
+ <summary>Senior Principal Sales Engineer / TLS Manager / Sr. Principal Engineer, Core Systems at Fastly</summary>
+
+  > I wanted to share feedback from `<NAME>` of `<LARGE_CUSTOMER_IM_NOT_ALLOWED_TO_NAME>` to give you positive feedback on our Terraform provider vs `<COMPETITOR>`'s: 
+  > 
+  > "team were quite shocked at the difference between `<COMPETITOR>`'s Terraform approach and Fastly....Fastly was a lot simpler, and just as powerful. Express my gratitude to the team for making the Terraform provider so awesome!"
+  >
+  > -- Senior Principal Sales Engineer at Fastly.
+  > 
+  > It’s all @Integralist 😅
+  > 
+  > -- TLS Manager at Fastly
+  > 
+  > THIS 🔼
+  > 
+  > -- Sr. Principal Engineer, Core Systems
+  >
+  > Piling on here with `<ANOTHER_LARGE_CUSTOMER>` giving kudos to the TF provider. 🙂
+  >
+  > -- Cloud Engineering Manager
+  
+  I'm very grateful for this feedback, both from the customer and from my colleagues as I had been working really hard on improving the Terraform provider and up until that point hadn't felt that any one had noticed or cared, and so this helped boost my confidence in what I had been doing. 💛
 </details>
 
 ## Summary
