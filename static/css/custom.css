@@ -267,10 +267,10 @@ blockquote code {
 .external-link::after {
   content: "";
   display: inline-block;
-  width: 1em; /* Adjust the icon size as needed */
+  width: .7em; /* Adjust the icon size as needed */
   height: 1em;
   margin-left: 0.25em; /* Adjust spacing between the link text and icon */
-  background-image: url('external-link.svg'); /* Replace with the path to your SVG icon */
+  background-image: url('external-link-dark.svg');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center bottom;
@@ -278,7 +278,7 @@ blockquote code {
 
 /* Style for the "open in new window" SVG icon */
 .external-link[target="_blank"]::after {
-  background-image: url('external-link.svg'); /* Replace with the path to your new window SVG icon */
+  background-image: url('external-link-dark.svg');
 }
 
 /* Control page fades:
