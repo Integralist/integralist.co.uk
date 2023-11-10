@@ -190,6 +190,16 @@ A kind smile, a compassionate ear, and a bit of effort goes a long way in life.
   I'm very grateful for this feedback, both from the customer and from my colleagues as I had been working really hard on improving the Terraform provider and up until that point hadn't felt that any one had noticed or cared, and so this helped boost my confidence in what I had been doing. 💛
 </details>
 
+<details>
+ <summary>Cloud Engineer at Fastly</summary>
+
+  > This level of investigation deserves a medal @integralist. Thank you so much for your time and deduction!
+  >
+  > -- Cloud Engineer at Fastly.
+  
+  A question was raised, which wasn't relevant to the channel it was brought up in but I didn't want this person to go away without the appropriate support. So as well as redirecting them to the correct channel and explaining why I was redirecting them, I then proceeded to explain the steps/processes I follow when trying to figure out the thing they were asking about. This led to a long thread of details and links to code and documentation. As much as I could provide as a helpful send off.
+</details>
+
 ## Summary
 
 I ideally want to get across three fundamental aspects about me:
