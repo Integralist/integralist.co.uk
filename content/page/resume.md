@@ -295,6 +295,14 @@ I'd like to share the projects I've worked on over the years and the impact/valu
  <summary>Details</summary>
 
   ### 2023
+
+  - **What**: Implemented production ready Single-Sign On (SSO) implementation in [Fastly CLI](https://github.com/fastly/cli) using [PKCE](https://pragmaticwebsecurity.com/articles/oauthoidc/from-implicit-to-pkce.html) (Proof Key for Code Exchange) OAuth flow (this was a follow-up to an earlier POC which was completely rewritten along with a project wide refactor to better support the integration).  
+    **Why**: Part of a larger initiative to upgrade our authentication and authorization model, so that we can offer more features to customers.  
+    **Impact**: Customers will get more flexible and advanced sign-in features.  
+
+  - **What**: Implemented Wasm binary metadata annotations (i.e. data collection).  
+    **Why**: Fastly and their customers have a mutual goal of attaining better visibility into what services have been deployed in production.     
+    **Impact**: Customers gain insights to dimensionality such as by industry vertical and by scale (e.g. what Rust packages are Compute customers in the commerce industry with over 10k requests/sec using?). They also benefit from improved security vulnerability detection (e.g. Fastly is able to recommend package version upgrades).  
   
   - **What**: Asked to lead the internal 'API Versioning' Working Guild.  
     **Why**: Lack of direction meant we weren't making as much progress as the organisation would like.   
