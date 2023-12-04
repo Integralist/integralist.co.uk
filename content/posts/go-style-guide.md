@@ -194,6 +194,50 @@ Essentially, the error "message" shouldn't necessarily be formatted like "error 
 
 ## Quick guide to slice 'gotchas'
 
+The first gotcha to be aware of is that in Go assigning a new value to a parameter with `=` won't affect the argument in any way. So consider the following simple code that tries to append a value to a slice...
+
+```go
+package main
+
+import "fmt"
+
+func addTwo(s []int) {
+	s = append(s, 2)
+}
+
+func main() {
+	mySlice := []int{1}
+	addTwo(mySlice)
+	fmt.Println(mySlice)
+}
+```
+
+This will print `[1]`, which is not what we want.
+
+Now if you already understand that a slice is really a pointer to an internal struct type, then this might make this even more confusing because you would be of the understanding that you can modify a argument if it's passed as a pointer. 
+
+But in this case, although a slice really is just a pointer to a struct, you have to remember that is an implementation detail and so you still have to explicitly define the parameter as a pointer type and pass it as such...
+
+```go
+package main
+
+import "fmt"
+
+func addTwo(s *[]int) {
+	*s = append(*s, 2)
+}
+
+func main() {
+	mySlice := []int{1}
+	addTwo(&mySlice)
+	fmt.Println(mySlice)
+}
+```
+
+The above version of the code will now correctly print `[1 2]`.
+
+---
+
 When taking a slice of a slice you might stumble into behaviour which appears confusing at first. The `cap`, `len` and `data` fields might change, but the underlying array is not re-allocated, nor copied over and so modifications to the slice will modify the original backing array.
 
 > **NOTE**: There are more examples/explanations in https://blogtitle.github.io/go-slices-gotchas/
@@ -239,13 +283,15 @@ The 'fix', like shown earlier, is `b := a[:2:2]` which sets the capacity of the 
 
 ## Quick guide to pass-by-value vs pass-by-pointer
 
-> Reference articles: [goinbigdata.com](https://goinbigdata.com/golang-pass-by-pointer-vs-pass-by-value/) and [dave.cheney.net](https://dave.cheney.net/2017/04/29/there-is-no-pass-by-reference-in-go).
+> Reference articles: [goinbigdata.com](https://goinbigdata.com/golang-pass-by-pointer-vs-pass-by-value/) and [dave.cheney.net](https://dave.cheney.net/2017/04/29/there-is-no-pass-by-reference-in-go) and [alexedwards.net](https://www.alexedwards.net/blog/demystifying-function-parameters-in-go).
 
-You'll commonly hear people use the phrase 'pass-by-reference'. What they're describing is: "you're not receiving a _copy_ of the thing being passed, but in fact you're getting _direct access_ to the thing". 
+You'll commonly hear people use the phrase 'pass-by-reference'. The behaviour this phrase describes is: "You're not receiving a _copy_ of the thing being passed, you're getting _direct access_ to it". 
 
 In Go this behaviour is called 'pass-by-pointer'. Whereas the phrase 'pass by reference' is actually a very _specific_ type of behaviour (not supported in Go), and it's not the same thing as 'pass-by-pointer'.
 
-All the following primitive/basic types in Go are passed as a value (i.e. copied):
+To understand pass-by-pointer we first thing to understand how arguments are passed to a function.
+
+All the following primitive/basic types in Go are passed as a _value_ (i.e. copied):
 
 - array
 - boolean
@@ -256,9 +302,21 @@ All the following primitive/basic types in Go are passed as a value (i.e. copied
 
 Whereas maps, slices, and channels are all passed by pointer. 
 
-A pointer is something that _points to_ a memory address. Go doesn't pass a pointer, instead it will create a _copy_ of the pointer and pass that. This still means the receiver can deference the copy of the pointer its given, to get at the underlying memory address.
+Now, here's where I need to be more specific (and _accurate_): 
 
-Go does not have pass-by-reference semantics because Go does not have 'reference variables', which is something you'd find in C++. 
+> In Go _every_ function operates on a _copy_ of the arguments passed into the function. No exceptions, that is what happens for every type. 
+
+With the primitive/basic types, their _value_ is _copied_.
+
+So why is it that maps, slices and channels are passed by pointer?
+
+Well, maps, slices and channels _are_ all pointers (you might not have realised that!). When you create an instance of one of these types, the Go language actually instantiates an _internal_ struct (e.g. a [`runtime.hmap`](https://github.com/golang/go/blob/883f062fc0a097bf561030ad453fd3e300896975/src/runtime/map.go#L117), [`runtime.slice`](https://github.com/golang/go/blob/883f062fc0a097bf561030ad453fd3e300896975/src/runtime/slice.go#L15) or [`runtime.hchan`](https://github.com/golang/go/blob/883f062fc0a097bf561030ad453fd3e300896975/src/runtime/chan.go#L33C6-L33C11)) and returns a pointer to them.
+
+A pointer is something that _points to_ a memory address. 
+
+As we've already said, Go will _always_ pass a _copy_ of an argument so Go doesn't pass a pointer. Just like the primitive/basic types, it will create a _copy_ of the pointer and pass that. This still means the receiver can deference the copy of the pointer its given, to get at the underlying memory address (because the underlying address is still the same, even if the pointer is a copy).
+
+Now going back to a phrase that people commonly use when talking about Go: pass-by-reference. Go does not have pass-by-reference semantics because Go does not have 'reference variables', which is something you'd find in C++. 
 
 In C++ you can define:
 
@@ -275,7 +333,7 @@ In C++ this would mean updating `b` would _affect_ `a`. Go doesn't have this beh
 
 In Go, every variable is stored in its own memory space. Meaning, if we had `b := &a` and updated `b` then we wouldn't cause any change to `a`.
 
-In Go, imagine we define a function that accepts a pointer:
+In Go, imagine we define a function with a parameter `p` which is of a pointer type:
 
 ```go
 func changeName(p *Person) {
