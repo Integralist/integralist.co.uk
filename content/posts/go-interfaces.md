@@ -341,7 +341,7 @@ Now whether you continue to define a new interface is up to you. There are actua
 
 If your code doesn't require interfaces, then don't use them.
 
-No point making the design of your code more complicated for no reason. Consider the following code which returns an interface
+No point making the design of your code more complicated for no reason. Consider the following code which returns an interface.
 
 > **NOTE**: The following example is modified from a much older post by [William Kennedy](https://www.ardanlabs.com/blog/2016/10/avoid-interface-pollution.html).
 
@@ -375,6 +375,8 @@ func main() {
 ```
 
 The use of an interface here is a bit pointless. We should instead just return a pointer to an exported version of the server struct because the user is gaining no benefits from an interface being returned by `NewServer` (see [Don't Return Concrete Types](#don-t-return-concrete-types) for a possible use case for returning interfaces, but the above example is not one of them).
+
+⚠️ There is also an important performance consideration to using interfaces that is often neglected: method calls on an interface type will be using [dynamic dispatch](https://en.wikipedia.org/wiki/Dynamic_dispatch) not [static dispatch](https://en.wikipedia.org/wiki/Static_dispatch) and in a code hot path that can be a problem because the memory associated with the call can escape to the heap (stack memory is much more efficient). Consider `r` had an interface type `io.Reader`. A call to `r.Read(b)` would result in both the value of `r` and the backing array of the `b` byte slice to be allocated onto the heap.
 
 ## Embedding Interfaces
 
