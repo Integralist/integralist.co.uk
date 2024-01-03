@@ -296,10 +296,13 @@ I'd like to share the projects I've worked on over the years and the impact/valu
 
   ### 2024
 
+  - **What**: Implemented a solution to enable public repo forks to have access to GitHub Actions secrets.  
+    **Why**: Fork PRs do not have access to GitHub Action secrets which makes validating the correctness of community contributed code much harder.  
+    **Impact**: An authorised user (i.e. a contributor with WRITE access to the repo) can now comment `/ok-to-test sha=<SHA>` and this will trigger the CI to run with the correct secret(s) access.  
+
   - **What**: Built an interactive CLI prompt to generate OpenAPI schemas.  
     **Why**: Two reasons: the first was that developers were unfamiliar with OpenAPI and unsure how to write the schemas (the learning curve wasn't steep but substantial for busy devs), and second: we use our schemas for auto-generating API clients and so it was easy for developers to design schemas that would break the code-generation process or produce invalid client code.  
     **Impact**: Consistency in our OpenAPI schema design, which helped to improve the generated client code interface (so a much better developer experience) as well as reduced errors in the API clients overall.  
-
 
   ### 2023
 
