@@ -200,6 +200,16 @@ A kind smile, a compassionate ear, and a bit of effort goes a long way in life.
   A question was raised, which wasn't relevant to the channel it was brought up in but I didn't want this person to go away without the appropriate support. So as well as redirecting them to the correct channel and explaining why I was redirecting them, I then proceeded to explain the steps/processes I follow when trying to figure out the thing they were asking about. This led to a long thread of details and links to code and documentation. As much as I could provide as a helpful send off.
 </details>
 
+<details>
+ <summary>Staff Product Manager at Fastly</summary>
+
+  > Your code review is itself a work of art! Is there a hall of fame for code reviews.
+  >
+  > -- Staff Product Manager at Fastly.
+  
+  I take a lot of care in my PR reviews 😊.
+</details>
+
 ## Summary
 
 I ideally want to get across three fundamental aspects about me:
@@ -295,6 +305,10 @@ I'd like to share the projects I've worked on over the years and the impact/valu
  <summary>Details</summary>
 
   ### 2024
+
+  - **What**: I moved into a new team working exclusively on [Domainr](https://domainr.com/).  
+    **Why**: It was felt my skill set would be ideal to help not only take over the project as the lead developer but to begin the planning, architecture and development on new features and products based around Domainr and its subject area.  
+    **Impact**: Too early to say. But one month in and I'm very excited about the future.  
 
   - **What**: Implemented a solution to enable public repo forks to have access to GitHub Actions secrets.  
     **Why**: Fork PRs do not have access to GitHub Action secrets which makes validating the correctness of community contributed code much harder.  
