@@ -46,7 +46,7 @@ The following reference materials are my 'go to' whenever I'm unsure of somethin
 
 The following is a summary of how to name things in Go, gleaned from either my own experiences over the years or from some of the above reference materials.
 
-- Choose package names that lend meaning to the names they export.
+- Choose package names that lend meaning to the names they export (see also [Google's Go style guide](https://google.github.io/styleguide/go/) for [examples](https://google.github.io/styleguide/go/decisions.html#package-names)).
 - Where types are descriptive, name should be short (1 or 2 char name).
 - If longer name required, consider refactoring into smaller functions.
 - Commonly used names:
