@@ -306,6 +306,10 @@ I'd like to share the projects I've worked on over the years and the impact/valu
 
   ### 2024
 
+  - **What**: I implemented a complete CI/CD pipeline using GitHub Actions, along with dynamic service creation for multiple environments using Terraform Cloud.  
+    **Why**: We wanted to move towards Iac (Infrastructure as Code) and automated releases.  
+    **Impact**: We're able to easily spin up environment specific instances of our service(s) and all the benefits of [Continuous Deployment](https://en.wikipedia.org/wiki/Continuous_deployment).  
+
   - **What**: I moved into a new team working exclusively on [Domainr](https://domainr.com/).  
     **Why**: It was felt my skill set would be ideal to help not only take over the project as the lead developer but to begin the planning, architecture and development on new features and products based around Domainr and its subject area.  
     **Impact**: Too early to say. But one month in and I'm very excited about the future.  
