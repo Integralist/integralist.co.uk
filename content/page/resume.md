@@ -306,6 +306,10 @@ I'd like to share the projects I've worked on over the years and the impact/valu
 
   ### 2024
 
+  - **What**: I created a public tool for validating Fastly's Compute cache semantics ([code](https://gist.github.com/Integralist/87118a8f79d47aaf640c21149bf9d687)).  
+    **Why**: Customers were having trouble understanding how HTTP cache semantics worked with the Fastly Compute platform (which at the time of writing doesn't have a HTTP cache API like Fastly's VCL product offering).  
+    **Impact**: Customers are able to validate and understand how caching works with Compute. They can define a set of HTTP calls and see how they are cached, and can assert against the cacheability of the calls.  
+
   - **What**: I implemented a complete CI/CD pipeline using GitHub Actions, along with dynamic service creation for multiple environments using Terraform Cloud.  
     **Why**: We wanted to move towards Iac (Infrastructure as Code) and automated releases.  
     **Impact**: We're able to easily spin up environment specific instances of our service(s) and all the benefits of [Continuous Deployment](https://en.wikipedia.org/wiki/Continuous_deployment).  
