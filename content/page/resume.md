@@ -825,6 +825,9 @@ The following links are to some of my more 'popular' articles. My main focus whe
 <details>
  <summary>Details</summary>
 
+  - [Continuous Integration and Deployment to multiple environments with Terraform Cloud and GitHub Actions](/posts/ci-cd/) (2024)
+  - [The Power of OpenAPI: Simplifying API Design and documentation](/posts/open-api/) (2023)
+  - [Beginner's guide to creating a Terraform Provider](/posts/terraform-provider/) (2022)
   - [Go Style Guide](/posts/go-style-guide/) (2022)
   - [GitHub Actions](/posts/github-actions/) (2021)
   - [Infrequent (and advanced) Vim topics, tips and tricks](/posts/vim/) (2021)
