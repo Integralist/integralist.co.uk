@@ -317,7 +317,7 @@ jobs:
         # trying to upload the TF configuration.
 
       - name: Upload Configuration
-        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
+        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.2.0
         id: plan-upload
         with:
           workspace: ${{ env.WORKSPACE_NAME }}
@@ -325,7 +325,7 @@ jobs:
           speculative: true
 
       - name: Create Plan Run
-        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
+        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.2.0
         id: plan-run
         with:
           workspace: ${{ env.WORKSPACE_NAME }}
@@ -333,7 +333,7 @@ jobs:
           plan_only: true
 
       - name: Get Plan Output
-        uses: hashicorp/tfc-workflows-github/actions/plan-output@v1.0.0
+        uses: hashicorp/tfc-workflows-github/actions/plan-output@v1.2.0
         id: plan-output
         with:
           plan: ${{ fromJSON(steps.plan-run.outputs.payload).data.relationships.plan.data.id }}
@@ -893,14 +893,14 @@ runs:
   using: composite
   steps:
     - name: Upload Configuration
-      uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
+      uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.2.0
       id: apply-upload
       with:
         workspace: ${{ inputs.workspace }}
         directory: ${{ env.CONFIG_DIRECTORY }}
 
     - name: Create Apply Run
-      uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
+      uses: hashicorp/tfc-workflows-github/actions/create-run@v1.2.0
       id: apply-run
       with:
         workspace: ${{ inputs.workspace }}
@@ -915,7 +915,7 @@ runs:
         # is_destroy: ${{ inputs.destroy == true || inputs.destroy == 'true' }}  # IMPORTANT: This will DESTROY the dev infrastructure.
 
     - name: Apply
-      uses: hashicorp/tfc-workflows-github/actions/apply-run@v1.0.0
+      uses: hashicorp/tfc-workflows-github/actions/apply-run@v1.2.0
       if: fromJSON(steps.apply-run.outputs.payload).data.attributes.actions.IsConfirmable
       id: apply
       with:
