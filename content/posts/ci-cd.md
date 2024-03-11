@@ -190,7 +190,7 @@ env:
 jobs:
   create-workspace:
     name: "Create Terraform Cloud Workspace"
-    if: ${{ github.event.action != 'closed' }} # don't run this when the PR is closed
+    if: ${{ github.event.action != 'closed' && github.actor != 'dependabot[bot]' }} # don't run this when the PR is closed
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -270,7 +270,7 @@ jobs:
       contents: read
       pull-requests: write
     needs: create-workspace
-    if: ${{ github.event.action != 'closed' && success() }} # don't run this when the PR is closed (and also only if the create-workspace was successful)
+    if: ${{ github.event.action != 'closed' && github.actor != 'dependabot[bot]' && success() }} # don't run this when the PR is closed (and also only if the create-workspace was successful)
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -380,7 +380,7 @@ jobs:
     permissions:
       contents: read  # for Terraform Actions
       statuses: write # for Status Action (myrotvorets/set-commit-status-action)
-    if: ${{ github.event.action != 'closed' && success() }} # don't run this when the PR is closed (and also only if the terraform-plan was successful)
+    if: ${{ github.event.action != 'closed' && github.actor != 'dependabot[bot]' && success() }} # don't run this when the PR is closed (and also only if the terraform-plan was successful)
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -427,7 +427,7 @@ jobs:
   terraform-destroy:
     name: "Cleanup Dev Environment"
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
+    if: ${{ github.event.pull_request.merged == true && github.actor != 'dependabot[bot]' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -575,6 +575,17 @@ value itself to be a string, but doing `export FOO=bar` doesn't assign `"bar"`
 to the variable, it only assigns `bar` without the quotes and that causes
 Terraform to treat the value like an undefined variable. So it's very important
 to wrap the string in single quotes.
+
+The next thing of interest is...
+
+```yaml
+if: ${{ github.event.action != 'closed' && github.actor != 'dependabot[bot]' }} # don't run this when the PR is closed
+```
+
+Specifically, the bit I want to call out is the check for `dependabot[bot]`.
+This is because when this automated-bot opens a PR on your repo, it won't have
+access to your secrets and so it won't be able to make TFC API calls (and do
+other things) so you might as well skip the CI/CD pipeline workflow.
 
 The next difficulty I ran into was figuring out how best to avoid API rate
 limits from the Terraform Cloud API. This particular set of workflow files would
@@ -834,9 +845,14 @@ runs:
   steps:
     - name: Set TF_VAR_branch
       shell: bash
-      run: echo "TF_VAR_branch=\"-$(echo ${{ github.head_ref }} | tr '[:upper:]' '[:lower:]' | tr '/' '-')\"" >> "${GITHUB_ENV}"
+      run: echo "TF_VAR_branch=\"-$(echo ${{ github.head_ref }} | tr '[:upper:]' '[:lower:]' | tr '/' '-' | tr '.' '-' | tr '_' '-')\"" >> "${GITHUB_ENV}"
       # NOTE: We only set the branch variable for dev (stg/prd will use an empty string).
 ```
+
+> **NOTE:** I had to update this action twice. The first was to replace dot
+> characters with a hyphen as TFC complained. The second was to replace
+> underscores with a hyphen as Fastly complained (i.e. an underscore is not a
+> valid character in a domain).
 
 Here is `tfc-dev-workspace-name`:
 
