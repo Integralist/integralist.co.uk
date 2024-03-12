@@ -459,7 +459,7 @@ jobs:
         # IMPORTANT: Deleting a service with a resource-link is a two-step apply.
         # We can't pass a -target to the Terraform GH Action as a prerequisite step.
         # So this means we'll need to clear any `resource_link` blocks from the config.
-        # Then, after we've applied the change, we'll need to clear ALL the config and run another apply.
+        # Then, after we've applied the change, we'll need to run a TF destroy.
 
       - name: Remove resource_link blocks from TF config
         run: |
@@ -483,14 +483,12 @@ jobs:
 
         # NOTE: Destroy config once Resource Links have been removed.
 
-      - name: Remove all config for 'destroy' apply
-        run: echo "" > ${{ env.CONFIG_DIRECTORY }}/main.tf
-
       - name: Terraform Apply
         if: success()
         uses: ./.github/actions/tf-apply
         with:
           workspace: ${{ env.WORKSPACE_NAME }}
+          destroy: true
 
         # NOTE: Once all Fastly resources are deleted, we delete the TFC workspace.
 
