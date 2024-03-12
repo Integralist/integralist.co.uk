@@ -460,7 +460,6 @@ jobs:
         # We can't pass a -target to the Terraform GH Action as a prerequisite step.
         # So this means we'll need to clear any `resource_link` blocks from the config.
         # Then, after we've applied the change, we'll need to clear ALL the config and run another apply.
-        # Integralist validated this via: https://github.com/Integralist/terraform-github-actions-testing
 
       - name: Remove resource_link blocks from TF config
         run: |
@@ -627,24 +626,15 @@ created, then at worst we'll get an error back from TFC when trying to upload
 the TF configuration to it.
 
 The last issue worth noting is related to tearing-down the infrastructure when
-the PR is merged. There was a combined issue with the HashiCorp Terraform GitHub
-Action, and an issue with the Fastly Terraform provider (or more specifically a
-Fastly API issue) where the removal of a Fastly 'Config Store' (which was needed
-by the application code) has to be done as a two-part terraform apply.
+the PR is merged. There was an issue with the Fastly Terraform provider (or more
+specifically a Fastly API issue) where the removal of a Fastly 'Config Store'
+(which was needed by the application code) has to be done as a two-part
+terraform apply.
 
 i.e. you have to remove the `resource_link` block from the
-`fastly_service_compute` resource and run `terraform apply`, and then delete all
-the rest of the config, and then again run `terraform apply`.
-
-To achieve this in an automated fashion meant having to write a shell script
-that strips any `resource_link` blocks from the TF config, do the apply, then I
-would delete all the TF config and run `terraform apply` a second time.
-
-The reason I had to delete all the config rather than do `terraform apply
--destroy` is because that's not a working feature in the Terraform action. We
-did investigate whether we should install the Terraform CLI in CI and run it,
-but we quickly realised it would require changes in other HashiCorp tools to
-allow us to upload configuration to TFC (where the state needs to be managed).
+`fastly_service_compute` resource and run `terraform apply`, and then you can
+trigger a `terraform apply -destroy` via the HashiCorp GitHub Action using the
+`is_destroy` field.
 
 ### Stage Config
 
@@ -882,9 +872,9 @@ inputs:
   workspace:
     description: "The TFC Workspace"
     required: true
-  # destroy:
-  #   description: "Should this be a terraform destroy run"
-  #   default: "false"
+  destroy:
+    description: "When true, this uses terraform to DESTROY the managed infrastructure"
+    default: "false"
 outputs:
   run_id:
     description: "The ID of the created run"
@@ -905,14 +895,7 @@ runs:
       with:
         workspace: ${{ inputs.workspace }}
         configuration_version: ${{ steps.apply-upload.outputs.configuration_version_id }}
-        # NOTE: is_destroy does literally NOTHING!
-        # I've been through the tfci CLI code and correlated it to the API.
-        # The API suggests that this action should plan _and_ run.
-        # Even when you set `plan_only: false` (which is by default) it only plans.
-        # And in reality it doesn't even plan the destroy!
-        # So you still need the `apply-run` action below.
-        #
-        # is_destroy: ${{ inputs.destroy == true || inputs.destroy == 'true' }}  # IMPORTANT: This will DESTROY the dev infrastructure.
+        is_destroy: ${{ inputs.destroy == true || inputs.destroy == 'true' }}  # IMPORTANT: This will DESTROY the dev infrastructure.
 
     - name: Apply
       uses: hashicorp/tfc-workflows-github/actions/apply-run@v1.2.0
