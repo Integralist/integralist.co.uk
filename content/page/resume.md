@@ -210,6 +210,20 @@ A kind smile, a compassionate ear, and a bit of effort goes a long way in life.
   I take a lot of care in my PR reviews 😊.
 </details>
 
+<details>
+ <summary>Director of Developer Experience at Fastly</summary>
+
+  > Look… that was f***ing impressive. 👏  
+  > Thank you so much!
+  >
+  > -- Director of Developer Experience at Fastly.
+  
+  A customer was having issues with one of our tools when using Windows. Fastly
+  pulled out all the stops to get me the access I needed to investigate and
+  debug the issue properly and I was able to get a fix in place in a few hours,
+  helping the customer realise what an asset Fastly is to their workflow.
+</details>
+
 ## Summary
 
 I ideally want to get across three fundamental aspects about me:
