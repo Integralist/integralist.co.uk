@@ -609,6 +609,61 @@ To explain: the `terraform-plan` job (and all jobs that follow it) requires a
 TFC Workspace. The name of the workspace is expected to match `WORKSPACE_NAME`.
 The creation of the workspace happens in the `create-workspace` job.
 
+Part of the `create-workspace` is making API requests, and to make that easier I
+pass a JSON file in to be used as the data input rather than manually
+configuring it in a single `curl` call. But first I have to modify the JSON data
+to include the values required (as I don't want them hardcoded into the JSON):
+
+```yaml
+  - name: Modify Workspace JSON Payload
+    if: steps.cache-workspace-id.outputs.cache-hit != 'true'
+    run: |
+      payload=./infrastructure/fastly/compute/api-gateway/tfc-api/payloads/workspace.json
+      jq '.data.attributes.name = "${{ env.WORKSPACE_NAME }}"' "$payload" > temp.json && mv temp.json "$payload"
+
+  - name: Modify Workspace Variable JSON Payload
+    if: steps.cache-workspace-id.outputs.cache-hit != 'true'
+    run: |
+      payload=./infrastructure/fastly/compute/api-gateway/tfc-api/payloads/workspace-variables.json
+      jq '.data.attributes.value = "${{ secrets.FASTLY_API_KEY }}"' "$payload" > temp.json && mv temp.json "$payload"
+```
+
+Here's the payload JSON for both API calls:
+
+```json
+{
+  "data": {
+    "type": "workspaces",
+    "attributes": {
+      "name": "api-gateway-dev-"
+    },
+    "relationships": {
+      "project": {
+        "data": {
+          "type": "projects",
+          "id": "prj-<REDACTED>"
+        }
+      }
+    }
+  }
+}
+```
+
+```json
+{
+  "data": {
+    "type": "vars",
+    "attributes": {
+      "key": "FASTLY_API_KEY",
+      "value": "",
+      "description": "API key used by the Fastly Terraform Provider",
+      "category": "env",
+      "sensitive": true
+    }
+  }
+}
+```
+
 But there are scenarios where the workspace might not exist! This can happen
 when there is an error in the `create-workspace` job. For example, when calling
 the TFC API. Although the API might error, we don't want to mark the job as not
