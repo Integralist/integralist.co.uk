@@ -332,7 +332,7 @@ Compute service/application, and it reaches the `r.Send()` line, then that will
 respond immediately with the cached content and not actually make a call to the
 backend.
 
-But what what about the `max-age`? Well, that's for the browser. The user's web
+But what about the `max-age`? Well, that's for the browser. The user's web
 browser will only see `Cache-Control: max-age=0` as `s-maxage` is for proxies
 and CDNs and so Fastly will strip it from the response header.
 
@@ -367,6 +367,15 @@ again, but this time for the user's web browser by overriding the backend's
 resp.Header.Set("Cache-Control", "public, max-age=60")
 ```
 
+> ⚠️  **WARNING:** There's a caveat to the readthrough cache that you'll want to
+> be careful with. If your backend sends `Cache-Control: private`, then
+> understandably the readthrough cache will not cache the response because your
+> backend has defined that behaviour. In this case, setting `r.CacheOptions.TTL`
+> will have NO EFFECT. It's only usable for responses that Fastly considers
+> _cacheable_ and `private` is not cacheable. You would need your backend to
+> change the `Cache-Control` value to be something cacheable if you wanted
+> `r.CacheOptions.TTL` to have any kind of effect.
+
 ## Deploying your Compute service
 
 To wrap up this post, let's get our Compute service/application deployed:
@@ -383,7 +392,7 @@ default values for everything:
 fastly compute publish --non-interactive
 ```
 
-For the first time deploying you may find it take a bit of time because Fastly
+For the first time deploying you may find it takes a bit of time because Fastly
 is uploading your package across its global fleet of servers. For me I've
 noticed the first deploy takes around ~30s but after that, any further changes I
 make to my application is almost immediately uploaded/replicated 🎉
@@ -430,7 +439,7 @@ Good luck, and I hope you enjoy programming at the edge with Fastly 🙂
 [9]: https://www.fastly.com/documentation/reference/compute/fastly-toml/
 [10]: https://github.com/fastly/viceroy
 [11]: https://github.com/fastly/compute-starter-kit-go-default
-[12]: ./posts/http-caching/
+[12]: /posts/http-caching/
 [13]: https://www.fastly.com/documentation/guides/concepts/edge-state/cache/
 [14]: https://www.fastly.com/documentation/guides/concepts/edge-state/cache/#readthrough-cache
 [15]: https://http-me.glitch.me
