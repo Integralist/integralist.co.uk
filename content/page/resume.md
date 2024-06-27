@@ -224,6 +224,21 @@ A kind smile, a compassionate ear, and a bit of effort goes a long way in life.
   helping the customer realise what an asset Fastly is to their workflow.
 </details>
 
+<details>
+ <summary>Principal Engineer in Edge Networking at Fastly</summary>
+
+  > You demonstrate, year in and year out, an excellent capacity to learn new
+  > systems and languages, pick up the responsibility of managing and being
+  > responsible for parts of our stack and technology and it looks like you work
+  > smoothly and effortlessly with our colleagues both in person / zoom and in
+  > slack / Jira / pull requests.  Thank you also for your regular, consistent
+  > contributions and easy-going working demeanor.  This is the sort of
+  > collegial professionalism and competence that makes Fastly a great place to
+  > work.
+  >
+  > -- Principal Engineer in Edge Networking at Fastly.
+</details>
+
 ## Summary
 
 I ideally want to get across three fundamental aspects about me:
