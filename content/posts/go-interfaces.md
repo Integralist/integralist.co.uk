@@ -34,17 +34,27 @@ While treading what might seem like familiar ground to some readers, this is a f
 
 ## Interfaces in Go
 
-An 'interface' is a contract which describes _behaviour_ (not _data_), and in Go it looks something like the following:
+An 'interface' is a contract which describes _behaviour_ (not _data_).
+
+[Andrei Boar](https://medium.com/@andreiboar/7-common-interface-mistakes-in-go-1d3f8e58be60) said...
+
+> When defining interfaces in Go, you don’t define what something _is_ but what it _provides_ — behavior, not things! That’s why there’s no File interface in Go, but a Reader and a Writer: these are behaviors, and File is a thing implementing Reader and Writer.
+
+...which is important because this has a direct effect on the naming of an
+interface. You name interfaces with an _-er_ at the end to indicate it's a verb
+(i.e. this thing _does_ something).
+
+In Go an interface is defined like so:
 
 ```go
-type Foo interface {
+type Fooer interface {
     Bar(s string) (string, error)
 }
 ```
 
-> **NOTE**: If a field name is capitalised, then it is considered public, otherwise it's considered private.
+> **NOTE**: In Go, a capitalised name (method, field etc) is public, lowercase is private.
 
-If an object in your code implements a `Bar` function, with the exact same signature (e.g. accepts a string and returns either a string or an error), then that object is said to _implement_ the `Foo` interface.
+If an object in your code implements a `Bar` function, with the exact same signature (e.g. accepts a string and returns either a string or an error), then that object is said to _implement_ the `Fooer` interface.
 
 An example of this would be:
 
@@ -56,7 +66,7 @@ func (l *thing) Bar(s string) (string, error) {
 }
 ```
 
-Now you can define a function that will accept that object, as long as it fulfils the `Foo` interface, like so:
+Now you can define a function that will accept that object, as long as it fulfils the `Fooer` interface, like so:
 
 ```go
 func doStuffWith(thing Foo)
@@ -73,7 +83,7 @@ Because of this flexibility in how interfaces are 'applied', it also means that 
 For example, imagine we have the following two interfaces:
 
 ```go
-type Foo interface {
+type Fooer interface {
   Bar(s string) (string, error)
 }
 
@@ -175,9 +185,9 @@ If your function accepts a concrete type then you've limited the consumers abili
 
 Consider a function only accepting the concrete type `*os.File` instead of the `io.Writer` interface. Now try swapping out the `os.File` implementation in a test environment, you'll have a hard time vs mocking this using a struct that has the relevant interface methods.
 
-Unless there is a good reason to, you should return concrete types instead of interfaces. This is because an interface has a tendendency to add an unnecessary layer of indirection for consumers of your package (although we'll discover a few valid scenarios where returning an interface is more appropriate).
+Unless there is a good reason to, you should return concrete types instead of interfaces. This is because an interface has a tendency to add an unnecessary layer of indirection for consumers of your package (although we'll discover a few valid scenarios where returning an interface is more appropriate).
 
-Below is an example of what I mean by _indirection_. We have a function `foo` that returns the interface `fooer`, and yet we want to access a field on the underlying type of the interface (which we can see is a `S` struct type):
+Below is an example of what I mean by _indirection_. We have a function `foo` that returns the interface `Fooer`, and yet we want to access a field on the underlying type of the interface (which we can see is a `S` struct type):
 
 ```go
 package main
@@ -243,7 +253,7 @@ Another example might be that your function needs to return a different type dep
 The following code example highlights the principle:
 
 ```go
-type ItemInterface interface {
+type Itemer interface {
 	GetItemValue() string
 }
 
@@ -269,7 +279,7 @@ func (ti TextItem) GetItemValue(){
 	return ti.Text
 }
 
-func FindItem(ID int) ItemInterface {
+func FindItem(ID int) Itemer {
   // returns either a URLItem or a TextItem
 }
 ```
@@ -311,7 +321,7 @@ To demonstrate this, consider the following example...
 
 ```go
 // this is a duplicate of fmt.Stringer interface
-type stringit interface {
+type Stringer interface {
 	String() string
 }
 
@@ -322,14 +332,14 @@ func (t testthing) String() string {
 }
 ```
 
-The `stringit` interface I've defined is actually a duplication of the existing standard library interface `fmt.Stringer`.
+The `Stringer` interface I've defined is actually a duplication of the existing standard library interface `fmt.Stringer`.
 
 So using Guru via my Vim editor I can see (when I have my cursor over the `testthing` struct and I call Guru) that this concrete type implements not only `stringit` but a few other interfaces...
 
 ```
 /main.go:33.6-33.14:                                                 struct type testthing
 /usr/local/Cellar/go/1.10.3/libexec/src/fmt/print.go:62.6-62.13:     implements fmt.Stringer
-/main.go:29.6-29.13:                                                 implements stringit
+/main.go:29.6-29.13:                                                 implements Stringer
 /usr/local/Cellar/go/1.10.3/libexec/src/runtime/error.go:66.6-66.13: implements runtime.stringer
 ```
 
@@ -391,14 +401,14 @@ Well, to avoid that situation try taking advantage of Go's ability to embed an i
 By embedding the interface into your struct, you automatically _promote_ all of the methods to the embedding struct. Now, you can pass your mock struct to the function and the compiler will be happy. You now only need to implement the methods you need to assert the test scenario you're trying to validate.
 
 ```go
-type Example interface {
+type Exampler interface {
 	Foo() error
 	Bar() error
 	Baz() error
 	// ...lots more...
 }
 
-func example(e Example) error {
+func example(e Exampler) error {
   err := e.Foo()
   if err != nil {
     return err
@@ -423,7 +433,7 @@ func TestExample(t *testing.T) {
 }
 ```
 
-But be aware that because you're not providing a concrete implementation of the interface when instantiating your struct, it means that the value of that embedded field will be `nil`. This means that if the function you pass your struct into calls any of the interface methods _not_ implemented by your mock struct, then there will be a runtime 'nil pointer dereference' error.
+But be aware that because you're not providing a concrete implementation of the interface when instantiating your struct, it means that the value of that embedded field will be `nil`. This means that if the function you pass your struct into calls any of the interface methods _not_ implemented by your mock struct, then there will be a runtime 'nil pointer dereference' error (but I argue that's a good thing because in a test environment you want to know if your code is calling something for real).
 
 ## Upgrading Interfaces
 
@@ -438,12 +448,12 @@ package main
 
 import "fmt"
 
-type foo interface {
+type Fooer interface {
 	bar() string
 	baz() string // new method added, which breaks the code
 }
 
-func doThing(f foo) {
+func doThing(f Fooer) {
 	fmt.Println("bar:", f.bar())
 }
 
@@ -464,7 +474,7 @@ func main() {
 }
 ```
 
-In the above code we can see we have added a new method `baz` to our `foo` interface which means the concrete implementation `pt` is no longer satisfying the `foo` interface as it has no `baz` method.
+In the above code we can see we have added a new method `baz` to our `Fooer` interface which means the concrete implementation `pt` is no longer satisfying the `Fooer` interface as it has no `baz` method.
 
 > **NOTE**: I appreciate the example is a bit silly because we could just update the code to support the new interface, but we have to imagine a world where your interface is provided as part of a public package that is consumed by lots of users.
 
@@ -479,19 +489,19 @@ package main
 
 import "fmt"
 
-type foo interface {
+type Fooer interface {
 	bar() string
 }
 
-type newfoo interface {
+type Newfooer interface {
 	baz() string
 }
 
-// We want a `foo` interface type, but if that valid type can also do the new
+// We want a `Fooer` interface type, but if that valid type can also do the new
 // behaviour, then we'll execute that behaviour...
 
-func doThing(f foo) {
-	if nf, ok := f.(newfoo); ok {
+func doThing(f Fooer) {
+	if nf, ok := f.(Newfooer); ok {
 		fmt.Println("baz:", nf.baz())
 	}
 	fmt.Println("bar:", f.bar())
@@ -542,7 +552,7 @@ baz: np !!! 3, ny !!! 4
 bar: p=3, y=4
 ```
 
-So we can see we called `doThing` and passed a concrete type that satisfied the `foo` interface and so that function called the `bar` method it was expecting to exist. Next we called `doThing` again but passed a different concrete type that not only satisfied the `foo` interface, but the `newfoo` interface and within `doThing` we type assert that the object passed in is not only a `foo` but a `newfoo`.
+So we can see we called `doThing` and passed a concrete type that satisfied the `Fooer` interface and so that function called the `bar` method it was expecting to exist. Next we called `doThing` again but passed a different concrete type that not only satisfied the `Fooer` interface, but the `Newfooer` interface and within `doThing` we type assert that the object passed in is not only a `Fooer` but a `Newfooer`.
 
 What would this look like in practice then? Well, if the Go standard library wanted to add a new method to the existing (and very popular) `net/http` package `ResponseWriter` interface: they would create a new interface with just the new behaviour defined, then they would document its existence and in that documentation they would explain that if your HTTP handler required the new behaviour, then you should type assert for it.
 
@@ -676,7 +686,7 @@ import (
 	"net/http"
 )
 
-type dataSource interface {
+type Getter interface {
 	Get(url string) (*http.Response, error)
 }
 
@@ -692,10 +702,10 @@ func (l *httpbin) Get(url string) (*http.Response, error) {
 	return resp, nil
 }
 
-func process(n int, ds dataSource) (string, error) {
+func process(n int, g Getter) (string, error) {
 	url := fmt.Sprintf("http:/httpbin.org/links/%d/0", n)
 
-	resp, err := ds.Get(url)
+	resp, err := g.Get(url)
 	if err != nil {
 		fmt.Printf("data source get error: %s\n", err)
 		return "", err
@@ -727,12 +737,12 @@ func main() {
 Let's start by looking at the interface we've defined:
 
 ```go
-type dataSource interface {
+type Getter interface {
 	Get(url string) (*http.Response, error)
 }
 ```
 
-We've not been overly explicit when naming this interface `dataSource`. Its name is quite generic on purpose so as not to imply an underlying implementation bias.
+We've not been overly explicit when naming this interface `Getter`. Its name is quite generic on purpose so as not to imply an underlying implementation bias.
 
 Unfortunately the defined `Get` method is still too tightly coupled to a specific implementation (i.e. it specifies `http.Response` as a return type).
 
@@ -860,7 +870,7 @@ import (
 	"net/http"
 )
 
-type dataSource interface {
+type Getter interface {
 	Get(url string) ([]byte, error)
 }
 
@@ -884,10 +894,10 @@ func (l *httpbin) Get(url string) ([]byte, error) {
 	return body, nil
 }
 
-func process(n int, ds dataSource) (string, error) {
+func process(n int, g Getter) (string, error) {
 	url := fmt.Sprintf("http://httpbin.org/links/%d/0", n)
 
-	resp, err := ds.Get(url)
+	resp, err := g.Get(url)
 	if err != nil {
 		fmt.Printf("data source get error: %s\n", err)
 		return "", err
@@ -906,7 +916,7 @@ func main() {
 }
 ```
 
-All we've really done here is move more of the logic related to HTTP up into the `httpbin.Get` implementation of the `dataSource` interface. We've also changed the response type from `(*http.Response, error)` to `([]byte, error)` to account for these movements.
+All we've really done here is move more of the logic related to HTTP up into the `httpbin.Get` implementation of the `Getter` interface. We've also changed the response type from `(*http.Response, error)` to `([]byte, error)` to account for these movements.
 
 Now the `process` function has even _less_ responsibility as far as acquiring data is concerned. This also means our test suite benefits by having a much simpler implementation:
 
