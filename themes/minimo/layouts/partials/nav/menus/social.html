@@ -2,7 +2,7 @@
 <div class='social'>
   <nav aria-label='{{ i18n "socialMenu" }}'>
     <ul class='social-menu'>
-    {{- range $platform, $username := .Site.Author.social -}}
+      {{- range $platform, $username := site.Taxonomies.author.social -}}
       {{- if $username -}}
       <li>
         <a href='{{ print ( index $.Site.Data.social.base $platform ) $username }}' target='_blank' rel='noopener'>
@@ -13,7 +13,7 @@
         </a>
       </li>
       {{- end -}}
-    {{- end -}}
+      {{- end -}}
     </ul>
   </nav>
 </div>

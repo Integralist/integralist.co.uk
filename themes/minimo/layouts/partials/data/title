@@ -1,6 +1,6 @@
 {{- $title := .Title -}}
 {{- $siteTitle := .Site.Title -}}
-{{- $authorName := .Site.Author.name -}}
+{{- $authorName := site.Taxonomies.author.name -}}
 {{- $sep := ( .Site.Params.SEO.titleSeparator | default "•" ) -}}
 {{- if .IsHome -}}
   {{ $siteTitle }}

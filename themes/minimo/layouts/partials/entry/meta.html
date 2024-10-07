@@ -7,7 +7,7 @@
       {{- .Date.Format ( or .Site.Params.dateFormat "2006, Jan 02" ) -}}
     </time>
   </span>
-  {{ with .Site.Author.name }}
+  {{ with site.Taxonomies.author.name }}
   <span class='byline'>
     {{ partial "svg/icons" "author" }}
     <span class='screen-reader'> {{ i18n "by" }} </span>

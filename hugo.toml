@@ -6,7 +6,8 @@ title = "integralist"
 theme = "minimo"
 
 googleAnalytics = "UA-33159515-1"
-paginate = 10
+[pagination]
+pagerSize = 10
 
 preserveTaxonomyNames = true
 
@@ -32,8 +33,10 @@ tag = "tags"
 
 [author]
 name = "Mark McDonnell"
+email = ""
 
 [author.social]
+facebook = ""
 github = "integralist"
 instagram = "integralist"
 twitter = "integralist"
