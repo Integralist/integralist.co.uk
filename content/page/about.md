@@ -4,7 +4,7 @@ description: Compassionate Listener. Polyglot. Author. Husband. Father. He/Him.
 comments: false
 ---
 
-<!-- <img src="../images/profile-2022.jpg" class="profile"> -->
+<!-- <img src="../images/profile-2024.jpg" class="profile"> -->
 
 ### Hi there 👋
 

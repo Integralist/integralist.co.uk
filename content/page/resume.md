@@ -8,8 +8,8 @@ comments: false
 
 Hello, my name is Mark and I work @[Fastly](https://www.fastly.com/) as a Staff Software Engineer.
 
-<img src="../images/profile-2022.jpg" class="profile">
-<center><small><b>NOTE:</b> Circa: 2021 - So the kids are a bit older now 🙂</small></center>
+<img src="../images/profile-2024.jpg" class="profile">
+<center><small><b>NOTE:</b> Yes. That is my wife and kids. But I've no idea who the big blue guy is 😉</small></center>
 
 ### TOC
 
