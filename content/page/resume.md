@@ -335,9 +335,34 @@ I'd like to share the projects I've worked on over the years and the impact/valu
 
   ### 2024
 
+  - **What**: I wrote a document "Terraform validation for API modifications"
+  that proposed a solution for how we can validate API changes against Terraform
+  to prevent breaking changes making their way into production.  
+	**Why**: There was an incident where a Fastly API introduced a breaking
+  change that affected an application I was on-call for. It was a confusing bug
+	and took a lot of time to investigate and identify and I was concerned for
+  our customers and how they might be affected (especially considering how
+  difficult Terraform can be to work with in general).  
+    **Impact**: This proposal document kick-started a new initiative to ensure
+  Terraform is treated as a first-class citizen within the Fastly ecosystem.
+
+  - **What**: Redesigned internal boilerplate project used for create new
+  Go services at Fastly.  
+    **Why**: As part of my work within a new team (although I was the sole
+  engineer for quite a while) I needed to get a new API application onboarded
+  with an internal platform that exposes the API to the public internet. The
+  recommendation was to use an internal boilerplate project, which turned out to
+  be quite stale, un-maintained, and in need of a redesign.  
+    **Impact**: Quite a few internal teams were onboarding onto the same
+  platform around that time and were able to benefit from not only the improved
+  tooling I built, the improved resiliency code I wrote, but also the in-depth
+  documentation I wrote to provide context and understanding around how the
+  platform itself functioned. Ultimately making it much easier for developers to
+  onboard their Go applications.
+
   - **What**: I created a public tool for validating Fastly's Compute cache semantics ([code](https://gist.github.com/Integralist/87118a8f79d47aaf640c21149bf9d687)).  
     **Why**: Customers were having trouble understanding how HTTP cache semantics worked with the Fastly Compute platform (which at the time of writing doesn't have a HTTP cache API like Fastly's VCL product offering).  
-    **Impact**: Customers are able to validate and understand how caching works with Compute. They can define a set of HTTP calls and see how they are cached, and can assert against the cacheability of the calls.  
+    **Impact**: Customers are able to validate and understand how caching works with Compute. They can define a set of HTTP calls and see how they are cached, and can assert against the cacheability of the calls. This work also helped to identify a bug in the underlying HTTP caching implementation.  
 
   - **What**: I implemented a complete CI/CD pipeline using GitHub Actions, along with dynamic service creation for multiple environments using Terraform Cloud.  
     **Why**: We wanted to move towards Iac (Infrastructure as Code) and automated releases.  
