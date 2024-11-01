@@ -19,7 +19,7 @@ In this comprehensive guide, we'll explore why OpenAPI is so important, how to w
 ## Table of Contents
 
 1. [Why OpenAPI Matters](#why-openapi-matters)
-1. [Summary](#summary)
+1. [Summary for those short on time](#summary-for-those-short-on-time)
 1. [Getting Started with OpenAPI](#getting-started-with-openapi)
    - 3.1 [Basic Structure](#basic-structure)
 1. [Defining Endpoints](#defining-endpoints)
@@ -49,9 +49,8 @@ OpenAPI, formerly known as Swagger, is an open-standard format for describing AP
 - **Testing and Validation**: The OpenAPI specification can be used to validate requests and responses, ensuring that your API adheres to the defined contract.
 - **Interactive Documentation**: Tools like [Swagger UI](https://swagger.io/tools/swagger-ui/) and [ReDoc](https://github.com/Redocly/redoc) allow you to create interactive documentation that lets users explore and test your API in real-time.
 
-## Summary
+## Summary for those short on time
 
-**For those short on time:**\
 OpenAPI is straightforward to write once you understand the high-level structure.
 
 Below is an OpenAPI document to get you going as a basic example\
@@ -143,9 +142,8 @@ separate file).
 So in the above example we can see the `paths:` config references a few
 different components:
 
-- `#/components/parameters/team_id`: this describes the API path's `team_id` input param
-requirements (you'll find this in the section `components/parameters`).
-  - This parameter object itself references `#/components/schemas/team_id` for describing the
+- `#/components/parameters/team_id`: this describes the API path's `team_id` input parameter.
+  - This parameter object also references a component (`#/components/schemas/team_id`) for describing the
   team_id.
 - `#/components/schemas/list_members_response`: this describes the schema for
 how the response body should look for this API endpoint.
@@ -153,7 +151,7 @@ how the response body should look for this API endpoint.
   what the schema looks like in practice.
 
 This is the basic _structure_ of an OpenAPI document. Yes, they can become more
-complex as the API grows, but at it's foundation you will always find this
+complex as the API grows, but at its foundation you will always find this
 familiar structure.
 
 OK, we've got the quick "summary" out of the way, let's dig a little deeper...
