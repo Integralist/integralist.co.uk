@@ -119,6 +119,45 @@ components:
         - "Christine"
 ```
 
+The above example OpenAPI document describes an API. Specifically it describes:
+
+- The OpenAPI version supported (i.e. `openapi:`)
+- Some API Metadata (i.e. `info:`)
+- The API address (i.e. `server:`)
+- Supported API endpoints (i.e. `paths:`)
+- Different 'components' referenced by the `paths:` configuration (i.e.
+`components:`)
+
+In practice the last section `components:` is where most of the 'meat' of the
+API configuration happens. You'll see it contains different sections like
+`parameters`, `schemas` and `examples`.
+
+The `paths:` section typically doesn't define behaviours _inline_ but instead
+will reference objects defined inside of `components:` whenever they need to
+describe some behaviour of the endpoint.
+
+Any time you see `$ref` that means we're about to reference an object defined
+elsewhere (might be in the same file, under `components:` or it could be from a
+separate file).
+
+So in the above example we can see the `paths:` config references a few
+different components:
+
+- `#/components/parameters/team_id`: this describes the API path's `team_id` input param
+requirements (you'll find this in the section `components/parameters`).
+  - This parameter object itself references `#/components/schemas/team_id` for describing the
+  team_id.
+- `#/components/schemas/list_members_response`: this describes the schema for
+how the response body should look for this API endpoint.
+- `#/components/examples/list_members_response`: this demonstrates an example of
+  what the schema looks like in practice.
+
+This is the basic _structure_ of an OpenAPI document. Yes, they can become more
+complex as the API grows, but at it's foundation you will always find this
+familiar structure.
+
+OK, we've got the quick "summary" out of the way, let's dig a little deeper...
+
 ## Getting Started with OpenAPI
 
 Before diving into the intricacies of writing an OpenAPI document, let's set up the basics.
