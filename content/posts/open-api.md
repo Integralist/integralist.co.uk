@@ -16,6 +16,29 @@ In the rapidly evolving landscape of software development, creating robust and u
 
 In this comprehensive guide, we'll explore why OpenAPI is so important, how to write an OpenAPI document, and the key sections you need to know. Whether you're a seasoned developer or just getting started, mastering OpenAPI can greatly enhance your API development process.
 
+## Table of Contents
+
+1. [Why OpenAPI Matters](#why-openapi-matters)
+1. [Summary](#summary)
+1. [Getting Started with OpenAPI](#getting-started-with-openapi)
+   - 3.1 [Basic Structure](#basic-structure)
+1. [Defining Endpoints](#defining-endpoints)
+   - 4.1 [Paths and Methods](#paths-and-methods)
+   - 4.2 [Parameters](#parameters)
+1. [Structuring Data](#structuring-data)
+   - 5.1 [Request and Response Bodies](#request-and-response-bodies)
+   - 5.2 [Data Types](#data-types)
+1. [Adding Metadata](#adding-metadata)
+   - 6.1 [API Information](#api-information)
+   - 6.2 [Tags and Grouping](#tags-and-grouping)
+1. [Handling Errors](#handling-errors)
+   - 7.1 [Status Codes](#status-codes)
+   - 7.2 [Error Responses](#error-responses)
+1. [Testing and Validation](#testing-and-validation)
+   - 8.1 [Tools for Validation](#tools-for-validation)
+   - 8.2 [Generating Client SDKs](#generating-client-sdks)
+1. [Conclusion](#conclusion)
+
 ## Why OpenAPI Matters
 
 OpenAPI, formerly known as Swagger, is an open-standard format for describing APIs. It serves as both a machine-readable and human-friendly documentation that enables developers to understand, visualize, and interact with APIs effortlessly. By defining your API using OpenAPI, you unlock a host of benefits:
@@ -95,29 +118,6 @@ components:
         - "Bob"
         - "Christine"
 ```
-
-## Table of Contents
-
-1. [Introduction](#introduction)
-1. [Why OpenAPI Matters](#why-openapi-matters)
-1. [Getting Started with OpenAPI](#getting-started-with-openapi)
-   - 3.1 [Basic Structure](#basic-structure)
-1. [Defining Endpoints](#defining-endpoints)
-   - 4.1 [Paths and Methods](#paths-and-methods)
-   - 4.2 [Parameters](#parameters)
-1. [Structuring Data](#structuring-data)
-   - 5.1 [Request and Response Bodies](#request-and-response-bodies)
-   - 5.2 [Data Types](#data-types)
-1. [Adding Metadata](#adding-metadata)
-   - 6.1 [API Information](#api-information)
-   - 6.2 [Tags and Grouping](#tags-and-grouping)
-1. [Handling Errors](#handling-errors)
-   - 7.1 [Status Codes](#status-codes)
-   - 7.2 [Error Responses](#error-responses)
-1. [Testing and Validation](#testing-and-validation)
-   - 8.1 [Tools for Validation](#tools-for-validation)
-   - 8.2 [Generating Client SDKs](#generating-client-sdks)
-1. [Conclusion](#conclusion)
 
 ## Getting Started with OpenAPI
 
