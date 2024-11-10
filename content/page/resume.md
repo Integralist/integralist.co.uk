@@ -879,6 +879,7 @@ The following links are to some of my more 'popular' articles. My main focus whe
 <details>
  <summary>Details</summary>
 
+  - [Bitwise Operators in Go](/posts/bitwise-operators-in-go/) (2024)
   - [Continuous Integration and Deployment to multiple environments with Terraform Cloud and GitHub Actions](/posts/ci-cd/) (2024)
   - [The Power of OpenAPI: Simplifying API Design and documentation](/posts/open-api/) (2023)
   - [Beginner's guide to creating a Terraform Provider](/posts/terraform-provider/) (2022)
