@@ -10,9 +10,8 @@ tags:
   - "bash"
   - "go"
   - "style"
+  - "bitwise"
 ---
-
-# Bitwise Operations in Go
 
 In the below Go file we use bitwise operators to manipulate individual flags (on/off switches) in a single integer, where each bit position represents a different status.
 
