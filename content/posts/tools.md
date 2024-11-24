@@ -20,8 +20,8 @@ I don't know who needs to hear this but:
 - **Terminal**: [Warp](https://www.warp.dev/)
 - **Code Editor**: [Neovim](https://neovim.io)
 
-**NOTES:**\
-I was using a multiplexer ([tmux](https://github.com/tmux/tmux/wiki)) for years but colour issues forced me to switch to [Zellij](https://zellij.dev). I then switched from [Alacritty](https://alacritty.org/) and Zellij to using Warp as my terminal (helping to consolidate the number of tools I needed to install and configure) as Warp provided a lot of what I was using Zellij for. My switch to Warp also meant I could drop support for [FZF](https://github.com/junegunn/fzf/blob/master/README.md) as Warp provided fuzzy searching my history, while `fd` (see below) allowed me to easily locate files. But after a year of using Warp I moved to [ghostty](https://mitchellh.com/ghostty) and back to using `fzf` (as it's just so awesome).
+**HISTORY:**\
+I was using a multiplexer ([tmux](https://github.com/tmux/tmux/wiki)) for years but colour issues forced me to switch to [Zellij](https://zellij.dev). I then switched from [Alacritty](https://alacritty.org/) and Zellij to using Warp as my terminal (helping to consolidate the number of tools I needed to install and configure) as Warp provided a lot of what I was using Zellij for. My switch to Warp also meant I could drop support for [FZF](https://github.com/junegunn/fzf/blob/master/README.md) as Warp provided fuzzy searching my history, while `fd` (see below) allowed me to easily locate files. But after a year of using Warp I moved to [ghostty](https://mitchellh.com/ghostty) and back to using `fzf` (as it's just so awesome). I then used the 'split pane' feature in Ghostty while using the built-in floating terminal in Neovim for project-by-project development (which was better than a single hotkey overlay terminal that Warp provided, as I wasn't interested in going back to a multiplexer like tmux or zellij).
 
 ## Supplementary
 
