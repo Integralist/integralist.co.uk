@@ -237,6 +237,44 @@ A kind smile, a compassionate ear, and a bit of effort goes a long way in life.
   > work.
   >
   > -- Principal Engineer in Edge Networking at Fastly.
+
+  This particular person was leaving Fastly (to retire) and I reached out to
+  wish them all the best and to let them know what an honour it had been for me
+  to get just a small bit of experience working with them. This was their
+  response to me, totally unexpected last piece of kindness shared by this
+  wonderful individual.
+</details>
+
+<details>
+ <summary>Staff Product Manager in Network Services at Fastly</summary>
+
+  > I’m sharing a Very, Very Big Shout-Out to @integralist for his work on the
+  > Eng side of the Domainr + Fastly systems integration efforts! 
+  >
+  > `<DETAILS I CANT SHARE>`
+  >
+  > This huge milestone will make operating and maintaining the Domainr service
+  > much more straightforward for the Domain Services Eng team going forward. 
+  >
+  > Thank you, Mark!
+  >
+  > -- Staff Product Manager in Network Services at Fastly.
+  > 
+  > I also want to add that @integralist has done an amazing job on both
+  > documentation and tooling improvements for on-call. 
+  > 
+  > As a member of the domain services team that is now responsible for handling
+  > on call and being onboarded to domainr codebase and systems, it has been a
+  > huge help in orienting myself. 
+  >
+  > He has also been super helpful in knowledge sharing with active pairing and helping out with presentations too! 
+  > 
+  > We appreciate you Mark!
+  >
+  > -- Staff Software Engineer in Network Management at Fastly.
+
+  Always nice to get some recognition from your peers for the hard work you put
+  in and the care you have for the projects you work on.
 </details>
 
 ## Summary
