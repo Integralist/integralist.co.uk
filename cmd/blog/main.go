@@ -131,9 +131,9 @@ func renderIndex(files <-chan string, wg *sync.WaitGroup) {
 		panic(err)
 	}
 
-	needle := []byte("{INSERT_HERE}")
+	needleMainInsert := []byte("{INSERT_HERE}")
 	dst := "index.html"
-	tpl := `
+	tplMain := `
 	<article>
 	<h3>{TITLE}</h3>
 	<p class="pubdate">{DATE}</p>
@@ -149,8 +149,8 @@ func renderIndex(files <-chan string, wg *sync.WaitGroup) {
 	}
 
 	var ( // nolint:prealloc
-		buf   bytes.Buffer
-		posts []post
+		bufMain bytes.Buffer
+		posts   []post
 	)
 
 	for path := range files {
@@ -159,7 +159,7 @@ func renderIndex(files <-chan string, wg *sync.WaitGroup) {
 		date := strings.Split(segs[1], ".")[0]
 		title := strings.ReplaceAll(caser.String(dir), "-", " ")
 		link := filepath.Join(dir, dst)
-		content := strings.Replace(tpl, "{TITLE}", title, 1)
+		content := strings.Replace(tplMain, "{TITLE}", title, 1)
 		content = strings.Replace(content, "{LINK}", link, 1)
 		content = strings.Replace(content, "{DATE}", date, 1)
 		posts = append(posts, post{date: date, content: content})
@@ -173,11 +173,12 @@ func renderIndex(files <-chan string, wg *sync.WaitGroup) {
 	})
 
 	for _, post := range posts {
-		_, _ = buf.WriteString(post.content)
+		_, _ = bufMain.WriteString(post.content)
 	}
 
-	content := bytes.Replace(page, needle, buf.Bytes(), 1)
-	err = writeFile("index.html", content)
+	page = bytes.Replace(page, needleMainInsert, bufMain.Bytes(), 1)
+
+	err = writeFile("index.html", page)
 	if err != nil {
 		fmt.Printf("failed to write index file: %s\n", err)
 		return
