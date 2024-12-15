@@ -131,8 +131,9 @@ func renderIndex(files <-chan string, wg *sync.WaitGroup) {
 		panic(err)
 	}
 
-	needleMainInsert := []byte("{INSERT_HERE}")
 	dst := "index.html"
+	needleMainInsert := []byte("{INSERT_MAIN}")
+	needleNavInsert := []byte("{INSERT_NAV}")
 	tplMain := `
 	<article>
 	<h3>{TITLE}</h3>
@@ -142,30 +143,52 @@ func renderIndex(files <-chan string, wg *sync.WaitGroup) {
 	</ul>
 	</article>
 	`
+	tplNav := `
+	<li>
+	  <span class="opener">{YEAR}</span>
+	  <ul>
+	    <li><a href="{LINK}">{TITLE}</a></li>
+	  </ul>
+	</li>
+	`
 
 	type post struct {
 		date    string // expects ISO 8601 format, e.g., "2024-12-15"
+		year    string
 		content string
 	}
 
 	var ( // nolint:prealloc
 		bufMain bytes.Buffer
+		bufNav  bytes.Buffer
 		posts   []post
+		links   []post
 	)
 
 	for path := range files {
 		segs := strings.Split(path, "/")
 		dir := segs[0]
 		date := strings.Split(segs[1], ".")[0]
+		year := strings.Split(date, ".")[0]
 		title := strings.ReplaceAll(caser.String(dir), "-", " ")
 		link := filepath.Join(dir, dst)
-		content := strings.Replace(tplMain, "{TITLE}", title, 1)
-		content = strings.Replace(content, "{LINK}", link, 1)
-		content = strings.Replace(content, "{DATE}", date, 1)
-		posts = append(posts, post{date: date, content: content})
+		contentMain := strings.Replace(tplMain, "{TITLE}", title, 1)
+		contentMain = strings.Replace(contentMain, "{LINK}", link, 1)
+		contentMain = strings.Replace(contentMain, "{DATE}", date, 1)
+		contentNav := strings.Replace(tplNav, "{YEAR}", year, 1)
+		contentNav = strings.Replace(contentNav, "{LINK}", link, 1)
+		contentNav = strings.Replace(contentNav, "{TITLE}", title, 1)
+		posts = append(posts, post{date: date, year: year, content: contentMain})
+		links = append(links, post{date: date, year: year, content: contentNav})
 	}
 
 	sort.Slice(posts, func(i, j int) bool {
+		// Parse dates for comparison
+		date1, _ := time.Parse("2006-01-02", posts[i].date)
+		date2, _ := time.Parse("2006-01-02", posts[j].date)
+		return date1.Before(date2) // Ascending order
+	})
+	sort.Slice(links, func(i, j int) bool {
 		// Parse dates for comparison
 		date1, _ := time.Parse("2006-01-02", posts[i].date)
 		date2, _ := time.Parse("2006-01-02", posts[j].date)
@@ -175,8 +198,12 @@ func renderIndex(files <-chan string, wg *sync.WaitGroup) {
 	for _, post := range posts {
 		_, _ = bufMain.WriteString(post.content)
 	}
+	for _, link := range links {
+		_, _ = bufNav.WriteString(link.content)
+	}
 
 	page = bytes.Replace(page, needleMainInsert, bufMain.Bytes(), 1)
+	page = bytes.Replace(page, needleNavInsert, bufNav.Bytes(), 1)
 
 	err = writeFile("index.html", page)
 	if err != nil {

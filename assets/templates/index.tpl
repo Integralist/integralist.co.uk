@@ -89,7 +89,7 @@
               <h2>Articles</h2>
             </header>
             <div class="posts">
-							{INSERT_HERE}
+							{INSERT_MAIN}
 							<!--
               <article>
                 <a href="./pages/ppv-wrestlemania-3.html" class="image"><img src="images/mania-3-index.jpg" alt="" /></a>
@@ -121,13 +121,7 @@
             <ul>
               <li><a href="index.html">About</a></li>
 							<li><a href="resume/index.html">Resume</a></li>
-              <li>
-                <span class="opener">2024</span>
-                <ul>
-                  <li><a href="go-concurrency-patterns/index.html">Go Concurrency Patterns</a></li>
-                  <li><a href="something-else/index.html">Something Else</a></li>
-                </ul>
-              </li>
+							{INSERT_NAV}
             </ul>
           </nav>
           <!-- Section -->
