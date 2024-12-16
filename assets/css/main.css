@@ -28,8 +28,11 @@ footer, header, hgroup, menu, nav, section {
   display: block; }
 
 details {
-	color: #ddbea9;
 	margin-bottom: 1em;
+}
+
+details.testimonial {
+	color: #ddbea9;
 }
 
 details .review {

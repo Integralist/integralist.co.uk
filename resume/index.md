@@ -17,7 +17,7 @@ Hello, my name is Mark and I work at [Fastly](https://www.fastly.com/) as a Staf
 
 The following quotes (all very kind) are from people I've worked with. Everything quoted below was unsolicited and unexpected feedback, which is just so lovely! I've never asked anyone to "please write something nice about me". **All of these wonderful comments were genuine and truly appreciated.**
 
-<details>
+<details class="testimonial">
 	<summary>Product Support at BuzzFeed</summary>
 	<p><i>"As smart as developers are, they are not always good at explaining things in a way that makes human sense. not you. you are an exception. you are A+"</i></p>
 	<p><small>-- Product Support at BuzzFeed.</small></p>
@@ -25,14 +25,14 @@ The following quotes (all very kind) are from people I've worked with. Everythin
 	<p class="review">Her feedback also hints at something bigger which I strive for: to help others to do their best work and to push/promote the good work other engineers do (including those from either a diverse background or minority).</p>
 </details>
 
-<details>
+<details class="testimonial">
 	<summary>Engineering Manager at Fastly</summary>
 	<p><i>"Hi Mark, your name keeps coming up (in a good way 😉) and I wanted to put a face to a name. Folks on the team like working with you. You're responsive and provide good and timely feedback."</i></p>
 	<p><small>-- Engineering Manager at Fastly.</small></p>
 	<p class="review">I always aim to build meaningful relationships with the people I work with across an organisation. In doing so I hope to ensure that we are able to work as a cohesive unit, and provide great value to our users. But ultimately I like to be helpful (it makes me feel good), so this was a nice bit of unexpected feedback ❤️</p>
 </details>
 
-<details>
+<details class="testimonial">
 	<summary>Senior Sales Engineer at Fastly</summary>
 	<p><i>"Thanks, I'm amazed that you always deliver top notch answers."</i></p>
 	<p><small>-- Senior Sales Engineer at Fastly.</small></p>
@@ -40,21 +40,21 @@ The following quotes (all very kind) are from people I've worked with. Everythin
 	<p class="review">A kind smile, a compassionate ear, and a bit of effort goes a long way in life.</p>
 </details>
 
-<details>
+<details class="testimonial">
 	<summary>Senior Sales Engineer at Fastly</summary>
 	<p><i>"Hey Man… you are a true powerhouse in fixing issues and handling customers… i’m truly impressed by you! Thanks and keep it up!"</i></p>
 	<p><small>-- Senior Sales Engineer at Fastly.</small></p>
 	<p class="review">I work hard to ensure customers get the support they need. This feedback was the result of another example of my work ethic.</p>
 </details>
 
-<details>
+<details class="testimonial">
 	<summary>Senior Solutions Architect at Fastly</summary>
 	<p><i>Hey Mark, thanks again for releasing the 4.0.0 version, last week! The customer already provided positive feedback. It's a pleasure to work in such a smooth way! 🙇</i></p>
 	<p><small>-- Senior Solutions Architect at Fastly.</small></p>
 	<p class="review">In this case my colleague was unfamiliar with writing Go and he was trying to contribute to a couple of different code bases that I was the core maintainer of, and for which I was helping guide him through and supporting/educating him on the various technical aspects of. It was a small change but one I really appreciated him taking the time to dig in and help implement.</p>
 </details>
 
-<details>
+<details class="testimonial">
 	<summary>Customer + CSE (Customer Support Engineer) at Fastly</summary>
 	<p><i>Thank you for your output and all the information you've provided. We really appreciate it. We have applied your latest release on all our production environments and it's looking great and there are no unexpected diffs in our Terraform plans anymore. Again, thank you for your time and your help to understand and resolve this issue as your insights were really helpful.</i></p>
 	<p><small>-- Customer</small></p>
@@ -64,7 +64,7 @@ The following quotes (all very kind) are from people I've worked with. Everythin
 	<p class="review">It was important to me that this customer (like all our customers) got their issues resolved as quickly as possible, with frequent updates to keep them in the loop and extra detailed explanations so they were better informed. It was a tough set of bugs to identify but I was pleased for the customer when they confirmed their services were all good again.</p>
 </details>
 
-<details>
+<details class="testimonial">
 	<summary>Director of Community at Fastly</summary>
 	<p><i>I want to call out this great thread in the fastly dev forum and give a huge bravo to @integralist for being there, being responsive, and guiding the customer to the solution. Overall the thread is <code>:chefkiss:</code> because...</i></p>
 	<p><i>- It makes for a great image optimization use case/support-driven tutorial.</i></br>
@@ -75,21 +75,21 @@ The following quotes (all very kind) are from people I've worked with. Everythin
 	<p class="review">This was a really nice (and unexpected) compliment. I like to go the extra mile to ensure customers feel seen/heard and that they're supported (even if it means I can't give them an immediate answer and need to refer to another team's expertise first).</p>
 </details>
 
-<details>
+<details class="testimonial">
 	<summary>Developer Relations Engineer at Fastly</summary>
 	<p><i>I just wanted to say that the care and attention you're putting into this work is making me enjoy my work, and I appreciate you.</i></p>
 	<p><small>-- Developer Relations Engineer at Fastly</small></p>
 	<p class="review">I was touched by this feedback as I had been battling a particularly difficult project and this came at a time where I was emotionally and mentally exhausted. Just the pickup I needed 💖</p>
 </details>
 
-<details>
+<details class="testimonial">
 	<summary>Tier 3 Customer Support Engineer at Fastly</summary>
 	<p><i>I want to thank @integralist for always answering any questions I (or others) have with so much detail and attention. Your answers usually long and full of thought and for that I am extremely grateful!</i></p>
 	<p><small>-- Tier 3 Customer Support Engineer at Fastly</small></p>
 	<p class="review">This was posted in a Fastly #gratitude Slack channel and got lots of nice emoji reactions to go with it 💖</p>
 </details>
 
-<details>
+<details class="testimonial">
 	<summary>Senior Customer Support Engineer at Fastly</summary>
 	<p><i>Thank you so much Mark for going above and beyond. I appreciate the details you provided.</i></p>
 	<p><code>later the next day...</code></p>
@@ -98,14 +98,14 @@ The following quotes (all very kind) are from people I've worked with. Everythin
 	<p class="review">A customer had reported an issue that we initially were not able to replicate. But after some thorough debugging (through _multiple_ internal systems) I was able to identify, explain, and document the source of the problem, then provide a resolution for the customer.</p>
 </details>
 
-<details>
+<details class="testimonial">
 	<summary>Security Architect at Fastly</summary>
 	<p><i>Man, it’s nice working with you</i></p>
 	<p><small>-- Security Architect at Fastly</small></p>
 	<p class="review">This certainly came out of nowhere 🙂. He needed a bunch of information related to some security work I was doing (I was <a href="https://github.com/fastly/cli/pull/1010" target="_blank">implementing SSO Single Sign-On using an OAuth PKCE flow for Fastly's CLI tool</a>) so I gave it to him whilst also pointing out some oddities about the platform that I felt should be addressed.</p>
 </details>
 
-<details>
+<details class="testimonial">
 	<summary>Senior Principal Sales Engineer / TLS Manager / Sr. Principal Engineer, Core Systems at Fastly</summary>
 	<p><i>I wanted to share feedback from <code>NAME_OF_LARGE_CUSTOMER_IM_NOT_ALLOWED_TO_SHARE</code> to give you positive feedback on our Terraform provider vs <code>COMPETITOR</code>'s:</i></p>
 	<p><i>"The team were quite shocked at the difference between <code>COMPETITOR</code>'s Terraform approach and Fastly....Fastly was a lot simpler, and just as powerful. Express my gratitude to the team for making the Terraform provider so awesome!"</i></p>
@@ -119,35 +119,35 @@ The following quotes (all very kind) are from people I've worked with. Everythin
 	<p class="review">I'm very grateful for this feedback, both from the customer and from my colleagues as I had been working really hard on improving the Terraform provider and up until that point hadn't felt that any one had noticed or cared, and so this helped boost my confidence in what I had been doing. 💛</p>
 </details>
 
-<details>
+<details class="testimonial">
 	<summary>Cloud Engineer at Fastly</summary>
 	<p><i>This level of investigation deserves a medal @integralist. Thank you so much for your time and deduction!</i></p>
 	<p><small>-- Cloud Engineer at Fastly.</small></p>
 	<p class="review">A question was raised, which wasn't relevant to the channel it was brought up in but I didn't want this person to go away without the appropriate support. So as well as redirecting them to the correct channel and explaining why I was redirecting them, I then proceeded to explain the steps/processes I follow when trying to figure out the thing they were asking about. This led to a long thread of details and links to code and documentation. As much as I could provide as a helpful send off.</p>
 </details>
 
-<details>
+<details class="testimonial">
 	<summary>Staff Product Manager at Fastly</summary>
 	<p><i>Your code review is itself a work of art! Is there a hall of fame for code reviews.</i></p>
 	<p><small>-- Staff Product Manager at Fastly.</small></p>
 	<p class="review">I take a lot of care in my PR reviews 😊.</p>
 </details>
 
-<details>
+<details class="testimonial">
 	<summary>Director of Developer Experience at Fastly</summary>
-	<p><i>Look… that was f\*\*\*ing impressive. 👏\</i><br>Thank you so much!</p>
+	<p><i>Look… that was f***ing impressive. 👏</i><br>Thank you so much!</p>
 	<p><small>-- Director of Developer Experience at Fastly.</small></p>
 	<p class="review">A customer was having issues with one of our tools when using Windows. Fastly pulled out all the stops to get me the access I needed to investigate and debug the issue properly and I was able to get a fix in place in a few hours, helping the customer realise what an asset Fastly is to their workflow.</p>
 </details>
 
-<details>
+<details class="testimonial">
 	<summary>Principal Engineer in Edge Networking at Fastly</summary>
 	<p><i>You demonstrate, year in and year out, an excellent capacity to learn new systems and languages, pick up the responsibility of managing and being responsible for parts of our stack and technology and it looks like you work smoothly and effortlessly with our colleagues both in person / zoom and in slack / Jira / pull requests.  Thank you also for your regular, consistent contributions and easy-going working demeanor.  This is the sort of collegial professionalism and competence that makes Fastly a great place to work.</i></p>
 	<p><small>Principal Engineer in Edge Networking at Fastly.</small></p>
 	<p class="review">This particular person was leaving Fastly (to retire) and I reached out to wish them all the best and to let them know what an honour it had been for me to get just a small bit of experience working with them. This was their response to me, totally unexpected last piece of kindness shared by this wonderful individual.</p>
 </details>
 
-<details>
+<details class="testimonial">
 	<summary>Staff Product Manager in Network Services at Fastly</summary>
 	<p><i>I'm sharing a Very, Very Big Shout-Out to @integralist for his work on the Eng side of the Domainr + Fastly systems integration efforts!</i></p>
 	<p><code>DETAILS I CANT SHARE</code></p>
@@ -183,66 +183,63 @@ You can find me online at the following locations:
 
 ## Brief History
 
-- [Fastly (2020-present)](#fastly-october-2020---present)
-- [BuzzFeed (2016-2020)](#buzzfeed-june-2016---october-2020)
-- [BBC (2013-2016)](#bbc-jan-2013---june-2016)
-- [Storm Creative (2001-2012)](#storm-creative-feb-2001---dec-2012)
+- [Fastly (2020-present)](#fastly-october-2020-present)
+- [BuzzFeed (2016-2020)](#buzzfeed-june-2016-october-2020)
+- [BBC (2013-2016)](#bbc-jan-2013-june-2016)
+- [Storm Creative (2001-2012)](#storm-creative-feb-2001-dec-2012)
 
 ### Fastly (October 2020 - present)
 
 <details>
  <summary>Details</summary>
- I was a former customer of Fastly, and had become well known for publishing probably the longest known article on the subject of Varnish, VCL and Fastly's implementation.
-
-I joined Fastly to work within its new (at the time) Developer Relations team helping to manage, support and be the core developer for their suite of API clients (inc. orchestration tools such as Terraform and Fastly's own [Terraform provider](https://github.com/fastly/terraform-provider-fastly), and the [Fastly CLI](https://github.com/fastly/cli)).
-
-While working within the Developer Relations team I had the opportunity to work on critical Rust projects such as https://fiddle.fastly.dev and to work cross-team to develop a new authentication model for customer services.
-
-In 2023 it became apparent that the tools I was responsible for maintaining were becoming even more important for our customers and so I was able to move from DevRel into my own dedicated team (Customer Developer Tools) to continue to support them without having to also support the various DevRel related projects and services.
-
+	<p>I was a former customer of Fastly, and had become well known for publishing probably the longest known article on the subject of Varnish, VCL and Fastly's implementation.<p>
+	<p>I joined Fastly to work within its new (at the time) Developer Relations team helping to manage, support and be the core developer for their suite of API clients (inc. orchestration tools such as Terraform and Fastly's own <a href="https://github.com/fastly/terraform-provider-fastly" target="_blank">Terraform provider</a>, and the <a href="https://github.com/fastly/cli" target="_blank">Fastly CLI</a>).<p>
+	<p>While working within the Developer Relations team I had the opportunity to work on critical Rust projects such as https://fiddle.fastly.dev and to work cross-team to develop a new authentication model for customer services.<p>
+	<p>In 2023 it became apparent that the tools I was responsible for maintaining were becoming even more important for our customers and so I was able to move from DevRel into my own dedicated team (Customer Developer Tools) to continue to support them without having to also support the various DevRel related projects and services.<p>
+	<p>In 2024, I was brought into a new team (a team of one for about a year) called "Domain Services" to
+		help onboard and integrate a new API Fastly had acquired. This required
+	a significant amount of time and effort as (up until this point) I had only
+	worked on open-source projects at Fastly and this was my first exposure to
+		the internal systems and deployment platform and pipelines.<p>
 </details>
 
 ### BuzzFeed (June 2016 - October 2020)
 
 <details>
  <summary>Details</summary>
-  I joined as a Senior Software Engineer as part of a new 'core' UK dev team. We were responsible for decommissioning a 10yr+ legacy Perl monolithic application stack over to individual Python and Go services.
-
-I was working primarily within BuzzFeed's OO-INFRA group, which sits somewhere in-between traditional infrastructure/operation teams and engineering teams building user facing products. Our motivations were to make the lives of our fellow engineers easier by building tools, services and abstractions that enabled them to work more quickly and efficiently.
-
-January 2018 BuzzFeed promoted me to Staff Software Engineer, after helping to design/architect, develop and maintain some of BuzzFeed's key infrastructure and software (CDN, caching strategies, routing behaviours, and security/authentication related concerns).
-
-January 2019 I moved over to the Core Infrastructure team (which consists of separate sub teams). I was part of the 'Infra Edge' team, and we were responsible for strengthening and securing our edge infrastructure and applications. The 'edge' is the surface area of our infrastructure that is in direct contact with the public internet. It includes DNS and the various services that accept ingress traffic from the Big Bad Internet. It is essential to our business that our Edge be a resilient and security-focused layer of our infrastructure.
-
-Each year I participated in different working groups and mentoring programs, and became part of the 'on-call' rota, and handled interactions with the Hackerone program.
-
-> **NOTE**: I'm a remote worker and my team resides primarily in New York, so good communication, focus and work ethic was essential.
-
+	<p>I joined as a Senior Software Engineer as part of a new 'core' UK dev team. We were responsible for decommissioning a 10yr+ legacy Perl monolithic application stack over to individual Python and Go services.<p>
+	<p>I was working primarily within BuzzFeed's OO-INFRA group, which sits somewhere in-between traditional infrastructure/operation teams and engineering teams building user facing products. Our motivations were to make the lives of our fellow engineers easier by building tools, services and abstractions that enabled them to work more quickly and efficiently.<p>
+	<p>January 2018 BuzzFeed promoted me to Staff Software Engineer, after helping to design/architect, develop and maintain some of BuzzFeed's key infrastructure and software (CDN, caching strategies, routing behaviours, and security/authentication related concerns).<p>
+	<p>January 2019 I moved over to the Core Infrastructure team (which consists of separate sub teams). I was part of the 'Infra Edge' team, and we were responsible for strengthening and securing our edge infrastructure and applications. The 'edge' is the surface area of our infrastructure that is in direct contact with the public internet. It includes DNS and the various services that accept ingress traffic from the Big Bad Internet. It is essential to our business that our Edge be a resilient and security-focused layer of our infrastructure.<p>
+	<p>Each year I participated in different working groups and mentoring programs, and became part of the 'on-call' rota, and handled interactions with the Hackerone program.<p>
+	<blockquote>
+		<p>⚠️  <b>NOTE</b><br>I'm a remote worker and my team resides primarily in New York, so good communication, focus and work ethic was essential.</p>
+	</blockquote>
 </details>
 
 ### BBC (Jan 2013 - June 2016)
 
 <details>
  <summary>Details</summary>
-
-I joined [BBC News](http://www.bbc.co.uk/news) as a client-side/mobile specialist within their Core News team. Within the year I had moved into a senior engineering role. The (then) Technical Lead for the BBC News Frameworks team requested I join them in order to help the organisation transition from its current platform over to one built upon the AWS platform.
-
-I started in the Frameworks team building and designing back-end architecture for different microservices hosted upon the AWS platform, and we developed these services primarily using JRuby. In October 2014, I was offered the role of Technical Lead.
-
-Near the end of 2015 I decided to change roles to Principal Software Engineer, as my previous role involved more meetings and handling line manager duties, whereas I wanted to focus my time more on helping my team solve technical problems.
-
+	<p>I joined <a href="http://www.bbc.co.uk/news" target="_blank">BBC News</a> as a client-side/mobile specialist within their Core News team. Within the year I had moved into a senior engineering role. The (then) Technical Lead for the BBC News Frameworks team requested I join them in order to help the organisation transition from its current platform over to one built upon the AWS platform.<p>
+	<p>I started in the Frameworks team building and designing back-end architecture for different microservices hosted upon the AWS platform, and we developed these services primarily using JRuby. In October 2014, I was offered the role of Technical Lead.<p>
+	<p>Near the end of 2015 I decided to change roles to Principal Software Engineer, as my previous role involved more meetings and handling line manager duties, whereas I wanted to focus my time more on helping my team solve technical problems.<p>
 </details>
 
 ### Storm Creative (Feb 2001 - Dec 2012)
 
 <details>
  <summary>Details</summary>
-
-I started working at the agency [Storm Creative](http://www.stormcreative.co.uk/) straight out of college. I was always focused on learning and improving my skill set - both technical and communication skills - the latter helped me communicate better with both clients and other stakeholders/colleagues.
-
-I progressed upwards through the organisation, moving from initially being a client-side web developer (this included doing animations utilising ActionScript 3.0) to becoming a server-side developer (ASP.NET, PHP and Ruby), then onto becoming a Technical Lead across all projects and finally becoming the Digital Media Manager responsible for my own team of four engineers and overseeing all aspects of our projects.
-
+	<p>I started working at the agency <a href="http://www.stormcreative.co.uk/" target="_blank">Storm Creative</a> straight out of college. I was always focused on learning and improving my skill set - both technical and communication skills - the latter helped me communicate better with both clients and other stakeholders/colleagues.<p>
+	<p>I progressed upwards through the organisation, moving from initially being a client-side web developer (this included doing animations utilising ActionScript 3.0) to becoming a server-side developer (ASP.NET, PHP and Ruby), then onto becoming a Technical Lead across all projects and finally becoming the Digital Media Manager responsible for my own team of four engineers and overseeing all aspects of our projects.<p>
 </details>
+
+<hr>
+
+> ⚠️  From here on we get deep into details. It's not necessary to read on unless
+> you're really interested in what I've been up to 🙂
+
+<hr>
 
 ## Impact!
 
@@ -257,9 +254,6 @@ I'd like to share the projects I've worked on over the years and the impact/valu
 <div id="impact-fastly"></div>
 
 ### 🏢 Fastly
-
-<details>
- <summary>Details</summary>
 
 ### 2024
 
@@ -414,15 +408,10 @@ I'd like to share the projects I've worked on over the years and the impact/valu
   **Why**: To help drive decisions around which API client libraries we should maintain (or which new languages to support).\
   **Impact**: We have a clearer understanding of where we should focus our resources.
 
-</details>
-
 <p></p>
 <div id="impact-buzzfeed"></div>
 
 ### 🏢 BuzzFeed
-
-<details>
- <summary>Details</summary>
 
 ### 2020
 
@@ -602,15 +591,10 @@ I'd like to share the projects I've worked on over the years and the impact/valu
   **Why**: Code consistency and easier debugging of code.\
   **Impact**: Improved code quality.
 
-</details>
-
 <p></p>
 <div id="impact-bbc"></div>
 
 ### 🏢 BBC
-
-<details>
- <summary>Details</summary>
 
 ### 2016
 
@@ -720,8 +704,6 @@ I'd like to share the projects I've worked on over the years and the impact/valu
   **Why**: To hear different engineering perspectives on how best to develop new UX designs.\
   **Impact**: Simplified specific aspects of GELs design.
 
-</details>
-
 ## Talks
 
 - [Living on the Edge (Video)](https://www.youtube.com/watch?v=Qz-sck-WIUQ): Presentation on our use of Fastly CDN and an internal service golang proxy service I built called "Perimeter".
@@ -739,9 +721,6 @@ I'd like to share the projects I've worked on over the years and the impact/valu
 ## Published
 
 I'm a print published and self-published author; I'm also a tech reviewer and am a published author for different popular online organisations (you'll find lots of technical articles on my own website as well):
-
-<details>
- <summary>Details</summary>
 
 ### Apress
 
@@ -802,14 +781,9 @@ I'm a print published and self-published author; I'm also a tech reviewer and am
 - [Testing Your Ruby Code With Guard, RSpec & Pry (Part 1 - Ruby/Guard/RSpec)](http://code.tutsplus.com/tutorials/testing-your-ruby-code-with-guard-rspec-pry--cms-19974)
 - [Testing Your Ruby Code With Guard, RSpec & Pry (Part 2 - RSpec/Pry/Travis-CI)](http://code.tutsplus.com/tutorials/testing-your-ruby-code-with-guard-rspec-pry-part-2--cms-20290)
 
-</details>
-
 ## Popular articles
 
 The following links are to some of my more 'popular' articles. My main focus when writing is to take a complicated or confusing topic and attempt to distil it into something that an unfamiliar reader can understand.
-
-<details>
- <summary>Details</summary>
 
 - [Go Concurrency Patterns](/posts/go-concurrency-patterns/) (2024)
 - [Bitwise Operators in Go](/posts/bitwise-operators-in-go/) (2024)
@@ -863,8 +837,6 @@ The following links are to some of my more 'popular' articles. My main focus whe
 - [Git Tips](/posts/git-tips/) (2012)
 - [JavaScript 101](/posts/javascript-101/) (2012)
 
-</details>
-
 ## Open-Source
 
 > ⚠️ **NOTE**:\
@@ -877,9 +849,6 @@ The following links are to some of my more 'popular' articles. My main focus whe
 > Anything I have worked on has been either done as part of an employer's\
 > own motivation to contribute to open-source or something I found\
 > 5 minutes to spare to share some code I was hacking together.
-
-<details>
- <summary>Details</summary>
 
 - [BBC Alephant](https://github.com/BBC-News/alephant):
   The Alephant framework is a collection of isolated Ruby gems, which interconnect to offer powerful message passing functionality built up around the "Broker" pattern.
@@ -944,14 +913,9 @@ The following links are to some of my more 'popular' articles. My main focus whe
 - [Stark](https://github.com/Integralist/Stark):
   Node Build Script for serving HTML components
 
-</details>
-
 ## Tools, Languages and Tech
 
 I don't profess mastery, but I'm adept with most of the below, and I have an aptitude towards learning what I need to get the job done right.
-
-<details>
- <summary>Details</summary>
 
 > **NOTE**: With any static list, this will go stale. For example, I've not worked with JavaScript for _many_ years (I'm aware of the different client-side platform changes, react, virtual doms etc) and although I was a deep dive expert, that is no longer the case. Take this list with a 'pinch of salt'.
 
@@ -1001,4 +965,7 @@ I don't profess mastery, but I'm adept with most of the below, and I have an apt
 - Varnish
 - Vim
 
-</details>
+<script>
+// the TOC is so large it's just offensive
+document.getElementsByTagName("nav")[0].style.display = "none";
+</script>
