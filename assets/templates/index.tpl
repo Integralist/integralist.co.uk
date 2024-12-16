@@ -120,7 +120,7 @@
             </header>
             <ul>
               <li><a href="index.html">About</a></li>
-							<li><a href="resume/index.html">Resume</a></li>
+							<!--<li><a href="resume/index.html">Resume</a></li>-->
 							{INSERT_NAV}
             </ul>
           </nav>

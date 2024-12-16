@@ -15,7 +15,7 @@ Most pages on the website are "article" pages writing about some topic.
 
 Some are general pages (e.g. "resume") and so they won't have a date prefixed to
 the filename. In these cases we render the page as HTML but we don't include the
-page dynamically in the list of articles.
+page dynamically in the list of articles (i.e. you have to manually link them).
 
 ## Writing Markdown
 

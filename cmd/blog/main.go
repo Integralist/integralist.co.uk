@@ -33,10 +33,10 @@ func main() {
 	wg.Add(numOfProcessors)
 
 	files := make(chan string, channelBufferSize)
-	index := make(chan string, channelBufferSize)
+	links := make(chan string, channelBufferSize)
 
-	go renderHTML(files, &wg)
-	go renderIndex(index, &wg)
+	go renderSubPages(files, links, &wg)
+	go renderHomepage(links, &wg)
 
 	// Walk the directory and send file paths to the channel
 	err := filepath.WalkDir(".", func(path string, d fs.DirEntry, err error) error {
@@ -50,9 +50,10 @@ func main() {
 		}
 		if filepath.Ext(d.Name()) == ".md" && d.Name() != "README.md" {
 			files <- path
-			if !strings.Contains(path, "/index.md") {
-				index <- path
-			}
+			links <- path
+			// if !strings.Contains(path, "/index.md") {
+			// 	links <- path // only article pages should have links dynamically generated
+			// }
 		}
 		return nil
 	})
@@ -60,13 +61,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	close(files) // forces renderHTML to complete
-	close(index) // forces renderIndex to complete
+	close(files) // forces renderSubPages to complete
+	close(links) // forces renderLinks to complete
 	wg.Wait()
 }
 
-func renderHTML(files <-chan string, wg *sync.WaitGroup) {
+func renderSubPages(files, links <-chan string, wg *sync.WaitGroup) {
 	defer wg.Done()
+	caser := cases.Title(language.BritishEnglish)
 
 	f, err := os.Open("assets/templates/page.tpl")
 	if err != nil {
@@ -74,15 +76,38 @@ func renderHTML(files <-chan string, wg *sync.WaitGroup) {
 		panic(err)
 	}
 
-	bs, err := io.ReadAll(f)
+	contentSubPage, err := io.ReadAll(f)
 	if err != nil {
 		err = fmt.Errorf("failed to read page template: %w", err)
 		panic(err)
 	}
 
-	needle := []byte("{INSERT_HERE}")
+	needleMainInsert := []byte("{INSERT_MAIN}")
+	needleNavInsert := []byte("{INSERT_NAV}")
+	tplNav := `
+	<li>
+	  <span class="opener">{YEAR}</span>
+	  <ul>
+	    <li><a href="../{LINK}">{TITLE}</a></li>
+	  </ul>
+	</li>
+	`
+
+	type post struct {
+		date    string // expects ISO 8601 format, e.g., "2024-12-15"
+		year    string
+		content string
+	}
+
+	var ( // nolint:prealloc
+		bufNav   bytes.Buffer
+		navLinks []post
+	)
 
 	for path := range files {
+		// if strings.Contains(path, "/index.md") {
+		// 	continue // non-article pages should be skipped
+		// }
 		f, err := os.Open(path)
 		if err != nil {
 			fmt.Printf("failed to open path '%s': %s\n", path, err)
@@ -98,12 +123,33 @@ func renderHTML(files <-chan string, wg *sync.WaitGroup) {
 		_ = f.Close()
 
 		h := mdToHTML(md)
-		content := bytes.Replace(bs, needle, h, 1)
+		content := bytes.Replace(contentSubPage, needleMainInsert, h, 1)
 
 		segs := strings.Split(path, "/")
 		dir := segs[0]
-		dst := filepath.Join(dir, "index.html")
+		date := strings.Split(segs[1], ".")[0]
+		year := strings.Split(date, ".")[0]
+		title := strings.ReplaceAll(caser.String(dir), "-", " ")
+		link := filepath.Join(dir, "index.html")
+		contentNav := strings.Replace(tplNav, "{YEAR}", year, 1)
+		contentNav = strings.Replace(contentNav, "{LINK}", link, 1)
+		contentNav = strings.Replace(contentNav, "{TITLE}", title, 1)
+		navLinks = append(navLinks, post{date: date, year: year, content: contentNav})
 
+		sort.Slice(navLinks, func(i, j int) bool {
+			// Parse dates for comparison
+			date1, _ := time.Parse("2006-01-02", navLinks[i].date)
+			date2, _ := time.Parse("2006-01-02", navLinks[j].date)
+			return date1.Before(date2) // Ascending order
+		})
+
+		for _, link := range navLinks {
+			_, _ = bufNav.WriteString(link.content)
+		}
+
+		content = bytes.Replace(content, needleNavInsert, bufNav.Bytes(), 1)
+
+		dst := filepath.Join(dir, "index.html")
 		err = writeFile(dst, content)
 		if err != nil {
 			fmt.Printf("failed to write file '%s': %s\n", dst, err)
@@ -114,18 +160,19 @@ func renderHTML(files <-chan string, wg *sync.WaitGroup) {
 	}
 }
 
-func renderIndex(files <-chan string, wg *sync.WaitGroup) {
+func renderHomepage(files <-chan string, wg *sync.WaitGroup) { // nolint:revive // function-length
 	defer wg.Done()
 	caser := cases.Title(language.BritishEnglish)
 
-	idx := "assets/templates/index.tpl"
-	f, err := os.Open(idx)
+	tplIndex := "assets/templates/index.tpl"
+
+	fi, err := os.Open(tplIndex)
 	if err != nil {
 		err = fmt.Errorf("failed to open index template: %w", err)
 		panic(err)
 	}
 
-	page, err := io.ReadAll(f)
+	contentIndex, err := io.ReadAll(fi)
 	if err != nil {
 		err = fmt.Errorf("failed to read index template: %w", err)
 		panic(err)
@@ -151,6 +198,9 @@ func renderIndex(files <-chan string, wg *sync.WaitGroup) {
 	  </ul>
 	</li>
 	`
+	tplNavGenericPage := `
+	<li><a href="{LINK}">{TITLE}</a></li>
+	`
 
 	type post struct {
 		date    string // expects ISO 8601 format, e.g., "2024-12-15"
@@ -175,10 +225,20 @@ func renderIndex(files <-chan string, wg *sync.WaitGroup) {
 		contentMain := strings.Replace(tplMain, "{TITLE}", title, 1)
 		contentMain = strings.Replace(contentMain, "{LINK}", link, 1)
 		contentMain = strings.Replace(contentMain, "{DATE}", date, 1)
-		contentNav := strings.Replace(tplNav, "{YEAR}", year, 1)
-		contentNav = strings.Replace(contentNav, "{LINK}", link, 1)
-		contentNav = strings.Replace(contentNav, "{TITLE}", title, 1)
-		posts = append(posts, post{date: date, year: year, content: contentMain})
+		var contentNav string
+		if year == "index" {
+			contentNav = strings.Replace(tplNavGenericPage, "{TITLE}", title, 1)
+			contentNav = strings.Replace(contentNav, "{LINK}", link, 1)
+		} else {
+			contentNav = strings.Replace(tplNav, "{YEAR}", year, 1)
+			contentNav = strings.Replace(contentNav, "{LINK}", link, 1)
+			contentNav = strings.Replace(contentNav, "{TITLE}", title, 1)
+		}
+		if year != "index" {
+			// Avoid adding generic pages to the home page list of pages in the
+			// main section (generic pages are fine to add to side nav `links`)
+			posts = append(posts, post{date: date, year: year, content: contentMain})
+		}
 		links = append(links, post{date: date, year: year, content: contentNav})
 	}
 
@@ -186,13 +246,13 @@ func renderIndex(files <-chan string, wg *sync.WaitGroup) {
 		// Parse dates for comparison
 		date1, _ := time.Parse("2006-01-02", posts[i].date)
 		date2, _ := time.Parse("2006-01-02", posts[j].date)
-		return date1.Before(date2) // Ascending order
+		return date2.Before(date1) // Descending order
 	})
 	sort.Slice(links, func(i, j int) bool {
 		// Parse dates for comparison
-		date1, _ := time.Parse("2006-01-02", posts[i].date)
-		date2, _ := time.Parse("2006-01-02", posts[j].date)
-		return date1.Before(date2) // Ascending order
+		date1, _ := time.Parse("2006-01-02", links[i].date)
+		date2, _ := time.Parse("2006-01-02", links[j].date)
+		return date2.Before(date1) // Descending order
 	})
 
 	for _, post := range posts {
@@ -202,16 +262,16 @@ func renderIndex(files <-chan string, wg *sync.WaitGroup) {
 		_, _ = bufNav.WriteString(link.content)
 	}
 
-	page = bytes.Replace(page, needleMainInsert, bufMain.Bytes(), 1)
-	page = bytes.Replace(page, needleNavInsert, bufNav.Bytes(), 1)
+	contentIndex = bytes.Replace(contentIndex, needleMainInsert, bufMain.Bytes(), 1)
+	contentIndex = bytes.Replace(contentIndex, needleNavInsert, bufNav.Bytes(), 1)
 
-	err = writeFile("index.html", page)
+	err = writeFile("index.html", contentIndex)
 	if err != nil {
 		fmt.Printf("failed to write index file: %s\n", err)
 		return
 	}
 
-	fmt.Printf("rendered: %s -> %s\n", idx, dst)
+	fmt.Printf("rendered: %s -> %s\n", tplIndex, dst)
 }
 
 func writeFile(filename string, content []byte) error {

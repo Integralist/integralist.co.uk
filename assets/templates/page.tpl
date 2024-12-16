@@ -35,7 +35,7 @@
             </header>
             <span class="image main"><img src="../images/rumble-89.jpg" alt="" /></span>
 						-->
-						{INSERT_HERE}
+						{INSERT_MAIN}
           </section>
         </div>
       </div>
@@ -55,14 +55,8 @@
       </header>
       <ul>
         <li><a href="../index.html">About</a></li>
-        <li><a href="../resume/index.html">Resume</a></li>
-        <li>
-					<span class="opener">2024</span>
-					<ul>
-						<li><a href="../go-concurrency-patterns/index.html">Go Concurrency Patterns</a></li>
-						<li><a href="../something-else/index.html">Something Else</a></li>
-          </ul>
-        </li>
+        <!--<li><a href="../resume/index.html">Resume</a></li>-->
+				{INSERT_NAV}
       </ul>
     </nav>
     <!-- Section -->

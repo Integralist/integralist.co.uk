@@ -27,6 +27,36 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
   display: block; }
 
+details {
+	color: #ddbea9;
+	margin-bottom: 1em;
+}
+
+details .review {
+	color: #b6bbbe;
+}
+
+details summary {
+	color: #ffffff;
+	cursor: pointer;
+	font-weight: bold;
+  -moz-transition: color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
+  -webkit-transition: color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
+  -ms-transition: color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
+  transition: color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
+}
+
+details summary:hover {
+	color: #ffbc8e !important;
+}
+
+details small {
+	color: #ffbc8e;
+	display: block;
+	font-size: 80%;
+	margin-top: -1em;
+}
+
 body {
   line-height: 1; }
 
@@ -116,7 +146,7 @@ a {
   text-decoration: none; }
   a:hover {
     border-bottom-color: #ffbc8e;
-    color: #ffbc8e !important; }
+    color: #FFFFFF !important; }
     a:hover strong {
       color: inherit; }
 
@@ -1248,6 +1278,21 @@ input[type="radio"] + label:before {
     width: 100%; }
     .image.main img {
       width: 100%; }
+
+.image.half {
+	width: 50%;
+}
+
+.image.border {
+	border: 1px solid #8b0202;
+}
+
+.image-summary {
+	display: block;
+	margin-top: -2em;
+	font-size: 80%;
+	font-style: italic;
+}
 
 a.image {
   overflow: hidden; }
