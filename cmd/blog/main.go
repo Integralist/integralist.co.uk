@@ -126,7 +126,7 @@ func renderSubPages(pages <-chan string, wg *sync.WaitGroup) {
 		segs := strings.Split(path, "/")
 		dir := segs[0]
 		// date := strings.Split(segs[1], ".")[0]
-		// year := strings.Split(date, ".")[0]
+		// year := strings.Split(date, "-")[0]
 		// title := strings.ReplaceAll(caser.String(dir), "-", " ")
 		// link := filepath.Join(dir, "index.html")
 		// contentNav := strings.Replace(tplNav, "{YEAR}", year, 1)
@@ -186,11 +186,11 @@ func renderHomepage(files <-chan string, wg *sync.WaitGroup) { // nolint:revive 
 	</ul>
 	</article>
 	`
-	tplNav := `
+	tplNavYear := `
 	<li>
 	  <span class="opener">{YEAR}</span>
 	  <ul>
-	    <li><a href="{LINK}">{TITLE}</a></li>
+		{YEAR_LINKS}
 	  </ul>
 	</li>
 	`
@@ -206,7 +206,6 @@ func renderHomepage(files <-chan string, wg *sync.WaitGroup) { // nolint:revive 
 
 	var ( // nolint:prealloc
 		bufMain bytes.Buffer
-		bufNav  bytes.Buffer
 		posts   []post
 		links   []post
 	)
@@ -215,21 +214,14 @@ func renderHomepage(files <-chan string, wg *sync.WaitGroup) { // nolint:revive 
 		segs := strings.Split(path, "/")
 		dir := segs[0]
 		date := strings.Split(segs[1], ".")[0]
-		year := strings.Split(date, ".")[0]
+		year := strings.Split(date, "-")[0]
 		title := strings.ReplaceAll(caser.String(dir), "-", " ")
 		link := filepath.Join(dir, dst)
 		contentMain := strings.Replace(tplMain, "{TITLE}", title, 1)
 		contentMain = strings.Replace(contentMain, "{LINK}", link, 1)
 		contentMain = strings.Replace(contentMain, "{DATE}", date, 1)
-		var contentNav string
-		if year == "index" {
-			contentNav = strings.Replace(tplNavGenericPage, "{TITLE}", title, 1)
-			contentNav = strings.Replace(contentNav, "{LINK}", link, 1)
-		} else {
-			contentNav = strings.Replace(tplNav, "{YEAR}", year, 1)
-			contentNav = strings.Replace(contentNav, "{LINK}", link, 1)
-			contentNav = strings.Replace(contentNav, "{TITLE}", title, 1)
-		}
+		contentNav := strings.Replace(tplNavGenericPage, "{TITLE}", title, 1)
+		contentNav = strings.Replace(contentNav, "{LINK}", link, 1)
 		if year != "index" {
 			// Avoid adding generic pages to the home page list of pages in the
 			// main section (generic pages are fine to add to side nav `links`)
@@ -254,12 +246,44 @@ func renderHomepage(files <-chan string, wg *sync.WaitGroup) { // nolint:revive 
 	for _, post := range posts {
 		_, _ = bufMain.WriteString(post.content)
 	}
+
+	// key is the year
+	// value is each link for that year
+	years := make(map[string][]string)
+
 	for _, link := range links {
-		_, _ = bufNav.WriteString(link.content)
+		yearLinks, ok := years[link.year]
+		if !ok {
+			// Create the year and add its first link
+			years[link.year] = []string{link.content}
+		} else {
+			// Update the year so it has another new link
+			yearLinks = append(yearLinks, link.content)
+			years[link.year] = yearLinks
+		}
+	}
+
+	// Map keys have non-deterministic ordering.
+	// So we order them manually.
+	keys := make([]string, 0)
+	for k := range years {
+		keys = append(keys, k)
+	}
+	sort.Slice(keys, func(i, j int) bool {
+		return keys[i] > keys[j] // descending order (e.g. []string{"index", "2024", "2023"})
+	})
+	var yearLinks string
+	for _, k := range keys {
+		section := k
+		if k == "index" {
+			section = "Pages"
+		}
+		container := strings.Replace(tplNavYear, "{YEAR}", section, 1)
+		yearLinks += strings.Replace(container, "{YEAR_LINKS}", strings.Join(years[k], ""), 1)
 	}
 
 	contentIndex = bytes.Replace(contentIndex, needleMainInsert, bufMain.Bytes(), 1)
-	contentIndex = bytes.Replace(contentIndex, needleNavInsert, bufNav.Bytes(), 1)
+	contentIndex = bytes.Replace(contentIndex, needleNavInsert, []byte(yearLinks), 1)
 
 	err = writeFile("index.html", contentIndex)
 	if err != nil {
