@@ -38,8 +38,10 @@ SOMETHING HERE TO IGNORE
 
 ## TODO
 
-- Figure out how to render list of pages.
-- Truncate the list of pages on the home page (once I've migrated pages).
 - Fix resume content.
+- Fix side nav on home page to group by year.
+- Figure out how to render side nav on sub pages without doubling up a walk.
+  - Might need to change channel async rendering approach for a slice of paths.
+- Truncate the list of pages on the home page (once I've migrated pages).
 
 [1]: https://go.dev/

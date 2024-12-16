@@ -32,10 +32,10 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(numOfProcessors)
 
-	files := make(chan string, channelBufferSize)
+	pages := make(chan string, channelBufferSize)
 	links := make(chan string, channelBufferSize)
 
-	go renderSubPages(files, links, &wg)
+	go renderSubPages(pages, &wg)
 	go renderHomepage(links, &wg)
 
 	// Walk the directory and send file paths to the channel
@@ -49,11 +49,8 @@ func main() {
 			return filepath.SkipDir
 		}
 		if filepath.Ext(d.Name()) == ".md" && d.Name() != "README.md" {
-			files <- path
+			pages <- path
 			links <- path
-			// if !strings.Contains(path, "/index.md") {
-			// 	links <- path // only article pages should have links dynamically generated
-			// }
 		}
 		return nil
 	})
@@ -61,14 +58,15 @@ func main() {
 		log.Fatal(err)
 	}
 
-	close(files) // forces renderSubPages to complete
-	close(links) // forces renderLinks to complete
+	close(pages) // forces renderSubPages to complete
+	close(links) // forces renderHomepage to complete
 	wg.Wait()
 }
 
-func renderSubPages(files, links <-chan string, wg *sync.WaitGroup) {
+// FIXME: Figure out how to render side-nav for sub pages.
+func renderSubPages(pages <-chan string, wg *sync.WaitGroup) {
 	defer wg.Done()
-	caser := cases.Title(language.BritishEnglish)
+	// caser := cases.Title(language.BritishEnglish)
 
 	f, err := os.Open("assets/templates/page.tpl")
 	if err != nil {
@@ -84,27 +82,27 @@ func renderSubPages(files, links <-chan string, wg *sync.WaitGroup) {
 
 	needleMainInsert := []byte("{INSERT_MAIN}")
 	needleNavInsert := []byte("{INSERT_NAV}")
-	tplNav := `
-	<li>
-	  <span class="opener">{YEAR}</span>
-	  <ul>
-	    <li><a href="../{LINK}">{TITLE}</a></li>
-	  </ul>
-	</li>
-	`
+	// tplNav := `
+	// <li>
+	//   <span class="opener">{YEAR}</span>
+	//   <ul>
+	//     <li><a href="../{LINK}">{TITLE}</a></li>
+	//   </ul>
+	// </li>
+	// `
 
-	type post struct {
-		date    string // expects ISO 8601 format, e.g., "2024-12-15"
-		year    string
-		content string
-	}
+	// type post struct {
+	// 	date    string // expects ISO 8601 format, e.g., "2024-12-15"
+	// 	year    string
+	// 	content string
+	// }
 
 	var ( // nolint:prealloc
-		bufNav   bytes.Buffer
-		navLinks []post
+	// bufNav   bytes.Buffer
+	// navLinks []post
 	)
 
-	for path := range files {
+	for path := range pages {
 		// if strings.Contains(path, "/index.md") {
 		// 	continue // non-article pages should be skipped
 		// }
@@ -127,27 +125,25 @@ func renderSubPages(files, links <-chan string, wg *sync.WaitGroup) {
 
 		segs := strings.Split(path, "/")
 		dir := segs[0]
-		date := strings.Split(segs[1], ".")[0]
-		year := strings.Split(date, ".")[0]
-		title := strings.ReplaceAll(caser.String(dir), "-", " ")
-		link := filepath.Join(dir, "index.html")
-		contentNav := strings.Replace(tplNav, "{YEAR}", year, 1)
-		contentNav = strings.Replace(contentNav, "{LINK}", link, 1)
-		contentNav = strings.Replace(contentNav, "{TITLE}", title, 1)
-		navLinks = append(navLinks, post{date: date, year: year, content: contentNav})
-
-		sort.Slice(navLinks, func(i, j int) bool {
-			// Parse dates for comparison
-			date1, _ := time.Parse("2006-01-02", navLinks[i].date)
-			date2, _ := time.Parse("2006-01-02", navLinks[j].date)
-			return date1.Before(date2) // Ascending order
-		})
-
-		for _, link := range navLinks {
-			_, _ = bufNav.WriteString(link.content)
-		}
-
-		content = bytes.Replace(content, needleNavInsert, bufNav.Bytes(), 1)
+		// date := strings.Split(segs[1], ".")[0]
+		// year := strings.Split(date, ".")[0]
+		// title := strings.ReplaceAll(caser.String(dir), "-", " ")
+		// link := filepath.Join(dir, "index.html")
+		// contentNav := strings.Replace(tplNav, "{YEAR}", year, 1)
+		// contentNav = strings.Replace(contentNav, "{LINK}", link, 1)
+		// contentNav = strings.Replace(contentNav, "{TITLE}", title, 1)
+		// navLinks = append(navLinks, post{date: date, year: year, content: contentNav})
+		// sort.Slice(navLinks, func(i, j int) bool {
+		// 	// Parse dates for comparison
+		// 	date1, _ := time.Parse("2006-01-02", navLinks[i].date)
+		// 	date2, _ := time.Parse("2006-01-02", navLinks[j].date)
+		// 	return date1.Before(date2) // Ascending order
+		// })
+		// for _, link := range navLinks {
+		// 	_, _ = bufNav.WriteString(link.content)
+		// }
+		// content = bytes.Replace(content, needleNavInsert, bufNav.Bytes(), 1)
+		content = bytes.Replace(content, needleNavInsert, []byte(""), 1)
 
 		dst := filepath.Join(dir, "index.html")
 		err = writeFile(dst, content)
