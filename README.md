@@ -1,6 +1,7 @@
 # integralist.co.uk
 
-The `integralist.co.uk` website is statically generated using [Go][1].
+The `integralist.co.uk` website is statically generated using [Go][1] and
+hosted by [Netlify][2].
 
 Running the target `make build` will:
 
@@ -14,8 +15,8 @@ Running the target `make build` will:
 Most pages on the website are "article" pages writing about some topic.
 
 Some are general pages (e.g. "resume") and so they won't have a date prefixed to
-the filename. In these cases we render the page as HTML but we don't include the
-page dynamically in the list of articles (i.e. you have to manually link them).
+the filename. In these cases we render the page as HTML and when linking to the
+page in the side nav we'll group them under a section called "Pages".
 
 ## Writing Markdown
 
@@ -36,12 +37,50 @@ SOMETHING HERE TO IGNORE
 <!-- markdownlint-enable -->
 ```
 
+## DNS
+
+- Hostname: www
+- Type: CNAME
+- Value: dreamy-wing-b0b998.netlify.com.
+
+______________________________________________________________________
+
+- Hostname: @
+- Type: A
+- Value: 104.198.14.52
+
+______________________________________________________________________
+
+- Hostname: www
+- Type: A
+- Value: 104.198.14.52
+
+______________________________________________________________________
+
+```shell
+$ dig www.integralist.co.uk
+
+;; ANSWER SECTION:
+www.integralist.co.uk.  14399   IN      CNAME   dreamy-wing-b0b998.netlify.com.
+dreamy-wing-b0b998.netlify.com. 19 IN   A       54.229.14.125
+
+$ dig integralist.co.uk
+
+;; ANSWER SECTION:
+integralist.co.uk.      14224   IN      A       104.198.14.52
+
+$ dig A integralist.co.uk @ns.123-reg.co.uk. +short
+104.198.14.52
+
+$ dig A integralist.co.uk @8.8.8.8 +short
+104.198.14.52
+```
+
 ## TODO
 
-- Fix resume content.
-- Fix side nav on home page to group by year.
 - Figure out how to render side nav on sub pages without doubling up a walk.
   - Might need to change channel async rendering approach for a slice of paths.
 - Truncate the list of pages on the home page (once I've migrated pages).
 
 [1]: https://go.dev/
+[2]: https://www.netlify.com/
