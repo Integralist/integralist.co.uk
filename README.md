@@ -81,8 +81,7 @@ $ dig A integralist.co.uk @8.8.8.8 +short
 
 ## TODO
 
-- Figure out how to render side nav on sub pages without doubling up a walk.
-  - Might need to change channel async rendering approach for a slice of paths.
+- Write JavaScript to show the current page in the side nav.
 
 [1]: https://go.dev/
 [2]: https://www.netlify.com/
