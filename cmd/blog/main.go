@@ -21,24 +21,18 @@ import (
 	"golang.org/x/text/language"
 )
 
-const (
-	channelBufferSize = 10
-	numOfProcessors   = 2
+var (
+	skipDirs         = []string{".git", "assets", "cmd"}
+	initOnce         sync.Once
+	contentSubPage   []byte
+	needleMainInsert = []byte("{INSERT_MAIN}")
+	needleNavInsert  = []byte("{INSERT_NAV}")
+	errInit          error
 )
 
-var skipDirs = []string{".git", "assets", "cmd"}
-
 func main() {
-	var wg sync.WaitGroup
-	wg.Add(numOfProcessors)
+	pages := []string{}
 
-	pages := make(chan string, channelBufferSize)
-	links := make(chan string, channelBufferSize)
-
-	go renderSubPages(pages, &wg)
-	go renderHomepage(links, &wg)
-
-	// Walk the directory and send file paths to the channel
 	err := filepath.WalkDir(".", func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			fmt.Printf("prevent panic by handling failure accessing a path %q: %v\n", path, err)
@@ -49,8 +43,7 @@ func main() {
 			return filepath.SkipDir
 		}
 		if filepath.Ext(d.Name()) == ".md" && d.Name() != "README.md" {
-			pages <- path
-			links <- path
+			pages = append(pages, path)
 		}
 		return nil
 	})
@@ -58,106 +51,70 @@ func main() {
 		log.Fatal(err)
 	}
 
-	close(pages) // forces renderSubPages to complete
-	close(links) // forces renderHomepage to complete
-	wg.Wait()
+	for _, page := range pages {
+		renderPosts(page)
+	}
+
+	renderHome(pages)
 }
 
-// FIXME: Figure out how to render side-nav for sub pages.
-func renderSubPages(pages <-chan string, wg *sync.WaitGroup) {
-	defer wg.Done()
-	// caser := cases.Title(language.BritishEnglish)
+// initTemplates initializes the template content and ensures it runs only once.
+func initTemplates() {
+	initOnce.Do(func() {
+		f, err := os.Open("assets/templates/page.tpl")
+		if err != nil {
+			errInit = fmt.Errorf("failed to open page template: %w", err)
+			return
+		}
+		defer f.Close()
 
-	f, err := os.Open("assets/templates/page.tpl")
-	if err != nil {
-		err = fmt.Errorf("failed to open page template: %w", err)
-		panic(err)
+		contentSubPage, err = io.ReadAll(f)
+		if err != nil {
+			errInit = fmt.Errorf("failed to read page template: %w", err)
+		}
+	})
+}
+
+func renderPosts(page string) {
+	// Initialize templates if not already done
+	initTemplates()
+	if errInit != nil {
+		panic(errInit)
 	}
 
-	contentSubPage, err := io.ReadAll(f)
+	f, err := os.Open(page)
 	if err != nil {
-		err = fmt.Errorf("failed to read page template: %w", err)
-		panic(err)
+		fmt.Printf("failed to open page '%s': %s\n", page, err)
+		return
 	}
 
-	needleMainInsert := []byte("{INSERT_MAIN}")
-	needleNavInsert := []byte("{INSERT_NAV}")
-	// tplNav := `
-	// <li>
-	//   <span class="opener">{YEAR}</span>
-	//   <ul>
-	//     <li><a href="../{LINK}">{TITLE}</a></li>
-	//   </ul>
-	// </li>
-	// `
-
-	// type post struct {
-	// 	date    string // expects ISO 8601 format, e.g., "2024-12-15"
-	// 	year    string
-	// 	content string
-	// }
-
-	var ( // nolint:prealloc
-	// bufNav   bytes.Buffer
-	// navLinks []post
-	)
-
-	for path := range pages {
-		// if strings.Contains(path, "/index.md") {
-		// 	continue // non-article pages should be skipped
-		// }
-		f, err := os.Open(path)
-		if err != nil {
-			fmt.Printf("failed to open path '%s': %s\n", path, err)
-			continue
-		}
-
-		md, err := io.ReadAll(f)
-		if err != nil {
-			fmt.Printf("failed to read file '%s': %s\n", path, err)
-			_ = f.Close()
-			continue
-		}
+	md, err := io.ReadAll(f)
+	if err != nil {
+		fmt.Printf("failed to read file '%s': %s\n", page, err)
 		_ = f.Close()
-
-		h := mdToHTML(md)
-		content := bytes.Replace(contentSubPage, needleMainInsert, h, 1)
-
-		segs := strings.Split(path, "/")
-		dir := segs[0] + "/" + segs[1]
-		// date := strings.Split(segs[2], ".")[0]
-		// year := strings.Split(date, "-")[0]
-		// title := strings.ReplaceAll(caser.String(segs[1]), "-", " ")
-		// link := filepath.Join(dir, "index.html")
-		// contentNav := strings.Replace(tplNav, "{YEAR}", year, 1)
-		// contentNav = strings.Replace(contentNav, "{LINK}", link, 1)
-		// contentNav = strings.Replace(contentNav, "{TITLE}", title, 1)
-		// navLinks = append(navLinks, post{date: date, year: year, content: contentNav})
-		// sort.Slice(navLinks, func(i, j int) bool {
-		// 	// Parse dates for comparison
-		// 	date1, _ := time.Parse("2006-01-02", navLinks[i].date)
-		// 	date2, _ := time.Parse("2006-01-02", navLinks[j].date)
-		// 	return date1.Before(date2) // Ascending order
-		// })
-		// for _, link := range navLinks {
-		// 	_, _ = bufNav.WriteString(link.content)
-		// }
-		// content = bytes.Replace(content, needleNavInsert, bufNav.Bytes(), 1)
-		content = bytes.Replace(content, needleNavInsert, []byte(""), 1)
-
-		dst := filepath.Join(dir, "index.html")
-		err = writeFile(dst, content)
-		if err != nil {
-			fmt.Printf("failed to write file '%s': %s\n", dst, err)
-			continue
-		}
-
-		fmt.Printf("rendered: %s -> %s\n", path, dst)
+		return
 	}
+	_ = f.Close()
+
+	h := mdToHTML(md)
+	content := bytes.Replace(contentSubPage, needleMainInsert, h, 1)
+
+	segs := strings.Split(page, "/")
+	dir := segs[0] + "/" + segs[1]
+
+	content = bytes.Replace(content, needleNavInsert, []byte(""), 1)
+
+	dst := filepath.Join(dir, "index.html")
+	err = writeFile(dst, content)
+	if err != nil {
+		fmt.Printf("failed to write file '%s': %s\n", dst, err)
+		return
+	}
+
+	fmt.Printf("rendered: %s -> %s\n", page, dst)
 }
 
-func renderHomepage(files <-chan string, wg *sync.WaitGroup) { // nolint:revive // function-length
-	defer wg.Done()
+func renderHome(pages []string) { // nolint:revive // function-length
 	caser := cases.Title(language.BritishEnglish)
 
 	tplIndex := "assets/templates/index.tpl"
@@ -210,7 +167,7 @@ func renderHomepage(files <-chan string, wg *sync.WaitGroup) { // nolint:revive 
 		links   []post
 	)
 
-	for path := range files {
+	for _, path := range pages {
 		segs := strings.Split(path, "/")
 		dir := segs[0] + "/" + segs[1]
 		date := strings.Split(segs[2], ".")[0]
