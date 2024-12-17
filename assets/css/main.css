@@ -2343,3 +2343,11 @@ button,
 .posts .pubdate {
 	margin-bottom: .5em;
 }
+
+.toc {
+	cursor: pointer;
+	color: pink;
+	text-decoration: underline;
+	margin-top: -1em;
+	font-size: 100%;
+}
