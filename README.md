@@ -79,9 +79,5 @@ $ dig A integralist.co.uk @8.8.8.8 +short
 104.198.14.52
 ```
 
-## TODO
-
-- Write JavaScript to show the current page in the side nav.
-
 [1]: https://go.dev/
 [2]: https://www.netlify.com/
