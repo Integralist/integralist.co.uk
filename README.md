@@ -81,14 +81,13 @@ $ dig A integralist.co.uk @8.8.8.8 +short
 
 ## TODO
 
+- Write some JS that moves the nav UNDER the h1 (and toggle visibility).
 - Move posts into posts directory.
 - Fix images.
 - Fix links to posts that have now changed.
 - Fix adverts.
-- Write some JS that moves the nav UNDER the h1 (and toggle visibility).
 - Figure out how to render side nav on sub pages without doubling up a walk.
   - Might need to change channel async rendering approach for a slice of paths.
-- Truncate the list of pages on the home page (once I've migrated pages).
 
 [1]: https://go.dev/
 [2]: https://www.netlify.com/
