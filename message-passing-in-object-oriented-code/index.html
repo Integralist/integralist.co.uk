@@ -1,0 +1,226 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+  <head>
+    <title>Integralist</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+  </head>
+  <body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+      <!-- Main -->
+      <div id="main">
+        <div class="inner">
+          <!-- Header -->
+					<header id="header">
+						<a href="../index.html" class="logo"><strong>Home</strong></a>
+							<ul class="icons">
+							<!--<li><a href="https://x.com/integralist" class="icon brands fa-twitter" target="blank"><span class="label">Twitter</span></a></li>-->
+							<!--<li><a href="https://instagram.com/wwfsuperstarsofwrestling" class="icon brands fa-instagram" target="blank"><span class="label">Instagram</span></a></li>-->
+						</ul>
+					</header>
+
+          <!-- Content -->
+          <section>
+						<!--
+            <header class="main">
+              <h1>Royal Rumble 1989</h1>
+              <p>A Bizarre Spectacle Where the Madness Multiplies</p>
+            </header>
+            <span class="image main"><img src="../images/rumble-89.jpg" alt="" /></span>
+						-->
+						<nav>
+
+<ul>
+<li><a href="#message-passing-in-object-oriented-code">Message Passing in Object Oriented Code</a>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+
+<li><a href="#quick-example">Quick example</a></li>
+
+<li><a href="#the-proxy-design-pattern">The Proxy Design Pattern</a></li>
+
+<li><a href="#how-ruby-handles-method-calls">How Ruby handles method calls</a></li>
+
+<li><a href="#implementing-method-missing">Implementing <code>method_missing</code></a></li>
+
+<li><a href="#conclusion">Conclusion</a></li>
+</ul></li>
+</ul>
+
+</nav>
+
+<h1 id="message-passing-in-object-oriented-code">Message Passing in Object Oriented Code</h1>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>In my <a href="http://www.integralist.co.uk/posts/object-oriented-design/" target="_blank">previous post</a> I quoted the following description of object-oriented design…</p>
+
+<blockquote>
+<p>Object-Oriented Design is about the messages that get sent between objects and not the objects themselves.</p>
+</blockquote>
+
+<p>The reason I felt this quote was important for good code design was because it helped focus our attention on improving our object&rsquo;s interfaces.</p>
+
+<p>Since then I&rsquo;ve been reading through <a href="http://designpatternsinruby.com" target="_blank">Design Patterns in Ruby</a> by Russ Olsen, and in the chapter on the Proxy design pattern he reiterates thinking about objects more from the perspective of &lsquo;messages&rsquo; and how that can help improve the Proxy pattern implementation.</p>
+
+<p>His comments really nailed home for me the design benefits of thinking more about &lsquo;messages&rsquo; being passed to objects, and it&rsquo;s that point which I want to elaborate on below.</p>
+
+<p>{{&lt; adverts/pythonforprogrammers &gt;}}</p>
+
+<h2 id="quick-example">Quick example</h2>
+
+<p>Imagine the following code example: <code>account.deposit(50)</code></p>
+
+<p>When thinking about a statically typed language, object methods are generally considered to be more &lsquo;baked&rsquo; into the objects, in the sense that running the above code example suggests you are &lsquo;calling&rsquo; the <code>deposit</code> method found on the <code>account</code> object.</p>
+
+<p>But in a dynamically typed language (such as Ruby) this doesn&rsquo;t make a lot of sense because the <code>account</code> object might not actually contain a method called <code>deposit</code> (statically typed languages are compiled and so we can be assured that if we call a method on an object, it will be there - otherwise the program would fail to compile) so talking about &lsquo;calling&rsquo; a method on an object is not as accurate as describing it like so:</p>
+
+<blockquote>
+<p>&ldquo;we&rsquo;re sending a deposit message to an account object&rdquo;</p>
+</blockquote>
+
+<h2 id="the-proxy-design-pattern">The Proxy Design Pattern</h2>
+
+<p>The Proxy design pattern is where we place an object between the user and the actual object the user wishes to interact with.</p>
+
+<p>There are a few different types of proxy object:</p>
+
+<ul>
+<li>Protection proxies</li>
+<li>Remote proxies</li>
+<li>Virtual proxies</li>
+</ul>
+
+<p>The reason &lsquo;message passing&rsquo; came up in the Proxy design pattern (specifically when developing a &lsquo;virtual proxy&rsquo; - which is where we create a proxy object to prevent an expensive object instantiation operation from happening until the user &lsquo;actually&rsquo; interacts with one of the methods on the real object) was because the author wanted to avoid the situation where we would need to implement a stub method for each method found on the real object.</p>
+
+<p>This isn&rsquo;t necessarily an issue for all types of objects. But if you look at built-in objects such as the <code>Array</code> object, that has approximately 118 (maybe more) methods! So for us to implement a proxy for that object we&rsquo;d theorectically need to implement 118 stub methods, each of which would simply forward on the request to the corresponding method on the real object to handle. That would not only be tedious but an inefficient way to implement our proxy object.</p>
+
+<h2 id="how-ruby-handles-method-calls">How Ruby handles method calls</h2>
+
+<p>In Ruby if you pass a message (e.g. call a method) to an object and that method doesn&rsquo;t exist, then Ruby will try to find another method on that object: <code>method_missing</code>.</p>
+
+<p>If <code>method_missing</code> doesn&rsquo;t exist then Ruby will try to lookup the method on the parent object, and will keep moving up the inheritance chain until it reaches the core <code>Object</code> object (which does implement <code>method_missing</code>) and which simply raises a <code>NoMethodError</code> exeception.</p>
+
+<h2 id="implementing-method-missing">Implementing <code>method_missing</code></h2>
+
+<p>If you implement <code>method_missing</code> on your proxy object then you can pass on the message to the real object more efficiently than stubbing the method.</p>
+
+<p>So instead of this…</p>
+
+<pre><code class="language-ruby">class AccountProxy
+    def initialize(real_object)
+        @real_object = real_object
+    end
+    
+    def deposit(amount)
+        @real_object.deposit(amount)
+    end
+    
+    … ad infinitum … 
+end
+
+account = Account.new
+proxy = AccountProxy.new(account)
+proxy.deposit(50)
+</code></pre>
+
+<p>…we should really take advantage of the dynamic nature of the Ruby language to avoid having to manually write out these methods by hand, like so…</p>
+
+<pre><code class="language-ruby">class AccountProxy
+    def initialize(real_account)
+        @subject = real_account
+    end
+    def method_missing(name, *args)
+        @subject.send(name, *args)
+    end
+end
+</code></pre>
+
+<p>You can see from the above example that we&rsquo;re using the <a href="http://ruby-doc.org/core-2.0/Object.html#method-i-send" target="_blank">send</a> method to pass the message (i.e. the method invoked by the user on the proxy object) directly to the real object.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>As you can see, focusing on passing messages not only helps inform us of better interfaces when designing our application but also makes us more efficient by utilising features unique to dynamically typed languages.</p>
+
+          </section>
+        </div>
+      </div>
+      <!-- Sidebar -->
+<div id="sidebar">
+  <div class="inner">
+    <!-- Search -->
+    <!--<section id="search" class="alt">-->
+    <!--  <form method="post" action="#">-->
+    <!--    <input type="text" name="query" id="query" placeholder="Search" />-->
+    <!--  </form>-->
+    <!--</section>-->
+    <!-- Menu -->
+    <nav id="menu">
+      <header class="major">
+        <h2>Menu</h2>
+      </header>
+      <ul>
+        <li><a href="../index.html">About</a></li>
+        <!--<li><a href="../resume/index.html">Resume</a></li>-->
+				
+      </ul>
+    </nav>
+    <!-- Section -->
+		<!--
+    <section>
+      <header class="major">
+        <h2>Highlights</h2>
+      </header>
+      <div class="mini-posts">
+        <article>
+          <a href="ppv-survivorseries-88.html" class="image"><img src="../images/survivor-88-index.jpg" alt="" /></a>
+          <p>Get ready for the ultimate showdown as Survivor Series 1988 brings non-stop tag team action, fierce rivalries, and unforgettable battles between the biggest WWF superstars!</p>
+        </article>
+        <article>
+          <a href="ppv-royalrumble-89.html" class="image"><img src="../images/rumble-89-index.jpg" alt="" /></a>
+          <p>Royal Rumble 1989 unleashes chaos with 30 superstars battling for glory in an unforgettable over-the-top-rope showdown!</p>
+        </article>
+        <article>
+          <a href="ppv-summerslam-88.html" class="image"><img src="../images/slam-88-index.jpg" alt="" /></a>
+          <p>SummerSlam 1988 delivers explosive action with iconic matchups, as the WWF's biggest stars collide in the hottest event of the summer!</p>
+        </article>
+      </div>
+    </section>
+		-->
+    <!-- Section -->
+    <!--<section>-->
+    <!--  <header class="major">-->
+    <!--    <h2>Get in touch</h2>-->
+    <!--  </header>-->
+    <!--  <p>Sed varius enim lorem ullamcorper dolore aliquam aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin sed aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>-->
+    <!--  <ul class="contact">-->
+    <!--    <li class="icon solid fa-envelope"><a href="#">information@untitled.tld</a></li>-->
+    <!--    <li class="icon solid fa-phone">(000) 000-0000</li>-->
+    <!--    <li class="icon solid fa-home">1234 Somewhere Road #8254<br />-->
+    <!--      Nashville, TN 00000-0000</li>-->
+    <!--  </ul>-->
+    <!--</section>-->
+    <!-- Footer -->
+    <footer id="footer">
+      <p class="copyright">&copy; Integralist. All rights reserved.</p>
+      <p class="copyright small">Demo Images: <a href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+    </footer>
+  </div>
+</div>
+
+    </div>
+    <!-- Scripts -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+  </body>
+</html>

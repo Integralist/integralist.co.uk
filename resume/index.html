@@ -19,7 +19,7 @@
         <div class="inner">
           <!-- Header -->
 					<header id="header">
-						<a href="../index.html" class="logo"><strong>Integralist</strong></a>
+						<a href="../index.html" class="logo"><strong>Home</strong></a>
 							<ul class="icons">
 							<!--<li><a href="https://x.com/integralist" class="icon brands fa-twitter" target="blank"><span class="label">Twitter</span></a></li>-->
 							<!--<li><a href="https://instagram.com/wwfsuperstarsofwrestling" class="icon brands fa-instagram" target="blank"><span class="label">Instagram</span></a></li>-->

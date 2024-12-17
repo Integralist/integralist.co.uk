@@ -1,0 +1,297 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+  <head>
+    <title>Integralist</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+  </head>
+  <body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+      <!-- Main -->
+      <div id="main">
+        <div class="inner">
+          <!-- Header -->
+					<header id="header">
+						<a href="../index.html" class="logo"><strong>Home</strong></a>
+							<ul class="icons">
+							<!--<li><a href="https://x.com/integralist" class="icon brands fa-twitter" target="blank"><span class="label">Twitter</span></a></li>-->
+							<!--<li><a href="https://instagram.com/wwfsuperstarsofwrestling" class="icon brands fa-instagram" target="blank"><span class="label">Instagram</span></a></li>-->
+						</ul>
+					</header>
+
+          <!-- Content -->
+          <section>
+						<!--
+            <header class="main">
+              <h1>Royal Rumble 1989</h1>
+              <p>A Bizarre Spectacle Where the Madness Multiplies</p>
+            </header>
+            <span class="image main"><img src="../images/rumble-89.jpg" alt="" /></span>
+						-->
+						<nav>
+
+<ul>
+<li><a href="#multiple-branches-in-git">Multiple Branches in Git</a>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+
+<li><a href="#worktree">Worktree</a></li>
+
+<li><a href="#example">Example</a>
+<ul>
+<li><a href="#create-a-new-repo">Create a new repo</a></li>
+
+<li><a href="#create-a-new-branch">Create a new branch</a></li>
+
+<li><a href="#create-new-worktree-branch">Create new worktree branch</a></li>
+
+<li><a href="#make-changes-in-new-worktree-branch">Make changes in new worktree branch</a></li>
+
+<li><a href="#merge-my-hotfix-back-into-master">Merge my hotfix back into master</a></li>
+
+<li><a href="#removing-the-worktree">Removing the worktree</a></li>
+
+<li><a href="#continuing-working-on-my-feature-branch">Continuing working on my feature branch</a></li>
+</ul></li>
+
+<li><a href="#conclusion">Conclusion</a></li>
+</ul></li>
+</ul>
+
+</nav>
+
+<h1 id="multiple-branches-in-git">Multiple Branches in Git</h1>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>There are times where you might be working from a particular git branch and need to quickly jump over to a different branch to do some urgent work.</p>
+
+<p>Typically you would need to first <code>git stash</code> anything you were working on (as it&rsquo;s unlikely to be in a state where it can be committed), and then you&rsquo;d have to leave your current branch to create a new branch from <code>master</code> and thus begin working on your new urgent task.</p>
+
+<p>This is a fairly straightforward workflow, but there is a mild annoyance which is that I happen to <code>git stash</code> <em>a lot</em> and I find when jumping over to a new branch to do some urgent work that I might end up <code>git stash</code>&lsquo;ing a few more times along the way.</p>
+
+<p>Ultimately, when I&rsquo;m done with my urgent task and ready to go back to my other branch, I then have to sift through my stash to find the relevant one I want to pop. OK so not that tragic considering <code>git stash list</code> will indicate the branch on which the stash was taken (which helps), but I do then need to Google what the syntax is for popping a specific stash (e.g. it&rsquo;s <code>git stash apply stash@{n}</code> where <code>n</code> is the index you want to apply.)</p>
+
+<blockquote>
+<p>Note: for the life of me I wish I could remember the syntax but it just eludes me every time.</p>
+</blockquote>
+
+<p>Oh, and then you have to think about whether you actually want to use <code>apply</code>, which leaves the stashed changes in the stack, or if you meant to actually <code>pop</code> the stashed content (<code>git stash pop stash@{n}</code>) so it&rsquo;s properly removed from the stack.</p>
+
+<p>This is where I was recently introduced to a concept in git referred to as a &lsquo;worktree&rsquo; (thanks Kiran).</p>
+
+<h2 id="worktree">Worktree</h2>
+
+<p>Git offers a feature referred to as a <a href="https://git-scm.com/docs/git-worktree" target="_blank">worktree</a>, and what it does is allow you to have multiple branches running at the same time.</p>
+
+<p>It does this by creating a new directory for you with a copy of your git repository that is synced between the two directories where they are stored.</p>
+
+<p>This is different to manually creating a new directory and git cloning your repo down, because with the worktree model the two sub directories are aware of each other.</p>
+
+<blockquote>
+<p>Note: as you&rsquo;ll see, although this workflow is pretty cool, you <em>could</em> argue that <code>git stash</code> is just plain simpler and easier for a human mind to reason about. I&rsquo;ll leave that up to the reader to decide.</p>
+</blockquote>
+
+<h2 id="example">Example</h2>
+
+<p>In the following example I&rsquo;m going to create a new git repo. I&rsquo;ll make a change in <code>master</code>, then create a new branch for doing some work. We&rsquo;ll then imagine that I have been given an urgent task that I must complete <em>now</em> and yet my current non-master branch is in such a state that I want to avoid just stashing everything.</p>
+
+<blockquote>
+<p>Note: I use tmux to split my terminal into multiple windows, and this demonstration will require two windows (or two separate terminal instances if you&rsquo;re not using a screen multiplexer) for the sake of demonstration.</p>
+</blockquote>
+
+<h3 id="create-a-new-repo">Create a new repo</h3>
+
+<ul>
+<li><code>mkdir foo_project</code></li>
+<li><code>cd foo_project</code></li>
+<li><code>touch foo</code></li>
+<li><code>git add foo</code></li>
+<li><code>git commit -m &quot;created foo file&quot;</code></li>
+</ul>
+
+<h3 id="create-a-new-branch">Create a new branch</h3>
+
+<ul>
+<li><code>git checkout -b foo_contents</code></li>
+<li><code>echo 123 &gt; foo</code></li>
+<li><code>git add -u</code></li>
+<li><code>git commit -m &quot;added content to foo&quot;</code></li>
+</ul>
+
+<p>Now I&rsquo;ll create a new file and stage it for committing, but I won&rsquo;t commit it (this is where we pretend my branch is in some hideously complex state).</p>
+
+<h3 id="create-new-worktree-branch">Create new worktree branch</h3>
+
+<ul>
+<li><code>git worktree add ../foo_hotfix</code></li>
+</ul>
+
+<blockquote>
+<p>Note: you&rsquo;ll want to create the new worktree in a directory outside of your current repo&rsquo;s directory (just so there&rsquo;s a clear distinction).</p>
+</blockquote>
+
+<p>At this point you&rsquo;ll find your current terminal is still in the same <code>foo_contents</code>, but there is now a new directory called <code>foo_hotfix</code> outside your current repo&rsquo;s directory.</p>
+
+<h3 id="make-changes-in-new-worktree-branch">Make changes in new worktree branch</h3>
+
+<p>Open up a new terminal (or split window) and run through the following steps:</p>
+
+<ul>
+<li><code>cd ./foo_hotfix</code> (or <code>cd ../foo_hotfix</code> if your new terminal is currently set to your main git repo directory)</li>
+<li><code>git log</code></li>
+</ul>
+
+<p>OK, so if you do a <code>git log</code> you&rsquo;ll find that the worktree has a branch automatically created and named after the worktree (so the branch is called <code>foo_hotfix</code> in my case).</p>
+
+<p>The important thing to realize is that <code>git worktree add</code> is a bit like <code>git branch</code> in that it creates the new worktree from the current branch you&rsquo;re in. Meaning that my <code>foo_hotfix</code> branch has the &ldquo;added content to foo&rdquo; commit from the <code>foo_contents</code> branch as that&rsquo;s where I ran the <code>git worktree add</code> command from.</p>
+
+<p>This is what <code>git log</code> looks like for me in this new worktree:</p>
+
+<pre><code>* d374dcb (Integralist) - (HEAD -&gt; foo_hotfix, foo_contents) added content to foo (2 minutes ago)
+* 9ae3a7f (Integralist) - (master) created foo file (3 minutes ago)
+</code></pre>
+
+<p>I don&rsquo;t want the commit <code>d374dcb</code> in there as it&rsquo;s coming from a branch (<code>foo_contents</code>) that&rsquo;s still in progress, and so I&rsquo;ll need to rebase out that commit:</p>
+
+<ul>
+<li><code>git rebase -i 9ae3a7f</code></li>
+</ul>
+
+<blockquote>
+<p>Note: the rebase editor opens and I change <code>pick</code> to <code>drop</code> to get rid of the commit.</p>
+</blockquote>
+
+<p>Now at this point I have a new working directory that I can work in:</p>
+
+<ul>
+<li><code>echo hotfix &gt; baz</code></li>
+<li><code>git add baz</code></li>
+<li><code>git commit -m &quot;some hotfix&quot;</code></li>
+</ul>
+
+<h3 id="merge-my-hotfix-back-into-master">Merge my hotfix back into master</h3>
+
+<p>I&rsquo;m going to change into my <code>master</code> branch, but remember I&rsquo;m still in the <code>foo_hotfix</code> directory, so my main repo directory <code>foo_project</code> (open in another terminal window) is still in the <code>foo_contents</code> branch).</p>
+
+<ul>
+<li><code>git checkout master</code></li>
+<li><code>git merge foo_hotfix</code></li>
+</ul>
+
+<h3 id="removing-the-worktree">Removing the worktree</h3>
+
+<p>OK, so at this point we&rsquo;ve merged our hotfix into <code>master</code>. I want to go back to my original repo directory and make sure I have the latest <code>master</code> rebased in before continuing on with my <code>foo_contents</code> work.</p>
+
+<p>To remove the worktree you can either remove it using the git interface (e.g. <code>git worktree remove foo_hotfix</code>) or manually remove it (e.g. <code>cd ../ &amp;&amp; rm ./foo_hotfix</code>), where git will, at some point in the future, internally run a prune and remove any references to this orphaned branch/working tree (you could also manually trigger that prune using <code>git worktree prune</code>).</p>
+
+<blockquote>
+<p>Note: if I do <code>git worktree remove foo_hotfix</code> while currently residing inside the <code>foo_hotfix</code> directory, I&rsquo;ll find that the <code>.git</code> repository is removed from the directory.</p>
+</blockquote>
+
+<h3 id="continuing-working-on-my-feature-branch">Continuing working on my feature branch</h3>
+
+<p>Presuming I&rsquo;m still in the <code>foo_hotfix</code> directory and that&rsquo;s where I ran <code>git worktree remove foo_hotfix</code>:</p>
+
+<ul>
+<li><code>cd ../foo_project</code></li>
+<li><code>git rebase master</code> &lt; whoops! I need to stash my changes first †</li>
+<li><code>git stash pop</code></li>
+</ul>
+
+<blockquote>
+<p>† why yes, this does seem a bit strange considering that&rsquo;s what I was trying to avoid in the first place, but in this case it&rsquo;s a single &lsquo;stash&rsquo; and so a simple <code>git stash pop</code> will suffice to get me back to where I need to be.</p>
+</blockquote>
+
+<p>I can now continue working on my <code>foo_contents</code> branch.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Well, this was fun heh! 😉</p>
+
+<p>Do you think you have any uses for git&rsquo;s worktree feature?</p>
+
+<p>Let me know on <a href="https://twitter.com/integralist" target="_blank">twitter</a>.</p>
+
+          </section>
+        </div>
+      </div>
+      <!-- Sidebar -->
+<div id="sidebar">
+  <div class="inner">
+    <!-- Search -->
+    <!--<section id="search" class="alt">-->
+    <!--  <form method="post" action="#">-->
+    <!--    <input type="text" name="query" id="query" placeholder="Search" />-->
+    <!--  </form>-->
+    <!--</section>-->
+    <!-- Menu -->
+    <nav id="menu">
+      <header class="major">
+        <h2>Menu</h2>
+      </header>
+      <ul>
+        <li><a href="../index.html">About</a></li>
+        <!--<li><a href="../resume/index.html">Resume</a></li>-->
+				
+      </ul>
+    </nav>
+    <!-- Section -->
+		<!--
+    <section>
+      <header class="major">
+        <h2>Highlights</h2>
+      </header>
+      <div class="mini-posts">
+        <article>
+          <a href="ppv-survivorseries-88.html" class="image"><img src="../images/survivor-88-index.jpg" alt="" /></a>
+          <p>Get ready for the ultimate showdown as Survivor Series 1988 brings non-stop tag team action, fierce rivalries, and unforgettable battles between the biggest WWF superstars!</p>
+        </article>
+        <article>
+          <a href="ppv-royalrumble-89.html" class="image"><img src="../images/rumble-89-index.jpg" alt="" /></a>
+          <p>Royal Rumble 1989 unleashes chaos with 30 superstars battling for glory in an unforgettable over-the-top-rope showdown!</p>
+        </article>
+        <article>
+          <a href="ppv-summerslam-88.html" class="image"><img src="../images/slam-88-index.jpg" alt="" /></a>
+          <p>SummerSlam 1988 delivers explosive action with iconic matchups, as the WWF's biggest stars collide in the hottest event of the summer!</p>
+        </article>
+      </div>
+    </section>
+		-->
+    <!-- Section -->
+    <!--<section>-->
+    <!--  <header class="major">-->
+    <!--    <h2>Get in touch</h2>-->
+    <!--  </header>-->
+    <!--  <p>Sed varius enim lorem ullamcorper dolore aliquam aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin sed aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>-->
+    <!--  <ul class="contact">-->
+    <!--    <li class="icon solid fa-envelope"><a href="#">information@untitled.tld</a></li>-->
+    <!--    <li class="icon solid fa-phone">(000) 000-0000</li>-->
+    <!--    <li class="icon solid fa-home">1234 Somewhere Road #8254<br />-->
+    <!--      Nashville, TN 00000-0000</li>-->
+    <!--  </ul>-->
+    <!--</section>-->
+    <!-- Footer -->
+    <footer id="footer">
+      <p class="copyright">&copy; Integralist. All rights reserved.</p>
+      <p class="copyright small">Demo Images: <a href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+    </footer>
+  </div>
+</div>
+
+    </div>
+    <!-- Scripts -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+  <head>
+    <title>Integralist</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+  </head>
+  <body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+      <!-- Main -->
+      <div id="main">
+        <div class="inner">
+          <!-- Header -->
+					<header id="header">
+						<a href="../index.html" class="logo"><strong>Home</strong></a>
+							<ul class="icons">
+							<!--<li><a href="https://x.com/integralist" class="icon brands fa-twitter" target="blank"><span class="label">Twitter</span></a></li>-->
+							<!--<li><a href="https://instagram.com/wwfsuperstarsofwrestling" class="icon brands fa-instagram" target="blank"><span class="label">Instagram</span></a></li>-->
+						</ul>
+					</header>
+
+          <!-- Content -->
+          <section>
+						<!--
+            <header class="main">
+              <h1>Royal Rumble 1989</h1>
+              <p>A Bizarre Spectacle Where the Madness Multiplies</p>
+            </header>
+            <span class="image main"><img src="../images/rumble-89.jpg" alt="" /></span>
+						-->
+						<nav>
+
+<ul>
+<li><a href="#github-workflow">GitHub Workflow</a>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+
+<li><a href="#rebase-before-merge">Rebase before merge</a></li>
+
+<li><a href="#example">Example</a></li>
+
+<li><a href="#bonus-modifying-content-within-an-interactive-rebase">(Bonus) Modifying content within an interactive rebase</a></li>
+</ul></li>
+</ul>
+
+</nav>
+
+<h1 id="github-workflow">GitHub Workflow</h1>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>This is a quick post to cover a GitHub workflow that is utilised by our specific team (Frameworks) here at BBC News. The basis of our workflow is this:</p>
+
+<ul>
+<li>Open a GitHub PR (Pull Request) by creating a new feature branch from <code>master</code></li>
+<li>Make feature specific changes and request a code review</li>
+<li>If given a &ldquo;thumbs up&rdquo;, this means the PR author is allowed to handle merging the PR</li>
+<li>The merge process requires a set of sub steps (see below)</li>
+</ul>
+
+<h2 id="rebase-before-merge">Rebase before merge</h2>
+
+<p>At this point the PR author has been given a &ldquo;thumbs up&rdquo; and is preparing their PR to be merged back into the <code>master</code> branch. The steps (in summary) are:</p>
+
+<ul>
+<li>Interactively rebase <code>master</code> onto the feature branch</li>
+<li>Squash all feature commits into a single commit:
+
+<ul>
+<li>we&rsquo;ll see an example of this later (as this isn&rsquo;t <em>exactly</em> a <code>squash</code>)</li>
+<li>the first line of the commit message should be the same as the GitHub PR title</li>
+</ul></li>
+<li>As part of the rebase ensure:
+
+<ul>
+<li>the author(s) is mentioned in the commit message</li>
+<li>the PR is mentioned (and any associated issues as well)</li>
+</ul></li>
+<li>Move back to the <code>master</code> branch and <code>cherry-pick</code> in the newly squashed feature commit</li>
+</ul>
+
+<h2 id="example">Example</h2>
+
+<p>Below is an example set of commits we&rsquo;ll be working from. I create a master branch and then branch off from that with a new <code>feature</code> branch:</p>
+
+<pre><code>git init
+touch test.txt
+git commit -am &quot;Initial file&quot;
+
+[master (root-commit) 85919e1] Initial file
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 test.txt
+
+git checkout -b feature
+Switched to a new branch 'feature'
+
+echo foo &gt;&gt; test.txt
+git commit -am &quot;Foo&quot;
+
+echo bar &gt;&gt; test.txt
+git commit -am &quot;Bar&quot;
+
+echo baz &gt;&gt; test.txt
+git commit -am &quot;Baz&quot;
+
+# Check commits we now have in this feature branch
+# Note: this is a custom shell alias
+git lg
+
+* 62d4c80 - Baz (HEAD, feature)
+* a5827db - Bar
+* ae1a4a5 - Foo
+</code></pre>
+
+<p>At this point, let&rsquo;s imagine our <code>feature</code> PR has been approved to be merged:</p>
+
+<pre><code># Make sure master is up to date
+git checkout master
+git pull --rebase origin master
+
+# Carry out the interactive rebase
+git checkout feature
+git rebase -i master
+</code></pre>
+
+<p>Now at this point you should see something like the following in your terminal:</p>
+
+<pre><code>pick ae1a4a5 Foo
+pick a5827db Bar
+pick 62d4c80 Baz
+
+# Rebase 85919e1..62d4c80 onto 85919e1
+#
+# Commands:
+#  p, pick = use commit
+#  r, reword = use commit, but edit the commit message
+#  e, edit = use commit, but stop for amending
+#  s, squash = use commit, but meld into previous commit
+#  f, fixup = like &quot;squash&quot;, but discard this commit's log message
+#  x, exec = run command (the rest of the line) using shell
+#
+# These lines can be re-ordered; they are executed from top to bottom.
+#
+# If you remove a line here THAT COMMIT WILL BE LOST.
+#
+# However, if you remove everything, the rebase will be aborted.
+#
+# Note that empty commits are commented out
+</code></pre>
+
+<p>We&rsquo;re now ready to modify our git history. So let&rsquo;s squash all our commits down into a single commit:</p>
+
+<pre><code>reword ae1a4a5 Foo
+fixup a5827db Bar
+fixup 62d4c80 Baz
+</code></pre>
+
+<blockquote>
+<p>Note: we don&rsquo;t use <code>squash</code> as that automatically uses the existing commit message from the commit we&rsquo;re squashing other commits into (but our requirements mean we wish to modify that commit message); so we use <code>reword</code> and <code>fixup</code> instead</p>
+</blockquote>
+
+<p>Let&rsquo;s apply these changes by executing <code>:wq</code>. Once you do this, Git will carry out the rebase and then drop you back to the <code>COMMIT_EDITMSG</code> screen. You can now modify the commit message so it is the same as the title of your GitHub PR (and you can inform GitHub of what PR to automatically close when this commit arrives in <code>master</code> by using the keyword: <a href="https://help.github.com/articles/closing-issues-via-commit-messages/" target="_blank">closes</a>; you&rsquo;ll notice there is the keyword <code>fixes</code> which indicates a GitHub issue to close).</p>
+
+<pre><code>New Feature X
+
+Closes #1 and Fixes #11
+Authors @integralist @stevenjack
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Date:      Sat Dec 27 16:19:54 2014 +0000
+#
+# rebase in progress; onto 85919e1
+# You are currently editing a commit while rebasing branch 'feature' on '85919e1'.
+#
+# Changes to be committed:
+#	modified:   test.txt
+#
+</code></pre>
+
+<p>We can now see (when executing <code>git log</code>) that the three individual feature commits are now a single commit with a commit hash of <code>68f5bee</code>. We can move back to <code>master</code> (i.e. <code>git checkout master</code>) and then <code>cherry-pick</code> the squashed commit into it:</p>
+
+<pre><code>git checkout master
+git cherry-pick 68f5bee
+git branch -D feature
+git push origin master
+</code></pre>
+
+<h2 id="bonus-modifying-content-within-an-interactive-rebase">(Bonus) Modifying content within an interactive rebase</h2>
+
+<p>One aspect of carrying out an interactive rebase that seems to confuse a lot of users is the ability to edit the content of a specific commit.</p>
+
+<p>I think the reason being is that when you select a commit to <code>edit</code>, the interactive rebase drops you at that specific commit, so you&rsquo;ll find there aren&rsquo;t any files in the staging area.</p>
+
+<p>To make edits at that point you need to undo the commit, so the files end up back in the staging area, ready to be modified and a new commit made.</p>
+
+<p>Let&rsquo;s take a look at an example, using our earlier example:</p>
+
+<pre><code>git lg
+
+* 76c99a2 - New Feature X (HEAD, master)
+* 85919e1 - Initial file
+</code></pre>
+
+<p>Let&rsquo;s say we want to make an edit to the commit <code>76c99a2</code>. To do that we&rsquo;ll need to start up an interactive rebase like so (we specify the commit before the one we want to edit):</p>
+
+<pre><code>git rebase -i 85919e1
+
+Stopped at 76c99a27e64b5f749ac8e3d3c7032f53954c760a... New Feature X
+You can amend the commit now, with
+
+        git commit --amend 
+
+Once you are satisfied with your changes, run
+
+        git rebase --continue
+</code></pre>
+
+<p>At this point we want to execute the following command, which will undo the commit (but keeps the changes from that commit) and place the files back into the staging area:</p>
+
+<pre><code>git reset --mixed 85919e1
+
+Unstaged changes after reset:
+M       test.txt
+</code></pre>
+
+<p>Now if you check the diff on the files you&rsquo;ll see the changes from that commit have been made and are waiting to be committed again:</p>
+
+<pre><code>git diff
+
+diff --git a/test.txt b/test.txt
+index e69de29..86e041d 100644
+--- a/test.txt
++++ b/test.txt
+@@ -0,0 +1,3 @@
++foo
++bar
++baz
+</code></pre>
+
+<p>So you can now modify the <code>test.txt</code> file as necessary and create a new commit. When you create the new commit you finish the rebase by using the <code>--continue</code> feature (as seen in the above output when initially starting the rebase):</p>
+
+<pre><code>echo qux &gt;&gt; test.txt
+git commit -am &quot;New Feature X&quot;
+git rebase --continue
+</code></pre>
+
+<blockquote>
+<p>Note: if you forget where you are then running <code>git status</code> should give you the information you need to help you either continue rebasing or to abort the rebase</p>
+</blockquote>
+
+          </section>
+        </div>
+      </div>
+      <!-- Sidebar -->
+<div id="sidebar">
+  <div class="inner">
+    <!-- Search -->
+    <!--<section id="search" class="alt">-->
+    <!--  <form method="post" action="#">-->
+    <!--    <input type="text" name="query" id="query" placeholder="Search" />-->
+    <!--  </form>-->
+    <!--</section>-->
+    <!-- Menu -->
+    <nav id="menu">
+      <header class="major">
+        <h2>Menu</h2>
+      </header>
+      <ul>
+        <li><a href="../index.html">About</a></li>
+        <!--<li><a href="../resume/index.html">Resume</a></li>-->
+				
+      </ul>
+    </nav>
+    <!-- Section -->
+		<!--
+    <section>
+      <header class="major">
+        <h2>Highlights</h2>
+      </header>
+      <div class="mini-posts">
+        <article>
+          <a href="ppv-survivorseries-88.html" class="image"><img src="../images/survivor-88-index.jpg" alt="" /></a>
+          <p>Get ready for the ultimate showdown as Survivor Series 1988 brings non-stop tag team action, fierce rivalries, and unforgettable battles between the biggest WWF superstars!</p>
+        </article>
+        <article>
+          <a href="ppv-royalrumble-89.html" class="image"><img src="../images/rumble-89-index.jpg" alt="" /></a>
+          <p>Royal Rumble 1989 unleashes chaos with 30 superstars battling for glory in an unforgettable over-the-top-rope showdown!</p>
+        </article>
+        <article>
+          <a href="ppv-summerslam-88.html" class="image"><img src="../images/slam-88-index.jpg" alt="" /></a>
+          <p>SummerSlam 1988 delivers explosive action with iconic matchups, as the WWF's biggest stars collide in the hottest event of the summer!</p>
+        </article>
+      </div>
+    </section>
+		-->
+    <!-- Section -->
+    <!--<section>-->
+    <!--  <header class="major">-->
+    <!--    <h2>Get in touch</h2>-->
+    <!--  </header>-->
+    <!--  <p>Sed varius enim lorem ullamcorper dolore aliquam aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin sed aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>-->
+    <!--  <ul class="contact">-->
+    <!--    <li class="icon solid fa-envelope"><a href="#">information@untitled.tld</a></li>-->
+    <!--    <li class="icon solid fa-phone">(000) 000-0000</li>-->
+    <!--    <li class="icon solid fa-home">1234 Somewhere Road #8254<br />-->
+    <!--      Nashville, TN 00000-0000</li>-->
+    <!--  </ul>-->
+    <!--</section>-->
+    <!-- Footer -->
+    <footer id="footer">
+      <p class="copyright">&copy; Integralist. All rights reserved.</p>
+      <p class="copyright small">Demo Images: <a href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+    </footer>
+  </div>
+</div>
+
+    </div>
+    <!-- Scripts -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+  </body>
+</html>

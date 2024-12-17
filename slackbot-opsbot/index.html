@@ -1,0 +1,290 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+  <head>
+    <title>Integralist</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+  </head>
+  <body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+      <!-- Main -->
+      <div id="main">
+        <div class="inner">
+          <!-- Header -->
+					<header id="header">
+						<a href="../index.html" class="logo"><strong>Home</strong></a>
+							<ul class="icons">
+							<!--<li><a href="https://x.com/integralist" class="icon brands fa-twitter" target="blank"><span class="label">Twitter</span></a></li>-->
+							<!--<li><a href="https://instagram.com/wwfsuperstarsofwrestling" class="icon brands fa-instagram" target="blank"><span class="label">Instagram</span></a></li>-->
+						</ul>
+					</header>
+
+          <!-- Content -->
+          <section>
+						<!--
+            <header class="main">
+              <h1>Royal Rumble 1989</h1>
+              <p>A Bizarre Spectacle Where the Madness Multiplies</p>
+            </header>
+            <span class="image main"><img src="../images/rumble-89.jpg" alt="" /></span>
+						-->
+						<nav>
+
+<ul>
+<li><a href="#opsbot-operations-slackbot">OpsBot: Operations Slackbot</a>
+<ul>
+<li><a href="#what-does-opsbot-do">What does OpsBot do?</a></li>
+
+<li><a href="#how-do-you-use-opsbot">How do you use OpsBot?</a></li>
+
+<li><a href="#incident-example">Incident Example</a></li>
+
+<li><a href="#how-does-opsbot-work">How does OpsBot work?</a></li>
+
+<li><a href="#what-did-we-learn">What did we learn?</a></li>
+
+<li><a href="#what-could-we-improve">What could we improve?</a></li>
+
+<li><a href="#what-else-could-opsbot-do">What else <em>could</em> OpsBot do?</a></li>
+</ul></li>
+</ul>
+
+</nav>
+
+<h1 id="opsbot-operations-slackbot">OpsBot: Operations Slackbot</h1>
+
+<p>So this post is a long time coming. It has been pushed to the forefront by the fact that BuzzFeed recently held its annual &lsquo;Hack Week&rsquo;, and riding on the wind of a massive success I&rsquo;ve had with my hack project this past week&hellip;</p>
+
+<blockquote>
+<p>&ldquo;Mark has casually saved the company $60k a year by letting us break away from a commercial dependency without losing any features!&rdquo; &ndash; BuzzFeed UK Newsletter</p>
+</blockquote>
+
+<p>&hellip;I&rsquo;ve decided to revisit <em>last years</em> hack week project: <strong>OpsBot</strong>, which is a Slackbot for operational tasks.</p>
+
+<blockquote>
+<p>Note: for those interested, the presentation slides for my 2018 hack can be found <a href="../../pdfs/hackweek_2018_nginx.pdf">here</a>.</p>
+</blockquote>
+
+<h2 id="what-does-opsbot-do">What does OpsBot do?</h2>
+
+<ul>
+<li>Creates standardized incident channels.</li>
+<li>Auto-invite users to incident channel based on emoji reactions.</li>
+<li>Looks up service runbooks.</li>
+</ul>
+
+<h2 id="how-do-you-use-opsbot">How do you use OpsBot?</h2>
+
+<ul>
+<li><code>/incident &lt;name&gt; [visibility] [reporter]</code></li>
+<li><code>/runbook &lt;service&gt;</code></li>
+</ul>
+
+<p>Let&rsquo;s break down the arguments provided to each command:</p>
+
+<ul>
+<li><code>name</code> (required):<br>
+hyphenated name of the incident, e.g. <code>Service-Foo-5xx</code></li>
+<li><code>visibility</code> (optional):<br>
+whether the channel should be public or private</li>
+<li><code>reporter</code> (optional; has a default channel):<br>
+name of channel where incident was first reported</li>
+<li><code>service</code> (required):<br>
+searches our company Google Drive for specified runbook</li>
+</ul>
+
+<h2 id="incident-example">Incident Example</h2>
+
+<p>Imagine I&rsquo;ve noticed something bad has happened. I&rsquo;ll go to the appropriate Slack channel and report it.</p>
+
+<p>At that point people who are interested in the incident will use an 👀 emoji (we support various types) to indicate their interest in being auto-invited to a new incident channel (if one is to be created).</p>
+
+<p>The following image demonstrates what that might look like&hellip;</p>
+
+<p><a href="../../images/opsbot_1.png"></p>
+
+<pre><code>&lt;img src=&quot;../../images/opsbot_1.png&quot;&gt;
+</code></pre>
+
+<p></a></p>
+
+<blockquote>
+<p>Note: we have automated notifications sent to specific monitoring slack channels, and so people can also use the emoji reaction on those messages.</p>
+</blockquote>
+
+<p>Now imagine this incident has been triaged and yes it is indeed a problem. We&rsquo;ll need to spin up an incident channel so we can focus discussions and get a resolution in place.</p>
+
+<p>It&rsquo;s at that point someone runs the command: <code>/incident bf4life</code> (or whatever you want to name the incident 😉) and we&rsquo;ll see the following&hellip;</p>
+
+<p><a href="../../images/opsbot_2.png"></p>
+
+<pre><code>&lt;img src=&quot;../../images/opsbot_2.png&quot;&gt;
+</code></pre>
+
+<p></a></p>
+
+<p>Notice that we automatically prefix the given incident name with the current date, so it&rsquo;s easier to go back and review/identify past incidents.</p>
+
+<p>If we&rsquo;re dealing with a service that we&rsquo;re unfamiliar with, then we might also want to look at the runbook(†) for that service.</p>
+
+<blockquote>
+<p>† a runbook is a compilation of routine procedures and operations that the system administrator or operator carries out &ndash; Wikipedia</p>
+</blockquote>
+
+<p>This is when someone runs the command: <code>/runbook site router</code> (or whatever the affected service is) and we&rsquo;ll see the following&hellip;</p>
+
+<p><a href="../../images/opsbot_3.png"></p>
+
+<pre><code>&lt;img src=&quot;../../images/opsbot_3.png&quot;&gt;
+</code></pre>
+
+<p></a></p>
+
+<h2 id="how-does-opsbot-work">How does OpsBot work?</h2>
+
+<p>When creating an incident channel, OpsBot will link back to the channel that reported the incident as well as linking to the specific notification in that channel.</p>
+
+<p>This works because OpsBot&rsquo;s logic is trying to match one of two possible patterns within the message&rsquo;s body:</p>
+
+<ol>
+<li>The phrase <code>ISSUE:</code> begins the message (see example from earlier ☝️).</li>
+<li>The message is identified as a automated NAGIOS <code>CRITICAL</code> notification.</li>
+</ol>
+
+<p>If the message is identified as an &lsquo;incident trigger&rsquo; then that&rsquo;s what we link to within the incident channel&hellip;</p>
+
+<p><a href="../../images/opsbot_4.png"></p>
+
+<pre><code>&lt;img src=&quot;../../images/opsbot_4.png&quot;&gt;
+</code></pre>
+
+<p></a></p>
+
+<h2 id="what-did-we-learn">What did we learn?</h2>
+
+<ul>
+<li>Have a pre-hack document with feature specifications in place.</li>
+<li>Slackbots are fun to create.</li>
+<li>The Google API was <del>kinda tricky</del> a PITA.</li>
+</ul>
+
+<h2 id="what-could-we-improve">What could we improve?</h2>
+
+<p>Two issues cropped up fairly early on in the design:</p>
+
+<ol>
+<li>Identify who <em>not</em> to auto-invite to a private incident.</li>
+<li>Identify better &lsquo;nagios incident message&rsquo; grouping logic.</li>
+</ol>
+
+<p>The first issue is an awkward one because we can&rsquo;t necessarily stop people from accessing a private incident channel if they&rsquo;ve gone into a public slack channel and used the emoji reaction on a particular incident.</p>
+
+<p>That being said, we very rarely have to create private incident channels. That&rsquo;s only when an incident relates to some serious security vulnerability, and nearly all the time those types of issues are raised via HackerOne and dealt with outside of typical monitoring notifications (like 5xx&rsquo;s).</p>
+
+<p>The second incident occurs when people add an emoji to a NAGIOS automated notification but then a repeat notification message is sent later. In this scenario a message pings to say there is an issue, people add the emoji reaction but later on (before an incident channel has been created) an updated NAGIOS error notification is sent.</p>
+
+<p>Now when we create the incident channel, it&rsquo;ll look for the <em>first</em> NAGIOS warning that matches and it&rsquo;ll find no emoji reactions, so it won&rsquo;t auto-invite people to the incident channel.</p>
+
+<p>Although this isn&rsquo;t the end of the world as people can still see the incident channel link generated (if it&rsquo;s a public channel) and click on that to access the incident channel.</p>
+
+<h2 id="what-else-could-opsbot-do">What else <em>could</em> OpsBot do?</h2>
+
+<p>OpsBot has the potential to do lots of things, it just depends on your needs and use cases.</p>
+
+<p>For us, a few things we planned to do but never quite got round to was&hellip;</p>
+
+<ul>
+<li>A <code>/postmortem</code> command for automatically creating our incident &lsquo;Post Mortem&rsquo; documents.</li>
+<li>A <code>/service</code> command for looking up the on-call team leads for that service(†).</li>
+<li>Add runbook info to our deployment platform so OpsBot can pull it in auto-magically.</li>
+<li>A <em>damn good refactor</em> and some tests! (this was a &lsquo;hack&rsquo; after all).</li>
+</ul>
+
+<blockquote>
+<p>† this might materialise into another project we have for improving team relations called <code>#WhoWhatWhy</code> (coming soon).</p>
+</blockquote>
+
+<p>So that&rsquo;s OpsBot. If you&rsquo;re interested, the presentation slides for the OpsBot hack can be found <a href="../../pdfs/hackweek_2017_opsbot.pdf">here</a></p>
+
+          </section>
+        </div>
+      </div>
+      <!-- Sidebar -->
+<div id="sidebar">
+  <div class="inner">
+    <!-- Search -->
+    <!--<section id="search" class="alt">-->
+    <!--  <form method="post" action="#">-->
+    <!--    <input type="text" name="query" id="query" placeholder="Search" />-->
+    <!--  </form>-->
+    <!--</section>-->
+    <!-- Menu -->
+    <nav id="menu">
+      <header class="major">
+        <h2>Menu</h2>
+      </header>
+      <ul>
+        <li><a href="../index.html">About</a></li>
+        <!--<li><a href="../resume/index.html">Resume</a></li>-->
+				
+      </ul>
+    </nav>
+    <!-- Section -->
+		<!--
+    <section>
+      <header class="major">
+        <h2>Highlights</h2>
+      </header>
+      <div class="mini-posts">
+        <article>
+          <a href="ppv-survivorseries-88.html" class="image"><img src="../images/survivor-88-index.jpg" alt="" /></a>
+          <p>Get ready for the ultimate showdown as Survivor Series 1988 brings non-stop tag team action, fierce rivalries, and unforgettable battles between the biggest WWF superstars!</p>
+        </article>
+        <article>
+          <a href="ppv-royalrumble-89.html" class="image"><img src="../images/rumble-89-index.jpg" alt="" /></a>
+          <p>Royal Rumble 1989 unleashes chaos with 30 superstars battling for glory in an unforgettable over-the-top-rope showdown!</p>
+        </article>
+        <article>
+          <a href="ppv-summerslam-88.html" class="image"><img src="../images/slam-88-index.jpg" alt="" /></a>
+          <p>SummerSlam 1988 delivers explosive action with iconic matchups, as the WWF's biggest stars collide in the hottest event of the summer!</p>
+        </article>
+      </div>
+    </section>
+		-->
+    <!-- Section -->
+    <!--<section>-->
+    <!--  <header class="major">-->
+    <!--    <h2>Get in touch</h2>-->
+    <!--  </header>-->
+    <!--  <p>Sed varius enim lorem ullamcorper dolore aliquam aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin sed aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>-->
+    <!--  <ul class="contact">-->
+    <!--    <li class="icon solid fa-envelope"><a href="#">information@untitled.tld</a></li>-->
+    <!--    <li class="icon solid fa-phone">(000) 000-0000</li>-->
+    <!--    <li class="icon solid fa-home">1234 Somewhere Road #8254<br />-->
+    <!--      Nashville, TN 00000-0000</li>-->
+    <!--  </ul>-->
+    <!--</section>-->
+    <!-- Footer -->
+    <footer id="footer">
+      <p class="copyright">&copy; Integralist. All rights reserved.</p>
+      <p class="copyright small">Demo Images: <a href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+    </footer>
+  </div>
+</div>
+
+    </div>
+    <!-- Scripts -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+  </body>
+</html>

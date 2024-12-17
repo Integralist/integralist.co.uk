@@ -1,0 +1,338 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+  <head>
+    <title>Integralist</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+  </head>
+  <body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+      <!-- Main -->
+      <div id="main">
+        <div class="inner">
+          <!-- Header -->
+					<header id="header">
+						<a href="../index.html" class="logo"><strong>Home</strong></a>
+							<ul class="icons">
+							<!--<li><a href="https://x.com/integralist" class="icon brands fa-twitter" target="blank"><span class="label">Twitter</span></a></li>-->
+							<!--<li><a href="https://instagram.com/wwfsuperstarsofwrestling" class="icon brands fa-instagram" target="blank"><span class="label">Instagram</span></a></li>-->
+						</ul>
+					</header>
+
+          <!-- Content -->
+          <section>
+						<!--
+            <header class="main">
+              <h1>Royal Rumble 1989</h1>
+              <p>A Bizarre Spectacle Where the Madness Multiplies</p>
+            </header>
+            <span class="image main"><img src="../images/rumble-89.jpg" alt="" /></span>
+						-->
+						<nav>
+
+<ul>
+<li><a href="#new-laptop-configuration-second-edition">New Laptop Configuration (Second Edition)</a>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+
+<li><a href="#backup">Backup</a></li>
+
+<li><a href="#steps">Steps</a></li>
+</ul></li>
+</ul>
+
+</nav>
+
+<h1 id="new-laptop-configuration-second-edition">New Laptop Configuration (Second Edition)</h1>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>This is the second edition to <a href="/posts/new-laptop-configuration/">&ldquo;New Laptop Configuration&rdquo;</a>.</p>
+
+<h2 id="backup">Backup</h2>
+
+<p>When moving laptops I will temporarily backup my existing GPG and SSH keys (encrypted) to an external data storage device.</p>
+
+<p>We start by making a directory to hold the files temporarily:</p>
+
+<pre><code class="language-bash">mkdir /tmp/keys
+</code></pre>
+
+<p>Next I start backing up my GPG data:</p>
+
+<pre><code class="language-shell"># Export the secret key that encrypts all the data in my 'password store'.
+# I encode the binary data in a ASCII armored file (.asc).
+gpg --export-secret-keys --armor &lt;NAME&gt; &gt; /tmp/keys/&lt;NAME&gt;.asc
+
+# Once exported I add a password to the file so people are unable to open it.
+# This will produce a .asc.gpg file.
+gpg --symmetric /tmp/keys/&lt;NAME&gt;.asc
+
+# To prevent having to trust all the same keys as before I'll export the trust database.
+gpg --export-ownertrust &gt; /tmp/keys/trustdb.txt 
+
+# Lastly, I move the files to my external flash drive (USB).
+mv /tmp/keys/&lt;NAME&gt;.asc.gpg /Volumes/.../&lt;NAME&gt;.asc.gpg
+mv /tmp/keys/trustdb.txt /Volumes/.../trustdb.txt
+</code></pre>
+
+<p>Next, I backup my SSH data:</p>
+
+<pre><code class="language-shell"># Recursively copy all files into a zip archive.
+zip -r /tmp/keys/sshbackup ~/.ssh/
+
+# I list the contents of the zip archive to be sure I have everything in there.
+unzip -l /tmp/keys/sshbackup.zip
+
+# Once archived I add a password to the file so people are unable to open it.
+# This will produce a .zip.gpg file.
+gpg --symmetric /tmp/keys/sshbackup.zip
+
+# Lastly, I move the file to my external flash drive (USB).
+mv /tmp/keys/sshbackup.zip.gpg /Volumes/.../sshbackup.zip.gpg
+</code></pre>
+
+<p>Then I clear out the temporary directory:</p>
+
+<pre><code class="language-shell">rm -rf /tmp/keys
+</code></pre>
+
+<h2 id="steps">Steps</h2>
+
+<ol>
+<li>Install Rust.</li>
+</ol>
+
+<pre><code class="language-bash">curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+</code></pre>
+
+<ol>
+<li>Install Go.</li>
+</ol>
+
+<pre><code class="language-txt">https://go.dev/dl/
+</code></pre>
+
+<ol>
+<li>Import GPG/SSH keys.</li>
+</ol>
+
+<pre><code class="language-bash">mkdir /tmp/keys
+cd /tmp/keys
+
+gpg --decrypt /tmp/keys/&lt;NAME&gt;.gpg &gt; &lt;NAME&gt;
+gpg --import &lt;NAME&gt;.asc
+
+rm ~/.gnupg/trustdb.gpg
+gpg --import-ownertrust &lt; /tmp/keys/trustdb.txt
+
+gpg --decrypt /tmp/keys/sshbackup.zip.gpg &gt; sshbackup.zip
+unzip /tmp/keys/sshbackup.zip
+mv /tmp/keys/.ssh/ ~/
+
+rm -rf /tmp/keys
+</code></pre>
+
+<ol>
+<li>Setup SSH.</li>
+</ol>
+
+<pre><code class="language-bash">eval &quot;$(ssh-agent -s)&quot;
+ssh-add --apple-use-keychain ~/.ssh/github
+</code></pre>
+
+<blockquote>
+<p><strong>NOTE:</strong> I&rsquo;ve since moved to <a href="https://www.warp.dev/" target="_blank">https://www.warp.dev/</a> (see my <a href="/posts/tools/">Dev Tools post</a>)<br>
+so I no longer use Alacritty or Fig (steps 5 and 6 below).</p>
+</blockquote>
+
+<ol>
+<li>Install Alacritty.</li>
+</ol>
+
+<pre><code class="language-bash"># https://github.com/alacritty/alacritty/releases
+mkdir .bash_completion
+curl https://raw.githubusercontent.com/alacritty/alacritty/master/extra/completions/alacritty.bash -o ~/.bash_completion/alacritty
+</code></pre>
+
+<ol>
+<li>Install Fig.</li>
+</ol>
+
+<pre><code class="language-txt">https://fig.io/
+</code></pre>
+
+<ol>
+<li>Install Homebrew + packages.</li>
+</ol>
+
+<pre><code class="language-bash"># https://brew.sh
+brew bundle --file /tmp/Brewfile install
+</code></pre>
+
+<ol>
+<li>Change default shell to Zsh.</li>
+</ol>
+
+<pre><code class="language-bash">echo /opt/homebrew/bin/zsh | sudo tee -a /etc/shells
+chsh -s /opt/homebrew/bin/zsh
+</code></pre>
+
+<blockquote>
+<p><strong>NOTE:</strong> I&rsquo;ve since moved to <a href="https://neovim.io/" target="_blank">https://neovim.io/</a> (see my <a href="/posts/tools/">Dev Tools post</a>)<br>
+so I no longer use Vim-Plug (step 9 below).</p>
+</blockquote>
+
+<ol>
+<li>Configure Vim-Plug.</li>
+</ol>
+
+<pre><code class="language-bash">sh -c 'curl -fLo &quot;${XDG_DATA_HOME:-$HOME/.local/share}&quot;/nvim/site/autoload/plug.vim --create-dirs \
+     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+</code></pre>
+
+<blockquote>
+<p><strong>NOTE:</strong> I no longer use tmux (see my <a href="/posts/tools/">Dev Tools post</a>)<br>
+so a bunch of the following step 10 has changed.</p>
+</blockquote>
+
+<ol>
+<li>Setup dotfiles.</li>
+</ol>
+
+<blockquote>
+<p><strong>NOTE</strong>: Don&rsquo;t forget to execute &lsquo;prefix + I&rsquo; in tmux to install plugins.</p>
+</blockquote>
+
+<pre><code class="language-bash">cd /tmp
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+git clone https://github.com/Integralist/dotfiles.git
+curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh
+curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh -o ~/.zsh/_git
+cp -R .alacritty.yml .zsh .zshrc .config .gitconfig .gitignore .gnupg .ignore .inputrc .leptonrc .tmux.conf ~/
+chown -R $(whoami) ~/.gnupg/
+chmod 600 ~/.gnupg/*
+chmod 700 ~/.gnupg
+</code></pre>
+
+<ol>
+<li>Setup password store.</li>
+</ol>
+
+<pre><code class="language-bash">KEY_ID=$(gpg --list-keys &lt;NAME&gt; | head -n 2 | tail -n 1 | cut -d ' ' -f 7)
+pass init $KEY_ID
+pass git init
+pass git remote add origin git@github.com:&lt;private/repo&gt;
+pass git pull
+</code></pre>
+
+<blockquote>
+<p><strong>NOTE:</strong> I no longer use Safari (see my <a href="/posts/tools/">Dev Tools post</a>)<br>
+so step 12 is redundant now.</p>
+</blockquote>
+
+<ol>
+<li>Safari extensions.</li>
+</ol>
+
+<pre><code class="language-txt">AdBlock One
+Dark Reader for Safari
+Super Agent for Safari (Cookie Consent Automation)
+Tab Sessions
+</code></pre>
+
+<ol>
+<li>Configure OS.</li>
+</ol>
+
+<pre><code class="language-txt">- Dock (Automatically hide and show the Dock)
+- Keyboard (Key Repeat = Fast, Delay Until Repeat = Short)
+- Accessibility &gt; Zoom (Use keyboard shortcuts to zoom)
+- Date &amp; Time &gt; Clock (Show date + Display the time with seconds)
+- Mission Control (disable &quot;Automatically rearrange Spaces based on most recent use&quot;)
+- Terminal Developer Mode (`spctl developer-mode enable-terminal`)
+- Wake up from sleep (`sudo pmset -a standbydelay 7200`)
+</code></pre>
+
+          </section>
+        </div>
+      </div>
+      <!-- Sidebar -->
+<div id="sidebar">
+  <div class="inner">
+    <!-- Search -->
+    <!--<section id="search" class="alt">-->
+    <!--  <form method="post" action="#">-->
+    <!--    <input type="text" name="query" id="query" placeholder="Search" />-->
+    <!--  </form>-->
+    <!--</section>-->
+    <!-- Menu -->
+    <nav id="menu">
+      <header class="major">
+        <h2>Menu</h2>
+      </header>
+      <ul>
+        <li><a href="../index.html">About</a></li>
+        <!--<li><a href="../resume/index.html">Resume</a></li>-->
+				
+      </ul>
+    </nav>
+    <!-- Section -->
+		<!--
+    <section>
+      <header class="major">
+        <h2>Highlights</h2>
+      </header>
+      <div class="mini-posts">
+        <article>
+          <a href="ppv-survivorseries-88.html" class="image"><img src="../images/survivor-88-index.jpg" alt="" /></a>
+          <p>Get ready for the ultimate showdown as Survivor Series 1988 brings non-stop tag team action, fierce rivalries, and unforgettable battles between the biggest WWF superstars!</p>
+        </article>
+        <article>
+          <a href="ppv-royalrumble-89.html" class="image"><img src="../images/rumble-89-index.jpg" alt="" /></a>
+          <p>Royal Rumble 1989 unleashes chaos with 30 superstars battling for glory in an unforgettable over-the-top-rope showdown!</p>
+        </article>
+        <article>
+          <a href="ppv-summerslam-88.html" class="image"><img src="../images/slam-88-index.jpg" alt="" /></a>
+          <p>SummerSlam 1988 delivers explosive action with iconic matchups, as the WWF's biggest stars collide in the hottest event of the summer!</p>
+        </article>
+      </div>
+    </section>
+		-->
+    <!-- Section -->
+    <!--<section>-->
+    <!--  <header class="major">-->
+    <!--    <h2>Get in touch</h2>-->
+    <!--  </header>-->
+    <!--  <p>Sed varius enim lorem ullamcorper dolore aliquam aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin sed aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>-->
+    <!--  <ul class="contact">-->
+    <!--    <li class="icon solid fa-envelope"><a href="#">information@untitled.tld</a></li>-->
+    <!--    <li class="icon solid fa-phone">(000) 000-0000</li>-->
+    <!--    <li class="icon solid fa-home">1234 Somewhere Road #8254<br />-->
+    <!--      Nashville, TN 00000-0000</li>-->
+    <!--  </ul>-->
+    <!--</section>-->
+    <!-- Footer -->
+    <footer id="footer">
+      <p class="copyright">&copy; Integralist. All rights reserved.</p>
+      <p class="copyright small">Demo Images: <a href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+    </footer>
+  </div>
+</div>
+
+    </div>
+    <!-- Scripts -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+  </body>
+</html>

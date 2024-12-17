@@ -1,0 +1,340 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+  <head>
+    <title>Integralist</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+  </head>
+  <body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+      <!-- Main -->
+      <div id="main">
+        <div class="inner">
+          <!-- Header -->
+					<header id="header">
+						<a href="../index.html" class="logo"><strong>Home</strong></a>
+							<ul class="icons">
+							<!--<li><a href="https://x.com/integralist" class="icon brands fa-twitter" target="blank"><span class="label">Twitter</span></a></li>-->
+							<!--<li><a href="https://instagram.com/wwfsuperstarsofwrestling" class="icon brands fa-instagram" target="blank"><span class="label">Instagram</span></a></li>-->
+						</ul>
+					</header>
+
+          <!-- Content -->
+          <section>
+						<!--
+            <header class="main">
+              <h1>Royal Rumble 1989</h1>
+              <p>A Bizarre Spectacle Where the Madness Multiplies</p>
+            </header>
+            <span class="image main"><img src="../images/rumble-89.jpg" alt="" /></span>
+						-->
+						<nav>
+
+<ul>
+<li><a href="#staying-anonymous">Staying Anonymous</a>
+<ul>
+<li><a href="#dns">DNS</a></li>
+
+<li><a href="#vpn">VPN</a></li>
+
+<li><a href="#tor">Tor</a></li>
+
+<li><a href="#web-browser-extensions">Web Browser Extensions</a></li>
+
+<li><a href="#email">Email</a></li>
+
+<li><a href="#conclusion">Conclusion</a></li>
+</ul></li>
+</ul>
+
+</nav>
+
+<h1 id="staying-anonymous">Staying Anonymous</h1>
+
+<p>Privacy is becoming more and more important in our modern world. We&rsquo;re constantly tracked and having our movements sold to advertisers.</p>
+
+<p>Even more so our privacy becomes a <em>necessity</em> if we find ourselves doing things that could get us arrested (or even killed), such as being a journalist or a whistleblower.</p>
+
+<p>I am lucky enough to not suffer from such necessity, but wherever possible I do like to have <em>control</em> over my web browsing and other online habits.</p>
+
+<p>What follows are some tools that I use to try and limit my exposure to the internet. This isn&rsquo;t a &lsquo;how to be 100% anonymous&rsquo; guide, but maybe some of these tools will be of interest to you.</p>
+
+<h2 id="dns">DNS</h2>
+
+<p>When you make a request for an online resource (for example this web page), your computer had to first convert the domain <code>integralist.co.uk</code> into an IP so that it could lookup the resource.</p>
+
+<p>I&rsquo;ve discussed <a href="/posts/dns-101/">how DNS works previously</a> so I wont dive into the details of it here, but suffice to say the whole process of resolving the domain name to an IP address is something that happens unencrypted.</p>
+
+<p>That means every resource you try to access will be known by your ISP, and anyone else for that matter who are snooping on the packets crossing over the network.</p>
+
+<p>Additionally, a &lsquo;man-in-the-middle&rsquo; (MITM) could modify DNS responses in such a way as to direct you to the wrong location (e.g. <a href="https://www.phishing.org/what-is-phishing" target="_blank">phishing</a>).</p>
+
+<p>To avoid these concerns you should utilize an encrypted connection to a DNS resolver. There are organizations, such as Cloudflare and Google, who offer this for free (that in itself is usually something to pay attention to for those who are very security minded).</p>
+
+<p>There are currently two forms that this type of encryption can take:</p>
+
+<ul>
+<li>DNS over TLS (DoT)</li>
+<li>DNS over HTTPS (DoH)</li>
+</ul>
+
+<blockquote>
+<p>Note: there are arguments over which is better, see <a href="https://www.thesslstore.com/blog/dns-over-tls-vs-dns-over-https/" target="_blank">this article</a> for a breakdown of what it all means.</p>
+</blockquote>
+
+<p>Here are some useful links to Cloudflare and Google if you&rsquo;re interested in their services:</p>
+
+<ul>
+<li>Cloudflare:
+
+<ul>
+<li><a href="https://developers.cloudflare.com/1.1.1.1/dns-over-tls/" target="_blank">DNS over TLS</a></li>
+<li><a href="https://developers.cloudflare.com/1.1.1.1/dns-over-https/" target="_blank">DNS over HTTPS</a></li>
+</ul></li>
+<li>Google:
+
+<ul>
+<li><a href="https://developers.google.com/speed/public-dns/docs/dns-over-tls" target="_blank">DNS over TLS</a></li>
+<li><a href="https://developers.google.com/speed/public-dns/docs/doh/" target="_blank">DNS over HTTPS</a></li>
+</ul></li>
+</ul>
+
+<h2 id="vpn">VPN</h2>
+
+<p>VPN stands for &ldquo;virtual private network&rdquo;, and is used to encrypt your internet traffic. This means no one, not even your ISP can see what resources you are requesting. All your ISP will see is you make a request to a VPN and from there you have established a secure &lsquo;tunnel&rsquo; to pass data back-and-forth.</p>
+
+<p>It&rsquo;s important to ensure your chosen VPN doesn&rsquo;t <a href="https://www.expressvpn.com/dns-leak-test" target="_blank">leak DNS requests</a>, which can occur if your VPN doesn&rsquo;t offer a feature such as a &lsquo;<a href="https://www.expressvpn.com/features/network-lock" target="_blank">network kill switch</a>&rsquo; (or &lsquo;network lock&rsquo;). Typically this is handled by the VPN software you download and run on your computer.</p>
+
+<blockquote>
+<p>Note: there are <a href="https://restoreprivacy.com/vpn-test/" target="_blank">online tools</a> available that help you verify your VPN isn&rsquo;t leaking data.</p>
+</blockquote>
+
+<p>Using a VPN also means your IP is protected and can&rsquo;t be identified because resources that are requested are actually requested from the VPN server(s). IP protection can also be increased if you utilize a request pattern such as <a href="https://nordvpn.com/features/double-vpn/" target="_blank">Double Hop</a> or an extra service such as <a href="#tor">Tor</a>.</p>
+
+<p>Typically you pay for a VPN, although in some cases you might find one that offers a free tier (e.g. <a href="https://windscribe.com/" target="_blank">Windscribe</a>). Although in the case of Windscribe that requires them to <a href="https://windscribe.com/features/no-logs" target="_blank">monitor your logs</a> in order to distinguish between free tier users who are abusing their service.</p>
+
+<blockquote>
+<p>Note: there are <a href="https://thatoneprivacysite.net/" target="_blank">online resources</a> for comparing different VPNs, which can be useful for helping you choose who to use.</p>
+</blockquote>
+
+<p>Tracking bandwidth might be a concern to you if you&rsquo;re overly security-minded, or it might be an acceptable trade-off for utilizing a free service. I personally believe that you get what you pay for, and a VPN is usually money well spent.</p>
+
+<p>Paying for a VPN doesn&rsquo;t have to be expensive though. I pay £6 a month which is acceptable considering I encrypt <em>all</em> my traffic, but I can appreciate that this might still be too much money for some people depending on circumstance.</p>
+
+<p>You can find VPNs for as cheap as £1 a month (e.g. Windscribe&rsquo;s custom built plans) or from as low as £2.99 with <a href="https://nordvpn.com/" target="_blank">NordVPN</a> depending on the length of the plan you select.</p>
+
+<h2 id="tor">Tor</h2>
+
+<p><a href="https://www.torproject.org/" target="_blank">Tor (aka. The Onion Router)</a> is a free service that directs your requested resource through multiple servers (much like the layers of an onion). The servers are chosen at random and increase your privacy by obfuscating the origin of the request through the use of encryption.</p>
+
+<p>Tor does not <em>replace</em> a VPN. Tor only anonymizes your web browsing, whereas a VPN encrypts all internet traffic (e.g. locally running desktop applications, to terminal command line applications etc).</p>
+
+<p>Using Tor with a VPN <a href="https://www.expressvpn.com/how-to-use-vpn/tor-vpn" target="_blank">is possible</a> but only really for those who require <em>complete</em> privacy (arguably not possible without a lot of effort).</p>
+
+<p>For most typical users who want to protect their privacy and online behaviours, the additional overhead of using Tor is unnecessary when they already use a VPN.</p>
+
+<p>If you feel using Tor would be a good thing, then it&rsquo;s best to first connect to your VPN before opening up Tor because it means your VPN won&rsquo;t be able to see what you&rsquo;re doing inside the Tor network (which might be useful in the unlikely scenario where your VPN is compromised).</p>
+
+<p>Equally, if there is a bug in Tor (this has happened), then the VPN will offer that extra layer of protection.</p>
+
+<blockquote>
+<p>Note: there is even an entire OS that is bootable from a USB stick that routes all traffic through Tor, called <a href="https://tails.boum.org/" target="_blank">Tails</a> (see <a href="https://www.theregister.co.uk/2019/01/30/tails_3_12/" target="_blank">this simple rundown</a> for a recent update, and <a href="https://www.expressvpn.com/blog/tails2-review/" target="_blank">this older review</a> for a more general feature run through).</p>
+</blockquote>
+
+<h2 id="web-browser-extensions">Web Browser Extensions</h2>
+
+<p>I personally use the <a href="https://www.mozilla.org/en-GB/firefox/new/" target="_blank">Firefox</a> as it offers me the best of performance and customization. Along with using a VPN I like to utilize some additional &lsquo;extensions&rsquo; (or add-ons as they&rsquo;re referred to by Firefox) to extend the behaviour of my web browser and to help reduce my ability to be tracked.</p>
+
+<p>The below image shows some of the add-ons I utilize:</p>
+
+<p><a href="../../images/firefox-addons.png"></p>
+
+<pre><code>&lt;img src=&quot;../../images/firefox-addons.png&quot;&gt;
+</code></pre>
+
+<p></a></p>
+
+<p>The ones of relevance here are:</p>
+
+<ul>
+<li><strong>Cookie Quick Manager</strong>: simple UI for editing/deleting cookies (useful to see what&rsquo;s being set and by whom!).</li>
+<li><strong>Privacy Badger</strong>: blocks invisible third-party trackers.</li>
+<li><strong>ExpressVPN</strong>: allows for doing things like &lsquo;double hops&rsquo;, spoofing my location, blocking WebRTC and enforcing HTTPS.</li>
+<li><strong>NoScript</strong>: blocks JavaScript and allows me to configure how specific scripts are run and for how long they&rsquo;re trusted.</li>
+<li><strong>uBlock</strong>: blocks ads, pop ups, and trackers.</li>
+</ul>
+
+<p>Old add-ons I used to have installed&hellip;</p>
+
+<ul>
+<li><strong>Cookie AutoDelete</strong>: highly configurable way to delete cookies once you&rsquo;ve finished browsing (whether it be changing domain, or tabs or browser restart).</li>
+<li><strong>DuckDuckGo Privacy Essentials</strong>: blocks hidden trackers, forces encryption via HTTPS, private search data, tools for grading websites based on their privacy performance.</li>
+</ul>
+
+<p>In the case of &lsquo;DuckDuckGo Privacy Essentials&rsquo; I removed that once I had &lsquo;ExpressVPN&rsquo; and &lsquo;Privacy Badger&rsquo; installed as I needed &lsquo;ExpressVPN&rsquo; any way (and that has &lsquo;HTTPS Everywhere&rsquo; built-in like DDG did), but also &lsquo;Privacy Badger&rsquo; was much a more advanced tracker blocker than DDG was.</p>
+
+<p>In the case of &lsquo;Cookie AutoDelete&rsquo; I removed that once I installed &lsquo;Privacy Badger&rsquo; and &lsquo;NoScript&rsquo; as both those add-ons aided with the same problem.</p>
+
+<p>Below is a screenshot of what the &lsquo;NoScript&rsquo; add-on looks like:</p>
+
+<p><a href="../../images/firefox-noscript-example.png"></p>
+
+<pre><code>&lt;img src=&quot;../../images/firefox-noscript-example.png&quot;&gt;
+</code></pre>
+
+<p></a></p>
+
+<p>Below is a screenshot of what the &lsquo;uBlock&rsquo; add-on looks like when visiting <code>google.com</code>:</p>
+
+<p><a href="../../images/firefox-ublock-example.png"></p>
+
+<pre><code>&lt;img src=&quot;../../images/firefox-ublock-example.png&quot;&gt;
+</code></pre>
+
+<p></a></p>
+
+<p>Below is a screenshot of what the &lsquo;DuckDuckGo Privacy Essentials&rsquo; add-on looks like:</p>
+
+<p><a href="../../images/firefox-duckduckgo.png"></p>
+
+<pre><code>&lt;img src=&quot;../../images/firefox-duckduckgo.png&quot;&gt;
+</code></pre>
+
+<p></a></p>
+
+<p>Also, each release of Firefox improves the Privacy settings available and so things like content blocking and preventing &lsquo;<a href="https://blog.mozilla.org/firefox/how-to-block-fingerprinting-with-firefox/" target="_blank">browser fingerprinting</a>&rsquo; is starting to be rolled out more generally for Firefox users:</p>
+
+<p><a href="../../images/firefox-security-strict.png"></p>
+
+<pre><code>&lt;img src=&quot;../../images/firefox-security-strict.png&quot;&gt;
+</code></pre>
+
+<p></a></p>
+
+<p>Below is a screenshot of Firefox&rsquo;s built-in &ldquo;Do Not Track&rdquo; setting (which is definitely worth enabling, even if respecting it is only <em>voluntary</em>):</p>
+
+<p><a href="../../images/firefox-do-not-track.png"></p>
+
+<pre><code>&lt;img src=&quot;../../images/firefox-do-not-track.png&quot;&gt;
+</code></pre>
+
+<p></a></p>
+
+<p>Below is a screenshot of what Firefox looks like when inspecting a web page that has had content blocked:</p>
+
+<p><a href="../../images/firefox-content-blocking.png"></p>
+
+<pre><code>&lt;img src=&quot;../../images/firefox-content-blocking.png&quot;&gt;
+</code></pre>
+
+<p></a></p>
+
+<p>But all that said, it&rsquo;s still worth checking what your browser is doing. For example, Firefox enables specific types of data collection which may be worth you disabling:</p>
+
+<p><a href="../../images/firefox-data-collection.png"></p>
+
+<pre><code>&lt;img src=&quot;../../images/firefox-data-collection.png&quot;&gt;
+</code></pre>
+
+<p></a></p>
+
+<h2 id="email">Email</h2>
+
+<p>Email through free providers such as Google&rsquo;s <a href="https://gmail.com/" target="_blank">Gmail</a> are definitely NOT private. Google has already admitted to reading their user&rsquo;s emails in order to serve them advertising based on the content of their email.</p>
+
+<p>If you are not paying for the service then you&rsquo;re not a &lsquo;customer&rsquo;. You are in fact a &lsquo;target&rsquo;.</p>
+
+<p>An alternative is to use an email provider that encrypts your messages and doesn&rsquo;t have access to their content in any way. A good option (which has a free tier, but obviously you&rsquo;ll use up that free tier pretty quickly) is <a href="https://proton.me" target="_blank">Proton</a>.</p>
+
+<blockquote>
+<p>Note: due to how they encrypt your data, if you forget your password and try to reset it, you&rsquo;ll lose <em>all</em> your email because they don&rsquo;t have a means to decrypt those files unless you provide the relevant password.</p>
+</blockquote>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Remember, staying &lsquo;anonymous&rsquo; and &lsquo;protecting your privacy&rsquo; are actually different things. The tools I use above will not help to keep my internet actions <em>anonymous</em>. If you want a good breakdown of what that would take (which is a lot of effort!) then <a href="https://blog.windscribe.com/how-to-actually-be-anonymous-online-801811b7088d?gi=317e75c4d929" target="_blank">read this article</a> by Windscribe VPN.</p>
+
+<p>Security is hard, and a never ending challenge to get right. But hopefully this post has given you some ideas about the various tools you can use to help you stay anonymous and to protect your privacy.</p>
+
+          </section>
+        </div>
+      </div>
+      <!-- Sidebar -->
+<div id="sidebar">
+  <div class="inner">
+    <!-- Search -->
+    <!--<section id="search" class="alt">-->
+    <!--  <form method="post" action="#">-->
+    <!--    <input type="text" name="query" id="query" placeholder="Search" />-->
+    <!--  </form>-->
+    <!--</section>-->
+    <!-- Menu -->
+    <nav id="menu">
+      <header class="major">
+        <h2>Menu</h2>
+      </header>
+      <ul>
+        <li><a href="../index.html">About</a></li>
+        <!--<li><a href="../resume/index.html">Resume</a></li>-->
+				
+      </ul>
+    </nav>
+    <!-- Section -->
+		<!--
+    <section>
+      <header class="major">
+        <h2>Highlights</h2>
+      </header>
+      <div class="mini-posts">
+        <article>
+          <a href="ppv-survivorseries-88.html" class="image"><img src="../images/survivor-88-index.jpg" alt="" /></a>
+          <p>Get ready for the ultimate showdown as Survivor Series 1988 brings non-stop tag team action, fierce rivalries, and unforgettable battles between the biggest WWF superstars!</p>
+        </article>
+        <article>
+          <a href="ppv-royalrumble-89.html" class="image"><img src="../images/rumble-89-index.jpg" alt="" /></a>
+          <p>Royal Rumble 1989 unleashes chaos with 30 superstars battling for glory in an unforgettable over-the-top-rope showdown!</p>
+        </article>
+        <article>
+          <a href="ppv-summerslam-88.html" class="image"><img src="../images/slam-88-index.jpg" alt="" /></a>
+          <p>SummerSlam 1988 delivers explosive action with iconic matchups, as the WWF's biggest stars collide in the hottest event of the summer!</p>
+        </article>
+      </div>
+    </section>
+		-->
+    <!-- Section -->
+    <!--<section>-->
+    <!--  <header class="major">-->
+    <!--    <h2>Get in touch</h2>-->
+    <!--  </header>-->
+    <!--  <p>Sed varius enim lorem ullamcorper dolore aliquam aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin sed aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>-->
+    <!--  <ul class="contact">-->
+    <!--    <li class="icon solid fa-envelope"><a href="#">information@untitled.tld</a></li>-->
+    <!--    <li class="icon solid fa-phone">(000) 000-0000</li>-->
+    <!--    <li class="icon solid fa-home">1234 Somewhere Road #8254<br />-->
+    <!--      Nashville, TN 00000-0000</li>-->
+    <!--  </ul>-->
+    <!--</section>-->
+    <!-- Footer -->
+    <footer id="footer">
+      <p class="copyright">&copy; Integralist. All rights reserved.</p>
+      <p class="copyright small">Demo Images: <a href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+    </footer>
+  </div>
+</div>
+
+    </div>
+    <!-- Scripts -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+  </body>
+</html>

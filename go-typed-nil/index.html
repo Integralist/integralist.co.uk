@@ -1,0 +1,246 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+  <head>
+    <title>Integralist</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+  </head>
+  <body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+      <!-- Main -->
+      <div id="main">
+        <div class="inner">
+          <!-- Header -->
+					<header id="header">
+						<a href="../index.html" class="logo"><strong>Home</strong></a>
+							<ul class="icons">
+							<!--<li><a href="https://x.com/integralist" class="icon brands fa-twitter" target="blank"><span class="label">Twitter</span></a></li>-->
+							<!--<li><a href="https://instagram.com/wwfsuperstarsofwrestling" class="icon brands fa-instagram" target="blank"><span class="label">Instagram</span></a></li>-->
+						</ul>
+					</header>
+
+          <!-- Content -->
+          <section>
+						<!--
+            <header class="main">
+              <h1>Royal Rumble 1989</h1>
+              <p>A Bizarre Spectacle Where the Madness Multiplies</p>
+            </header>
+            <span class="image main"><img src="../images/rumble-89.jpg" alt="" /></span>
+						-->
+						<nav>
+
+<ul>
+<li><a href="#go-typed-nil">Go Typed Nil</a>
+<ul>
+<li><a href="#typed-nils">Typed Nils</a></li>
+
+<li><a href="#explanation">Explanation</a></li>
+
+<li><a href="#summary">Summary</a></li>
+
+<li><a href="#reference-material">Reference material</a></li>
+</ul></li>
+</ul>
+
+</nav>
+
+<h1 id="go-typed-nil">Go Typed Nil</h1>
+
+<p>The following code doesn&rsquo;t do what you might expect:</p>
+
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+	var i *impl
+
+	fmt.Println(&quot;i == nil:&quot;, i == nil)
+	what(i)
+}
+
+type impl struct{}
+
+func (i *impl) do() {}
+
+func what(i interface{ do() }) {
+	fmt.Println(&quot;i == nil:&quot;, i == nil)
+}
+</code></pre>
+
+<p>If you expected the <code>what</code> function to print <code>i == nil: true</code>, then keep
+reading&hellip;</p>
+
+<h2 id="typed-nils">Typed Nils</h2>
+
+<p>The behavior observed is due to the way interfaces and nil values interact in
+Go. To understand why the <code>what</code> function is able to see the <code>i</code> argument as
+non-nil, we need to dig into the details of how Go handles interface values.</p>
+
+<ol>
+<li>Interface Values: In Go, an interface value is a tuple of a type and a value.
+An interface value is <code>nil</code> only if both the type and the value are <code>nil</code>.</li>
+<li>Concrete vs Interface nil: When you assign a concrete type value (which
+happens to be <code>nil</code>) to an interface, the interface itself is not <code>nil</code>. This
+is because the interface value now contains a type (the concrete type) and a
+value (<code>nil</code>).</li>
+</ol>
+
+<h2 id="explanation">Explanation</h2>
+
+<ol>
+<li>Declaring <code>i</code> as <code>*impl</code> and initializing it to <code>nil</code>:
+
+<pre><code class="language-go">
+var i *impl
+</code></pre>
+
+Here, <code>i</code> is a pointer to <code>impl</code> and is initialized to <code>nil</code>.
+<p></p></li>
+<li>Printing <code>i == nil</code> in <code>main</code>:
+
+<pre><code class="language-go">
+fmt.Println(&quot;i == nil:&quot;, i == nil)
+</code></pre>
+
+This prints <code>true</code> because <code>i</code> is a <code>nil</code> pointer to <code>impl</code>.
+<p></p></li>
+<li>Calling <code>what(i)</code>:
+
+<pre><code class="language-go">
+what(i)
+</code></pre>
+
+The function <code>what</code> takes an argument of type <code>interface{ do() }</code>.
+<p></p></li>
+<li>Inside <code>what</code> function:
+
+<pre><code class="language-go">
+func what(i interface{ do() }) {
+   fmt.Println(&quot;i == nil:&quot;, i == nil)
+}
+</code></pre>
+
+When <code>i</code> (which is <code>nil</code>) is passed to <code>what</code>, it is assigned to the parameter <code>i</code> of type <code>interface{ do() }</code>.
+<p></p></li>
+<li>Interface value construction:<br>
+The value of <code>i</code> inside <code>what</code> is now an interface that holds:
+
+<ul>
+<li>Type: <code>*impl</code> (the concrete type of the value passed in)</li>
+<li>Value: <code>nil</code> (the value of the concrete type)
+<p></p></li>
+</ul></li>
+<li>Checking <code>i == nil</code>:
+
+<pre><code class="language-go">
+fmt.Println(&quot;i == nil:&quot;, i == nil)
+</code></pre>
+
+This prints <code>false</code> because the interface <code>i</code> is not <code>nil</code>:
+
+<ul>
+<li>The type part of the interface is <code>*impl</code>.</li>
+<li>The value part of the interface is <code>nil</code>.
+<p></p></li>
+</ul></li>
+</ol>
+
+<h2 id="summary">Summary</h2>
+
+<p>The <code>what</code> function sees the <code>i</code> argument as non-nil because, in Go, an
+interface holding a <code>nil</code> pointer is not itself <code>nil</code>. The interface contains
+type information (<code>*impl</code>) and a <code>nil</code> value. Therefore, when the code checks if
+<code>i</code> is <code>nil</code>, it returns <code>false</code> since the type information (<code>*impl</code>) is
+present.</p>
+
+<h2 id="reference-material">Reference material</h2>
+
+<ul>
+<li><a href="https://go.dev/doc/faq#nil_error" target="_blank">Go FAQ</a></li>
+<li><a href="https://dave.cheney.net/2017/08/09/typed-nils-in-go-2" target="_blank">Dave Cheney</a></li>
+</ul>
+
+          </section>
+        </div>
+      </div>
+      <!-- Sidebar -->
+<div id="sidebar">
+  <div class="inner">
+    <!-- Search -->
+    <!--<section id="search" class="alt">-->
+    <!--  <form method="post" action="#">-->
+    <!--    <input type="text" name="query" id="query" placeholder="Search" />-->
+    <!--  </form>-->
+    <!--</section>-->
+    <!-- Menu -->
+    <nav id="menu">
+      <header class="major">
+        <h2>Menu</h2>
+      </header>
+      <ul>
+        <li><a href="../index.html">About</a></li>
+        <!--<li><a href="../resume/index.html">Resume</a></li>-->
+				
+      </ul>
+    </nav>
+    <!-- Section -->
+		<!--
+    <section>
+      <header class="major">
+        <h2>Highlights</h2>
+      </header>
+      <div class="mini-posts">
+        <article>
+          <a href="ppv-survivorseries-88.html" class="image"><img src="../images/survivor-88-index.jpg" alt="" /></a>
+          <p>Get ready for the ultimate showdown as Survivor Series 1988 brings non-stop tag team action, fierce rivalries, and unforgettable battles between the biggest WWF superstars!</p>
+        </article>
+        <article>
+          <a href="ppv-royalrumble-89.html" class="image"><img src="../images/rumble-89-index.jpg" alt="" /></a>
+          <p>Royal Rumble 1989 unleashes chaos with 30 superstars battling for glory in an unforgettable over-the-top-rope showdown!</p>
+        </article>
+        <article>
+          <a href="ppv-summerslam-88.html" class="image"><img src="../images/slam-88-index.jpg" alt="" /></a>
+          <p>SummerSlam 1988 delivers explosive action with iconic matchups, as the WWF's biggest stars collide in the hottest event of the summer!</p>
+        </article>
+      </div>
+    </section>
+		-->
+    <!-- Section -->
+    <!--<section>-->
+    <!--  <header class="major">-->
+    <!--    <h2>Get in touch</h2>-->
+    <!--  </header>-->
+    <!--  <p>Sed varius enim lorem ullamcorper dolore aliquam aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin sed aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>-->
+    <!--  <ul class="contact">-->
+    <!--    <li class="icon solid fa-envelope"><a href="#">information@untitled.tld</a></li>-->
+    <!--    <li class="icon solid fa-phone">(000) 000-0000</li>-->
+    <!--    <li class="icon solid fa-home">1234 Somewhere Road #8254<br />-->
+    <!--      Nashville, TN 00000-0000</li>-->
+    <!--  </ul>-->
+    <!--</section>-->
+    <!-- Footer -->
+    <footer id="footer">
+      <p class="copyright">&copy; Integralist. All rights reserved.</p>
+      <p class="copyright small">Demo Images: <a href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+    </footer>
+  </div>
+</div>
+
+    </div>
+    <!-- Scripts -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+  </body>
+</html>
