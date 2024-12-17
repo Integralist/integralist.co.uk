@@ -51,8 +51,10 @@ func main() {
 		log.Fatal(err)
 	}
 
+	sideNavContent := renderSideNav(pages, "../../")
+
 	for _, page := range pages {
-		renderPosts(page)
+		renderPosts(page, sideNavContent)
 	}
 
 	renderHome(pages)
@@ -75,7 +77,7 @@ func initTemplates() {
 	})
 }
 
-func renderPosts(page string) {
+func renderPosts(page, sideNavContent string) {
 	// Initialize templates if not already done
 	initTemplates()
 	if errInit != nil {
@@ -102,7 +104,7 @@ func renderPosts(page string) {
 	segs := strings.Split(page, "/")
 	dir := segs[0] + "/" + segs[1]
 
-	content = bytes.Replace(content, needleNavInsert, []byte(""), 1)
+	content = bytes.Replace(content, needleNavInsert, []byte(sideNavContent), 1)
 
 	dst := filepath.Join(dir, "index.html")
 	err = writeFile(dst, content)
@@ -114,36 +116,10 @@ func renderPosts(page string) {
 	fmt.Printf("rendered: %s -> %s\n", page, dst)
 }
 
-func renderHome(pages []string) { // nolint:revive // function-length
+func renderSideNav(pages []string, root string) string { // nolint:revive // function-length
 	caser := cases.Title(language.BritishEnglish)
 
-	tplIndex := "assets/templates/index.tpl"
-
-	fi, err := os.Open(tplIndex)
-	if err != nil {
-		err = fmt.Errorf("failed to open index template: %w", err)
-		panic(err)
-	}
-
-	contentIndex, err := io.ReadAll(fi)
-	if err != nil {
-		err = fmt.Errorf("failed to read index template: %w", err)
-		panic(err)
-	}
-
-	dst := "index.html"
-	needleMainInsert := []byte("{INSERT_MAIN}")
-	needleNavInsert := []byte("{INSERT_NAV}")
-	tplMain := `
-	<article>
-	<h3>{TITLE}</h3>
-	<p class="pubdate">{DATE}</p>
-	<ul class="actions">
-	<li><a href="{LINK}" class="button">Read</a></li>
-	</ul>
-	</article>
-	`
-	tplNavYear := `
+	tplNavGroupLinks := `
 	<li>
 	  <span class="opener">{YEAR}</span>
 	  <ul>
@@ -151,7 +127,7 @@ func renderHome(pages []string) { // nolint:revive // function-length
 	  </ul>
 	</li>
 	`
-	tplNavGenericPage := `
+	tplNavSingleLink := `
 	<li><a href="{LINK}">{TITLE}</a></li>
 	`
 
@@ -161,11 +137,7 @@ func renderHome(pages []string) { // nolint:revive // function-length
 		content string
 	}
 
-	var ( // nolint:prealloc
-		bufMain bytes.Buffer
-		posts   []post
-		links   []post
-	)
+	links := make([]post, 0, len(pages))
 
 	for _, path := range pages {
 		segs := strings.Split(path, "/")
@@ -173,36 +145,18 @@ func renderHome(pages []string) { // nolint:revive // function-length
 		date := strings.Split(segs[2], ".")[0]
 		year := strings.Split(date, "-")[0]
 		title := strings.ReplaceAll(caser.String(segs[1]), "-", " ")
-		link := filepath.Join(dir, dst)
-		contentMain := strings.Replace(tplMain, "{TITLE}", title, 1)
-		contentMain = strings.Replace(contentMain, "{LINK}", link, 1)
-		contentMain = strings.Replace(contentMain, "{DATE}", date, 1)
-		contentNav := strings.Replace(tplNavGenericPage, "{TITLE}", title, 1)
+		link := filepath.Join(root, dir, "index.html")
+		contentNav := strings.Replace(tplNavSingleLink, "{TITLE}", title, 1)
 		contentNav = strings.Replace(contentNav, "{LINK}", link, 1)
-		if year != "index" {
-			// Avoid adding generic pages to the home page list of pages in the
-			// main section (generic pages are fine to add to side nav `links`)
-			posts = append(posts, post{date: date, year: year, content: contentMain})
-		}
 		links = append(links, post{date: date, year: year, content: contentNav})
 	}
 
-	sort.Slice(posts, func(i, j int) bool {
-		// Parse dates for comparison
-		date1, _ := time.Parse("2006-01-02", posts[i].date)
-		date2, _ := time.Parse("2006-01-02", posts[j].date)
-		return date2.Before(date1) // Descending order
-	})
 	sort.Slice(links, func(i, j int) bool {
 		// Parse dates for comparison
 		date1, _ := time.Parse("2006-01-02", links[i].date)
 		date2, _ := time.Parse("2006-01-02", links[j].date)
 		return date2.Before(date1) // Descending order
 	})
-
-	for _, post := range posts {
-		_, _ = bufMain.WriteString(post.content)
-	}
 
 	// key is the year
 	// value is each link for that year
@@ -235,12 +189,83 @@ func renderHome(pages []string) { // nolint:revive // function-length
 		if k == "index" {
 			section = "Pages"
 		}
-		container := strings.Replace(tplNavYear, "{YEAR}", section, 1)
+		container := strings.Replace(tplNavGroupLinks, "{YEAR}", section, 1)
 		yearLinks += strings.Replace(container, "{YEAR_LINKS}", strings.Join(years[k], ""), 1)
 	}
 
+	return yearLinks
+}
+
+func renderHome(pages []string) { // nolint:revive // function-length
+	sideNavContent := renderSideNav(pages, "")
+	caser := cases.Title(language.BritishEnglish)
+
+	tplIndex := "assets/templates/index.tpl"
+
+	fi, err := os.Open(tplIndex)
+	if err != nil {
+		err = fmt.Errorf("failed to open index template: %w", err)
+		panic(err)
+	}
+
+	contentIndex, err := io.ReadAll(fi)
+	if err != nil {
+		err = fmt.Errorf("failed to read index template: %w", err)
+		panic(err)
+	}
+
+	dst := "index.html"
+	tplMain := `
+	<article>
+	<h3>{TITLE}</h3>
+	<p class="pubdate">{DATE}</p>
+	<ul class="actions">
+	<li><a href="{LINK}" class="button">Read</a></li>
+	</ul>
+	</article>
+	`
+
+	type post struct {
+		date    string // expects ISO 8601 format, e.g., "2024-12-15"
+		year    string
+		content string
+	}
+
+	var ( // nolint:prealloc
+		bufMain bytes.Buffer
+		posts   []post
+	)
+
+	for _, path := range pages {
+		segs := strings.Split(path, "/")
+		dir := segs[0] + "/" + segs[1]
+		date := strings.Split(segs[2], ".")[0]
+		year := strings.Split(date, "-")[0]
+		title := strings.ReplaceAll(caser.String(segs[1]), "-", " ")
+		link := filepath.Join(dir, dst)
+		contentMain := strings.Replace(tplMain, "{TITLE}", title, 1)
+		contentMain = strings.Replace(contentMain, "{LINK}", link, 1)
+		contentMain = strings.Replace(contentMain, "{DATE}", date, 1)
+		if year != "index" {
+			// Avoid adding generic pages to the home page list of pages in the
+			// main section (generic pages are fine to add to side nav `links`)
+			posts = append(posts, post{date: date, year: year, content: contentMain})
+		}
+	}
+
+	sort.Slice(posts, func(i, j int) bool {
+		// Parse dates for comparison
+		date1, _ := time.Parse("2006-01-02", posts[i].date)
+		date2, _ := time.Parse("2006-01-02", posts[j].date)
+		return date2.Before(date1) // Descending order
+	})
+
+	for _, post := range posts {
+		_, _ = bufMain.WriteString(post.content)
+	}
+
 	contentIndex = bytes.Replace(contentIndex, needleMainInsert, bufMain.Bytes(), 1)
-	contentIndex = bytes.Replace(contentIndex, needleNavInsert, []byte(yearLinks), 1)
+	contentIndex = bytes.Replace(contentIndex, needleNavInsert, []byte(sideNavContent), 1)
 
 	err = writeFile("index.html", contentIndex)
 	if err != nil {
