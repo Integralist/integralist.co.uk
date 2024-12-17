@@ -912,7 +912,9 @@ c := NewClient(&quot;httpbin.org&quot;, WithPort(443)) // WithPort is called and
 		<script>
 		// Get the current page's URL path and normalize it
     const currentUrl = window.location.pathname;
-    const normalizedCurrentUrl = currentUrl.replace(/.*\/(pages|posts)\//, '$1/').replace(/index\.html$/, '');
+    const normalizedCurrentUrl = currentUrl
+        .replace(/.*\/(pages|posts)\//, '/$1/') // Ensure leading slash and extract from `pages/` or `posts/`
+        .replace(/index\.html$/, ''); // Remove `index.html` suffix
 
     // Select all menu links
     const links = document.querySelectorAll('#menu ul li a');
@@ -922,7 +924,7 @@ c := NewClient(&quot;httpbin.org&quot;, WithPort(443)) // WithPort is called and
     links.forEach(link => {
         // Normalize the link's href for comparison
         const normalizedHref = link.getAttribute('href')
-            .replace(/^(\.\.\/)+/, '') // Remove leading `../../` or similar
+            .replace(/^(\.\.\/)+/, '/') // Convert `../../` to `/` for consistency
             .replace(/index\.html$/, ''); // Remove `index.html` suffix
 
         // Check if the normalized href matches the normalized current URL
