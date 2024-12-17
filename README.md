@@ -81,7 +81,6 @@ $ dig A integralist.co.uk @8.8.8.8 +short
 
 ## TODO
 
-- Fix links to posts that have now changed.
 - Figure out how to render side nav on sub pages without doubling up a walk.
   - Might need to change channel async rendering approach for a slice of paths.
 
