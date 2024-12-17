@@ -727,7 +727,7 @@ sub vcl_deliver {
 <p>† <em>except</em> when <code>Cache-Control</code> contains <code>private</code>.</p>
 </blockquote>
 
-<p>Next in line is <code>Surrogate-Control</code> (see <a href="/posts/http-caching/">my post on HTTP caching</a> for more information on this cache header), which takes priority over <code>Cache-Control</code>. The <code>Cache-Control</code> header itself takes priority over <code>Expires</code>.</p>
+<p>Next in line is <code>Surrogate-Control</code> (see <a href="/posts/http-caching-guide/">my post on HTTP caching</a> for more information on this cache header), which takes priority over <code>Cache-Control</code>. The <code>Cache-Control</code> header itself takes priority over <code>Expires</code>.</p>
 
 <blockquote>
 <p>Note: if you ever want to debug Fastly and your custom VCL then it&rsquo;s recommended you create a &lsquo;reduced test case&rsquo; using their <a href="https://fiddle.fastlydemo.net/" target="_blank">Fastly Fiddle</a> tool. Be aware this tool shares code publicly so don&rsquo;t put secret codes or logic into it! Don&rsquo;t forget to add <code>return</code> statements to the functions in the Fiddle UI, otherwise the default Fastly boilerplate VCL will be executed and that can cause confusion if your service typically doesn&rsquo;t use it! e.g. httpbin origin was sending back a 500 and <code>vcl_fetch</code> was triggering a restart and I didn&rsquo;t know why. I discovered I had to add <code>return(deliver)</code> in <code>vcl_fetch</code> to prevent Fastly boilerplate from executing!</p>
@@ -2699,7 +2699,7 @@ if(!resp.http.X-Cache-Hits) {
 <p>Rate limiting clients at the edge currently (as of March 2020) isn&rsquo;t easy because we don&rsquo;t have a fully fledged programming environment to work with (although Fastly is releasing a new &lsquo;compute@edge&rsquo; serverless service which aims to tackle that problem).</p>
 
 <blockquote>
-<p>Note: there&rsquo;s an alternative approach to what I discuss below, and it is slightly more involved because it attempts to handle web scraper/fuzzer tools. I&rsquo;ve blogged about it as a separate article here: <a href="/posts/rate-limiting-at-the-cdn-edge/">Rate Limiting at the CDN Edge</a>.</p>
+<p>Note: there&rsquo;s an alternative approach to what I discuss below, and it is slightly more involved because it attempts to handle web scraper/fuzzer tools. I&rsquo;ve blogged about it as a separate article here: <a href="/posts/rate-limiting/">Rate Limiting at the CDN Edge</a>.</p>
 </blockquote>
 
 <p>In the mean time this leaves us with various ways of implementing rate limiting with Fastly&rsquo;s version of Varnish and VCL. One approach I have is a multi-pronged approach and it ultimately requires your origin (or at least some service <em>behind</em> Fastly) to handle the rate limiting and to be able to return <code>429 Too Many Requests</code> for a client that is hitting certain exposed endpoints too hard.</p>

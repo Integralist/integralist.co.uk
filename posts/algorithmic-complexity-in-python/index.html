@@ -211,7 +211,7 @@ print(binary_search(input, 13))  # fount: True
 <p>This algorithm fits the requirements of logarithmic time complexity because instead of iterating over the entire input list, we actually <em>shorten</em> the input by half on each &lsquo;step&rsquo; of the algorithm.</p>
 
 <blockquote>
-<p>Note: I discuss <a href="/posts/big-o-for-beginners/#8">binary search</a> in more detail in an older post.</p>
+<p>Note: I discuss <a href="/posts/big-o-for-beginners/#binary-search">binary search</a> in more detail in an older post.</p>
 </blockquote>
 
 <h3 id="square-root-time">Square Root Time</h3>
@@ -252,12 +252,12 @@ search(5, range(10))
 <p>The worst case scenario is if <code>x</code> happens to be a number that doesn&rsquo;t exist in the given input. We would have to iterate over the entire input before we realized the number didn&rsquo;t exist.</p>
 
 <blockquote>
-<p>Note: a much better algorithm to use (if the input was guaranteed to be ordered/sorted) would be a <a href="/posts/big-o-for-beginners/#8">binary search</a>.</p>
+<p>Note: a much better algorithm to use (if the input was guaranteed to be ordered/sorted) would be a <a href="/posts/big-o-for-beginners/#binary-search">binary search</a>.</p>
 </blockquote>
 
 <p>What&rsquo;s interesting to keep in mind is that there are algorithms that are slower still than the example we&rsquo;ve given above but are <em>still</em> considered to be &lsquo;linear time&rsquo; (e.g. <code>O(n)</code>). Consider a collection of ten items that you loop over twice! That&rsquo;s twice as many operations as our initial example but it&rsquo;s still <code>O(n)</code> and not something like <code>O(n*2)</code>.</p>
 
-<p>Why is that? Well, it stems from how you <em>calculate</em> algorithmic complexity (see <a href="/posts/calculating-bigo/">my blog post on the subject</a>). But in essence the calculation starts off very explicit until you identify which portion of the algorithm is the &lsquo;dominant&rsquo; (e.g. as the size of the input grows, which part of the algorithm gets worse). In the case of <code>O(n*2)</code> the &lsquo;constant&rsquo; value is <code>2</code>, but if the collection size changed from <code>10</code> to <code>1000</code> then (that being the <code>n</code> part) the <code>n</code> becomes the &lsquo;dominant&rsquo; portion of the algorithm and so we can simplify big-o to just <code>O(n)</code>.</p>
+<p>Why is that? Well, it stems from how you <em>calculate</em> algorithmic complexity (see <a href="/posts/calculating-big-o/">my blog post on the subject</a>). But in essence the calculation starts off very explicit until you identify which portion of the algorithm is the &lsquo;dominant&rsquo; (e.g. as the size of the input grows, which part of the algorithm gets worse). In the case of <code>O(n*2)</code> the &lsquo;constant&rsquo; value is <code>2</code>, but if the collection size changed from <code>10</code> to <code>1000</code> then (that being the <code>n</code> part) the <code>n</code> becomes the &lsquo;dominant&rsquo; portion of the algorithm and so we can simplify big-o to just <code>O(n)</code>.</p>
 
 <h3 id="linearithmic-time">Linearithmic Time</h3>
 
@@ -283,7 +283,7 @@ print(&quot;sorted:  &quot;, quicksort(input))
 </code></pre>
 
 <blockquote>
-<p>Note: I discuss <a href="/posts/big-o-for-beginners/#13">quick sort</a> in more detail in an older post.</p>
+<p>Note: I discuss <a href="/posts/big-o-for-beginners/#quick-sort">quick sort</a> in more detail in an older post.</p>
 </blockquote>
 
 <h3 id="quadratic-time">Quadratic Time</h3>
@@ -403,7 +403,7 @@ f(3):
 <p>Hence this is the worst performing time complexity of the lot.</p>
 
 <blockquote>
-<p>Note: I discuss <a href="/posts/big-o-for-beginners/#5">factorials</a> in more detail in an older post.</p>
+<p>Note: I discuss <a href="/posts/big-o-for-beginners/#factorials">factorials</a> in more detail in an older post.</p>
 </blockquote>
 
           </section>

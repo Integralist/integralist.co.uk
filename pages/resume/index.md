@@ -419,9 +419,9 @@ I'd like to share the projects I've worked on over the years and the impact/valu
   **Why**: we had started to exceed our cost agreements with our metric/log aggregation provider.\
   **Impact**: managed to reach our log production goal, while having the opportunity to work and share ideas with lots of different teams across the org.
 
-- **What**: I was the sole engineer designing, communicating (via RFC process) and building a global rate limiting feature ([read my post about it](/posts/rate-limiting-at-the-cdn-edge/)) that integrated at different layers of our infrastructure (CDN, Routing + a new 'rate control' service).\
+- **What**: I was the sole engineer designing, communicating (via RFC process) and building a global rate limiting feature ([read my post about it](/posts/rate-limiting/)) that integrated at different layers of our infrastructure (CDN, Routing + a new 'rate control' service).\
   **Why**: teams across the organization were struggling to handle rate limiting within their services and Core Infrastructure (the team I work in) found through user feedback that this would be a valuable task to take on.\
-  **Impact**: I was able to release [a feature](/posts/rate-limiting-at-the-cdn-edge/) that provided our organization with DoS level protection at 'the edge' (e.g. reduced load on our internal infrastructure) while decoupling rate limiting logic from our critical path, along with granular client identification context to be more useful than a simple IP deny list.
+  **Impact**: I was able to release [a feature](/posts/rate-limiting/) that provided our organization with DoS level protection at 'the edge' (e.g. reduced load on our internal infrastructure) while decoupling rate limiting logic from our critical path, along with granular client identification context to be more useful than a simple IP deny list.
 
 - **What**: spent three weeks tackling problem of metric production across ~600 microservices.\
   **Why**: we had run over our allotted threshold
@@ -457,7 +457,7 @@ I'd like to share the projects I've worked on over the years and the impact/valu
   **Why**: Complex services (such as in technical areas teams were unfamiliar with) could behave like black boxes.\
   **Impact**: Provided service consumers with a clear definition of expectations, enabling teams to better understand what a service would do for them.
 
-- **What**: Wrote [a guide to HTTP caching](/posts/http-caching/).\
+- **What**: Wrote [a guide to HTTP caching](/posts/http-caching-guide/).\
   **Why**: As engineers we have a responsibility to understand the platform we write software for.\
   **Impact**: Shared understanding of how to properly use HTTP caching directives.
 
@@ -787,53 +787,53 @@ The following links are to some of my more 'popular' articles. My main focus whe
 
 - [Go Concurrency Patterns](/posts/go-concurrency-patterns/) (2024)
 - [Bitwise Operators in Go](/posts/bitwise-operators-in-go/) (2024)
-- [Continuous Integration and Deployment to multiple environments with Terraform Cloud and GitHub Actions](/posts/ci-cd/) (2024)
-- [The Power of OpenAPI: Simplifying API Design and documentation](/posts/open-api/) (2023)
-- [Beginner's guide to creating a Terraform Provider](/posts/terraform-provider/) (2022)
+- [Continuous Integration and Deployment to multiple environments with Terraform Cloud and GitHub Actions](/posts/ci-cd-with-terraform-cloud-and-github-actions/) (2024)
+- [The Power of OpenAPI: Simplifying API Design and documentation](/posts/openapi/) (2023)
+- [Beginner's guide to creating a Terraform Provider](/posts/terraform-build-a-provider/) (2022)
 - [Go Style Guide](/posts/go-style-guide/) (2022)
 - [GitHub Actions](/posts/github-actions/) (2021)
-- [Infrequent (and advanced) Vim topics, tips and tricks](/posts/vim/) (2021)
+- [Infrequent (and advanced) Vim topics, tips and tricks](/posts/vim-advanced/) (2021)
 - [Git Internals](/posts/git-internals/) (2020)
-- [Python Management and Project Dependencies](/posts/python-management/) (2019)
+- [Python Management and Project Dependencies](/posts/python-app-dependencies/) (2019)
 - [Guide to Concurrency in Python with Asyncio](/posts/python-asyncio/) (2019)
-- [Staying Anonymous](/posts/staying-anonymous/) (2019)
-- [HTTP Caching Guide](/posts/http-caching/) (2019)
+- [Staying Anonymous](/posts/anonymity/) (2019)
+- [HTTP Caching Guide](/posts/http-caching-guide/) (2019)
 - [Algorithmic Complexity in Python](/posts/algorithmic-complexity-in-python/) (2019)
 - [Data Types and Data Structures](/posts/data-types-and-data-structures/) (2019)
 - [Engineer to Manager](/posts/engineer-to-manager/) (2018)
-- [Interview Techniques](/posts/architecture-interview/) (2018)
-- [Post Mortems](/posts/post-mortem-template/) (2018)
+- [Interview Techniques](/posts/interview-techniques/) (2018)
+- [Post Mortems](/posts/post-mortems/) (2018)
 - [Thinking about Interfaces in Go](/posts/go-interfaces/) (2018)
 - [Multigrain Services](/posts/multigrain-services/) (2018)
-- [Authentication with AWS Cognito](/posts/cognito/) (2018)
-- [A guide to effective 1:1 meetings](/posts/1-1/) (2018)
-- [Project Management in Five Minutes](/posts/project-management-in-five-minutes/) (2018)
-- [Interview Topics](/posts/questions-when-interviewing/) (2018)
-- [Hashing, Encryption and Encoding](/posts/hashing-and-encryption/) (2018)
-- [Computers 101: terminals, kernels and shells](/posts/terminal-shell/) (2018)
-- [Statistics and Graphs: The Basics](/posts/statistic-basics/) (2017)
+- [Authentication with AWS Cognito](/posts/authentication-with-aws-cognito/) (2018)
+- [A guide to effective 1:1 meetings](/posts/a-guide-to-effective-1-1-meetings/) (2018)
+- [Project Management in Five Minutes](/posts/project-management/) (2018)
+- [Interview Topics](/posts/interview-topics/) (2018)
+- [Hashing, Encryption and Encoding](/posts/hashing-encryption-encoding/) (2018)
+- [Computers 101: terminals, kernels and shells](/posts/computers-101/) (2018)
+- [Statistics and Graphs: The Basics](/posts/statistics-basics/) (2017)
 - [Observability and Monitoring Best Practices](/posts/monitoring-best-practices/) (2017)
 - [Logging 101](/posts/logging-101/) (2017)
 - [Fastly Varnish](/posts/fastly-varnish/) (2017)
 - [Profiling Go](/posts/profiling-go/) (2017)
 - [Profiling Python](/posts/profiling-python/) (2017)
 - [Bits Explained (inc. base numbers, ips, cidrs and more)](/posts/bits-and-bytes/) (2016)
-- [Terminal Debugging Utilities](/posts/terminal-debugging-utilities/) (2016)
+- [Terminal Debugging Utilities](/posts/terminal-utils/) (2016)
 - [Big O for Beginners](/posts/big-o-for-beginners/) (2016)
 - [Git Merge Strategies](/posts/git-merge-strategies/) (2016)
 - [HTTP/2](/posts/http2/) (2015)
 - [Client Cert Authentication](/posts/client-cert-authentication/) (2015)
 - [DNS 101](/posts/dns-101/) (2015)
 - [Security basics with GPG, OpenSSH, OpenSSL and Keybase](/posts/security-basics/) (2015)
-- [Setting up nginx with Docker](/posts/setting-up-nginx-with-docker/) (2015)
+- [Setting up nginx with Docker](/posts/docker-nginx/) (2015)
 - [Building Software with Make](/posts/building-systems-with-make/) (2015)
-- [Thread Safe Concurrency](/posts/thread-safe-concurrency/) (2014)
+- [Thread Safe Concurrency](/posts/concurrency/) (2014)
 - [GitHub Workflow](/posts/github-workflow/) (2014)
 - [Understanding recursion in functional JavaScript programming](/posts/functional-recursive-javascript-programming/) (2014)
 - [Refactoring Techniques](/posts/refactoring-techniques/) (2013)
-- [MVCP: Model, View, Controller, Presenter](/posts/mvcp/) (2013)
+- [MVCP: Model, View, Controller, Presenter](/posts/design-mvcp/) (2013)
 - [Basic Shell Scripting](/posts/basic-shell-scripting/) (2013)
-- [Object-Oriented Design (OOD)](/posts/object-oriented-design/) (2013)
+- [Object-Oriented Design (OOD)](/posts/design-oop/) (2013)
 - [Git Tips](/posts/git-tips/) (2012)
 - [JavaScript 101](/posts/javascript-101/) (2012)
 

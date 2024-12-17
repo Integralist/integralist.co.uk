@@ -68,7 +68,7 @@
 <p>This post is going to cover a few tools and features I plan on using when writing Python code in 2019.</p>
 
 <blockquote>
-<p>† read my post &ldquo;<a href="/posts/python-management/">Python Management and Project Dependencies</a>&rdquo;.</p>
+<p>† read my post &ldquo;<a href="/posts/python-app-dependencies/">Python Management and Project Dependencies</a>&rdquo;.</p>
 </blockquote>
 
 <h2 id="type-hints-and-static-analysis">Type Hints and Static Analysis</h2>
@@ -389,7 +389,7 @@ t = Thing()  # TypeError: Can't instantiate abstract class Thing with abstract m
 
 <h2 id="dependency-management-with-pipenv">Dependency Management (with pipenv)</h2>
 
-<p><strong>UPDATE 2019.12.20</strong>: I no longer use Pipenv (as per below). I&rsquo;ve written an updated version of how best to handle dependencies <a href="/posts/python-management/">here</a>.</p>
+<p><strong>UPDATE 2019.12.20</strong>: I no longer use Pipenv (as per below). I&rsquo;ve written an updated version of how best to handle dependencies <a href="/posts/python-app-dependencies/">here</a>.</p>
 
 <p>Python has historically utilised a <code>requirements.txt</code> file for defining the dependencies required of your program, but there are <a href="https://medium.com/knerd/the-nine-circles-of-python-dependency-hell-481d53e3e025" target="_blank">various</a> annoying <a href="https://realpython.com/pipenv-guide/#dependency-management-with-requirementstxt" target="_blank">complications</a> that go along with the traditional model of handling dependencies which has meant we have a few new players in the field to help us.</p>
 
@@ -416,7 +416,7 @@ t = Thing()  # TypeError: Can't instantiate abstract class Thing with abstract m
 <p>Although <em>another</em> alternative approach to the specific problem of virtual environments is to utilise docker containers for doing your development, but you&rsquo;ll need to be comfortable using a terminal editor like Vim (unless you want to jump through some X11 hoops). Using containers also doesn&rsquo;t eliminate the other issues with determining the right dependencies, so keep reading anyway.</p>
 
 <blockquote>
-<p>Note: if using Docker with a terminal editor like Vim to solve this problem sounds like a good approach for you, then review <a href="/posts/dev-environments-within-docker-containers/">an older post of mine that explains how to do that</a>.</p>
+<p>Note: if using Docker with a terminal editor like Vim to solve this problem sounds like a good approach for you, then review <a href="/posts/docker-nginx/">an older post of mine that explains how to do that</a>.</p>
 </blockquote>
 
 <p>Here are the commands necessary to install Pipenv on macOS:</p>

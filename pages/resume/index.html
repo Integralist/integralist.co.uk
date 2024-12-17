@@ -582,9 +582,9 @@ onboard their Go applications.</p></li>
 <strong>Why</strong>: we had started to exceed our cost agreements with our metric/log aggregation provider.<br>
 <strong>Impact</strong>: managed to reach our log production goal, while having the opportunity to work and share ideas with lots of different teams across the org.</p></li>
 
-<li><p><strong>What</strong>: I was the sole engineer designing, communicating (via RFC process) and building a global rate limiting feature (<a href="/posts/rate-limiting-at-the-cdn-edge/">read my post about it</a>) that integrated at different layers of our infrastructure (CDN, Routing + a new &lsquo;rate control&rsquo; service).<br>
+<li><p><strong>What</strong>: I was the sole engineer designing, communicating (via RFC process) and building a global rate limiting feature (<a href="/posts/rate-limiting/">read my post about it</a>) that integrated at different layers of our infrastructure (CDN, Routing + a new &lsquo;rate control&rsquo; service).<br>
 <strong>Why</strong>: teams across the organization were struggling to handle rate limiting within their services and Core Infrastructure (the team I work in) found through user feedback that this would be a valuable task to take on.<br>
-<strong>Impact</strong>: I was able to release <a href="/posts/rate-limiting-at-the-cdn-edge/">a feature</a> that provided our organization with DoS level protection at &lsquo;the edge&rsquo; (e.g. reduced load on our internal infrastructure) while decoupling rate limiting logic from our critical path, along with granular client identification context to be more useful than a simple IP deny list.</p></li>
+<strong>Impact</strong>: I was able to release <a href="/posts/rate-limiting/">a feature</a> that provided our organization with DoS level protection at &lsquo;the edge&rsquo; (e.g. reduced load on our internal infrastructure) while decoupling rate limiting logic from our critical path, along with granular client identification context to be more useful than a simple IP deny list.</p></li>
 
 <li><p><strong>What</strong>: spent three weeks tackling problem of metric production across ~600 microservices.<br>
 <strong>Why</strong>: we had run over our allotted threshold
@@ -622,7 +622,7 @@ onboard their Go applications.</p></li>
 <strong>Why</strong>: Complex services (such as in technical areas teams were unfamiliar with) could behave like black boxes.<br>
 <strong>Impact</strong>: Provided service consumers with a clear definition of expectations, enabling teams to better understand what a service would do for them.</p></li>
 
-<li><p><strong>What</strong>: Wrote <a href="/posts/http-caching/">a guide to HTTP caching</a>.<br>
+<li><p><strong>What</strong>: Wrote <a href="/posts/http-caching-guide/">a guide to HTTP caching</a>.<br>
 <strong>Why</strong>: As engineers we have a responsibility to understand the platform we write software for.<br>
 <strong>Impact</strong>: Shared understanding of how to properly use HTTP caching directives.</p></li>
 
@@ -995,53 +995,53 @@ onboard their Go applications.</p></li>
 <ul>
 <li><a href="/posts/go-concurrency-patterns/">Go Concurrency Patterns</a> (2024)</li>
 <li><a href="/posts/bitwise-operators-in-go/">Bitwise Operators in Go</a> (2024)</li>
-<li><a href="/posts/ci-cd/">Continuous Integration and Deployment to multiple environments with Terraform Cloud and GitHub Actions</a> (2024)</li>
-<li><a href="/posts/open-api/">The Power of OpenAPI: Simplifying API Design and documentation</a> (2023)</li>
-<li><a href="/posts/terraform-provider/">Beginner&rsquo;s guide to creating a Terraform Provider</a> (2022)</li>
+<li><a href="/posts/ci-cd-with-terraform-cloud-and-github-actions/">Continuous Integration and Deployment to multiple environments with Terraform Cloud and GitHub Actions</a> (2024)</li>
+<li><a href="/posts/openapi/">The Power of OpenAPI: Simplifying API Design and documentation</a> (2023)</li>
+<li><a href="/posts/terraform-build-a-provider/">Beginner&rsquo;s guide to creating a Terraform Provider</a> (2022)</li>
 <li><a href="/posts/go-style-guide/">Go Style Guide</a> (2022)</li>
 <li><a href="/posts/github-actions/">GitHub Actions</a> (2021)</li>
-<li><a href="/posts/vim/">Infrequent (and advanced) Vim topics, tips and tricks</a> (2021)</li>
+<li><a href="/posts/vim-advanced/">Infrequent (and advanced) Vim topics, tips and tricks</a> (2021)</li>
 <li><a href="/posts/git-internals/">Git Internals</a> (2020)</li>
-<li><a href="/posts/python-management/">Python Management and Project Dependencies</a> (2019)</li>
+<li><a href="/posts/python-app-dependencies/">Python Management and Project Dependencies</a> (2019)</li>
 <li><a href="/posts/python-asyncio/">Guide to Concurrency in Python with Asyncio</a> (2019)</li>
-<li><a href="/posts/staying-anonymous/">Staying Anonymous</a> (2019)</li>
-<li><a href="/posts/http-caching/">HTTP Caching Guide</a> (2019)</li>
+<li><a href="/posts/anonymity/">Staying Anonymous</a> (2019)</li>
+<li><a href="/posts/http-caching-guide/">HTTP Caching Guide</a> (2019)</li>
 <li><a href="/posts/algorithmic-complexity-in-python/">Algorithmic Complexity in Python</a> (2019)</li>
 <li><a href="/posts/data-types-and-data-structures/">Data Types and Data Structures</a> (2019)</li>
 <li><a href="/posts/engineer-to-manager/">Engineer to Manager</a> (2018)</li>
-<li><a href="/posts/architecture-interview/">Interview Techniques</a> (2018)</li>
-<li><a href="/posts/post-mortem-template/">Post Mortems</a> (2018)</li>
+<li><a href="/posts/interview-techniques/">Interview Techniques</a> (2018)</li>
+<li><a href="/posts/post-mortems/">Post Mortems</a> (2018)</li>
 <li><a href="/posts/go-interfaces/">Thinking about Interfaces in Go</a> (2018)</li>
 <li><a href="/posts/multigrain-services/">Multigrain Services</a> (2018)</li>
-<li><a href="/posts/cognito/">Authentication with AWS Cognito</a> (2018)</li>
-<li><a href="/posts/1-1/">A guide to effective 1:1 meetings</a> (2018)</li>
-<li><a href="/posts/project-management-in-five-minutes/">Project Management in Five Minutes</a> (2018)</li>
-<li><a href="/posts/questions-when-interviewing/">Interview Topics</a> (2018)</li>
-<li><a href="/posts/hashing-and-encryption/">Hashing, Encryption and Encoding</a> (2018)</li>
-<li><a href="/posts/terminal-shell/">Computers 101: terminals, kernels and shells</a> (2018)</li>
-<li><a href="/posts/statistic-basics/">Statistics and Graphs: The Basics</a> (2017)</li>
+<li><a href="/posts/authentication-with-aws-cognito/">Authentication with AWS Cognito</a> (2018)</li>
+<li><a href="/posts/a-guide-to-effective-1-1-meetings/">A guide to effective 1:1 meetings</a> (2018)</li>
+<li><a href="/posts/project-management/">Project Management in Five Minutes</a> (2018)</li>
+<li><a href="/posts/interview-topics/">Interview Topics</a> (2018)</li>
+<li><a href="/posts/hashing-encryption-encoding/">Hashing, Encryption and Encoding</a> (2018)</li>
+<li><a href="/posts/computers-101/">Computers 101: terminals, kernels and shells</a> (2018)</li>
+<li><a href="/posts/statistics-basics/">Statistics and Graphs: The Basics</a> (2017)</li>
 <li><a href="/posts/monitoring-best-practices/">Observability and Monitoring Best Practices</a> (2017)</li>
 <li><a href="/posts/logging-101/">Logging 101</a> (2017)</li>
 <li><a href="/posts/fastly-varnish/">Fastly Varnish</a> (2017)</li>
 <li><a href="/posts/profiling-go/">Profiling Go</a> (2017)</li>
 <li><a href="/posts/profiling-python/">Profiling Python</a> (2017)</li>
 <li><a href="/posts/bits-and-bytes/">Bits Explained (inc. base numbers, ips, cidrs and more)</a> (2016)</li>
-<li><a href="/posts/terminal-debugging-utilities/">Terminal Debugging Utilities</a> (2016)</li>
+<li><a href="/posts/terminal-utils/">Terminal Debugging Utilities</a> (2016)</li>
 <li><a href="/posts/big-o-for-beginners/">Big O for Beginners</a> (2016)</li>
 <li><a href="/posts/git-merge-strategies/">Git Merge Strategies</a> (2016)</li>
 <li><a href="/posts/http2/">HTTP/2</a> (2015)</li>
 <li><a href="/posts/client-cert-authentication/">Client Cert Authentication</a> (2015)</li>
 <li><a href="/posts/dns-101/">DNS 101</a> (2015)</li>
 <li><a href="/posts/security-basics/">Security basics with GPG, OpenSSH, OpenSSL and Keybase</a> (2015)</li>
-<li><a href="/posts/setting-up-nginx-with-docker/">Setting up nginx with Docker</a> (2015)</li>
+<li><a href="/posts/docker-nginx/">Setting up nginx with Docker</a> (2015)</li>
 <li><a href="/posts/building-systems-with-make/">Building Software with Make</a> (2015)</li>
-<li><a href="/posts/thread-safe-concurrency/">Thread Safe Concurrency</a> (2014)</li>
+<li><a href="/posts/concurrency/">Thread Safe Concurrency</a> (2014)</li>
 <li><a href="/posts/github-workflow/">GitHub Workflow</a> (2014)</li>
 <li><a href="/posts/functional-recursive-javascript-programming/">Understanding recursion in functional JavaScript programming</a> (2014)</li>
 <li><a href="/posts/refactoring-techniques/">Refactoring Techniques</a> (2013)</li>
-<li><a href="/posts/mvcp/">MVCP: Model, View, Controller, Presenter</a> (2013)</li>
+<li><a href="/posts/design-mvcp/">MVCP: Model, View, Controller, Presenter</a> (2013)</li>
 <li><a href="/posts/basic-shell-scripting/">Basic Shell Scripting</a> (2013)</li>
-<li><a href="/posts/object-oriented-design/">Object-Oriented Design (OOD)</a> (2013)</li>
+<li><a href="/posts/design-oop/">Object-Oriented Design (OOD)</a> (2013)</li>
 <li><a href="/posts/git-tips/">Git Tips</a> (2012)</li>
 <li><a href="/posts/javascript-101/">JavaScript 101</a> (2012)</li>
 </ul>

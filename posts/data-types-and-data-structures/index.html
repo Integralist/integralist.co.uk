@@ -101,7 +101,7 @@
 <p>If we consider a composite type, such as a &lsquo;string&rsquo;, it <em>describes</em> a data structure which contains a sequence of char scalars (characters), and as such is referred to as being a &lsquo;composite&rsquo; type. Whereas the underlying <em>implementation</em> of the string composite type is typically implemented using an array data structure (we&rsquo;ll cover <a href="#data-structures">data structures</a> shortly).</p>
 
 <blockquote>
-<p>Note: in a language like C the length of the string&rsquo;s underlying array will be the number of characters in the string followed by a &lsquo;<a href="/posts/concepts-from-the-c-programming-language/#7">null terminator</a>&rsquo;.</p>
+<p>Note: in a language like C the length of the string&rsquo;s underlying array will be the number of characters in the string followed by a &lsquo;<a href="/posts/concepts-from-the-c-programming-language/#null-terminator">null terminator</a>&rsquo;.</p>
 </blockquote>
 
 <p>An abstract data type (ADT) describes the expected <em>behaviour</em> associated with a concrete data structure. For example, a &lsquo;list&rsquo; is an abstract data type which represents a countable number of ordered values, but again the <em>implementation</em> of such a data type could be implemented using a variety of different data structures, one being a &lsquo;<a href="https://en.wikipedia.org/wiki/Linked_list" target="_blank">linked list</a>&rsquo;.</p>
@@ -240,7 +240,7 @@ please see this <a href="https://en.wikipedia.org/wiki/List_of_data_structures" 
 <p>When determining the &lsquo;time complexity&rsquo; for operations on this type of data structure we typically use &lsquo;Big O&rsquo; notation and thus the Big O complexity would be defined as <code>O(log n)</code> for the average search case (which is good), but the <em>worst case</em> for searching would still be <code>O(n)</code> linear time (which is bad &ndash; and I&rsquo;ll explain why in the next section on <a href="#red-black-tree">red-black trees</a>).</p>
 
 <blockquote>
-<p>Note: I&rsquo;ve covered the basics of logarithm and binary search in a <a href="/posts/big-o-for-beginners/#8">much older post</a> about Big O notation, and so I&rsquo;ll refer you to that for more details.</p>
+<p>Note: I&rsquo;ve covered the basics of logarithm and binary search in a <a href="/posts/big-o-for-beginners/#logarithms">much older post</a> about Big O notation, and so I&rsquo;ll refer you to that for more details.</p>
 </blockquote>
 
 <p>Similarly when considering complexity for a particular algorithm, we should take into account both &lsquo;time&rsquo; and &lsquo;space&rsquo; complexity. The latter is the amount of memory necessary for the algorithm to execute and is similar to time complexity in that we&rsquo;re interested in how that resource (time vs space) will change and affect the performance depending on the size of the input.</p>

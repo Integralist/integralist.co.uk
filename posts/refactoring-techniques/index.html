@@ -458,7 +458,7 @@ end
 
 <h3 id="move-method">Move Method</h3>
 
-<p>In a previous post about <a href="http://www.integralist.co.uk/posts/object-oriented-design-ood/#class-analysis" target="_blank">Object-Oriented Design</a> I explained that you should query your classes/objects to ensure the methods they define are actually where they should be (another reason is &lsquo;feature envy&rsquo;, if a method is asking another class a lot of questions then it may be an indication the method is on the wrong object).</p>
+<p>In a previous post about <a href="http://www.integralist.co.uk/posts/design-ood/#class-analysis" target="_blank">Object-Oriented Design</a> I explained that you should query your classes/objects to ensure the methods they define are actually where they should be (another reason is &lsquo;feature envy&rsquo;, if a method is asking another class a lot of questions then it may be an indication the method is on the wrong object).</p>
 
 <p>The Move Method technique ensures this decoupling by simply moving the identified misplaced method onto the correct one.</p>
 
@@ -590,7 +590,7 @@ class Baz
 end
 </code></pre>
 
-<p>From here we&rsquo;re now in a better state to use both the <a href="#extract-method">Extract Method</a> and <a href="/posts/even-more-refactoring-techniques/#replace-conditional-with-polymorphism">Replace Conditional with Polymorphism</a> techniques to refactor the <code>Baz</code> class.</p>
+<p>From here we&rsquo;re now in a better state to use both the <a href="#extract-method">Extract Method</a> and <a href="/posts/refactoring-techniques/#replace-conditional-with-polymorphism">Replace Conditional with Polymorphism</a> techniques to refactor the <code>Baz</code> class.</p>
 
 <h3 id="replace-loop-with-collection-closure-method">Replace Loop With Collection Closure Method</h3>
 
@@ -926,7 +926,7 @@ end
 end 
 </code></pre>
 
-<p>You can also use this technique to help ease creating properties on an object. For example, I used this technique in my <a href="http://www.integralist.co.uk/posts/mvcp/" target="_blank">MVCP</a> blog post to dynamically create instance variables&hellip;</p>
+<p>You can also use this technique to help ease creating properties on an object. For example, I used this technique in my <a href="http://www.integralist.co.uk/posts/design-mvcp/" target="_blank">MVCP</a> blog post to dynamically create instance variables&hellip;</p>
 
 <pre><code>require 'app/presenters/base' 
 require 'app/models/person' 
@@ -1003,7 +1003,7 @@ foo.do_something
 
 <p>The motivation for this technique is to convert a simple data container which holds multiple data types into an object with clear and descriptive identifiers.</p>
 
-<p>This principle helps to present your complex data into a more sensible format (I demonstrated this in a previous post on <a href="/posts/object-oriented-design-ood/#direct-references">object-oriented design</a>). This technique also makes the data interaction more maintainable by providing an easier and understandable interface to the data.</p>
+<p>This principle helps to present your complex data into a more sensible format (I demonstrated this in a previous post on <a href="/posts/design-ood/#direct-references">object-oriented design</a>). This technique also makes the data interaction more maintainable by providing an easier and understandable interface to the data.</p>
 
 <p>Here is an example where we&rsquo;re violating the principle of a clean data interaction&hellip;</p>
 
