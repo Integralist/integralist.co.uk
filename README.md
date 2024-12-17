@@ -82,7 +82,6 @@ $ dig A integralist.co.uk @8.8.8.8 +short
 ## TODO
 
 - Write some JS that moves the nav UNDER the h1 (and toggle visibility).
-- Move posts into posts directory.
 - Fix links to posts that have now changed.
 - Figure out how to render side nav on sub pages without doubling up a walk.
   - Might need to change channel async rendering approach for a slice of paths.

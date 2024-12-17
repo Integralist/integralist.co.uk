@@ -1,0 +1,514 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+  <head>
+    <title>Integralist</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+      <!-- Main -->
+      <div id="main">
+        <div class="inner">
+          <!-- Header -->
+					<header id="header">
+						<a href="../../index.html" class="logo"><strong>Home</strong></a>
+							<ul class="icons">
+							<!--<li><a href="https://x.com/integralist" class="icon brands fa-twitter" target="blank"><span class="label">Twitter</span></a></li>-->
+							<!--<li><a href="https://instagram.com/wwfsuperstarsofwrestling" class="icon brands fa-instagram" target="blank"><span class="label">Instagram</span></a></li>-->
+						</ul>
+					</header>
+
+          <!-- Content -->
+          <section>
+						<!--
+            <header class="main">
+              <h1>Royal Rumble 1989</h1>
+              <p>A Bizarre Spectacle Where the Madness Multiplies</p>
+            </header>
+            <span class="image main"><img src="../images/rumble-89.jpg" alt="" /></span>
+						-->
+						<nav>
+
+<ul>
+<li><a href="#setting-up-neovim-for-rust-and-go-development">Setting up Neovim for Rust and Go development</a>
+<ul>
+<li><a href="#update-november-2022">UPDATE November 2022</a></li>
+
+<li><a href="#requirements">Requirements</a>
+<ul>
+<li><a href="#executables">Executables</a></li>
+
+<li><a href="#plugin-manager">Plugin manager</a></li>
+
+<li><a href="#lsp">LSP</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+</nav>
+
+<h1 id="setting-up-neovim-for-rust-and-go-development">Setting up Neovim for Rust and Go development</h1>
+
+<h2 id="update-november-2022">UPDATE November 2022</h2>
+
+<p>Not long after I wrote this post I had switched from VimScript to using Lua and also making large sets of changes and tweaks to my configuration. The source of truth is:</p>
+
+<p><a href="https://github.com/integralist/nvim" target="_blank">https://github.com/integralist/nvim</a> (which is a submodule within <a href="https://github.com/integralist/dotfiles" target="_blank">https://github.com/integralist/dotfiles</a>)</p>
+
+<p>This post is being kept for posterity, but ultimately I would recommend you look at the above dotfiles repo instead.</p>
+
+<hr>
+
+<p>This is going to be a very focused post because when you&rsquo;re looking to get your code editor configured you typically just want answers. Let&rsquo;s go&hellip;</p>
+
+<blockquote>
+<p><strong>NOTE</strong>: I configure Neovim with <code>~/.config/nvim/init.vim</code>.</p>
+</blockquote>
+
+<h2 id="requirements">Requirements</h2>
+
+<ul>
+<li>Executables.</li>
+<li>Plugin manager.</li>
+<li>An LSP (Language Server Protocol) client.</li>
+</ul>
+
+<h3 id="executables">Executables</h3>
+
+<p>There&rsquo;s a bunch of Rust and Go based tools we&rsquo;ll want to have installed first.</p>
+
+<p>Add the following to your <code>.bashrc</code>:</p>
+
+<pre><code class="language-bash">export PATH=&quot;/usr/local/go/bin:$PATH&quot;
+export PATH=&quot;$HOME/go/bin:$PATH&quot;
+export PATH=&quot;$HOME/.cargo/bin:$PATH&quot;
+
+# rustup
+#
+# avoid https://github.com/rust-analyzer/rust-analyzer/issues/4172
+#
+# NOTE: Has to be defined after PATH update to locate .cargo directory.
+#
+export RUST_SRC_PATH=&quot;$(rustc --print sysroot)/lib/rustlib/src/rust/src&quot;
+
+# To support the configuring our go environment we will override the cd
+# command to call the go logic for checking the go version.
+#
+# We also make sure to call ls when changing directories as it's nice to see
+# what's in each directory.
+#
+# NOTE: We use `command` and not `builtin` because the latter doesn't take into
+# account anything available on the user's $PATH but also because it didn't
+# work with the Starship prompt which seems to override cd also.
+function cd {
+  command cd &quot;$@&quot;
+  RET=$?
+  ls
+  go_version
+  return $RET
+}
+
+# configure go environment
+#
+# Custom go binaries are installed in $HOME/go/bin.
+#
+function go_version {
+    if [ -f &quot;go.mod&quot; ]; then
+        v=$(grep -E '^go \d.+$' ./go.mod | grep -oE '\d.+$')
+        if [[ ! $(go version | grep &quot;go$v&quot;) ]]; then
+          echo &quot;&quot;
+          echo &quot;About to switch go version to: $v&quot;
+          if ! command -v &quot;$HOME/go/bin/go$v&quot; &amp;&gt; /dev/null
+          then
+            echo &quot;run: go install golang.org/dl/go$v@latest &amp;&amp; go$v download &amp;&amp; sudo cp \$(which go$v) \$(which go)&quot;
+            return
+          fi
+          sudo cp $(which go$v) $(which go)
+        fi
+    fi
+}
+if [ ! -f &quot;$HOME/go/bin/gofumpt&quot; ]; then
+    go install mvdan.cc/gofumpt@latest
+fi
+if [ ! -f &quot;$HOME/go/bin/revive&quot; ]; then
+    go install github.com/mgechev/revive@latest
+fi
+
+# configure rust environment
+#
+# - autocomplete
+# - rust-analyzer
+# - cargo audit
+# - cargo-nextest
+# - cargo fmt
+# - cargo clippy
+# - cargo edit
+#
+source $HOME/.cargo/env
+if [ ! -f &quot;$HOME/.config/rustlang/autocomplete/rustup&quot; ]; then
+  mkdir -p ~/.config/rustlang/autocomplete
+  rustup completions bash rustup &gt;&gt; ~/.config/rustlang/autocomplete/rustup
+fi
+source &quot;$HOME/.config/rustlang/autocomplete/rustup&quot;
+if ! command -v rust-analyzer &amp;&gt; /dev/null
+then
+  brew install rust-analyzer
+fi
+if ! cargo audit --version &amp;&gt; /dev/null; then
+  cargo install cargo-audit --features=fix
+fi
+if ! cargo nextest --version &amp;&gt; /dev/null; then
+  cargo install cargo-nextest
+fi
+if ! cargo fmt --version &amp;&gt; /dev/null; then
+  rustup component add rustfmt
+fi
+if ! cargo clippy --version &amp;&gt; /dev/null; then
+  rustup component add clippy
+fi
+if ! ls ~/.cargo/bin | grep 'cargo-upgrade' &amp;&gt; /dev/null; then
+  cargo install cargo-edit
+fi
+</code></pre>
+
+<h3 id="plugin-manager">Plugin manager</h3>
+
+<p>I use <a href="https://github.com/junegunn/vim-plug" target="_blank"><code>vim-plug</code></a>:</p>
+
+<pre><code class="language-viml">call plug#begin()
+
+Plug 'folke/trouble.nvim'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/vim-vsnip-integ'
+Plug 'j-hui/fidget.nvim'
+Plug 'kosayoda/nvim-lightbulb'
+Plug 'm-demare/hlargs.nvim'
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'simrat39/rust-tools.nvim'
+Plug 'weilbith/nvim-code-action-menu'
+Plug 'williamboman/nvim-lsp-installer'
+
+call plug#end()
+</code></pre>
+
+<p>Define the above and run <code>:PlugInstall</code>. Once everything is installed, continue to the next section.</p>
+
+<h3 id="lsp">LSP</h3>
+
+<p>I use Neovim&rsquo;s built-in LSP.</p>
+
+<p>Add the following plugin configuration:</p>
+
+<pre><code class="language-viml">&quot; ------------------------------------
+&quot; j-hui/fidget.nvim
+&quot; ------------------------------------
+&quot;
+lua require(&quot;fidget&quot;).setup()
+
+&quot; ------------------------------------
+&quot; kosayoda/nvim-lightbulb
+&quot; ------------------------------------
+&quot;
+autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()
+
+&quot; ------------------------------------
+&quot; weilbith/nvim-code-action-menu
+&quot; ------------------------------------
+&quot;
+let g:code_action_menu_window_border = 'single'
+
+&quot; ------------------------------------
+&quot; folke/trouble.nvim
+&quot; ------------------------------------
+&quot;
+lua require(&quot;trouble&quot;).setup()
+
+&quot; ------------------------------------
+&quot; Neovim LSP
+&quot; ------------------------------------
+&quot;
+&quot; Configure Rust LSP.
+&quot;
+&quot; https://github.com/simrat39/rust-tools.nvim#configuration
+&quot;
+lua &lt;&lt;EOF
+local opts = {
+  -- rust-tools options
+  tools = {
+    autoSetHints = true,
+    hover_with_actions = true,
+    inlay_hints = {
+      show_parameter_hints = true,
+      parameter_hints_prefix = &quot;&quot;,
+      other_hints_prefix = &quot;&quot;,
+      },
+    },
+
+  -- all the opts to send to nvim-lspconfig
+  -- these override the defaults set by rust-tools.nvim
+  -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
+  -- https://rust-analyzer.github.io/manual.html#features
+  server = {
+    settings = {
+      [&quot;rust-analyzer&quot;] = {
+        assist = {
+          importEnforceGranularity = true,
+          importPrefix = &quot;crate&quot;
+          },
+        cargo = {
+          allFeatures = true
+          },
+        checkOnSave = {
+          -- default: `cargo check`
+          command = &quot;clippy&quot;
+          },
+        },
+        inlayHints = {
+          lifetimeElisionHints = {
+            enable = true,
+            useParameterNames = true
+          },
+        },
+      }
+    },
+}
+require('rust-tools').setup(opts)
+EOF
+
+&quot; Configure Golang LSP.
+&quot;
+&quot; https://github.com/golang/tools/blob/master/gopls/doc/settings.md
+&quot; https://github.com/golang/tools/blob/master/gopls/doc/analyzers.md
+&quot; https://github.com/golang/tools/blob/master/gopls/doc/vim.md#neovim
+&quot; https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#gopls
+&quot; https://github.com/golang/tools/blob/master/gopls/doc/vim.md#neovim
+&quot; https://www.getman.io/posts/programming-go-in-neovim/
+&quot;
+lua &lt;&lt;EOF
+require('lspconfig').gopls.setup{
+	cmd = {'gopls'},
+  settings = {
+    gopls = {
+      analyses = {
+        nilness = true,
+        unusedparams = true,
+        unusedwrite = true,
+        useany = true,
+      },
+      experimentalPostfixCompletions = true,
+      gofumpt = true,
+      staticcheck = true,
+      usePlaceholders = true,
+    },
+  },
+	on_attach = on_attach,
+}
+EOF
+
+&quot; Configure Golang Environment.
+&quot;
+fun! GoFumpt()
+  :silent !gofumpt -w %
+  :edit
+endfun
+autocmd FileType go map &lt;buffer&gt; &lt;leader&gt;p :call append(&quot;.&quot;, &quot;fmt.Printf(\&quot;%+v\\n\&quot;, )&quot;)&lt;CR&gt; &lt;bar&gt; :norm $a&lt;CR&gt;&lt;esc&gt;j==$i
+autocmd FileType go map &lt;buffer&gt; &lt;leader&gt;e :call append(&quot;.&quot;, &quot;if err != nil {return err}&quot;)&lt;CR&gt; &lt;bar&gt; :w&lt;CR&gt;
+autocmd BufWritePost *.go call GoFumpt()
+autocmd BufWritePost *.go :cex system('revive '..expand('%:p')) | cwindow
+
+&quot; Order imports on save, like goimports does:
+&quot;
+lua &lt;&lt;EOF
+  function OrgImports(wait_ms)
+    local params = vim.lsp.util.make_range_params()
+    params.context = {only = {&quot;source.organizeImports&quot;}}
+    local result = vim.lsp.buf_request_sync(0, &quot;textDocument/codeAction&quot;, params, wait_ms)
+    for _, res in pairs(result or {}) do
+      for _, r in pairs(res.result or {}) do
+        if r.edit then
+          vim.lsp.util.apply_workspace_edit(r.edit, &quot;UTF-8&quot;)
+        else
+          vim.lsp.buf.execute_command(r.command)
+        end
+      end
+    end
+  end
+EOF
+autocmd BufWritePre *.go lua OrgImports(1000)
+
+&quot; Configure LSP code navigation shortcuts
+&quot; as found in :help lsp
+&quot;
+nnoremap &lt;silent&gt; &lt;c-]&gt;     &lt;cmd&gt;lua vim.lsp.buf.definition()&lt;CR&gt;
+nnoremap &lt;silent&gt; &lt;c-k&gt;     &lt;cmd&gt;lua vim.lsp.buf.signature_help()&lt;CR&gt;
+nnoremap &lt;silent&gt; K         &lt;cmd&gt;lua vim.lsp.buf.hover()&lt;CR&gt;
+nnoremap &lt;silent&gt; gi        &lt;cmd&gt;lua vim.lsp.buf.implementation()&lt;CR&gt;
+nnoremap &lt;silent&gt; gc        &lt;cmd&gt;lua vim.lsp.buf.incoming_calls()&lt;CR&gt;
+nnoremap &lt;silent&gt; gd        &lt;cmd&gt;lua vim.lsp.buf.type_definition()&lt;CR&gt;
+nnoremap &lt;silent&gt; gr        &lt;cmd&gt;lua vim.lsp.buf.references()&lt;CR&gt;
+nnoremap &lt;silent&gt; gn        &lt;cmd&gt;lua vim.lsp.buf.rename()&lt;CR&gt;
+nnoremap &lt;silent&gt; gs        &lt;cmd&gt;lua vim.lsp.buf.document_symbol()&lt;CR&gt;
+nnoremap &lt;silent&gt; gw        &lt;cmd&gt;lua vim.lsp.buf.workspace_symbol()&lt;CR&gt;
+
+&quot; Replaced LSP implementation with code action plugin...
+&quot;
+&quot; nnoremap &lt;silent&gt; ga        &lt;cmd&gt;lua vim.lsp.buf.code_action()&lt;CR&gt;
+&quot;
+nnoremap &lt;silent&gt; ga        &lt;cmd&gt;CodeActionMenu&lt;CR&gt;
+
+nnoremap &lt;silent&gt; [x        &lt;cmd&gt;lua vim.diagnostic.goto_prev()&lt;CR&gt;
+nnoremap &lt;silent&gt; ]x        &lt;cmd&gt;lua vim.diagnostic.goto_next()&lt;CR&gt;
+nnoremap &lt;silent&gt; ]s        &lt;cmd&gt;lua vim.diagnostic.show()&lt;CR&gt;
+
+&quot; Replaced LSP implementation with trouble plugin...
+&quot;
+&quot; nnoremap &lt;silent&gt; &lt;space&gt;q  &lt;cmd&gt;lua vim.diagnostic.setloclist()&lt;CR&gt;
+&quot;
+nnoremap &lt;silent&gt; &lt;space&gt;q  &lt;cmd&gt;Trouble&lt;CR&gt;
+
+&quot; Setup Completion
+&quot; https://github.com/hrsh7th/nvim-cmp#recommended-configuration
+&quot;
+lua &lt;&lt;EOF
+local cmp = require('cmp')
+cmp.setup({
+  snippet = {
+    expand = function(args)
+        vim.fn[&quot;vsnip#anonymous&quot;](args.body)
+    end,
+  },
+  mapping = {
+    ['&lt;C-p&gt;'] = cmp.mapping.select_prev_item(),
+    ['&lt;C-n&gt;'] = cmp.mapping.select_next_item(),
+    ['&lt;S-Tab&gt;'] = cmp.mapping.select_prev_item(),
+    ['&lt;Tab&gt;'] = cmp.mapping.select_next_item(),
+    ['&lt;C-d&gt;'] = cmp.mapping.scroll_docs(-4),
+    ['&lt;C-f&gt;'] = cmp.mapping.scroll_docs(4),
+    ['&lt;C-Space&gt;'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+    ['&lt;C-e&gt;'] = cmp.mapping.close(),
+    ['&lt;CR&gt;'] = cmp.mapping.confirm({
+      behavior = cmp.ConfirmBehavior.Insert,
+      select = true,
+    })
+  },
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'vsnip' },
+    { name = 'path' },
+    { name = 'buffer' },
+    { name = 'nvim_lsp_signature_help' },
+  },
+})
+EOF
+
+&quot; Setup Treesitter and friends
+&quot;
+&quot; NOTE: originally used `ensure_installed = &quot;all&quot;` but an experimental PHP
+&quot; parser was causing NPM lockfile errors.
+&quot;
+lua &lt;&lt;EOF
+require('nvim-treesitter.configs').setup {
+  ensure_installed = { &quot;bash&quot;, &quot;c&quot;, &quot;cmake&quot;, &quot;css&quot;, &quot;dockerfile&quot;, &quot;go&quot;, &quot;gomod&quot;, &quot;gowork&quot;, &quot;hcl&quot;, &quot;help&quot;, &quot;html&quot;, &quot;http&quot;, &quot;javascript&quot;, &quot;json&quot;, &quot;lua&quot;, &quot;make&quot;, &quot;markdown&quot;, &quot;python&quot;, &quot;regex&quot;, &quot;ruby&quot;, &quot;rust&quot;, &quot;toml&quot;, &quot;vim&quot;, &quot;yaml&quot;, &quot;zig&quot; },
+  highlight = {
+    enable = true,
+  },
+  rainbow = {
+    enable = true,
+    extended_mode = true,
+    max_file_lines = nil,
+  }
+}
+require('hlargs').setup()
+EOF
+</code></pre>
+
+          </section>
+        </div>
+      </div>
+      <!-- Sidebar -->
+<div id="sidebar">
+  <div class="inner">
+    <!-- Search -->
+    <!--<section id="search" class="alt">-->
+    <!--  <form method="post" action="#">-->
+    <!--    <input type="text" name="query" id="query" placeholder="Search" />-->
+    <!--  </form>-->
+    <!--</section>-->
+    <!-- Menu -->
+    <nav id="menu">
+      <header class="major">
+        <h2>Menu</h2>
+      </header>
+      <ul>
+        <li><a href="../../index.html">About</a></li>
+        <!--<li><a href="../resume/index.html">Resume</a></li>-->
+				
+      </ul>
+    </nav>
+    <!-- Section -->
+		<!--
+    <section>
+      <header class="major">
+        <h2>Highlights</h2>
+      </header>
+      <div class="mini-posts">
+        <article>
+          <a href="ppv-survivorseries-88.html" class="image"><img src="../images/survivor-88-index.jpg" alt="" /></a>
+          <p>Get ready for the ultimate showdown as Survivor Series 1988 brings non-stop tag team action, fierce rivalries, and unforgettable battles between the biggest WWF superstars!</p>
+        </article>
+        <article>
+          <a href="ppv-royalrumble-89.html" class="image"><img src="../images/rumble-89-index.jpg" alt="" /></a>
+          <p>Royal Rumble 1989 unleashes chaos with 30 superstars battling for glory in an unforgettable over-the-top-rope showdown!</p>
+        </article>
+        <article>
+          <a href="ppv-summerslam-88.html" class="image"><img src="../images/slam-88-index.jpg" alt="" /></a>
+          <p>SummerSlam 1988 delivers explosive action with iconic matchups, as the WWF's biggest stars collide in the hottest event of the summer!</p>
+        </article>
+      </div>
+    </section>
+		-->
+    <!-- Section -->
+    <!--<section>-->
+    <!--  <header class="major">-->
+    <!--    <h2>Get in touch</h2>-->
+    <!--  </header>-->
+    <!--  <p>Sed varius enim lorem ullamcorper dolore aliquam aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin sed aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>-->
+    <!--  <ul class="contact">-->
+    <!--    <li class="icon solid fa-envelope"><a href="#">information@untitled.tld</a></li>-->
+    <!--    <li class="icon solid fa-phone">(000) 000-0000</li>-->
+    <!--    <li class="icon solid fa-home">1234 Somewhere Road #8254<br />-->
+    <!--      Nashville, TN 00000-0000</li>-->
+    <!--  </ul>-->
+    <!--</section>-->
+    <!-- Footer -->
+    <footer id="footer">
+      <p class="copyright">&copy; Integralist. All rights reserved.</p>
+      <p class="copyright small">Demo Images: <a href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+    </footer>
+  </div>
+</div>
+
+    </div>
+    <!-- Scripts -->
+    <script src="../../assets/js/jquery.min.js"></script>
+    <script src="../../assets/js/browser.min.js"></script>
+    <script src="../../assets/js/breakpoints.min.js"></script>
+    <script src="../../assets/js/util.js"></script>
+    <script src="../../assets/js/main.js"></script>
+  </body>
+</html>

@@ -35,7 +35,119 @@
             </header>
             <span class="image main"><img src="../images/rumble-89.jpg" alt="" /></span>
 						-->
-						{INSERT_MAIN}
+						<nav>
+
+<ul>
+<li><a href="#go-typed-nil">Go Typed Nil</a>
+<ul>
+<li><a href="#typed-nils">Typed Nils</a></li>
+
+<li><a href="#explanation">Explanation</a></li>
+
+<li><a href="#summary">Summary</a></li>
+
+<li><a href="#reference-material">Reference material</a></li>
+</ul></li>
+</ul>
+
+</nav>
+
+<h1 id="go-typed-nil">Go Typed Nil</h1>
+
+<p>The following code doesn&rsquo;t do what you might expect:</p>
+
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+	var i *impl
+
+	fmt.Println(&quot;i == nil:&quot;, i == nil)
+	what(i)
+}
+
+type impl struct{}
+
+func (i *impl) do() {}
+
+func what(i interface{ do() }) {
+	fmt.Println(&quot;i == nil:&quot;, i == nil)
+}
+</code></pre>
+
+<p>If you expected the <code>what</code> function to print <code>i == nil: true</code>, then keep
+reading&hellip;</p>
+
+<h2 id="typed-nils">Typed Nils</h2>
+
+<p>The behavior observed is due to the way interfaces and nil values interact in
+Go. To understand why the <code>what</code> function is able to see the <code>i</code> argument as
+non-nil, we need to dig into the details of how Go handles interface values.</p>
+
+<ol>
+<li>Interface Values: In Go, an interface value is a tuple of a type and a value.
+An interface value is <code>nil</code> only if both the type and the value are <code>nil</code>.</li>
+<li>Concrete vs Interface nil: When you assign a concrete type value (which
+happens to be <code>nil</code>) to an interface, the interface itself is not <code>nil</code>. This
+is because the interface value now contains a type (the concrete type) and a
+value (<code>nil</code>).</li>
+</ol>
+
+<h2 id="explanation">Explanation</h2>
+
+<ol>
+<li>Declaring <code>var i *impl</code> initializes it to <code>nil</code>.
+
+<ul>
+<li><code>i</code> is a pointer to <code>impl</code> and is initialized to <code>nil</code>.</li>
+</ul></li>
+<li>Printing <code>i == nil</code> in <code>main</code> is <code>true</code>
+
+<ul>
+<li>because <code>i</code> is a <code>nil</code> pointer to <code>impl</code></li>
+</ul></li>
+<li>Calling <code>what(i)</code> function:
+
+<ul>
+<li>the function <code>what</code> takes an argument of type <code>interface{ do() }</code></li>
+</ul></li>
+<li>Inside <code>what</code> function:
+
+<ul>
+<li><code>i</code> (which is <code>nil</code>) is passed to <code>what</code></li>
+<li>it is assigned to the parameter <code>i</code> of type <code>interface{ do() }</code></li>
+</ul></li>
+<li>Interface value construction:<br>
+The value of <code>i</code> inside <code>what</code> is now an interface that holds:
+
+<ul>
+<li>Type: <code>*impl</code> (the concrete type of the value passed in)</li>
+<li>Value: <code>nil</code> (the value of the concrete type)</li>
+</ul></li>
+<li>Checking <code>i == nil</code> prints <code>false</code> because the interface <code>i</code> is not <code>nil</code>:
+
+<ul>
+<li>The type part of the interface is <code>*impl</code>.</li>
+<li>The value part of the interface is <code>nil</code>.</li>
+</ul></li>
+</ol>
+
+<h2 id="summary">Summary</h2>
+
+<p>The <code>what</code> function sees the <code>i</code> argument as non-nil because, in Go, an
+interface holding a <code>nil</code> pointer is not itself <code>nil</code>. The interface contains
+type information (<code>*impl</code>) and a <code>nil</code> value. Therefore, when the code checks if
+<code>i</code> is <code>nil</code>, it returns <code>false</code> since the type information (<code>*impl</code>) is
+present.</p>
+
+<h2 id="reference-material">Reference material</h2>
+
+<ul>
+<li><a href="https://go.dev/doc/faq#nil_error" target="_blank">Go FAQ</a></li>
+<li><a href="https://dave.cheney.net/2017/08/09/typed-nils-in-go-2" target="_blank">Dave Cheney</a></li>
+</ul>
+
           </section>
         </div>
       </div>
@@ -56,7 +168,7 @@
       <ul>
         <li><a href="../../index.html">About</a></li>
         <!--<li><a href="../resume/index.html">Resume</a></li>-->
-				{INSERT_NAV}
+				
       </ul>
     </nav>
     <!-- Section -->

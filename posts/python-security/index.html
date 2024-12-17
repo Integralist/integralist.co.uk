@@ -1,0 +1,355 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+  <head>
+    <title>Integralist</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+      <!-- Main -->
+      <div id="main">
+        <div class="inner">
+          <!-- Header -->
+					<header id="header">
+						<a href="../../index.html" class="logo"><strong>Home</strong></a>
+							<ul class="icons">
+							<!--<li><a href="https://x.com/integralist" class="icon brands fa-twitter" target="blank"><span class="label">Twitter</span></a></li>-->
+							<!--<li><a href="https://instagram.com/wwfsuperstarsofwrestling" class="icon brands fa-instagram" target="blank"><span class="label">Instagram</span></a></li>-->
+						</ul>
+					</header>
+
+          <!-- Content -->
+          <section>
+						<!--
+            <header class="main">
+              <h1>Royal Rumble 1989</h1>
+              <p>A Bizarre Spectacle Where the Madness Multiplies</p>
+            </header>
+            <span class="image main"><img src="../images/rumble-89.jpg" alt="" /></span>
+						-->
+						<nav>
+
+<ul>
+<li><a href="#security-with-python">Security with Python</a>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+
+<li><a href="#generate-digest">generate_digest</a></li>
+
+<li><a href="#decrypt-digest-and-validate-digest">decrypt_digest and validate_digest</a></li>
+
+<li><a href="#dependencies">Dependencies</a></li>
+
+<li><a href="#usage">Usage</a></li>
+
+<li><a href="#tests">Tests</a></li>
+
+<li><a href="#implementation">Implementation</a></li>
+
+<li><a href="#conclusion">Conclusion</a></li>
+</ul></li>
+</ul>
+
+</nav>
+
+<h1 id="security-with-python">Security with Python</h1>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>I recently implemented a Python library which acts as an abstraction layer on top of an existing security algorithm (in this case <a href="https://www.tarsnap.com/scrypt.html" target="_blank">scrypt</a>).</p>
+
+<p>The motivation was for allowing teams to have a consistent experience utilising encryption (and hashing) in their applications and services without necessarily having to know the ins-and-outs of what&rsquo;s important with regards to salts, key lengths etc.</p>
+
+<blockquote>
+<p>Note: I always encourage people to understand what it is they&rsquo;re doing, but in some cases that&rsquo;s not always a practical mindset.</p>
+</blockquote>
+
+<p>The library provides three functions:</p>
+
+<ol>
+<li><code>generate_digest</code></li>
+<li><code>decrypt_digest</code></li>
+<li><code>validate_digest</code></li>
+</ol>
+
+<p>{{&lt; adverts/pythonforprogrammers &gt;}}</p>
+
+<p>Before we start looking at the three functions provided by this library/interface, let&rsquo;s very briefly talk about KDF and PBKDF2.</p>
+
+<p>A <a href="https://en.wikipedia.org/wiki/Key_derivation_function" target="_blank">KDF</a> (Key Derivation Function) accepts a message + a key, and produces a digest for its output. They are designed to be more computationally intensive than standard hashing functions, and so they make it harder to use dictionary or rainbow table style attacks (as they would require a lot of extra memory resources and become more unfeasible as an attack vector).</p>
+
+<p>By default the KDF will generate a random salt (thus output is non-deterministic) and have a maximum computational time of <code>0.5</code> (although this can be overridden using a <code>maxtime</code> argument, as we&rsquo;ll see later).</p>
+
+<p>A <a href="https://en.wikipedia.org/wiki/PBKDF2" target="_blank">PBKDF2</a> on the other hand is able to provide deterministic output (as well as the ability to specify an explicit salt value). The internal implementation will repeat its process multiple times, thus reducing the feasibility of automated password cracking attempts (similar to a KDF).</p>
+
+<p>I mention both of these (KDF and PBKDF2) because the <code>generate_digest</code> function I&rsquo;ve written is a multi-arity function that will switch implementation based upon the provided arguments in the method signature.</p>
+
+<p>Originally I had two separate functions to distinguish them a bit more clearly but realised if this library is to make life easier for developers who don&rsquo;t understand encryption or hashing concepts, then I need to provide a single function that intelligently handles things internally.</p>
+
+<p>Because KDF accepts a key and is able to return the original message (given the same key) it&rsquo;s acting as a form of symmetrical encryption, whereas a PBKDF2 is more like a one-way hash function. Hence I named the function in this library <code>generate_digest</code> rather than something like <code>encrypt_message</code> which wouldn&rsquo;t have made sense when dealing with PBKDF2.</p>
+
+<h2 id="generate-digest">generate_digest</h2>
+
+<p>This is a multi-arity function that will generate a digest using either a password-based key derivation function (<a href="https://en.wikipedia.org/wiki/Key_derivation_function" target="_blank">KDF</a>) or a <a href="https://en.wikipedia.org/wiki/PBKDF2" target="_blank">PBKDF2</a> depending on the input given.</p>
+
+<p>If a <code>password</code> argument is provided, then KDF will be used (along with a random salt) to generate a <em>non-deterministic</em> digest.</p>
+
+<p>If a <code>salt</code> is provided, then a PBKDF2 will be used to generate a <em>deterministic</em> digest.</p>
+
+<blockquote>
+<p>Note: salts should be a minimum of 128bits (~16 characters) in length. Also, when specifying a maxtime with <code>generate_digest</code>, ensure you include that same value when decrypting with <code>decrypt_digest</code> or validating via <code>validate_digest</code>.</p>
+</blockquote>
+
+<h2 id="decrypt-digest-and-validate-digest">decrypt_digest and validate_digest</h2>
+
+<p>The <code>decrypt_digest</code> and <code>validate_digest</code> functions only apply to digests that have been generated using a password (i.e. KDF). Given the right password <code>decrypt_digest</code> will return the original message, and thus is considered more a form of symmetrical encryption than a straight one-way hash function. The <code>validate_digest</code> function will return a boolean true or false if the given password was able to decrypt the message.</p>
+
+<h2 id="dependencies">Dependencies</h2>
+
+<p>This abstraction library requires <code>scrypt</code>, which itself requires the following dependencies to be installed within the context of your service: <code>build-essential</code>, <code>libssl-dev</code>, and <code>python-dev</code>. If your service has a Dockerfile, adding these dependencies should be as simple as adding a line like the following:</p>
+
+<pre><code>RUN apt-get update &amp;&amp; apt-get install -y build-essential libssl-dev python-dev
+</code></pre>
+
+<h2 id="usage">Usage</h2>
+
+<p>I suggest looking at the test suite (see below) to get an idea of how you would use the functions in this library.</p>
+
+<blockquote>
+<p>Note: for a glossary of security terms, refer to <a href="https://docs.google.com/document/d/1qs3jEIQvocdVhSxCSPLF1BoLnp91aLnuUIasvl-maYo/edit?usp=sharing" target="_blank">this document</a>.</p>
+</blockquote>
+
+<h2 id="tests">Tests</h2>
+
+<p>Before we look at the implementation of the library, let&rsquo;s take a moment to sift through its test suite.</p>
+
+<blockquote>
+<p>Note: I named the library <code>secure</code> and have it running on a private PyPy instance. This code is <a href="https://github.com/Integralist/Python-Encryption" target="_blank">made available via GitHub</a>.</p>
+</blockquote>
+
+<pre><code>import pytest
+
+from secure.interface import ArgumentError, generate_digest, validate_digest, decrypt_digest
+
+
+message = &quot;my-message&quot;
+password = &quot;my-password&quot;
+salt = &quot;my-salt-is-long-enough&quot;
+
+
+def test_generate_digest_with_both_a_password_and_a_salt():
+    &quot;&quot;&quot;Providing both a password and a salt should raise an exception.&quot;&quot;&quot;
+
+    with pytest.raises(ArgumentError):
+        generate_digest(message, salt=salt, password=password)
+
+
+def test_generate_digest_with_a_password():
+    &quot;&quot;&quot;Generating a digest with a password should be non-deterministic.&quot;&quot;&quot;
+
+    digest1 = generate_digest(message, password=password)
+    digest2 = generate_digest(message, password=password)
+    digest3 = generate_digest(message, password=password, maxtime=1.5)
+    digest4 = generate_digest(message, password=password, maxtime=1.5)
+    digest5 = generate_digest(message, password=password, maxtime=int(1))
+    digest6 = generate_digest(message, password=password, maxtime=int(1))
+
+    assert digest1 != digest2
+    assert digest3 != digest4
+    assert digest5 != digest6
+
+
+def test_generate_digest_without_a_password():
+    &quot;&quot;&quot;Generating a digest without a password should be deterministic.&quot;&quot;&quot;
+
+    digest1 = generate_digest(message)
+    digest2 = generate_digest(message)
+    digest3 = generate_digest(message, salt=salt)
+    digest4 = generate_digest(message, salt=salt)
+    digest5 = generate_digest(message, length=128)
+    digest6 = generate_digest(message, length=128)
+
+    assert digest1 == digest2
+    assert digest3 == digest4
+    assert len(digest5) == len(digest6)
+
+
+def test_generate_digest_with_different_salt_lengths():
+    &quot;&quot;&quot;Salts should be at least 128bits (~16 characters) in length.&quot;&quot;&quot;
+
+    generate_digest(message, salt=salt)
+
+    with pytest.raises(ArgumentError):
+        generate_digest(message, salt=&quot;too-short&quot;)
+
+def test_validate_digest():
+    &quot;&quot;&quot;Validation only applies to digests generated with a password.&quot;&quot;&quot;
+
+    digest1 = generate_digest(message, password=password)
+    digest2 = generate_digest(message, password=password)
+    digest3 = generate_digest(message, password=password, maxtime=1.5)
+    digest4 = generate_digest(message, password=password, maxtime=1.5)
+    digest5 = generate_digest(message, password=password, maxtime=int(1))
+    digest6 = generate_digest(message, password=password, maxtime=int(1))
+
+    assert not validate_digest(digest1, 'incorrect-password')
+    assert validate_digest(digest1, password)
+    assert validate_digest(digest3, password, maxtime=1.5)
+    assert validate_digest(digest5, password, maxtime=int(1))
+
+
+def test_decrypt_digest():
+    &quot;&quot;&quot;Decryption is possible given the right password.&quot;&quot;&quot;
+
+    digest = generate_digest(message, password=password)
+
+    assert decrypt_digest(digest, password) == message
+</code></pre>
+
+<h2 id="implementation">Implementation</h2>
+
+<p>OK, time to see the library code itself.</p>
+
+<blockquote>
+<p>Note: I like to use <a href="http://mypy-lang.org/" target="_blank">MyPy</a> for type hinting.</p>
+</blockquote>
+
+<pre><code>import scrypt
+
+from typing import Union
+
+
+class ArgumentError(Exception):
+    pass
+
+
+def generate_digest(message: str,
+                    password: str = None,
+                    maxtime: Union[float, int] = 0.5,
+                    salt: str = &quot;&quot;,
+                    length: int = 64) -&gt; bytes:
+    &quot;&quot;&quot;Multi-arity function for generating a digest.
+
+    Use KDF symmetric encryption given a password.
+    Use deterministic hash function given a salt (or lack of password).
+    &quot;&quot;&quot;
+
+    if password and salt:
+        raise ArgumentError(&quot;only provide a password or a salt, not both&quot;)
+
+    if salt != &quot;&quot; and len(salt) &lt; 16:
+        raise ArgumentError(&quot;salts need to be minimum of 128bits (~16 characters)&quot;)
+
+    if password:
+        return scrypt.encrypt(message, password, maxtime=maxtime)
+    else:
+        return scrypt.hash(message, salt, buflen=length)
+
+
+def decrypt_digest(digest: bytes,
+                   password: str,
+                   maxtime: Union[float, int] = 0.5) -&gt; bytes:
+    &quot;&quot;&quot;Decrypts digest using given password.&quot;&quot;&quot;
+
+    return scrypt.decrypt(digest, password, maxtime)
+
+
+def validate_digest(digest: bytes,
+                    password: str,
+                    maxtime: Union[float, int] = 0.5) -&gt; bool:
+    &quot;&quot;&quot;Validate digest using given password.&quot;&quot;&quot;
+
+    try:
+        scrypt.decrypt(digest, password, maxtime)
+        return True
+    except scrypt.error:
+        return False
+</code></pre>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Let me know what you think on twitter. Have fun.</p>
+
+          </section>
+        </div>
+      </div>
+      <!-- Sidebar -->
+<div id="sidebar">
+  <div class="inner">
+    <!-- Search -->
+    <!--<section id="search" class="alt">-->
+    <!--  <form method="post" action="#">-->
+    <!--    <input type="text" name="query" id="query" placeholder="Search" />-->
+    <!--  </form>-->
+    <!--</section>-->
+    <!-- Menu -->
+    <nav id="menu">
+      <header class="major">
+        <h2>Menu</h2>
+      </header>
+      <ul>
+        <li><a href="../../index.html">About</a></li>
+        <!--<li><a href="../resume/index.html">Resume</a></li>-->
+				
+      </ul>
+    </nav>
+    <!-- Section -->
+		<!--
+    <section>
+      <header class="major">
+        <h2>Highlights</h2>
+      </header>
+      <div class="mini-posts">
+        <article>
+          <a href="ppv-survivorseries-88.html" class="image"><img src="../images/survivor-88-index.jpg" alt="" /></a>
+          <p>Get ready for the ultimate showdown as Survivor Series 1988 brings non-stop tag team action, fierce rivalries, and unforgettable battles between the biggest WWF superstars!</p>
+        </article>
+        <article>
+          <a href="ppv-royalrumble-89.html" class="image"><img src="../images/rumble-89-index.jpg" alt="" /></a>
+          <p>Royal Rumble 1989 unleashes chaos with 30 superstars battling for glory in an unforgettable over-the-top-rope showdown!</p>
+        </article>
+        <article>
+          <a href="ppv-summerslam-88.html" class="image"><img src="../images/slam-88-index.jpg" alt="" /></a>
+          <p>SummerSlam 1988 delivers explosive action with iconic matchups, as the WWF's biggest stars collide in the hottest event of the summer!</p>
+        </article>
+      </div>
+    </section>
+		-->
+    <!-- Section -->
+    <!--<section>-->
+    <!--  <header class="major">-->
+    <!--    <h2>Get in touch</h2>-->
+    <!--  </header>-->
+    <!--  <p>Sed varius enim lorem ullamcorper dolore aliquam aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin sed aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>-->
+    <!--  <ul class="contact">-->
+    <!--    <li class="icon solid fa-envelope"><a href="#">information@untitled.tld</a></li>-->
+    <!--    <li class="icon solid fa-phone">(000) 000-0000</li>-->
+    <!--    <li class="icon solid fa-home">1234 Somewhere Road #8254<br />-->
+    <!--      Nashville, TN 00000-0000</li>-->
+    <!--  </ul>-->
+    <!--</section>-->
+    <!-- Footer -->
+    <footer id="footer">
+      <p class="copyright">&copy; Integralist. All rights reserved.</p>
+      <p class="copyright small">Demo Images: <a href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+    </footer>
+  </div>
+</div>
+
+    </div>
+    <!-- Scripts -->
+    <script src="../../assets/js/jquery.min.js"></script>
+    <script src="../../assets/js/browser.min.js"></script>
+    <script src="../../assets/js/breakpoints.min.js"></script>
+    <script src="../../assets/js/util.js"></script>
+    <script src="../../assets/js/main.js"></script>
+  </body>
+</html>

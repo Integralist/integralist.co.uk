@@ -124,10 +124,10 @@ func renderSubPages(pages <-chan string, wg *sync.WaitGroup) {
 		content := bytes.Replace(contentSubPage, needleMainInsert, h, 1)
 
 		segs := strings.Split(path, "/")
-		dir := segs[0]
-		// date := strings.Split(segs[1], ".")[0]
+		dir := segs[0] + "/" + segs[1]
+		// date := strings.Split(segs[2], ".")[0]
 		// year := strings.Split(date, "-")[0]
-		// title := strings.ReplaceAll(caser.String(dir), "-", " ")
+		// title := strings.ReplaceAll(caser.String(segs[1]), "-", " ")
 		// link := filepath.Join(dir, "index.html")
 		// contentNav := strings.Replace(tplNav, "{YEAR}", year, 1)
 		// contentNav = strings.Replace(contentNav, "{LINK}", link, 1)
@@ -212,10 +212,10 @@ func renderHomepage(files <-chan string, wg *sync.WaitGroup) { // nolint:revive 
 
 	for path := range files {
 		segs := strings.Split(path, "/")
-		dir := segs[0]
-		date := strings.Split(segs[1], ".")[0]
+		dir := segs[0] + "/" + segs[1]
+		date := strings.Split(segs[2], ".")[0]
 		year := strings.Split(date, "-")[0]
-		title := strings.ReplaceAll(caser.String(dir), "-", " ")
+		title := strings.ReplaceAll(caser.String(segs[1]), "-", " ")
 		link := filepath.Join(dir, dst)
 		contentMain := strings.Replace(tplMain, "{TITLE}", title, 1)
 		contentMain = strings.Replace(contentMain, "{LINK}", link, 1)

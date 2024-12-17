@@ -1,0 +1,271 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+  <head>
+    <title>Integralist</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+      <!-- Main -->
+      <div id="main">
+        <div class="inner">
+          <!-- Header -->
+					<header id="header">
+						<a href="../../index.html" class="logo"><strong>Home</strong></a>
+							<ul class="icons">
+							<!--<li><a href="https://x.com/integralist" class="icon brands fa-twitter" target="blank"><span class="label">Twitter</span></a></li>-->
+							<!--<li><a href="https://instagram.com/wwfsuperstarsofwrestling" class="icon brands fa-instagram" target="blank"><span class="label">Instagram</span></a></li>-->
+						</ul>
+					</header>
+
+          <!-- Content -->
+          <section>
+						<!--
+            <header class="main">
+              <h1>Royal Rumble 1989</h1>
+              <p>A Bizarre Spectacle Where the Madness Multiplies</p>
+            </header>
+            <span class="image main"><img src="../images/rumble-89.jpg" alt="" /></span>
+						-->
+						<nav>
+
+<ul>
+<li><a href="#bitwise-operations-in-go">Bitwise Operations in Go</a>
+<ul>
+<li><a href="#visualising-bits">Visualising Bits</a></li>
+
+<li><a href="#defining-bit-flags">Defining Bit Flags</a></li>
+
+<li><a href="#setting-statuses">Setting Statuses</a></li>
+
+<li><a href="#adding-and-removing-flags">Adding and Removing Flags</a></li>
+
+<li><a href="#comparing-statuses">Comparing Statuses</a></li>
+</ul></li>
+</ul>
+
+</nav>
+
+<h1 id="bitwise-operations-in-go">Bitwise Operations in Go</h1>
+
+<p>In the below Go file we use bitwise operators to manipulate individual flags (on/off switches) in a single integer, where each bit position represents a different status.</p>
+
+<p>First we&rsquo;ll look at the code, and then we&rsquo;ll explain how it works:</p>
+
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+	&quot;strings&quot;
+)
+
+// Define bit flags as constants, where each status is represented by a unique bit position
+const (
+	StatusActive   = 1 &lt;&lt; iota // 1 &lt;&lt; 0 which is 0001 (binary)
+	StatusAdmin                // 1 &lt;&lt; 1 which is 0010
+	StatusBanned               // 1 &lt;&lt; 2 which is 0100
+	StatusVerified             // 1 &lt;&lt; 3 which is 1000
+)
+
+// Stringify statuses for easier output
+func stringifyStatus(status int) string {
+	statuses := []string{}
+
+	if status&amp;StatusActive != 0 {
+		statuses = append(statuses, &quot;Active&quot;)
+	}
+	if status&amp;StatusAdmin != 0 {
+		statuses = append(statuses, &quot;Admin&quot;)
+	}
+	if status&amp;StatusBanned != 0 {
+		statuses = append(statuses, &quot;Banned&quot;)
+	}
+	if status&amp;StatusVerified != 0 {
+		statuses = append(statuses, &quot;Verified&quot;)
+	}
+
+	return strings.Join(statuses, &quot;, &quot;)
+}
+
+func main() {
+	// Let's create a user status and use bitwise OR to combine different flags
+
+	var userStatus int
+
+	// Set the user as active and verified
+	userStatus |= StatusActive | StatusVerified
+	fmt.Println(&quot;Initial Status:&quot;, stringifyStatus(userStatus))
+
+	// Add &quot;Admin&quot; status
+	userStatus |= StatusAdmin
+	fmt.Println(&quot;After adding Admin:&quot;, stringifyStatus(userStatus))
+
+	// Remove &quot;Verified&quot; status using bitwise AND with NOT
+	userStatus &amp;^= StatusVerified
+	fmt.Println(&quot;After removing Verified:&quot;, stringifyStatus(userStatus))
+
+	// Add &quot;Banned&quot; status
+	userStatus |= StatusBanned
+	fmt.Println(&quot;After adding Banned:&quot;, stringifyStatus(userStatus))
+
+	// Check if the user is an admin
+	if userStatus&amp;StatusAdmin != 0 {
+		fmt.Println(&quot;User is an admin.&quot;)
+	} else {
+		fmt.Println(&quot;User is NOT an admin.&quot;)
+	}
+
+	// Remove &quot;Admin&quot; status using bitwise AND with NOT
+	userStatus &amp;^= StatusAdmin
+	fmt.Println(&quot;After removing Admin:&quot;, stringifyStatus(userStatus))
+
+	// Check if the user is banned
+	if userStatus&amp;StatusBanned != 0 {
+		fmt.Println(&quot;User is banned.&quot;)
+	} else {
+		fmt.Println(&quot;User is NOT banned.&quot;)
+	}
+
+	// Check if the user is an admin
+	if userStatus&amp;StatusAdmin != 0 {
+		fmt.Println(&quot;User is an admin.&quot;)
+	} else {
+		fmt.Println(&quot;User is NOT an admin.&quot;)
+	}
+}
+</code></pre>
+
+<h2 id="visualising-bits">Visualising Bits</h2>
+
+<p>In case you need a reminder of a what bit alignment and shifting look like:</p>
+
+<p><a href="../../assets/images/bits-visualised.png">
+<img src="../../assets/images/bits-visualised.png">
+</a></p>
+
+<h2 id="defining-bit-flags">Defining Bit Flags</h2>
+
+<p>Each status is assigned a unique power of 2 using bit shifting (<code>1 &lt;&lt; iota</code>).</p>
+
+<p>This ensures each flag only affects a single bit:</p>
+
+<ul>
+<li><code>StatusActive</code> has the binary value <code>0001</code> (<code>1 &lt;&lt; 0</code> == 1 in decimal).</li>
+<li><code>StatusAdmin</code> has the binary value <code>0010</code> (<code>1 &lt;&lt; 1</code> == 2 in decimal).</li>
+<li><code>StatusBanned</code> has the binary value <code>0100</code> (<code>1 &lt;&lt; 2</code> == 4 in decimal).</li>
+<li><code>StatusVerified</code> has the binary value <code>1000</code> (<code>1 &lt;&lt; 3</code> == 8 in decimal).</li>
+</ul>
+
+<h2 id="setting-statuses">Setting Statuses</h2>
+
+<p>The following example combines two separate status flags:</p>
+
+<pre><code>userStatus |= StatusActive | StatusVerified
+</code></pre>
+
+<p>In binary, this results in <code>1001</code> (or 9 in decimal), which means both the &ldquo;active&rdquo; and &ldquo;verified&rdquo; flags are set.</p>
+
+<h2 id="adding-and-removing-flags">Adding and Removing Flags</h2>
+
+<p>The following example sets the &ldquo;admin&rdquo; bit without affecting the other bits, resulting in <code>1011</code> (11 in decimal):</p>
+
+<pre><code>userStatus |= StatusAdmin
+</code></pre>
+
+<h2 id="comparing-statuses">Comparing Statuses</h2>
+
+<p>Once <code>userStatus</code> has combined flags we can use the <code>&amp;</code> operator to perform a bitwise <code>AND</code> operation, which means it compares each bit of two integers. For each bit position, if both bits are 1, the result at that position will be 1; otherwise, it will be 0.</p>
+
+<p>So what happens when we compare <code>userStatus&amp;StatusAdmin != 0</code>?</p>
+
+<p>Well, <code>StatusAdmin</code> is a bit flag defined as <code>1 &lt;&lt; 1</code>, which results in <code>0010</code> in binary. This means that <code>StatusAdmin</code> occupies the second bit position in the binary representation of an integer. When we do <code>userStatus&amp;StatusAdmin</code>, we&rsquo;re effectively &ldquo;masking&rdquo; all bits except for the one represented by StatusAdmin (this is known as <strong>bit masking</strong>).</p>
+
+<p>When we perform <code>userStatus&amp;StatusAdmin</code>, we get a result where only the bit corresponding to <code>StatusAdmin</code> remains (and is set to <code>1</code> if that bit was already set in <code>userStatus</code>). If this result is non-zero (<code>!= 0</code>), it means the <code>StatusAdmin</code> bit is set in <code>userStatus</code>. If it&rsquo;s zero, then <code>StatusAdmin</code> is not set in <code>userStatus</code>.</p>
+
+<p>If we look at the code in <code>bitwise.go</code> we&rsquo;ll see <code>userStatus</code> is initially set to include <code>StatusActive</code> and <code>StatusVerified</code>, so <code>userStatus</code> is <code>1001</code> in binary (which is <code>9</code> in decimal). Remember <code>StatusActive</code> occupied the first bit position (<code>0001</code>), while <code>StatusVerified</code> occupied the fourth bit position (<code>1000</code>) so if setting both flags we get the combined <code>1001</code>.</p>
+
+<p>Next, we add the <code>StatusAdmin</code> flag with <code>userStatus |= StatusAdmin</code>, making <code>userStatus</code> now <code>1011</code> in binary (which is 11 in decimal). When we check if <code>StatusAdmin</code> is set using <code>userStatus&amp;StatusAdmin != 0</code> we get back <code>2</code> from <code>userStatus&amp;StatusAdmin</code> (which is <code>0010</code> in binary) because we&rsquo;ve bit masked the other bits that might have been turned on (if you recall, using <code>&amp;</code> turns each bit to zero except for those bits that were 1 in both numbers being compared), in order to <em>reveal</em> whether the <code>StatusAdmin</code> bit was set on or not (i.e. <code>0</code> != <code>2</code> so we know this person is an admin).</p>
+
+          </section>
+        </div>
+      </div>
+      <!-- Sidebar -->
+<div id="sidebar">
+  <div class="inner">
+    <!-- Search -->
+    <!--<section id="search" class="alt">-->
+    <!--  <form method="post" action="#">-->
+    <!--    <input type="text" name="query" id="query" placeholder="Search" />-->
+    <!--  </form>-->
+    <!--</section>-->
+    <!-- Menu -->
+    <nav id="menu">
+      <header class="major">
+        <h2>Menu</h2>
+      </header>
+      <ul>
+        <li><a href="../../index.html">About</a></li>
+        <!--<li><a href="../resume/index.html">Resume</a></li>-->
+				
+      </ul>
+    </nav>
+    <!-- Section -->
+		<!--
+    <section>
+      <header class="major">
+        <h2>Highlights</h2>
+      </header>
+      <div class="mini-posts">
+        <article>
+          <a href="ppv-survivorseries-88.html" class="image"><img src="../images/survivor-88-index.jpg" alt="" /></a>
+          <p>Get ready for the ultimate showdown as Survivor Series 1988 brings non-stop tag team action, fierce rivalries, and unforgettable battles between the biggest WWF superstars!</p>
+        </article>
+        <article>
+          <a href="ppv-royalrumble-89.html" class="image"><img src="../images/rumble-89-index.jpg" alt="" /></a>
+          <p>Royal Rumble 1989 unleashes chaos with 30 superstars battling for glory in an unforgettable over-the-top-rope showdown!</p>
+        </article>
+        <article>
+          <a href="ppv-summerslam-88.html" class="image"><img src="../images/slam-88-index.jpg" alt="" /></a>
+          <p>SummerSlam 1988 delivers explosive action with iconic matchups, as the WWF's biggest stars collide in the hottest event of the summer!</p>
+        </article>
+      </div>
+    </section>
+		-->
+    <!-- Section -->
+    <!--<section>-->
+    <!--  <header class="major">-->
+    <!--    <h2>Get in touch</h2>-->
+    <!--  </header>-->
+    <!--  <p>Sed varius enim lorem ullamcorper dolore aliquam aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin sed aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>-->
+    <!--  <ul class="contact">-->
+    <!--    <li class="icon solid fa-envelope"><a href="#">information@untitled.tld</a></li>-->
+    <!--    <li class="icon solid fa-phone">(000) 000-0000</li>-->
+    <!--    <li class="icon solid fa-home">1234 Somewhere Road #8254<br />-->
+    <!--      Nashville, TN 00000-0000</li>-->
+    <!--  </ul>-->
+    <!--</section>-->
+    <!-- Footer -->
+    <footer id="footer">
+      <p class="copyright">&copy; Integralist. All rights reserved.</p>
+      <p class="copyright small">Demo Images: <a href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+    </footer>
+  </div>
+</div>
+
+    </div>
+    <!-- Scripts -->
+    <script src="../../assets/js/jquery.min.js"></script>
+    <script src="../../assets/js/browser.min.js"></script>
+    <script src="../../assets/js/breakpoints.min.js"></script>
+    <script src="../../assets/js/util.js"></script>
+    <script src="../../assets/js/main.js"></script>
+  </body>
+</html>
