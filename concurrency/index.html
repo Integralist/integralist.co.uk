@@ -127,8 +127,8 @@
 
 <p>The following diagram is an extremely simplistic view of how CPUs, Processes and Threads interact but should help us to better understand why code can become <strong>NON</strong> thread-safe (as far as the &ldquo;Shared Memory&rdquo; model is concerned; we&rsquo;ll see shortly that the &ldquo;message passing&rdquo; model side steps this issue):</p>
 
-<p><a href="../../images/cpu-processes-and-threads.png">
-    <img src="../../images/cpu-processes-and-threads.png">
+<p><a href="../assets/images/cpu-processes-and-threads.png">
+    <img src="../assets/images/cpu-processes-and-threads.png">
 </a></p>
 
 <p>&hellip;for those of you who cannot see the image, effectively a process can spawn multiple threads and each thread belonging to a specific process shares the memory related to the process.</p>
@@ -510,9 +510,9 @@ greeter ! Greeting(&quot;Charlie Parker&quot;)
 
 <p>There is one distinctive difference between Erlang&rsquo;s Actor and Clojure&rsquo;s Agent, which is that an Agents &ldquo;action&rdquo; doesn&rsquo;t block additional value request calls like an Erlang &ldquo;message&rdquo;. This is demonstrated in the following image, but in summary: requests to an Actor are blocked until a response to the previous message can be provided; whereas Clojure Agents allow multiple <code>@deref</code> calls to be made and processed:</p>
 
-<p><a href="../../images/actors-vs-agents.png"></p>
+<p><a href="../assets/images/actors-vs-agents.png"></p>
 
-<pre><code>&lt;img src=&quot;../../images/actors-vs-agents.png&quot;&gt;
+<pre><code>&lt;img src=&quot;../assets/images/actors-vs-agents.png&quot;&gt;
 </code></pre>
 
 <p></a></p>
@@ -633,8 +633,8 @@ func createChannel(msg string, size int) &lt;-chan string {
 
 <p>See also the following image that demonstrates how a CPU will allow interruptions for I/O based signals (<a href="https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/13_IOSystems.html" target="_blank">source</a>):</p>
 
-<p><a href="../../images/cpu-io.jpg">
-   <img src="../../images/cpu-io.jpg">
+<p><a href="../assets/images/cpu-io.jpg">
+   <img src="../assets/images/cpu-io.jpg">
 </a></p>
 
 <p>A CPU/Processor can contain one or more cores. For example, a quad core processor that runs at speed of 3GHz will have 4 cores running at that speed.</p>

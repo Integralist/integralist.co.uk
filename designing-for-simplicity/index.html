@@ -247,7 +247,7 @@
 
 <p>Using the following diagram as a basis, let&rsquo;s consider an application where the user uploads an image (1) and the server resizes the image (2) and places the newly created image into an <a href="http://aws.amazon.com/s3/" target="_blank">AWS S3</a> bucket (3). The server is expected to return an auto generated URL to the user (4), which when shared with and visited by another user will show the resized image.</p>
 
-<p><img loading="lazy" src="../../images/bad-architecture.png" alt="Bad Architecture" /></p>
+<p><img loading="lazy" src="../assets/images/bad-architecture.png" alt="Bad Architecture" /></p>
 
 <p>This architecture will not scale very well, nor very easily.</p>
 
@@ -259,7 +259,7 @@
 
 <p>In the mean time, a separate service is polling the queue for messages (5). The service will read the message (which can include the location of the source image in S3) and then retrieves the relevant image from S3 (6) so it can resize the image (7) and replace the image in S3 with the resized version (8), or whatever needs to happen at that point.</p>
 
-<p><img loading="lazy" src="../../images/better-architecture.png" alt="Better Architecture" /></p>
+<p><img loading="lazy" src="../assets/images/better-architecture.png" alt="Better Architecture" /></p>
 
 <p>So this design might not be perfect, but what&rsquo;s better about this architecture is that we&rsquo;ve decoupled the various parts of the overall system that previously would&rsquo;ve made scaling the application much harder. We&rsquo;re now in a position to scale up the back-end service (the service that polls the queue and resizes the images) separately from the front-end system which handles the user upload.</p>
 
@@ -319,7 +319,7 @@
 
 <p>The following diagram gives you a top-level view of this architecture:</p>
 
-<p><img loading="lazy" src="../../images/broker-renderer-pattern-push-model.png" alt="Broker Renderer Pattern Push Model" /></p>
+<p><img loading="lazy" src="../assets/images/broker-renderer-pattern-push-model.png" alt="Broker Renderer Pattern Push Model" /></p>
 
 <blockquote>
 <p>Note: for brevity, in the above diagram, I&rsquo;m not demonstrating either the caching of broker requests or the sequencing requirements (i.e. the storing off the version of a message into DynamoDB). As mentioned before, some queues have different guarantees and so I didn&rsquo;t want the diagram to be too tightly coupled to DynamoDB&rsquo;s implementation</p>
@@ -337,7 +337,7 @@
 
 <p>The following diagram gives you a top-level view of this architecture:</p>
 
-<p><img loading="lazy" src="../../images/better-architecture.png" alt="Better Architecture" /></p>
+<p><img loading="lazy" src="../assets/images/better-architecture.png" alt="Better Architecture" /></p>
 
 <blockquote>
 <p>Note: for brevity, in the above diagram, I&rsquo;m not detailing the complexity of how you feed information to a broker so it knows which renderer to interrogate to satisfy the user&rsquo;s request</p>
@@ -392,7 +392,7 @@
 
 <p>In the following diagram we show how two separate platforms (PHP and Ruby) consume a parser specific to their language to resolve the dependencies for a given component and serve up the component(s) in the most appropriate way for their platform:</p>
 
-<p><img loading="lazy" src="../../images/chintz-specification.png" alt="Better Architecture" /></p>
+<p><img loading="lazy" src="../assets/images/chintz-specification.png" alt="Better Architecture" /></p>
 
 <p>There are currently two (WIP) client parsers we&rsquo;ve open-sourced:</p>
 
@@ -536,7 +536,7 @@ dependencies:
 
 <p>The following diagram provides a basic visualization of the inherited layers:</p>
 
-<p><img loading="lazy" src="../../images/rpm-libraries.png" alt="Better Architecture" /></p>
+<p><img loading="lazy" src="../assets/images/rpm-libraries.png" alt="Better Architecture" /></p>
 
 <p>Each library acts as a layer that builds upon the last and provides specific functionality that extends the overall behavior.</p>
 

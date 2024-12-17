@@ -167,7 +167,7 @@ please see this <a href="https://en.wikipedia.org/wiki/List_of_data_structures" 
 
 <p>The data is what you&rsquo;ve assigned to that element/node, whereas the pointer is a memory address reference to the next node in the list.</p>
 
-<p><img src="../../images/linked-list.png"></p>
+<p><img src="../assets/images/linked-list.png"></p>
 
 <p>Also unlike an array, there is no index access. So in order to locate a specific piece of data you&rsquo;ll need to traverse the entire list until you find the data you&rsquo;re looking for.</p>
 
@@ -183,7 +183,7 @@ please see this <a href="https://en.wikipedia.org/wiki/List_of_data_structures" 
 
 <p>The concept of a &lsquo;tree&rsquo; in its simplest terms is to represent a hierarchical tree structure, with a root value and subtrees of children (with a parent node), represented as a set of linked nodes.</p>
 
-<p><img src="../../images/tree.png"></p>
+<p><img src="../assets/images/tree.png"></p>
 
 <p>A tree contains &ldquo;nodes&rdquo; (a node has a value associated with it) and each node is connected by a line called an &ldquo;edge&rdquo;. These lines represent the <em>relationship</em> between the nodes.</p>
 
@@ -217,7 +217,7 @@ please see this <a href="https://en.wikipedia.org/wiki/List_of_data_structures" 
 
 <p>A binary search tree is a &lsquo;sorted&rsquo; tree, and is named as such because it helps to support the use of a &lsquo;binary search&rsquo; algorithm for searching more efficiently for a particular node (more on that later).</p>
 
-<p><img src="../../images/binary-search-tree.png"></p>
+<p><img src="../assets/images/binary-search-tree.png"></p>
 
 <p>To understand the idea of the nodes being &lsquo;sorted&rsquo; (or &lsquo;ordered&rsquo;) we need to compare the left node with the right node. The left node should always be a lesser number than the right node, and the parent node should be the decider as to whether a child node is placed to the left or the right.</p>
 
@@ -258,7 +258,7 @@ please see this <a href="https://en.wikipedia.org/wiki/List_of_data_structures" 
 
 <p>If we construct a binary search tree from this data, what we would ultimately end up with is a very &lsquo;unbalanced&rsquo; tree in the sense that all the nodes would be to the right, and none to the left.</p>
 
-<p><img src="../../images/bst-unbalanced.png"></p>
+<p><img src="../assets/images/bst-unbalanced.png"></p>
 
 <p>When we search this type of tree (which for all purposes is effectively a linked list) we would, worst case, end up with linear time complexity: <code>O(n)</code>. To resolve that problem we need a way to balance the nodes in the tree.</p>
 
@@ -279,7 +279,7 @@ please see this <a href="https://en.wikipedia.org/wiki/List_of_data_structures" 
 <p>Note: when counting nodes we don&rsquo;t include the root node, and we count each black node up to (and including) the NIL node.</p>
 </blockquote>
 
-<p><img src="../../images/red-black-tree.png"></p>
+<p><img src="../assets/images/red-black-tree.png"></p>
 
 <p>The height of the tree is referred to as its &lsquo;black-height&rsquo;, which is the number of black nodes (not including the root) to the furthest leaf, and should be no longer than twice as long as the length of the shortest path (the nearest NIL).</p>
 
@@ -334,11 +334,11 @@ in the case where recolouring then requires a structural change.</li>
 
 <p><strong>Left Rotation</strong></p>
 
-<p><img src="../../images/red-black-tree-left-rotation.png"></p>
+<p><img src="../assets/images/red-black-tree-left-rotation.png"></p>
 
 <p><strong>Right Rotation</strong></p>
 
-<p><img src="../../images/red-black-tree-right-rotation.png"></p>
+<p><img src="../assets/images/red-black-tree-right-rotation.png"></p>
 
 <blockquote>
 <p>Note: rotations are confusing, so I recommend watching <a href="https://www.youtube.com/watch?v=95s3ndZRGbk" target="_blank">this short video</a> for some examples and pseudo-code.</p>
@@ -383,11 +383,11 @@ in the case where recolouring then requires a structural change.</li>
 
 <p><strong>Max Heap</strong>:</p>
 
-<p><img src="../../images/binary-heap-max.png"></p>
+<p><img src="../assets/images/binary-heap-max.png"></p>
 
 <p><strong>Min Heap</strong>:</p>
 
-<p><img src="../../images/binary-heap-min.png"></p>
+<p><img src="../assets/images/binary-heap-min.png"></p>
 
 <h2 id="hash-table">Hash Table</h2>
 
@@ -441,7 +441,7 @@ in the case where recolouring then requires a structural change.</li>
 
 <p>The following image demonstrates a &lsquo;directed&rsquo; graph (notice the edges have arrows indicating the direction and flow):</p>
 
-<p><img src="../../images/graph-directed.png"></p>
+<p><img src="../assets/images/graph-directed.png"></p>
 
 <blockquote>
 <p>Note: an &lsquo;undirected&rsquo; graph simply has no arrow heads, so the flow between nodes can go in either direction.</p>

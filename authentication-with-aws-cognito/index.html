@@ -282,8 +282,8 @@
 
 <p>With the hosted ui option you&rsquo;ll likely also need to utilise <a href="https://aws.amazon.com/lambda/" target="_blank">AWS Lambda</a> in order to do some logic processing. The following diagram demonstrates how we were initially using the hosted ui:</p>
 
-<p><a href="../../images/cognito-high-level.png">
-  <img src="../../images/cognito-high-level.png">
+<p><a href="../assets/images/cognito-high-level.png">
+  <img src="../assets/images/cognito-high-level.png">
 </a></p>
 
 <ol>
@@ -535,8 +535,8 @@
 
 <p>If you&rsquo;re interested the updated architecture looked something like this&hellip;</p>
 
-<p><a href="../../images/cognito-high-level-new-arch.png">
-  <img src="../../images/cognito-high-level-new-arch.png">
+<p><a href="../assets/images/cognito-high-level-new-arch.png">
+  <img src="../assets/images/cognito-high-level-new-arch.png">
 </a></p>
 
 <p>None of the listed services are public, they&rsquo;re all internal. The &ldquo;API Gateway&rdquo; is an internal tool that allows upstreams (such as the <code>buzzfeed_auth_api</code> to control concurrency and rate limiting) of downstream consumers (such as <code>buzzfeed_auth_ui</code> and <code>user_settings</code>).</p>
@@ -547,8 +547,8 @@
 
 <p>We discovered that the social sign-in for native mobile apps doesn&rsquo;t work as well as the web SDK&rsquo;s. Mobile apps need to instead do things differently as their SDK&rsquo;s aren&rsquo;t as &lsquo;integrated&rsquo; like web.</p>
 
-<p><a href="../../images/mobile-app-authentication-flow.png">
-  <img src="../../images/mobile-app-authentication-flow.png">
+<p><a href="../assets/images/mobile-app-authentication-flow.png">
+  <img src="../assets/images/mobile-app-authentication-flow.png">
 </a></p>
 
 <h2 id="user-pool-configuration">User Pool Configuration</h2>
