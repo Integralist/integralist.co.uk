@@ -120,8 +120,6 @@
 
 <p>The motivation for this post is to understand why you will most likely want to use <code>asyncio</code> over the other available modules (e.g. <code>_thread</code> and <code>threading</code>) and when it&rsquo;s actually more appropriate to use either <code>multiprocessing</code> or <code>concurrent.futures</code>.</p>
 
-<p>{{&lt; adverts/pythonforprogrammers &gt;}}</p>
-
 <h2 id="why-focus-on-asyncio">Why focus on asyncio?</h2>
 
 <p>One of the issues with writing concurrent code (using either the <code>_thread</code> or <code>threading</code> modules) is that you suffer the cost of &lsquo;CPU context switching&rsquo; (as a CPU core can only run one thread at a time) which although quick, isn&rsquo;t free.</p>
