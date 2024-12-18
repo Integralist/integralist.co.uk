@@ -7,8 +7,7 @@ Running the target `make build` will:
 
 - Loop over all top-level directories (skipping `cmd`, `assets` etc).
 - Convert every `.md` into a `index.html`.
-- Pushes the date for every `.md` (extracted from the filename) into a queue.
-- A separate process pulls from the queue and builds a HTML list.
+- The date in the Markdown filename is used as the publish date.
 
 > \[!NOTE\]
 > The folder name will become the URL slug.
