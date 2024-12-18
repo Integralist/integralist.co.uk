@@ -786,7 +786,7 @@ I'm a print published and self-published author; I'm also a tech reviewer and am
 The following links are to some of my more 'popular' articles. My main focus when writing is to take a complicated or confusing topic and attempt to distil it into something that an unfamiliar reader can understand.
 
 - [Go Concurrency Patterns](/posts/go-concurrency-patterns/) (2024)
-- [Bitwise Operators in Go](/posts/bitwise-operators-in-go/) (2024)
+- [Bitwise Operators in Go](/posts/bitwise-operations-in-go/) (2024)
 - [Continuous Integration and Deployment to multiple environments with Terraform Cloud and GitHub Actions](/posts/ci-cd-with-terraform-cloud-and-github-actions/) (2024)
 - [The Power of OpenAPI: Simplifying API Design and documentation](/posts/openapi/) (2023)
 - [Beginner's guide to creating a Terraform Provider](/posts/terraform-build-a-provider/) (2022)
