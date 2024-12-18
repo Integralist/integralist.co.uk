@@ -244,7 +244,8 @@ map &lt;leader&gt;t :AgC&lt;CR&gt;
 set wildignore+=*/.git/*,*/node_modules/*,*/.hg/*,*/.svn/*.,*/.DS_Store
 set wildmode=list:longest,list:full
 
-autocmd VimEnter * command! -nargs=* -bang AgC call fzf#vim#ag(&lt;q-args&gt;, '--path-to-ignore ~/.ignore --hidden --ignore &quot;node_modules&quot; --ignore-dir=&quot;vendor&quot; --skip-vcs-ignores', &lt;bang&gt;0)
+autocmd VimEnter * command! -nargs=* -bang AgC \
+call fzf#vim#ag(&lt;q-args&gt;, '--path-to-ignore ~/.ignore --hidden --ignore &quot;node_modules&quot; --ignore-dir=&quot;vendor&quot; --skip-vcs-ignores', &lt;bang&gt;0)
 
 let g:ackprg = 'ag --vimgrep --smart-case --path-to-ignore ~/.ignore --hidden --ignore-dir=node_modules --ignore-dir=vendor --skip-vcs-ignores'
 
@@ -604,10 +605,12 @@ set wildignore+=*/.git/*,*/node_modules/*,*/.hg/*,*/.svn/*.,*/.DS_Store &quot; F
 set wildmode=list:longest,list:full
 
 &quot; configure FZF text search command to have default flags included
-autocmd VimEnter * command! -nargs=* -bang AgC call fzf#vim#ag(&lt;q-args&gt;, '--path-to-ignore ~/.ignore --hidden --ignore &quot;node_modules&quot; --ignore-dir=&quot;vendor&quot; --skip-vcs-ignores', &lt;bang&gt;0)
+autocmd VimEnter * command! -nargs=* -bang AgC call fzf#vim#ag(&lt;q-args&gt;,\
+'--path-to-ignore ~/.ignore --hidden --ignore &quot;node_modules&quot; --ignore-dir=&quot;vendor&quot; --skip-vcs-ignores', &lt;bang&gt;0)
 
 &quot; ack
-let g:ackprg = 'ag --vimgrep --smart-case --path-to-ignore ~/.ignore --hidden --ignore-dir=node_modules --ignore-dir=vendor --skip-vcs-ignores'
+let g:ackprg = 'ag --vimgrep --smart-case --path-to-ignore ~/.ignore \
+--hidden --ignore-dir=node_modules --ignore-dir=vendor --skip-vcs-ignores'
 
 &quot; help Ack mappings to respect my split settings
 let g:ack_mappings = {

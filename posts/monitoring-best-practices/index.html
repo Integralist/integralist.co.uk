@@ -307,9 +307,11 @@ i.e. you should monitor things like &lsquo;requests per second&rsquo; - do you h
 
 <pre><code>Foo-Service 5xx
 
-Foo-Service is serving a high number of 5xx responses, these will not be cached at CDN, possibly resulting in further cache misses.
+Foo-Service is serving a high number of 5xx responses, 
+these will not be cached at CDN, possibly resulting in further cache misses.
 
-Foo-Service serves responsive article pages for the BuzzFeed website (www.buzzfeed.com) and is fronted by a CDN. It has an upstream dependency on Redis and the internal Buzz API v2.
+Foo-Service serves responsive article pages for the BuzzFeed website (www.buzzfeed.com) 
+and is fronted by a CDN. It has an upstream dependency on Redis and the internal Buzz API v2.
 
 Please refer to the monitoring for more details:
 

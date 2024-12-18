@@ -2351,3 +2351,7 @@ button,
 	margin-top: -1em;
 	font-size: 100%;
 }
+
+#main p img, canvas {
+	max-width: 100%;
+}

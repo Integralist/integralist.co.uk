@@ -130,31 +130,56 @@
 
 <pre><code class="language-txt">$ man git-&lt;tab&gt;
 
-git-add                       git-commit-tree               git-fsck                      git-merge-file                git-rebase                    git-show-index
-git-am                        git-config                    git-fsck-objects              git-merge-index               git-receive-pack              git-show-ref
-git-annotate                  git-count-objects             git-gc                        git-merge-one-file            git-reflog                    git-stage
-git-apply                     git-credential                git-get-tar-commit-id         git-merge-tree                git-remote                    git-stash
-git-archimport                git-credential-cache          git-grep                      git-mergetool                 git-remote-ext                git-status
-git-archive                   git-credential-cache--daemon  git-gui                       git-mergetool--lib            git-remote-fd                 git-stripspace
-git-bisect                    git-credential-store          git-hash-object               git-mktag                     git-remote-testgit            git-submodule
-git-blame                     git-cvsexportcommit           git-help                      git-mktree                    git-repack                    git-svn
-git-branch                    git-cvsimport                 git-http-backend              git-multi-pack-index          git-replace                   git-symbolic-ref
-git-bundle                    git-cvsserver                 git-http-fetch                git-mv                        git-request-pull              git-tag
-git-cat-file                  git-daemon                    git-http-push                 git-name-rev                  git-rerere                    git-unpack-file
-git-check-attr                git-describe                  git-imap-send                 git-notes                     git-reset                     git-unpack-objects
-git-check-ignore              git-diff                      git-index-pack                git-p4                        git-rev-list                  git-update-index
-git-check-mailmap             git-diff-files                git-init                      git-pack-objects              git-rev-parse                 git-update-ref
-git-check-ref-format          git-diff-index                git-init-db                   git-pack-redundant            git-revert                    git-update-server-info
-git-checkout                  git-diff-tree                 git-instaweb                  git-pack-refs                 git-rm                        git-upload-archive
-git-checkout-index            git-difftool                  git-interpret-trailers        git-parse-remote              git-send-email                git-upload-pack
-git-cherry                    git-fast-export               git-log                       git-patch-id                  git-send-pack                 git-var
-git-cherry-pick               git-fast-import               git-ls-files                  git-prune                     git-sh-i18n                   git-verify-commit
-git-citool                    git-fetch                     git-ls-remote                 git-prune-packed              git-sh-i18n--envsubst         git-verify-pack
-git-clean                     git-fetch-pack                git-ls-tree                   git-pull                      git-sh-setup                  git-verify-tag
-git-clone                     git-filter-branch             git-mailinfo                  git-push                      git-shell                     git-web--browse
-git-column                    git-fmt-merge-msg             git-mailsplit                 git-quiltimport               git-shortlog                  git-whatchanged
-git-commit                    git-for-each-ref              git-merge                     git-range-diff                git-show                      git-worktree
-git-commit-graph              git-format-patch              git-merge-base                git-read-tree                 git-show-branch               git-write-tree
+git-add                       git-commit-tree               git-fsck                      
+git-am                        git-config                    git-fsck-objects              
+git-annotate                  git-count-objects             git-gc                        
+git-apply                     git-credential                git-get-tar-commit-id         
+git-archimport                git-credential-cache          git-grep                      
+git-archive                   git-credential-cache--daemon  git-gui                       
+git-bisect                    git-credential-store          git-hash-object               
+git-blame                     git-cvsexportcommit           git-help                      
+git-branch                    git-cvsimport                 git-http-backend              
+git-bundle                    git-cvsserver                 git-http-fetch                
+git-cat-file                  git-daemon                    git-http-push                 
+git-check-attr                git-describe                  git-imap-send                 
+git-check-ignore              git-diff                      git-index-pack                
+git-check-mailmap             git-diff-files                git-init                      
+git-check-ref-format          git-diff-index                git-init-db                   
+git-checkout                  git-diff-tree                 git-instaweb                  
+git-checkout-index            git-difftool                  git-interpret-trailers        
+git-cherry                    git-fast-export               git-log                       
+git-cherry-pick               git-fast-import               git-ls-files                  
+git-citool                    git-fetch                     git-ls-remote                 
+git-clean                     git-fetch-pack                git-ls-tree                   
+git-clone                     git-filter-branch             git-mailinfo                  
+git-column                    git-fmt-merge-msg             git-mailsplit                 
+git-commit                    git-for-each-ref              git-merge                     
+git-commit-graph              git-format-patch              git-merge-base                
+git-merge-file                git-rebase                    git-show-index
+git-merge-index               git-receive-pack              git-show-ref
+git-merge-one-file            git-reflog                    git-stage
+git-merge-tree                git-remote                    git-stash
+git-mergetool                 git-remote-ext                git-status
+git-mergetool--lib            git-remote-fd                 git-stripspace
+git-mktag                     git-remote-testgit            git-submodule
+git-mktree                    git-repack                    git-svn
+git-multi-pack-index          git-replace                   git-symbolic-ref
+git-mv                        git-request-pull              git-tag
+git-name-rev                  git-rerere                    git-unpack-file
+git-notes                     git-reset                     git-unpack-objects
+git-p4                        git-rev-list                  git-update-index
+git-pack-objects              git-rev-parse                 git-update-ref
+git-pack-redundant            git-revert                    git-update-server-info
+git-pack-refs                 git-rm                        git-upload-archive
+git-parse-remote              git-send-email                git-upload-pack
+git-patch-id                  git-send-pack                 git-var
+git-prune                     git-sh-i18n                   git-verify-commit
+git-prune-packed              git-sh-i18n--envsubst         git-verify-pack
+git-pull                      git-sh-setup                  git-verify-tag
+git-push                      git-shell                     git-web--browse
+git-quiltimport               git-shortlog                  git-whatchanged
+git-range-diff                git-show                      git-worktree
+git-read-tree                 git-show-branch               git-write-tree
 </code></pre>
 
 <p>But there <em>is</em> a way to find out! Currently the <code>man git</code> page describes which commands are intended as porcelain and which are plumbing. Simple search for <code>GIT COMMANDS</code> and you&rsquo;ll find the two groupings.</p>

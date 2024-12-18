@@ -215,7 +215,8 @@ var app = (function (global) {
 
 }(this));
 
-app.will_be_made_public_but_cant_be_accessed_directly() // TypeError: Object #&lt;Object&gt; has no method 'will_be_made_public_but_cant_be_accessed_directly'
+// TypeError: Object #&lt;Object&gt; has no method 'will_be_made_public_but_cant_be_accessed_directly'
+app.will_be_made_public_but_cant_be_accessed_directly() 
 
 app.do_something(); // =&gt; 'Private'
 </code></pre>

@@ -256,7 +256,9 @@ Thumbs.db
 <p>What we need to do is open the <code>~/.gitconfig</code> file and then add the following content…</p>
 
 <pre><code>[alias]
-    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset' --abbrev-commit --date=relative
+    lg = log --color --graph \
+    --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset' \
+    --abbrev-commit --date=relative
 </code></pre>
 
 <h2 id="shorter-git-status">Shorter <code>git status</code></h2>

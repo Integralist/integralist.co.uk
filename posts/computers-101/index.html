@@ -262,44 +262,82 @@ Use `man -k' or `info' to find out more about commands not in this list.
 
 A star (*) next to a name means that the command is disabled.
 
- job_spec [&amp;]                                                                                                           history [-c] [-d offset] [n] or history -anrw [filename] or history -ps arg [arg...]
- (( expression ))                                                                                                       if COMMANDS; then COMMANDS; [ elif COMMANDS; then COMMANDS; ]... [ else COMMANDS; ] fi
- . filename [arguments]                                                                                                 jobs [-lnprs] [jobspec ...] or jobs -x command [args]
- :                                                                                                                      kill [-s sigspec | -n signum | -sigspec] pid | jobspec ... or kill -l [sigspec]
- [ arg... ]                                                                                                             let arg [arg ...]
- [[ expression ]]                                                                                                       local [option] name[=value] ...
- alias [-p] [name[=value] ... ]                                                                                         logout [n]
- bg [job_spec ...]                                                                                                      mapfile [-d delim] [-n count] [-O origin] [-s count] [-t] [-u fd] [-C callback] [-c quantum] [array]
- bind [-lpsvPSVX] [-m keymap] [-f filename] [-q name] [-u name] [-r keyseq] [-x keyseq:shell-command] [keyseq:readlin&gt;  popd [-n] [+N | -N]
- break [n]                                                                                                              printf [-v var] format [arguments]
- builtin [shell-builtin [arg ...]]                                                                                      pushd [-n] [+N | -N | dir]
- caller [expr]                                                                                                          pwd [-LP]
- case WORD in [PATTERN [| PATTERN]...) COMMANDS ;;]... esac                                                             read [-ers] [-a array] [-d delim] [-i text] [-n nchars] [-N nchars] [-p prompt] [-t timeout] [-u fd] [name ...]
- cd [-L|[-P [-e]] [-@]] [dir]                                                                                           readarray [-d delim] [-n count] [-O origin] [-s count] [-t] [-u fd] [-C callback] [-c quantum] [array]
- command [-pVv] command [arg ...]                                                                                       readonly [-aAf] [name[=value] ...] or readonly -p
- compgen [-abcdefgjksuv] [-o option] [-A action] [-G globpat] [-W wordlist]  [-F function] [-C command] [-X filterpat&gt;  return [n]
- complete [-abcdefgjksuv] [-pr] [-DEI] [-o option] [-A action] [-G globpat] [-W wordlist]  [-F function] [-C command]&gt;  select NAME [in WORDS ... ;] do COMMANDS; done
- compopt [-o|+o option] [-DEI] [name ...]                                                                               set [-abefhkmnptuvxBCHP] [-o option-name] [--] [arg ...]
- continue [n]                                                                                                           shift [n]
- coproc [NAME] command [redirections]                                                                                   shopt [-pqsu] [-o] [optname ...]
- declare [-aAfFgilnrtux] [-p] [name[=value] ...]                                                                        source filename [arguments]
- dirs [-clpv] [+N] [-N]                                                                                                 suspend [-f]
- disown [-h] [-ar] [jobspec ... | pid ...]                                                                              test [expr]
- echo [-neE] [arg ...]                                                                                                  time [-p] pipeline
- enable [-a] [-dnps] [-f filename] [name ...]                                                                           times
- eval [arg ...]                                                                                                         trap [-lp] [[arg] signal_spec ...]
- exec [-cl] [-a name] [command [arguments ...]] [redirection ...]                                                       true
- exit [n]                                                                                                               type [-afptP] name [name ...]
- export [-fn] [name[=value] ...] or export -p                                                                           typeset [-aAfFgilnrtux] [-p] name[=value] ...
- false                                                                                                                  ulimit [-SHabcdefiklmnpqrstuvxPT] [limit]
- fc [-e ename] [-lnr] [first] [last] or fc -s [pat=rep] [command]                                                       umask [-p] [-S] [mode]
- fg [job_spec]                                                                                                          unalias [-a] name [name ...]
- for NAME [in WORDS ... ] ; do COMMANDS; done                                                                           unset [-f] [-v] [-n] [name ...]
- for (( exp1; exp2; exp3 )); do COMMANDS; done                                                                          until COMMANDS; do COMMANDS; done
- function name { COMMANDS ; } or name () { COMMANDS ; }                                                                 variables - Names and meanings of some shell variables
- getopts optstring name [arg]                                                                                           wait [-fn] [id ...]
- hash [-lr] [-p pathname] [-dt] [name ...]                                                                              while COMMANDS; do COMMANDS; done
- help [-dms] [pattern ...]                                                                                              { COMMANDS ; }
+ job_spec [&amp;]                                                                                                           
+ (( expression ))                                                                                                       
+ . filename [arguments]                                                                                                 
+ :                                                                                                                      
+ [ arg... ]                                                                                                             
+ [[ expression ]]                                                                                                       
+ alias [-p] [name[=value] ... ]                                                                                         
+ bg [job_spec ...]                                                                                                      
+ bind [-lpsvPSVX] [-m keymap] [-f filename] [-q name] [-u name] [-r keyseq] [-x keyseq:shell-command] [keyseq:readlin&gt;  
+ break [n]                                                                                                              
+ builtin [shell-builtin [arg ...]]                                                                                      
+ caller [expr]                                                                                                          
+ case WORD in [PATTERN [| PATTERN]...) COMMANDS ;;]... esac                                                             
+ cd [-L|[-P [-e]] [-@]] [dir]                                                                                           
+ command [-pVv] command [arg ...]                                                                                       
+ compgen [-abcdefgjksuv] [-o option] [-A action] [-G globpat] [-W wordlist]  [-F function] [-C command] [-X filterpat&gt;  
+ complete [-abcdefgjksuv] [-pr] [-DEI] [-o option] [-A action] [-G globpat] [-W wordlist]  [-F function] [-C command]&gt;  
+ compopt [-o|+o option] [-DEI] [name ...]                                                                               
+ continue [n]                                                                                                           
+ coproc [NAME] command [redirections]                                                                                   
+ declare [-aAfFgilnrtux] [-p] [name[=value] ...]                                                                        
+ dirs [-clpv] [+N] [-N]                                                                                                 
+ disown [-h] [-ar] [jobspec ... | pid ...]                                                                              
+ echo [-neE] [arg ...]                                                                                                  
+ enable [-a] [-dnps] [-f filename] [name ...]                                                                           
+ eval [arg ...]                                                                                                         
+ exec [-cl] [-a name] [command [arguments ...]] [redirection ...]                                                       
+ exit [n]                                                                                                               
+ export [-fn] [name[=value] ...] or export -p                                                                           
+ false                                                                                                                  
+ fc [-e ename] [-lnr] [first] [last] or fc -s [pat=rep] [command]                                                       
+ fg [job_spec]                                                                                                          
+ for NAME [in WORDS ... ] ; do COMMANDS; done                                                                           
+ for (( exp1; exp2; exp3 )); do COMMANDS; done                                                                          
+ function name { COMMANDS ; } or name () { COMMANDS ; }                                                                 
+ getopts optstring name [arg]                                                                                           
+ hash [-lr] [-p pathname] [-dt] [name ...]                                                                              
+ help [-dms] [pattern ...]                                                                                              
+ history [-c] [-d offset] [n] or history -anrw [filename] or history -ps arg [arg...]
+ if COMMANDS; then COMMANDS; [ elif COMMANDS; then COMMANDS; ]... [ else COMMANDS; ] fi
+ jobs [-lnprs] [jobspec ...] or jobs -x command [args]
+ kill [-s sigspec | -n signum | -sigspec] pid | jobspec ... or kill -l [sigspec]
+ let arg [arg ...]
+ local [option] name[=value] ...
+ logout [n]
+ mapfile [-d delim] [-n count] [-O origin] [-s count] [-t] [-u fd] [-C callback] [-c quantum] [array]
+ popd [-n] [+N | -N]
+ printf [-v var] format [arguments]
+ pushd [-n] [+N | -N | dir]
+ pwd [-LP]
+ read [-ers] [-a array] [-d delim] [-i text] [-n nchars] [-N nchars] [-p prompt] [-t timeout] [-u fd] [name ...]
+ readarray [-d delim] [-n count] [-O origin] [-s count] [-t] [-u fd] [-C callback] [-c quantum] [array]
+ readonly [-aAf] [name[=value] ...] or readonly -p
+ return [n]
+ select NAME [in WORDS ... ;] do COMMANDS; done
+ set [-abefhkmnptuvxBCHP] [-o option-name] [--] [arg ...]
+ shift [n]
+ shopt [-pqsu] [-o] [optname ...]
+ source filename [arguments]
+ suspend [-f]
+ test [expr]
+ time [-p] pipeline
+ times
+ trap [-lp] [[arg] signal_spec ...]
+ true
+ type [-afptP] name [name ...]
+ typeset [-aAfFgilnrtux] [-p] name[=value] ...
+ ulimit [-SHabcdefiklmnpqrstuvxPT] [limit]
+ umask [-p] [-S] [mode]
+ unalias [-a] name [name ...]
+ unset [-f] [-v] [-n] [name ...]
+ until COMMANDS; do COMMANDS; done
+ variables - Names and meanings of some shell variables
+ wait [-fn] [id ...]
+ while COMMANDS; do COMMANDS; done
+ { COMMANDS ; }
 </code></pre>
 
 <p>If we want to see the documentation for the <code>type</code> builtin, use <code>help type</code>:</p>

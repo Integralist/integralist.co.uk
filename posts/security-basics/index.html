@@ -608,7 +608,14 @@ Alt-Svc: quic=&quot;www.google.com:443&quot;; p=&quot;1&quot;; ma=600,quic=&quot
 
 <p>Mozilla released a <a href="https://blog.mozilla.org/security/2015/09/11/deprecating-the-rc4-cipher/" target="_blank">blog post</a> recently that stated they&rsquo;ve discontinued support for this particular cipher. So the above command will return the following output, which indicates a <code>SSL handshake failure</code>:</p>
 
-<pre><code>57533:error:14077410:SSL routines:SSL23_GET_SERVER_HELLO:sslv3 alert handshake failure:/BuildRoot/Library/Caches/com.apple.xbs/Sources/OpenSSL098/OpenSSL098-59/src/ssl/s23_clnt.c:593:
+<pre><code>57533:
+error:
+14077410:
+SSL routines:
+SSL23_GET_SERVER_HELLO:
+sslv3 alert handshake failure:
+/BuildRoot/Library/Caches/com.apple.xbs/Sources/OpenSSL098/OpenSSL098-59/src/ssl/s23_clnt.c:
+593:
 </code></pre>
 
 <h3 id="certificate-signature">Certificate signature</h3>

@@ -1635,8 +1635,8 @@ sub vcl_deliver {
 # pop: &lt;value&gt;, node: &lt;value&gt;, state: &lt;value&gt;, host: &lt;value&gt;, path: &lt;value&gt;
 #
 # pop  = the POP where the request is currently passing through.
-# node  = whether the cache node is a delivery node or fetching node (see: https://www.integralist.co.uk/posts/fastly-varnish/#4.2).
-# state = internal fastly variable that reports state flow as well as whether a request waited for request collapsing or whether it was clustered.
+# node  = whether the cache node is a delivery node or fetching node
+# state = internal fastly variable that reports state flow (req waited for collapsing or clustered).
 # host  = the full host name, without the path or query parameters.
 # path   = the full path, including query parameters.
 #
@@ -1651,7 +1651,8 @@ sub debug_info_recv {
   }
 
   set req.http.X-VCL-Route = var.context + &quot;VCL_RECV(&quot; +
-    &quot;pop: &quot; + if(req.backend.is_shield, &quot;edge&quot;, if(fastly.ff.visits_this_service &lt; 2, &quot;edge&quot;, &quot;shield&quot;)) + &quot; [&quot; + server.datacenter + &quot;, &quot; + server.hostname + &quot;], &quot; +
+    &quot;pop: &quot; + if(req.backend.is_shield, &quot;edge&quot;, 
+    if(fastly.ff.visits_this_service &lt; 2, &quot;edge&quot;, &quot;shield&quot;)) + &quot; [&quot; + server.datacenter + &quot;, &quot; + server.hostname + &quot;], &quot; +
     &quot;node: cluster_edge, &quot; +
     &quot;state: &quot; + fastly_info.state + &quot;, &quot; +
     &quot;host: &quot; + req.http.host + &quot;, &quot; +
@@ -1661,7 +1662,8 @@ sub debug_info_recv {
 
 sub debug_info_hash {
   set req.http.X-VCL-Route = req.http.X-VCL-Route + &quot;, VCL_HASH(&quot; +
-    &quot;pop: &quot; + if(req.backend.is_shield, &quot;edge&quot;, if(fastly.ff.visits_this_service &lt; 2, &quot;edge&quot;, &quot;shield&quot;)) + &quot; [&quot; + server.datacenter + &quot;, &quot; + server.hostname + &quot;], &quot; +
+    &quot;pop: &quot; + if(req.backend.is_shield, &quot;edge&quot;, 
+    if(fastly.ff.visits_this_service &lt; 2, &quot;edge&quot;, &quot;shield&quot;)) + &quot; [&quot; + server.datacenter + &quot;, &quot; + server.hostname + &quot;], &quot; +
     &quot;node: cluster_edge, &quot; +
     &quot;state: &quot; + fastly_info.state + &quot;, &quot; +
     &quot;host: &quot; + req.http.host + &quot;, &quot; +
@@ -1671,7 +1673,8 @@ sub debug_info_hash {
 
 sub debug_info_miss {
   set req.http.X-PreFetch-Miss = &quot;, VCL_MISS(&quot; +
-    &quot;pop: &quot; + if(req.backend.is_shield, &quot;edge&quot;, if(fastly.ff.visits_this_service &lt; 2, &quot;edge&quot;, &quot;shield&quot;)) &quot; [&quot; server.datacenter &quot;, &quot; server.hostname &quot;], &quot; +
+    &quot;pop: &quot; + if(req.backend.is_shield, &quot;edge&quot;, 
+    if(fastly.ff.visits_this_service &lt; 2, &quot;edge&quot;, &quot;shield&quot;)) &quot; [&quot; server.datacenter &quot;, &quot; server.hostname &quot;], &quot; +
     &quot;node: cluster_&quot; + if(fastly_info.is_cluster_shield, &quot;shield&quot;, &quot;edge&quot;) + &quot;, &quot; +
     &quot;state: &quot; + fastly_info.state + &quot;, &quot; +
     &quot;host: &quot; + bereq.http.host + &quot;, &quot; +
@@ -1681,7 +1684,8 @@ sub debug_info_miss {
 
 sub debug_info_pass {
   set req.http.X-PreFetch-Pass = &quot;, &quot; if(fastly_info.state ~ &quot;^HITPASS&quot;, &quot;VCL_HIT&quot;, &quot;VCL_PASS&quot;) &quot;(&quot; +
-    &quot;pop: &quot; + if(req.backend.is_shield, &quot;edge&quot;, if(fastly.ff.visits_this_service &lt; 2, &quot;edge&quot;, &quot;shield&quot;)) + &quot; [&quot; + server.datacenter + &quot;, &quot; + server.hostname + &quot;], &quot; +
+    &quot;pop: &quot; + if(req.backend.is_shield, &quot;edge&quot;, 
+    if(fastly.ff.visits_this_service &lt; 2, &quot;edge&quot;, &quot;shield&quot;)) + &quot; [&quot; + server.datacenter + &quot;, &quot; + server.hostname + &quot;], &quot; +
     &quot;node: cluster_&quot; + if(fastly_info.is_cluster_shield, &quot;shield&quot;, &quot;edge&quot;) + &quot;, &quot; +
     &quot;state: &quot; + fastly_info.state + &quot;, &quot; +
     &quot;host: &quot; + req.http.host + &quot;, &quot; +
@@ -1694,7 +1698,8 @@ sub debug_info_fetch {
   set beresp.http.X-PreFetch-Pass = req.http.X-PreFetch-Pass;
   set beresp.http.X-PreFetch-Miss = req.http.X-PreFetch-Miss;
   set beresp.http.X-PostFetch = &quot;, VCL_FETCH(&quot; +
-    &quot;pop: &quot; + if(req.backend.is_shield, &quot;edge&quot;, if(fastly.ff.visits_this_service &lt; 2, &quot;edge&quot;, &quot;shield&quot;)) + &quot; [&quot; + server.datacenter + &quot;, &quot; + server.hostname + &quot;], &quot; +
+    &quot;pop: &quot; + if(req.backend.is_shield, &quot;edge&quot;, 
+    if(fastly.ff.visits_this_service &lt; 2, &quot;edge&quot;, &quot;shield&quot;)) + &quot; [&quot; + server.datacenter + &quot;, &quot; + server.hostname + &quot;], &quot; +
     &quot;node: cluster_&quot; + if(fastly_info.is_cluster_shield, &quot;shield&quot;, &quot;edge&quot;) + &quot;, &quot; +
     &quot;state: &quot; + fastly_info.state + &quot;, &quot; +
     &quot;host: &quot; + req.http.host + &quot;, &quot; +
@@ -1710,7 +1715,8 @@ sub debug_info_error {
   set var.error_page = false;
 
   set obj.http.X-VCL-Route = req.http.X-VCL-Route + &quot;, VCL_ERROR(&quot; +
-    &quot;pop: &quot; + if(req.backend.is_shield, &quot;edge&quot;, if(fastly.ff.visits_this_service &lt; 2, &quot;edge&quot;, &quot;shield&quot;)) + &quot; [&quot; + server.datacenter + &quot;, &quot; + server.hostname + &quot;], &quot; +
+    &quot;pop: &quot; + if(req.backend.is_shield, &quot;edge&quot;, 
+    if(fastly.ff.visits_this_service &lt; 2, &quot;edge&quot;, &quot;shield&quot;)) + &quot; [&quot; + server.datacenter + &quot;, &quot; + server.hostname + &quot;], &quot; +
     &quot;node: cluster_&quot; + if(fastly_info.is_cluster_shield, &quot;shield&quot;, &quot;edge&quot;) + &quot;, &quot; +
     &quot;state: &quot; + fastly_info.state + &quot;, &quot; +
     &quot;host: &quot; + req.http.host + &quot;, &quot; +
@@ -1745,7 +1751,8 @@ sub debug_info_deliver {
   } elseif (fastly_info.state ~ &quot;^HIT($|-)&quot;) {
     # otherwise track the initial vcl_hit request flow.
     set req.http.X-VCL-Route = req.http.X-VCL-Route + &quot;, VCL_HIT(&quot; +
-      &quot;pop: &quot; + if(req.backend.is_shield, &quot;edge&quot;, if(fastly.ff.visits_this_service &lt; 2, &quot;edge&quot;, &quot;shield&quot;)) + &quot; [&quot; + server.datacenter + &quot;, &quot; + server.hostname + &quot;], &quot; +
+      &quot;pop: &quot; + if(req.backend.is_shield, &quot;edge&quot;, 
+      if(fastly.ff.visits_this_service &lt; 2, &quot;edge&quot;, &quot;shield&quot;)) + &quot; [&quot; + server.datacenter + &quot;, &quot; + server.hostname + &quot;], &quot; +
       &quot;node: cluster_shield, &quot; +
       &quot;state: &quot; + fastly_info.state + &quot;, &quot; +
       &quot;host: &quot; + req.http.host + &quot;, &quot; +
@@ -1777,7 +1784,8 @@ sub debug_info_deliver {
   }
 
   set req.http.X-VCL-Route = req.http.X-VCL-Route + &quot;, VCL_DELIVER(&quot; +
-    &quot;pop: &quot; + if(req.backend.is_shield, &quot;edge&quot;, if(fastly.ff.visits_this_service &lt; 2, &quot;edge&quot;, &quot;shield&quot;)) + &quot; [&quot; + server.datacenter + &quot;, &quot; + server.hostname + &quot;], &quot; +
+    &quot;pop: &quot; + if(req.backend.is_shield, &quot;edge&quot;, 
+    if(fastly.ff.visits_this_service &lt; 2, &quot;edge&quot;, &quot;shield&quot;)) + &quot; [&quot; + server.datacenter + &quot;, &quot; + server.hostname + &quot;], &quot; +
     &quot;node: cluster_edge, &quot; +
     &quot;state: &quot; + fastly_info.state + &quot;, &quot; +
     &quot;host: &quot; + req.http.host + &quot;, &quot; +
@@ -2292,7 +2300,11 @@ if (beresp.status &gt;= 500 &amp;&amp; beresp.status &lt; 600) {
 <pre><code>sub vcl_log {
 #--FASTLY LOG START
   # default response conditions
-  log {&quot;syslog &lt;service_id&gt; &lt;service_name&gt; :: &quot;} req.http.Fastly-Client-IP &quot; [&quot; strftime({&quot;%Y-%m-%d %H:%M:%S&quot;}, time.start) &quot;.&quot; time.start.msec_frac {&quot;] &quot;&quot;} cstr_escape(req.request) &quot; &quot; cstr_escape(req.url) &quot; &quot; cstr_escape(req.proto) {&quot;&quot; &quot;} resp.status &quot; &quot; resp.body_bytes_written &quot; &quot; tls.client.protocol &quot; &quot; fastly_info.state &quot; &quot; req.http.user-agent;
+  log {&quot;syslog &lt;service_id&gt; &lt;service_name&gt; :: &quot;} 
+  req.http.Fastly-Client-IP &quot; [&quot; strftime({&quot;%Y-%m-%d %H:%M:%S&quot;}, time.start) &quot;.&quot; 
+  time.start.msec_frac {&quot;] &quot;&quot;} cstr_escape(req.request) &quot; &quot; cstr_escape(req.url)
+  &quot; &quot; cstr_escape(req.proto) {&quot;&quot; &quot;} resp.status &quot; &quot; resp.body_bytes_written &quot; &quot;
+  tls.client.protocol &quot; &quot; fastly_info.state &quot; &quot; req.http.user-agent;
 #--FASTLY LOG END
 }
 </code></pre>

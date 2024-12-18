@@ -69,7 +69,8 @@
 </blockquote>
 
 <pre><code class="language-bash"># you can swap `ag` for `grep` if you prefer
-alias golatest=&quot;curl -L https://github.com/golang/go/tags 2&gt;&amp;1 | ag '/golang/go/releases/tag/go[\w.]+' -o | cut -d '/' -f 6 | awk NR==1 | ag '\d.+' -o&quot;
+alias golatest=&quot;curl -L https://github.com/golang/go/tags 2&gt;&amp;1 |\
+ag '/golang/go/releases/tag/go[\w.]+' -o | cut -d '/' -f 6 | awk NR==1 | ag '\d.+' -o&quot;
 
 function go_install {
   if [ -z &quot;$1&quot; ]; then

@@ -420,7 +420,13 @@ asyncio.run(main())
 
 n: 3!
 
-({&lt;Task finished coro=&lt;foo() done, defined at await.py:5&gt; result=None&gt;}, {&lt;Task pending coro=&lt;foo() running at await.py:8&gt; wait_for=&lt;Future pending cb=[&lt;TaskWakeupMethWrapper object at 0x10322b468&gt;()]&gt;&gt;, &lt;Task pending coro=&lt;foo() running at await.py:8&gt; wait_for=&lt;Future pending cb=[&lt;TaskWakeupMethWrapper object at 0x10322b4c8&gt;()]&gt;&gt;})
+(
+{&lt;Task finished coro=&lt;foo() done, defined at await.py:5&gt; result=None&gt;}, 
+{
+&lt;Task pending coro=&lt;foo() running at await.py:8&gt; wait_for=&lt;Future pending cb=[&lt;TaskWakeupMethWrapper object at 0x10322b468&gt;()]&gt;&gt;, 
+&lt;Task pending coro=&lt;foo() running at await.py:8&gt; wait_for=&lt;Future pending cb=[&lt;TaskWakeupMethWrapper object at 0x10322b4c8&gt;()]&gt;&gt;
+}
+)
 </code></pre>
 
 <h3 id="wait-for"><code>wait_for</code></h3>

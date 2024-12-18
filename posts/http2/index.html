@@ -227,7 +227,29 @@ RequestURI: &quot;/&quot;
 URL: &amp;url.URL{Scheme:&quot;&quot;, Opaque:&quot;&quot;, User:(*url.Userinfo)(nil), Host:&quot;&quot;, Path:&quot;/&quot;, RawPath:&quot;&quot;, RawQuery:&quot;&quot;, Fragment:&quot;&quot;}
 Body.ContentLength: 0 (-1 means unknown)
 Close: false (relevant for HTTP/1 only)
-TLS: &amp;tls.ConnectionState{Version:0x303, HandshakeComplete:true, DidResume:false, CipherSuite:0xc02f, NegotiatedProtocol:&quot;h2&quot;, NegotiatedProtocolIsMutual:true, ServerName:&quot;localhost&quot;, PeerCertificates:[]*x509.Certificate(nil), VerifiedChains:[][]*x509.Certificate(nil), SignedCertificateTimestamps:[][]uint8(nil), OCSPResponse:[]uint8(nil), TLSUnique:[]uint8{0xf6, 0xb, 0xf8, 0x95, 0x6f, 0x73, 0x4f, 0x26, 0x8f, 0x72, 0x26, 0xab}}
+TLS: &amp;tls.ConnectionState{Version:0x303,
+ HandshakeComplete:true,
+ DidResume:false,
+ CipherSuite:0xc02f,
+ NegotiatedProtocol:&quot;h2&quot;,
+ NegotiatedProtocolIsMutual:true,
+ ServerName:&quot;localhost&quot;,
+ PeerCertificates:[]*x509.Certificate(nil),
+ VerifiedChains:[][]*x509.Certificate(nil),
+ SignedCertificateTimestamps:[][]uint8(nil),
+ OCSPResponse:[]uint8(nil),
+ TLSUnique:[]uint8{0xf6,
+ 0xb,
+ 0xf8,
+ 0x95,
+ 0x6f,
+ 0x73,
+ 0x4f,
+ 0x26,
+ 0x8f,
+ 0x72,
+ 0x26,
+ 0xab}}
 
 Headers:
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
