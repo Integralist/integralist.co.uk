@@ -240,9 +240,10 @@ code {
   padding: 0.25em 0.65em; }
 
 pre {
+	width: 800px;
   -webkit-overflow-scrolling: touch;
   font-family: "Courier New", monospace;
-  font-size: 0.9em;
+  font-size: 1.1em;
   margin: 0 0 2em 0; }
   pre code {
     display: block;

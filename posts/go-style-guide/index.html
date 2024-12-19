@@ -451,12 +451,13 @@ This happens because although the <code>&amp;person</code> pointer was copied in
 
 <p>Don&rsquo;t, for example, pass in an argument whose type is a large and deeply nested object. Firstly, this means the consuming function has to know the structure well enough to dip into it (and arguably it could be argued that this violates the Law of Demeter). Secondly, it makes testing such a function tedious, and thirdly managing such a data structure is equally tedious. Instead choose a field from the object to pass in as it&rsquo;ll likely have a simpler type (like a <code>string</code> or <code>int</code>).</p>
 
-<p>Three approaches to dealing with functions that potentially could have a large number of arguments&hellip;</p>
+<p>There are four approaches to dealing with functions that potentially could have a large number of arguments&hellip;</p>
 
 <ol>
 <li>Make multiple functions to help reduce the number of arguments.</li>
 <li>Pass in a <code>&lt;T&gt;Options</code> struct.</li>
-<li>Variadic arguments that accept a func type.</li>
+<li>Variadic arguments that accept a func type (aka &ldquo;functional options pattern&rdquo;).</li>
+<li>Chaining methods on the configuration object (aka &ldquo;builder pattern&rdquo;).</li>
 </ol>
 
 <p>I would say go with option 1 whenever possible, and almost never choose option 2 over option 3 as the latter is much more flexible.</p>
@@ -496,6 +497,48 @@ func NewClient(host string, options ...Option) *Client {
 c := NewClient(&quot;httpbin.org&quot;) // only 'host' is required 
 c := NewClient(&quot;httpbin.org&quot;, WithPort(443)) // WithPort is called and returns an Option type
 </code></pre>
+
+<p>The downside to option 3 is that it&rsquo;s hard to know the <code>With*</code> functions exist
+as they live at the package level and aren&rsquo;t directly associated with the
+<code>*Client</code> type.</p>
+
+<p>So option 4 helps with that:</p>
+
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+)
+
+// Client is the complex type that needs to be constructed.
+type Client struct {
+	host string
+	port int
+}
+
+// WithPort returns a mutated *Client type.
+func (c *Client) WithPort(port int) *Client {
+	c.port = port
+	return c
+}
+
+// NewClient returns the initial *Client type with required host set and the
+// optional port set to port 80.
+func NewClient(host string) *Client {
+	return &amp;Client{host: host, port: 80} // default value for port
+}
+
+func main() {
+	c := NewClient(&quot;httpbin.org&quot;)
+	fmt.Printf(&quot;%#v\n&quot;, c) // &amp;main.Client{host:&quot;httpbin.org&quot;, port:80}
+	c = NewClient(&quot;httpbin.org&quot;).WithPort(443)
+	fmt.Printf(&quot;%#v\n&quot;, c) // &amp;main.Client{host:&quot;httpbin.org&quot;, port:443}
+}
+</code></pre>
+
+<p>I don&rsquo;t like the &ldquo;chaining&rdquo; pattern because it reminds me of jQuery (which made
+this approach famous in the world of JavaScript) but it&rsquo;s hard to deny that the
+methods are definitely more <em>discoverable</em> than the functional options pattern.</p>
 
           </section>
         </div>

@@ -224,7 +224,16 @@ Protocol: HTTP/2.0
 Host: localhost:8080
 RemoteAddr: [::1]:63555
 RequestURI: &quot;/&quot;
-URL: &amp;url.URL{Scheme:&quot;&quot;, Opaque:&quot;&quot;, User:(*url.Userinfo)(nil), Host:&quot;&quot;, Path:&quot;/&quot;, RawPath:&quot;&quot;, RawQuery:&quot;&quot;, Fragment:&quot;&quot;}
+URL: &amp;url.URL{
+	Scheme:&quot;&quot;, 
+	Opaque:&quot;&quot;, 
+	User:(*url.Userinfo)(nil), 
+	Host:&quot;&quot;, 
+	Path:&quot;/&quot;, 
+	RawPath:&quot;&quot;, 
+	RawQuery:&quot;&quot;, 
+	Fragment:&quot;&quot;
+}
 Body.ContentLength: 0 (-1 means unknown)
 Close: false (relevant for HTTP/1 only)
 TLS: &amp;tls.ConnectionState{Version:0x303,
@@ -259,7 +268,7 @@ Cache-Control: max-age=0
 Cookie: _chartbeat2=CAgQSrCqRzJnCmxa4b.1434983427317.1434983759085.1
 Dnt: 1
 Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1)...
 </code></pre>
 
 <p>You&rsquo;ll notice the <code>Protocol: HTTP/2.0</code> which indicates we&rsquo;re handling HTTP/2 now. If you&rsquo;re using the Chrome web browser you can also download an extension called &ldquo;HTTP/2 and SPDY indicator&rdquo; which will display a blue lightning bolt on any site that is serving content via the HTTP/2 protocol.</p>

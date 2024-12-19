@@ -112,9 +112,13 @@
 function isHostMethod(object, property) {
     var type = typeof object[property];
 
-    return type == 'function' || // This is the result we're expecting (as the test is for a method)
-           (type == 'object' &amp;&amp; !!object[property]) || // Protect against ES3 'null' typeof result being 'object'
-           type == 'unknown'; // For IE &lt; 9 when Microsoft used ActiveX objects for Native Functions (we're checking property of ActiveX object)
+    // This is the result we're expecting (as the test is for a method)
+    return type == 'function' || 
+           // Protect against ES3 'null' typeof result being 'object'
+           (type == 'object' &amp;&amp; !!object[property]) || 
+           // For IE &lt; 9 when Microsoft used ActiveX objects for Native Functions 
+           // (we're checking property of ActiveX object)
+           type == 'unknown'; 
 }
 </code></pre>
 

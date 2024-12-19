@@ -378,7 +378,9 @@ console.log(obj['my property']);
 
 <pre><code>var arr = ['a','b','c'];
 
-console.log(typeof arr); // =&gt; &quot;object&quot; - well that's not right, it should return the type as 'Array'! (note: this is a known JavaScript bug)
+// =&gt; &quot;object&quot; - well that's not right
+// it should return the type as 'Array'! (note: this is a known JavaScript bug)
+console.log(typeof arr); 
 
 console.log(Object.prototype.toString.call(arr)); // =&gt; &quot;[object Array]&quot; - that's more like it
 </code></pre>
@@ -676,8 +678,10 @@ var obj2 = {
 
 obj2.speak(); // =&gt; 'My name is Mark'
 
-// obj1 doesn't have a speak method and we don't want to add extra code to that object when 
-// obj2 already has the same method already defined. We want to be able to just borrow obj2's 'speak' method!
+// obj1 doesn't have a speak method and we don't want to add extra code to that
+// object when 
+// obj2 already has the same method already defined. We want to be able to just
+// borrow obj2's 'speak' method!
 
 obj2.speak.call(obj1); // =&gt; 'My name is Bob'
 </code></pre>
@@ -708,7 +712,8 @@ obj2.speak.call(obj1); // =&gt; 'My name is Bob'
 // Create a new instance of the Person Class
 var bob = new Person({ name:'Bob', age:7 });
 
-// Add a method to this instance of the Person Class only (no other instances created will have this method)
+// Add a method to this instance of the Person Class only (no other instances
+// created will have this method)
 bob.getAge = function() {
    return this.age;
 }
@@ -730,7 +735,9 @@ try {
    alert(err); // Uncaught TypeError: Object [object Object] has no method 'getAge'
 }
 
-// Add a method to the Person Class' prototype chain (all instances of the Person Class will now get this method - even those already defined)
+// Add a method to the Person Class' prototype chain 
+// all instances of the Person Class will now get this method
+// even those already defined
 Person.prototype.getNameAndAge = function() {
    return 'Hi, my name is ' + this.name + ', and I\'m ' + this.age + ' years old.';
 }

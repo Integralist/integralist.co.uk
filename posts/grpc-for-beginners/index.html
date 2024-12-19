@@ -231,7 +231,9 @@ message Response {
 
 <p>We&rsquo;re interested in Go and Ruby as I want to have the RPC service server side running in Go but have the consumer in Ruby. So I&rsquo;ll first generate the Ruby client stub using the <code>protoc</code> compiler we installed earlier:</p>
 
-<pre><code>protoc --ruby_out=lib --grpc_out=lib --plugin=protoc-gen-grpc=`which grpc_ruby_plugin` ./requester.proto
+<pre><code>protoc --ruby_out=lib \
+--grpc_out=lib \
+--plugin=protoc-gen-grpc=`which grpc_ruby_plugin` ./requester.proto
 </code></pre>
 
 <blockquote>
@@ -376,7 +378,9 @@ func NewRequesterClient(cc *grpc.ClientConn) RequesterClient {
   return &amp;requesterClient{cc}
 }
 
-func (c *requesterClient) Process(ctx context.Context, in *Config, opts ...grpc.CallOption) (*Response, error) {
+func (c *requesterClient) Process(
+	ctx context.Context, in *Config, opts ...grpc.CallOption
+) (*Response, error) {
   out := new(Response)
   err := grpc.Invoke(ctx, &quot;/requester.Requester/Process&quot;, in, out, c.cc, opts...)
   if err != nil {
@@ -395,7 +399,9 @@ func RegisterRequesterServer(s *grpc.Server, srv RequesterServer) {
   s.RegisterService(&amp;_Requester_serviceDesc, srv)
 }
 
-func _Requester_Process_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Requester_Process_Handler(
+	srv interface{}, ctx context.Context, dec func(interface{}) error
+) (interface{}, error) {
   in := new(Config)
   if err := dec(in); err != nil {
     return nil, err

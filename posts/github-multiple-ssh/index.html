@@ -277,7 +277,8 @@ Host github.com
 
 <p>I&rsquo;ve also automated the process using the following alias (the <code># switch</code> comment is important, as well as the line number that it starts on in your config file):</p>
 
-<pre><code>alias sshconfig='nvim -c &quot;norm 12ggVjjjgc&quot; -c &quot;wq&quot; ~/.ssh/config &amp;&amp; cat ~/.ssh/config | awk &quot;/switch/ {for(i=0; i&lt;=3; i++) {getline; print}}&quot;'
+<pre><code>alias sshconfig='nvim -c &quot;norm 12ggVjjjgc&quot; -c &quot;wq&quot; ~/.ssh/config &amp;&amp; \
+cat ~/.ssh/config | awk &quot;/switch/ {for(i=0; i&lt;=3; i++) {getline; print}}&quot;'
 </code></pre>
 
 <p>So this uses NeoVim (although it works the same with standard Vim) to open the file and to use Tim Pope&rsquo;s Commentary plugin to toggle the comments around the Host block. My <code># switch</code> line starts on line 12 of my config file, so you might need to change the alias to fit your use case.</p>
