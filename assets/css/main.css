@@ -2358,3 +2358,22 @@ button,
 #main p img, canvas {
 	max-width: 100%;
 }
+
+#backToTop {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	background-color: #ddbea9;
+	color: white;
+	padding: 0 1em;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 14px;
+	display: none; /* Hidden by default */
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#backToTop:hover {
+	background-color: #240505;
+}

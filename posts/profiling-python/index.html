@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="../../assets/css/main.css" />
   </head>
   <body class="is-preload">
+		<button id="backToTop">↑ Back to Top</button>
     <!-- Wrapper -->
     <div id="wrapper">
       <!-- Main -->
@@ -996,5 +997,28 @@ docker run --privileged pyflame &gt; output.svg &amp;&amp; tail -n+2 output.svg 
         matchedParentSpan.classList.add('active');
     }
 		</script>
+
+		<!-- The following script handles "back to top" functionality -->
+		<script>
+    // Create a reference to the button
+    const backToTopButton = document.getElementById('backToTop');
+
+    // Show button when scrolled down a bit
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTopButton.style.display = 'block';
+      } else {
+        backToTopButton.style.display = 'none';
+      }
+    });
+
+    // Add a click event listener to scroll to the top
+    backToTopButton.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  </script>
   </body>
 </html>
