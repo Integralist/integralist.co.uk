@@ -1507,14 +1507,16 @@ table {
     border-left: 0;
     border-right: 0; }
     table tbody tr:nth-child(2n + 1) {
-      background-color: rgba(230, 235, 237, 0.25); }
+      background-color: rgb(174 73 127 / 25%); }
   table td {
     padding: 0.75em 0.75em; }
   table th {
-    color: #3d4449;
-    font-size: 0.9em;
+		border: 1px solid #541d1d;
+	  background-color: #d7bebe;
+    color: #000000;
+    font-size: 1em;
     font-weight: 600;
-    padding: 0 0.75em 0.75em 0.75em;
+    padding: 0.8em 0.75em 0.75em 0.75em;
     text-align: left; }
   table thead {
     border-bottom: solid 2px rgba(210, 215, 217, 0.75); }
