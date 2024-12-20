@@ -307,7 +307,7 @@
 
 <p>In this request flow we can see that although we&rsquo;re successfully serving stale content when a cached object&rsquo;s TTL has expired, this is still potentially going to result in multiple requests to the origin (rather than acting as a cache HIT) if we have an influx of requests for the same resource.</p>
 
-<p>Now with that said, the ability to reach the origin (if we&rsquo;re using Fastly at least, other CDN providers may differ) is only going to be on a datacenter by datacenter basis. The reason being, each <a href="https://www.integralist.co.uk/posts/fastly-varnish/#clustering" target="_blank">cache node</a> will perform <a href="https://docs.fastly.com/guides/performance-tuning/request-collapsing" target="_blank">request collapsing</a> which will mitigate the damage of having to allow a request through to your origin.</p>
+<p>Now with that said, the ability to reach the origin (if we&rsquo;re using Fastly at least, other CDN providers may differ) is only going to be on a datacenter by datacenter basis. The reason being, each <a href="/posts/fastly-varnish/#clustering">cache node</a> will perform <a href="https://docs.fastly.com/guides/performance-tuning/request-collapsing" target="_blank">request collapsing</a> which will mitigate the damage of having to allow a request through to your origin.</p>
 
 <p>With this in mind, having a large <code>stale-while-revalidate</code> TTL might not necessarily be a good idea because ultimately for that time period, if there is no updated version of the content, new client requests are going to be able to reach the origin.</p>
 
