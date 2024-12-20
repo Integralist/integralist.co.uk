@@ -1257,7 +1257,8 @@ but that doesn&rsquo;t indicate which variables are read vs write.</p>
 <table>
 <thead>
 <tr>
-<th align="left">R</th>
+<th align="left"></th>
+<th>R</th>
 <th>F</th>
 <th>P</th>
 <th>M</th>
@@ -1266,7 +1267,6 @@ but that doesn&rsquo;t indicate which variables are read vs write.</p>
 <th>D</th>
 <th>I</th>
 <th>#</th>
-<th></th>
 </tr>
 </thead>
 
@@ -1285,45 +1285,94 @@ but that doesn&rsquo;t indicate which variables are read vs write.</p>
 </tr>
 
 <tr>
-<td align="left" colspan="2"><code>bereq.*</code></td>
+<td align="left"><code>bereq.*</code></td>
 <td>R/W</td>
 <td>R/W</td>
-<td colspan="4">R/W</td>
-<td colspan="2">R/W</td>
-</tr>
-
-<tr>
-<td align="left" colspan="5"><code>obj.hits</code></td>
-<td colspan="2">R</td>
-<td colspan="3">R</td>
-</tr>
-
-<tr>
-<td align="left" colspan="5"><code>obj.ttl</code></td>
 <td>R/W</td>
-<td colspan="4">R/W</td>
+<td>R/W</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 
 <tr>
-<td align="left" colspan="5"><code>obj.grace</code></td>
-<td colspan="5">R/W</td>
-</tr>
-
-<tr>
-<td align="left" colspan="5"><code>obj.*</code></td>
+<td align="left"><code>obj.hits</code></td>
 <td>R</td>
-<td colspan="4">R/W</td>
+<td>R</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 
 <tr>
-<td align="left" colspan="2"><code>beresp.*</code></td>
-<td colspan="8">R/W</td>
-</tr>
-
-<tr>
-<td align="left" colspan="6"><code>resp.*</code></td>
+<td align="left"><code>obj.ttl</code></td>
 <td>R/W</td>
-<td colspan="3">R/W</td>
+<td>R/W</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td align="left"><code>obj.grace</code></td>
+<td>R/W</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td align="left"><code>obj.*</code></td>
+<td>R</td>
+<td>R/W</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td align="left"><code>beresp.*</code></td>
+<td>R/W</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td align="left"><code>resp.*</code></td>
+<td>R/W</td>
+<td>R/W</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
