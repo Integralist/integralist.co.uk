@@ -238,7 +238,10 @@ jobs:
     env:
       LITERAL: whatever
       INTERPOLATION: ${{ github.ref_name }}
-      EXPRESSION: $(echo ${{ github.ref_name }} | perl -pe 's/[^a-zA-Z0-9]+/-/g' | perl -pe 's/(\A-|-\Z)//g' | awk '{print tolower($0)}')
+      EXPRESSION: $(echo ${{ github.ref_name }} | \
+        perl -pe 's/[^a-zA-Z0-9]+/-/g' | \
+        perl -pe 's/(\A-|-\Z)//g' | \
+        awk '{print tolower($0)}')
     steps:
       - name: Print Global Environment Variables
         run: echo $FOO
