@@ -173,27 +173,42 @@
 
 <h2 id="introduction">Introduction</h2>
 
-<p>A few years ago when I was learning the <a href="https://golang.org/" target="_blank">Go programming language</a> I created a gist and updated it on a regular basis as a sort of cheat sheet. I stumbled across this gist recently and decided I&rsquo;d try and port it over to some form of semi-coherent blog post.</p>
+<p>A few years ago when I was learning the <a href="https://golang.org/" target="_blank">Go programming
+language</a> I created a gist and updated it on a regular
+basis as a sort of cheat sheet. I stumbled across this gist recently and decided
+I&rsquo;d try and port it over to some form of semi-coherent blog post.</p>
 
 <blockquote>
-<p>Note: the code will not be updated in any way so <a href="http://dictionary.cambridge.org/dictionary/english/ymmv" target="_blank">YMMV</a></p>
+<p>Note: the code will not be updated in any way so
+<a href="http://dictionary.cambridge.org/dictionary/english/ymmv" target="_blank">YMMV</a></p>
 </blockquote>
 
-<p>What this isn&rsquo;t, is a walk-through of how to write Go code. I&rsquo;d suggest trying the official <a href="https://tour.golang.org/welcome/1" target="_blank">Go Tour</a> which is really good and covers a lot of ground. Instead I&rsquo;m going to provide lots of example code in the vein of a resource like <a href="https://gobyexample.com/" target="_blank">Go by Example</a>.</p>
+<p>What this isn&rsquo;t, is a walk-through of how to write Go code. I&rsquo;d suggest trying
+the official <a href="https://tour.golang.org/welcome/1" target="_blank">Go Tour</a> which is really good
+and covers a lot of ground. Instead I&rsquo;m going to provide lots of example code in
+the vein of a resource like <a href="https://gobyexample.com/" target="_blank">Go by Example</a>.</p>
 
-<p>What this <em>is</em>, is a barren wasteland of old code. Passers by are forewarned to tread carefully.</p>
+<p>What this <em>is</em>, is a barren wasteland of old code. Passers by are forewarned to
+tread carefully.</p>
 
 <blockquote>
-<p>Note: there&rsquo;s also not much in the way of code explanation, to the extent that some of the testing examples are long and very context specific - you&rsquo;ve been warned</p>
+<p>Note: there&rsquo;s also not much in the way of code explanation, to the extent that
+some of the testing examples are long and very context specific - you&rsquo;ve been
+warned</p>
 </blockquote>
 
-<p>Most of this Go code is old, so you may find some packages or information possibly out of date (as in not the latest awesome thing) or maybe not that great quality either.</p>
+<p>Most of this Go code is old, so you may find some packages or information
+possibly out of date (as in not the latest awesome thing) or maybe not that
+great quality either.</p>
 
-<p>Take this as what it is, a sharing exercise. Take what you need and leave the rest. I wont be offended.</p>
+<p>Take this as what it is, a sharing exercise. Take what you need and leave the
+rest. I wont be offended.</p>
 
 <h2 id="private-repo-access">Private Repo Access</h2>
 
-<p><code>go get</code> uses HTTPS so to be able to pull dependencies from a private repository, you&rsquo;ll need to force it to use SSH so it can access your keys and authorise the connection:</p>
+<p><code>go get</code> uses HTTPS so to be able to pull dependencies from a private
+repository, you&rsquo;ll need to force it to use SSH so it can access your keys and
+authorise the connection:</p>
 
 <pre><code>git config --global url.&quot;git@github.com:&quot;.insteadOf &quot;https://github.com/&quot;
 </code></pre>
@@ -267,11 +282,14 @@ windows   amd64    -- 64 bit Windows
 
 <p>Use the <code>-a</code> flag when running <code>go build</code>.</p>
 
-<p>In short, if you dont&rsquo; use <code>go build -a -v .</code> then Go won&rsquo;t know if any packages are missing (you can find the gory details <a href="https://medium.com/@felixge/why-you-should-use-go-build-a-or-gb-c469157d5c1b#.jf5orcwrj" target="_blank">here</a>)</p>
+<p>In short, if you dont&rsquo; use <code>go build -a -v .</code> then Go won&rsquo;t know if any packages
+are missing (you can find the gory details
+<a href="https://medium.com/@felixge/why-you-should-use-go-build-a-or-gb-c469157d5c1b#.jf5orcwrj" target="_blank">here</a>)</p>
 
 <h2 id="build-time-dynamic-variables">Build Time Dynamic Variables</h2>
 
-<p>Imagine you have a global variable called <code>version</code> in your <code>main</code> package and you want to update that value at build time:</p>
+<p>Imagine you have a global variable called <code>version</code> in your <code>main</code> package and
+you want to update that value at build time:</p>
 
 <pre><code>go build -ldflags &quot;-X main.version=foobar&quot;
 </code></pre>
@@ -281,7 +299,10 @@ windows   amd64    -- 64 bit Windows
 <pre><code>go build -ldflags &quot;-X main.version=$(git rev-parse HEAD)&quot;
 </code></pre>
 
-<p>Another approach would be to have separate files for different &lsquo;environments&rsquo; (all under the <code>main</code> package). You would then use a code comment to indicate what the environment was, and at build time you would tell the compiler which version of the file to compile.</p>
+<p>Another approach would be to have separate files for different &lsquo;environments&rsquo;
+(all under the <code>main</code> package). You would then use a code comment to indicate
+what the environment was, and at build time you would tell the compiler which
+version of the file to compile.</p>
 
 <pre><code>// +build prod
 
@@ -299,9 +320,17 @@ func init() {
 
 <h2 id="package-naming">Package Naming</h2>
 
-<p>In Go, the name of the package is used to refer to the exported item: <code>fmt.Println</code>, <code>http.RegisterFunc</code> etc. Because the package name is so visible, the package name should describe what the exported items are. Meaning, we shouldn&rsquo;t have packages named <code>util</code> (as a common example of bad package naming) because <code>util.JSONMarshal</code> isn&rsquo;t as efficient and effective as <code>json.Marshal</code>.</p>
+<p>In Go, the name of the package is used to refer to the exported item:
+<code>fmt.Println</code>, <code>http.RegisterFunc</code> etc. Because the package name is so visible,
+the package name should describe what the exported items are. Meaning, we
+shouldn&rsquo;t have packages named <code>util</code> (as a common example of bad package naming)
+because <code>util.JSONMarshal</code> isn&rsquo;t as efficient and effective as <code>json.Marshal</code>.</p>
 
-<p>Another example of this that I found in my own code was <code>utils.CreateUser</code>. Later on during the project I had added <code>utils.CreateLegacyUser</code>. When I discovered what I had done I went back and made two separate packages <code>legacy</code> and <code>aws</code> so that I could have a consistent <code>CreateUser</code> function within both (e.g. <code>aws.CreateUser</code> and <code>legacy.CreateUser</code>).</p>
+<p>Another example of this that I found in my own code was <code>utils.CreateUser</code>.
+Later on during the project I had added <code>utils.CreateLegacyUser</code>. When I
+discovered what I had done I went back and made two separate packages <code>legacy</code>
+and <code>aws</code> so that I could have a consistent <code>CreateUser</code> function within both
+(e.g. <code>aws.CreateUser</code> and <code>legacy.CreateUser</code>).</p>
 
 <h2 id="dependency-information">Dependency Information</h2>
 
@@ -383,7 +412,8 @@ func init() {
 }
 </code></pre>
 
-<p>If you don&rsquo;t specify the <code>-json</code> flag then the default behaviour is to filter out the <code>ImportPath</code> field from the above JSON output. For example:</p>
+<p>If you don&rsquo;t specify the <code>-json</code> flag then the default behaviour is to filter
+out the <code>ImportPath</code> field from the above JSON output. For example:</p>
 
 <pre><code>go list strconv
 </code></pre>
@@ -394,12 +424,14 @@ func init() {
 <p>Documentation: <code>go help list | less</code></p>
 </blockquote>
 
-<p>You can also utilise Go&rsquo;s templating functionality on the returned JSON object by adding the <code>-f</code> flag:</p>
+<p>You can also utilise Go&rsquo;s templating functionality on the returned JSON object
+by adding the <code>-f</code> flag:</p>
 
 <pre><code>go list -f '{{join .Deps &quot; &quot;}}' strconv
 </code></pre>
 
-<p>Which filters out the <code>Deps</code> field, joins up all items it contains using whitespace and subsequently returns:</p>
+<p>Which filters out the <code>Deps</code> field, joins up all items it contains using
+whitespace and subsequently returns:</p>
 
 <pre><code>errors math runtime unicode/utf8 unsafe
 </code></pre>
@@ -421,24 +453,42 @@ compress/zlib -&gt; bufio compress/flate errors fmt hash hash/adler32 io
 <h2 id="dependency-management">Dependency Management</h2>
 
 <blockquote>
-<p>Update (August 2017): there is an official tool now called <a href="https://github.com/golang/dep" target="_blank">dep</a>.</p>
+<p>Update (August 2017): there is an official tool now called
+<a href="https://github.com/golang/dep" target="_blank">dep</a>.</p>
 </blockquote>
 
-<p>There are many dependency management tools, these are the few that I&rsquo;ve tried (in this order): godeps, gb, glide. Let&rsquo;s review each of them to see how they work:</p>
+<p>There are many dependency management tools, these are the few that I&rsquo;ve tried
+(in this order): godeps, gb, glide. Let&rsquo;s review each of them to see how they
+work:</p>
 
 <h3 id="godeps">Godeps</h3>
 
-<p>When running <code>go get &lt;dependency&gt;</code> locally, Go will stick the dependency in the folder defined by your <code>$GOPATH</code> variable. So when you build your code into a binary using <code>go build &lt;script&gt;</code> it&rsquo;ll bake the dependencies into the binary (i.e. the binary is statically linked).</p>
+<p>When running <code>go get &lt;dependency&gt;</code> locally, Go will stick the dependency in the
+folder defined by your <code>$GOPATH</code> variable. So when you build your code into a
+binary using <code>go build &lt;script&gt;</code> it&rsquo;ll bake the dependencies into the binary
+(i.e. the binary is statically linked).</p>
 
-<p>But if someone pulls down your repo and tries to do a build from your code, then they&rsquo;ll need to have a network connection to pull down the dependencies as their <code>$GOPATH</code> might not have those dependencies yet (unless the user manually executes <code>go get</code> for each dependency required). Also the dependencies they subsequently pull down could be a more recent (and untested version) of each dependency.</p>
+<p>But if someone pulls down your repo and tries to do a build from your code, then
+they&rsquo;ll need to have a network connection to pull down the dependencies as their
+<code>$GOPATH</code> might not have those dependencies yet (unless the user manually
+executes <code>go get</code> for each dependency required). Also the dependencies they
+subsequently pull down could be a more recent (and untested version) of each
+dependency.</p>
 
-<p>So to make this situation better we can use <a href="https://github.com/tools/godep" target="_blank">Godep</a> to stick all your dependencies within a <code>Godeps</code> folder inside your project directory. You can then use <code>godep save -r ./...</code> to automatically update all your references to point to that local folder.</p>
+<p>So to make this situation better we can use
+<a href="https://github.com/tools/godep" target="_blank">Godep</a> to stick all your dependencies within a
+<code>Godeps</code> folder inside your project directory. You can then use <code>godep save -r ./...</code> to automatically update all your references to point to that local
+folder.</p>
 
 <blockquote>
-<p>Note: you might need to remove the <code>Godeps</code> folder and run <code>go get</code> if you get strange conflicts. The <code>./...</code> means to target all <code>.go</code> files</p>
+<p>Note: you might need to remove the <code>Godeps</code> folder and run <code>go get</code> if you get
+strange conflicts. The <code>./...</code> means to target all <code>.go</code> files</p>
 </blockquote>
 
-<p>This way users who clone your repo don&rsquo;t need an internet connection to pull the dependencies, as they already have them. But also they&rsquo;ll have the correct versions of the dependencies. This acts like a <code>Gemfile.lock</code> as you would typically find in the Ruby world.</p>
+<p>This way users who clone your repo don&rsquo;t need an internet connection to pull the
+dependencies, as they already have them. But also they&rsquo;ll have the correct
+versions of the dependencies. This acts like a <code>Gemfile.lock</code> as you would
+typically find in the Ruby world.</p>
 
 <h3 id="gb">Gb</h3>
 
@@ -461,9 +511,12 @@ gb build all
 
 <h3 id="glide">Glide</h3>
 
-<p>This is now my preferred dependency management tool, as it works just like existing tools in other languages (e.g. Ruby&rsquo;s Bundler or Node&rsquo;s NPM) and so consistency is a plus.</p>
+<p>This is now my preferred dependency management tool, as it works just like
+existing tools in other languages (e.g. Ruby&rsquo;s Bundler or Node&rsquo;s NPM) and so
+consistency is a plus.</p>
 
-<p>It also provides the ability (like gb) to not commit dependencies but have specific versions vendored when running a simple command.</p>
+<p>It also provides the ability (like gb) to not commit dependencies but have
+specific versions vendored when running a simple command.</p>
 
 <pre><code>go get github.com/Masterminds/glide
 export GO15VENDOREXPERIMENT=1       # or use 1.6
@@ -480,7 +533,9 @@ go test $(glide novendor)           # test only your package (not vendored packa
 
 <h2 id="documentation">Documentation</h2>
 
-<p><code>Godoc</code> is the original implementation for viewing documentation. Previous to <code>Godoc</code> there was <code>go doc</code>, but that was removed and then added <em>back</em> with totally different functionality.</p>
+<p><code>Godoc</code> is the original implementation for viewing documentation. Previous to
+<code>Godoc</code> there was <code>go doc</code>, but that was removed and then added <em>back</em> with
+totally different functionality.</p>
 
 <p>The syntax structure for <code>go doc</code> is as follows:</p>
 
@@ -515,11 +570,15 @@ here is a similar result using <code>go doc</code><br>
 <code>go doc http.Request.ParseForm | less</code></p>
 </blockquote>
 
-<p>The purpose of <code>go doc</code> was to provide a simplistic cli documentation viewer, whereas <code>Godoc</code> has many more features available.</p>
+<p>The purpose of <code>go doc</code> was to provide a simplistic cli documentation viewer,
+whereas <code>Godoc</code> has many more features available.</p>
 
-<p>The <code>go doc</code> command also works not only with Go&rsquo;s own library&rsquo;s but your own custom packages as well.</p>
+<p>The <code>go doc</code> command also works not only with Go&rsquo;s own library&rsquo;s but your own
+custom packages as well.</p>
 
-<p>There are some differences in what is returned though between <code>godoc</code> and <code>go doc</code> (mainly the latter is more succinct/compact so you can find the functions/types you&rsquo;re after and then you can expand into those once you&rsquo;ve found them; <code>godoc</code> is harder to sift through on the command line)&hellip;</p>
+<p>There are some differences in what is returned though between <code>godoc</code> and <code>go doc</code> (mainly the latter is more succinct/compact so you can find the
+functions/types you&rsquo;re after and then you can expand into those once you&rsquo;ve
+found them; <code>godoc</code> is harder to sift through on the command line)&hellip;</p>
 
 <h3 id="godoc-encoding-json-encoder"><code>godoc encoding/json Encoder</code></h3>
 
@@ -555,26 +614,31 @@ func (enc *Encoder) Encode(v interface{}) error
 <p>Notice the functions don&rsquo;t have their documentation notes printed with <code>go doc</code></p>
 </blockquote>
 
-<p>One other thing <code>godoc</code> has over <code>go doc</code> is the ability to view the source code using the <code>-src</code> flag:</p>
+<p>One other thing <code>godoc</code> has over <code>go doc</code> is the ability to view the source code
+using the <code>-src</code> flag:</p>
 
 <pre><code>godoc -src builtin make | less
 </code></pre>
 
-<p>The <code>godoc</code> tool also has a full browser documentation suite available and allows you to generate HTML documentation for your project&hellip;</p>
+<p>The <code>godoc</code> tool also has a full browser documentation suite available and
+allows you to generate HTML documentation for your project&hellip;</p>
 
 <h3 id="full-browser-documentation">Full Browser Documentation</h3>
 
-<p>Start a local documentation server and allow indexing (which takes a few minutes; you have to just keep trying the search until it&rsquo;s done)</p>
+<p>Start a local documentation server and allow indexing (which takes a few
+minutes; you have to just keep trying the search until it&rsquo;s done)</p>
 
 <pre><code>godoc -http ':6060' -index
 </code></pre>
 
-<p>You can then open a new terminal pane and search via cli if you prefer (rather than open up a browser to <a href="http://localhost:6060/" target="_blank">http://localhost:6060/</a>)</p>
+<p>You can then open a new terminal pane and search via cli if you prefer (rather
+than open up a browser to <a href="http://localhost:6060/)" target="_blank">http://localhost:6060/)</a></p>
 
 <pre><code>godoc -q tls | less
 </code></pre>
 
-<p>You can also have the playground available if you need it in the browser, but it does require an internet connection to compile:</p>
+<p>You can also have the playground available if you need it in the browser, but it
+does require an internet connection to compile:</p>
 
 <pre><code>godoc -http ':6060' -play
 </code></pre>
@@ -582,17 +646,23 @@ func (enc *Encoder) Encode(v interface{}) error
 <h2 id="testing">Testing</h2>
 
 <blockquote>
-<p>Note: see also <a href="https://gist.github.com/Integralist/cf76668bc46d75058ab5f566d96ce74a" target="_blank">examples here</a></p>
+<p>Note: see also <a href="https://gist.github.com/Integralist/cf76668bc46d75058ab5f566d96ce74a" target="_blank">examples
+here</a></p>
 </blockquote>
 
-<p>Test files are placed in the same directory as the file/package being tested. The convention is to use the same file name but suffix it with <code>_test</code>. So <code>foo.go</code> would have another file next to it called <code>foo_test.go</code>.</p>
+<p>Test files are placed in the same directory as the file/package being tested.
+The convention is to use the same file name but suffix it with <code>_test</code>. So
+<code>foo.go</code> would have another file next to it called <code>foo_test.go</code>.</p>
 
 <p>Run the tests: <code>go test -v ./...</code></p>
 
 <p>You can also run a specific test like so: <code>go test -v command/foo_test.go</code></p>
 
 <blockquote>
-<p>Note: remember that your test file should have the same package name as your code being tested. This means the test file will have access to all the public functions and variables of that package (and so subsequently it&rsquo;ll have access to the code being tested)</p>
+<p>Note: remember that your test file should have the same package name as your
+code being tested. This means the test file will have access to all the public
+functions and variables of that package (and so subsequently it&rsquo;ll have access
+to the code being tested)</p>
 </blockquote>
 
 <p>Here is a simple test example:</p>
@@ -621,7 +691,8 @@ exit status 1
 FAIL    command-line-arguments  0.004s
 </code></pre>
 
-<p>The following example program demonstrates how to mock an io function so that we&rsquo;re not reliant on reading from disk in our test suite.</p>
+<p>The following example program demonstrates how to mock an io function so that
+we&rsquo;re not reliant on reading from disk in our test suite.</p>
 
 <p>Here&rsquo;s the program:</p>
 
@@ -672,9 +743,11 @@ func TestIO(t *testing.T) {
 }
 </code></pre>
 
-<p>You could also probably use an interface there, but we&rsquo;ve gone with a <code>func</code> type.</p>
+<p>You could also probably use an interface there, but we&rsquo;ve gone with a <code>func</code>
+type.</p>
 
-<p>Here&rsquo;s another program that does something similar where we mock a function that expects a particular interface:</p>
+<p>Here&rsquo;s another program that does something similar where we mock a function that
+expects a particular interface:</p>
 
 <pre><code>package main
 
@@ -750,15 +823,19 @@ import (
 )
 
 func TestSuccessResponse(t *testing.T) {
-  upstream := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set(&quot;Content-Type&quot;, &quot;application/json&quot;)
-    fmt.Fprintln(w, `{&quot;head&quot;:[ &quot;foo&quot; ],&quot;bodyInline&quot;:&quot;bar&quot;,&quot;bodyLast&quot;:[ &quot;baz&quot; ]}`)
-  }))
+  upstream := httptest.NewServer(http.HandlerFunc(
+    func(w http.ResponseWriter, r *http.Request) {
+      w.Header().Set(&quot;Content-Type&quot;, &quot;application/json&quot;)
+      fmt.Fprintln(w, `{&quot;head&quot;:[ &quot;foo&quot; ],&quot;bodyInline&quot;:&quot;bar&quot;,&quot;bodyLast&quot;:[ &quot;baz&quot; ]}`)
+    }
+  ))
   defer upstream.Close()
 
-  router := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-    Process(w, r, httprouter.Params{})
-  }))
+  router := httptest.NewServer(http.HandlerFunc(
+    func(w http.ResponseWriter, r *http.Request) {
+      Process(w, r, httprouter.Params{})
+    }
+  ))
   defer router.Close()
 
   var config = []byte(fmt.Sprintf(`{
@@ -784,32 +861,40 @@ func TestSuccessResponse(t *testing.T) {
 
   expectedStatus := &quot;success&quot;
   if result.Summary != expectedStatus {
-    t.Errorf(&quot;The response:\n '%s'\ndidn't match the expectation:\n '%s'&quot;, result.Summary, expectedStatus)
+    t.Errorf(&quot;The response:\n '%s'\ndidn't match the expectation:\n '%s'&quot;,
+    result.Summary, expectedStatus)
   }
 
   expectedLength := 2
   if len(result.Components) != expectedLength {
-    t.Errorf(&quot;The response:\n '%d'\ndidn't match the expectation:\n '%d'&quot;, len(result.Components), expectedLength)
+    t.Errorf(&quot;The response:\n '%d'\ndidn't match the expectation:\n '%d'&quot;, 
+    len(result.Components), expectedLength)
   }
 }
 
 func TestFailureResponse(t *testing.T) {
-  healthyUpstream := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set(&quot;Content-Type&quot;, &quot;application/json&quot;)
-    fmt.Fprintln(w, `{&quot;head&quot;:[ &quot;foo&quot; ],&quot;bodyInline&quot;:&quot;bar&quot;,&quot;bodyLast&quot;:[ &quot;baz&quot; ]}`)
-  }))
+  healthyUpstream := httptest.NewServer(http.HandlerFunc(
+    func(w http.ResponseWriter, r *http.Request) {
+      w.Header().Set(&quot;Content-Type&quot;, &quot;application/json&quot;)
+      fmt.Fprintln(w, `{&quot;head&quot;:[ &quot;foo&quot; ],&quot;bodyInline&quot;:&quot;bar&quot;,&quot;bodyLast&quot;:[ &quot;baz&quot; ]}`)
+    }
+  ))
   defer healthyUpstream.Close()
 
-  failingUpstream := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set(&quot;Content-Type&quot;, &quot;text/plain; charset=utf-8&quot;)
-    w.WriteHeader(http.StatusNotFound)
-    fmt.Fprintln(w, &quot;404 page not found&quot;)
-  }))
+  failingUpstream := httptest.NewServer(http.HandlerFunc(
+    func(w http.ResponseWriter, r *http.Request) {
+      w.Header().Set(&quot;Content-Type&quot;, &quot;text/plain; charset=utf-8&quot;)
+      w.WriteHeader(http.StatusNotFound)
+      fmt.Fprintln(w, &quot;404 page not found&quot;)
+    }
+  ))
   defer failingUpstream.Close()
 
-  router := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-    Process(w, r, httprouter.Params{})
-  }))
+  router := httptest.NewServer(http.HandlerFunc(
+    func(w http.ResponseWriter, r *http.Request) {
+      Process(w, r, httprouter.Params{})
+    }
+  ))
   defer router.Close()
 
   var config = []byte(fmt.Sprintf(`{
@@ -835,12 +920,14 @@ func TestFailureResponse(t *testing.T) {
 
   expectedSummary := &quot;failure&quot;
   if result.Summary != expectedSummary {
-    t.Errorf(&quot;The response:\n '%s'\ndidn't match the expectation:\n '%s'&quot;, result.Summary, expectedSummary)
+    t.Errorf(&quot;The response:\n '%s'\ndidn't match the expectation:\n '%s'&quot;, 
+    result.Summary, expectedSummary)
   }
 
   expectedLength := 2
   if len(result.Components) != expectedLength {
-    t.Errorf(&quot;The response length:\n '%d'\ndidn't match the expectation:\n '%d'&quot;, len(result.Components), expectedLength)
+    t.Errorf(&quot;The response length:\n '%d'\ndidn't match the expectation:\n '%d'&quot;, 
+    len(result.Components), expectedLength)
   }
 
   expectedStatus := []int{}
@@ -850,31 +937,38 @@ func TestFailureResponse(t *testing.T) {
     }
   }
   if len(expectedStatus) &lt; 1 || len(expectedStatus) &gt; 1 {
-    t.Errorf(&quot;The response length:\n '%d'\ndidn't match the expectation:\n '%d'&quot;, len(expectedStatus), 1)
+    t.Errorf(&quot;The response length:\n '%d'\ndidn't match the expectation:\n '%d'&quot;, 
+    len(expectedStatus), 1)
   }
 }
 
 func TestSlowResponse(t *testing.T) {
-  healthyUpstream := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set(&quot;Content-Type&quot;, &quot;application/json&quot;)
-    fmt.Fprintln(w, `{&quot;head&quot;:[ &quot;foo&quot; ],&quot;bodyInline&quot;:&quot;bar&quot;,&quot;bodyLast&quot;:[ &quot;baz&quot; ]}`)
-  }))
+  healthyUpstream := httptest.NewServer(http.HandlerFunc(
+    func(w http.ResponseWriter, r *http.Request) {
+      w.Header().Set(&quot;Content-Type&quot;, &quot;application/json&quot;)
+      fmt.Fprintln(w, `{&quot;head&quot;:[ &quot;foo&quot; ],&quot;bodyInline&quot;:&quot;bar&quot;,&quot;bodyLast&quot;:[ &quot;baz&quot; ]}`)
+    }
+  ))
   defer healthyUpstream.Close()
 
-  slowUpstream := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-    timeout, err := strconv.Atoi(os.Getenv(&quot;COMPONENT_TIMEOUT&quot;))
-    if err != nil {
-      t.Errorf(&quot;COMPONENT_TIMEOUT: %s&quot;, err.Error())
+  slowUpstream := httptest.NewServer(http.HandlerFunc(
+    func(w http.ResponseWriter, r *http.Request) {
+      timeout, err := strconv.Atoi(os.Getenv(&quot;COMPONENT_TIMEOUT&quot;))
+      if err != nil {
+        t.Errorf(&quot;COMPONENT_TIMEOUT: %s&quot;, err.Error())
+      }
+      time.Sleep(time.Duration(timeout) * time.Millisecond)
+      w.Header().Set(&quot;Content-Type&quot;, &quot;application/json&quot;)
+      fmt.Fprintln(w, `{&quot;head&quot;:[ &quot;foo&quot; ],&quot;bodyInline&quot;:&quot;bar&quot;,&quot;bodyLast&quot;:[ &quot;baz&quot; ]}`)
     }
-    time.Sleep(time.Duration(timeout) * time.Millisecond)
-    w.Header().Set(&quot;Content-Type&quot;, &quot;application/json&quot;)
-    fmt.Fprintln(w, `{&quot;head&quot;:[ &quot;foo&quot; ],&quot;bodyInline&quot;:&quot;bar&quot;,&quot;bodyLast&quot;:[ &quot;baz&quot; ]}`)
-  }))
+  ))
   defer slowUpstream.Close()
 
-  router := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-    Process(w, r, httprouter.Params{})
-  }))
+  router := httptest.NewServer(http.HandlerFunc(
+    func(w http.ResponseWriter, r *http.Request) {
+      Process(w, r, httprouter.Params{})
+    }
+  ))
   defer router.Close()
 
   var config = []byte(fmt.Sprintf(`{
@@ -901,13 +995,15 @@ func TestSlowResponse(t *testing.T) {
   expectedStatus := 408
   for _, value := range result.Components {
     if value.ID == &quot;bar&quot; &amp;&amp; value.Status != expectedStatus {
-      t.Errorf(&quot;The response:\n '%d'\ndidn't match the expectation:\n '%d'&quot;, value.Status, expectedStatus)
+      t.Errorf(&quot;The response:\n '%d'\ndidn't match the expectation:\n '%d'&quot;, 
+      value.Status, expectedStatus)
     }
   }
 
   expectedSummary := &quot;failure&quot;
   if result.Summary != expectedSummary {
-    t.Errorf(&quot;The response:\n '%s'\ndidn't match the expectation:\n '%s'&quot;, result.Summary, expectedSummary)
+    t.Errorf(&quot;The response:\n '%s'\ndidn't match the expectation:\n '%s'&quot;, 
+    result.Summary, expectedSummary)
   }
 }
 </code></pre>
@@ -967,7 +1063,8 @@ func TestRetrieveReturnValue(t *testing.T) {
   coll, _ := Retrieve(url, fakeNewDocument)
 
   if response := coll[0]; response != href {
-    t.Errorf(&quot;The response:\n '%s'\ndidn't match the expectation:\n '%s'&quot;, response, href)
+    t.Errorf(&quot;The response:\n '%s'\ndidn't match the expectation:\n '%s'&quot;, 
+    response, href)
   }
 }
 
@@ -985,7 +1082,8 @@ func TestRetrieveMissingAttributeReturnsEmptySlice(t *testing.T) {
   coll, _ := Retrieve(url, fakeNewDocument)
 
   if response := coll; len(response) &gt; 0 {
-    t.Errorf(&quot;The response:\n '%s'\ndidn't match the expectation:\n '%s'&quot;, response, &quot;[http://bar.com/]&quot;)
+    t.Errorf(&quot;The response:\n '%s'\ndidn't match the expectation:\n '%s'&quot;, 
+    response, &quot;[http://bar.com/]&quot;)
   }
 }
 </code></pre>
@@ -1036,7 +1134,8 @@ func TestScrapeResults(t *testing.T) {
 }
 
 func err(response, expected string, t *testing.T) {
-  t.Errorf(&quot;The response:\n '%s'\ndidn't match the expectation:\n '%s'&quot;, response, expected)
+  t.Errorf(&quot;The response:\n '%s'\ndidn't match the expectation:\n '%s'&quot;, 
+  response, expected)
 }
 </code></pre>
 
@@ -1099,7 +1198,8 @@ func main() {
 
 <p>Godo is a build tool in a similar vein to rake or gulp.</p>
 
-<p>The following example is taken from my own project <a href="https://github.com/Integralist/Go-Requester" target="_blank">go-requester</a>:</p>
+<p>The following example is taken from my own project
+<a href="https://github.com/Integralist/Go-Requester" target="_blank">go-requester</a>:</p>
 
 <pre><code>package main
 
@@ -1127,11 +1227,14 @@ func main() {
 
 <h2 id="import-race-conditions">Import Race Conditions</h2>
 
-<p>When you import a package within a Go script, only the public functions and variables are exposed for the caller to utilise. So if you need a package to execute some bootstrapping code at the point of it being <em>loaded</em>, then you&rsquo;ll need to stick it inside of an <code>init</code> function.</p>
+<p>When you import a package within a Go script, only the public functions and
+variables are exposed for the caller to utilise. So if you need a package to
+execute some bootstrapping code at the point of it being <em>loaded</em>, then you&rsquo;ll
+need to stick it inside of an <code>init</code> function.</p>
 
 <blockquote>
-<p>Note: you can have multiple <code>init</code> functions inside a package
-e.g. one per file within the package namespace</p>
+<p>Note: you can have multiple <code>init</code> functions inside a package e.g. one per
+file within the package namespace</p>
 </blockquote>
 
 <p>But be careful using <code>init</code> as it can result in a race condition.</p>
@@ -1144,17 +1247,25 @@ e.g. one per file within the package namespace</p>
 <li><code>bar.go</code> (imported by <code>foo.go</code>)</li>
 </ul>
 
-<p>Each one of these packages had its own <code>init</code> function and ultimately the <code>bar.go</code>&rsquo;s <code>init</code> function was being run first, followed by the <code>foo.go</code>&rsquo;s <code>init</code> function and finally followed by the <code>main.go</code>&rsquo;s <code>init</code> function.</p>
+<p>Each one of these packages had its own <code>init</code> function and ultimately the
+<code>bar.go</code>&rsquo;s <code>init</code> function was being run first, followed by the <code>foo.go</code>&rsquo;s
+<code>init</code> function and finally followed by the <code>main.go</code>&rsquo;s <code>init</code> function.</p>
 
-<p>The reason this was an issue was because <code>main.go</code> was loading some environment variables needed by <code>bar.go</code> but those variables weren&rsquo;t available by the time the <code>bar.go</code> was running as that happened <em>before</em> <code>main.go</code>&rsquo;s <code>init</code> function had executed.</p>
+<p>The reason this was an issue was because <code>main.go</code> was loading some environment
+variables needed by <code>bar.go</code> but those variables weren&rsquo;t available by the time
+the <code>bar.go</code> was running as that happened <em>before</em> <code>main.go</code>&rsquo;s <code>init</code> function
+had executed.</p>
 
-<p>The solution was to rename all the <code>init</code> functions to <code>Init</code> and explicitly call them to bootstrap the package when needed (i.e. they didn&rsquo;t automatically bootstrap themselves and so we avoided that race condition).</p>
+<p>The solution was to rename all the <code>init</code> functions to <code>Init</code> and explicitly
+call them to bootstrap the package when needed (i.e. they didn&rsquo;t automatically
+bootstrap themselves and so we avoided that race condition).</p>
 
 <h2 id="new-vs-make">New vs Make</h2>
 
 <ul>
 <li><code>func new(Type) *Type</code>: allocate memory for custom-user type</li>
-<li><code>func make(Type, size IntegerType) Type</code>: allocate memory for builtin types (Slice, Map, Chan)</li>
+<li><code>func make(Type, size IntegerType) Type</code>: allocate memory for builtin types
+(Slice, Map, Chan)</li>
 </ul>
 
 <pre><code>package main
@@ -1254,7 +1365,8 @@ var (
 
 // we return an 'error' type specifically
 // CustomError is indeed an error type, so returning that works
-// but also, the interface CustomErr means the CustomError var _is_ a CustomErr type too
+// but also, the interface CustomErr means the CustomError var 
+// _is_ a CustomErr type too
 func succeed(b bool) (string, error) {
 	if b {
 		return &quot;success&quot;, nil
@@ -1289,7 +1401,8 @@ func (e errCustom) Error() string {
 } 
 </code></pre>
 
-<p>We would then implement the struct with the specific error context information and return it:</p>
+<p>We would then implement the struct with the specific error context information
+and return it:</p>
 
 <pre><code>return errCustom{
     message: &quot;whoops&quot;,
@@ -1361,7 +1474,9 @@ func main() {
 
 <h2 id="enumerator-iota">Enumerator IOTA</h2>
 
-<p>Within a constant declaration, the predeclared identifier <code>iota</code> represents successive untyped integer constants. It is reset to 0 whenever the reserved word <code>const</code> appears in the source.</p>
+<p>Within a constant declaration, the predeclared identifier <code>iota</code> represents
+successive untyped integer constants. It is reset to 0 whenever the reserved
+word <code>const</code> appears in the source.</p>
 
 <pre><code>package main
 
@@ -1495,7 +1610,8 @@ func main() {
 <p>Note: anonymous fields don&rsquo;t work shorthand literal Struct</p>
 </blockquote>
 
-<p>The following example demonstrates how methods of a composited object can be accessed from the consuming object:</p>
+<p>The following example demonstrates how methods of a composited object can be
+accessed from the consuming object:</p>
 
 <pre><code>package main
 
@@ -1575,7 +1691,8 @@ func main() {
 }
 </code></pre>
 
-<p>Here is a more practical example that demonstrates how embedded functionality can make code more expressive:</p>
+<p>Here is a more practical example that demonstrates how embedded functionality
+can make code more expressive:</p>
 
 <pre><code>package main
 
@@ -1611,7 +1728,8 @@ func main() {
 
 <h2 id="reference-vs-value">Reference vs Value</h2>
 
-<p>Summary: limit passing by reference unless the size of the copied value is a problem (i.e. memory allocations).</p>
+<p>Summary: limit passing by reference unless the size of the copied value is a
+problem (i.e. memory allocations).</p>
 
 <p>Map data structures are passed by reference, rather than a copied value.</p>
 
@@ -1643,7 +1761,9 @@ foo after, m =  map[hai:123]
 main after, m =  map[hai:123]
 </code></pre>
 
-<p>Notice how the map is mutated even once the <code>foo</code> function has finished. This is because a reference to the underlying struct memory location was passed and so the changes made were effective everywhere.</p>
+<p>Notice how the map is mutated even once the <code>foo</code> function has finished. This is
+because a reference to the underlying struct memory location was passed and so
+the changes made were effective everywhere.</p>
 
 <p>In fact, anything with <code>make</code> is a reference, as well as any explicit interface.</p>
 
@@ -1675,9 +1795,12 @@ foo after, m =  [1 2 3 4]
 main after, m =  [1 2 3]
 </code></pre>
 
-<p>Notice how the slice isn&rsquo;t showing as mutated after the <code>foo</code> function has finished. This is because a <em>copy</em> of the slice was passed to the function for mutating.</p>
+<p>Notice how the slice isn&rsquo;t showing as mutated after the <code>foo</code> function has
+finished. This is because a <em>copy</em> of the slice was passed to the function for
+mutating.</p>
 
-<p>In the following example we pass a struct by value (i.e. a copy of the <code>person</code> variable is passed):</p>
+<p>In the following example we pass a struct by value (i.e. a copy of the <code>person</code>
+variable is passed):</p>
 
 <pre><code>package main
 
@@ -1817,7 +1940,12 @@ type ComponentsYamlList struct {
 func main() {
   var y ComponentsYamlList
 
-  yaml.Unmarshal([]byte(&quot;components:\n  - id: google\n    url: http://google.com\n  - id: integralist\n    url: http://integralist.co.uk&quot;), &amp;y)
+  yaml.Unmarshal([]byte(
+    &quot;components:
+    \n  - id: google
+    \n    url: http://google.com
+    \n  - id: integralist
+    \n    url: http://integralist.co.uk&quot;), &amp;y)
 
   fmt.Println(y)
 }
@@ -1969,7 +2097,8 @@ fmt.Println(text)
 
 <h2 id="http-middleware">HTTP Middleware</h2>
 
-<p>This code was modified from <a href="https://medium.com/@matryer/writing-middleware-in-golang-and-how-go-makes-it-so-much-fun-4375c1246e81" target="_blank">@matryer</a>:</p>
+<p>This code was modified from
+<a href="https://medium.com/@matryer/writing-middleware-in-golang-and-how-go-makes-it-so-much-fun-4375c1246e81" target="_blank">@matryer</a>:</p>
 
 <pre><code>package main
 
@@ -2044,7 +2173,8 @@ func main() {
 <li><code>/hello-with-middleware</code></li>
 </ol>
 
-<p>The client sees the same output but the latter endpoint produces the following stdout output:</p>
+<p>The client sees the same output but the latter endpoint produces the following
+stdout output:</p>
 
 <pre><code>before
 server: middleware.go:35: before
@@ -2151,9 +2281,15 @@ import (
 )
 
 var (
-  certFile = flag.String(&quot;cert&quot;, &quot;/etc/pki/tls/certs/client.crt&quot;, &quot;A PEM eoncoded certificate file.&quot;)
-  keyFile  = flag.String(&quot;key&quot;, &quot;/etc/pki/tls/private/client.key&quot;, &quot;A PEM encoded private key file.&quot;)
-  caFile   = flag.String(&quot;CA&quot;, &quot;/etc/ca/cloud-ca.pem&quot;, &quot;A PEM eoncoded CA's certificate file.&quot;)
+  certFile = flag.String(
+    &quot;cert&quot;, &quot;/etc/pki/tls/certs/client.crt&quot;, &quot;A PEM eoncoded certificate file.&quot;
+  )
+  keyFile  = flag.String(
+    &quot;key&quot;, &quot;/etc/pki/tls/private/client.key&quot;, &quot;A PEM encoded private key file.&quot;
+  )
+  caFile   = flag.String(
+    &quot;CA&quot;, &quot;/etc/ca/cloud-ca.pem&quot;, &quot;A PEM eoncoded CA's certificate file.&quot;
+  )
 )
 
 func SecureClient() *http.Client {
@@ -2342,7 +2478,9 @@ func main() {
 
 <h2 id="custom-http-request-methods">Custom HTTP Request Methods</h2>
 
-<p>Go doesn&rsquo;t provide abstractions for all the various HTTP request types, so for things like <code>PUT</code> you have to implement it yourself. The following is an example that creates a secure (TLS/HTTPS) <code>PUT</code> abstraction&hellip;</p>
+<p>Go doesn&rsquo;t provide abstractions for all the various HTTP request types, so for
+things like <code>PUT</code> you have to implement it yourself. The following is an example
+that creates a secure (TLS/HTTPS) <code>PUT</code> abstraction&hellip;</p>
 
 <pre><code>func SecurePut(url, contentType string, configFile io.Reader) (*http.Response, error) {
   client := &amp;http.Client{Transport: configureTLS()}
@@ -2408,7 +2546,8 @@ func (p *Point) scaleBy(factor int) {
 
   // Don't need to derefence (*) struct fields
   // Compiler will perform an implicit &amp;p for you
-  // You only need to dereference in standard functions when a argument pointer is required (see below Array Pointer example)
+  // You only need to dereference in standard functions 
+  // when a argument pointer is required (see below Array Pointer example)
   p.x *= factor
   p.y *= factor
 
@@ -2435,7 +2574,8 @@ func main() {
 </code></pre>
 
 <blockquote>
-<p>Note: compiler can only apply implicit dereference for variables and struct fields. This wouldn&rsquo;t work <code>Point{1, 2}.scaleBy(5)</code></p>
+<p>Note: compiler can only apply implicit dereference for variables and struct
+fields. This wouldn&rsquo;t work <code>Point{1, 2}.scaleBy(5)</code></p>
 </blockquote>
 
 <p>Results in the following output:</p>
@@ -2472,7 +2612,8 @@ func main() {
 }
 </code></pre>
 
-<p>Alternatively you can utilise a Slice instead of an Array, as the slice &lsquo;header&rsquo; already has a &lsquo;pointer&rsquo; to an underlying Array:</p>
+<p>Alternatively you can utilise a Slice instead of an Array, as the slice &lsquo;header&rsquo;
+already has a &lsquo;pointer&rsquo; to an underlying Array:</p>
 
 <pre><code>package main
 
@@ -2534,7 +2675,9 @@ if ae, ok := e.(*argError); ok {
 
 <h2 id="line-counting">Line Counting</h2>
 
-<p>Demonstrates how to use <code>bufio</code> package to scan a file and read it line by line, and then how to increment a map integer value using the shortcut <code>map[key]++</code>. Finally, demonstrates nested maps and ranging over them:</p>
+<p>Demonstrates how to use <code>bufio</code> package to scan a file and read it line by line,
+and then how to increment a map integer value using the shortcut <code>map[key]++</code>.
+Finally, demonstrates nested maps and ranging over them:</p>
 
 <pre><code>package main
 
@@ -2644,7 +2787,8 @@ func main() {
   file.Seek(-currentOffset, 1) // Return to start of file for next Read
 
   // Read buffered view of file
-  data := make([]byte, 10, bytesWritten) // create slice with underlying Array capacity set to total file bytes size
+  // create slice with underlying Array capacity set to total file bytes size
+  data := make([]byte, 10, bytesWritten) 
   eof := false
   for !eof {
     count, err := file.Read(data)
@@ -2685,7 +2829,9 @@ func main() {
 }
 </code></pre>
 
-<p>Here is a basic example that pauses execution of a channel until the timer has expired (you would use this over a <code>timer.Sleep</code> because you can cancel a timer before it has expired):</p>
+<p>Here is a basic example that pauses execution of a channel until the timer has
+expired (you would use this over a <code>timer.Sleep</code> because you can cancel a timer
+before it has expired):</p>
 
 <pre><code>package main
 
@@ -2798,7 +2944,11 @@ Done
 
 <h2 id="starting-and-stopping-things-with-channels">Starting and Stopping things with Channels</h2>
 
-<p>I would imagine that for most cases you&rsquo;ll want to use a <code>time.NewTimer</code> as seen in previous examples if you want to stop a goroutine that&rsquo;s processing a long running program. The following example is more for stopping a goroutine that&rsquo;s running code at a set interval (although using <code>time.NewTicker</code> would probably be more appropriate):</p>
+<p>I would imagine that for most cases you&rsquo;ll want to use a <code>time.NewTimer</code> as seen
+in previous examples if you want to stop a goroutine that&rsquo;s processing a long
+running program. The following example is more for stopping a goroutine that&rsquo;s
+running code at a set interval (although using <code>time.NewTicker</code> would probably
+be more appropriate):</p>
 
 <pre><code>package main
 
@@ -2897,9 +3047,15 @@ func main() {
 
 <h2 id="channel-pipelines">Channel Pipelines</h2>
 
-<p>The principle of a pipeline, is to take data from one function and pass it into another function, that receiving function will process the received data and then that result is returned and subsequently passed onto another function&hellip; rinse and repeat for however long your pipeline needs to be.</p>
+<p>The principle of a pipeline, is to take data from one function and pass it into
+another function, that receiving function will process the received data and
+then that result is returned and subsequently passed onto another function&hellip;
+rinse and repeat for however long your pipeline needs to be.</p>
 
-<p>In the below example (copied from <a href="https://blog.gopheracademy.com/advent-2015/automi-stream-processing-over-go-channels/" target="_blank">here</a>) demonstrates how a set of functions accept a channel and return a channel and so channels is the &lsquo;data&rsquo; that is passed around the pipeline functions:</p>
+<p>In the below example (copied from
+<a href="https://blog.gopheracademy.com/advent-2015/automi-stream-processing-over-go-channels/" target="_blank">here</a>)
+demonstrates how a set of functions accept a channel and return a channel and so
+channels is the &lsquo;data&rsquo; that is passed around the pipeline functions:</p>
 
 <pre><code>package main
 
@@ -3021,7 +3177,8 @@ func main() {
 </code></pre>
 
 <blockquote>
-<p>Note: <code>printf</code> is a built-in function for templating and is functionally equivalent to <code>fmt.Sprintf</code></p>
+<p>Note: <code>printf</code> is a built-in function for templating and is functionally
+equivalent to <code>fmt.Sprintf</code></p>
 </blockquote>
 
 <p>Program output:</p>
@@ -3433,7 +3590,9 @@ func main() {
 }
 </code></pre>
 
-<p>&hellip;it doesn&rsquo;t read the response Body completely. So when closing the response you might get an error as a stray <code>\n</code> could be present later on. You&rsquo;ll need to drain the response instead:</p>
+<p>&hellip;it doesn&rsquo;t read the response Body completely. So when closing the response
+you might get an error as a stray <code>\n</code> could be present later on. You&rsquo;ll need to
+drain the response instead:</p>
 
 <pre><code>defer func() {
   io.CopyN(ioutil.Discard, r.Body, 512)
@@ -3442,7 +3601,8 @@ func main() {
 </code></pre>
 
 <blockquote>
-<p>Note: <a href="https://github.com/google/go-github/pull/317" target="_blank">https://github.com/google/go-github/pull/317</a></p>
+<p>Note:
+<a href="https://github.com/google/go-github/pull/317" target="_blank">https://github.com/google/go-github/pull/317</a></p>
 </blockquote>
 
 <h2 id="writing-your-own-marshal-unmarshal-functions">Writing your own Marshal/Unmarshal functions</h2>
@@ -3519,7 +3679,8 @@ func (this Stuff) UnmarshalJSON(b []byte) error {
 
 <p>This means you can also leverage custom type checking:</p>
 
-<p>See: <a href="http://blog.tamizhvendan.in/blog/2017/06/24/leveraging-interfaces-in-golang-part-1/" target="_blank">leveraging interfaces in golang</a></p>
+<p>See: <a href="http://blog.tamizhvendan.in/blog/2017/06/24/leveraging-interfaces-in-golang-part-1/" target="_blank">leveraging interfaces in
+golang</a></p>
 
           </section>
         </div>

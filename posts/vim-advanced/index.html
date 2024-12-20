@@ -224,7 +224,8 @@ quxfoo
 
 <p>Now, there may be times where you want a minimal config but with some extra treats, I&rsquo;ll typically have a <code>~/.vimrc-core</code> file with the following configuration that gives me the above &lsquo;basic&rsquo; configuration (with some other configuration which isn&rsquo;t essential but also isn&rsquo;t superfluous either) along with some <em>core</em> plugins I like to use):</p>
 
-<pre><code class="language-viml">set nocompatible number autoread cursorline expandtab hlsearch visualbell tabstop=2 shiftwidth=2 clipboard+=unnamed wildmenu hidden noswapfile
+<pre><code class="language-viml">set nocompatible number autoread cursorline expandtab hlsearch visualbell 
+set tabstop=2 shiftwidth=2 clipboard+=unnamed wildmenu hidden noswapfile
 syntax on
 packadd cfilter
 
@@ -246,9 +247,22 @@ set wildignore+=*/.git/*,*/node_modules/*,*/.hg/*,*/.svn/*.,*/.DS_Store
 set wildmode=list:longest,list:full
 
 autocmd VimEnter * command! -nargs=* -bang AgC \
-call fzf#vim#ag(&lt;q-args&gt;, '--path-to-ignore ~/.ignore --hidden --ignore &quot;node_modules&quot; --ignore-dir=&quot;vendor&quot; --skip-vcs-ignores', &lt;bang&gt;0)
+call fzf#vim#ag(
+      \ &lt;q-args&gt;, 
+      \ '--path-to-ignore ~/.ignore '
+      \ . '--hidden '
+      \ . '--ignore &quot;node_modules&quot; '
+      \ . '--ignore-dir=&quot;vendor&quot; '
+      \ . '--skip-vcs-ignores', 
+      \ &lt;bang&gt;0
+      \)
 
-let g:ackprg = 'ag --vimgrep --smart-case --path-to-ignore ~/.ignore --hidden --ignore-dir=node_modules --ignore-dir=vendor --skip-vcs-ignores'
+let g:ackprg = 'ag --vimgrep --smart-case '
+      \ . '--path-to-ignore ~/.ignore '
+      \ . '--hidden '
+      \ . '--ignore-dir=node_modules '
+      \ . '--ignore-dir=vendor '
+      \ . '--skip-vcs-ignores'
 
 let g:ack_mappings = {
   \ &quot;h&quot;: &quot;&lt;C-W&gt;&lt;CR&gt;:exe 'wincmd ' (&amp;splitbelow ? 'J' : 'K')&lt;CR&gt;&lt;C-W&gt;p&lt;C-W&gt;J&lt;C-W&gt;p&quot;,
@@ -602,12 +616,21 @@ map &lt;leader&gt;b :Buffers!&lt;CR&gt;
 map &lt;leader&gt;g :GFiles!?&lt;CR&gt;
 map &lt;leader&gt;w :Windows!&lt;CR&gt;
 map &lt;leader&gt;t :AgC!&lt;CR&gt;
-set wildignore+=*/.git/*,*/node_modules/*,*/.hg/*,*/.svn/*.,*/.DS_Store &quot; Files matched are ignored when expanding wildcards
+
+&quot; Files matched are ignored when expanding wildcards
+set wildignore+=*/.git/*,*/node_modules/*,*/.hg/*,*/.svn/*.,*/.DS_Store 
 set wildmode=list:longest,list:full
 
 &quot; configure FZF text search command to have default flags included
-autocmd VimEnter * command! -nargs=* -bang AgC call fzf#vim#ag(&lt;q-args&gt;,\
-'--path-to-ignore ~/.ignore --hidden --ignore &quot;node_modules&quot; --ignore-dir=&quot;vendor&quot; --skip-vcs-ignores', &lt;bang&gt;0)
+autocmd VimEnter * command! -nargs=* -bang AgC call fzf#vim#ag(
+      \ &lt;q-args&gt;, 
+      \ '--path-to-ignore ~/.ignore '
+      \ . '--hidden '
+      \ . '--ignore &quot;node_modules&quot; '
+      \ . '--ignore-dir=&quot;vendor&quot; '
+      \ . '--skip-vcs-ignores', 
+      \ &lt;bang&gt;0
+      \)
 
 &quot; ack
 let g:ackprg = 'ag --vimgrep --smart-case --path-to-ignore ~/.ignore \

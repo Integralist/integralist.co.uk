@@ -78,13 +78,25 @@
 
 <p>The <code>go</code> keyword is used to start a goroutine.</p>
 
-<p>A goroutine is a lightweight, managed thread used by the Go runtime to run functions concurrently.</p>
+<p>A goroutine is a lightweight, managed thread used by the Go runtime to run
+functions concurrently.</p>
 
-<p>Unlike OS threads, which have a fixed stack size (often around 1MB), goroutines start with a very small stack, around 2KB, and can grow or shrink dynamically as needed. This makes it possible to run thousands or even millions of goroutines simultaneously, depending on the available memory.</p>
+<p>Unlike OS threads, which have a fixed stack size (often around 1MB), goroutines
+start with a very small stack, around 2KB, and can grow or shrink dynamically as
+needed. This makes it possible to run thousands or even millions of goroutines
+simultaneously, depending on the available memory.</p>
 
-<p>Goroutines are sometimes compared to &ldquo;green threads,&rdquo; which are threads that are scheduled in user space rather than by the OS. The problem with green threads is that they may not leverage multiple CPU cores efficiently since they don&rsquo;t interact directly with the OS’s scheduler.</p>
+<p>Goroutines are sometimes compared to &ldquo;green threads,&rdquo; which are threads that are
+scheduled in user space rather than by the OS. The problem with green threads is
+that they may not leverage multiple CPU cores efficiently since they don&rsquo;t
+interact directly with the OS’s scheduler.</p>
 
-<p>Goroutines are similar to green threads in that they are scheduled by the Go runtime rather than the OS. However, they differ in a crucial way: Go uses a model called Mscheduling, where the Go runtime maps multiple goroutines (M) onto multiple OS threads (N). This allows the runtime to distribute goroutines across multiple CPU cores when possible, making Go’s concurrency model more efficient and scalable than traditional green threads.</p>
+<p>Goroutines are similar to green threads in that they are scheduled by the Go
+runtime rather than the OS. However, they differ in a crucial way: Go uses a
+model called Mscheduling, where the Go runtime maps multiple goroutines (M) onto
+multiple OS threads (N). This allows the runtime to distribute goroutines across
+multiple CPU cores when possible, making Go’s concurrency model more efficient
+and scalable than traditional green threads.</p>
 
 <blockquote>
 <p>⚠️ <strong>IMPORTANT</strong><br>
@@ -123,7 +135,9 @@ This main goroutine can then spawn additional goroutines as needed.</p>
 
 <h2 id="channels">Channels</h2>
 
-<p>Channels in Go are a powerful way to communicate between goroutines and to synchronize them. They allow you to send and receive values across goroutines, and they help avoid race conditions by enabling safe data sharing.</p>
+<p>Channels in Go are a powerful way to communicate between goroutines and to
+synchronize them. They allow you to send and receive values across goroutines,
+and they help avoid race conditions by enabling safe data sharing.</p>
 
 <blockquote>
 <p>⚠️ <strong>IMPORTANT</strong><br>
@@ -158,9 +172,12 @@ func main() {
 
 <h2 id="select-statement">Select Statement</h2>
 
-<p>The <code>select</code> statement is used to wait on multiple channel operations. It blocks until one of its cases can proceed, which makes it essential for handling multiple asynchronous tasks.</p>
+<p>The <code>select</code> statement is used to wait on multiple channel operations. It blocks
+until one of its cases can proceed, which makes it essential for handling
+multiple asynchronous tasks.</p>
 
-<p>Use <code>select</code> when you have multiple channels to listen to, and you want to respond to whichever channel receives data first.</p>
+<p>Use <code>select</code> when you have multiple channels to listen to, and you want to
+respond to whichever channel receives data first.</p>
 
 <blockquote>
 <p>⚠️ <strong>NOTE</strong><br>
@@ -237,11 +254,17 @@ func main() {
 
 <h2 id="wait-groups">Wait Groups</h2>
 
-<p>A <code>sync.WaitGroup</code> waits for a collection of goroutines to finish. It helps coordinate a group of goroutines and ensures the program waits until all of them have completed before proceeding.</p>
+<p>A <code>sync.WaitGroup</code> waits for a collection of goroutines to finish. It helps
+coordinate a group of goroutines and ensures the program waits until all of them
+have completed before proceeding.</p>
 
-<p>Use a <code>WaitGroup</code> when you need to wait for multiple goroutines to finish before moving on.</p>
+<p>Use a <code>WaitGroup</code> when you need to wait for multiple goroutines to finish before
+moving on.</p>
 
-<p>In this example, a <code>sync.WaitGroup</code> is used to wait for three goroutines to complete. Each goroutine represents a worker, and each one calls <code>wg.Done()</code> to signal that it&rsquo;s finished. The <code>main</code> function calls <code>wg.Wait()</code> to block until all workers are done.</p>
+<p>In this example, a <code>sync.WaitGroup</code> is used to wait for three goroutines to
+complete. Each goroutine represents a worker, and each one calls <code>wg.Done()</code> to
+signal that it&rsquo;s finished. The <code>main</code> function calls <code>wg.Wait()</code> to block until
+all workers are done.</p>
 
 <pre><code class="language-go">package main
 
@@ -275,11 +298,15 @@ func main() {
 
 <h2 id="mutex">Mutex</h2>
 
-<p>Go&rsquo;s <code>sync.Mutex</code> provides mutual exclusion, allowing only one goroutine at a time to access a critical section of code. While <code>sync.RWMutex</code> is a variant that allows multiple readers or a single writer but not both.</p>
+<p>Go&rsquo;s <code>sync.Mutex</code> provides mutual exclusion, allowing only one goroutine at a
+time to access a critical section of code. While <code>sync.RWMutex</code> is a variant
+that allows multiple readers or a single writer but not both.</p>
 
-<p>Use <code>sync.Mutex</code> or <code>sync.RWMutex</code> when you need fine-grained control over data access and want to protect shared data from race conditions.</p>
+<p>Use <code>sync.Mutex</code> or <code>sync.RWMutex</code> when you need fine-grained control over data
+access and want to protect shared data from race conditions.</p>
 
-<p>In the below example <code>sync.Mutex</code> ensures that only one goroutine modifies <code>counter.value</code> at a time, preventing race conditions:</p>
+<p>In the below example <code>sync.Mutex</code> ensures that only one goroutine modifies
+<code>counter.value</code> at a time, preventing race conditions:</p>
 
 <pre><code class="language-go">package main
 
@@ -334,15 +361,25 @@ Here I should have just placed the <code>Unlock()</code> call after the <code>c.
 
 <h2 id="conditions">Conditions</h2>
 
-<p>Go&rsquo;s <code>sync.Cond</code> is used for signaling between goroutines. It lets goroutines wait until they are notified to continue, which is useful when one goroutine needs to wait for a certain condition to be met by another goroutine.</p>
+<p>Go&rsquo;s <code>sync.Cond</code> is used for signaling between goroutines. It lets goroutines
+wait until they are notified to continue, which is useful when one goroutine
+needs to wait for a certain condition to be met by another goroutine.</p>
 
-<p>Use <code>sync.Cond</code> when you need goroutines to wait for certain conditions, such as producer-consumer scenarios.</p>
+<p>Use <code>sync.Cond</code> when you need goroutines to wait for certain conditions, such as
+producer-consumer scenarios.</p>
 
-<p>In the following example, <code>cond.Wait()</code> blocks until <code>cond.Signal()</code> is called. It&rsquo;s useful for waiting on complex conditions where other primitives like <code>chan</code> may not be ideal:</p>
+<p>In the following example, <code>cond.Wait()</code> blocks until <code>cond.Signal()</code> is called.
+It&rsquo;s useful for waiting on complex conditions where other primitives like <code>chan</code>
+may not be ideal:</p>
 
 <blockquote>
 <p>⚠️ <strong>IMPORTANT</strong><br>
-The call to <code>cond.L.Lock()</code> in the main goroutine just before <code>for !ready</code> is required, otherwise you&rsquo;ll get the error <code>fatal error: sync: unlock of unlocked mutex</code>. This is because <code>cond.Wait()</code> expects the caller to hold the lock before calling <code>Wait()</code> (see <a href="https://youtu.be/VAV2h1GdgE0?si=cqErfqLXnWOgmcsh" target="_blank">this video</a> for details). Once <code>Wait()</code> returns, it reacquires the lock, ensuring the main goroutine can safely check ready and exit the loop.</p>
+The call to <code>cond.L.Lock()</code> in the main goroutine just before <code>for !ready</code> is
+required, otherwise you&rsquo;ll get the error <code>fatal error: sync: unlock of unlocked mutex</code>. This is because <code>cond.Wait()</code> expects the caller to hold the
+lock before calling <code>Wait()</code> (see <a href="https://youtu.be/VAV2h1GdgE0?si=cqErfqLXnWOgmcsh" target="_blank">this
+video</a> for details). Once
+<code>Wait()</code> returns, it reacquires the lock, ensuring the main goroutine can
+safely check ready and exit the loop.</p>
 </blockquote>
 
 <pre><code class="language-go">package main
@@ -377,7 +414,9 @@ func main() {
 
 <p><a href="https://play.golang.com/p/n_txZaH7lPA" target="_blank">https://play.golang.com/p/n_txZaH7lPA</a></p>
 
-<p>In the following example we have multiple worker goroutines waiting on a shared condition to be &ldquo;notified.&rdquo; We&rsquo;ll see how both <code>.Signal()</code> and <code>.Broadcast()</code> work when notifying waiting goroutines:</p>
+<p>In the following example we have multiple worker goroutines waiting on a shared
+condition to be &ldquo;notified.&rdquo; We&rsquo;ll see how both <code>.Signal()</code> and <code>.Broadcast()</code>
+work when notifying waiting goroutines:</p>
 
 <pre><code class="language-go">package main
 
@@ -425,13 +464,18 @@ func main() {
 
 <p><a href="https://play.golang.com/p/41ibtmUmKaN" target="_blank">https://play.golang.com/p/41ibtmUmKaN</a></p>
 
-<p>Each worker goroutine locks the condition, calls <code>cond.Wait()</code>, and then waits. This releases the lock (as we now understand from the earlier IMPORTANT note, see above if you missed it), allowing other goroutines to call <code>Wait()</code> as well.</p>
+<p>Each worker goroutine locks the condition, calls <code>cond.Wait()</code>, and then waits.
+This releases the lock (as we now understand from the earlier IMPORTANT note,
+see above if you missed it), allowing other goroutines to call <code>Wait()</code> as well.</p>
 
-<p>The <code>cond.Signal()</code> call in the <code>main</code> function wakes up one of the waiting goroutines, allowing it to proceed.</p>
+<p>The <code>cond.Signal()</code> call in the <code>main</code> function wakes up one of the waiting
+goroutines, allowing it to proceed.</p>
 
-<p>After a short delay, <code>cond.Broadcast()</code> wakes up all remaining waiting goroutines, allowing them to proceed simultaneously.</p>
+<p>After a short delay, <code>cond.Broadcast()</code> wakes up all remaining waiting
+goroutines, allowing them to proceed simultaneously.</p>
 
-<p>This is useful for scenarios where multiple tasks need to wait for a common event or state change to proceed.</p>
+<p>This is useful for scenarios where multiple tasks need to wait for a common
+event or state change to proceed.</p>
 
 <blockquote>
 <p>⚠️ <strong>IMPORTANT</strong><br>
@@ -440,31 +484,47 @@ Any one of the waiting goroutines can be chosen to proceed first.<br>
 Broadcast ensures that all waiting goroutines eventually proceed.</p>
 </blockquote>
 
-<p>Now you might be thinking &ldquo;hmm, it looks like I could use channels instead and they&rsquo;re more idiomatic&rdquo;.</p>
+<p>Now you might be thinking &ldquo;hmm, it looks like I could use channels instead and
+they&rsquo;re more idiomatic&rdquo;.</p>
 
-<p>Well, here are some reasons for why you might need to choose <code>sync.Cond</code> over channels:</p>
+<p>Well, here are some reasons for why you might need to choose <code>sync.Cond</code> over
+channels:</p>
 
 <ol>
-<li><p>Fine-Grained Control: <code>sync.Cond</code> allows precise control over waiting and signaling, suitable for cases where specific conditions must be checked or managed.</p></li>
+<li><p>Fine-Grained Control: <code>sync.Cond</code> allows precise control over waiting and
+signaling, suitable for cases where specific conditions must be checked or
+managed.</p></li>
 
-<li><p>Broadcast Capability: Broadcasting to multiple goroutines is straightforward with <code>sync.Cond</code>, whereas channels require individual signaling, which can be inefficient.</p></li>
+<li><p>Broadcast Capability: Broadcasting to multiple goroutines is straightforward
+with <code>sync.Cond</code>, whereas channels require individual signaling, which can be
+inefficient.</p></li>
 
-<li><p>Reduced Complexity for State-Based Waiting: <code>sync.Cond</code> is ideal for situations where goroutines need to wait for specific conditions to be true, rather than for individual values or events passed through a channel.</p></li>
+<li><p>Reduced Complexity for State-Based Waiting: <code>sync.Cond</code> is ideal for
+situations where goroutines need to wait for specific conditions to be true,
+rather than for individual values or events passed through a channel.</p></li>
 
-<li><p>Avoiding Channel Overhead: Channels introduce buffering and management overhead, especially with many goroutines, whereas <code>sync.Cond</code> relies on a shared mutex with a direct wait/notify mechanism, which is often faster.</p></li>
+<li><p>Avoiding Channel Overhead: Channels introduce buffering and management
+overhead, especially with many goroutines, whereas <code>sync.Cond</code> relies on a
+shared mutex with a direct wait/notify mechanism, which is often faster.</p></li>
 </ol>
 
-<p>In summary, <code>sync.Cond</code> is best suited for use cases that involve waiting for and signaling conditions, especially when you need more control over synchronization and when goroutines are reacting to shared state changes rather than discrete message passing.</p>
+<p>In summary, <code>sync.Cond</code> is best suited for use cases that involve waiting for
+and signaling conditions, especially when you need more control over
+synchronization and when goroutines are reacting to shared state changes rather
+than discrete message passing.</p>
 
 <h2 id="atomic-operations">Atomic Operations</h2>
 
 <!--alex ignore simple-->
 
-<p>The <code>sync/atomic</code> package provides low-level atomic operations on simple types like integers and pointers, ensuring operations are performed atomically.</p>
+<p>The <code>sync/atomic</code> package provides low-level atomic operations on simple types
+like integers and pointers, ensuring operations are performed atomically.</p>
 
-<p>Use atomic operations when you need lock-free synchronization for counters or flags, but only for basic integer or pointer manipulations.</p>
+<p>Use atomic operations when you need lock-free synchronization for counters or
+flags, but only for basic integer or pointer manipulations.</p>
 
-<p>In the following example, <code>atomic.AddInt32</code> safely increments <code>counter</code> without a lock, making it ideal for high-performance counters or flags:</p>
+<p>In the following example, <code>atomic.AddInt32</code> safely increments <code>counter</code> without
+a lock, making it ideal for high-performance counters or flags:</p>
 
 <pre><code class="language-go">package main
 
@@ -496,11 +556,15 @@ func main() {
 
 <h2 id="once">Once</h2>
 
-<p>Go&rsquo;s <code>sync.Once</code> ensures that a function only executes once, even if multiple goroutines attempt to run it.</p>
+<p>Go&rsquo;s <code>sync.Once</code> ensures that a function only executes once, even if multiple
+goroutines attempt to run it.</p>
 
-<p>Use <code>sync.Once</code> when you need to perform a one-time initialization, such as setting up a shared resource.</p>
+<p>Use <code>sync.Once</code> when you need to perform a one-time initialization, such as
+setting up a shared resource.</p>
 
-<p>In the following example, even though multiple goroutines call <code>once.Do(initialize)</code>, <code>initialize</code> only runs once. This is especially useful for lazy initialization of global resources:</p>
+<p>In the following example, even though multiple goroutines call
+<code>once.Do(initialize)</code>, <code>initialize</code> only runs once. This is especially useful
+for lazy initialization of global resources:</p>
 
 <pre><code class="language-go">package main
 
@@ -532,11 +596,15 @@ func main() {
 
 <h2 id="context">Context</h2>
 
-<p>Go&rsquo;s <code>context.Context</code> is not a strict concurrency primitive but is widely used to manage timeouts, cancellations, and deadlines across goroutines.</p>
+<p>Go&rsquo;s <code>context.Context</code> is not a strict concurrency primitive but is widely used
+to manage timeouts, cancellations, and deadlines across goroutines.</p>
 
-<p>Use <code>context.Context</code> to signal cancellation or control the lifespan of goroutines, particularly in networked or long-running tasks.</p>
+<p>Use <code>context.Context</code> to signal cancellation or control the lifespan of
+goroutines, particularly in networked or long-running tasks.</p>
 
-<p>In the following example, <code>context.WithTimeout</code> creates a context that automatically cancels after 1 second, which is useful for controlling tasks that may hang or take too long:</p>
+<p>In the following example, <code>context.WithTimeout</code> creates a context that
+automatically cancels after 1 second, which is useful for controlling tasks that
+may hang or take too long:</p>
 
 <pre><code class="language-go">package main
 
@@ -569,29 +637,42 @@ func main() {
 
 <h2 id="map">Map</h2>
 
-<p>The <code>sync</code> package has a <a href="https://pkg.go.dev/sync#Map" target="_blank"><code>Map</code></a> type which you will likely not need to use.</p>
+<p>The <code>sync</code> package has a <a href="https://pkg.go.dev/sync#Map" target="_blank"><code>Map</code></a> type which you
+will likely not need to use.</p>
 
 <p>The Go authors even document it as such&hellip;</p>
 
 <blockquote>
-<p>The Map type is specialized. Most code should use a plain Go map instead, with separate locking or coordination, for better type safety and to make it easier to maintain other invariants along with the map content.</p>
+<p>The Map type is specialized. Most code should use a plain Go map instead, with
+separate locking or coordination, for better type safety and to make it easier
+to maintain other invariants along with the map content.</p>
 
-<p>The Map type is optimized for two common use cases: (1) when the entry for a given key is only ever written once but read many times, as in caches that only grow, or (2) when multiple goroutines read, write, and overwrite entries for disjoint sets of keys. In these two cases, use of a Map may significantly reduce lock contention compared to a Go map paired with a separate Mutex or RWMutex.</p>
+<p>The Map type is optimized for two common use cases: (1) when the entry for a
+given key is only ever written once but read many times, as in caches that
+only grow, or (2) when multiple goroutines read, write, and overwrite entries
+for disjoint sets of keys. In these two cases, use of a Map may significantly
+reduce lock contention compared to a Go map paired with a separate Mutex or
+RWMutex.</p>
 </blockquote>
 
 <h2 id="real-examples">Real Examples</h2>
 
-<p>Below is a &lsquo;real world&rsquo; example where we need to delete a bunch of keys from a data store.</p>
+<p>Below is a &lsquo;real world&rsquo; example where we need to delete a bunch of keys from a
+data store.</p>
 
 <p>The API that is provided, does not support bulk deleting of keys.</p>
 
-<p>The API does provide an endpoint that lets us paginate the available keys, and we then need to stream that information as quickly as possible using a pool of goroutines coordinated with both channels and wait groups.</p>
+<p>The API does provide an endpoint that lets us paginate the available keys, and
+we then need to stream that information as quickly as possible using a pool of
+goroutines coordinated with both channels and wait groups.</p>
 
-<p>It&rsquo;s a nice example because it brings together several different concurrency primitives (goroutines, channels, select, wait groups, atomic operations).</p>
+<p>It&rsquo;s a nice example because it brings together several different concurrency
+primitives (goroutines, channels, select, wait groups, atomic operations).</p>
 
 <blockquote>
 <p>💡 <strong>TIP</strong><br>
-Keep reading after the code snippet for a brief breakdown of what the code does.</p>
+Keep reading after the code snippet for a brief breakdown of what the code
+does.</p>
 </blockquote>
 
 <pre><code class="language-go">const (
@@ -629,7 +710,8 @@ func DeleteAllKeys(storeID string, out io.Writer) error {
 	errorsCh := make(chan string, MaxErrors)
 	
 	// Channel for tracking keys to delete.
-	keysCh := make(chan string, 1000) // this number correlates to the pagination page size defined by the API
+	keysCh := make(chan string, 1000) // this number correlates to the pagination 
+	                                  // page size defined by the API
 
 	var (
 		// Track the number of keys deleted.
@@ -667,16 +749,20 @@ func DeleteAllKeys(storeID string, out io.Writer) error {
 		go func() {
 			defer wg.Done()
 			for key := range keysCh {
-				err := fastly.DeleteKVStoreKey(&amp;fastly.DeleteKVStoreKeyInput{StoreID: c.StoreID, Key: key})
+				err := fastly.DeleteKVStoreKey(
+					&amp;fastly.DeleteKVStoreKeyInput{StoreID: c.StoreID, Key: key},
+				)
 				if err != nil {
 					select {
 					case errorsCh &lt;- key:
 					default:
-						return // channel is full (i.e. we've reached our MaxErrors limit)
+						return // channel is full (i.e. MaxErrors limit reached)
 					}
 				}
-				// Update the TUI (Terminal UI) to reflect the current number of deleted keys.
-				spinner.Message(spinnerMessage + &quot;...&quot; + strconv.FormatUint(deleteCount.Add(1), 10))
+				// Update the TUI (Terminal UI) to reflect the current number of 
+				// deleted keys.
+				f := strconv.FormatUint(deleteCount.Add(1), 10)
+				spinner.Message(spinnerMessage + &quot;...&quot; + f)
 			}
 		}()
 	}
@@ -758,7 +844,11 @@ but <em>two</em>! See the code comments below for more details&hellip;</p>
 <!-- markdownlint-disable -->
 
 <pre><code class="language-go">// deleteAllKVStoreKeys deletes all keys within the specified KV Store.
-func deleteAllKVStoreKeys(conn *gofastly.Client, storeID string, maxErrors, poolSize int) error {
+func deleteAllKVStoreKeys(
+	conn *gofastly.Client, 
+	storeID string, 
+	maxErrors, poolSize int
+) error {
 	p := conn.NewListKVStoreKeysPaginator(&amp;fastly.ListKVStoreKeysInput{
 		StoreID: storeID,
 	})
@@ -823,7 +913,9 @@ func deleteAllKVStoreKeys(conn *gofastly.Client, storeID string, maxErrors, pool
 		go func() {
 			defer wgProcessing.Done()
 			for key := range keysCh {
-				err := conn.DeleteKVStoreKey(&amp;fastly.DeleteKVStoreKeyInput{StoreID: storeID, Key: key})
+				err := conn.DeleteKVStoreKey(
+					&amp;fastly.DeleteKVStoreKeyInput{StoreID: storeID, Key: key},
+				)
 				if err != nil {
 					select {
 					case errorsCh &lt;- key:

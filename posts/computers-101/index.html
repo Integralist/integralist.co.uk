@@ -69,16 +69,23 @@
 
 <h1 id="computers-101-terminals-kernels-and-shells">Computers 101: terminals, kernels and shells</h1>
 
-<p>Before we get started, here&rsquo;s a diagram to give you an overview of what we will be covering in this post:</p>
+<p>Before we get started, here&rsquo;s a diagram to give you an overview of what we will
+be covering in this post:</p>
 
 <p><a href="../../assets/images/terminals-kernals-shells.png">
   <img src="../../assets/images/terminals-kernals-shells.png">
 </a></p>
 
-<p>One thing I want to clarify in the above image is that each box is <em>within</em> the parent box. So for example, The &ldquo;Program: terminal&rdquo; is interacting with a contained shell, while the shell then spawns either a &ldquo;Built-in&rdquo; or &ldquo;Program&rdquo;.</p>
+<p>One thing I want to clarify in the above image is that each box is <em>within</em> the
+parent box. So for example, The &ldquo;Program: terminal&rdquo; is interacting with a
+contained shell, while the shell then spawns either a &ldquo;Built-in&rdquo; or &ldquo;Program&rdquo;.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: Nearly four years after this post was published someone else published <a href="https://www.poor.dev/blog/terminal-anatomy/" target="_blank">https://www.poor.dev/blog/terminal-anatomy/</a> which is an excellent write up that provides a really good animation of how the terminal interacts with the shell, and it goes into much deeper explanation that I do here. So I recommend reading that also.</p>
+<p><strong>NOTE</strong>: Nearly four years after this post was published someone else
+published <a href="https://www.poor.dev/blog/terminal-anatomy/" target="_blank">https://www.poor.dev/blog/terminal-anatomy/</a> which is an excellent
+write up that provides a really good animation of how the terminal interacts
+with the shell, and it goes into much deeper explanation that I do here. So I
+recommend reading that also.</p>
 </blockquote>
 
 <h2 id="kernel">Kernel</h2>
@@ -93,15 +100,21 @@
 
 <h2 id="program">Program</h2>
 
-<p>A &ldquo;<a href="https://simple.wikipedia.org/wiki/Computer_program" target="_blank">program</a>&rdquo; is a structured collection of instructions (machine code) that a computer can execute.</p>
+<p>A &ldquo;<a href="https://simple.wikipedia.org/wiki/Computer_program" target="_blank">program</a>&rdquo; is a
+structured collection of instructions (machine code) that a computer can
+execute.</p>
 
-<p>Your computer has many programs. One such example would be the &lsquo;terminal emulator&rsquo; program.</p>
+<p>Your computer has many programs. One such example would be the &lsquo;terminal
+emulator&rsquo; program.</p>
 
 <blockquote>
 <p>Note: see next section for explanation of what a &ldquo;terminal&rdquo; is.</p>
 </blockquote>
 
-<p>Depending on the programming language used to create the program, either the program is <em>compiled</em> down into binary so it can be understood by the computer, or it&rsquo;ll be <em>interpreted</em> by another program that then generates machine code out of the human readable program.</p>
+<p>Depending on the programming language used to create the program, either the
+program is <em>compiled</em> down into binary so it can be understood by the computer,
+or it&rsquo;ll be <em>interpreted</em> by another program that then generates machine code
+out of the human readable program.</p>
 
 <h2 id="executables">Executables</h2>
 
@@ -113,9 +126,11 @@
 <p>Note: these are also often referred to as just &lsquo;binaries&rsquo;.</p>
 </blockquote>
 
-<p>Executables are generally the <em>result</em> of a program being turned into something that can be &lsquo;executed&rsquo; by the computer.</p>
+<p>Executables are generally the <em>result</em> of a program being turned into something
+that can be &lsquo;executed&rsquo; by the computer.</p>
 
-<p>Executables can be found in multiple locations, e.g. look at the <code>$PATH</code> environment variable in a terminal.</p>
+<p>Executables can be found in multiple locations, e.g. look at the <code>$PATH</code>
+environment variable in a terminal.</p>
 
 <pre><code>$ echo $PATH
 
@@ -130,29 +145,36 @@
 
 <p>A terminal is an input/output device.</p>
 
-<p>Traditionally terminals would have been a <em>real</em> &lsquo;hardware&rsquo; device that you used to interact with a computer.</p>
+<p>Traditionally terminals would have been a <em>real</em> &lsquo;hardware&rsquo; device that you used
+to interact with a computer.</p>
 
-<p>e.g. the computer would be a large box in a server room, and the terminal would be a monitor/keyboard connected to the computer.</p>
+<p>e.g. the computer would be a large box in a server room, and the terminal would
+be a monitor/keyboard connected to the computer.</p>
 
 <p>In modern computing we have <em>electronic</em> terminals.</p>
 
 <p>The modern equivalent of a terminal is known as a &lsquo;terminal emulator&rsquo;.</p>
 
-<p>Terminal emulators ironically (or confusingly) are part of the computer they would have previously been plugged into separately.</p>
+<p>Terminal emulators ironically (or confusingly) are part of the computer they
+would have previously been plugged into separately.</p>
 
-<p>If you don&rsquo;t want to use a GUI (graphical user interface) to interact with your computer, you can use a terminal emulator.</p>
+<p>If you don&rsquo;t want to use a GUI (graphical user interface) to interact with your
+computer, you can use a terminal emulator.</p>
 
 <h2 id="shell">Shell</h2>
 
 <p>A shell is a program which is accessed <em>via</em> a terminal emulator.</p>
 
-<p>The terminal accepts input, passes it to the shell, and the shell&rsquo;s output is sent back to the terminal to be displayed.</p>
+<p>The terminal accepts input, passes it to the shell, and the shell&rsquo;s output is
+sent back to the terminal to be displayed.</p>
 
 <p>The shell accepts input as a set of commands.</p>
 
-<p>The available commands vary depending on the shell (e.g. different shells have different commands).</p>
+<p>The available commands vary depending on the shell (e.g. different shells have
+different commands).</p>
 
-<p>In order to fulfil your instructions, commands are interpreted by the shell and the shell determines if it should either:</p>
+<p>In order to fulfil your instructions, commands are interpreted by the shell and
+the shell determines if it should either:</p>
 
 <ul>
 <li>load <em>another</em> program</li>
@@ -168,13 +190,18 @@
 
 <p>A &lsquo;builtin&rsquo; function is one that is provided by the shell.</p>
 
-<p>If a command is provided and the shell has no corresponding builtin associated with the given command, it will lookup the command via a separate list of available <em>external</em> &lsquo;executables&rsquo;.</p>
+<p>If a command is provided and the shell has no corresponding builtin associated
+with the given command, it will lookup the command via a separate list of
+available <em>external</em> &lsquo;executables&rsquo;.</p>
 
 <p>A builtin command can affect the internal state of the shell.</p>
 
-<p>This is why a command such as <code>cd</code> <em>must</em> be part of the shell (i.e. a builtin), because an external program can&rsquo;t change the current directory of the shell.</p>
+<p>This is why a command such as <code>cd</code> <em>must</em> be part of the shell (i.e. a builtin),
+because an external program can&rsquo;t change the current directory of the shell.</p>
 
-<p>Other commands, like <code>echo</code>, might be (and are in this case) built into the shell for the sake of performance (it&rsquo;s quicker to call the builtin <code>echo</code> than it is to load and manage the external executable <code>echo</code>).</p>
+<p>Other commands, like <code>echo</code>, might be (and are in this case) built into the
+shell for the sake of performance (it&rsquo;s quicker to call the builtin <code>echo</code> than
+it is to load and manage the external executable <code>echo</code>).</p>
 
 <h2 id="documentation">Documentation</h2>
 
@@ -184,20 +211,25 @@
 
 <p>Manuals do not cover shell builtins.</p>
 
-<p>The <code>exit</code> command is a shell builtin, so what happens when looking up a manual for it?</p>
+<p>The <code>exit</code> command is a shell builtin, so what happens when looking up a manual
+for it?</p>
 
 <p>e.g. <code>man exit</code> returns a generic &lsquo;BUILTIN&rsquo; documentation page.</p>
 
 <p>If you see that page, then you know the command is a shell builtin.</p>
 
-<p>Another way to tell if a command is a builtin vs an executable is to use the <code>type</code> command.</p>
+<p>Another way to tell if a command is a builtin vs an executable is to use the
+<code>type</code> command.</p>
 
 <pre><code>$ type exit
 
 exit is a shell builtin
 </code></pre>
 
-<p>One other reason I like to use <code>type</code> is when trying to figure out what a shell alias is set to (in case you&rsquo;re unfamiliar, in most shells you can assign a long or hard to remember command to a short variable name). Imagine I&rsquo;ve created an alias like so:</p>
+<p>One other reason I like to use <code>type</code> is when trying to figure out what a shell
+alias is set to (in case you&rsquo;re unfamiliar, in most shells you can assign a long
+or hard to remember command to a short variable name). Imagine I&rsquo;ve created an
+alias like so:</p>
 
 <pre><code>alias gb=&quot;git branch --list 'integralist*'&quot;
 </code></pre>
@@ -220,7 +252,8 @@ exit: exit [n]
     is that of the last command executed.
 </code></pre>
 
-<p>The <code>help</code> command is itself a builtin (hence it knows about builtins, unlike <code>man</code> which isn&rsquo;t a builtin).</p>
+<p>The <code>help</code> command is itself a builtin (hence it knows about builtins, unlike
+<code>man</code> which isn&rsquo;t a builtin).</p>
 
 <pre><code>$ type help
 
@@ -251,7 +284,8 @@ help: help [-dms] [pattern ...]
     Returns success unless PATTERN is not found or an invalid option is given.
 </code></pre>
 
-<p>If you run the <code>help</code> command by itself you&rsquo;ll see a list of commands that can be passed to <code>help</code> (you&rsquo;ll see in the list <code>exit</code>, hence why we could run <code>help exit</code> earlier):</p>
+<p>If you run the <code>help</code> command by itself you&rsquo;ll see a list of commands that can
+be passed to <code>help</code> (you&rsquo;ll see in the list <code>exit</code>, hence why we could run <code>help exit</code> earlier):</p>
 
 <pre><code>$ help
 
@@ -271,15 +305,18 @@ A star (*) next to a name means that the command is disabled.
  [[ expression ]]                                                                                                       
  alias [-p] [name[=value] ... ]                                                                                         
  bg [job_spec ...]                                                                                                      
- bind [-lpsvPSVX] [-m keymap] [-f filename] [-q name] [-u name] [-r keyseq] [-x keyseq:shell-command] [keyseq:readlin&gt;  
+ bind [-lpsvPSVX] [-m keymap] [-f filename] [-q name] [-u name] [-r keyseq] \
+ [-x keyseq:shell-command] [keyseq:readlin&gt;  
  break [n]                                                                                                              
  builtin [shell-builtin [arg ...]]                                                                                      
  caller [expr]                                                                                                          
  case WORD in [PATTERN [| PATTERN]...) COMMANDS ;;]... esac                                                             
  cd [-L|[-P [-e]] [-@]] [dir]                                                                                           
  command [-pVv] command [arg ...]                                                                                       
- compgen [-abcdefgjksuv] [-o option] [-A action] [-G globpat] [-W wordlist]  [-F function] [-C command] [-X filterpat&gt;  
- complete [-abcdefgjksuv] [-pr] [-DEI] [-o option] [-A action] [-G globpat] [-W wordlist]  [-F function] [-C command]&gt;  
+ compgen [-abcdefgjksuv] [-o option] [-A action] [-G globpat] [-W wordlist]  \
+ [-F function] [-C command] [-X filterpat&gt;  
+ complete [-abcdefgjksuv] [-pr] [-DEI] [-o option] [-A action] [-G globpat] \
+ [-W wordlist]  [-F function] [-C command]&gt;  
  compopt [-o|+o option] [-DEI] [name ...]                                                                               
  continue [n]                                                                                                           
  coproc [NAME] command [redirections]                                                                                   
@@ -308,13 +345,16 @@ A star (*) next to a name means that the command is disabled.
  let arg [arg ...]
  local [option] name[=value] ...
  logout [n]
- mapfile [-d delim] [-n count] [-O origin] [-s count] [-t] [-u fd] [-C callback] [-c quantum] [array]
+ mapfile [-d delim] [-n count] [-O origin] [-s count] [-t] [-u fd] [-C callback] \
+ [-c quantum] [array]
  popd [-n] [+N | -N]
  printf [-v var] format [arguments]
  pushd [-n] [+N | -N | dir]
  pwd [-LP]
- read [-ers] [-a array] [-d delim] [-i text] [-n nchars] [-N nchars] [-p prompt] [-t timeout] [-u fd] [name ...]
- readarray [-d delim] [-n count] [-O origin] [-s count] [-t] [-u fd] [-C callback] [-c quantum] [array]
+ read [-ers] [-a array] [-d delim] [-i text] [-n nchars] [-N nchars] [-p prompt] \
+ [-t timeout] [-u fd] [name ...]
+ readarray [-d delim] [-n count] [-O origin] [-s count] [-t] [-u fd] [-C callback] \
+ [-c quantum] [array]
  readonly [-aAf] [name[=value] ...] or readonly -p
  return [n]
  select NAME [in WORDS ... ;] do COMMANDS; done
@@ -375,7 +415,8 @@ type: type [-afptP] name [name ...]
 
 <h2 id="explicit-requests">Explicit Requests</h2>
 
-<p>When we used the <code>type</code> command earlier on the <code>exit</code> command it returned a single response (<code>exit is a shell builtin</code>).</p>
+<p>When we used the <code>type</code> command earlier on the <code>exit</code> command it returned a
+single response (<code>exit is a shell builtin</code>).</p>
 
 <p>Let&rsquo;s try again with a different command (<code>echo</code>):</p>
 
@@ -392,9 +433,11 @@ echo is a shell builtin
 echo is /bin/echo
 </code></pre>
 
-<p>This indicates that the shell found a builtin first, but that there was <em>also</em> an external executable called <code>echo</code>.</p>
+<p>This indicates that the shell found a builtin first, but that there was <em>also</em>
+an external executable called <code>echo</code>.</p>
 
-<p>If you were to execute <code>echo foo</code> you would be calling the builtin <code>echo</code> command.</p>
+<p>If you were to execute <code>echo foo</code> you would be calling the builtin <code>echo</code>
+command.</p>
 
 <p>You could be explicit by executing it via the <code>builtin</code> command:</p>
 
@@ -403,7 +446,8 @@ echo is /bin/echo
 foo
 </code></pre>
 
-<p>You could also explicitly request the executable and not the builtin by using the <code>command</code> command:</p>
+<p>You could also explicitly request the executable and not the builtin by using
+the <code>command</code> command:</p>
 
 <pre><code>$ command echo foo
 
@@ -421,7 +465,8 @@ foo
 which is /usr/bin/which
 </code></pre>
 
-<p>If we use <code>which</code> to lookup the location of the <code>echo</code> command, will it find the builtin or the external executable?</p>
+<p>If we use <code>which</code> to lookup the location of the <code>echo</code> command, will it find the
+builtin or the external executable?</p>
 
 <pre><code>$ which echo
 
@@ -430,24 +475,29 @@ which is /usr/bin/which
 
 <p>We can see it only found the external executable.</p>
 
-<p>The <code>which</code> command <em>isn&rsquo;t</em> a builtin, and so it has no idea of where to look for builtins.</p>
+<p>The <code>which</code> command <em>isn&rsquo;t</em> a builtin, and so it has no idea of where to look
+for builtins.</p>
 
 <p>Because, by nature, builtins are built <em>into</em> the shell itself.</p>
 
 <h2 id="hashed-types">Hashed Types</h2>
 
-<p>If you open a fresh terminal screen and execute <code>type man</code> you would see the response <code>man is /usr/bin/man</code>.</p>
+<p>If you open a fresh terminal screen and execute <code>type man</code> you would see the
+response <code>man is /usr/bin/man</code>.</p>
 
-<p>If you now execute the <code>man</code> command (e.g. <code>man echo</code>) and try <code>type man</code> again you&rsquo;ll see:</p>
+<p>If you now execute the <code>man</code> command (e.g. <code>man echo</code>) and try <code>type man</code> again
+you&rsquo;ll see:</p>
 
 <pre><code>man is hashed (/usr/bin/man)
 </code></pre>
 
-<p>The reason for this is because in order for the shell to locate the executable it needs to look it up from various locations.</p>
+<p>The reason for this is because in order for the shell to locate the executable
+it needs to look it up from various locations.</p>
 
 <p>These locations are defined in the <code>$PATH</code> (as we saw earlier).</p>
 
-<p>To avoid having to do that lookup every time, it caches the result in a hash table.</p>
+<p>To avoid having to do that lookup every time, it caches the result in a hash
+table.</p>
 
 <p>If we read the Bash manual (<code>man bash</code>) you&rsquo;ll see the following comment:</p>
 
@@ -483,7 +533,8 @@ hash: hash [-lr] [-p pathname] [-dt] [name ...]
     Returns success unless NAME is not found or an invalid option is given.
 </code></pre>
 
-<p>So the documentation informs us of how we can look inside of the shell&rsquo;s hash table by using the <code>-l</code> flag:</p>
+<p>So the documentation informs us of how we can look inside of the shell&rsquo;s hash
+table by using the <code>-l</code> flag:</p>
 
 <pre><code>$ hash -l
 
@@ -492,14 +543,17 @@ builtin hash -p /usr/bin/man man
 builtin hash -p /usr/bin/clear clear
 </code></pre>
 
-<p>From this you can see I&rsquo;ve already executed the <code>which</code>, <code>man</code> and <code>clear</code> executables, hence they&rsquo;re now cached.</p>
+<p>From this you can see I&rsquo;ve already executed the <code>which</code>, <code>man</code> and <code>clear</code>
+executables, hence they&rsquo;re now cached.</p>
 
 <p>Also in the Bash manual is the following comment:</p>
 
 <pre><code>BASH_CMDS
-    An associative array variable whose members correspond to the internal hash table of commands as maintained by the hash builtin.
+    An associative array variable whose members correspond to the internal 
+    hash table of commands as maintained by the hash builtin.
     Elements added to this array appear in the hash table; 
-    however, unsetting array elements currently does not cause command names to be removed from the hash table.  
+    however, unsetting array elements currently does not cause command names to 
+    be removed from the hash table.  
     If BASH_CMDS is unset, it loses its special properties, even if it is subsequently reset.
 </code></pre>
 
@@ -513,7 +567,8 @@ declare -A BASH_CMDS=([which]=&quot;/usr/bin/which&quot; [man]=&quot;/usr/bin/ma
 </code></pre>
 
 <blockquote>
-<p>Note: it&rsquo;s not as clear to read as the <code>hash</code> output, but this is probably more useful for interacting with programatically.</p>
+<p>Note: it&rsquo;s not as clear to read as the <code>hash</code> output, but this is probably
+more useful for interacting with programatically.</p>
 </blockquote>
 
 <h2 id="list-of-all-builtins-vs-executables">List of all builtins vs executables</h2>
@@ -586,7 +641,8 @@ enable wait
 </code></pre>
 
 <blockquote>
-<p>Note: an online reference can be found <a href="https://www.gnu.org/software/bash/manual/html_node/Bash-Builtins.html#Bash-Builtins" target="_blank">here</a></p>
+<p>Note: an online reference can be found
+<a href="https://www.gnu.org/software/bash/manual/html_node/Bash-Builtins.html#Bash-Builtins" target="_blank">here</a></p>
 </blockquote>
 
 <p>To list out all available executables is a little more tricky.</p>

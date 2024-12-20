@@ -129,7 +129,8 @@ function go_version {
           echo &quot;About to switch go version to: $v&quot;
           if ! command -v &quot;$HOME/go/bin/go$v&quot; &amp;&gt; /dev/null
           then
-            echo &quot;run: go install golang.org/dl/go$v@latest &amp;&amp; go$v download &amp;&amp; sudo cp \$(which go$v) \$(which go)&quot;
+            echo &quot;run: go install golang.org/dl/go$v@latest &amp;&amp; go$v download &amp;&amp; \
+              sudo cp \$(which go$v) \$(which go)&quot;
             return
           fi
           sudo cp $(which go$v) $(which go)
@@ -262,7 +263,8 @@ local opts = {
 
   -- all the opts to send to nvim-lspconfig
   -- these override the defaults set by rust-tools.nvim
-  -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
+  -- https://github.com/rust-analyzer/rust-analyzer/blob/master\
+     /docs/user/generated_config.adoc
   -- https://rust-analyzer.github.io/manual.html#features
   server = {
     settings = {
@@ -327,8 +329,10 @@ fun! GoFumpt()
   :silent !gofumpt -w %
   :edit
 endfun
-autocmd FileType go map &lt;buffer&gt; &lt;leader&gt;p :call append(&quot;.&quot;, &quot;fmt.Printf(\&quot;%+v\\n\&quot;, )&quot;)&lt;CR&gt; &lt;bar&gt; :norm $a&lt;CR&gt;&lt;esc&gt;j==$i
-autocmd FileType go map &lt;buffer&gt; &lt;leader&gt;e :call append(&quot;.&quot;, &quot;if err != nil {return err}&quot;)&lt;CR&gt; &lt;bar&gt; :w&lt;CR&gt;
+autocmd FileType go map &lt;buffer&gt; &lt;leader&gt;p :call \
+  append(&quot;.&quot;, &quot;fmt.Printf(\&quot;%+v\\n\&quot;, )&quot;)&lt;CR&gt; &lt;bar&gt; :norm $a&lt;CR&gt;&lt;esc&gt;j==$i
+autocmd FileType go map &lt;buffer&gt; &lt;leader&gt;e :call \
+  append(&quot;.&quot;, &quot;if err != nil {return err}&quot;)&lt;CR&gt; &lt;bar&gt; :w&lt;CR&gt;
 autocmd BufWritePost *.go call GoFumpt()
 autocmd BufWritePost *.go :cex system('revive '..expand('%:p')) | cwindow
 

@@ -204,7 +204,9 @@ rather than recompiling the application code, is to ensure consistency<br>
 between the staging and production environments.</p>
 
 <p>We require the person triggering the deployment to manually locate the relevant
-Compute package hash. We can&rsquo;t rely on automation (e.g <code>git tag --sort=-creatordate</code>) because at the moment of checking the git tags, another
+Compute package hash. We can&rsquo;t rely on automation
+(e.g <code>git tag --sort=-creatordate</code>) because at the moment of checking the git
+tags, another
 person might have merged another PR and thus we would pick up that new staging
 tag and deploy the wrong artifact to the production environment.</p>
 
@@ -295,13 +297,15 @@ jobs:
         if: steps.cache-workspace-id.outputs.cache-hit != 'true'
         run: |
           payload=./infrastructure/fastly/compute/api-gateway/tfc-api/payloads/workspace.json
-          jq '.data.attributes.name = &quot;${{ env.WORKSPACE_NAME }}&quot;' &quot;$payload&quot; &gt; temp.json &amp;&amp; mv temp.json &quot;$payload&quot;
+          jq '.data.attributes.name = &quot;${{ env.WORKSPACE_NAME }}&quot;' \
+            &quot;$payload&quot; &gt; temp.json &amp;&amp; mv temp.json &quot;$payload&quot;
 
       - name: Modify Workspace Variable JSON Payload
         if: steps.cache-workspace-id.outputs.cache-hit != 'true'
         run: |
           payload=./infrastructure/fastly/compute/api-gateway/tfc-api/payloads/workspace-variables.json
-          jq '.data.attributes.value = &quot;${{ secrets.FASTLY_API_KEY }}&quot;' &quot;$payload&quot; &gt; temp.json &amp;&amp; mv temp.json &quot;$payload&quot;
+          jq '.data.attributes.value = &quot;${{ secrets.FASTLY_API_KEY }}&quot;' \
+            &quot;$payload&quot; &gt; temp.json &amp;&amp; mv temp.json &quot;$payload&quot;
 
       # NOTE: A cache is volatile/ephemeral.
       # If the cache is invalidated/cleared, then the following step could still
@@ -320,7 +324,7 @@ jobs:
             --header &quot;Authorization: Bearer ${{ secrets.TF_API_TOKEN }}&quot; \
             --header &quot;Content-Type: application/vnd.api+json&quot; \
             --request POST \
-            --data @infrastructure/fastly/compute/api-gateway/tfc-api/payloads/workspace.json \
+            --data @infra/fastly/compute/api-gateway/tfc-api/payloads/workspace.json \
             https://app.terraform.io/api/v2/organizations/example/workspaces &gt; response.json
           if [[ $(jq '.errors | length == 0' response.json) == false ]]; then
             jq '.errors' response.json
@@ -335,7 +339,7 @@ jobs:
             --header &quot;Authorization: Bearer ${{ secrets.TF_API_TOKEN }}&quot; \
             --header &quot;Content-Type: application/vnd.api+json&quot; \
             --request POST \
-            --data @infrastructure/fastly/compute/api-gateway/tfc-api/payloads/workspace-variables.json \
+            --data @infra/fastly/compute/api-gateway/tfc-api/payloads/variables.json \
             &quot;https://app.terraform.io/api/v2/workspaces/$workspace_id/vars&quot;
           echo &quot;$workspace_id&quot; &gt; tfc-workspace-id
 
@@ -428,12 +432,13 @@ jobs:
               issue_number: context.issue.number,
             });
             const botComment = comments.find(comment =&gt; {
-              return comment.user.type === 'Bot' &amp;&amp; comment.body.includes('Terraform Cloud Plan Output')
+              return comment.user.type === 'Bot' &amp;&amp; comment.body.includes('TF Plan Output')
             });
             const output = `#### Terraform Cloud Plan Output
                \`\`\`
                Plan: ${{ steps.plan-output.outputs.add }} to add, 
-               ${{ steps.plan-output.outputs.change }} to change, ${{ steps.plan-output.outputs.destroy }} to destroy.
+               ${{ steps.plan-output.outputs.change }} to change, \
+               ${{ steps.plan-output.outputs.destroy }} to destroy.
                \`\`\`
                [Terraform Cloud Plan](${{ steps.plan-run.outputs.run_link }})
                `;
@@ -499,10 +504,12 @@ jobs:
           status: &quot;success&quot;
           description: &quot;click 'Details' to view&quot;
           context: Terraform Apply Results
-          targetUrl: &quot;https://app.terraform.io/app/example/workspaces/api-gateway/runs/${{ steps.tf-apply.outputs.run_id }}&quot;
+          targetUrl: &quot;https://app.terraform.io/app/example/workspaces/\
+            api-gateway/runs/${{ steps.tf-apply.outputs.run_id }}&quot;
 
   # Remove any dev services once the corresponding PR has been merged.
-  # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#running-your-pull_request-workflow-when-a-pull-request-merges
+  # https://docs.github.com/en/actions/using-workflows/\
+  # events-that-trigger-workflows#running-your-pull_request-workflow-when-a-pull-request-merges
   terraform-destroy:
     name: &quot;Cleanup Dev Environment&quot;
     runs-on: ubuntu-latest
@@ -553,7 +560,8 @@ jobs:
               else
                 echo &quot;$line&quot;
               fi
-          done &lt; ${{ env.CONFIG_DIRECTORY }}/main.tf &gt; ./main.tf &amp;&amp; mv ./main.tf ${{ env.CONFIG_DIRECTORY }}/main.tf
+          done &lt; ${{ env.CONFIG_DIRECTORY }}/main.tf &gt; ./main.tf &amp;&amp; \
+            mv ./main.tf ${{ env.CONFIG_DIRECTORY }}/main.tf
 
       - name: Terraform Apply
         uses: ./.github/actions/tf-apply
@@ -695,13 +703,15 @@ to include the values required (as I don&rsquo;t want them hardcoded into the JS
     if: steps.cache-workspace-id.outputs.cache-hit != 'true'
     run: |
       payload=./infrastructure/fastly/compute/api-gateway/tfc-api/payloads/workspace.json
-      jq '.data.attributes.name = &quot;${{ env.WORKSPACE_NAME }}&quot;' &quot;$payload&quot; &gt; temp.json &amp;&amp; mv temp.json &quot;$payload&quot;
+      jq '.data.attributes.name = &quot;${{ env.WORKSPACE_NAME }}&quot;' &quot;$payload&quot; \
+        &gt; temp.json &amp;&amp; mv temp.json &quot;$payload&quot;
 
   - name: Modify Workspace Variable JSON Payload
     if: steps.cache-workspace-id.outputs.cache-hit != 'true'
     run: |
       payload=./infrastructure/fastly/compute/api-gateway/tfc-api/payloads/workspace-variables.json
-      jq '.data.attributes.value = &quot;${{ secrets.FASTLY_API_KEY }}&quot;' &quot;$payload&quot; &gt; temp.json &amp;&amp; mv temp.json &quot;$payload&quot;
+      jq '.data.attributes.value = &quot;${{ secrets.FASTLY_API_KEY }}&quot;' \
+        &quot;$payload&quot; &gt; temp.json &amp;&amp; mv temp.json &quot;$payload&quot;
 </code></pre>
 
 <p>Here&rsquo;s the payload JSON for both API calls:</p>
@@ -815,7 +825,7 @@ jobs:
         run: fastly compute build --dir ${{ env.APP_DIRECTORY }}
 
       - name: Calculate Compute Package Hash
-        id: compute-package-hash
+        id: cph
         run: |
           echo &quot;compute_package_hash=\
           $(fastly compute hash-files --skip-build --dir ${{ env.APP_DIRECTORY }} --quiet)&quot;\ 
@@ -841,7 +851,7 @@ jobs:
         run: |
           echo &quot;GIT_STAGE_TAG=stg/$(date +'%Y-%m-%d/%H-%M-%SZ')/\
           $(echo ${{ github.triggering_actor }} | tr '[:upper:]' '[:lower:]' | \
-          tr -d ' ')/${{ steps.compute-package-hash.outputs.compute_package_hash }}&quot; &gt;&gt; &quot;${GITHUB_ENV}&quot;
+          tr -d ' ')/${{ steps.cph.outputs.compute_package_hash }}&quot; &gt;&gt; &quot;${GITHUB_ENV}&quot;
 
       - name: Check Git Tag
         run: echo &quot;$GIT_STAGE_TAG&quot;
@@ -992,9 +1002,12 @@ runs:
     - name: Set WORKSPACE_NAME
       shell: bash
       run: |
-        branch_quoted='${{ env.TF_VAR_branch }}' # e.g. `&quot;-example&quot;` (set in ../tf-var-branch/action.yml)
-        branch_strip_leading_quote=&quot;${branch_quoted#\&quot;}&quot; # strip the leading quote (e.g. turn `&quot;-example&quot;` to `-example&quot;`)
-        branch=&quot;${branch_strip_leading_quote%\&quot;}&quot; # strip the trailing quote (e.g. turn `-example&quot;` to `-example`)
+        # e.g. `&quot;-example&quot;` (set in ../tf-var-branch/action.yml)
+        branch_quoted='${{ env.TF_VAR_branch }}' 
+        # strip the leading quote (e.g. turn `&quot;-example&quot;` to `-example&quot;`)
+        branch_strip_leading_quote=&quot;${branch_quoted#\&quot;}&quot; 
+        # strip the trailing quote (e.g. turn `-example&quot;` to `-example`)
+        branch=&quot;${branch_strip_leading_quote%\&quot;}&quot; 
         echo &quot;WORKSPACE_NAME=api-gateway-dev${branch}&quot; &gt;&gt; $GITHUB_ENV
 </code></pre>
 
@@ -1031,7 +1044,8 @@ runs:
       with:
         workspace: ${{ inputs.workspace }}
         configuration_version: ${{ steps.apply-upload.outputs.configuration_version_id }}
-        is_destroy: ${{ inputs.destroy == true || inputs.destroy == 'true' }}  # IMPORTANT: This will DESTROY the dev infrastructure.
+        # IMPORTANT: This will DESTROY the dev infrastructure.
+        is_destroy: ${{ inputs.destroy == true || inputs.destroy == 'true' }}  
 
     - name: Apply
       uses: hashicorp/tfc-workflows-github/actions/apply-run@v1.2.0
