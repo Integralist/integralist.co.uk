@@ -42,6 +42,7 @@ Here is a more complete (sorted) list of Christmas movies/shows I like to watch:
 - Hey Duggee "The Tinsel Badge" + "The Snowman Badge"
 - Home Alone 1 & 2
 - How the Grinch stole Christmas (1966)
+- Ice Age: A Mammoth Christmas
 - Jingle All the Way
 - Jonathan Creek Christmas Specials
 - Lady and the Tramp
