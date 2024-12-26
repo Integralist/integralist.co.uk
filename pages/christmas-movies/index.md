@@ -66,6 +66,7 @@ Here is a more complete (sorted) list of Christmas movies/shows I like to watch:
 - Steptoe and Son "The Party"
 - Steptoe and Son "The Perfect Christmas"
 - The Christmas Chronicles
+- The Gruffalo's Child
 - The Simpsons Christmas Episode
 - The Snowman
 - Vicar of Dibley Christmas Specials
