@@ -43,6 +43,10 @@
 <ul>
 <li><a href="#core">Core</a></li>
 
+<li><a href="#history">History</a></li>
+
+<li><a href="#workflow">Workflow</a></li>
+
 <li><a href="#supplementary">Supplementary</a></li>
 
 <li><a href="#browser">Browser</a></li>
@@ -53,7 +57,7 @@
 
 <h1 id="developer-tools">Developer Tools</h1>
 
-<p>I don&rsquo;t know who needs to hear this but:
+<p>I don&rsquo;t know who needs to hear this but:<br>
 <strong>I love my developer tools</strong>.</p>
 
 <h2 id="core">Core</h2>
@@ -64,8 +68,39 @@
 <li><strong>Code Editor</strong>: <a href="https://neovim.io" target="_blank">Neovim</a></li>
 </ul>
 
-<p><strong>HISTORY:</strong><br>
-I was using a multiplexer (<a href="https://github.com/tmux/tmux/wiki" target="_blank">tmux</a>) for years but colour issues forced me to switch to <a href="https://zellij.dev" target="_blank">Zellij</a>. I then switched from <a href="https://alacritty.org/" target="_blank">Alacritty</a> and Zellij to using Warp as my terminal (helping to consolidate the number of tools I needed to install and configure) as Warp provided a lot of what I was using Zellij for. My switch to Warp also meant I could drop support for <a href="https://github.com/junegunn/fzf/blob/master/README.md" target="_blank">FZF</a> as Warp provided fuzzy searching my history, while <code>fd</code> (see below) allowed me to easily locate files. But after a year of using Warp I moved to <a href="https://mitchellh.com/ghostty" target="_blank">ghostty</a> and back to using <code>fzf</code> (as it&rsquo;s just so awesome). I then used the &lsquo;split pane&rsquo; feature in Ghostty while using the built-in floating terminal in Neovim for project-by-project development (which was better than a single hotkey overlay terminal that Warp provided, as I wasn&rsquo;t interested in going back to a multiplexer like tmux or zellij).</p>
+<h2 id="history">History</h2>
+
+<ul>
+<li>Used stock macOS Terminal.app with <a href="https://github.com/tmux/tmux/wiki" target="_blank">tmux</a>
+for 10+ years.</li>
+<li>I tried <a href="https://iterm2.com/" target="_blank">iTerm2</a>,
+<a href="https://sw.kovidgoyal.net/kitty/" target="_blank">Kitty</a>, <a href="https://alacritty.org/" target="_blank">Alacritty</a>,
+<a href="https://wezfurlong.org/wezterm/" target="_blank">WesTerm</a> but none really fit well for me.</li>
+<li>Constant colour issues forced me to switch from tmux to
+<a href="https://zellij.dev" target="_blank">Zellij</a>.</li>
+<li>I moved to using <a href="https://www.warp.dev/" target="_blank">Warp</a> for a few years, but it still
+had issues.</li>
+<li>I finally landed on <a href="https://ghostty.org" target="_blank">Ghostty</a> which has been great. Yes,
+it still has minor issues but the community is active and open.</li>
+</ul>
+
+<h2 id="workflow">Workflow</h2>
+
+<p>I use <a href="https://www.zsh.org" target="_blank">Zsh</a> Autocomplete with
+<a href="https://github.com/Aloxaf/fzf-tab" target="_blank">fzf-tab</a> to replace Zsh&rsquo;s default completion
+selection menu with <a href="https://github.com/junegunn/fzf" target="_blank">fzf</a> which works really
+nicely.</p>
+
+<p>I mostly use terminal splits and tabs for dividing up projects and tasks, and on
+the occasion I&rsquo;ll use Neovim&rsquo;s built-in terminal across multiple splits or
+floating windows. Otherwise, the other part of Ghostty I use <em>a lot</em> is its
+floating terminal that can be triggered from anywhere via a hotkey (as long as
+Ghostty is open somewhere).</p>
+
+<blockquote>
+<p>💡 You can find my Neovim config <a href="https://github.com/integralist/nvim" target="_blank">here</a> and
+my dotfiles <a href="https://github.com/integralist/dotfiles" target="_blank">here</a>.</p>
+</blockquote>
 
 <h2 id="supplementary">Supplementary</h2>
 
@@ -87,19 +122,27 @@ I was using a multiplexer (<a href="https://github.com/tmux/tmux/wiki" target="_
 <li><strong>Process Status</strong>: <a href="https://github.com/dalance/procs/blob/master/README.md" target="_blank">Procs</a></li>
 <li><strong>Process/System Monitor</strong>: <a href="https://github.com/htop-dev/htop/#readme" target="_blank">Htop</a> †</li>
 <li><strong>Shell</strong>: <a href="https://www.zsh.org" target="_blank">Zsh</a></li>
-<li><strong>Shell Autocomplete</strong>: <a href="https://fig.io/" target="_blank">Fig</a></li>
+<li><strong>Shell Autocomplete</strong>: <a href="https://github.com/Aloxaf/fzf-tab" target="_blank">FZF-tab</a></li>
 <li><strong>Shell Prompt</strong>: <a href="https://starship.rs/" target="_blank">Starship</a></li>
 </ul>
 
 <blockquote>
-<p>† I had switched to <a href="https://github.com/ClementTsang/bottom/blob/master/README.md" target="_blank">Bottom</a> but <code>htop</code> is just so much more flexible and configurable, and although the graphs in <code>btm</code> are nice I just don&rsquo;t <em>need</em> them.</p>
+<p>† I had switched to
+<a href="https://github.com/ClementTsang/bottom/blob/master/README.md" target="_blank">Bottom</a> but
+<code>htop</code> is so much more flexible and configurable, and although the graphs in
+<code>btm</code> are nice, I don&rsquo;t <em>need</em> them.</p>
 </blockquote>
 
 <h2 id="browser">Browser</h2>
 
-<p>Controversial, but I had started to move away from <a href="https://www.mozilla.org/en-GB/firefox/new/" target="_blank">Firefox</a> with a whole suite of security/privacy minded tools to <a href="https://www.apple.com/uk/safari/" target="_blank">Apple&rsquo;s Safari</a> browser.</p>
+<p>Controversial, but I had moved away from
+<a href="https://www.mozilla.org/en-GB/firefox/new/" target="_blank">Firefox</a> with a whole suite of
+security/privacy minded tools to <a href="https://www.apple.com/uk/safari/" target="_blank">Apple&rsquo;s
+Safari</a> browser.</p>
 
-<p>I <em>was</em> using Safari&rsquo;s <a href="https://twitter.com/integralist/status/1514526555275501569?s=20&amp;t=BJu3WlWq6dhoeAarJf91ig" target="_blank">&ldquo;Tab Group&rdquo;</a> feature, which I <em>really</em> liked along with the following extensions&hellip;</p>
+<p>I <em>was</em> using Safari&rsquo;s <a href="https://twitter.com/integralist/status/1514526555275501569?s=20&amp;t=BJu3WlWq6dhoeAarJf91ig" target="_blank">&ldquo;Tab
+Group&rdquo;</a>
+feature, which I <em>really</em> liked along with the following extensions&hellip;</p>
 
 <ul>
 <li>AdBlock One</li>
@@ -108,10 +151,13 @@ I was using a multiplexer (<a href="https://github.com/tmux/tmux/wiki" target="_
 <li>Super Agent for Safari (Cookie Consent Automation)</li>
 </ul>
 
-<p>&hellip;but ultimately the Tab Groups feature ended up being super buggy and duplicating bookmarks and groups etc and I couldn&rsquo;t get the issue resolved, so I ended up back with Google Chrome.</p>
+<p>&hellip;but ultimately the Tab Groups feature ended up being super buggy and
+duplicating bookmarks and groups etc and I couldn&rsquo;t get the issue resolved, so I
+ended up back with Google Chrome.</p>
 
 <blockquote>
-<p>💡 In the future I&rsquo;ll likely switch over to using <a href="https://ladybird.org/" target="_blank">Ladybird</a>.</p>
+<p>💡 In the future I&rsquo;ll likely switch over to using
+<a href="https://ladybird.org/" target="_blank">Ladybird</a>.</p>
 </blockquote>
 
           </section>
