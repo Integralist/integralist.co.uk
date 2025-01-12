@@ -9,11 +9,13 @@ Here are my top ten Christmas Movies:
 1. The Morcambe & Wise Christmas Special (1971)
 1. Mickey's Christmas Carol
 1. Muppets Christmas Carol
-1. Gremlins
-1. Scrooged
 1. Home Alone
-1. Long Kiss Goodnight
+1. Scrooged
 1. Batman Returns
+1. Gremlins
+1. How the Grinch stole Christmas (1966)
+
+> **Bonus:** Long Kiss Goodnight
 
 ## Complete List
 
