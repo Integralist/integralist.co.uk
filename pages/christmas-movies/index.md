@@ -5,15 +5,15 @@
 Here are my top ten Christmas Movies:
 
 1. National Lampoon's Christmas Vacation
-1. Peanuts: A Charlie Brown Christmas
+1. How the Grinch stole Christmas (1966)
 1. The Morcambe & Wise Christmas Special (1971)
+1. Peanuts: A Charlie Brown Christmas
 1. Mickey's Christmas Carol
 1. Muppets Christmas Carol
 1. Home Alone
 1. Scrooged
 1. Batman Returns
 1. Gremlins
-1. How the Grinch stole Christmas (1966)
 
 > **Bonus:** Long Kiss Goodnight
 
