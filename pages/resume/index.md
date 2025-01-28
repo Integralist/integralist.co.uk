@@ -5,7 +5,7 @@
 Hello, my name is Mark and I work at [Fastly](https://www.fastly.com/) as a Staff Software Engineer.
 
 <img src="../../assets/images/profile-2024.jpg" class="image fit half border">
-<small class="image-summary"><b>NOTE:</b> Yes. That is my wife and kids. But I've no idea who the big blue guy is 😉</small>
+<small class="image-summary"><b>NOTE:</b> Yes. That is my wife and kids. But I've no idea who the other guy is 😉</small>
 
 ### Previously
 
