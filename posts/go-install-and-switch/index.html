@@ -1,0 +1,806 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+  <head>
+    <title>Integralist</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+  <body class="is-preload">
+		<button id="backToTop">↑ Back to Top</button>
+    <!-- Wrapper -->
+    <div id="wrapper">
+      <!-- Main -->
+      <div id="main">
+        <div class="inner">
+          <!-- Header -->
+					<header id="header">
+						<a href="../../index.html" class="logo"><strong>Home</strong></a>
+							<ul class="icons">
+							<!--<li><a href="https://x.com/integralist" class="icon brands fa-twitter" target="blank"><span class="label">Twitter</span></a></li>-->
+							<!--<li><a href="https://instagram.com/wwfsuperstarsofwrestling" class="icon brands fa-instagram" target="blank"><span class="label">Instagram</span></a></li>-->
+						</ul>
+					</header>
+
+          <!-- Content -->
+          <section>
+						<!--
+            <header class="main">
+              <h1>Royal Rumble 1989</h1>
+              <p>A Bizarre Spectacle Where the Madness Multiplies</p>
+            </header>
+            <span class="image main"><img src="../images/rumble-89.jpg" alt="" /></span>
+						-->
+						<nav>
+
+<ul>
+<li><a href="#manually-install-and-auto-switch-golang-versions">Manually install and auto-switch Golang versions</a>
+<ul>
+<li><a href="#shell-structure">Shell Structure</a></li>
+
+<li><a href="#exports">Exports</a></li>
+
+<li><a href="#installing-go-for-goroot">Installing Go for GOROOT</a></li>
+
+<li><a href="#triggering-a-switch-on-directory-change">Triggering a switch on directory change</a></li>
+</ul></li>
+</ul>
+
+</nav>
+
+<h1 id="manually-install-and-auto-switch-golang-versions">Manually install and auto-switch Golang versions</h1>
+
+<p>If you work on muliple <a href="https://go.dev/" target="_blank">Go</a> projects, you&rsquo;ll often find they require
+different Go versions. So how do you handle switching between Go versions?</p>
+
+<p>You can&rsquo;t rely on your package manager as it might only provide the latest
+version of Go (such as is the case when using <a href="https://brew.sh/" target="_blank">Homebrew</a> on macOS) or it might
+not provide all prior Go versions (maybe only a subset). Then you have to decide
+whether the <em>switch</em> is something you do manually or automatically when you <code>cd</code>
+into a Go project directory (but how do you determine and implement that?).</p>
+
+<p>Typically you&rsquo;ll use a third-party tool that does this for you. I&rsquo;ve
+historically used a lot of tools. The last tool I used was
+<a href="https://github.com/stefanmaric/g" target="_blank">stefanmaric/g</a> and it was working fine &hellip;for a while, until one day
+it stopped working and for the life of me I couldn&rsquo;t figure out why.</p>
+
+<p>The problem with using a third-party tool is that <em>if</em> it does go wrong, it&rsquo;s
+very hard to debug and fix. With this in mind, I decided I would have a go at
+solving the problem in a way that worked for me.</p>
+
+<blockquote>
+<p>⚠️ <strong>WARNING:</strong><br>
+This is NOT a perfect solution, and in some cases it&rsquo;s a <em>poor</em> solution.</p>
+</blockquote>
+
+<p>In this article I&rsquo;m going to show you the code I wrote to implement Go-version
+switching, as well as covering some of the caveats of the approach I took. But
+ultimately, this is a solution I&rsquo;ve implemented from scratch and so I
+intrinsically understand it and will understand how it works better than anyone
+and will understand more easily what to do <em>if</em> for some reason there&rsquo;s a bug or
+scenario that I didn&rsquo;t account for when first creating it. This is why I provide
+the above warning note. <strong>Feel free to use my approach, or use the code as an
+example from which to build your <em>own</em> solution.</strong></p>
+
+<p>Let&rsquo;s dig in and see what we have&hellip;</p>
+
+<h2 id="shell-structure">Shell Structure</h2>
+
+<p>OK, let&rsquo;s start with how I like to structure my shell files.</p>
+
+<p>I have a <code>.zshrc</code> from which I then load in other shell scripts.</p>
+
+<p>To avoid muddying the water I&rsquo;ll show a truncated version:</p>
+
+<blockquote>
+<p>💡 <strong>NOTE:</strong><br>
+If you want the full version of the code we&rsquo;re discussing,<br>
+then refer to my <a href="https://github.com/integralist/dotfiles" target="_blank">dotfiles repo</a>.</p>
+</blockquote>
+
+<pre><code class="language-shell">#!/usr/bin/zsh
+
+function load_script {
+	local path=$1
+	if test -f $path; then
+		source $path
+	else
+		echo &quot;no $path found&quot;
+	fi
+}
+
+load_script ~/.config/zsh/tools.zsh
+</code></pre>
+
+<p>Cool, so we know we need a <code>tools.zsh</code> script. Let&rsquo;s take a look at the relevant
+sections of that file. We&rsquo;ll start with the exports&hellip;</p>
+
+<h2 id="exports">Exports</h2>
+
+<pre><code class="language-shell">export GOPATH=&quot;$HOME/go&quot;
+export GOROOT=&quot;$HOME/.go&quot;
+export PATH=&quot;$GOPATH/bin:$GOROOT/bin:$PATH&quot;;
+</code></pre>
+
+<p>The <code>GOPATH</code> is where we install Go CLI programs, and for our purposes it&rsquo;s
+where we will install our different Go versions.</p>
+
+<p>The <code>GOROOT</code> is where we
+install our primary Go version (this is the Go version we start with and is the
+version we keep up-to-date with the latest Go release).</p>
+
+<p>The <code>PATH</code> is where our shell attempts to lookup executable binaries, such as
+the <code>go</code> binary.</p>
+
+<p>You can see we make sure <code>$GOPATH/bin</code> is checked first, then failing that it&rsquo;ll
+check <code>$GOROOT/bin</code>, before considering any other entries in the <code>$PATH</code>.</p>
+
+<p>You can probably already guess the approach I&rsquo;m taking, but if not, it&rsquo;s this:
+by having <code>$GOPATH/bin</code> as the first entry in my <code>$PATH</code>, it means I can install
+my different Go version binaries there, and then create a symlink for <code>go</code> in
+that same directory to point to the specific Go version binary I want to be
+using.</p>
+
+<h2 id="installing-go-for-goroot">Installing Go for GOROOT</h2>
+
+<p>The first thing we need to do is identify if we have Go installed at all. We do
+this by checking if there is a <code>go</code> binary file in our <code>$GOROOT/bin</code> directory.
+If there isn&rsquo;t a file there, then we identify the latest Go version release and
+download it into <code>$GOROOT/bin</code>:</p>
+
+<pre><code class="language-shell">if [ ! -f $GOROOT/bin/go ]; then
+	mkdir -p &quot;$GOPATH&quot;
+	mkdir -p &quot;$GOROOT&quot;
+
+	GO_VERSION=$(golatest)
+	OS=$(uname | tr '[:upper:]' '[:lower:]')
+	ARCH=$(uname -m)
+	URL=&quot;https://go.dev/dl/go${GO_VERSION}.${OS}-${ARCH}.tar.gz&quot;
+	TMP_DL=&quot;/tmp/go.tar.gz&quot;
+
+	echo &quot;Downloading latest Go archive from $URL&quot;
+	curl -Lo &quot;$TMP_DL&quot; &quot;$URL&quot;
+
+	# Extract the tar.gz file to the installation directory
+	# The --strip-components=1 skips the go/ directory within the archive.
+	# This ensures the ~/.go directory contains bin/ rather than ~/.go/go/bin
+	echo &quot;Extracting Go archive to $GOROOT&quot;
+	tar -C &quot;$GOROOT&quot; --strip-components=1 -xzf &quot;$TMP_DL&quot;
+
+	# Cleanup the downloaded archive
+	echo &quot;Cleaning up Go archive from $TMP_DL&quot;
+	rm &quot;$TMP_DL&quot;
+fi
+</code></pre>
+
+<blockquote>
+<p>💡 <strong>NOTE:</strong><br>
+I&rsquo;ve used <code>golatest</code> in the above code. The implementation for that is as
+follows:</p>
+</blockquote>
+
+<pre><code class="language-shell">alias golatest=&quot;curl -L https://github.com/golang/go/tags 2&gt;&amp;1 | \
+	rg '/golang/go/releases/tag/go[\w.]+' -o | \
+	cut -d '/' -f 6 | \
+	grep -v 'rc' | \
+	awk NR==1 | \
+	rg '\d.+' -o&quot;
+</code></pre>
+
+<h2 id="triggering-a-switch-on-directory-change">Triggering a switch on directory change</h2>
+
+<p>So the key part to all this is checking the current directory to see if we need
+to download a different Go version. In the Zsh shell you have access to a
+builtin function called <code>chpwd</code> which runs every time you change directory.
+Changing directory is typically done using <code>cd</code> but it also works if you use a
+tool like <a href="https://github.com/ajeetdsouza/zoxide" target="_blank">ajeetdsouza/zoxide</a> (like I do) to quickly jump around
+common project directories.</p>
+
+<blockquote>
+<p>💡 <strong>NOTE:</strong><br>
+See the Zsh <a href="https://zsh.sourceforge.io/Doc/Release/Functions.html#Hook-Functions" target="_blank">hook functions</a> docs.</p>
+</blockquote>
+
+<p>Here is the relevant parts of our <code>chpwd</code> function:</p>
+
+<pre><code class="language-shell">function chpwd() {
+	local v=&quot;&quot;
+	if [ -e go.mod ]; then
+		v=$(awk '/^go [0-9]+\.[0-9]+/ { print $2 }' go.mod)
+		# go.mod isn't always going to contain a complete version (e.g. 1.20)
+		# we need a complete version for installing and symlinking (e.g. 1.20.1)
+		#
+		if [[ ! &quot;$v&quot; =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+			latest_patch=$(gh api repos/golang/go/tags --jq '.[].name' --paginate \
+				| grep -E &quot;^go${v}\.[0-9]+$&quot; \
+				| sed 's/^go//' \
+				| sort -V \
+				| tail -n 1)
+			if [ -n &quot;$latest_patch&quot; ]; then
+				v=&quot;$latest_patch&quot;
+			else
+				echo &quot;Failed to fetch the latest patch version for $v&quot;
+				go_symlink_remove # remove symlink so the PATH lookup finds the GOROOT binary.
+				v=&quot;&quot; # Ensure v is empty to prevent executing the install steps
+			fi
+		fi
+	elif [ -e .go-version ]; then
+		v=&quot;$(cat .go-version)&quot;
+	fi
+	if [ -n &quot;$v&quot; ]; then
+		go_install &quot;$v&quot; # installs the specified Go version
+		go_symlink &quot;$v&quot; # ensures `go` now references the specified Go version
+		go_tools # ensures we have all the tools we need for this Go version
+		r # reload shell so starship can display the updated go version
+	fi
+}
+</code></pre>
+
+<p>In the above script we do the following:</p>
+
+<ul>
+<li>Check if the directory contains a <code>go.mod</code> or a <code>.go-version</code>.</li>
+<li>If there&rsquo;s a <code>go.mod</code> then we check if it&rsquo;s a &lsquo;complete&rsquo; version.</li>
+<li>If it&rsquo;s not a complete version, we identify the latest patch available.</li>
+<li>If it&rsquo;s a <code>.go-version</code> then we know that will contain a full version.</li>
+<li>We store whatever version we find or calculate into <code>v</code>.</li>
+<li>We then call some custom functions and pass them <code>v</code>.</li>
+</ul>
+
+<p>For that last bullet, the functions we call are:</p>
+
+<ul>
+<li><code>go_install</code></li>
+<li><code>go_symlink</code></li>
+<li><code>go_tools</code></li>
+</ul>
+
+<p>The implementation for those functions are:</p>
+
+<pre><code class="language-shell"># go_install installs the specified version
+function go_install() {
+  if [ -z &quot;$1&quot; ]; then
+		echo &quot;Pass a Go version (e.g. 1.21.13)&quot;
+    return
+  fi
+	local v=&quot;$1&quot;
+	go install &quot;golang.org/dl/go$v@latest&quot;
+	&quot;$GOPATH/bin/go$v&quot; download
+	&quot;$GOPATH/bin/go$v&quot; version
+}
+
+# go_symlink is called by chpwd to allow a different go version binary to be used.
+# if the specified version binary doesn't exist, we install it first.
+function go_symlink() {
+  if [ -z &quot;$1&quot; ]; then
+		echo &quot;Pass a Go version (e.g. 1.21.13)&quot;
+    return
+  fi
+	local v=$1
+	if [ ! -f &quot;$GOPATH/bin/go$v&quot; ]; then
+		go_install &quot;$v&quot;
+	fi
+	ln -sf &quot;$GOPATH/bin/go$v&quot; &quot;$GOPATH/bin/go&quot;
+}
+
+# go_tools installs/updates necessary Go tools.
+function go_tools {
+  local golangcilatest=$(curl -s &quot;https://github.com/golangci/golangci-lint/releases&quot; | \
+	grep -o 'tag/v[0-9]\+\.[0-9]\+\.[0-9]\+' | head -n 1 | cut -d '/' -f 2)
+  curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | \
+	sh -s -- -b $(go env GOPATH)/bin &quot;$golangcilatest&quot;
+  go install github.com/rakyll/gotest@latest
+  go install github.com/mgechev/revive@latest
+  go install golang.org/x/tools/gopls@latest
+  go install mvdan.cc/gofumpt@latest
+  go install honnef.co/go/tools/cmd/staticcheck@latest # https://github.com/dominikh/go-tools
+  go install golang.org/x/vuln/cmd/govulncheck@latest
+  go install github.com/go-delve/delve/cmd/dlv@latest
+  go install go.uber.org/nilaway/cmd/nilaway@latest
+  go install golang.org/x/tools/cmd/goimports@latest
+  go install github.com/incu6us/goimports-reviser/v3@latest
+  go install github.com/google/gops@latest
+  go install github.com/securego/gosec/v2/cmd/gosec@latest
+}
+</code></pre>
+
+<p>Finally, we run <code>r</code> which is an alias that reloads the <code>.zshrc</code> file:</p>
+
+<pre><code class="language-shell">alias r=&quot;source ~/.zshrc&quot;
+</code></pre>
+
+<p>Why do we reload the shell configuration? Well, I use the <a href="https://starship.rs/" target="_blank">Starship</a> shell
+prompt, and that has its own logic for determining the Go version, and now with
+the above workflow it often reports the wrong Go version. But once I reload my
+shell configuration it&rsquo;ll pick up the <code>go</code> binary that is now being symlinked to
+a specific Go version.</p>
+
+          </section>
+        </div>
+      </div>
+      <!-- Sidebar -->
+<div id="sidebar">
+  <div class="inner">
+    <!-- Search -->
+    <!--<section id="search" class="alt">-->
+    <!--  <form method="post" action="#">-->
+    <!--    <input type="text" name="query" id="query" placeholder="Search" />-->
+    <!--  </form>-->
+    <!--</section>-->
+    <!-- Menu -->
+    <nav id="menu">
+      <header class="major">
+        <h2>Menu</h2>
+      </header>
+      <ul>
+        <li><a href="../../index.html">Home</a></li>
+        <!--<li><a href="../resume/index.html">Resume</a></li>-->
+				
+	<li>
+	  <span class="opener">Pages</span>
+	  <ul>
+		
+	<li><a href="../../pages/christmas-movies/index.html">Christmas Movies</a></li>
+	
+	<li><a href="../../pages/resume/index.html">Resume</a></li>
+	
+	<li><a href="../../pages/halloween-movies/index.html">Halloween Movies</a></li>
+	
+	  </ul>
+	</li>
+	
+	<li>
+	  <span class="opener">2025</span>
+	  <ul>
+		
+	<li><a href="../../posts/go-install-and-switch/index.html">Go Install And Switch</a></li>
+	
+	  </ul>
+	</li>
+	
+	<li>
+	  <span class="opener">2024</span>
+	  <ul>
+		
+	<li><a href="../../posts/go-concurrency-patterns/index.html">Go Concurrency Patterns</a></li>
+	
+	<li><a href="../../posts/bitwise-operations-in-go/index.html">Bitwise Operations In Go</a></li>
+	
+	<li><a href="../../posts/programming-at-the-edge-with-fastly-compute/index.html">Programming At The Edge With Fastly Compute</a></li>
+	
+	<li><a href="../../posts/go-typed-nil/index.html">Go Typed Nil</a></li>
+	
+	<li><a href="../../posts/ci-cd-with-terraform-cloud-and-github-actions/index.html">Ci Cd With Terraform Cloud And Github Actions</a></li>
+	
+	  </ul>
+	</li>
+	
+	<li>
+	  <span class="opener">2023</span>
+	  <ul>
+		
+	<li><a href="../../posts/openapi/index.html">Openapi</a></li>
+	
+	  </ul>
+	</li>
+	
+	<li>
+	  <span class="opener">2022</span>
+	  <ul>
+		
+	<li><a href="../../posts/terraform-build-a-provider/index.html">Terraform Build A Provider</a></li>
+	
+	<li><a href="../../posts/rust-smart-pointers/index.html">Rust Smart Pointers</a></li>
+	
+	<li><a href="../../posts/laptop-setup-v2/index.html">Laptop Setup V2</a></li>
+	
+	<li><a href="../../posts/go-install/index.html">Go Install</a></li>
+	
+	<li><a href="../../posts/neovim-rust-go/index.html">Neovim Rust Go</a></li>
+	
+	<li><a href="../../posts/vim-themes/index.html">Vim Themes</a></li>
+	
+	<li><a href="../../posts/dev-tools/index.html">Dev Tools</a></li>
+	
+	<li><a href="../../posts/go-style-guide/index.html">Go Style Guide</a></li>
+	
+	  </ul>
+	</li>
+	
+	<li>
+	  <span class="opener">2021</span>
+	  <ul>
+		
+	<li><a href="../../posts/github-actions/index.html">Github Actions</a></li>
+	
+	<li><a href="../../posts/vim-advanced/index.html">Vim Advanced</a></li>
+	
+	<li><a href="../../posts/rust-ownership/index.html">Rust Ownership</a></li>
+	
+	  </ul>
+	</li>
+	
+	<li>
+	  <span class="opener">2020</span>
+	  <ul>
+		
+	<li><a href="../../posts/go-reflection/index.html">Go Reflection</a></li>
+	
+	<li><a href="../../posts/software-comparison/index.html">Software Comparison</a></li>
+	
+	<li><a href="../../posts/rate-limiting/index.html">Rate Limiting</a></li>
+	
+	<li><a href="../../posts/git-internals/index.html">Git Internals</a></li>
+	
+	<li><a href="../../posts/python-context-managers/index.html">Python Context Managers</a></li>
+	
+	  </ul>
+	</li>
+	
+	<li>
+	  <span class="opener">2019</span>
+	  <ul>
+		
+	<li><a href="../../posts/python-generators/index.html">Python Generators</a></li>
+	
+	<li><a href="../../posts/tox-ini/index.html">Tox Ini</a></li>
+	
+	<li><a href="../../posts/python-app-dependencies/index.html">Python App Dependencies</a></li>
+	
+	<li><a href="../../posts/python-asyncio/index.html">Python Asyncio</a></li>
+	
+	<li><a href="../../posts/go-arrays-and-slices/index.html">Go Arrays And Slices</a></li>
+	
+	<li><a href="../../posts/anonymity/index.html">Anonymity</a></li>
+	
+	<li><a href="../../posts/http-caching-guide/index.html">Http Caching Guide</a></li>
+	
+	<li><a href="../../posts/laptop-setup/index.html">Laptop Setup</a></li>
+	
+	<li><a href="../../posts/git-multiple-branches/index.html">Git Multiple Branches</a></li>
+	
+	<li><a href="../../posts/algorithms-in-python/index.html">Algorithms In Python</a></li>
+	
+	<li><a href="../../posts/remote-working/index.html">Remote Working</a></li>
+	
+	<li><a href="../../posts/python-mocking/index.html">Python Mocking</a></li>
+	
+	<li><a href="../../posts/calculating-big-o/index.html">Calculating Big O</a></li>
+	
+	<li><a href="../../posts/algorithmic-complexity-in-python/index.html">Algorithmic Complexity In Python</a></li>
+	
+	<li><a href="../../posts/data-types-and-data-structures/index.html">Data Types And Data Structures</a></li>
+	
+	<li><a href="../../posts/design-python/index.html">Design Python</a></li>
+	
+	  </ul>
+	</li>
+	
+	<li>
+	  <span class="opener">2018</span>
+	  <ul>
+		
+	<li><a href="../../posts/js-modern/index.html">Js Modern</a></li>
+	
+	<li><a href="../../posts/engineer-to-manager/index.html">Engineer To Manager</a></li>
+	
+	<li><a href="../../posts/interview-techniques/index.html">Interview Techniques</a></li>
+	
+	<li><a href="../../posts/post-mortems/index.html">Post Mortems</a></li>
+	
+	<li><a href="../../posts/slackbot-opsbot/index.html">Slackbot Opsbot</a></li>
+	
+	<li><a href="../../posts/go-interfaces/index.html">Go Interfaces</a></li>
+	
+	<li><a href="../../posts/multigrain-services/index.html">Multigrain Services</a></li>
+	
+	<li><a href="../../posts/authentication-with-aws-cognito/index.html">Authentication With Aws Cognito</a></li>
+	
+	<li><a href="../../posts/a-guide-to-effective-1-1-meetings/index.html">A Guide To Effective 1 1 Meetings</a></li>
+	
+	<li><a href="../../posts/project-management/index.html">Project Management</a></li>
+	
+	<li><a href="../../posts/reading-list/index.html">Reading List</a></li>
+	
+	<li><a href="../../posts/python-security/index.html">Python Security</a></li>
+	
+	<li><a href="../../posts/static-site-search/index.html">Static Site Search</a></li>
+	
+	<li><a href="../../posts/interview-topics/index.html">Interview Topics</a></li>
+	
+	<li><a href="../../posts/go-reverse-proxy/index.html">Go Reverse Proxy</a></li>
+	
+	<li><a href="../../posts/hashing-encryption-encoding/index.html">Hashing Encryption Encoding</a></li>
+	
+	<li><a href="../../posts/computers-101/index.html">Computers 101</a></li>
+	
+	  </ul>
+	</li>
+	
+	<li>
+	  <span class="opener">2017</span>
+	  <ul>
+		
+	<li><a href="../../posts/statistics-basics/index.html">Statistics Basics</a></li>
+	
+	<li><a href="../../posts/queue-best-practices/index.html">Queue Best Practices</a></li>
+	
+	<li><a href="../../posts/monitoring-best-practices/index.html">Monitoring Best Practices</a></li>
+	
+	<li><a href="../../posts/load-testing-guidelines/index.html">Load Testing Guidelines</a></li>
+	
+	<li><a href="../../posts/logging-101/index.html">Logging 101</a></li>
+	
+	<li><a href="../../posts/fastly-varnish/index.html">Fastly Varnish</a></li>
+	
+	<li><a href="../../posts/profiling-python/index.html">Profiling Python</a></li>
+	
+	<li><a href="../../posts/profiling-go/index.html">Profiling Go</a></li>
+	
+	<li><a href="../../posts/dev-environments-within-docker-containers/index.html">Dev Environments Within Docker Containers</a></li>
+	
+	  </ul>
+	</li>
+	
+	<li>
+	  <span class="opener">2016</span>
+	  <ul>
+		
+	<li><a href="../../posts/key-architecture/index.html">Key Architecture</a></li>
+	
+	<li><a href="../../posts/go-hitchhikers-guide/index.html">Go Hitchhikers Guide</a></li>
+	
+	<li><a href="../../posts/concepts-from-the-c-programming-language/index.html">Concepts From The C Programming Language</a></li>
+	
+	<li><a href="../../posts/man-pages/index.html">Man Pages</a></li>
+	
+	<li><a href="../../posts/c-and-syscalls/index.html">C And Syscalls</a></li>
+	
+	<li><a href="../../posts/bits-and-bytes/index.html">Bits And Bytes</a></li>
+	
+	<li><a href="../../posts/terminal-password-manager/index.html">Terminal Password Manager</a></li>
+	
+	<li><a href="../../posts/terminal-utils/index.html">Terminal Utils</a></li>
+	
+	<li><a href="../../posts/github-pull-request-formatting/index.html">Github Pull Request Formatting</a></li>
+	
+	<li><a href="../../posts/big-o-for-beginners/index.html">Big O For Beginners</a></li>
+	
+	<li><a href="../../posts/the-perfect-developer/index.html">The Perfect Developer</a></li>
+	
+	<li><a href="../../posts/git-merge-strategies/index.html">Git Merge Strategies</a></li>
+	
+	<li><a href="../../posts/grpc-for-beginners/index.html">Grpc For Beginners</a></li>
+	
+	<li><a href="../../posts/bash-watchtower/index.html">Bash Watchtower</a></li>
+	
+	<li><a href="../../posts/rpc-variations-in-go/index.html">Rpc Variations In Go</a></li>
+	
+	  </ul>
+	</li>
+	
+	<li>
+	  <span class="opener">2015</span>
+	  <ul>
+		
+	<li><a href="../../posts/go-func-type/index.html">Go Func Type</a></li>
+	
+	<li><a href="../../posts/github-multiple-ssh/index.html">Github Multiple Ssh</a></li>
+	
+	<li><a href="../../posts/http2/index.html">Http2</a></li>
+	
+	<li><a href="../../posts/building-systems-with-make/index.html">Building Systems With Make</a></li>
+	
+	<li><a href="../../posts/client-cert-authentication/index.html">Client Cert Authentication</a></li>
+	
+	<li><a href="../../posts/dns-101/index.html">Dns 101</a></li>
+	
+	<li><a href="../../posts/security-basics/index.html">Security Basics</a></li>
+	
+	<li><a href="../../posts/docker-nginx/index.html">Docker Nginx</a></li>
+	
+	<li><a href="../../posts/designing-for-simplicity/index.html">Designing For Simplicity</a></li>
+	
+	  </ul>
+	</li>
+	
+	<li>
+	  <span class="opener">2014</span>
+	  <ul>
+		
+	<li><a href="../../posts/concurrency/index.html">Concurrency</a></li>
+	
+	<li><a href="../../posts/github-workflow/index.html">Github Workflow</a></li>
+	
+	<li><a href="../../posts/functional-recursive-javascript-programming/index.html">Functional Recursive Javascript Programming</a></li>
+	
+	  </ul>
+	</li>
+	
+	<li>
+	  <span class="opener">2013</span>
+	  <ul>
+		
+	<li><a href="../../posts/refactoring-techniques/index.html">Refactoring Techniques</a></li>
+	
+	<li><a href="../../posts/design-mvcp/index.html">Design Mvcp</a></li>
+	
+	<li><a href="../../posts/basic-shell-scripting/index.html">Basic Shell Scripting</a></li>
+	
+	<li><a href="../../posts/clean-coder/index.html">Clean Coder</a></li>
+	
+	<li><a href="../../posts/message-passing-in-object-oriented-code/index.html">Message Passing In Object Oriented Code</a></li>
+	
+	<li><a href="../../posts/design-oop/index.html">Design Oop</a></li>
+	
+	  </ul>
+	</li>
+	
+	<li>
+	  <span class="opener">2012</span>
+	  <ul>
+		
+	<li><a href="../../posts/git-tips/index.html">Git Tips</a></li>
+	
+	<li><a href="../../posts/javascript-101/index.html">Javascript 101</a></li>
+	
+	<li><a href="../../posts/maintainable-css-with-bem/index.html">Maintainable Css With Bem</a></li>
+	
+	<li><a href="../../posts/host-methods-vs-native-methods/index.html">Host Methods Vs Native Methods</a></li>
+	
+	  </ul>
+	</li>
+	
+      </ul>
+    </nav>
+    <!-- Section -->
+		<!--
+    <section>
+      <header class="major">
+        <h2>Highlights</h2>
+      </header>
+      <div class="mini-posts">
+        <article>
+          <a href="ppv-survivorseries-88.html" class="image"><img src="../images/survivor-88-index.jpg" alt="" /></a>
+          <p>Get ready for the ultimate showdown as Survivor Series 1988 brings non-stop tag team action, fierce rivalries, and unforgettable battles between the biggest WWF superstars!</p>
+        </article>
+        <article>
+          <a href="ppv-royalrumble-89.html" class="image"><img src="../images/rumble-89-index.jpg" alt="" /></a>
+          <p>Royal Rumble 1989 unleashes chaos with 30 superstars battling for glory in an unforgettable over-the-top-rope showdown!</p>
+        </article>
+        <article>
+          <a href="ppv-summerslam-88.html" class="image"><img src="../images/slam-88-index.jpg" alt="" /></a>
+          <p>SummerSlam 1988 delivers explosive action with iconic matchups, as the WWF's biggest stars collide in the hottest event of the summer!</p>
+        </article>
+      </div>
+    </section>
+		-->
+    <!-- Section -->
+    <!--<section>-->
+    <!--  <header class="major">-->
+    <!--    <h2>Get in touch</h2>-->
+    <!--  </header>-->
+    <!--  <p>Sed varius enim lorem ullamcorper dolore aliquam aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin sed aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>-->
+    <!--  <ul class="contact">-->
+    <!--    <li class="icon solid fa-envelope"><a href="#">information@untitled.tld</a></li>-->
+    <!--    <li class="icon solid fa-phone">(000) 000-0000</li>-->
+    <!--    <li class="icon solid fa-home">1234 Somewhere Road #8254<br />-->
+    <!--      Nashville, TN 00000-0000</li>-->
+    <!--  </ul>-->
+    <!--</section>-->
+    <!-- Footer -->
+    <footer id="footer">
+      <p class="copyright">&copy; Integralist. All rights reserved.</p>
+      <p class="copyright small">Demo Images: <a href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+    </footer>
+  </div>
+</div>
+
+    </div>
+    <!-- Scripts -->
+    <script src="../../assets/js/jquery.min.js"></script>
+    <script src="../../assets/js/browser.min.js"></script>
+    <script src="../../assets/js/breakpoints.min.js"></script>
+    <script src="../../assets/js/util.js"></script>
+    <script src="../../assets/js/main.js"></script>
+
+		<!-- The following script is for handling the automatic TOC generated by `make build` -->
+		<script>
+		// Get references to the elements
+		const nav = document.querySelector('#main nav');
+		const h1 = document.querySelector('#main h1');
+
+		// Move the `nav` element to be underneath the `h1`
+		h1.insertAdjacentElement('afterend', nav);
+
+		// Hide the `nav` element by default using inline styles
+		nav.style.display = 'none';
+
+		// Create a new `h2` element with the text "TOC"
+		const toc = document.createElement('h2');
+		toc.textContent = 'TOC';
+		toc.className = "toc"
+
+		// Add inline styles to make the `h2` look clickable
+		// DISABLED: done with className
+		//
+		// toc.style.cursor = 'pointer';
+		// toc.style.color = 'blue';
+		// toc.style.textDecoration = 'underline';
+
+		// Add a click event listener to toggle the visibility of the `nav`
+		toc.addEventListener('click', () => {
+				nav.style.display = nav.style.display === 'none' ? 'block' : 'none';
+		});
+
+		// Insert the `h2` element above the `nav`
+		nav.insertAdjacentElement('beforebegin', toc);
+		</script>
+
+		<!-- The following script highlights the current page in the side nav -->
+		<script>
+		// Get the current page's URL path and normalize it
+    const currentUrl = window.location.pathname;
+    const normalizedCurrentUrl = currentUrl
+        .replace(/.*\/(pages|posts)\//, '/$1/') // Ensure leading slash and extract from `pages/` or `posts/`
+        .replace(/index\.html$/, ''); // Remove `index.html` suffix
+
+    // Select all menu links
+    const links = document.querySelectorAll('#menu ul li a');
+
+    let matchedParentSpan = null;
+
+    links.forEach(link => {
+        // Normalize the link's href for comparison
+        const normalizedHref = link.getAttribute('href')
+            .replace(/^(\.\.\/)+/, '/') // Convert `../../` to `/` for consistency
+            .replace(/index\.html$/, ''); // Remove `index.html` suffix
+
+        // Check if the normalized href matches the normalized current URL
+        if (normalizedHref === normalizedCurrentUrl) {
+            // Add the inline style to the matching link
+            link.style.color = 'black';
+
+            // Find the parent span with the class 'opener'
+            matchedParentSpan = link.closest('ul').previousElementSibling;
+        }
+    });
+
+    // If a matching parent span was found, add the 'active' class
+    if (matchedParentSpan && matchedParentSpan.classList.contains('opener')) {
+        matchedParentSpan.classList.add('active');
+    }
+		</script>
+
+		<!-- The following script handles "back to top" functionality -->
+		<script>
+    // Create a reference to the button
+    const backToTopButton = document.getElementById('backToTop');
+
+    // Show button when scrolled down a bit
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTopButton.style.display = 'block';
+      } else {
+        backToTopButton.style.display = 'none';
+      }
+    });
+
+    // Add a click event listener to scroll to the top
+    backToTopButton.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  </script>
+	<link rel="stylesheet" href="../../assets/css/highlights/hybrid.min.css">
+	<script src="../../assets/js/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
+  </body>
+</html>

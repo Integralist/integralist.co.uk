@@ -1945,6 +1945,10 @@ button,
       #main > .inner > section {
         padding: 2em 0 1em 0 ; } }
 
+#main > .inner > section {
+	padding-bottom: 5em; /* Allows spacing after last line of body text so it doesn't get covered by the "Back to top" button */
+}
+
 /* Sidebar */
 #search form {
   text-decoration: none;

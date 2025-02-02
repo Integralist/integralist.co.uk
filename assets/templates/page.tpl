@@ -201,5 +201,8 @@
       });
     });
   </script>
+	<link rel="stylesheet" href="../../assets/css/highlights/hybrid.min.css">
+	<script src="../../assets/js/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
   </body>
 </html>
