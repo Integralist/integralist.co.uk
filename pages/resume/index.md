@@ -15,7 +15,11 @@ Hello, my name is Mark and I work at [Fastly](https://www.fastly.com/) as a Staf
 
 ## Working Together / Testimonials
 
-The following quotes (all very kind) are from people I've worked with. Everything quoted below was unsolicited and unexpected feedback, which is just so lovely! I've never asked anyone to "please write something nice about me". **All of these wonderful comments were genuine and truly appreciated.**
+The following quotes are all **genuine**. I've never asked anyone I've worked
+with to say/write something nice about me, but I've had the good fortune to have
+built up wonderful relationships with the people I work with, and so they have
+responded in kind by posting nice things to/about me in public work Slack
+channels...
 
 <details class="testimonial">
 	<summary>Product Support at BuzzFeed</summary>
@@ -160,6 +164,23 @@ The following quotes (all very kind) are from people I've worked with. Everythin
 	<p><i>We appreciate you Mark!</i></p>
 	<p><small>-- Staff Software Engineer in Network Management at Fastly.</small></p>
 	<p class="review">Always nice to get some recognition from your peers for the hard work you put in and the care you have for the projects you work on.</p>
+</details>
+
+<details class="testimonial">
+	<summary>Staff Product Manager (Network Services) / Sr. Principal Engineer / Sr. Engineering Manager at Fastly</summary>
+	<p><i>Mark this is great! Immaculate, even. ⭐⭐⭐⭐⭐, 10/10 no notes. This is the Sistine Chapel of refactorings (seriously)</i></p>
+	<p><small>-- Staff Product Manager (Network Services)</small></p>
+	<p><i>Yep, this is <code>#eng-wins</code>–worthy and I want to shout it from the rooftops.</i></p>
+	<p><small>-- Sr. Principal Engineer</small></p>
+	<p><i>Love this!</i></p>
+	<p><small>-- Sr. Engineering Manager</small></p>
+	<p class="review">I created a design document for how to improve the
+	structure and tooling around secrets managements, especially related to
+	certain applications the Domain Services team are responsible for. After
+	much back and forth discussion I went ahead and started to implement a POC
+	of my suggested approach, and I recorded a video to demonstrate the features
+	and the design, all with the hope to gauge feedback and tweak as necessary, 
+	and the response was a lot better than I expected 😍</p>
 </details>
 
 <hr>
