@@ -209,11 +209,15 @@ See the Zsh <a href="https://zsh.sourceforge.io/Doc/Release/Functions.html#Hook-
 <p>Here is the relevant parts of our <code>chpwd</code> function:</p>
 
 <pre><code class="language-shell">function chpwd() {
+	ls
+
+	# figure out go version
+	#
 	local v=&quot;&quot;
 	if [ -e go.mod ]; then
 		v=$(awk '/^go [0-9]+\.[0-9]+/ { print $2 }' go.mod)
-		# go.mod isn't always going to contain a complete version (e.g. 1.20)
-		# we need a complete version for installing and symlinking (e.g. 1.20.1)
+		# go.mod isn't always going to contain a complete version (e.g. 1.20 vs 1.20.1)
+		# we need a complete version for installing and symlinking.
 		#
 		if [[ ! &quot;$v&quot; =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
 			latest_patch=$(gh api repos/golang/go/tags --jq '.[].name' --paginate \
@@ -233,10 +237,40 @@ See the Zsh <a href="https://zsh.sourceforge.io/Doc/Release/Functions.html#Hook-
 		v=&quot;$(cat .go-version)&quot;
 	fi
 	if [ -n &quot;$v&quot; ]; then
-		go_install &quot;$v&quot; # installs the specified Go version
-		go_symlink &quot;$v&quot; # ensures `go` now references the specified Go version
-		go_tools # ensures we have all the tools we need for this Go version
+		# create go dependencies cache directory if it doesn't exist.
+		local cache_dir=&quot;$HOME/.cache/go-deps&quot;
+		if [[ ! -d &quot;$cache_dir&quot; ]]; then
+			mkdir -p &quot;$HOME/.cache/go-deps&quot;
+		fi
+		local cache_file=&quot;$cache_dir/go$v&quot;
+
+		if [[ ! -f &quot;$cache_file&quot; ]]; then
+			go_install &quot;$v&quot; # installs the specified Go version
+			go_symlink &quot;$v&quot; # ensures `go` now references the specified Go version
+			go_tools # ensures we have all the tools we need for this Go version
+			touch &quot;$cache_file&quot; # update last_modified date
+		else
+			go_symlink &quot;$v&quot; # ensures `go` now references the specified Go version
+
+			local current_day=$(date +%Y-%m-%d)
+			local last_modified_day=$(date -r &quot;$cache_file&quot; +%Y-%m-%d)
+
+			# if the cache file was last modified on a different day, run the command
+			if [ &quot;$current_day&quot; != &quot;$last_modified_day&quot; ]; then
+				echo &quot;updating go$v dependencies (last updated: $last_modified_day)&quot;
+				go_tools # ensures we have all the tools we need for this Go version
+				touch &quot;$cache_file&quot; # update last_modified date
+			fi
+		fi
+
 		r # reload shell so starship can display the updated go version
+	fi
+
+	# clean out any .DS_Store files
+	#
+	if [[ $PWD != $HOME ]]; then
+		# find . -type f -name '.DS_Store' -delete
+		fd '.DS_Store' --type f --hidden --absolute-path | xargs -I {} rm {}
 	fi
 }
 </code></pre>
@@ -319,6 +353,45 @@ prompt, and that has its own logic for determining the Go version, and now with
 the above workflow it often reports the wrong Go version. But once I reload my
 shell configuration it&rsquo;ll pick up the <code>go</code> binary that is now being symlinked to
 a specific Go version.</p>
+
+<p>Now, there&rsquo;s a performance improvement I made to the code (which you can see in
+the earlier code snippet but I didn&rsquo;t explain):</p>
+
+<pre><code class="language-shell"># create go dependencies cache directory if it doesn't exist.
+local cache_dir=&quot;$HOME/.cache/go-deps&quot;
+if [[ ! -d &quot;$cache_dir&quot; ]]; then
+	mkdir -p &quot;$HOME/.cache/go-deps&quot;
+fi
+local cache_file=&quot;$cache_dir/go$v&quot;
+
+if [[ ! -f &quot;$cache_file&quot; ]]; then
+	go_install &quot;$v&quot; # installs the specified Go version
+	go_symlink &quot;$v&quot; # ensures `go` now references the specified Go version
+	go_tools # ensures we have all the tools we need for this Go version
+	touch &quot;$cache_file&quot; # update last_modified date
+else
+	go_symlink &quot;$v&quot; # ensures `go` now references the specified Go version
+
+	local current_day=$(date +%Y-%m-%d)
+	local last_modified_day=$(date -r &quot;$cache_file&quot; +%Y-%m-%d)
+
+	# if the cache file was last modified on a different day, run the command
+	if [ &quot;$current_day&quot; != &quot;$last_modified_day&quot; ]; then
+		echo &quot;updating go$v dependencies (last updated: $last_modified_day)&quot;
+		go_tools # ensures we have all the tools we need for this Go version
+		touch &quot;$cache_file&quot; # update last_modified date
+	fi
+fi
+</code></pre>
+
+<p>That improvement was to check if a cache file exists for the Go version, and if
+so, we&rsquo;ll see if the file was updated at some point in the last day. If it has
+been updated already then we don&rsquo;t bother updating the Go tools and dependencies
+for the specified Go version</p>
+
+<p>We only really want to do that <em>once</em> a day, otherwise every time you change
+directory to another Go project it will unnecessarily downloads dependencies you
+already have and that takes time.</p>
 
           </section>
         </div>
