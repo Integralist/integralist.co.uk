@@ -87,6 +87,14 @@ scenario that I didn&rsquo;t account for when first creating it. This is why I p
 the above warning note. <strong>Feel free to use my approach, or use the code as an
 example from which to build your <em>own</em> solution.</strong></p>
 
+<blockquote>
+<p>💡<strong>NOTE:</strong><br>
+As an alternative, some people prefer to have a single Go version install
+(i.e. GOROOT) and then when they use the <code>go</code> binary to install other versions
+they will simply create an alias (manually) or have a Makefile accept a
+<code>GO_BIN</code> override. It&rsquo;s definitely a much simpler approach if you prefer that.</p>
+</blockquote>
+
 <p>Let&rsquo;s dig in and see what we have&hellip;</p>
 
 <h2 id="shell-structure">Shell Structure</h2>
