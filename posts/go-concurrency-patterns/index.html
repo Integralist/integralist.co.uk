@@ -170,6 +170,13 @@ func main() {
 
 <p><a href="https://play.golang.com/p/2Qn_NacVw-0" target="_blank">https://play.golang.com/p/2Qn_NacVw-0</a></p>
 
+<blockquote>
+<p>⚠️ <strong>IMPORTANT</strong><br>
+The most crucial best practice is to close the channel from the sender side, not the receiver.<br>
+The sender is the goroutine that writes data to the channel.<br>
+This signals to the receiver that no more values will be sent.</p>
+</blockquote>
+
 <h2 id="select-statement">Select Statement</h2>
 
 <p>The <code>select</code> statement is used to wait on multiple channel operations. It blocks
