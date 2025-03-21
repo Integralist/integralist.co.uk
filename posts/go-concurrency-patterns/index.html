@@ -64,6 +64,8 @@
 <li><a href="#real-examples">Real Examples</a>
 <ul>
 <li><a href="#update-2024-11-01">UPDATE 2024.11.01</a></li>
+
+<li><a href="#update-2025-03-21">UPDATE 2025.03.21</a></li>
 </ul></li>
 
 <li><a href="#reference-material">Reference Material</a></li>
@@ -955,6 +957,344 @@ func deleteAllKVStoreKeys(
 	return nil
 }
 </code></pre>
+
+<!-- markdownlint-enable -->
+
+<h3 id="update-2025-03-21">UPDATE 2025.03.21</h3>
+
+<p>I ended up needing to write some pretty complex asynchronous code with multiple
+layers of fan-out requests.</p>
+
+<p>To explain, I was building an API as a thin wrapper around an ACME client for
+issuing TLS certificates and I have an asynchronous pipeline with multiple
+stages.</p>
+
+<p>In one stage I have an &lsquo;order&rsquo; which contains multiple &lsquo;authorization&rsquo; objects.
+These objects are essentially each domain that needs to be validated (i.e. the
+server needs to confirm the customer owns the domains).</p>
+
+<p>The server issues multiple challenges for each authorization. There are three
+challenge types: dns, http, tls. The customer just needs to validate one of
+them, but we don&rsquo;t know which one they&rsquo;ll use so we try them all. Hence we need
+to fan-out each challenge request concurrently.</p>
+
+<p>We also process the parent authorization (i.e. the domains) concurrently because
+we don&rsquo;t want to sequentially process them as that would take a lot longer.</p>
+
+<p>So, as an example, if I (as the customer) had made an API request for a new TLS
+certificate that I wanted to have for an apex domain (example.com) and a CNAME
+(www.example.com), then we would:</p>
+
+<ul>
+<li>Have two authorizations (each running concurrently)</li>
+<li>Each authorization would have three challenges (each running concurrently)</li>
+</ul>
+
+<p>The code for that looks like the following:</p>
+
+<blockquote>
+<p>💡 The reason I&rsquo;m sharing this code is because it uses lots of different
+concurrency mechanisms to ensure efficient use of memory resources (i.e. we
+need to ensure goroutines finishes more quickly, and actually get cleaned up
+completely and not leak memory).</p>
+</blockquote>
+
+<!-- markdownlint-disable -->
+
+<pre><code class="language-go">package order
+
+import (
+	&quot;context&quot;
+	&quot;errors&quot;
+	&quot;fmt&quot;
+	&quot;io&quot;
+	&quot;log/slog&quot;
+	&quot;math&quot;
+	&quot;net&quot;
+	&quot;net/http&quot;
+	&quot;slices&quot;
+	&quot;strings&quot;
+	&quot;sync&quot;
+	&quot;time&quot;
+
+	&quot;github.com/mholt/acmez/v3/acme&quot;
+
+	&quot;github.com/fastly/ascerta/internal/httpx&quot;
+	&quot;github.com/fastly/ascerta/internal/log&quot;
+)
+
+const (
+	// backoffMax is the maximum number to backoff by (i.e. 2 hours in minutes).
+	backoffMax = 120
+	// backoffMultiplier is the multiplier used for exponential backoff.
+	backoffMultiplier = 2
+	// checkTimeout short-circuits an authorization check if it stalls.
+	// We don't expect an individual check to take longer than 5 seconds.
+	checkTimeout = time.Duration(5) * time.Second
+	// maxRetries is the maximum number of times a message can be re-queued.
+	maxRetries = 10
+)
+
+var (
+	// backoff is the duration to backoff by (in minutes).
+	// This is a variable so it can be updated for exponential backoff purposes.
+	backoff = 5.0
+
+	// supportedChallengeTypes filters unsupported challenge types.
+	supportedChallengeTypes = []string{
+		acme.ChallengeTypeDNS01,
+		acme.ChallengeTypeHTTP01,
+	}
+)
+
+// consumerChecks takes new certificate orders from the queue and determines
+// what pre-flight checks to perform (avoiding bothering a CA unnecessarily).
+func consumerChecks() {
+	l := log.New()
+	ctx := context.Background()
+
+	// TODO: Consider using pointer to Order struct to reduce value copying.
+	for o := range ordersCheck {
+		sl := l.With(
+			slog.Group(&quot;retries&quot;,
+				slog.Int(&quot;current&quot;, o.retries),
+				slog.Int(&quot;max&quot;, maxRetries),
+			),
+		)
+		sl.LogAttrs(ctx, slog.LevelInfo, &quot;consumer_check&quot;, slog.String(&quot;state&quot;, &quot;start&quot;))
+
+		if o.retries &gt; maxRetries {
+			// TODO: send order to a dead letter queue
+			sl.LogAttrs(ctx, slog.LevelWarn, &quot;consumer_check&quot;, slog.String(&quot;state&quot;, &quot;dead&quot;))
+			continue
+		}
+
+		// We have one 'authorization' per SAN list entry (i.e. per domain).
+		// We then have multiple 'challenges' per authorization to check.
+		//
+		// We process each authorization asynchronously.
+		// We also process each authorization's challenges asynchronously.
+
+		var wg sync.WaitGroup
+
+		for i, a := range o.authorizations {
+			// If an order has been placed back on the queue, then we want to
+			// avoid having to re-validate authorizations that were already
+			// validated successfully.
+			if !a.authorized {
+				wg.Add(1)
+				go func() {
+					defer wg.Done()
+					processAuthorization(ctx, l, i, &amp;o)
+				}()
+			}
+		}
+
+		wg.Wait()
+
+		// We now need to check if any authorizations failed.
+		// If so, we need to re-queue the order.
+		var (
+			requeue bool
+			failed  []string
+		)
+		for _, a := range o.authorizations {
+			if !a.authorized {
+				failed = append(failed, a.authorization.IdentifierValue())
+				requeue = true
+			}
+		}
+		if requeue {
+			sl.LogAttrs(ctx, slog.LevelWarn, &quot;consumer_check&quot;,
+				slog.Any(&quot;err&quot;, errors.New(&quot;not all authorizations were successful&quot;)),
+				slog.Bool(&quot;retry&quot;, true),
+				slog.Float64(&quot;backoff&quot;, backoff),
+				slog.String(&quot;failed&quot;, strings.Join(failed, &quot;,&quot;)),
+				slog.String(&quot;state&quot;, &quot;re-queued&quot;),
+			)
+			o.retries++
+
+			// TODO: When implementing NSQ use DeferredPublish.
+			// https://pkg.go.dev/github.com/nsqio/go-nsq#DeferredPublish
+			time.Sleep(time.Duration(backoff) * time.Minute) // increases exponentially: 10, 20, 40, 80, 160, 2hr (x5 until maxRetries) ...etc
+			// TODO: Extend the backoff to once a day requeue.
+			backoff = math.Min(backoff*backoffMultiplier, backoffMax)
+			go func() {
+				ordersCheck &lt;- o // put the order back on the queue for retry.
+			}()
+			continue
+		}
+
+		sl.LogAttrs(ctx, slog.LevelInfo, &quot;consumer_check&quot;,
+			slog.Any(&quot;order&quot;, o),
+			slog.String(&quot;state&quot;, &quot;complete&quot;),
+		)
+		ordersValidate &lt;- o
+	}
+}
+
+// processAuthorization processes each authorization concurrently. Each
+// challenge within the authorization is also processed concurrently.
+func processAuthorization(ctx context.Context, l *slog.Logger, i int, o *Order) {
+	a := o.authorizations[i]
+	sl := l.With(slog.String(&quot;authorization&quot;, a.authorization.Identifier.Value))
+
+	// We wait for only one goroutine to complete successfully.
+	authorized := make(chan acme.Challenge, 1)
+
+	// The use of a cancellable context is to short-circuit running goroutines.
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	// The WaitGroup allows us to verify that all goroutines exit properly.
+	var wg sync.WaitGroup
+
+	for _, c := range a.authorization.Challenges {
+		if slices.Contains(supportedChallengeTypes, c.Type) {
+			wg.Add(1)
+			go func(c acme.Challenge) {
+				defer wg.Done()
+				if err := challengeCheck(ctx, sl, c); err == nil {
+					// The use of select with a cancellable context allows to
+					// solve two issues:
+					//
+					// 1. Signal goroutines to stop if the channel gets blocked.
+					//    This can happen if both dns and http challenges pass.
+					//
+					// 2. Signal goroutines to stop when one challenge passes.
+					//    Allowing us to short-circuit more quickly.
+					//    And avoids waiting for the checkTimeout below.
+					select {
+					case &lt;-ctx.Done():
+					case authorized &lt;- c:
+					}
+				}
+			}(c)
+		}
+	}
+
+	// Block until one of the challenges returns successfully.
+	// Otherwise we'll timeout and cause a re-queue.
+	select {
+	case c := &lt;-authorized:
+		cancel()  // short-circuit any still running goroutines.
+		wg.Wait() // validate we've cleaned up all goroutines.
+		sl.LogAttrs(ctx, slog.LevelInfo, &quot;authorization_check&quot;,
+			slog.Bool(&quot;success&quot;, true),
+			slog.Int(&quot;index&quot;, i),
+			slog.String(&quot;validation_method&quot;, c.Type),
+		)
+		o.authorizations[i].authorized = true
+		o.authorizations[i].challengeType = c.Type
+	case &lt;-time.After(checkTimeout): // in case no challenges are valid
+		cancel()  // short-circuit any still running goroutines.
+		wg.Wait() // validate we've cleaned up all goroutines.
+		sl.LogAttrs(ctx, slog.LevelWarn, &quot;authorization_check&quot;, slog.String(&quot;reason&quot;, &quot;timeout&quot;))
+	}
+}
+
+// challengeCheck identifies the challenge type and triggers that check.
+func challengeCheck(ctx context.Context, l *slog.Logger, c acme.Challenge) error {
+	switch c.Type {
+	case acme.ChallengeTypeDNS01:
+		return checkDNS(ctx, l, c)
+	case acme.ChallengeTypeHTTP01:
+		return checkHTTP(ctx, l, c)
+	}
+	return nil
+}
+
+// checkDNS looks up the TXT record to see if it contains the correct value. It
+// will return nil if the record exists with the correct value.
+func checkDNS(ctx context.Context, l *slog.Logger, c acme.Challenge) error {
+	// use a resolver to propagate context
+	var r net.Resolver
+	txtRecords, err := r.LookupTXT(ctx, c.DNS01TXTRecordName())
+	if err != nil {
+		err := fmt.Errorf(&quot;failed to lookup TXT record: %w&quot;, err)
+		l.LogAttrs(ctx, slog.LevelWarn, &quot;check_dns&quot;, slog.Any(&quot;err&quot;, err))
+		return err
+	}
+	if slices.Contains(txtRecords, c.DNS01KeyAuthorization()) {
+		return nil
+	}
+	err = fmt.Errorf(&quot;record exists but does not contain correct value: %s&quot;, strings.Join(txtRecords, &quot;,&quot;))
+	l.LogAttrs(ctx, slog.LevelWarn, &quot;check_dns&quot;, slog.Any(&quot;err&quot;, err))
+	return err
+}
+
+// checkHTTP looks up the .well-known/acme-challenge/... path to see if it
+// exists at that path location and will return nil if it does.
+func checkHTTP(ctx context.Context, l *slog.Logger, c acme.Challenge) error {
+	var lastErr error
+
+	for _, protocol := range []string{&quot;http&quot;, &quot;https&quot;} {
+		endpoint := fmt.Sprintf(&quot;%s://%s%s&quot;, protocol, c.Identifier.Value, c.HTTP01ResourcePath())
+		sl := l.With(slog.String(&quot;endpoint&quot;, endpoint))
+
+		req, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
+		if err != nil {
+			lastErr = fmt.Errorf(&quot;failed to create a http.Request for '%s': %w&quot;, endpoint, err)
+			sl.LogAttrs(ctx, slog.LevelWarn, &quot;check_http&quot;, slog.Any(&quot;err&quot;, lastErr))
+			continue
+		}
+
+		res, err := httpx.Client.Do(req)
+		if err != nil {
+			// Checking context cancelled allows us to return faster.
+			// i.e. we're either already authorized or we timed out.
+			if errors.Is(err, context.Canceled) {
+				err := fmt.Errorf(&quot;failed to send http.Request: %w&quot;, ctx.Err())
+				sl.LogAttrs(ctx, slog.LevelWarn, &quot;check_http&quot;, slog.Any(&quot;err&quot;, err))
+				return err
+			}
+			lastErr = fmt.Errorf(&quot;failed to send http.Request: %w&quot;, err)
+			sl.LogAttrs(ctx, slog.LevelWarn, &quot;check_http&quot;, slog.Any(&quot;err&quot;, lastErr))
+			continue
+		}
+
+		// NOTE: It's unsafe to defer inside a loop so I manually close res.Body
+		if res.StatusCode != http.StatusOK {
+			res.Body.Close()
+			lastErr = fmt.Errorf(&quot;invalid http status '%s'&quot;, res.Status)
+			sl.LogAttrs(ctx, slog.LevelWarn, &quot;check_http&quot;, slog.Any(&quot;err&quot;, lastErr))
+			continue
+		}
+
+		body, err := io.ReadAll(res.Body)
+		if err != nil {
+			res.Body.Close()
+			lastErr = fmt.Errorf(&quot;failed to read response body: %w&quot;, err)
+			sl.LogAttrs(ctx, slog.LevelWarn, &quot;check_http&quot;, slog.Any(&quot;err&quot;, lastErr))
+			continue
+		}
+		res.Body.Close()
+
+		if string(body) != c.KeyAuthorization {
+			lastErr = fmt.Errorf(&quot;invalid response body '%s': expected '%s'&quot;, body, c.KeyAuthorization)
+			sl.LogAttrs(ctx, slog.LevelWarn, &quot;check_http&quot;, slog.Any(&quot;err&quot;, lastErr))
+			continue
+		}
+
+		return nil // success
+	}
+
+	if lastErr != nil {
+		return lastErr
+	}
+
+	// WARNING: We should never reach this part of the code.
+	// We should have already returned a success or tracked an error.
+	err := errors.New(&quot;unexpected code path reached&quot;)
+	l.LogAttrs(ctx, slog.LevelError, &quot;check_http&quot;, slog.Any(&quot;err&quot;, err))
+	return err
+}
+</code></pre>
+
+<p>The <code>processAuthorization</code> function specifically might look over engineered but
+it&rsquo;s critical that we don&rsquo;t have goroutines hanging around waiting to be
+unblocked. So all these concurrency mechanisms are in place to ensure the code
+is as robust as possible.</p>
 
 <!-- markdownlint-enable -->
 
