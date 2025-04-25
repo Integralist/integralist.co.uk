@@ -192,6 +192,16 @@ channels...
 	like to ensure people feel supported.</p>
 </details>
 
+<details class="testimonial">
+	<summary>Senior Software Engineer, Domain Services at Fastly</summary>
+	<p><i>The amount of things I've learned from `@integralist` 's blog posts is incredible. Thank you so much! `:salute:`. Your blog is legitimately a gold mine in terms of information. Thank you for taking the time to write all of those posts, I learn something every time I look at them.</i></p>
+	<p><small>Senior Software Engineer, Domain Services at Fastly</small></p>
+	<p class="review">The team had been discussing how to profile Go programs
+	and I had written a blog post covering all the details years back that I
+	thought would be useful to the team (who were new to Go). I'm always
+	genuinely pleased to hear that my blog is useful to people.</p>
+</details>
+
 <hr>
 
 ## Summary
