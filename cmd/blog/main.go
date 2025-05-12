@@ -116,7 +116,28 @@ func renderPosts(page, sideNavContent string) {
 	fmt.Printf("rendered: %s -> %s\n", page, dst)
 }
 
-func renderSideNav(pages []string, root string) string { // nolint:revive // function-length
+// Helper function to extract link text from the content string
+// Example input: "\n\t<li><a href=\"...\">Link Text</a></li>\n\t"
+// Example output: "Link Text"
+func extractLinkText(content string) string {
+	// Find the position right after the opening '>' of the <a> tag
+	startIdx := strings.Index(content, ">")
+	if startIdx == -1 {
+		return content // Return original content as fallback if '>' not found
+	}
+	startIdx++ // Move past the '>'
+
+	// Find the position of the closing '</a>' tag
+	endIdx := strings.Index(content, "</a>")
+	if endIdx == -1 || endIdx <= startIdx {
+		return content // Return original content as fallback if '</a>' not found or is before '>'
+	}
+
+	// Extract the substring and trim leading/trailing whitespace
+	return strings.TrimSpace(content[startIdx:endIdx])
+}
+
+func renderSideNav(pages []string, root string) string {
 	caser := cases.Title(language.BritishEnglish)
 
 	tplNavGroupLinks := `
@@ -127,73 +148,115 @@ func renderSideNav(pages []string, root string) string { // nolint:revive // fun
 	  </ul>
 	</li>
 	`
-	tplNavSingleLink := `
-	<li><a href="{LINK}">{TITLE}</a></li>
-	`
+	tplNavSingleLink := `<li><a href="{LINK}">{TITLE}</a></li>`
 
 	type post struct {
-		date    string // expects ISO 8601 format, e.g., "2024-12-15"
-		year    string
-		content string
+		date    string // expects ISO 8601 format, e.g., "2024-12-15" or "index"
+		year    string // e.g., "2024" or "index"
+		content string // HTML <li> content
 	}
 
-	links := make([]post, 0, len(pages))
+	// Create separate slices for pages and posts
+	pageLinks := make([]post, 0)
+	postLinks := make([]post, 0)
 
+	// --- 1. Populate the separate slices ---
 	for _, path := range pages {
 		segs := strings.Split(path, "/")
+		if len(segs) < 3 {
+			fmt.Printf("Warning: Skipping path with unexpected format: %s\n", path)
+			continue // Skip malformed paths
+		}
 		dir := segs[0] + "/" + segs[1]
-		date := strings.Split(segs[2], ".")[0]
-		year := strings.Split(date, "-")[0]
+		date := strings.Split(segs[2], ".")[0] // e.g., "index" or "2025-05-12"
+		year := date                           // Default year to date
+		if strings.Contains(date, "-") {
+			year = strings.Split(date, "-")[0] // e.g., "2025" if date has '-'
+		}
+		// Handle cases like "pages/resume/index.md" where year should be "index"
+		if date == "index" {
+			year = "index"
+		}
+
 		title := strings.ReplaceAll(caser.String(segs[1]), "-", " ")
 		link := filepath.Join(root, dir, "index.html")
 		contentNav := strings.Replace(tplNavSingleLink, "{TITLE}", title, 1)
 		contentNav = strings.Replace(contentNav, "{LINK}", link, 1)
-		links = append(links, post{date: date, year: year, content: contentNav})
+
+		p := post{date: date, year: year, content: contentNav}
+
+		if p.year == "index" {
+			pageLinks = append(pageLinks, p)
+		} else {
+			postLinks = append(postLinks, p)
+		}
 	}
 
-	sort.Slice(links, func(i, j int) bool {
-		// Parse dates for comparison
-		date1, _ := time.Parse("2006-01-02", links[i].date)
-		date2, _ := time.Parse("2006-01-02", links[j].date)
+	// --- 2. Sort the pageLinks slice alphabetically by title ---
+	sort.Slice(pageLinks, func(i, j int) bool {
+		linkTextI := extractLinkText(pageLinks[i].content)
+		linkTextJ := extractLinkText(pageLinks[j].content)
+		return linkTextI < linkTextJ
+	})
+
+	// --- 3. Sort the postLinks slice by date descending ---
+	sort.Slice(postLinks, func(i, j int) bool {
+		date1, err1 := time.Parse("2006-01-02", postLinks[i].date)
+		date2, err2 := time.Parse("2006-01-02", postLinks[j].date)
+		// Basic error handling: treat unparsable dates as "equal" or log them
+		if err1 != nil {
+			fmt.Printf("Warning: Could not parse date '%s' for sorting post '%s'\n", postLinks[i].date, extractLinkText(postLinks[i].content))
+			return false // Keep order stable relative to date2 if date1 fails
+		}
+		if err2 != nil {
+			fmt.Printf("Warning: Could not parse date '%s' for sorting post '%s'\n", postLinks[j].date, extractLinkText(postLinks[j].content))
+			return true // Keep order stable relative to date1 if date2 fails
+		}
 		return date2.Before(date1) // Descending order
 	})
 
-	// key is the year
-	// value is each link for that year
-	years := make(map[string][]string)
+	// --- 4. Build the final navigation HTML string ---
+	var finalNav strings.Builder // Use strings.Builder for efficiency
 
-	for _, link := range links {
-		yearLinks, ok := years[link.year]
-		if !ok {
-			// Create the year and add its first link
-			years[link.year] = []string{link.content}
-		} else {
-			// Update the year so it has another new link
-			yearLinks = append(yearLinks, link.content)
-			years[link.year] = yearLinks
+	// Add "Pages" section (if any pages exist)
+	if len(pageLinks) > 0 {
+		var pageContentLinks strings.Builder
+		for _, pLink := range pageLinks {
+			pageContentLinks.WriteString(pLink.content) // Append the pre-formatted <li>...</li>
+		}
+		// Use strings.ReplaceAll for potentially multiple replacements if templates change
+		pagesContainer := strings.ReplaceAll(tplNavGroupLinks, "{YEAR}", "Pages")
+		pagesContainer = strings.ReplaceAll(pagesContainer, "{YEAR_LINKS}", pageContentLinks.String())
+		finalNav.WriteString(pagesContainer)
+	}
+
+	// Group sorted posts by year
+	postsByYear := make(map[string][]string)
+	yearOrder := make([]string, 0) // Keep track of year order as encountered in sorted posts
+	yearSeen := make(map[string]bool)
+
+	for _, pLink := range postLinks { // Iterate sorted postLinks
+		year := pLink.year
+		postsByYear[year] = append(postsByYear[year], pLink.content)
+		if !yearSeen[year] {
+			yearOrder = append(yearOrder, year)
+			yearSeen[year] = true
 		}
 	}
 
-	// Map keys have non-deterministic ordering.
-	// So we order them manually.
-	keys := make([]string, 0)
-	for k := range years {
-		keys = append(keys, k)
-	}
-	sort.Slice(keys, func(i, j int) bool {
-		return keys[i] > keys[j] // descending order (e.g. []string{"index", "2024", "2023"})
-	})
-	var yearLinks string
-	for _, k := range keys {
-		section := k
-		if k == "index" {
-			section = "Pages"
+	// Add post sections by year (already in descending date order from postLinks sort)
+	for _, year := range yearOrder {
+		var yearContentLinks strings.Builder
+		// Links within postsByYear[year] are already sorted by date
+		for _, content := range postsByYear[year] {
+			yearContentLinks.WriteString(content)
 		}
-		container := strings.Replace(tplNavGroupLinks, "{YEAR}", section, 1)
-		yearLinks += strings.Replace(container, "{YEAR_LINKS}", strings.Join(years[k], ""), 1)
+		yearContainer := strings.ReplaceAll(tplNavGroupLinks, "{YEAR}", year)
+		yearContainer = strings.ReplaceAll(yearContainer, "{YEAR_LINKS}", yearContentLinks.String())
+		finalNav.WriteString(yearContainer)
 	}
 
-	return yearLinks
+	return finalNav.String()
 }
 
 func renderHome(pages []string) { // nolint:revive // function-length

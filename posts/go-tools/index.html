@@ -39,349 +39,272 @@
 						<nav>
 
 <ul>
-<li><a href="#engineer-to-manager">Engineer to Manager</a>
+<li><a href="#managing-project-tools-with-go">Managing project tools with Go</a>
 <ul>
-<li><a href="#roles">Roles</a></li>
+<li><a href="#go-tool">go tool</a>
+<ul>
+<li><a href="#caveats-and-issues">Caveats and Issues</a></li>
 
-<li><a href="#responsibilities">Responsibilities</a>
-<ul>
-<li><a href="#motivation">Motivation</a></li>
+<li><a href="#multiple-module-files">Multiple Module Files</a></li>
 </ul></li>
 
-<li><a href="#communication">Communication</a></li>
+<li><a href="#tools-go">tools.go</a></li>
 
-<li><a href="#team-leader">Team Leader</a></li>
-
-<li><a href="#why">Why?</a></li>
-
-<li><a href="#incremental-steps">Incremental Steps</a></li>
-
-<li><a href="#manager-cheat-sheet">Manager Cheat Sheet</a>
-<ul>
-<li><a href="#daily">Daily</a></li>
-
-<li><a href="#weekly">Weekly</a></li>
-
-<li><a href="#monthly">Monthly</a></li>
-</ul></li>
-
-<li><a href="#conclusion">Conclusion</a></li>
+<li><a href="#go-run">go run</a></li>
 </ul></li>
 </ul>
 
 </nav>
 
-<h1 id="engineer-to-manager">Engineer to Manager</h1>
+<h1 id="managing-project-tools-with-go">Managing project tools with Go</h1>
 
-<p>You&rsquo;re a software engineer with many years of technical experience, and you&rsquo;ve decided you want to kickstart the process of working towards becoming an &lsquo;Engineering Manager&rsquo;.</p>
+<p>There are multiple ways to deal with non-application dependencies (i.e. &ldquo;tools&rdquo; that your project needs).</p>
 
-<p>So what do you need to know? Let&rsquo;s discuss&hellip;</p>
+<h2 id="go-tool">go tool</h2>
 
-<h2 id="roles">Roles</h2>
+<p>As of Go 1.24 (Feb 2025)</p>
 
-<p>As a software engineer you have a few different paths available to you for career progression:</p>
+<p>To add a new tool:</p>
 
-<ul>
-<li>Senior Software Engineer</li>
-<li>Staff Software Engineer</li>
-<li>Principal Software Engineer</li>
-<li>Architect</li>
-<li>Tech Lead</li>
-<li>Engineering Manager</li>
-</ul>
+<pre><code class="language-shell">go get -tool golang.org/x/lint/golint
+go get -tool github.com/mgechev/revive@latest
+</code></pre>
 
-<blockquote>
-<p>Note: the role hierarchy can change per organisation</p>
-</blockquote>
+<p>To run the tool:</p>
 
-<p>You may notice some of these roles are not like the others 😉 It&rsquo;s worth recognizing that there is a slight separation between the last two roles (Tech Lead, Engineering Manager) and the rest of the roles, in that the last two are more closely related to management than the other roles.</p>
+<pre><code class="language-shell">go tool golint -h
+go tool golang.org/x/lint/golint -h # in case of naming overlap
+</code></pre>
 
-<p>I&rsquo;ve grouped these roles together like this because they tend to be the progression path for a lot of engineers. They exhaust all possibilities as far as &lsquo;engineering&rsquo; as an IC (individual contributor) before finally residing themselves to a management role.</p>
+<p>To see a list of all tools:</p>
 
-<p>This doesn&rsquo;t <em>have</em> to be the case though. You might decide to make that shift to a more management role before progressing through the more senior engineering roles, but you may find some organisations will expect a certain level of engineering experience.</p>
+<pre><code class="language-shell">go tool
+</code></pre>
 
-<p>When moving up the career ladder you&rsquo;ll typically find that between roles there is a fair amount of cross-over responsibilities, but for the purposes of this post let&rsquo;s focus in on the last role (&lsquo;Engineering Manager&rsquo;) and what that entails.</p>
+<p>To update all tools:</p>
 
-<h2 id="responsibilities">Responsibilities</h2>
+<pre><code class="language-shell">go get -u tool
+</code></pre>
 
-<p>Below I have listed a few different areas of responsibility (as I see them) associated with an Engineering Manager role, and of course these responsibilities can change depending on the culture of where you work.</p>
+<p>If you check the <code>go.mod</code> you&rsquo;ll see a new tool syntax:</p>
 
-<p>Meaning it&rsquo;s a good idea, when interviewing for an Engineering Manager role, to ask clarifying questions in order to help you understand the expectations of that role (in the specific context of that organisation).</p>
+<pre><code class="language-go.mod">module testing-tools
 
-<blockquote>
-<p>Note: to learn more about <em>what</em> to talk about during an interview, read my post &lsquo;<a href="/posts/interview-topics/">Interview Topics</a>&rsquo;</p>
-</blockquote>
+go 1.23.4
 
-<p>For example, some companies have dedicated &lsquo;Project Managers&rsquo;; meaning an Engineering Manager doesn&rsquo;t have to worry too much with that aspect of the job, and can instead focus on technical leadership responsibilities.</p>
+tool (
+    github.com/mgechev/revive
+    golang.org/x/lint/golint
+)
+</code></pre>
 
-<p>Another example is the role of a &lsquo;Tech Lead&rsquo;; some organisations use this name and &lsquo;Engineering Manager&rsquo; interchangeably, while others treat them as distinct roles (and in some cases a less management/more code oriented role than an Engineering Manager).</p>
+<h3 id="caveats-and-issues">Caveats and Issues</h3>
 
-<blockquote>
-<p>Note: see also my post &lsquo;<a href="/posts/project-management/">Project Management in Five Minutes</a>&rsquo; which discusses Lara Hogan&rsquo;s venn diagram of various leadership roles, as well as a project management checklist.</p>
-</blockquote>
+<p>Now, there is a problem (sort of), which is that you&rsquo;ll see a bunch of <em>indirect</em> dependencies showing up in the <code>go.mod</code>.</p>
 
-<h3 id="motivation">Motivation</h3>
+<p>This is because these are the dependencies that your &ldquo;tools&rdquo; need.</p>
 
-<p>A good engineering manager must be committed to building great software, great teams, creativity, careers, and general welfare of the team members.</p>
+<p>I&rsquo;m less concerned about that as a side-effect of using the new <code>go tools</code> feature, but I appreciate it&rsquo;s not ideal.</p>
 
-<p>With that in mind, the following list feels like (to me) a reasonable breakdown of the various jobs you (as an Engineering Manager) will be expected to look after&hellip;</p>
+<p>My concern being: it&rsquo;s more mental overhead.</p>
 
-<ul>
-<li><strong>Team Leader</strong>
+<p>You don&rsquo;t know if these <em>indirect</em> dependencies are transient dependencies used by your application dependencies, or if they&rsquo;re dependencies for the &ldquo;tools&rdquo; you&rsquo;ve installed.</p>
 
-<ul>
-<li>1:1&rsquo;s (read <a href="/posts/a-guide-to-effective-1-1-meetings/">my post on better 1:1 practices</a>)</li>
-<li>Mentoring</li>
-<li>Support</li>
-<li>Career development</li>
-</ul></li>
-<li><strong>Technical Lead</strong>
+<p>The reason I&rsquo;m not usually <em>that fussed</em> by this is because I only really care about the &ldquo;direct&rdquo; dependencies, and those are always clear because they don&rsquo;t have <code>// indirect</code> following them.</p>
 
-<ul>
-<li>Define and communicate with non-technical stake holders</li>
-<li>Guide the architecture and technical design</li>
-<li>Resolve conflicts around technical discussions</li>
-<li>Write code and work with the engineering team</li>
-</ul></li>
-<li><strong>Project Management</strong>
+<p><strong>So the following instructions are only relevant if you really care about this</strong>.</p>
 
-<ul>
-<li>Define technical requirements</li>
-<li>Work with non-technical stake holders to define user stories</li>
-<li>Breakdown large tasks into smaller tasks</li>
-<li>Prioritise work and revise priorities when necessary</li>
-<li>Establish schedules, estimates and milestone deliveries</li>
-<li>Run and guide the technical aspect of the project</li>
-</ul></li>
-<li><strong>Communicator</strong>
+<h3 id="multiple-module-files">Multiple Module Files</h3>
 
-<ul>
-<li>Up: team/project status and health to upper management</li>
-<li>Down: updates/decision making to your team and direct reports</li>
-<li>Across: identify, engage and collaborate with other teams</li>
-</ul></li>
-<li><strong>Recruitment</strong>
+<p>There is another option on the table that we can use, and it doesn&rsquo;t appear to be too much additional maintenance or mental overhead, which is great. But it does have a downside (see the <code>IMPORTANT</code> note at the end of this section).</p>
 
-<ul>
-<li>Work with recruiters to define required engineering roles</li>
-<li>Screen resumes</li>
-<li>Interview candidates</li>
-<li>Assist onboarding new recruits</li>
-</ul></li>
-</ul>
+<p>Essentially, the approach is to have a separate modfile for tools.</p>
 
-<h2 id="communication">Communication</h2>
+<p>It means we&rsquo;d have multiple files now, like this&hellip;</p>
 
-<p>The most important skill you&rsquo;ll need, if you are to be effective as a manager of people (e.g. your direct reports, your managers, your stake holders: both technical and non-technical), is communication.</p>
-
-<p>You need to be able to build strong and trusted relationships with these people. You need to be able to <em>challenge</em> them and push them to do better, for <em>their</em> own success, <em>not</em> the business.</p>
-
-<p>To elaborate further: helping people to reach their goals, to be happy and to help them find doing what they enjoy doing (while still challenging them) will ultimately yield better value from the work they do, and as a side-effect the business will benefit more greatly than if you push someone down another path designed with the business in mind.</p>
-
-<p>This means <em>caring personally</em> about the people you are interacting with and doing what you can to bring out their best. It also means recognising when someone <em>isn&rsquo;t</em> a good fit for your team, and in extreme cases &lsquo;letting them go&rsquo; can actually work out better for both them and the business.</p>
-
-<p>Patty McCord discusses this topic in-depth in her book on <em>culture building</em> at scale &ldquo;<a href="http://pattymccord.com/book/" target="_blank">Powerful: building a culture of freedom and responsibility</a>&rdquo;.</p>
-
-<p>In essence let&rsquo;s help people work on things that will realize their ambitions, but not at the expense of the business, more <em>in co-operation</em> with the business. But if your ambitions don&rsquo;t fit with the business, then maybe it&rsquo;s best for you and the business to separate ways. I like that as a healthy way for both sides to either work together for a common good or separate ways for an equally better outcome.</p>
-
-<p>When building relationships you should be mindful of not falling too heavily on one side or another with regards to &lsquo;professional vs personal&rsquo;. Find a balance, and if unsure err on the side of building a respected professional relationship, as friendship and a greater sense of personal appreciation/understanding (in some cases) will naturally occur.</p>
-
-<p>Below I&rsquo;ve listed some useful resources for learning how to communicate effectively (these are all highly recommended):</p>
-
-<ul>
-<li><a href="https://www.soundstrue.com/store/authentic-communication.html" target="_blank">Authentic Communication</a> by Fred Kofman.</li>
-<li><a href="https://www.radicalcandor.com/" target="_blank">Radical Candor</a> by Kim Scott.</li>
-<li><a href="https://gist.github.com/Integralist/24c8a9ce570d78d37ed0cf9967594e0e" target="_blank">SBI: Situation, Behaviour, Impact</a> a methodology developed by The Center for Creative Leadership.</li>
-<li><a href="https://www.amazon.co.uk/Hard-Thing-About-Things-Building/dp/0062273205/ref=asap_bc" target="_blank">The Hard Thing About Hard Things</a> by Ben Horowitz.</li>
-</ul>
+<pre><code>go.mod
+go.sum
+tools.mod
+tools.sum
+</code></pre>
 
 <blockquote>
-<p>Note: &lsquo;Authentic Communication&rsquo; is actually taken from a larger work called <a href="https://www.soundstrue.com/store/conscious-business-4036.html" target="_blank">Conscious Business: How to build value through values</a>.</p>
+<p>⚠️ <strong>IMPORTANT</strong>:<br>
+If you give the <code>tools.mod</code> a unique module name, let&rsquo;s say <code>go.mod</code> uses <code>github.com/example/foo</code>, and so you make <code>tools.mod</code> use <code>github.com/example/foo/tools</code> then be aware that the use of <code>go mod</code> isn&rsquo;t going to make your <code>tools.mod</code> think it needs the module from <code>go.mod</code> and it&rsquo;ll add it as a dependency (this makes things weird in special cases), so it might be worth making the module name the same between <code>go.mod</code> and <code>tools.mod</code>.</p>
 </blockquote>
 
-<h2 id="team-leader">Team Leader</h2>
+<p>To install a new tool:</p>
 
-<p>As someone who is going to be mentoring and supporting a team of engineers, it is important you understand the motivations and what drives your team. In doing so you&rsquo;ll be better equipped to find them the right roles within the organisation that brings out their best work and allows them to grow in the areas that matter the most to them.</p>
+<pre><code class="language-bash"># instead of...
+go get -tool github.com/mgechev/revive
 
-<p>It&rsquo;s also important to sometimes think as an &lsquo;engineer&rsquo; again. When you design and develop large scale systems you identify bottlenecks and ways of working that reduce complexity and support certain services to <em>scale</em>. Now think about <em>that</em> when you&rsquo;re handling management duties.</p>
-
-<p>Do you find yourself handling tasks, or using processes, that take up a lot of time? This might be ok for now while you&rsquo;re responsible for a small team but how will that work out for you once you start taking on <em>more</em> teams and more responsibilities? Be mindful of the tools and processes you use and refine them constantly.</p>
-
-<h2 id="why">Why?</h2>
-
-<p>The single biggest question you should now be asking yourself is:</p>
+# we do...
+go get -modfile=tools.mod -tool github.com/mgechev/revive
+</code></pre>
 
 <blockquote>
-<p>&ldquo;Why do I want to become an Engineering Manager?&rdquo;</p>
+<p>💡 <strong>TIP</strong>:<br>
+To <em>remove</em> a tool you can do the above but set the version to <code>@none</code>.</p>
 </blockquote>
 
-<p>This is really important, and requires you to be very honest and open with <em>yourself</em> (not only will you suffer the consequences of a bad decision, but so will everyone else who is relying on you).</p>
+<p>And if we want to use that tool we have to make sure to specify the modfile:</p>
 
-<p>If you answered the question with any one of the following (or more), then you need to seriously consider an alternative future career path; simply because you truly won&rsquo;t be happy in this role otherwise:</p>
+<pre><code>$ go tool revive --version
+go: no such tool &quot;revive&quot;
 
-<ul>
-<li>I want more money</li>
-<li>I want a promotion</li>
-<li>I want a better job title</li>
-<li>I&rsquo;m bored of writing code</li>
-</ul>
+$ go tool -modfile=tools.mod revive --version
+version 1.7.0
+</code></pre>
 
-<p>To me, a <em>good</em> reason to want to progress towards being an Engineering Manager is when you deep down know that your enjoyment comes from helping people and having a positive impact in <em>their</em> ability to do great work and helping them to progress in their career.</p>
+<p>Having to specify the <code>-modfile</code> flag isn&rsquo;t a big issue as we already have <code>go tool</code> abstracted inside the various Makefile targets, so we should only ever be calling a Makefile target (or in the case of stringer have it codified in the go generate directive in the code itself).</p>
 
-<p>If that is your motivation, then you have the right mentality for this type of role. If that&rsquo;s not your intent, then that&rsquo;s OK (don&rsquo;t worry) but you will need to consider alternative options and really figure out what it is about working in tech/engineering that you enjoy, and do what you can to move more in that specific direction.</p>
+<p>As far as updating tools, you can either do it a dependency at a time or all of them at once:</p>
 
-<p>Ultimately if you want things like more money or a promotion or a better job title, that will require you to have more <em>impact</em> at work, and to do <em>that</em> means you need to lift your head up from your laptop and engage more widely with the organisation and the teams within and start demonstrating more broadly the potential positive impact that you can have.</p>
+<pre><code class="language-bash"># instead of...
+go get -u -tool github.com/mgechev/revive@latest
+go get -u tool
+
+# we do...
+go get -u -modfile=tools.mod -tool github.com/mgechev/revive@latest
+go get -u -modfile=tools.mod tool
+</code></pre>
+
+<p>Same for listing the installed tools:</p>
+
+<pre><code class="language-bash"># instead of...
+go tool
+
+# we do...
+go tool -modfile=tools.mod
+</code></pre>
 
 <blockquote>
-<p>Note: see also my post on &lsquo;<a href="/posts/interview-techniques/">Architecture Interviews (and other thoughts)</a>&rsquo;, where I cover what I look for when interviewing an Engineering Manager candidate.</p>
+<p>💡 <strong>TIP</strong>:<br>
+Can also try <code>go list -modfile=tools.mod tool</code></p>
 </blockquote>
 
-<h2 id="incremental-steps">Incremental Steps</h2>
+<p>To verify the integrity of the tool dependencies:</p>
 
-<p>You might not be quite ready for a straight jump up to Engineering Manager, so what can you do in the meantime to help you move towards that goal? Here are some ideas&hellip;</p>
+<pre><code>go mod verify -modfile=tools.mod
+</code></pre>
 
-<ul>
-<li><strong>Mentoring</strong>
+<p>Here&rsquo;s an associated Makefile:</p>
 
-<ul>
-<li>Most companies have a mentoring program, and even if not it doesn&rsquo;t prevent you from reaching out to colleagues and offering them your help, guidance and the benefits of your experience (if they choose to accept it)</li>
-</ul></li>
-<li><strong>Take Responsibility</strong>
+<pre><code class="language-Makefile">.PHONY: deps-app-update
+deps-app-update: ## Update all application dependencies
+	go get -u -t ./...
+	go mod tidy
+	if [ -d &quot;vendor&quot; ]; then go mod vendor; fi
+	
+.PHONY: deps-outdated
+deps-outdated:  ## Lists direct dependencies that have a newer version available
+	@go list -u -m -json all | go tool -modfile=tools.mod go-mod-outdated -update -direct
+	
+TOOLS = \
+	cuelang.org/go/cmd/cue \
+	github.com/client9/misspell/cmd/misspell \
+	github.com/go-delve/delve/cmd/dlv \
+	github.com/mgechev/revive \
+	github.com/psampaz/go-mod-outdated \
+	github.com/stealthrocket/wasi-go/cmd/wasirun \
+	github.com/stern/stern \
+	github.com/tetratelabs/wazero/cmd/wazero \
+	golang.org/x/lint/golint \
+	golang.org/x/tools/cmd/stringer \
+	golang.org/x/tools/go/analysis/passes/nilness/cmd/nilness \
+	golang.org/x/vuln/cmd/govulncheck \
+	honnef.co/go/tools/cmd/staticcheck \
+	mvdan.cc/gofumpt \
 
-<ul>
-<li>Get involved with cross-team discussions</li>
-<li>Create a working-group for a topic you care about</li>
-<li>Support your team and reach out on their behalf if you&rsquo;re able to</li>
-</ul></li>
-<li><strong>Lead</strong>
+.PHONY: tools
+tools:
+	@$(foreach tool,$(TOOLS), \
+		if ! go tool -modfile=tools.mod | grep &quot;$(tool)&quot; &gt;/dev/null; then \
+			go get -modfile=tools.mod -tool &quot;$(tool)&quot;@latest; \
+		fi; \
+	)
 
-<ul>
-<li>Take the responsibility of leading a project</li>
-<li>Beyond that take the opportunity to lead a team</li>
-<li>Help non-technical stakeholders understand the team&rsquo;s work</li>
-</ul></li>
-</ul>
+.PHONY: tools-update
+tools-update:
+	go get -u -modfile=tools.mod tool
+	go mod tidy -modfile=tools.mod
+</code></pre>
 
-<h2 id="manager-cheat-sheet">Manager Cheat Sheet</h2>
+<blockquote>
+<p>⚠️ <strong>IMPORTANT</strong>:<br>
+This approach keeps the main <code>go.mod</code> and <code>go.sum</code> clean of any tool dependencies, but not the other way around. So the <code>tools.mod</code> and <code>tools.sum</code> will ultimately contain all the dependencies from the main <code>go.mod</code> (that is a side-effect of running <code>go mod tidy -modfile=tools.mod</code> as <code>go mod</code> always consults the main <code>go.mod</code>, hence all of its dependencies end up in your <code>tools.mod</code> and <code>tools.sum</code>).</p>
 
-<p><a href="https://www.buzzfeed.com/" target="_blank">BuzzFeed</a> recently hired a new Engineering Manager 🎉 🙂</p>
+<p>This is unavoidable. There is no way to get around it (trust me, I&rsquo;ve tried 😅).</p>
 
-<p>Her name is <a href="https://twitter.com/SBozhko" target="_blank">Svetlana Bozhko</a> and she kindly shared with me a &lsquo;cheat sheet&rsquo; (of sorts) that helps her stay on-track/focused.</p>
+<p>Now, this isn&rsquo;t the end of the world as the <code>tools</code> directive is still at the top of the <code>tools.mod</code> and is very clear as to what &ldquo;tools&rdquo; are installed, but yeah, you&rsquo;ll also see a bunch of <code>require</code> directives (related to your main Go project) as well, unfortunately.</p>
 
-<p>I know of other Engineering Managers/Directors of Engineering (some of whom work for a few of &lsquo;the big 4&rsquo;) who use a similar approach, and it&rsquo;s something I personally like.</p>
+<p>One thing you could do, is only run the <code>go get -u -modfile=tools.mod tool</code> command, which would keep your <code>tools.mod</code> clean, and would only update <code>tools.sum</code> with the relevant updated dependencies. The problem with that is the old dependencies aren&rsquo;t cleaned out. e.g. if you updated tool &ldquo;foo&rdquo; from version 1.0 to 2.0 then both versions appear in your <code>tools.sum</code> (this is why we have <code>go mod tidy</code> to ensure only 2.0 is present in the <code>tools.sum</code>). So one approach would simple be to manually clean up the <code>go.sum</code> everytime after running <code>go get -u -modfile=tools.mod tool</code> &ndash; it&rsquo;s not that difficult as you just look for the new tool version added and remove the old one, but it&rsquo;s a manual process and that sucks).</p>
+</blockquote>
 
-<p>Here&rsquo;s an example of what such a &lsquo;cheat sheet&rsquo; might look like:</p>
+<h2 id="tools-go">tools.go</h2>
 
-<h3 id="daily">Daily</h3>
+<blockquote>
+<p>🗒️ <strong>NOTE</strong>:<br>
+For more details on code generation in a general sense, refer to:<br>
+<a href="https://gist.github.com/Integralist/8f39eb897316e1cbeaf9eff8326cfa59" target="_blank">https://gist.github.com/Integralist/8f39eb897316e1cbeaf9eff8326cfa59</a></p>
+</blockquote>
 
-<ul>
-<li><strong>Personal</strong>
+<p>The following file <code>internal/tools/tools.go</code> uses a build tag to avoid the dependencies being compiled into your application binary&hellip;</p>
 
-<ul>
-<li>Am I ready for today&rsquo;s meetings?</li>
-<li>Can I reduce the length of those meetings?</li>
-<li>Can I cancel any of those meetings?</li>
-</ul></li>
-<li><strong>People</strong>
+<pre><code class="language-go">//go:build tools
 
-<ul>
-<li>Recruiting, Hiring, Interviewing</li>
-<li>Candidate follow-ups</li>
-<li>Sell the company, its vision, roles etc</li>
-<li>Close great candidates</li>
-<li>Observe team health</li>
-<li>Casual feedback sessions</li>
-</ul></li>
-<li><strong>Processes</strong>
+// Package tools manages go-based tools that are used to develop in this repo.
+package tools
 
-<ul>
-<li>Daily standups</li>
-<li>Am I ready for these standups?</li>
-<li>Any important company-wide updates?</li>
-</ul></li>
-<li><strong>Projects</strong>
+import (
+	_ &quot;github.com/nbio/cart&quot;
+	_ &quot;github.com/nbio/slugger&quot;
+	_ &quot;github.com/psampaz/go-mod-outdated&quot;
+	_ &quot;github.com/stealthrocket/wasi-go/cmd/wasirun&quot;
+	_ &quot;github.com/tetratelabs/wazero/cmd/wazero&quot;
+	_ &quot;golang.org/x/lint/golint&quot;
+	_ &quot;golang.org/x/tools/cmd/stringer&quot;
+	_ &quot;golang.org/x/vuln/cmd/govulncheck&quot;
+)
 
-<ul>
-<li>Are we on track with critical projects?</li>
-<li>Any docs/guides needed to be written?</li>
-<li>Any PRs waiting my approval/feedback?</li>
-<li>Should I step in on any engineering tasks?</li>
-</ul></li>
-</ul>
+//go:generate go install github.com/nbio/cart
+//go:generate go install github.com/nbio/slugger
+//go:generate go install github.com/psampaz/go-mod-outdated
+//go:generate go install github.com/stealthrocket/wasi-go/cmd/wasirun
+//go:generate go install github.com/tetratelabs/wazero/cmd/wazero
+//go:generate go install golang.org/x/lint/golint
+//go:generate go install golang.org/x/vuln/cmd/govulncheck
+//go:generate go install golang.org/x/tools/cmd/stringer
+</code></pre>
 
-<h3 id="weekly">Weekly</h3>
+<p>Notice the <code>go:generate</code> comments? Yup, we invoke them like so (notice the <code>-tags</code> flag):</p>
 
-<ul>
-<li><strong>Personal</strong>
+<pre><code class="language-Makefile">tools: internal/tools/tools.go
+	go generate -v -x -tags tools ./internal/tools/...
+</code></pre>
 
-<ul>
-<li>Have I setup my goals for this/next week?</li>
-<li>How do I progress with my goals?</li>
-</ul></li>
-<li><strong>People</strong>
+<h2 id="go-run">go run</h2>
 
-<ul>
-<li>1:1&rsquo;s and enhancing their strengths</li>
-<li>Who needs additional feedback?</li>
-<li>Any tasks I can delegate?</li>
-</ul></li>
-<li><strong>Processes</strong>
+<p>An alternative to this approach is to use <code>go run</code> directly, which downloads tools to a cache but doesn&rsquo;t install them and yet still gives you explicit versioning consistency across developer&rsquo;s machines&hellip;</p>
 
-<ul>
-<li>Review all tasks in backlog</li>
-<li>Any design/architecture discussions?</li>
-<li>Divide tasks into smaller ones</li>
-<li>Plan team retrospectives</li>
-</ul></li>
-<li><strong>Projects</strong>
+<pre><code class="language-go">//go:generate go run golang.org/x/tools/cmd/stringer@v0.25.0 -type=Scope -linecomment
+</code></pre>
 
-<ul>
-<li>Give status reports to my managers</li>
-<li>Who else do I need to update?</li>
-</ul></li>
-</ul>
+<p>I then invoke go generation with:</p>
 
-<h3 id="monthly">Monthly</h3>
+<pre><code class="language-Makefile">.PHONY: go-gen
+go-gen: ## Invoke go generate
+	@# The `-x` flag prints the shell commands that `go generate` runs.
+	go generate -v -x ./mustang/status/...
+</code></pre>
 
-<ul>
-<li><strong>Personal</strong>
-
-<ul>
-<li>What do I need to do to be more successful in my role?</li>
-<li>Any training I can do, mentoring I can give, books I can read?</li>
-</ul></li>
-<li><strong>People</strong>
-
-<ul>
-<li>Ensure team vision is aligned</li>
-<li>Ensure team expectations are understood</li>
-<li>Any team events we should consider?</li>
-<li>1:1&rsquo;s focused specifically on career growth</li>
-<li>Anyone moved into new roles?</li>
-<li>Do I need to set new expectations?</li>
-<li>Any changes to the career ladder?</li>
-<li>What changes would make it more fun to work here?</li>
-</ul></li>
-<li><strong>Processes</strong>
-
-<ul>
-<li>Challenge and question existing processes</li>
-<li>Are the current sprint metrics still useful?</li>
-</ul></li>
-<li><strong>Projects</strong>
-
-<ul>
-<li>Any strategic ideas to improve current projects?</li>
-<li>Do we need a new project?</li>
-<li>Dow we need to stop a project?</li>
-<li>Any strategic hires needed?</li>
-<li>Budget and capacity planning</li>
-</ul></li>
-</ul>
-
-<h2 id="conclusion">Conclusion</h2>
-
-<p>So what do <em>you</em> think? Is there anything here that you disagree with, or something you feel I missed altogether? Let me know on twitter!</p>
+<blockquote>
+<p>💡 <strong>TIP</strong>:<br>
+If you&rsquo;re developing whilst offline, then one advantage the tools.go pattern
+has is that it works whilst offline because the tool is explicitly installed.
+But to work around that with <code>go run</code> you can set <code>export GOPROXY=direct</code> and
+as long as you have the module in your local cache you&rsquo;ll be able to use it.</p>
+</blockquote>
 
           </section>
         </div>
