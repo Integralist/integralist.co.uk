@@ -51,8 +51,6 @@
 
 <li><a href="#mutex">Mutex</a></li>
 
-<li><a href="#conditions">Conditions</a></li>
-
 <li><a href="#atomic-operations">Atomic Operations</a></li>
 
 <li><a href="#once">Once</a></li>
@@ -61,11 +59,16 @@
 
 <li><a href="#map">Map</a></li>
 
+<li><a href="#conditions">Conditions</a></li>
+
 <li><a href="#real-examples">Real Examples</a>
 <ul>
+<li><a href="#bulk-deletion-api">Bulk Deletion API</a>
+<ul>
 <li><a href="#update-2024-11-01">UPDATE 2024.11.01</a></li>
+</ul></li>
 
-<li><a href="#update-2025-03-21">UPDATE 2025.03.21</a></li>
+<li><a href="#tls-certificate-asynchronous-pipeline">TLS Certificate asynchronous Pipeline</a></li>
 </ul></li>
 
 <li><a href="#reference-material">Reference Material</a></li>
@@ -129,7 +132,7 @@ func main() {
 <p><a href="https://play.golang.com/p/SdOdZ90-exI" target="_blank">https://play.golang.com/p/SdOdZ90-exI</a></p>
 
 <blockquote>
-<p>⚠️ <strong>NOTE</strong><br>
+<p>🗒️ <strong>NOTE</strong><br>
 In Go, the <code>main</code> function is effectively the &ldquo;initial&rdquo; goroutine.<br>
 When a Go program starts, the Go runtime creates a goroutine to run <code>main</code>.<br>
 This main goroutine can then spawn additional goroutines as needed.</p>
@@ -143,8 +146,11 @@ and they help avoid race conditions by enabling safe data sharing.</p>
 
 <blockquote>
 <p>⚠️ <strong>IMPORTANT</strong><br>
-In the following example the <code>&lt;-ch</code> BLOCKS the main thread.<br>
-This can cause a deadlock if we don&rsquo;t have a goroutine running to unblock it.</p>
+Sending and receiving channel messages can
+<a href="https://go.dev/tour/concurrency/2" target="_blank">block</a>.<br>
+In the following example the <code>&lt;-ch</code> BLOCKS the <code>main()</code> function.<br>
+While the <code>ch &lt;-</code> BLOCKS the <code>sendMessage()</code> function.<br>
+This can cause a deadlock, hence we use a goroutine to unblock things.</p>
 </blockquote>
 
 <pre><code class="language-go">package main
@@ -155,6 +161,8 @@ import (
 
 func sendMessage(ch chan string) {
 	ch &lt;- &quot;Hello from a goroutine!&quot; // Send a message to the channel
+	                                // ⚠️ This BLOCKS but as it's running in a goroutine 
+	                                // the program is unaffected.
 }
 
 func main() {
@@ -165,7 +173,7 @@ func main() {
 	go sendMessage(ch)
 
 	// Receive the message from the channel
-	msg := &lt;-ch
+	msg := &lt;-ch // ⚠️ This BLOCKS the program (hence sendMessage() runs in a goroutine)
 	fmt.Println(msg) // Output: Hello from a goroutine!
 }
 </code></pre>
@@ -174,22 +182,33 @@ func main() {
 
 <blockquote>
 <p>⚠️ <strong>IMPORTANT</strong><br>
+You can <code>range</code> over a channel, but the loop will never stop unless the
+channel is closed.<br>
+So when ranging over a channel, think how the program can proceed and when is
+the channel going to be closed.</p>
+
+<p>🗒️ <strong>NOTE</strong><br>
+Depending on what you application needs, you can create
+<a href="https://go.dev/tour/concurrency/3" target="_blank">buffered</a> channels.<br>
+Sends to a buffered channel block only when the buffer is full.</p>
+
+<p>💡 <strong>TIP</strong><br>
 The most crucial best practice is to close the channel from the sender side, not the receiver.<br>
 The sender is the goroutine that writes data to the channel.<br>
-This signals to the receiver that no more values will be sent.</p>
+Hence the sender knows when there&rsquo;s no more data to be sent, not the receiver.</p>
 </blockquote>
 
 <h2 id="select-statement">Select Statement</h2>
 
-<p>The <code>select</code> statement is used to wait on multiple channel operations. It blocks
-until one of its cases can proceed, which makes it essential for handling
-multiple asynchronous tasks.</p>
+<p>The <code>select</code> statement is used to wait on multiple channel operations.<br>
+It blocks until one of its cases can proceed, which makes it essential for
+handling multiple asynchronous tasks.</p>
 
 <p>Use <code>select</code> when you have multiple channels to listen to, and you want to
 respond to whichever channel receives data first.</p>
 
 <blockquote>
-<p>⚠️ <strong>NOTE</strong><br>
+<p>⚠️ <strong>IMPORTANT</strong><br>
 In the following example, the first goroutine uses a <code>time.Sleep</code>.<br>
 This is to simulate the operation taking a long time.<br>
 It results in the <code>select</code> pulling a value from the second goroutine.</p>
@@ -229,7 +248,7 @@ func main() {
 <p>A common use case for <code>select</code> is to timeout a potential deadlock:</p>
 
 <blockquote>
-<p>⚠️ <strong>NOTE</strong><br>
+<p>⚠️ <strong>IMPORTANT</strong><br>
 In the following example we use <code>time.After</code> to cause a timeout.</p>
 </blockquote>
 
@@ -305,11 +324,21 @@ func main() {
 
 <p><a href="https://play.golang.com/p/LhEdSQIPp1R" target="_blank">https://play.golang.com/p/LhEdSQIPp1R</a></p>
 
+<blockquote>
+<p>💡 <strong>TIP</strong><br>
+The <a href="https://pkg.go.dev/golang.org/x/sync/errgroup" target="_blank">errgroup</a> package is like
+a <code>sync.WaitGroup</code> but with added capabilities for error handling and context
+cancellation; while a WaitGroup simply waits for a collection of goroutines to
+finish, an errgroup also collects any errors returned by those goroutines and
+can cancel all of them if one fails.</p>
+</blockquote>
+
 <h2 id="mutex">Mutex</h2>
 
 <p>Go&rsquo;s <code>sync.Mutex</code> provides mutual exclusion, allowing only one goroutine at a
-time to access a critical section of code. While <code>sync.RWMutex</code> is a variant
-that allows multiple readers or a single writer but not both.</p>
+time to access a critical section of code.<br>
+While <code>sync.RWMutex</code> is a variant that allows multiple readers or a single
+writer but not both.</p>
 
 <p>Use <code>sync.Mutex</code> or <code>sync.RWMutex</code> when you need fine-grained control over data
 access and want to protect shared data from race conditions.</p>
@@ -362,165 +391,11 @@ func main() {
 <p><a href="https://play.golang.com/p/VIbNkQaPfZI" target="_blank">https://play.golang.com/p/VIbNkQaPfZI</a></p>
 
 <blockquote>
-<p>⚠️ <strong>NOTE</strong><br>
+<p>🗒️ <strong>NOTE</strong><br>
 The use of <code>defer</code> in the <code>Increment()</code> method is redundant.<br>
 It&rsquo;s more useful for long complex functions where errors can occur.<br>
 Here I should have just placed the <code>Unlock()</code> call after the <code>c.value++</code>.</p>
 </blockquote>
-
-<h2 id="conditions">Conditions</h2>
-
-<p>Go&rsquo;s <code>sync.Cond</code> is used for signaling between goroutines. It lets goroutines
-wait until they are notified to continue, which is useful when one goroutine
-needs to wait for a certain condition to be met by another goroutine.</p>
-
-<p>Use <code>sync.Cond</code> when you need goroutines to wait for certain conditions, such as
-producer-consumer scenarios.</p>
-
-<p>In the following example, <code>cond.Wait()</code> blocks until <code>cond.Signal()</code> is called.
-It&rsquo;s useful for waiting on complex conditions where other primitives like <code>chan</code>
-may not be ideal:</p>
-
-<blockquote>
-<p>⚠️ <strong>IMPORTANT</strong><br>
-The call to <code>cond.L.Lock()</code> in the main goroutine just before <code>for !ready</code> is
-required, otherwise you&rsquo;ll get the error <code>fatal error: sync: unlock of unlocked mutex</code>. This is because <code>cond.Wait()</code> expects the caller to hold the
-lock before calling <code>Wait()</code> (see <a href="https://youtu.be/VAV2h1GdgE0?si=cqErfqLXnWOgmcsh" target="_blank">this
-video</a> for details). Once
-<code>Wait()</code> returns, it reacquires the lock, ensuring the main goroutine can
-safely check ready and exit the loop.</p>
-</blockquote>
-
-<pre><code class="language-go">package main
-
-import (
-	&quot;fmt&quot;
-	&quot;sync&quot;
-	&quot;time&quot;
-)
-
-func main() {
-	var mu sync.Mutex
-	cond := sync.NewCond(&amp;mu)
-	ready := false
-
-	go func() {
-		time.Sleep(1 * time.Second)
-		cond.L.Lock()
-		ready = true
-		cond.L.Unlock()
-		cond.Signal() // Notify one waiting goroutine
-	}()
-
-	cond.L.Lock()
-	for !ready {
-		cond.Wait() // Wait until condition is met
-	}
-	fmt.Println(&quot;Ready is true, proceeding.&quot;)
-	cond.L.Unlock()
-}
-</code></pre>
-
-<p><a href="https://play.golang.com/p/n_txZaH7lPA" target="_blank">https://play.golang.com/p/n_txZaH7lPA</a></p>
-
-<p>In the following example we have multiple worker goroutines waiting on a shared
-condition to be &ldquo;notified.&rdquo; We&rsquo;ll see how both <code>.Signal()</code> and <code>.Broadcast()</code>
-work when notifying waiting goroutines:</p>
-
-<pre><code class="language-go">package main
-
-import (
-	&quot;fmt&quot;
-	&quot;sync&quot;
-	&quot;time&quot;
-)
-
-func worker(id int, cond *sync.Cond) {
-	cond.L.Lock() // Lock the condition
-	defer cond.L.Unlock()
-
-	fmt.Printf(&quot;Worker %d is waiting\n&quot;, id)
-	cond.Wait() // Wait for a signal or broadcast
-	fmt.Printf(&quot;Worker %d is proceeding\n&quot;, id)
-}
-
-func main() {
-	lock := &amp;sync.Mutex{}
-	cond := sync.NewCond(lock)
-
-	// Start multiple worker goroutines that will wait on the condition
-	for i := range 3 {
-		go worker(i, cond)
-	}
-
-	// Allow time for all workers to start and wait
-	time.Sleep(1 * time.Second)
-
-	// Use Signal to wake up one goroutine
-	fmt.Println(&quot;Notifying one worker&quot;)
-	cond.Signal() // Notifies one waiting worker
-	time.Sleep(1 * time.Second)
-
-	// Use Broadcast to wake up all remaining goroutines
-	fmt.Println(&quot;Broadcasting to all remaining workers&quot;)
-	cond.Broadcast() // Notifies all remaining waiting workers
-
-	// Allow time for all goroutines to complete
-	time.Sleep(2 * time.Second)
-	fmt.Println(&quot;Main function exiting.&quot;)
-}
-</code></pre>
-
-<p><a href="https://play.golang.com/p/41ibtmUmKaN" target="_blank">https://play.golang.com/p/41ibtmUmKaN</a></p>
-
-<p>Each worker goroutine locks the condition, calls <code>cond.Wait()</code>, and then waits.
-This releases the lock (as we now understand from the earlier IMPORTANT note,
-see above if you missed it), allowing other goroutines to call <code>Wait()</code> as well.</p>
-
-<p>The <code>cond.Signal()</code> call in the <code>main</code> function wakes up one of the waiting
-goroutines, allowing it to proceed.</p>
-
-<p>After a short delay, <code>cond.Broadcast()</code> wakes up all remaining waiting
-goroutines, allowing them to proceed simultaneously.</p>
-
-<p>This is useful for scenarios where multiple tasks need to wait for a common
-event or state change to proceed.</p>
-
-<blockquote>
-<p>⚠️ <strong>IMPORTANT</strong><br>
-Notifications are not ordered.<br>
-Any one of the waiting goroutines can be chosen to proceed first.<br>
-Broadcast ensures that all waiting goroutines eventually proceed.</p>
-</blockquote>
-
-<p>Now you might be thinking &ldquo;hmm, it looks like I could use channels instead and
-they&rsquo;re more idiomatic&rdquo;.</p>
-
-<p>Well, here are some reasons for why you might need to choose <code>sync.Cond</code> over
-channels:</p>
-
-<ol>
-<li><p>Fine-Grained Control: <code>sync.Cond</code> allows precise control over waiting and
-signaling, suitable for cases where specific conditions must be checked or
-managed.</p></li>
-
-<li><p>Broadcast Capability: Broadcasting to multiple goroutines is straightforward
-with <code>sync.Cond</code>, whereas channels require individual signaling, which can be
-inefficient.</p></li>
-
-<li><p>Reduced Complexity for State-Based Waiting: <code>sync.Cond</code> is ideal for
-situations where goroutines need to wait for specific conditions to be true,
-rather than for individual values or events passed through a channel.</p></li>
-
-<li><p>Avoiding Channel Overhead: Channels introduce buffering and management
-overhead, especially with many goroutines, whereas <code>sync.Cond</code> relies on a
-shared mutex with a direct wait/notify mechanism, which is often faster.</p></li>
-</ol>
-
-<p>In summary, <code>sync.Cond</code> is best suited for use cases that involve waiting for
-and signaling conditions, especially when you need more control over
-synchronization and when goroutines are reacting to shared state changes rather
-than discrete message passing.</p>
 
 <h2 id="atomic-operations">Atomic Operations</h2>
 
@@ -664,7 +539,167 @@ reduce lock contention compared to a Go map paired with a separate Mutex or
 RWMutex.</p>
 </blockquote>
 
+<h2 id="conditions">Conditions</h2>
+
+<p>Go&rsquo;s <code>sync.Cond</code> is probably the most confusing and hard to use of all
+concurrency tools (hence I&rsquo;ve left it till last). It&rsquo;s used for signaling
+between goroutines. It lets goroutines wait until they are notified to continue,
+which is useful when one goroutine needs to wait for a certain condition to be
+met by another goroutine.</p>
+
+<p>Use <code>sync.Cond</code> when you need goroutines to wait for certain conditions, such as
+producer-consumer scenarios.</p>
+
+<p>In the following example, <code>cond.Wait()</code> blocks until <code>cond.Signal()</code> is called.
+It&rsquo;s useful for waiting on complex conditions where other primitives like <code>chan</code>
+may not be ideal:</p>
+
+<blockquote>
+<p>⚠️ <strong>IMPORTANT</strong><br>
+The call to <code>cond.L.Lock()</code> in the main goroutine just before <code>for !ready</code> is
+required, otherwise you&rsquo;ll get the error <code>fatal error: sync: unlock of unlocked mutex</code>. This is because <code>cond.Wait()</code> expects the caller to hold the
+lock before calling <code>Wait()</code> (see <a href="https://youtu.be/VAV2h1GdgE0?si=cqErfqLXnWOgmcsh" target="_blank">this
+video</a> for details). Once
+<code>Wait()</code> returns, it reacquires the lock, ensuring the main goroutine can
+safely check ready and exit the loop.</p>
+</blockquote>
+
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+	&quot;sync&quot;
+	&quot;time&quot;
+)
+
+func main() {
+	var mu sync.Mutex
+	cond := sync.NewCond(&amp;mu)
+	ready := false
+
+	go func() {
+		time.Sleep(1 * time.Second)
+		cond.L.Lock()
+		ready = true
+		cond.L.Unlock()
+		cond.Signal() // Notify one waiting goroutine
+	}()
+
+	cond.L.Lock()
+	for !ready {
+		cond.Wait() // Wait until condition is met
+	}
+	fmt.Println(&quot;Ready is true, proceeding.&quot;)
+	cond.L.Unlock()
+}
+</code></pre>
+
+<p><a href="https://play.golang.com/p/n_txZaH7lPA" target="_blank">https://play.golang.com/p/n_txZaH7lPA</a></p>
+
+<p>In the following example we have multiple worker goroutines waiting on a shared
+condition to be &ldquo;notified.&rdquo; We&rsquo;ll see how both <code>.Signal()</code> and <code>.Broadcast()</code>
+work when notifying waiting goroutines:</p>
+
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+	&quot;sync&quot;
+	&quot;time&quot;
+)
+
+func worker(id int, cond *sync.Cond) {
+	cond.L.Lock() // Lock the condition
+	defer cond.L.Unlock()
+
+	fmt.Printf(&quot;Worker %d is waiting\n&quot;, id)
+	cond.Wait() // Wait for a signal or broadcast
+	fmt.Printf(&quot;Worker %d is proceeding\n&quot;, id)
+}
+
+func main() {
+	lock := &amp;sync.Mutex{}
+	cond := sync.NewCond(lock)
+
+	// Start multiple worker goroutines that will wait on the condition
+	for i := range 3 {
+		go worker(i, cond)
+	}
+
+	// Allow time for all workers to start and wait
+	time.Sleep(1 * time.Second)
+
+	// Use Signal to wake up one goroutine
+	fmt.Println(&quot;Notifying one worker&quot;)
+	cond.Signal() // Notifies one waiting worker
+	time.Sleep(1 * time.Second)
+
+	// Use Broadcast to wake up all remaining goroutines
+	fmt.Println(&quot;Broadcasting to all remaining workers&quot;)
+	cond.Broadcast() // Notifies all remaining waiting workers
+
+	// Allow time for all goroutines to complete
+	time.Sleep(2 * time.Second)
+	fmt.Println(&quot;Main function exiting.&quot;)
+}
+</code></pre>
+
+<p><a href="https://play.golang.com/p/41ibtmUmKaN" target="_blank">https://play.golang.com/p/41ibtmUmKaN</a></p>
+
+<p>Each worker goroutine locks the condition, calls <code>cond.Wait()</code>, and then waits.
+This releases the lock (as we now understand from the earlier IMPORTANT note,
+see above if you missed it), allowing other goroutines to call <code>Wait()</code> as well.</p>
+
+<p>The <code>cond.Signal()</code> call in the <code>main</code> function wakes up one of the waiting
+goroutines, allowing it to proceed.</p>
+
+<p>After a short delay, <code>cond.Broadcast()</code> wakes up all remaining waiting
+goroutines, allowing them to proceed simultaneously.</p>
+
+<p>This is useful for scenarios where multiple tasks need to wait for a common
+event or state change to proceed.</p>
+
+<blockquote>
+<p>🗒️ <strong>NOTE</strong><br>
+Notifications are not ordered.<br>
+Any one of the waiting goroutines can be chosen to proceed first.<br>
+Broadcast ensures that all waiting goroutines eventually proceed.</p>
+</blockquote>
+
+<p>Now you might be thinking &ldquo;hmm, it looks like I could use channels instead and
+they&rsquo;re more idiomatic&rdquo;.</p>
+
+<p>Well, here are some reasons for why you might need to choose <code>sync.Cond</code> over
+channels:</p>
+
+<ol>
+<li><p>Fine-Grained Control: <code>sync.Cond</code> allows precise control over waiting and
+signaling, suitable for cases where specific conditions must be checked or
+managed.</p></li>
+
+<li><p>Broadcast Capability: Broadcasting to multiple goroutines is straightforward
+with <code>sync.Cond</code>, whereas channels require individual signaling, which can be
+inefficient.</p></li>
+
+<li><p>Reduced Complexity for State-Based Waiting: <code>sync.Cond</code> is ideal for
+situations where goroutines need to wait for specific conditions to be true,
+rather than for individual values or events passed through a channel.</p></li>
+
+<li><p>Avoiding Channel Overhead: Channels introduce buffering and management
+overhead, especially with many goroutines, whereas <code>sync.Cond</code> relies on a
+shared mutex with a direct wait/notify mechanism, which is often faster.</p></li>
+</ol>
+
+<p>In summary, <code>sync.Cond</code> is best suited for use cases that involve waiting for
+and signaling conditions, especially when you need more control over
+synchronization and when goroutines are reacting to shared state changes rather
+than discrete message passing.</p>
+
 <h2 id="real-examples">Real Examples</h2>
+
+<p>Here are some real world application code I&rsquo;ve had to write.</p>
+
+<h3 id="bulk-deletion-api">Bulk Deletion API</h3>
 
 <p>Below is a &lsquo;real world&rsquo; example where we need to delete a bunch of keys from a
 data store.</p>
@@ -827,7 +862,7 @@ accurately tracking the number of deleted keys. We use its <code>Add()</code> me
 the goroutine to safely increment the counter, and then at the end of the
 function we use its <code>Load()</code> method to safely extract the final value.</p>
 
-<h3 id="update-2024-11-01">UPDATE 2024.11.01</h3>
+<h4 id="update-2024-11-01">UPDATE 2024.11.01</h4>
 
 <p>Below is a modification to the &lsquo;real world&rsquo; example code.</p>
 
@@ -960,7 +995,7 @@ func deleteAllKVStoreKeys(
 
 <!-- markdownlint-enable -->
 
-<h3 id="update-2025-03-21">UPDATE 2025.03.21</h3>
+<h3 id="tls-certificate-asynchronous-pipeline">TLS Certificate asynchronous Pipeline</h3>
 
 <p>I ended up needing to write some pretty complex asynchronous code with multiple
 layers of fan-out requests.</p>
@@ -1053,7 +1088,6 @@ func consumerChecks() {
 	l := log.New()
 	ctx := context.Background()
 
-	// TODO: Consider using pointer to Order struct to reduce value copying.
 	for o := range ordersCheck {
 		sl := l.With(
 			slog.Group(&quot;retries&quot;,
@@ -1064,7 +1098,6 @@ func consumerChecks() {
 		sl.LogAttrs(ctx, slog.LevelInfo, &quot;consumer_check&quot;, slog.String(&quot;state&quot;, &quot;start&quot;))
 
 		if o.retries &gt; maxRetries {
-			// TODO: send order to a dead letter queue
 			sl.LogAttrs(ctx, slog.LevelWarn, &quot;consumer_check&quot;, slog.String(&quot;state&quot;, &quot;dead&quot;))
 			continue
 		}
@@ -1114,10 +1147,7 @@ func consumerChecks() {
 			)
 			o.retries++
 
-			// TODO: When implementing NSQ use DeferredPublish.
-			// https://pkg.go.dev/github.com/nsqio/go-nsq#DeferredPublish
 			time.Sleep(time.Duration(backoff) * time.Minute) // increases exponentially
-			// TODO: Extend the backoff to once a day requeue.
 			backoff = math.Min(backoff*backoffMultiplier, backoffMax)
 			go func() {
 				ordersCheck &lt;- o // put the order back on the queue for retry.
@@ -1301,7 +1331,7 @@ is as robust as possible.</p>
 <h2 id="reference-material">Reference Material</h2>
 
 <ul>
-<li><a href="../go-style-guide/index.html">../go-style-guide/index.html</a></li>
+<li><a href="../go-style-guide/index.html">Go Style Guide</a></li>
 <li><a href="https://go.dev/doc/effective_go#concurrency" target="_blank">go.dev/doc/effective_go</a></li>
 </ul>
 
