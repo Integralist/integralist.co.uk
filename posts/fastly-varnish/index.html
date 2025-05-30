@@ -348,8 +348,9 @@ to the next logical state which is actually <code>vcl_fetch</code>.</p>
 request (while also keeping any modifications you might have made to the request
 intact). To do that you would call <code>return(restart)</code>.</p>
 
-<p><img src="../../assets/images/varnish.webp" class="post-img" loading="lazy">
-<small class="img-caption">^^ Varnish in action</small></p>
+<p><img src="../../assets/images/varnish.webp" class="post-img" loading="lazy"></p>
+
+<p><small class="img-caption">^^ Varnish in action</small></p>
 
 <h3 id="states-vs-actions">States vs Actions</h3>
 
@@ -444,8 +445,9 @@ we (as customers) can see, and this VCL is used to help Fastly scale varnish
 (e.g. handle things like their custom clustering solution).</p>
 </blockquote>
 
-<p><img src="../../assets/images/cant-see-me.webp" class="post-img" loading="lazy">
-<small class="img-caption">fastly&rsquo;s master VCL be all like ^^</small></p>
+<p><img src="../../assets/images/cant-see-me.webp" class="post-img" loading="lazy"></p>
+
+<p><small class="img-caption">fastly&rsquo;s master VCL be all like ^^</small></p>
 
 <h2 id="custom-vcl">Custom VCL</h2>
 
@@ -1072,8 +1074,9 @@ will cache the response from the fetching node (including the MISS reported by
 <code>fastly-debug-ttl</code>) and so even if another request reaches the name delivery
 node, it will report a <code>MISS, HIT</code> combination.</p>
 
-<p><img src="../../assets/images/you-lose.webp" class="post-img" loading="lazy">
-<small class="img-caption">thanks Fastly, for this totally not confusing setup</small></p>
+<p><img src="../../assets/images/you-lose.webp" class="post-img" loading="lazy"></p>
+
+<p><small class="img-caption">thanks Fastly, for this totally not confusing setup ^^</small></p>
 
 <h3 id="304-not-modified">304 Not Modified</h3>
 
@@ -1498,8 +1501,9 @@ will result in a &lsquo;last cached wins&rsquo; scenario (e.g. if you have two r
 going simultaneously to origin, whichever responds first will be cached but then
 the one that responds last will overwrite the first cached response).</p>
 
-<p><img src="../../assets/images/collapse.webp" class="post-img post-img-small" loading="lazy">
-<small class="img-caption">request collapsing in action</small></p>
+<p><img src="../../assets/images/collapse.webp" class="post-img post-img-small" loading="lazy"></p>
+
+<p><small class="img-caption">request collapsing in action ^^</small></p>
 
 <h2 id="clustering">Clustering</h2>
 
@@ -1744,8 +1748,9 @@ happens less frequently because you would have to <code>return(pass)</code> from
 <code>vcl_hit</code> or <code>vcl_miss</code> (and that’s not a typical state change flow for most
 people).</p>
 
-<p><img src="../../assets/images/this-is-fine.webp" class="post-img" loading="lazy">
-<small class="img-caption">^^ whenever I learn something new about Fastly</small></p>
+<p><img src="../../assets/images/this-is-fine.webp" class="post-img" loading="lazy"></p>
+
+<p><small class="img-caption">^^ whenever I learn something new about Fastly</small></p>
 
 <h3 id="breaking-clustering">Breaking clustering</h3>
 
@@ -2983,8 +2988,9 @@ served stale if its &lsquo;stale ttl&rsquo; has yet to expire).</p>
 <p>The reason we do this is because serving old (i.e. stale) content is better than
 serving an error.</p>
 
-<p><img src="../../assets/images/stale.webp" class="post-img" loading="lazy">
-<small class="img-caption">stale content is always better, right!</small></p>
+<p><img src="../../assets/images/stale.webp" class="post-img" loading="lazy"></p>
+
+<p><small class="img-caption">stale content is always better, right! ^^</small></p>
 
 <p>In order to serve stale we need to add some conditional checks into our VCL logic.</p>
 
