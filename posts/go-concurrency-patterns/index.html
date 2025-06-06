@@ -49,6 +49,8 @@
 
 <li><a href="#wait-groups">Wait Groups</a></li>
 
+<li><a href="#error-groups">Error Groups</a></li>
+
 <li><a href="#mutex">Mutex</a></li>
 
 <li><a href="#atomic-operations">Atomic Operations</a></li>
@@ -324,14 +326,92 @@ func main() {
 
 <p><a href="https://play.golang.com/p/LhEdSQIPp1R" target="_blank">https://play.golang.com/p/LhEdSQIPp1R</a></p>
 
-<blockquote>
-<p>💡 <strong>TIP</strong><br>
-The <a href="https://pkg.go.dev/golang.org/x/sync/errgroup" target="_blank">errgroup</a> package is like
-a <code>sync.WaitGroup</code> but with added capabilities for error handling and context
-cancellation; while a WaitGroup simply waits for a collection of goroutines to
-finish, an errgroup also collects any errors returned by those goroutines and
-can cancel all of them if one fails.</p>
-</blockquote>
+<h2 id="error-groups">Error Groups</h2>
+
+<p>The <a href="https://pkg.go.dev/golang.org/x/sync/errgroup" target="_blank">errgroup</a> package is like a
+<code>sync.WaitGroup</code> but with added capabilities for error handling and context
+cancellation.</p>
+
+<p>While a WaitGroup simply waits for a collection of goroutines to finish, an
+errgroup also collects any errors returned by those goroutines and can cancel
+all of them if one fails.</p>
+
+<p>In the following example, when one worker fails, it triggers a cancellation in
+the other workers (some might complete in time, but those that don&rsquo;t will be
+forcefully cancelled):</p>
+
+<pre><code class="language-go">package main
+
+import (
+	&quot;context&quot;
+	&quot;errors&quot;
+	&quot;fmt&quot;
+	&quot;time&quot;
+
+	&quot;golang.org/x/sync/errgroup&quot;
+)
+
+func main() {
+	// errgroup.WithContext creates a new Group and a derived Context.
+	// The errgroup context is cancelled when the first goroutine returns a non-nil
+	// error or when the g.Wait function returns.
+	g, ctx := errgroup.WithContext(context.Background())
+
+	for i := range 10 {
+		g.Go(func() error {
+			// Pass the errgroup context down to the worker.
+			return worker(ctx, i)
+		})
+	}
+	
+	// Wait for all goroutines to finish.
+	// g.Wait will return the first non-nil error returned by a goroutine.
+	if err := g.Wait(); err != nil {
+		fmt.Printf(&quot;\nAn error occurred: %v\n&quot;, err)
+	} else {
+		fmt.Println(&quot;\nAll workers done successfully.&quot;)
+	}
+}
+
+// worker accepts a context to enable cancellation.
+func worker(ctx context.Context, id int) error {
+	fmt.Printf(&quot;Worker %d starting\n&quot;, id)
+	var workDuration time.Duration
+
+	// Assign different work durations to simulate a realistic scenario
+	switch {
+	case id &lt; 3:
+		// These workers are fast and should complete successfully
+		workDuration = time.Duration(id+1) * 100 * time.Millisecond
+	case id == 4:
+		// This worker takes a bit longer and will fail
+		workDuration = 500 * time.Millisecond
+	default:
+		// These workers are slow and should be cancelled
+		workDuration = 2 * time.Second
+	}
+
+	select {
+	case &lt;-time.After(workDuration):
+		// The simulated &quot;work&quot; has finished.
+		// Now we check if this specific worker is supposed to produce an error.
+		if id == 4 {
+			fmt.Printf(&quot;Worker %d encountering an error\n&quot;, id)
+			return errors.New(&quot;something went wrong in worker 4&quot;)
+		}
+		fmt.Printf(&quot;Worker %d done\n&quot;, id)
+
+	case &lt;-ctx.Done():
+		// This block is executed if the context is cancelled before the work is finished.
+		fmt.Printf(&quot;Worker %d cancelled\n&quot;, id)
+		return ctx.Err()
+	}
+
+	return nil
+}
+</code></pre>
+
+<p><a href="https://play.golang.com/p/Xhdl5XU5Iwq" target="_blank">https://play.golang.com/p/Xhdl5XU5Iwq</a></p>
 
 <h2 id="mutex">Mutex</h2>
 
@@ -482,6 +562,11 @@ func main() {
 
 <p>Go&rsquo;s <code>context.Context</code> is not a strict concurrency primitive but is widely used
 to manage timeouts, cancellations, and deadlines across goroutines.</p>
+
+<blockquote>
+<p>💡 <strong>TIP</strong><br>
+You&rsquo;ve seen context used in the <a href="#error-groups">Error Groups</a> example earlier.</p>
+</blockquote>
 
 <p>Use <code>context.Context</code> to signal cancellation or control the lifespan of
 goroutines, particularly in networked or long-running tasks.</p>
