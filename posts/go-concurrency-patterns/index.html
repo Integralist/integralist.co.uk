@@ -326,6 +326,37 @@ func main() {
 
 <p><a href="https://play.golang.com/p/LhEdSQIPp1R" target="_blank">https://play.golang.com/p/LhEdSQIPp1R</a></p>
 
+<blockquote>
+<p>💡 <strong>UPDATE:</strong><br>
+As of Go 1.25 you no longer need to <code>wg.Add</code>/<code>wg.Defer</code> for simple cases.<br>
+Instead you can just use <code>wg.Go()</code>.</p>
+</blockquote>
+
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+	&quot;sync&quot;
+)
+
+func main() {
+	var wg sync.WaitGroup
+
+	wg.Go(func() {
+		fmt.Println(&quot;go is awesome&quot;)
+	})
+
+	wg.Go(func() {
+		fmt.Println(&quot;cats are cute&quot;)
+	})
+
+	wg.Wait()
+	fmt.Println(&quot;done&quot;)
+}
+</code></pre>
+
+<p><a href="https://go.dev/play/p/b_WdOO7IYVM?v=gotip" target="_blank">https://go.dev/play/p/b_WdOO7IYVM?v=gotip</a></p>
+
 <h2 id="error-groups">Error Groups</h2>
 
 <p>The <a href="https://pkg.go.dev/golang.org/x/sync/errgroup" target="_blank">errgroup</a> package is like a
