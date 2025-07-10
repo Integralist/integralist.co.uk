@@ -10,6 +10,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="../../assets/css/main.css" />
+    <link rel="stylesheet" href="../../assets/css/custom.css" />
   </head>
   <body class="is-preload">
 		<button id="backToTop">↑ Back to Top</button>
@@ -133,7 +134,8 @@ a dev environment, a stage environment, and a production environment).</p>
 It is automatically spun-down when the associated PR is merged.</p>
 
 <blockquote>
-<p><strong>NOTE:</strong> We control which files will trigger the dev environment creation.</p>
+<p>[!NOTE]
+We control which files will trigger the dev environment creation.</p>
 </blockquote>
 
 <p>The service name is <code>api-gateway-dev-&lt;BRANCH&gt;</code>.<br>
@@ -156,7 +158,8 @@ development environment that is isolated between different PR authors:</p>
 <p>The last step is required as we&rsquo;re deploying the service to <a href="https://www.fastly.com/" target="_blank">Fastly</a>.</p>
 
 <blockquote>
-<p><strong>NOTE:</strong> You&rsquo;ll notice shortly that our stage and production flows use a
+<p>[!NOTE]
+You&rsquo;ll notice shortly that our stage and production flows use a
 single service and workspace, where as our dev environment is a bit more
 involved and requires its own dynamically created workspace and services. This
 is because we have multiple developers working on multiple features at any one
@@ -175,7 +178,8 @@ infrastructure without affecting anyone else.</p>
 </ol>
 
 <blockquote>
-<p><strong>NOTE:</strong> Again, we control which files will trigger the environment creation.</p>
+<p>[!NOTE]
+Again, we control which files will trigger the environment creation.</p>
 </blockquote>
 
 <p>The service name is <code>api-gateway-stg</code>.<br>
@@ -986,7 +990,8 @@ runs:
 </code></pre>
 
 <blockquote>
-<p><strong>NOTE:</strong> I had to update this action twice. The first was to replace dot
+<p>[!NOTE]
+I had to update this action twice. The first was to replace dot
 characters with a hyphen as TFC complained. The second was to replace
 underscores with a hyphen as Fastly complained (i.e. an underscore is not a
 valid character in a domain).</p>

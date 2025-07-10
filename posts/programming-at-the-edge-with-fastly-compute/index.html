@@ -10,6 +10,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="../../assets/css/main.css" />
+    <link rel="stylesheet" href="../../assets/css/custom.css" />
   </head>
   <body class="is-preload">
 		<button id="backToTop">↑ Back to Top</button>
@@ -72,7 +73,8 @@ understand how caching works there too.</p>
 and sign up for FREE (for more details see <a href="https://www.fastly.com/pricing/" target="_blank">here</a>).</p>
 
 <blockquote>
-<p><strong>NOTE:</strong> Fastly has recently updated its <a href="https://manage.fastly.com/" target="_blank">UI</a> to make creating a new
+<p>[!NOTE]
+Fastly has recently updated its <a href="https://manage.fastly.com/" target="_blank">UI</a> to make creating a new
 Compute service even easier by providing a step through wizard-style
 experience to set up and configure a new service (go check it out).</p>
 </blockquote>
@@ -180,11 +182,13 @@ your package and exposes a local web server for you to interact with:</p>
 </code></pre>
 
 <blockquote>
-<p><strong>NOTE:</strong> If you want to iteratively develop your application then you can
+<p>[!NOTE]
+If you want to iteratively develop your application then you can
 pass the <code>--watch</code> flag to have the CLI monitor your files for changes and to
 hot reload your application.</p>
 
-<p><strong>TIP:</strong> If you want to configure files to be ignored then create a
+<p>[!TIP]
+If you want to configure files to be ignored then create a
 <code>.fastlyignore</code> file. It works like <code>.gitignore</code> so should be familiar to you.</p>
 </blockquote>
 
@@ -390,7 +394,8 @@ browser will only see <code>Cache-Control: max-age=0</code> as <code>s-maxage</c
 and CDNs and so Fastly will strip it from the response header.</p>
 
 <blockquote>
-<p><strong>NOTE:</strong> If you want more information on HTTP caching then take a look at my
+<p>[!NOTE]
+If you want more information on HTTP caching then take a look at my
 blog post <a href="/posts/http-caching-guide/">HTTP Caching Guide</a> which explains all the details.</p>
 </blockquote>
 
@@ -410,7 +415,8 @@ r.CacheOptions.TTL = 30
 readthrough cache works (i.e. it automatically handles caching the responses).</p>
 
 <blockquote>
-<p><strong>NOTE:</strong> Fastly also provides a &lsquo;simple&rsquo; cache interface and a more advanced
+<p>[!NOTE]
+Fastly also provides a &lsquo;simple&rsquo; cache interface and a more advanced
 &lsquo;core&rsquo; cache interface exposed via the Compute SDKs. You can see examples
 <a href="https://www.fastly.com/documentation/guides/concepts/edge-state/cache/#interfaces" target="_blank">here</a>.</p>
 </blockquote>
@@ -423,7 +429,8 @@ again, but this time for the user&rsquo;s web browser by overriding the backend&
 </code></pre>
 
 <blockquote>
-<p>⚠️  <strong>WARNING:</strong> There&rsquo;s a caveat to the readthrough cache that you&rsquo;ll want to
+<p>[!WARNING]
+There&rsquo;s a caveat to the readthrough cache that you&rsquo;ll want to
 be careful with. If your backend sends <code>Cache-Control: private</code>, then
 understandably the readthrough cache will not cache the response because your
 backend has defined that behaviour. In this case, setting <code>r.CacheOptions.TTL</code>

@@ -276,7 +276,8 @@ You can find me online at the following locations:
 
 <hr>
 
-> ⚠️  From here on we get deep into details. It's not necessary to read on unless
+> \[!WARNING\]
+> From here on we get deep into details. It's not necessary to read on unless
 > you're really interested in what I've been up to 🙂
 
 <hr>
@@ -285,7 +286,8 @@ You can find me online at the following locations:
 
 I'd like to share the projects I've worked on over the years and the impact/value this work has provided.
 
-**NOTE**: My 'impact' has primarily been as a _remote_ worker. My hope is that the following list demonstrates how I've made a positive impact (both as an IC and as a Team Lead) while also being a 100% remote worker with a family to support and balance against.
+> \[!NOTE\]
+> My 'impact' has primarily been as a _remote_ worker. My hope is that the following list demonstrates how I've made a positive impact (both as an IC and as a Team Lead) while also being a 100% remote worker with a family to support and balance against.
 
 - [Impact at Fastly](#impact-fastly)
 - [Impact at BuzzFeed](#impact-buzzfeed)
@@ -879,7 +881,7 @@ The following links are to some of my more 'popular' articles. My main focus whe
 
 ## Open-Source
 
-> ⚠️ **NOTE**:\
+> \[!NOTE\]
 > I list the following repositories alphabetically (i.e. they are not prioritized)\
 > and they're probably very stale at this point too.
 >
@@ -957,7 +959,8 @@ The following links are to some of my more 'popular' articles. My main focus whe
 
 I don't profess mastery, but I'm adept with most of the below, and I have an aptitude towards learning what I need to get the job done right.
 
-> **NOTE**: With any static list, this will go stale. For example, I've not worked with JavaScript for _many_ years (I'm aware of the different client-side platform changes, react, virtual doms etc) and although I was a deep dive expert, that is no longer the case. Take this list with a 'pinch of salt'.
+> \[!NOTE\]
+> With any static list, this will go stale. For example, I've not worked with JavaScript for _many_ years (I'm aware of the different client-side platform changes, react, virtual doms etc) and although I was a deep dive expert, that is no longer the case. Take this list with a 'pinch of salt'.
 
 **The _slightly_ more up-to-date list would be**:
 

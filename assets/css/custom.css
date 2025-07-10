@@ -1,0 +1,71 @@
+/* Admonition styles */
+.admonition {
+    padding: 1em 1.5em;
+    margin-bottom: 1em;
+    border-left: .25em solid;
+    border-radius: .25em;
+}
+
+.admonition > :first-child {
+    margin-top: 0;
+}
+
+.admonition > :last-child {
+    margin-bottom: 0;
+}
+
+.admonition::before {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+/* NOTE - blue */
+.admonition.note {
+    border-color: #007bff;
+    background-color: rgba(0, 123, 255, 0.3);
+}
+.admonition.note::before {
+    color: #007bff;
+    content: "🗒️ Note";
+}
+
+/* TIP - green */
+.admonition.tip {
+    border-color: #28a745;
+    background-color: rgba(40, 167, 69, 0.3);
+}
+.admonition.tip::before {
+    color: #28a745;
+    content: "💡 Tip";
+}
+
+/* IMPORTANT - purple */
+.admonition.important {
+    border-color: #6f42c1;
+    background-color: rgba(111, 66, 193, 0.3);
+}
+.admonition.important::before {
+    color: #6f42c1;
+    content: "📌 Important";
+}
+
+/* WARNING - orange */
+.admonition.warning {
+    border-color: #ffc107;
+    background-color: rgba(255, 193, 7, 0.3);
+}
+.admonition.warning::before {
+    color: #ffc107;
+    content: "⚠️ Warning";
+}
+
+/* CAUTION - red */
+.admonition.caution {
+    border-color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.3);
+}
+.admonition.caution::before {
+    color: #dc3545;
+    content: "🚨 Caution";
+}

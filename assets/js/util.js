@@ -584,4 +584,60 @@
 
 	};
 
+	$(function() {
+		$('blockquote').each(function() {
+			var $blockquote = $(this);
+			// Use .children() to only get direct descendants, which should be <p> tags.
+			var $paragraphs = $blockquote.children('p');
+			var newBlockquotes = [];
+			var currentBlockquote = null;
+
+			$paragraphs.each(function() {
+				var $p = $(this);
+				var html = $p.html();
+				var match = html.match(/^\s*\[!([A-Z]+)\]/);
+
+				if (match) {
+					// This paragraph starts a new admonition.
+					// If we were already building a blockquote, push it to our list.
+					if (currentBlockquote) {
+						newBlockquotes.push(currentBlockquote);
+					}
+
+					var type = match[1].toLowerCase();
+					var validTypes = ['note', 'tip', 'important', 'warning', 'caution'];
+
+					if (validTypes.includes(type)) {
+						// Create a new blockquote with the correct admonition class.
+						currentBlockquote = $('<blockquote class="admonition ' + type + '"></blockquote>');
+						var newHtml = html.replace(/^\s*\[![A-Z]+\]\s*(<br\s*\/?>)?\s*/, '');
+						$p.html(newHtml);
+						currentBlockquote.append($p);
+					} else {
+						// The tag is not a valid admonition type, so treat it as a regular blockquote.
+						currentBlockquote = $('<blockquote></blockquote>');
+						currentBlockquote.append($p);
+					}
+				} else {
+					// This paragraph belongs to the current blockquote.
+					if (!currentBlockquote) {
+						// If we're not in a blockquote, start a new plain one.
+						currentBlockquote = $('<blockquote></blockquote>');
+					}
+					currentBlockquote.append($p);
+				}
+			});
+
+			// Don't forget to add the last blockquote to the list.
+			if (currentBlockquote) {
+				newBlockquotes.push(currentBlockquote);
+			}
+
+			// If we created new blockquotes, replace the original one.
+			if (newBlockquotes.length > 0) {
+				$blockquote.replaceWith(newBlockquotes);
+			}
+		});
+	});
+
 })(jQuery);

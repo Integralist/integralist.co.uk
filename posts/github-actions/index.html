@@ -10,6 +10,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="../../assets/css/main.css" />
+    <link rel="stylesheet" href="../../assets/css/custom.css" />
   </head>
   <body class="is-preload">
 		<button id="backToTop">↑ Back to Top</button>
@@ -108,7 +109,8 @@
 <p></p></p>
 
 <blockquote>
-<p><strong>NOTE</strong>: Each job you define will run in parallel. If you need jobs to run sequentially, then you&rsquo;ll need to configure a job to depend on another job using the <code>needs</code> property (we&rsquo;ll see an example of this later).</p>
+<p>[!NOTE]
+Each job you define will run in parallel. If you need jobs to run sequentially, then you&rsquo;ll need to configure a job to depend on another job using the <code>needs</code> property (we&rsquo;ll see an example of this later).</p>
 </blockquote>
 
 <h2 id="documentation">Documentation</h2>
@@ -169,7 +171,8 @@ on:
 </ul>
 
 <blockquote>
-<p><strong>NOTE</strong>: <a href="https://crontab.guru/" target="_blank">https://crontab.guru/</a> makes dealing with cron syntax easy.</p>
+<p>[!NOTE]
+<a href="https://crontab.guru/" target="_blank">https://crontab.guru/</a> makes dealing with cron syntax easy.</p>
 </blockquote>
 
 <p>Refer to GitHub&rsquo;s <a href="https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows" target="_blank">events documentation</a> to learn more about the various events you can configure. For example, you can restrict a workflow to only execute against a specific branch.</p>
@@ -215,7 +218,8 @@ jobs:
 </ul>
 
 <blockquote>
-<p><strong>NOTE</strong>: Refer to the GitHub <a href="https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#github-hosted-runners" target="_blank">runner documentation</a> to see what other environments are available. Also refer to the <a href="https://github.com/actions/virtual-environments" target="_blank">virtual-environments</a> repo to see what is installed on each runner&rsquo;s operating system.</p>
+<p>[!NOTE]
+Refer to the GitHub <a href="https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#github-hosted-runners" target="_blank">runner documentation</a> to see what other environments are available. Also refer to the <a href="https://github.com/actions/virtual-environments" target="_blank">virtual-environments</a> repo to see what is installed on each runner&rsquo;s operating system.</p>
 </blockquote>
 
 <p>As you can see, defining a workflow and its jobs/steps is actually very simple and intuitive. Now we can start looking at using more features and how to take advantage of the platform.</p>
@@ -335,7 +339,8 @@ jobs:
 <p>The trick is to update a GitHub Actions provided environment variable called <code>$GITHUB_ENV</code>. All the following steps will then have an environment that includes whatever is in <code>$GITHUB_ENV</code>.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: You could also use the output of a step as the input to the <code>actions/setup-node</code> action, but we&rsquo;ll look at that feature later.</p>
+<p>[!NOTE]
+You could also use the output of a step as the input to the <code>actions/setup-node</code> action, but we&rsquo;ll look at that feature later.</p>
 </blockquote>
 
 <h2 id="secrets">Secrets</h2>
@@ -417,7 +422,8 @@ jobs:
 <p>All of the above actions, with the exception of the last, are official GitHub maintained actions. This means they are considered safe to use in your workflows (remember that an action runner will be able to use your <code>secrets.GITHUB_TOKEN</code>). See also <a href="https://github.com/actions" target="_blank">https://github.com/actions</a> for more official/verified actions you can use.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: I&rsquo;ve no idea why they don&rsquo;t provide a Rust action.</p>
+<p>[!NOTE]
+I&rsquo;ve no idea why they don&rsquo;t provide a Rust action.</p>
 </blockquote>
 
 <h2 id="conditions">Conditions</h2>
@@ -437,7 +443,8 @@ jobs:
 </code></pre>
 
 <blockquote>
-<p><strong>NOTE</strong>: Expressions can omit the surrounding <code>${{ ... }}</code> but I tend to include it.</p>
+<p>[!NOTE]
+Expressions can omit the surrounding <code>${{ ... }}</code> but I tend to include it.</p>
 </blockquote>
 
 <p>The above example won&rsquo;t work simply because the string <code>&quot;main&quot;</code> is using double quotes. You&rsquo;ll find the requirement for using single quotes is mentioned in the GitHub documentation for &ldquo;<a href="https://docs.github.com/en/actions/learn-github-actions/expressions#literals" target="_blank">Literals</a>&rdquo;.</p>
@@ -461,7 +468,8 @@ jobs:
 <p>To persist data using a job&rsquo;s output requires a job to produce some data and to expose that data via the job&rsquo;s <code>outputs</code> field. A consumer can then use and parse that data however they see fit. This approach can also be useful for dynamically generating job matrix variants using a job&rsquo;s <a href="https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idstrategy" target="_blank"><code>strategy.matrix</code></a> field.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: A job has an <code>outputs</code> field, but also individual steps can access the output from a previous step by way of the same mechanism, which is a step needs to set an <code>id</code> field which either another step or the job itself can reference.</p>
+<p>[!NOTE]
+A job has an <code>outputs</code> field, but also individual steps can access the output from a previous step by way of the same mechanism, which is a step needs to set an <code>id</code> field which either another step or the job itself can reference.</p>
 </blockquote>
 
 <p>The way your <code>run</code> code (or an external shell script) can produce data that the GitHub job can reference is to <code>echo</code> a specially formatted string:</p>
@@ -488,7 +496,8 @@ jobs:
 </code></pre>
 
 <blockquote>
-<p><strong>NOTE</strong>: Be sure to use the <code>id</code> field so the second step can use it to reference the first step&rsquo;s output!</p>
+<p>[!NOTE]
+Be sure to use the <code>id</code> field so the second step can use it to reference the first step&rsquo;s output!</p>
 </blockquote>
 
 <h3 id="using-shared-job-data-to-determine-if-subsequent-job-should-run">Using shared job data to determine if subsequent job should run</h3>
@@ -529,7 +538,8 @@ jobs:
 <p>The key part to getting job <code>bar</code> to determine if it should run is to use an <code>if</code> along with one of GitHub&rsquo;s native functions called <a href="https://docs.github.com/en/actions/learn-github-actions/expressions#contains" target="_blank"><code>contains()</code></a>. You can see I use it twice to check if the persisted data contains the values I&rsquo;m looking for.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: You&rsquo;ll likely want to use the <code>needs</code> property to help make the jobs run sequentially. Otherwise without it the jobs will run in parallel and this means there would be a data race in <code>bar</code> trying to access the <code>foo</code> job&rsquo;s output which might not yet be available and this would cause both the <code>bar</code> job and its dependant <code>build</code> job to not be run.</p>
+<p>[!NOTE]
+You&rsquo;ll likely want to use the <code>needs</code> property to help make the jobs run sequentially. Otherwise without it the jobs will run in parallel and this means there would be a data race in <code>bar</code> trying to access the <code>foo</code> job&rsquo;s output which might not yet be available and this would cause both the <code>bar</code> job and its dependant <code>build</code> job to not be run.</p>
 </blockquote>
 
 <h3 id="persist-data-using-strategy-matrix">Persist data using <code>strategy.matrix</code></h3>

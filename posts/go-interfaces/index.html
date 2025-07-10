@@ -10,6 +10,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="../../assets/css/main.css" />
+    <link rel="stylesheet" href="../../assets/css/custom.css" />
   </head>
   <body class="is-preload">
 		<button id="backToTop">↑ Back to Top</button>
@@ -105,7 +106,8 @@ interface. You name interfaces with an <em>-er</em> at the end to indicate it&rs
 </code></pre>
 
 <blockquote>
-<p><strong>NOTE</strong>: In Go, a capitalised name (method, field etc) is public, lowercase is private.</p>
+<p>[!NOTE]
+In Go, a capitalised name (method, field etc) is public, lowercase is private.</p>
 </blockquote>
 
 <p>If an object in your code implements a <code>Bar</code> function, with the exact same signature (e.g. accepts a string and returns either a string or an error), then that object is said to <em>implement</em> the <code>Fooer</code> interface.</p>
@@ -156,7 +158,8 @@ func (l *thing) Beep(s string) (string, error) {
 </code></pre>
 
 <blockquote>
-<p><strong>NOTE</strong>: This is a bit of silly example, and so you&rsquo;ll notice the method signature for each type is effectively the same. Be careful when designing your interfaces, because in this case we could possibly combine these two interfaces into a single (more generic) interface.</p>
+<p>[!NOTE]
+This is a bit of silly example, and so you&rsquo;ll notice the method signature for each type is effectively the same. Be careful when designing your interfaces, because in this case we could possibly combine these two interfaces into a single (more generic) interface.</p>
 </blockquote>
 
 <h2 id="name-your-interface-arguments">Name Your Interface Arguments</h2>
@@ -338,7 +341,8 @@ func FindItem(ID int) Itemer {
 <p>In this instance returning an interface allows the consumer to not have to worry about the change in underlying data types.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: It&rsquo;s possible the returned types could be consolidated into a single generic type struct, which means we can avoid returning an interface, but it depends on the exact scenario/use case.</p>
+<p>[!NOTE]
+It&rsquo;s possible the returned types could be consolidated into a single generic type struct, which means we can avoid returning an interface, but it depends on the exact scenario/use case.</p>
 </blockquote>
 
 <h2 id="use-existing-interfaces">Use Existing Interfaces</h2>
@@ -394,7 +398,8 @@ func (t testthing) String() string {
 <p>Now whether you continue to define a new interface is up to you. There are actually quite a few places in the Go standard library where interfaces are duplicated for (what I believe to be) semantic reasoning, but otherwise if you don&rsquo;t need to make an explicit/semantic distinction, then I&rsquo;d opt to reuse an existing interface.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: For more details on how to use Guru, see <a href="https://gist.github.com/Integralist/20ff7427d3df5cc02d5a619ca0cd9695" target="_blank">this gist</a>.</p>
+<p>[!NOTE]
+For more details on how to use Guru, see <a href="https://gist.github.com/Integralist/20ff7427d3df5cc02d5a619ca0cd9695" target="_blank">this gist</a>.</p>
 </blockquote>
 
 <h2 id="don-t-force-interfaces">Don&rsquo;t Force Interfaces</h2>
@@ -404,7 +409,8 @@ func (t testthing) String() string {
 <p>No point making the design of your code more complicated for no reason. Consider the following code which returns an interface.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: The following example is modified from a much older post by <a href="https://www.ardanlabs.com/blog/2016/10/avoid-interface-pollution.html" target="_blank">William Kennedy</a>.</p>
+<p>[!NOTE]
+The following example is modified from a much older post by <a href="https://www.ardanlabs.com/blog/2016/10/avoid-interface-pollution.html" target="_blank">William Kennedy</a>.</p>
 </blockquote>
 
 <pre><code class="language-go">package main
@@ -526,7 +532,8 @@ func main() {
 <p>In the above code we can see we have added a new method <code>baz</code> to our <code>Fooer</code> interface which means the concrete implementation <code>pt</code> is no longer satisfying the <code>Fooer</code> interface as it has no <code>baz</code> method.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: I appreciate the example is a bit silly because we could just update the code to support the new interface, but we have to imagine a world where your interface is provided as part of a public package that is consumed by lots of users.</p>
+<p>[!NOTE]
+I appreciate the example is a bit silly because we could just update the code to support the new interface, but we have to imagine a world where your interface is provided as part of a public package that is consumed by lots of users.</p>
 </blockquote>
 
 <p>To solve this problem we need an intermediate interface. The following example demonstrates the process. The steps are&hellip;</p>
@@ -595,7 +602,8 @@ func main() {
 </code></pre>
 
 <blockquote>
-<p><strong>NOTE</strong>: Again, the example is a bit silly in that we&rsquo;re handling everything within a single file, whereas in reality the consumer won&rsquo;t have access to the original interface/implementation code like we do here (so just use your imagination 🙂).</p>
+<p>[!NOTE]
+Again, the example is a bit silly in that we&rsquo;re handling everything within a single file, whereas in reality the consumer won&rsquo;t have access to the original interface/implementation code like we do here (so just use your imagination 🙂).</p>
 </blockquote>
 
 <p>The output of the above code is as follows:</p>
@@ -725,7 +733,8 @@ type Closer interface {
 <p>Meaning, we need to provide that functionality to the <code>process</code> function. Let&rsquo;s see what this might look like in practice:</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: This is just a first iteration, and is a poor design because although it shifts the problem slightly, there will still be tight coupling. I&rsquo;ll come back to this code later and refactor away the coupling completely. The reason I&rsquo;ve not done that upfront is because there are learnings to be had from trying to write tests for this code (which we&rsquo;ll see in a minute).</p>
+<p>[!NOTE]
+This is just a first iteration, and is a poor design because although it shifts the problem slightly, there will still be tight coupling. I&rsquo;ll come back to this code later and refactor away the coupling completely. The reason I&rsquo;ve not done that upfront is because there are learnings to be had from trying to write tests for this code (which we&rsquo;ll see in a minute).</p>
 </blockquote>
 
 <pre><code class="language-go">package main
@@ -821,7 +830,8 @@ func (l *httpbin) Get(url string) (*http.Response, error) {
 <p>Meaning, this refactor <em>could</em> be considered &lsquo;good enough&rsquo; for your use cases. Alternatively your values and standards may differ, and so you need to consider your options for how you might what to design this solution in such a way that it would allow the code to not be so reliant on HTTP as the transport mechanism.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: We&rsquo;ll revisit this code later and consider another refactor that will help clean up this first pass of code decoupling.</p>
+<p>[!NOTE]
+We&rsquo;ll revisit this code later and consider another refactor that will help clean up this first pass of code decoupling.</p>
 </blockquote>
 
 <p>But first, let&rsquo;s look at how we might want to test this initial code refactor (as testing this code allows us to learn some interesting things when it comes to needing to mock interfaces).</p>
@@ -904,7 +914,8 @@ func TestBasics(t *testing.T) {
 <p>Great! Our test can now call the <code>process</code> function and process the mocked dependency and the code/test works as intended.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: Yes, we should probably use something more obvious and replace <code>bytes.NewBufferString</code> with something like <code>bytes.NewReader</code>, <code>strings.NewReader</code>.</p>
+<p>[!NOTE]
+Yes, we should probably use something more obvious and replace <code>bytes.NewBufferString</code> with something like <code>bytes.NewReader</code>, <code>strings.NewReader</code>.</p>
 </blockquote>
 
 <h2 id="more-flexible-solutions">More flexible solutions?</h2>

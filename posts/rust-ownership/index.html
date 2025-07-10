@@ -10,6 +10,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="../../assets/css/main.css" />
+    <link rel="stylesheet" href="../../assets/css/custom.css" />
   </head>
   <body class="is-preload">
 		<button id="backToTop">↑ Back to Top</button>
@@ -89,7 +90,8 @@
 <p>The stack is very fast to access data because the data is close together, unlike heap memory, and also because the data that is stored is literal (i.e. primitive types like string literals, booleans, integers etc) it means the data itself can be hard coded into the compiled Rust binary.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: Rust primitive/scalar types (int, bool, float, char, string literal etc) are stored in stack memory.</p>
+<p>[!NOTE]
+Rust primitive/scalar types (int, bool, float, char, string literal etc) are stored in stack memory.</p>
 </blockquote>
 
 <h2 id="heap-memory">Heap Memory</h2>
@@ -99,7 +101,8 @@
 <p>The heap is for memory that grows or has unknown size (such as when accepting user input, you don&rsquo;t know what data will be provided), and it will be allocated onto the heap by a &lsquo;memory allocator&rsquo; that needs to first find a space in the heap large enough to hold the data, and then return a pointer to that space in the heap.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: Rust complex types (String, Box etc.) are stored into heap memory.</p>
+<p>[!NOTE]
+**Rust complex types (String, Box etc.) are stored into heap memory.</p>
 </blockquote>
 
 <h2 id="ownership">Ownership</h2>
@@ -421,7 +424,8 @@ fn return_ref&lt;'a&gt;() -&gt; &amp;'a String {
 </code></pre>
 
 <blockquote>
-<p><strong>NOTE</strong>: the <code>&lt;'a&gt;</code> and <code>&amp;'a</code> syntax will be explained in the next section called &ldquo;Lifetimes&rdquo;.</p>
+<p>[!NOTE]
+the <code>&lt;'a&gt;</code> and <code>&amp;'a</code> syntax will be explained in the next section called &ldquo;Lifetimes&rdquo;.</p>
 </blockquote>
 
 <p>The above code will cause the following compiler error:</p>

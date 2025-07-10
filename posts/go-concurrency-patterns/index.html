@@ -10,6 +10,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="../../assets/css/main.css" />
+    <link rel="stylesheet" href="../../assets/css/custom.css" />
   </head>
   <body class="is-preload">
 		<button id="backToTop">↑ Back to Top</button>
@@ -106,7 +107,7 @@ multiple CPU cores when possible, making Go’s concurrency model more efficient
 and scalable than traditional green threads.</p>
 
 <blockquote>
-<p>⚠️ <strong>IMPORTANT</strong><br>
+<p>[!IMPORTANT]
 The following example uses a <code>time.Sleep</code> to wait for the goroutine to finish.<br>
 This is done for simplicity. Do NOT use this approach.<br>
 I&rsquo;ll explain alternative options afterwards.</p>
@@ -134,7 +135,7 @@ func main() {
 <p><a href="https://play.golang.com/p/SdOdZ90-exI" target="_blank">https://play.golang.com/p/SdOdZ90-exI</a></p>
 
 <blockquote>
-<p>🗒️ <strong>NOTE</strong><br>
+<p>[!NOTE]
 In Go, the <code>main</code> function is effectively the &ldquo;initial&rdquo; goroutine.<br>
 When a Go program starts, the Go runtime creates a goroutine to run <code>main</code>.<br>
 This main goroutine can then spawn additional goroutines as needed.</p>
@@ -147,7 +148,7 @@ synchronize them. They allow you to send and receive values across goroutines,
 and they help avoid race conditions by enabling safe data sharing.</p>
 
 <blockquote>
-<p>⚠️ <strong>IMPORTANT</strong><br>
+<p>[!IMPORTANT]
 Sending and receiving channel messages can
 <a href="https://go.dev/tour/concurrency/2" target="_blank">block</a>.<br>
 In the following example the <code>&lt;-ch</code> BLOCKS the <code>main()</code> function.<br>
@@ -183,18 +184,18 @@ func main() {
 <p><a href="https://play.golang.com/p/2Qn_NacVw-0" target="_blank">https://play.golang.com/p/2Qn_NacVw-0</a></p>
 
 <blockquote>
-<p>⚠️ <strong>IMPORTANT</strong><br>
+<p>[!IMPORTANT]
 You can <code>range</code> over a channel, but the loop will never stop unless the
 channel is closed.<br>
 So when ranging over a channel, think how the program can proceed and when is
 the channel going to be closed.</p>
 
-<p>🗒️ <strong>NOTE</strong><br>
+<p>[!NOTE]
 Depending on what you application needs, you can create
 <a href="https://go.dev/tour/concurrency/3" target="_blank">buffered</a> channels.<br>
 Sends to a buffered channel block only when the buffer is full.</p>
 
-<p>💡 <strong>TIP</strong><br>
+<p>[!TIP]
 The most crucial best practice is to close the channel from the sender side, not the receiver.<br>
 The sender is the goroutine that writes data to the channel.<br>
 Hence the sender knows when there&rsquo;s no more data to be sent, not the receiver.</p>
@@ -210,7 +211,7 @@ handling multiple asynchronous tasks.</p>
 respond to whichever channel receives data first.</p>
 
 <blockquote>
-<p>⚠️ <strong>IMPORTANT</strong><br>
+<p>[!IMPORTANT]
 In the following example, the first goroutine uses a <code>time.Sleep</code>.<br>
 This is to simulate the operation taking a long time.<br>
 It results in the <code>select</code> pulling a value from the second goroutine.</p>
@@ -250,7 +251,7 @@ func main() {
 <p>A common use case for <code>select</code> is to timeout a potential deadlock:</p>
 
 <blockquote>
-<p>⚠️ <strong>IMPORTANT</strong><br>
+<p>[!IMPORTANT]
 In the following example we use <code>time.After</code> to cause a timeout.</p>
 </blockquote>
 
@@ -509,7 +510,7 @@ func main() {
 <p><a href="https://play.golang.com/p/VIbNkQaPfZI" target="_blank">https://play.golang.com/p/VIbNkQaPfZI</a></p>
 
 <blockquote>
-<p>🗒️ <strong>NOTE</strong><br>
+<p>[!NOTE]
 The use of <code>defer</code> in the <code>Increment()</code> method is redundant.<br>
 It&rsquo;s more useful for long complex functions where errors can occur.<br>
 Here I should have just placed the <code>Unlock()</code> call after the <code>c.value++</code>.</p>
@@ -602,7 +603,7 @@ func main() {
 to manage timeouts, cancellations, and deadlines across goroutines.</p>
 
 <blockquote>
-<p>💡 <strong>TIP</strong><br>
+<p>[!TIP]
 You&rsquo;ve seen context used in the <a href="#error-groups">Error Groups</a> example earlier.</p>
 </blockquote>
 
@@ -678,7 +679,7 @@ It&rsquo;s useful for waiting on complex conditions where other primitives like 
 may not be ideal:</p>
 
 <blockquote>
-<p>⚠️ <strong>IMPORTANT</strong><br>
+<p>[!IMPORTANT]
 The call to <code>cond.L.Lock()</code> in the main goroutine just before <code>for !ready</code> is
 required, otherwise you&rsquo;ll get the error <code>fatal error: sync: unlock of unlocked mutex</code>. This is because <code>cond.Wait()</code> expects the caller to hold the
 lock before calling <code>Wait()</code> (see <a href="https://youtu.be/VAV2h1GdgE0?si=cqErfqLXnWOgmcsh" target="_blank">this
@@ -783,7 +784,7 @@ goroutines, allowing them to proceed simultaneously.</p>
 event or state change to proceed.</p>
 
 <blockquote>
-<p>🗒️ <strong>NOTE</strong><br>
+<p>[!NOTE]
 Notifications are not ordered.<br>
 Any one of the waiting goroutines can be chosen to proceed first.<br>
 Broadcast ensures that all waiting goroutines eventually proceed.</p>
@@ -837,7 +838,7 @@ goroutines coordinated with both channels and wait groups.</p>
 primitives (goroutines, channels, select, wait groups, atomic operations).</p>
 
 <blockquote>
-<p>💡 <strong>TIP</strong><br>
+<p>[!TIP]
 Keep reading after the code snippet for a brief breakdown of what the code
 does.</p>
 </blockquote>

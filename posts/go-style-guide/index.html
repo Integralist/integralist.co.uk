@@ -10,6 +10,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="../../assets/css/main.css" />
+    <link rel="stylesheet" href="../../assets/css/custom.css" />
   </head>
   <body class="is-preload">
 		<button id="backToTop">↑ Back to Top</button>
@@ -90,7 +91,8 @@
 </ul>
 
 <blockquote>
-<p><strong>NOTE</strong>: Refer to the <a href="https://golang.org/ref/spec" target="_blank">specification</a> if ever confused about what the expected behaviour is.</p>
+<p>[!NOTE]
+Refer to the <a href="https://golang.org/ref/spec" target="_blank">specification</a> if ever confused about what the expected behaviour is.</p>
 </blockquote>
 
 <h2 id="naming">Naming</h2>
@@ -159,7 +161,8 @@
 </ul>
 
 <blockquote>
-<p><strong>NOTE</strong>: Refer also to <a href="https://github.com/kettanaito/naming-cheatsheet" target="_blank">https://github.com/kettanaito/naming-cheatsheet</a></p>
+<p>[!NOTE]
+Refer also to <a href="https://github.com/kettanaito/naming-cheatsheet" target="_blank">https://github.com/kettanaito/naming-cheatsheet</a></p>
 </blockquote>
 
 <h2 id="whitespace">Whitespace</h2>
@@ -331,7 +334,8 @@ func main() {
 <p>When taking a slice of a slice you might stumble into behaviour which appears confusing at first. The <code>cap</code>, <code>len</code> and <code>data</code> fields might change, but the underlying array is not re-allocated, nor copied over and so modifications to the slice will modify the original backing array.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: There are more examples/explanations in <a href="https://blogtitle.github.io/go-slices-gotchas/" target="_blank">https://blogtitle.github.io/go-slices-gotchas/</a></p>
+<p>[!NOTE]
+There are more examples/explanations in <a href="https://blogtitle.github.io/go-slices-gotchas/" target="_blank">https://blogtitle.github.io/go-slices-gotchas/</a></p>
 </blockquote>
 
 <h3 id="ghost-update-1">Ghost update 1</h3>
@@ -354,7 +358,8 @@ fmt.Println(b) // [42]
 </code></pre>
 
 <blockquote>
-<p><strong>NOTE</strong>: Refer to the golang language specification section on <a href="https://golang.org/ref/spec#Slice_expressions" target="_blank">&ldquo;full slice expressions&rdquo;</a> syntax (<code>[low : high : max]</code>) for controlling the capacity of a slice.</p>
+<p>[!NOTE]
+Refer to the golang language specification section on <a href="https://golang.org/ref/spec#Slice_expressions" target="_blank">&ldquo;full slice expressions&rdquo;</a> syntax (<code>[low : high : max]</code>) for controlling the capacity of a slice.</p>
 </blockquote>
 
 <h3 id="ghost-update-2">Ghost update 2</h3>

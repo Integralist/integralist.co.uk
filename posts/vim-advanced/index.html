@@ -10,6 +10,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="../../assets/css/main.css" />
+    <link rel="stylesheet" href="../../assets/css/custom.css" />
   </head>
   <body class="is-preload">
 		<button id="backToTop">↑ Back to Top</button>
@@ -100,10 +101,12 @@
 
 <p>I see a lot of posts on Vim &lsquo;tips and tricks&rsquo; and decided I&rsquo;d have a go at putting together my own list of things that don&rsquo;t typically see the light of day, but are super powerful and useful to know about.</p>
 
-<p><strong>IMPORTANT</strong>: I want people to realise that they don&rsquo;t need super complex Vim configurations with lots of third-party plugins, and this entire post is built on that motivation. This means you&rsquo;ll find nearly everything described here is just plain Vim (no plugins). Don&rsquo;t get me wrong, I use <a href="https://github.com/Integralist/dotfiles/blob/master/.vimrc#L120-L142" target="_blank">a few plugins</a>, but I try to keep them to a minimum and rely more on the fundamentals of how Vim works.</p>
-
 <blockquote>
-<p><strong>NOTE</strong>: Remember that <code>:help &lt;some_phrase&gt;</code> is your friend! So if you don&rsquo;t know about any features I mention (and I don&rsquo;t explain them in this post), then use Vim&rsquo;s help feature. You can also try <a href="https://vimhelp.org/" target="_blank">https://vimhelp.org/</a> too, which is a nice UI with autocomplete search box.</p>
+<p>[!IMPORTANT]
+I want people to realise that they don&rsquo;t need super complex Vim configurations with lots of third-party plugins, and this entire post is built on that motivation. This means you&rsquo;ll find nearly everything described here is just plain Vim (no plugins). Don&rsquo;t get me wrong, I use <a href="https://github.com/Integralist/dotfiles/blob/master/.vimrc#L120-L142" target="_blank">a few plugins</a>, but I try to keep them to a minimum and rely more on the fundamentals of how Vim works.</p>
+
+<p>[!NOTE]
+Remember that <code>:help &lt;some_phrase&gt;</code> is your friend! So if you don&rsquo;t know about any features I mention (and I don&rsquo;t explain them in this post), then use Vim&rsquo;s help feature. You can also try <a href="https://vimhelp.org/" target="_blank">https://vimhelp.org/</a> too, which is a nice UI with autocomplete search box.</p>
 </blockquote>
 
 <p><strong>Let&rsquo;s take a look at what we&rsquo;ll be covering&hellip;</strong></p>
@@ -197,7 +200,8 @@ quxfoo
 </code></pre>
 
 <blockquote>
-<p><strong>NOTE</strong>: If you use <a href="https://stedolan.github.io/jq/" target="_blank">jq</a> you can both prettify <code>%!jq</code> <em>and</em> minify <code>%!jq -c</code>.</p>
+<p>[!NOTE]
+If you use <a href="https://stedolan.github.io/jq/" target="_blank">jq</a> you can both prettify <code>%!jq</code> <em>and</em> minify <code>%!jq -c</code>.</p>
 </blockquote>
 
 <p>Or if you didn&rsquo;t want to replace the current buffer, but instead <em>append</em> a pretty printed version on the line(s) after the current line, then you would use <code>:read</code> like so:</p>
@@ -219,7 +223,8 @@ quxfoo
 <p>And the great thing about all of this is that there are <em>no</em> plugins required. It&rsquo;s all standard Vim features. You just need to know they exist.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: If you do decide to use plugins, then don&rsquo;t forget to <code>vim -c &quot;:helptags ALL&quot; -c &quot;:q&quot;</code> to ensure you get all the relevant help information loaded.</p>
+<p>[!NOTE]
+If you do decide to use plugins, then don&rsquo;t forget to <code>vim -c &quot;:helptags ALL&quot; -c &quot;:q&quot;</code> to ensure you get all the relevant help information loaded.</p>
 </blockquote>
 
 <p>Now, there may be times where you want a minimal config but with some extra treats, I&rsquo;ll typically have a <code>~/.vimrc-core</code> file with the following configuration that gives me the above &lsquo;basic&rsquo; configuration (with some other configuration which isn&rsquo;t essential but also isn&rsquo;t superfluous either) along with some <em>core</em> plugins I like to use):</p>
@@ -313,7 +318,8 @@ silent! tnoremap &lt;Esc&gt; &lt;C-\&gt;&lt;C-n&gt;
 </code></pre>
 
 <blockquote>
-<p><strong>NOTE</strong>: Once you&rsquo;ve replayed a macro (e.g. <code>@q</code>) you can trigger it again without having to specify the register by typing <code>@</code> again, e.g. <code>@@</code> will rerun the last used macro.</p>
+<p>[!NOTE]
+Once you&rsquo;ve replayed a macro (e.g. <code>@q</code>) you can trigger it again without having to specify the register by typing <code>@</code> again, e.g. <code>@@</code> will rerun the last used macro.</p>
 </blockquote>
 
 <p>If you need to run a macro a certain number of times then just prefix it with that number. For example, to run a macro six times I&rsquo;d type <code>6@&lt;register&gt;</code>.</p>
@@ -335,7 +341,8 @@ barfoo
 </code></pre>
 
 <blockquote>
-<p><strong>NOTE</strong>: If you just want to see what would match, you could either use the <a href="https://vimhelp.org/various.txt.html#%3Ap" target="_blank"><code>:p</code></a> command (e.g. <code>:g/^foo/p</code>) or just leave off the command altogether as <code>:p</code> is the default behaviour.</p>
+<p>[!NOTE]
+If you just want to see what would match, you could either use the <a href="https://vimhelp.org/various.txt.html#%3Ap" target="_blank"><code>:p</code></a> command (e.g. <code>:g/^foo/p</code>) or just leave off the command altogether as <code>:p</code> is the default behaviour.</p>
 </blockquote>
 
 <p>What&rsquo;s cool about the <code>:global</code> command is that because the command can be <em>any</em> Ex command, it means you can also use <a href="https://vimhelp.org/repeat.txt.html#recording" target="_blank">macros</a> by way of the <a href="https://vimhelp.org/various.txt.html#%3Anorm" target="_blank"><code>:norm</code></a> command. In the following example we search for <code>foo</code> anywhere in the content and then apply the <code>@q</code> register to the matches&hellip;</p>
@@ -414,7 +421,8 @@ log('baz', level='info')
 <p>Notice with magic mode we don&rsquo;t have to escape a bunch of things like the capture groups (i.e. the parenthesis) or the <code>@</code>.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: If the number of permutations was small enough, then it&rsquo;s arguably simpler to use an alternator pipe like <code>/\vlevel\='(debug|error)</code> because remembering the lookaround syntax like <code>@!</code> (and its friends) might be hard to recall.</p>
+<p>[!NOTE]
+If the number of permutations was small enough, then it&rsquo;s arguably simpler to use an alternator pipe like <code>/\vlevel\='(debug|error)</code> because remembering the lookaround syntax like <code>@!</code> (and its friends) might be hard to recall.</p>
 </blockquote>
 
 <p>Next we&rsquo;ll look at <code>\u</code> and <code>\U</code> (they have lowercase equivalents: <code>\l</code> and <code>\L</code>).</p>
@@ -442,7 +450,8 @@ log('baz', level='info')
 </code></pre>
 
 <blockquote>
-<p><strong>NOTE</strong>: For more details refer to <a href="https://vimhelp.org/change.txt.html#sub-replace-special" target="_blank"><code>:h sub-replace-special</code></a>, but also <a href="https://vimhelp.org/pattern.txt.html#whitespace" target="_blank"><code>:h whitespace</code></a> which elaborates on some other special regex pattern flags.</p>
+<p>[!NOTE]
+For more details refer to <a href="https://vimhelp.org/change.txt.html#sub-replace-special" target="_blank"><code>:h sub-replace-special</code></a>, but also <a href="https://vimhelp.org/pattern.txt.html#whitespace" target="_blank"><code>:h whitespace</code></a> which elaborates on some other special regex pattern flags.</p>
 </blockquote>
 
 <h2 id="searching-and-filtering-content">Searching and filtering content</h2>
@@ -466,7 +475,8 @@ log('baz', level='info')
 </code></pre>
 
 <blockquote>
-<p><strong>NOTE</strong>: We could have just done <code>**/next.config.js</code> but in case you weren&rsquo;t familiar with the filename, then using another wildcard like we did helps to narrow things down.</p>
+<p>[!NOTE]
+We could have just done <code>**/next.config.js</code> but in case you weren&rsquo;t familiar with the filename, then using another wildcard like we did helps to narrow things down.</p>
 </blockquote>
 
 <h3 id="finding-content-within-one-or-more-files">Finding content within one or more files</h3>
@@ -489,7 +499,8 @@ log('baz', level='info')
 </code></pre>
 
 <blockquote>
-<p><strong>NOTE</strong>: <code>j</code> prevents Vim from trying to open the first file match (also, if you don&rsquo;t use <code>j</code> then the location list won&rsquo;t be populated with results as it&rsquo;ll presume the first match was all you wanted), while <code>g</code> means &ldquo;ensure every match on a single line is displayed&rdquo;.</p>
+<p>[!NOTE]
+<code>j</code> prevents Vim from trying to open the first file match (also, if you don&rsquo;t use <code>j</code> then the location list won&rsquo;t be populated with results as it&rsquo;ll presume the first match was all you wanted), while <code>g</code> means &ldquo;ensure every match on a single line is displayed&rdquo;.</p>
 </blockquote>
 
 <p>Example usage (we&rsquo;re searching for any reference to <code>class</code> anywhere in the project):</p>
@@ -501,7 +512,8 @@ log('baz', level='info')
 <p>For anyone unfamiliar, the <code>copen</code> command will open Vim&rsquo;s &lsquo;quickfix&rsquo; window, while the <code>lopen</code> command will open the &lsquo;location list&rsquo; (refer to <code>:h copen</code> and <code>:h lopen</code> to find related commands).</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: a nice trick if you&rsquo;re using the <em>append</em> version of <code>vimgrep</code> (i.e. <a href="https://vimhelp.org/quickfix.txt.html#%3Avimgrepa" target="_blank"><code>vimgrepa</code></a>), is if you make a mistake populating the quickfix window, then you can use <code>:cex []</code> to clear it! See <a href="https://vimhelp.org/quickfix.txt.html#%3Acex" target="_blank"><code>:cex</code></a> for details.</p>
+<p>[!NOTE]
+a nice trick if you&rsquo;re using the <em>append</em> version of <code>vimgrep</code> (i.e. <a href="https://vimhelp.org/quickfix.txt.html#%3Avimgrepa" target="_blank"><code>vimgrepa</code></a>), is if you make a mistake populating the quickfix window, then you can use <code>:cex []</code> to clear it! See <a href="https://vimhelp.org/quickfix.txt.html#%3Acex" target="_blank"><code>:cex</code></a> for details.</p>
 </blockquote>
 
 <p>One interesting feature of <code>:vimgrep</code> is that you can use the result of a backtick expression to be the file source:</p>
@@ -523,7 +535,8 @@ log('baz', level='info')
 <p>Imagine <code>...</code> was the last search pattern, this would mean the Ex mode command would currently look like <code>:vimgrep /...</code> so you would need to finish the command <code>/ *</code> (so it&rsquo;s almost like you wrote the command in its entirety).</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: if you use another plugin like <code>:Ack!</code> then <code>&lt;C-r&gt;/</code> works to insert the last search pattern still (e.g. <code>:Ack! '&lt;C-r&gt;/'</code>)</p>
+<p>[!NOTE]
+if you use another plugin like <code>:Ack!</code> then <code>&lt;C-r&gt;/</code> works to insert the last search pattern still (e.g. <code>:Ack! '&lt;C-r&gt;/'</code>)</p>
 </blockquote>
 
 <h3 id="using-external-shell-tool">Using external shell tool</h3>
@@ -548,7 +561,8 @@ log('baz', level='info')
 </code></pre>
 
 <blockquote>
-<p><strong>NOTE</strong>: spaces have to be escaped with a backslash <code>\</code>.</p>
+<p>[!NOTE]
+spaces have to be escaped with a backslash <code>\</code>.</p>
 </blockquote>
 
 <p>You can now use the new program like so (e.g. to find any reference to the word <code>class</code> using the Silver Searcher tool):</p>
@@ -558,7 +572,8 @@ log('baz', level='info')
 </code></pre>
 
 <blockquote>
-<p><strong>NOTE</strong>: you still need to open the &lsquo;quickfix&rsquo; window manually afterwards to see the results.</p>
+<p>[!NOTE]
+you still need to open the &lsquo;quickfix&rsquo; window manually afterwards to see the results.</p>
 </blockquote>
 
 <p>All this said, you can improve the performance of <code>:vimgrep</code> by prefixing it with <a href="https://vimhelp.org/autocmd.txt.html#%3Anoautocmd" target="_blank"><code>:noautocmd</code></a>.</p>
@@ -573,7 +588,8 @@ log('baz', level='info')
 <p>OK, the built-in tools are great and flexible, but I&rsquo;ll be honest with you and say that in my day-to-day Vim usage you&rsquo;ll find me using <a href="https://github.com/junegunn/fzf.vim" target="_blank"><code>:FZF</code></a> to find files and <a href="https://github.com/mileszs/ack.vim" target="_blank"><code>:Ack! '&lt;regex&gt;' &lt;path&gt;</code></a> to find files that contain a particular string.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: Although I use the <a href="https://github.com/mileszs/ack.vim" target="_blank">Ack</a> Vim plugin, I actually configure it to use the <code>ag</code> &lsquo;<a href="https://github.com/ggreer/the_silver_searcher" target="_blank">Silver Searcher</a>&rsquo; shell command.</p>
+<p>[!NOTE]
+Although I use the <a href="https://github.com/mileszs/ack.vim" target="_blank">Ack</a> Vim plugin, I actually configure it to use the <code>ag</code> &lsquo;<a href="https://github.com/ggreer/the_silver_searcher" target="_blank">Silver Searcher</a>&rsquo; shell command.</p>
 </blockquote>
 
 <pre><code class="language-viml">&quot; Plugin Managment
@@ -738,7 +754,8 @@ let g:ack_mappings = {
 <p>Here is an example of how to use <code>Cfilter</code>. I&rsquo;m going to search for the phrase &ldquo;vim&rdquo; across my blog, which ends up returning quite a few results across multiple files. Turns out I&rsquo;m only interested in files that are Markdown files and so I need to filter the results to only show me those files&hellip;</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: Sure you could use <a href="https://vimhelp.org/options.txt.html#%27wildignore%27" target="_blank"><code>wildignore</code></a> (or maybe even <a href="https://vimhelp.org/options.txt.html#%27suffixes%27" target="_blank"><code>suffixes</code></a>, although it won&rsquo;t solve our problem, only alleviate it slightly) but it&rsquo;s really a <em>hammer</em> solution, where we want a scalpel.</p>
+<p>[!NOTE]
+Sure you could use <a href="https://vimhelp.org/options.txt.html#%27wildignore%27" target="_blank"><code>wildignore</code></a> (or maybe even <a href="https://vimhelp.org/options.txt.html#%27suffixes%27" target="_blank"><code>suffixes</code></a>, although it won&rsquo;t solve our problem, only alleviate it slightly) but it&rsquo;s really a <em>hammer</em> solution, where we want a scalpel.</p>
 </blockquote>
 
 <pre><code class="language-viml">:vimgrep /vim/ **/*
@@ -755,7 +772,8 @@ let g:ack_mappings = {
 <p>As you can see the default behaviour of the filter is to keep only those results that match your pattern. If you want the filter to work in reverse so it <em>removes</em> anything that matches your pattern, then add <code>!</code> to the command like so <code>:Cfilter! /your_pattern/</code>.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: As this is a regex pattern you can still use <code>\v</code> to get &lsquo;magic&rsquo; mode. For example <code>/\vyour_pattern/</code>.</p>
+<p>[!NOTE]
+As this is a regex pattern you can still use <code>\v</code> to get &lsquo;magic&rsquo; mode. For example <code>/\vyour_pattern/</code>.</p>
 </blockquote>
 
 <h2 id="processing-files-with-t-do">Processing files with <code>&lt;T&gt;do</code></h2>
@@ -831,7 +849,8 @@ foo
 <p>When using the <code>-e</code> and <code>-s</code> flags, we&rsquo;re able to use <code>+</code> to execute Ex mode commands.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: If you don&rsquo;t use <code>+'qa!'</code> then Vim will cause the terminal to hang. You also need the <code>!</code> otherwise <code>qa</code> would (if dealing with a traditional Vim UI) show a message saying the buffer has been edited and can&rsquo;t be quit.</p>
+<p>[!NOTE]
+If you don&rsquo;t use <code>+'qa!'</code> then Vim will cause the terminal to hang. You also need the <code>!</code> otherwise <code>qa</code> would (if dealing with a traditional Vim UI) show a message saying the buffer has been edited and can&rsquo;t be quit.</p>
 </blockquote>
 
 <p>To avoid the <code>Vim: Reading from stdin...</code> message we need an additional flag <code>--not-a-term</code>:</p>
@@ -849,7 +868,8 @@ FOO
 </code></pre>
 
 <blockquote>
-<p><strong>NOTE</strong>: <code>norm</code> says execute the following characters as if the user is typing them, so <code>V</code> selects the entire line and <code>gU</code> uppercases the selection. We then print the output to stdout <code>%p</code> and then quit without trying to save the modifications.</p>
+<p>[!NOTE]
+<code>norm</code> says execute the following characters as if the user is typing them, so <code>V</code> selects the entire line and <code>gU</code> uppercases the selection. We then print the output to stdout <code>%p</code> and then quit without trying to save the modifications.</p>
 </blockquote>
 
 <h2 id="starting-vim-with-your-last-workspace">Starting Vim with your last workspace</h2>
@@ -883,7 +903,8 @@ FOO
 </code></pre>
 
 <blockquote>
-<p><strong>NOTE</strong>: if you want to debug the start-up process: <a href="https://vimhelp.org/starting.txt.html#--startuptime" target="_blank"><code>vim --startuptime some_log_filename</code></a>.</p>
+<p>[!NOTE]
+if you want to debug the start-up process: <a href="https://vimhelp.org/starting.txt.html#--startuptime" target="_blank"><code>vim --startuptime some_log_filename</code></a>.</p>
 </blockquote>
 
 <p>To learn more about the various directories Vim uses, then refer to the <code>:help</code> documentation, for example:</p>
@@ -941,7 +962,8 @@ n  \x            :ALENext&lt;CR&gt;
 </code></pre>
 
 <blockquote>
-<p><strong>NOTE</strong>: see <code>:h map-listing</code> for the various modes (<code>n</code> = normal, <code>x</code> = visual, etc).</p>
+<p>[!NOTE]
+see <code>:h map-listing</code> for the various modes (<code>n</code> = normal, <code>x</code> = visual, etc).</p>
 </blockquote>
 
 <p>The same principle works with other mappings like <code>&lt;Ctrl-k&gt;</code> and <code>&lt;Ctrl-j</code>&hellip;</p>
@@ -964,7 +986,8 @@ v  &lt;NL&gt;          &lt;Plug&gt;MoveBlockDown
 <p>If you want to know what the default commands that Vim defines, then take a look at <a href="https://vimhelp.org/index.txt.html#index" target="_blank"><code>:h index</code></a> and drill down into the various commands per &lsquo;mode&rsquo;.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: Vim also has a debugger you can use: <code>vim -D ~/.vimrc</code> (see reference below for details).</p>
+<p>[!NOTE]
+Vim also has a debugger you can use: <code>vim -D ~/.vimrc</code> (see reference below for details).</p>
 </blockquote>
 
 <p>Lastly, there is the <code>-V&lt;N&gt;</code> flag that sets the verbosity of Vim output when starting up&hellip;</p>
@@ -981,7 +1004,8 @@ v  &lt;NL&gt;          &lt;Plug&gt;MoveBlockDown
 </code></pre>
 
 <blockquote>
-<p><strong>NOTE</strong>: see <code>:h vbs</code> for details.</p>
+<p>[!NOTE]
+see <code>:h vbs</code> for details.</p>
 </blockquote>
 
 <p>Usage example: <code>vim -V9 ~/.vimrc</code>, but you can also write the output to a log file instead (pro tip: use the log file approach) such as <code>vim -V9foo ~/.vimrc</code> which will write the output to the log file <code>foo</code>.</p>

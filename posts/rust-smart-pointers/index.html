@@ -10,6 +10,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="../../assets/css/main.css" />
+    <link rel="stylesheet" href="../../assets/css/custom.css" />
   </head>
   <body class="is-preload">
 		<button id="backToTop">↑ Back to Top</button>
@@ -69,7 +70,8 @@
 <p>The five types covered: <code>Box</code>, <code>Rc</code>, <code>Arc</code>, <code>Cell</code>, <code>RefCell</code>.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: Not discussed are <code>Mutex&lt;T&gt;</code> and <code>RwLock&lt;T&gt;</code>,<br>
+<p>[!NOTE]
+Not discussed are <code>Mutex&lt;T&gt;</code> and <code>RwLock&lt;T&gt;</code>,<br>
 which provide mutual-exclusion.</p>
 </blockquote>
 
@@ -110,7 +112,8 @@ It was written by many people much smarter than me.</p>
 <p><em>Smart pointers</em>, on the other hand, are data structures that act like a pointer but also have additional metadata and capabilities.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: Both <code>String</code> and <code>Vec&lt;T&gt;</code> types count as smart pointers because they own some memory and allow you to manipulate it. They also have metadata and extra capabilities or guarantees.</p>
+<p>[!NOTE]
+Both <code>String</code> and <code>Vec&lt;T&gt;</code> types count as smart pointers because they own some memory and allow you to manipulate it. They also have metadata and extra capabilities or guarantees.</p>
 </blockquote>
 
 <p>Smart pointers are usually implemented using structs. Unlike an ordinary struct, smart pointers implement the <code>Deref</code> and <code>Drop</code> traits. The <code>Deref</code> trait allows an instance of the smart pointer struct to behave like a reference so you can write your code to work with either references or smart pointers. The <code>Drop</code> trait allows you to customize the code that&rsquo;s run when an instance of the smart pointer goes out of scope.</p>
@@ -134,7 +137,8 @@ It was written by many people much smarter than me.</p>
 <p>We use the <code>Rc&lt;T&gt;</code> type when we want to allocate some data on the heap for multiple parts of our program to read and we can’t determine at compile time which part will finish using the data last.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: <code>Rc&lt;T&gt;</code> is only for use in single-threaded scenarios. When shared ownership between threads is needed, <code>Arc&lt;T&gt;</code> (Atomic Reference Counted) can be used.</p>
+<p>[!NOTE]
+<code>Rc&lt;T&gt;</code> is only for use in single-threaded scenarios. When shared ownership between threads is needed, <code>Arc&lt;T&gt;</code> (Atomic Reference Counted) can be used.</p>
 </blockquote>
 
 <h2 id="arc-t"><code>Arc&lt;T&gt;</code></h2>
@@ -159,7 +163,8 @@ It was written by many people much smarter than me.</p>
 <p>Because <code>RefCell&lt;T&gt;</code> borrows are <em>dynamic</em> it is possible to attempt to borrow a value that is already mutably borrowed; when this happens it results in thread panic.</p>
 
 <blockquote>
-<p><strong>NOTE</strong>: Neither <code>Cell&lt;T&gt;</code> nor <code>RefCell&lt;T&gt;</code> are thread-safe.<br>
+<p>[!NOTE]
+Neither <code>Cell&lt;T&gt;</code> nor <code>RefCell&lt;T&gt;</code> are thread-safe.<br>
 The <code>Sync</code> marker trait is not implemented.</p>
 </blockquote>
 

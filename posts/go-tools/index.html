@@ -10,6 +10,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="../../assets/css/main.css" />
+    <link rel="stylesheet" href="../../assets/css/custom.css" />
   </head>
   <body class="is-preload">
 		<button id="backToTop">↑ Back to Top</button>
@@ -129,7 +130,7 @@ tools.sum
 </code></pre>
 
 <blockquote>
-<p>⚠️ <strong>IMPORTANT</strong>:<br>
+<p>[!IMPORTANT]
 If you give the <code>tools.mod</code> a unique module name, let&rsquo;s say <code>go.mod</code> uses <code>github.com/example/foo</code>, and so you make <code>tools.mod</code> use <code>github.com/example/foo/tools</code> then be aware that the use of <code>go mod</code> isn&rsquo;t going to make your <code>tools.mod</code> think it needs the module from <code>go.mod</code> and it&rsquo;ll add it as a dependency (this makes things weird in special cases), so it might be worth making the module name the same between <code>go.mod</code> and <code>tools.mod</code>.</p>
 </blockquote>
 
@@ -143,7 +144,7 @@ go get -modfile=tools.mod -tool github.com/mgechev/revive
 </code></pre>
 
 <blockquote>
-<p>💡 <strong>TIP</strong>:<br>
+<p>[!TIP]
 To <em>remove</em> a tool you can do the above but set the version to <code>@none</code>.</p>
 </blockquote>
 
@@ -179,7 +180,7 @@ go tool -modfile=tools.mod
 </code></pre>
 
 <blockquote>
-<p>💡 <strong>TIP</strong>:<br>
+<p>[!TIP]
 Can also try <code>go list -modfile=tools.mod tool</code></p>
 </blockquote>
 
@@ -231,7 +232,7 @@ tools-update:
 </code></pre>
 
 <blockquote>
-<p>⚠️ <strong>IMPORTANT</strong>:<br>
+<p>[!IMPORTANT]
 This approach keeps the main <code>go.mod</code> and <code>go.sum</code> clean of any tool dependencies, but not the other way around. So the <code>tools.mod</code> and <code>tools.sum</code> will ultimately contain all the dependencies from the main <code>go.mod</code> (that is a side-effect of running <code>go mod tidy -modfile=tools.mod</code> as <code>go mod</code> always consults the main <code>go.mod</code>, hence all of its dependencies end up in your <code>tools.mod</code> and <code>tools.sum</code>).</p>
 
 <p>This is unavoidable. There is no way to get around it (trust me, I&rsquo;ve tried 😅).</p>
@@ -244,7 +245,7 @@ This approach keeps the main <code>go.mod</code> and <code>go.sum</code> clean o
 <h2 id="tools-go">tools.go</h2>
 
 <blockquote>
-<p>🗒️ <strong>NOTE</strong>:<br>
+<p>[!NOTE]
 For more details on code generation in a general sense, refer to:<br>
 <a href="https://gist.github.com/Integralist/8f39eb897316e1cbeaf9eff8326cfa59" target="_blank">https://gist.github.com/Integralist/8f39eb897316e1cbeaf9eff8326cfa59</a></p>
 </blockquote>
@@ -299,7 +300,7 @@ go-gen: ## Invoke go generate
 </code></pre>
 
 <blockquote>
-<p>💡 <strong>TIP</strong>:<br>
+<p>[!TIP]
 If you&rsquo;re developing whilst offline, then one advantage the tools.go pattern
 has is that it works whilst offline because the tool is explicitly installed.
 But to work around that with <code>go run</code> you can set <code>export GOPROXY=direct</code> and

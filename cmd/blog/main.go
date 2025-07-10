@@ -102,6 +102,10 @@ func renderPosts(page, sideNavContent string) {
 	content := bytes.Replace(contentSubPage, needleMainInsert, h, 1)
 
 	segs := strings.Split(page, "/")
+	if len(segs) < 3 {
+		fmt.Printf("Warning: Skipping path with unexpected format in renderPosts: %s\n", page)
+		return
+	}
 	dir := segs[0] + "/" + segs[1]
 
 	content = bytes.Replace(content, needleNavInsert, []byte(sideNavContent), 1)
@@ -301,6 +305,10 @@ func renderHome(pages []string) { // nolint:revive // function-length
 
 	for _, path := range pages {
 		segs := strings.Split(path, "/")
+		if len(segs) < 3 {
+			fmt.Printf("Warning: Skipping path with unexpected format in renderHome: %s\n", path)
+			continue
+		}
 		dir := segs[0] + "/" + segs[1]
 		date := strings.Split(segs[2], ".")[0]
 		year := strings.Split(date, "-")[0]
