@@ -444,6 +444,13 @@ func worker(ctx context.Context, id int) error {
 
 <p><a href="https://play.golang.com/p/Xhdl5XU5Iwq" target="_blank">https://play.golang.com/p/Xhdl5XU5Iwq</a></p>
 
+<blockquote>
+<p>[!TIP]
+You can limit the number of active goroutines in the group with:<br>
+<code>g.SetLimit(10)</code><br>
+Calls to <code>g.Go</code> will block until an active goroutine can be added.</p>
+</blockquote>
+
 <h2 id="mutex">Mutex</h2>
 
 <p>Go&rsquo;s <code>sync.Mutex</code> provides mutual exclusion, allowing only one goroutine at a
