@@ -297,7 +297,133 @@ I'd like to share the projects I've worked on over the years and the impact/valu
 
 ### 🏢 Fastly
 
+### 2025
+
+- **What**: Took on a lead engineering role for "Blue Ribbon", a major project to enable path-based routing for customers via the API.\
+  **Why**: My experience in API design and leading complex projects made me a good fit to drive this high-priority initiative forward.\
+  **Impact**: I quickly got up to speed on a new and complex domain, authored the core API design document, and began leading the technical implementation. This project will deliver a highly-requested feature, allowing customers to manage complex routing rules without writing custom code.
+
+- **What**: Collaborated with another team to create architectural diagrams for the Managed DNS project.\
+  **Why**: To ensure a shared understanding and alignment on a complex, cross-team initiative.\
+  **Impact**: The collaborative effort resulted in clear and accurate diagrams that became the source of truth for the project's architecture, improving communication and reducing misunderstandings between teams.
+
+- **What**: Created the official on-call process and documentation for the Domain Services team.\
+  **Why**: A clear and well-defined on-call process is essential for ensuring service reliability and maintaining a healthy work-life balance for the team.\
+  **Impact**: The document established clear expectations and procedures for the on-call rotation, leading to more effective incident response and a more sustainable on-call experience for engineers.
+
+- **What**: Played a key role in triaging and resolving a major Terraform issue related to a legacy product deprecation.\
+  **Why**: The issue was impacting a large number of customers and required deep expertise in both Terraform and Fastly's platform to resolve.\
+  **Impact**: My involvement helped to quickly identify the root cause and guide customers towards a solution, minimizing the impact of the deprecation and demonstrating our commitment to customer support.
+
+- **What**: Integrated a new certificate authority into the Ascerta platform.\
+  **Why**: To provide more options and redundancy for certificate issuance.\
+  **Impact**: This integration increased the flexibility and resilience of our certificate issuance pipeline, giving us more choices and mitigating risks associated with relying on a single authority.
+
+- **What**: Implemented and configured the core messaging infrastructure (NSQ) for the Ascerta service.\
+  **Why**: A reliable and scalable messaging queue is the backbone of Ascerta's asynchronous certificate processing pipeline.\
+  **Impact**: This work ensured the Ascerta service had a robust and performant foundation, capable of handling a high volume of certificate operations reliably.
+
+- **What**: Was a core member of the team responsible for designing the next-generation Fastly Terraform Provider.\
+  **Why**: A complete rewrite was necessary to leverage new frameworks and address long-standing architectural issues.\
+  **Impact**: My contributions helped shape a modern and more maintainable provider architecture, which will result in a more reliable and feature-rich experience for customers managing their Fastly services with Terraform.
+
+- **What**: Created detailed architectural diagrams to visualize and explain the upcoming Managed DNS service.\
+  **Why**: The system was complex and a visual aid was needed to help stakeholders and team members understand how the different components would interact.\
+  **Impact**: The diagrams became a key communication tool, clarifying complex concepts and facilitating productive discussions about the architecture, which helped align the team and accelerate the project.
+
+- **What**: Presented the architecture and implementation of the Ascerta project to the wider team.\
+  **Why**: To share knowledge, gather feedback, and ensure alignment on the technical direction of this critical new service.\
+  **Impact**: The presentation helped upskill the entire team on the new architecture, fostering collaboration and ensuring a shared understanding of the project's goals and design.
+
+- **What**: Led the engineering effort for "Ascerta", a new TLS certificate issuance and renewal service.\
+  **Why**: To create a modern, scalable, and automated platform for managing TLS certificates for our customers and internal services.\
+  **Impact**: Ascerta provides a robust and asynchronous pipeline for certificate management, improving the reliability and speed of issuance and renewals. This foundational service is critical for securing customer applications.
+
+- **What**: Began the architectural redesign of a core service to create a dedicated API for managed TLS certificates.\
+  **Why**: To decouple certificate management from other service logic, creating a more modular and scalable architecture.\
+  **Impact**: This foundational work paved the way for "Ascerta", a new, standalone certificate issuance service, enabling greater flexibility and focus on TLS automation.
+
+- **What**: Designed and implemented a new, automated secrets management workflow between 1Password and HashiCorp Vault.\
+  **Why**: To improve security and efficiency by automating the synchronization of secrets.\
+  **Impact**: This new system reduced manual toil, eliminated inconsistencies, and strengthened our security posture by ensuring secrets were managed in a consistent and automated way.
+
+- **What**: Onboarded and mentored a new engineer joining the team.\
+  **Why**: To ensure new team members feel supported and can become productive contributors as quickly as possible.\
+  **Impact**: My mentorship helped the new hire to quickly integrate with the team and start contributing to key projects, strengthening the team's overall capacity.
+
 ### 2024
+
+- **What**: Developed a bot to automatically track and report on scheduled maintenance from our partners.\
+  **Why**: To provide the on-call team with proactive awareness of external maintenance events that could impact our services.\
+  **Impact**: The bot significantly improved the on-call team's situational awareness, allowing them to anticipate and respond to potential issues more effectively, reducing stress and improving service reliability.
+
+- **What**: Rewrote a legacy component responsible for managing partner zone data.\
+  **Why**: The original implementation was difficult to maintain and extend.\
+  **Impact**: The new implementation was more robust, easier to understand, and simpler to maintain, which reduced technical debt and made it easier to add new partners in the future.
+
+- **What**: Migrated another data synchronization process from GitHub Actions to a more reliable internal scheduling platform.\
+  **Why**: To improve the reliability and performance of critical data workflows that were not well-suited for GitHub Actions.\
+  **Impact**: The migration resulted in a more stable and efficient process, reducing operational overhead and the risk of data inconsistencies.
+
+- **What**: Initiated the planning for a multi-region redundancy strategy for a critical service.\
+  **Why**: To improve the service's resilience and availability in the event of a regional outage.\
+  **Impact**: This kicked off a key initiative to improve the disaster recovery capabilities of the service, ultimately making it more reliable for our customers.
+
+- **What**: Designed a system for synchronizing secrets between 1Password and HashiCorp Vault.\
+  **Why**: To streamline secrets management, reduce manual effort, and ensure consistency across different systems.\
+  **Impact**: The design laid the foundation for a more automated and secure secrets management workflow, improving both developer productivity and our security posture.
+
+- **What**: Re-implemented a critical certificate expiry notification script as a robust Go service.\
+  **Why**: The old script was fragile and unreliable. A more robust solution was needed to prevent certificate-related outages.\
+  **Impact**: The new service provided reliable and timely notifications about expiring certificates, preventing potential service disruptions and improving the security posture of our systems.
+
+- **What**: Created a series of video tutorials to help onboard and upskill engineers on complex systems.\
+  **Why**: To provide a scalable and accessible learning resource for current and future team members.\
+  **Impact**: The videos accelerated the learning process for engineers, making it easier for them to understand complex topics and contribute to projects more quickly.
+
+- **What**: Authored a strategic API planning document for integrating the Domainr API into a larger Unified Domain Management platform.\
+  **Why**: To provide a clear roadmap for a major architectural integration and ensure alignment across teams.\
+  **Impact**: The document provided a clear vision and technical plan that was adopted by the project, ensuring a smooth and successful integration effort.
+
+- **What**: Automated the login process for domain registry operators.\
+  **Why**: The manual login process was time-consuming and a potential security risk.\
+  **Impact**: The automation improved operational efficiency and security, and laid the groundwork for future automation of password management, further reducing manual toil.
+
+- **What**: Authored a detailed proposal for new monitoring alerts and refined the on-call process for the Domainr team.\
+  **Why**: To create a more sustainable and effective on-call rotation with actionable alerts.\
+  **Impact**: The proposal led to a significant improvement in our on-call experience, with fewer false positives and clearer runbooks, allowing the on-call engineer to resolve issues more efficiently.
+
+- **What**: Acted as the Subject Matter Expert for Terraform in the design of new APIs for domain management.\
+  **Why**: My expertise was crucial to ensure the new APIs would integrate seamlessly with Terraform, a key tool for many of our customers.\
+  **Impact**: My guidance helped shape the API design to be friendly to Infrastructure as Code workflows, ensuring a great customer experience for those using Terraform to manage their domains.
+
+- **What**: Designed and implemented a new set of monitoring alarms for the Domainr API.\
+  **Why**: To improve observability and ensure we could proactively detect and respond to issues before they impacted customers.\
+  **Impact**: The new alarms provided better visibility into the health of the service, leading to faster incident detection and response times, and ultimately a more reliable service for users.
+
+- **What**: Designed and implemented a robust validation process for a critical configuration file using schemas and CUE.\
+  **Why**: The configuration file was complex and manual changes were prone to error, which could cause service disruptions.\
+  **Impact**: This new validation system prevented invalid configurations from being deployed, significantly improving the reliability and stability of the service. It also made it safer and easier for developers to make changes.
+
+- **What**: Became a subject matter expert in TLS certificate management processes and operations for our internal TLS pipelines and services.\
+  **Why**: The team needed deep expertise in this area to ensure the security and reliability of the service.\
+  **Impact**: I created comprehensive documentation and tooling that upskilled the entire team, reducing operational risks and improving our ability to manage certificates effectively.
+
+- **What**: Successfully advocated for maintaining the architectural integrity of a newly migrated service.\
+  **Why**: There were suggestions to revert parts of the new architecture, which would have reintroduced technical debt and complexity.\
+  **Impact**: By providing clear reasoning and vision, I helped the team stay the course, resulting in a more maintainable, scalable, and modern system architecture for the long term.
+
+- **What**: Implemented a system for auditing and backing up critical domain data.\
+  **Why**: To ensure data integrity and provide a recovery path in case of data loss or corruption.\
+  **Impact**: Increased the resilience and security of the Domainr service by ensuring critical data was regularly backed up and could be verified for correctness.
+
+- **What**: Advocated for and helped establish better communication practices, both internally and with customers.\
+  **Why**: Clear, positive, and proactive communication is key to building strong team dynamics and customer relationships.\
+  **Impact**: Fostered a more positive and collaborative team environment and improved the quality of customer interactions, leading to better outcomes and higher satisfaction.
+
+- **What**: Migrated a critical data processing workflow from GitHub Actions to a more robust internal component.\
+  **Why**: GitHub Actions was not the ideal environment for this stateful, long-running task, leading to reliability issues.\
+  **Impact**: The migration resulted in a more reliable and efficient data processing system, ensuring the integrity of important business operations.
 
 - **What**: I wrote a document "Terraform validation for API modifications"
   that proposed a solution for how we can validate API changes against Terraform
@@ -309,6 +435,26 @@ I'd like to share the projects I've worked on over the years and the impact/valu
   difficult Terraform can be to work with in general).\
   **Impact**: This proposal document kick-started a new initiative to ensure
   Terraform is treated as a first-class citizen within the Fastly ecosystem.
+
+- **What**: Automated the CI/CD promotion workflow from staging to production environments.\
+  **Why**: The manual promotion process was slow and prone to human error.\
+  **Impact**: Streamlined the release process, making deployments faster, more reliable, and less error-prone. This allowed the team to deliver value to customers more frequently.
+
+- **What**: Collaborated on a project to improve the Fastly CLI's service creation capabilities.\
+  **Why**: The existing functionality was not flexible enough to meet evolving customer needs for bootstrapping new services.\
+  **Impact**: The CLI became more powerful and flexible, allowing users to clone and create services more effectively, which simplified their workflows.
+
+- **What**: Identified and reported a bug within the Fastly Compute platform.\
+  **Why**: To ensure the stability and correctness of the platform for our customers.\
+  **Impact**: The bug was triaged and fixed, preventing potential issues for customers using the Compute platform and improving overall platform reliability.
+
+- **What**: Mentored other engineers on the Fastly CLI codebase and development practices.\
+  **Why**: To help team members get up to speed quickly and contribute effectively to the project.\
+  **Impact**: Enabled faster onboarding for engineers, increasing the team's productivity and capacity to deliver new features and fixes for the CLI.
+
+- **What**: Collaborated with the TLS team on Terraform resource design and resolved existing issues.\
+  **Why**: To improve the integration between Fastly's TLS products and Terraform, making it easier for customers to manage their certificates as code.\
+  **Impact**: A better designed and more stable Terraform integration for TLS services, leading to an improved customer experience.
 
 - **What**: Redesigned internal boilerplate project used for creating new
   Go services at Fastly.\
