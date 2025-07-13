@@ -492,67 +492,67 @@ I'd like to share the projects I've worked on over the years and the impact/valu
 
 ### 2023
 
-- **What**: Implemented production ready Single-Sign On (SSO) implementation in [Fastly CLI](https://github.com/fastly/cli) using [PKCE](https://pragmaticwebsecurity.com/articles/oauthoidc/from-implicit-to-pkce.html) (Proof Key for Code Exchange) OAuth flow (this was a follow-up to an earlier POC which was completely rewritten along with a project wide refactor to better support the integration).\
-  **Why**: Part of a larger initiative to upgrade our authentication and authorization model, so that we can offer more features to customers.\
-  **Impact**: Customers will get more flexible and advanced sign-in features.
+- **What**: Implemented a production-ready Single Sign-On (SSO) feature in the Fastly CLI.\
+  **Why**: To modernize the CLI's authentication mechanism and enable more advanced security features for customers.\
+  **Impact**: This provided customers with a more secure and streamlined login experience, aligning the CLI with modern authentication standards.
 
-- **What**: Implemented Wasm binary metadata annotations (i.e. data collection).\
-  **Why**: Fastly and their customers have a mutual goal of attaining better visibility into what services have been deployed in production.\
-  **Impact**: Customers gain insights to dimensionality such as by industry vertical and by scale (e.g. what Rust packages are Compute customers in the commerce industry with over 10k requests/sec using?). They also benefit from improved security vulnerability detection (e.g. Fastly is able to recommend package version upgrades).
+- **What**: Implemented Wasm binary metadata annotation for Compute services.\
+  **Why**: To provide better visibility into deployed services for both Fastly and its customers.\
+  **Impact**: This enabled customers to gain deeper insights into their deployed services and allowed Fastly to provide proactive security recommendations, improving the overall security posture of customer applications.
 
-- **What**: Asked to lead the internal 'API Versioning' Working Guild.\
-  **Why**: Lack of direction meant we weren't making as much progress as the organisation would like.\
-  **Impact**: I researched, documented and presented a slide deck that architected a complete (green field) solution for an automated API versioning system that used satellite systems to run a scheduled release cycle with a pull model to acquire individual API application metadata, which inturn would publish a new external consumer API interface version at the appropriate time (yeah, that was a mouthful I know 😄).
+- **What**: Led the internal 'API Versioning' Working Group.\
+  **Why**: The organization needed clear technical leadership to define and drive a strategy for API versioning.\
+  **Impact**: I architected and presented a comprehensive, automated API versioning solution. The proposal was well-received and provided a clear path forward for a complex, cross-cutting concern, unblocking a key organizational initiative.
 
-- **What**: Moved into a new "Customer Developer Tools" team, responsible for managing, developing and maintaining/supporting the various tools Fastly customers use to interact with our platform.\
-  **Why**: My responsibilities were growing beyond the boundaries of the Developer Relations team.\
-  **Impact**: I was able to focus more of my time and energy on supporting these critical customer developer tools.
+- **What**: Moved into the newly-formed "Customer Developer Tools" team.\
+  **Why**: To provide dedicated focus and ownership for the critical developer tools that customers rely on.\
+  **Impact**: This move allowed for more focused development and support of key tools like the Terraform Provider and CLI, resulting in improved stability and faster feature delivery for customers.
 
-- **What**: Invited to join internal API Working Guild.\
-  **Why**: I'm the core maintainer for Fastly's Terraform provider(s), CLI and multiple API clients, so my insight and expertise in those areas were important for ensuring the quality of our new API design.\
-  **Impact**: I've been able to help guide the design of the API to account for specialised consumer cases that otherwise would have been neglected.
+- **What**: Joined the internal API Working Guild as a subject matter expert.\
+  **Why**: To provide expertise on API consumption from the perspective of developer tools like Terraform and the CLI.\
+  **Impact**: My input helped ensure that new API designs were optimized for Infrastructure as Code and CLI workflows, preventing potential integration issues and ensuring a better experience for developers.
 
-- **What**: Rewrote Fastly's (very complex) Terraform provider from scratch (https://github.com/Integralist/terraform-provider-fastly-framework).\
-  **Why**: New HashiCorp framework was incompatible with their previous SDK and so it was important we started migrating before HashiCorp published a deprecation notice.\
-  **Impact**: Customers will benefit from a more modern provider implementation and a whole bunch of long standing bugs resolved.
+- **What**: Led the from-scratch rewrite of the Fastly Terraform Provider.\
+  **Why**: To migrate to a new, modern framework from HashiCorp, ensuring the provider's long-term viability and maintainability.\
+  **Impact**: The rewrite resulted in a more stable, performant, and feature-rich provider, resolving numerous long-standing bugs and improving the overall customer experience.
 
 ### 2022
 
-- **What**: Implemented a proof-of-concept [PKCE](https://pragmaticwebsecurity.com/articles/oauthoidc/from-implicit-to-pkce.html) (Proof Key for Code Exchange) OAuth flow for the [Fastly CLI](https://github.com/fastly/cli) ([example gist](https://gist.github.com/Integralist/76f8be7cd5bb6e75587d58146daf0ab5)).\
-  **Why**: Part of a larger initiative to upgrade our authentication and authorization model, so that we can offer more features to customers.\
-  **Impact**: Customers will get more flexible and advanced sign-in features.
+- **What**: Implemented a proof-of-concept for a PKCE-based OAuth flow in the Fastly CLI.\
+  **Why**: To explore a more secure and modern authentication flow for the Fastly CLI.\
+  **Impact**: The successful POC demonstrated the viability of the PKCE flow, paving the way for the full implementation in 2023 and a more secure authentication experience for customers.
 
-- **What**: Implemented a new code-generated Go API client with the help of [openapi-generator.tech](https://openapi-generator.tech).\
-  **Why**: Part of a larger initiative to use the OpenAPI specification to code-generate language API clients.\
-  **Impact**: We have a lot of customers interested in Go who are now able to interact with our platform.
+- **What**: Implemented a new, code-generated Go API client from our OpenAPI specification.\
+  **Why**: To provide Go developers with a modern, idiomatic way to interact with the Fastly platform.\
+  **Impact**: This enabled Go developers to seamlessly integrate Fastly into their applications, expanding our ecosystem and meeting customer demand.
 
-- **What**: I was the SME (Subject Matter Expert) on a cross-team collaboration for supporting custom headers in healthchecks for Terraform.\
-  **Why**: An important customer required this feature as part of a large-scale event.\
-  **Impact**: We completed the project ahead of schedule and the event was a success.
+- **What**: Acted as the Subject Matter Expert for a cross-team project to add a critical feature to the Terraform provider.\
+  **Why**: To deliver a time-sensitive feature required by a major customer for a large-scale event.\
+  **Impact**: The project was delivered ahead of schedule, enabling the customer's event to be a success and strengthening the customer relationship.
 
-- **What**: Implemented a solution to reduce API calls in the Fastly Terraform provider ([PR](https://github.com/fastly/terraform-provider-fastly/pull/593)).\
-  **Why**: The provider was making unnecessary API calls that was causing network and performance problems, and was affecting our platform reliability.\
-  **Impact**: I reduced the time for a 'plan' (and the time it takes to run the integration tests) by ~70%! This improves the quality of life for our customers, while also helping to protect the Fastly API, and benefits the developers working on the provider.
+- **What**: Implemented a major performance optimization in the Fastly Terraform provider.\
+  **Why**: To address performance issues and reduce load on the Fastly API caused by excessive calls from the provider.\
+  **Impact**: This optimization reduced Terraform plan times by approximately 70%, significantly improving the customer experience and increasing platform stability.
 
-- **What**: Implemented a new code-generated Rust API client with the help of [openapi-generator.tech](https://openapi-generator.tech).\
-  **Why**: Part of a larger initiative to use the OpenAPI specification to code-generate language API clients.\
-  **Impact**: We have a lot of customers interested in Rust who are now able to interact with our platform.
+- **What**: Implemented a new, code-generated Rust API client from our OpenAPI specification.\
+  **Why**: To provide Rust developers, particularly those using Compute, with a modern, idiomatic way to interact with the Fastly platform.\
+  **Impact**: This enabled Rust developers to seamlessly integrate Fastly into their applications, expanding our ecosystem and meeting customer demand.
 
-- **What**: Implemented retry behaviour for critical section of [customer facing platform software](https://fiddle.fastlydemo.net).\
-  **Why**: A hard to reproduce, and intermittent, network failure was causing services to restart at the infrastructure layer, which was a slow and costly process.\
-  **Impact**: Developers wouldn't waste cycles having to manually re-start flaky/failing CI jobs, and a large reduction in service remediation latency.
+- **What**: Implemented retry logic in a critical, customer-facing service.\
+  **Why**: To improve the resilience of the service, which was experiencing intermittent network failures.\
+  **Impact**: The change made the service more resilient to transient network issues, reducing CI flakiness and improving developer productivity and service uptime.
 
-- **What**: Designed a [PKCE](https://pragmaticwebsecurity.com/articles/oauthoidc/from-implicit-to-pkce.html) (Proof Key for Code Exchange) OAuth flow for existing authentication systems.\
-  **Why**: We wanted all our public clients to be able to support OAuth.\
-  **Impact**: We increase the security and flexibility of our authentication systems.
+- **What**: Designed a standardized PKCE OAuth flow for all of Fastly's public clients.\
+  **Why**: To create a consistent and secure authentication experience across all our developer tools.\
+  **Impact**: The design provided a clear path to modernizing our authentication systems, improving both security and user experience across multiple client applications.
 
-- **What**: Designed and developed a CLI based strategy (in [go](https://go.dev/)) for integrating an OAuth user flow. This included co-authoring the relevant Rust work (in a separate internal auth service) to support different Fastly clients (i.e. a client might be one of Fastly's existing web properties like [developer.fastly.com](https://developer.fastly.com) or the [Fastly CLI](https://github.com/fastly/cli)).\
-  **Why**: Users of the Fastly CLI could not configure more than one token. This would mean the token typically, for convenience, would be a long-lived token (e.g. no expiry). This was a tedious flow for users as they needed to manually interact with different areas of the Fastly UI before then having to go back to the CLI to apply a token.\
-  **Impact**: Users have a slick and easy authentication flow that is more secure and provides better best practices (i.e. using short-lived tokens that regenerate frequently).
+- **What**: Designed and co-developed a new, secure, and user-friendly authentication flow for the Fastly CLI.\
+  **Why**: The existing CLI authentication flow was cumbersome and relied on insecure long-lived tokens.\
+  **Impact**: The new design provided a seamless and secure authentication flow, promoting security best practices by using short-lived tokens and improving the overall developer experience.
 
-- **What**: Developed features and bug fixes for, as well as managed and coordinated, [a major v1.0.0 release of the Fastly Terraform provider](https://github.com/fastly/terraform-provider-fastly/releases/tag/v1.0.0).\
-  **Why**: The provider had been at 0.x for the past couple years and more generally was not in a great state.\
-  **Impact**: A greatly simplified user experience (UX) via a more consistent interface, the fixing of multitude bugs, and resolving a potential issue that otherwise could trigger data loss, resulted in a much improved product for Fastly customers.
+- **What**: Managed and coordinated the v1.0.0 release of the Fastly Terraform provider.\
+  **Why**: The provider had been in a pre-release state for years and needed significant work to be considered stable and production-ready.\
+  **Impact**: The v1.0.0 release marked a major milestone, delivering a more consistent user experience, fixing numerous bugs, and resolving a critical data loss issue. This resulted in a much more stable and reliable product for customers.
 
 > "This is a HUGE milestone for the provider, it's come a long way since we adopted it and we've always been building up to being able to cut this v1 release.
 >
@@ -562,39 +562,39 @@ I'd like to share the projects I've worked on over the years and the impact/valu
 
 ### 2021
 
-- **What**: Migrated from Travis CI to GitHub Actions, which included general refactoring of scripts, implementing reusable jobs and figuring out how to efficiently persist data between jobs (I also added lots of internal documentation).\
-  **Why**: To reduce complexity in our CI/CD pipelines.\
-  **Impact**: Our CI is much easier to understand, maintain and contribute to for internal staff (I also [wrote about GitHub Actions](/posts/github-actions/) as a side-effect).
+- **What**: Migrated our CI/CD pipelines from Travis CI to GitHub Actions.\
+  **Why**: To modernize our CI/CD pipelines and reduce complexity.\
+  **Impact**: The migration resulted in a CI system that was easier to understand, maintain, and contribute to, improving developer productivity.
 
-- **What**: Published a [best practices guide](https://developer.fastly.com/learning/integrations/orchestration/terraform/) for writing Terraform using the Fastly Terraform provider.\
-  **Why**: We noticed an increase in customer support queries related to Terraform and it being a complex topic to understand.\
-  **Impact**: Customers reported an appreciation for the official guidance as it helped to elucidate an otherwise confusing combination of tools and concepts.
+- **What**: Authored an official best practices guide for using Terraform with Fastly.\
+  **Why**: To address a growing number of customer support queries and provide clear guidance on a complex topic.\
+  **Impact**: The guide was well-received by customers and helped them to use Terraform with Fastly more effectively, reducing support load and improving customer satisfaction.
 
-- **What**: Acted as an ambassador for Fastly support on Stack Overflow ([Fastly Stack Overflow profile](https://stackoverflow.com/users/14849316/integralist)).\
-  **Why**: To help the community of Fastly users.\
-  **Impact**: We unblocked customers and enabled them to become productive, as well as generally feeling supported.
+- **What**: Acted as a Fastly ambassador on Stack Overflow.\
+  **Why**: To provide expert support to the Fastly user community on a public platform.\
+  **Impact**: This helped unblock customers, enabled them to be more productive, and fostered a sense of a supportive community around Fastly's products.
 
-- **What**: I designed, wrote and coordinated the release of a Terraform training module that also focuses on integration with Fastly.\
-  **Why**: We had noticed an ever growing increase in interest with Terraform.\
-  **Impact**: Our customers can feel confident and supported when thinking of managing their services using Terraform.
+- **What**: Designed and created a Terraform training module for Fastly customers.\
+  **Why**: To meet the growing customer interest in using Terraform to manage Fastly services.\
+  **Impact**: The training module empowered customers to confidently manage their services with Terraform, improving their experience and promoting best practices.
 
-- **What**: Wrote a custom golang program to parse a bunch of OpenAPI schemas and to auto-generate a golang based API client.\
-  **Why**: To identify potential problems with our OpenAPI schemas and whether we can offer custom generated API clients to our customers.\
-  **Impact**: We have a viable solution that will ensure our API endpoints and API clients stay in-sync with minimal effort/cost.
+- **What**: Built a tool to validate our OpenAPI schemas and test a code-generation strategy.\
+  **Why**: To explore the feasibility of auto-generating API clients from our OpenAPI schemas.\
+  **Impact**: The tool proved the viability of a code-generation strategy, providing a path to ensure our API clients stay in sync with our API endpoints with minimal manual effort.
 
-- **What**: Defined a new retro process.\
-  **Why**: There was none defined.\
-  **Impact**: We now have effective and valuable retros 🎉.
+- **What**: Defined and implemented a new retrospective process for the team.\
+  **Why**: The team lacked a structured process for retrospectives, limiting our ability to learn and improve.\
+  **Impact**: The new process led to more effective and valuable retrospectives, fostering a culture of continuous improvement within the team.
 
 ### 2020
 
-- **What**: Reaching out to our customers (and _potential_ customers).\
-  **Why**: To help answer complex questions related to the fastly platform.\
-  **Impact**: The fastly organisation is more approachable and better understood from a technical perspective.
+- **What**: Provided expert technical support to customers and potential customers.\
+  **Why**: To help users solve complex problems and better understand the Fastly platform.\
+  **Impact**: This helped make Fastly's technology more approachable, strengthening customer relationships and building trust in the platform.
 
-- **What**: Coordinated wide net of user feedback (both internally and externally).\
-  **Why**: To help drive decisions around which API client libraries we should maintain (or which new languages to support).\
-  **Impact**: We have a clearer understanding of where we should focus our resources.
+- **What**: Gathered and analyzed user feedback to inform our API client strategy.\
+  **Why**: To ensure our development efforts were focused on the languages and tools that mattered most to our customers.\
+  **Impact**: The feedback provided a clear, data-driven understanding of customer needs, allowing us to focus our resources where they would provide the most value.
 
 <p></p>
 <div id="impact-buzzfeed"></div>
@@ -603,181 +603,181 @@ I'd like to share the projects I've worked on over the years and the impact/valu
 
 ### 2020
 
-- **What**: worked across different teams promoting certain patterns to help reduce our logs (e.g. sampling 2xx's & single-log context middleware for http servers).\
-  **Why**: we had started to exceed our cost agreements with our metric/log aggregation provider.\
-  **Impact**: managed to reach our log production goal, while having the opportunity to work and share ideas with lots of different teams across the org.
+- **What**: Led a cross-team initiative to reduce logging volume.\
+  **Why**: To bring our logging costs back within budget.\
+  **Impact**: This collaborative effort successfully met its cost-reduction goals and fostered a culture of cost-awareness across the engineering organization.
 
-- **What**: I was the sole engineer designing, communicating (via RFC process) and building a global rate limiting feature ([read my post about it](/posts/rate-limiting/)) that integrated at different layers of our infrastructure (CDN, Routing + a new 'rate control' service).\
-  **Why**: teams across the organization were struggling to handle rate limiting within their services and Core Infrastructure (the team I work in) found through user feedback that this would be a valuable task to take on.\
-  **Impact**: I was able to release [a feature](/posts/rate-limiting/) that provided our organization with DoS level protection at 'the edge' (e.g. reduced load on our internal infrastructure) while decoupling rate limiting logic from our critical path, along with granular client identification context to be more useful than a simple IP deny list.
+- **What**: Designed and built a global rate-limiting service.\
+  **Why**: To provide a centralized and robust rate-limiting solution that individual teams were struggling to implement on their own.\
+  **Impact**: The new service provided robust DoS protection at the edge, reducing load on internal services and decoupling rate-limiting logic from the application's critical path.
 
-- **What**: spent three weeks tackling problem of metric production across ~600 microservices.\
-  **Why**: we had run over our allotted threshold
-  **Impact**: we saved the company ~$40k! We also educated ourselves greatly on how our provider determines 'custom metrics' and how to better use distribution metrics over standard histograms.
+- **What**: Led a cost-saving initiative to reduce metric production across hundreds of microservices.\
+  **Why**: To reduce metric costs that had exceeded our budget.\
+  **Impact**: This three-week effort saved the company approximately $40,000 and led to a better understanding of how to use our metrics provider more cost-effectively.
 
-- **What**: wrote Python script that parsed any metrics produced by our ~600 microservices and cross-referenced them against our ~1000 dashboards and ~1000 monitors to identify which metrics were actually used.\
-  **Why**: in the face of the Covid-19 pandemic we needed to reduce our metric costs.\
-  **Impact**: teams were able to run the script to efficiently identify unused metrics, and it provided direct links to the relevant monitors and dashboards (and even the specific graphs within those dashboards).
+- **What**: Developed a script to identify unused metrics across all services, dashboards, and monitors.\
+  **Why**: To help engineering teams efficiently reduce metric costs.\
+  **Impact**: The script empowered teams to easily identify and remove unused metrics, providing direct links to associated dashboards and monitors to streamline the cleanup process.
 
-- **What**: Implemented 'graceful shutdown' within shared libraries for HTTP servers written in Go/Python.\
-  **Why**: EC2 updates (for servers we manage under ECS) were causing containerized services to fail.\
-  **Impact**: The use of graceful shutdowns meant in-flight requests had time to complete once receiving a SIGTERM to the service by EC2.
+- **What**: Implemented graceful shutdown logic in our shared Go and Python web server libraries.\
+  **Why**: To prevent service disruptions caused by abrupt container shutdowns during routine infrastructure updates.\
+  **Impact**: This change ensured that in-flight requests could complete successfully during deployments, improving the reliability of our services and preventing data loss.
 
 ### 2019
 
-- **What**: Created an RFC for an updated Disaster Recovery plan.\
-  **Why**: Our 'Plan Z' (static rendering) approach wasn't clear to some teams/influencers.\
-  **Impact**: Summarized our current disaster recovery approach (i.e. in most cases relying on serve-stale) and highlighted the ways we were building confidence in our Plan Z approach by smoke testing the behaviours on a regular basis. As well as documenting possible active:active CDN approaches where an alternative provider supports a programmatic edge comparable to Fastly.
+- **What**: Authored an RFC to formalize and update our disaster recovery plan.\
+  **Why**: To ensure there was clear, company-wide understanding of our DR strategy.\
+  **Impact**: The RFC provided a clear summary of our DR strategy and plans for regular testing, which increased confidence in our ability to handle major outages.
 
-- **What**: Refactored and rewrote our static rendering 'disaster recovery' edge logic/process.\
-  **Why**: Modifications to our VCL for serving custom error pages from the edge had broken legacy DR logic that would attempt to pull error pages from AWS S3.\
-  **Impact**: Improved maintainability, understanding, effectiveness, resilience.
+- **What**: Rewrote our static-rendering disaster recovery process.\
+  **Why**: To fix and modernize our DR process, which had been broken by other changes.\
+  **Impact**: The rewrite resulted in a more resilient and maintainable DR process, ensuring we could reliably serve static content during a major outage.
 
-- **What**: Consolidated different debug headers and query parameters.\
-  **Why**: As the list of services along a request path increased (we introduced different proxies) the number of debug entry points increased.\
-  **Impact**: Reduced ~4 different debug entry points to 1, allowing engineers to more efficiently access the information they needed.
+- **What**: Consolidated multiple debugging headers and query parameters into a single entry point.\
+  **Why**: To simplify debugging across a complex, multi-layered request path.\
+  **Impact**: This consolidation streamlined the debugging process, making it faster and easier for engineers to diagnose issues in our distributed system.
 
-- **What**: Implemented new endpoint that directs traffic to a custom instance of [httpbin](https://httpbin.org/).\
-  **Why**: To enable engineers to test specific scenarios and behaviours of different aspects of our system.\
-  **Impact**: Teams are able to debug how different proxies will affect the request flow, and can now test different areas of our CDN logic (such as verifying if we're serving stale when expected).
+- **What**: Implemented a custom instance of httpbin for internal testing.\
+  **Why**: To provide engineers with a tool to safely test and debug interactions between different layers of our infrastructure.\
+  **Impact**: This enabled engineers to easily verify complex behaviors in our CDN and proxy layers, leading to more confident deployments and faster issue resolution.
 
-- **What**: Defined service contracts ([example](https://gist.github.com/524be67b0b33e8087dd67a5a6af9b3c5)).\
-  **Why**: Complex services (such as in technical areas teams were unfamiliar with) could behave like black boxes.\
-  **Impact**: Provided service consumers with a clear definition of expectations, enabling teams to better understand what a service would do for them.
+- **What**: Introduced the concept of "service contracts" to document service behaviors.\
+  **Why**: To demystify complex services and provide clear expectations for their consumers.\
+  **Impact**: Service contracts improved inter-team communication and understanding, making it easier for teams to reliably consume services they didn't own.
 
-- **What**: Wrote [a guide to HTTP caching](/posts/http-caching-guide/).\
-  **Why**: As engineers we have a responsibility to understand the platform we write software for.\
-  **Impact**: Shared understanding of how to properly use HTTP caching directives.
+- **What**: Wrote an internal guide to HTTP caching best practices.\
+  **Why**: To educate engineers on how to correctly and effectively use HTTP caching.\
+  **Impact**: The guide led to a shared understanding of HTTP caching across teams, resulting in more efficient and correct use of our CDN.
 
-- **What**: Extended OpsBot Slackbot application with `/oncall` command and generate reports that are dynamically added to incident document in Google Drive.\
-  **Why**: Seemed like a useful feature to add as part of HackWeek.\
-  **Impact**: People 'on-call' can now track what they work on and generate a report which becomes a permanent record.
+- **What**: Extended our internal Slackbot with incident management commands.\
+  **Why**: To improve our incident management process during a company HackWeek.\
+  **Impact**: The new command streamlined incident response by making it easy for on-call engineers to generate and archive incident reports, improving our post-mortem process.
 
-- **What**: Built (go based) CDN smoke test verification service.\
-  **Why**: Migration of behaviours from CDN to new Perimeter service was proving complicated.\
-  **Impact**: Able to verify existing behaviours, and deploy more confidently when the smoke tests continue to pass.
+- **What**: Built a Go-based smoke testing service for our CDN configuration.\
+  **Why**: To de-risk a complex migration of logic from our CDN to a new internal service.\
+  **Impact**: The smoke test service allowed us to verify critical behaviors throughout the migration, enabling us to deploy changes with high confidence and without impacting users.
 
-- **What**: Documented specific definitions for [SLI, SLO, SLA](https://gist.github.com/b9aa8e225ade0f78fcb57e1852627785).\
-  **Why**: To help people understand what these terms mean and why they are useful.\
-  **Impact**: Engaged more teams in defining SLA's for their services along with their own internal SLI/SLO's.
+- **What**: Created documentation defining SLIs, SLOs, and SLAs.\
+  **Why**: To create a shared understanding of service reliability concepts across the engineering organization.\
+  **Impact**: This initiative led to more teams defining and tracking SLOs for their services, resulting in a more data-driven approach to reliability.
 
-- **What**: Planned and designed project to migrate VCL logic from CDN layer to a new 'perimeter' service.\
-  **Why**: Reduce the amount of custom routing and behavioural logic within our CDN (which is a 'black box' for most engineers).\
-  **Impact**: Enabled BuzzFeed's ability to failover to a different CDN provider, thus avoiding vendor lock-in and improving our CDN resilience.
+- **What**: Planned and designed the migration of routing logic from our CDN to a new "perimeter" service.\
+  **Why**: To reduce complexity at the CDN layer and avoid vendor lock-in.\
+  **Impact**: This strategic project improved our infrastructure's resilience by enabling a multi-CDN strategy and made our routing logic more accessible to engineers.
 
-- **What**: Implemented CLI command for authenticated purging of URLs in Python.\
-  **Why**: To enable BuzzFeed staff (inc. tech support) to purge a given URL.\
-  **Impact**: Reduced the number of 'blessed' users given direct access to our CDN control panel, thus reducing the scope of potential user mistakes for a critical piece of our infrastructure.
+- **What**: Implemented a CLI command for authenticated URL purging.\
+  **Why**: To provide a secure and audited way for non-engineers to purge content from the CDN.\
+  **Impact**: This tool improved security by reducing the number of users with direct access to our CDN control panel, minimizing the risk of accidental, widespread purges.
 
-- **What**: Locked down purging of individual CDN URLs to authentication by API key.\
-  **Why**: Avoid bad actors engineering a distributed attack of our cache nodes.\
-  **Impact**: Increased platform resilience to cache dropping exploits.
+- **What**: Secured our CDN purging endpoint with API key authentication.\
+  **Why**: To protect our CDN from malicious purge attacks.\
+  **Impact**: This change hardened our platform against a potential denial-of-service attack, improving overall resilience.
 
-- **What**: Moved to 'Core Infra' (specifically the Infra Edge) team.\
-  **Why**: To increase the security and resilience of our Edge.\
-  **Impact**: Excitement from everyone in Core Infra to have me onboard. Seems my reputation preceded me ❤️
+- **What**: Moved to the Core Infrastructure team.\
+  **Why**: To apply my skills and experience to the team responsible for the security and resilience of our public-facing infrastructure.\
+  **Impact**: I was able to quickly contribute to the team's mission of securing and strengthening our edge infrastructure.
 
 ### 2018
 
-- **What**: I replaced BuzzFeed's use of NGINX+ (an expensive commercial product used as part of a critical piece of BuzzFeed's infrastructure) with the open-source version.\
-  **Why**: This was a [hack week project](../../pdfs/hackweek_2018_nginx.pdf). It took one day to develop the changes, one day to test and verify behaviours in a staging environment, followed by a quick rollout to production.\
-  **Impact**: This saved the organization $60,000 a year in licensing fees.
+- **What**: Replaced NGINX+ with the open-source version of NGINX in a critical piece of infrastructure.\
+  **Why**: To reduce licensing costs by replacing a commercial product with its open-source equivalent.\
+  **Impact**: This HackWeek project saved the company $60,000 annually in licensing fees with no loss of functionality.
 
-- **What**: Designed and co-implemented new authentication system built in Python on top of AWS Cognito.\
-  **Why**: We needed to decommission a legacy authentication system coupled to a 10yr+ monolithic Perl application.\
-  **Impact**: Enabled more services to offer authentication, thus allowing more community driven features across our products.
+- **What**: Designed and co-implemented a new authentication system using AWS Cognito.\
+  **Why**: To replace a legacy authentication system as part of a wider monolith decomposition effort.\
+  **Impact**: The new, modern authentication system enabled more services to securely add community features, and was a key step in migrating away from the legacy monolith.
 
-- **What**: Built a Python package that wraps scrypt.\
-  **Why**: Provide a consistent interface when requiring a hashing function.\
-  **Impact**: Engineers unfamiliar with security protocols (e.g. hashing mechanisms or the difference between that and encryption) could use hashing without having to understand the implementation.
+- **What**: Built a Python package to provide a safe and consistent interface for password hashing.\
+  **Why**: To abstract away the complexities of security protocols for developers.\
+  **Impact**: The package allowed developers to implement secure password hashing without needing to be security experts, improving the security of our applications.
 
-- **What**: Helped promote the benefits of Kim Scott's 'Radical Candor', Marshall Rosenberg's 'Nonviolent Communication' and Fred Kofman's 'Authentic Communication' to different teams across BuzzFeed.\
-  **Why**: Effective, clear and compassionate communication benefits everyone.\
-  **Impact**: Teams were becoming more productive with the increased confidence to give the most appropriate and direct feedback necessary to catch both interpersonal issues and address team concerns.
+- **What**: Promoted effective communication practices based on "Radical Candor" and "Nonviolent Communication".\
+  **Why**: To foster a culture of more effective and compassionate communication.\
+  **Impact**: This helped teams to communicate more openly and effectively, leading to better collaboration and higher productivity.
 
-- **What**: Introduced Wednesday lunch videos/presentations.\
-  **Why**: To motivate and inspire our development teams.\
-  **Impact**: People had fun listening to interesting topics (not all tech related), and having a source of conversation and discussion beyond the lunch hour and in some cases helped to inspire changes that fed back into the company.
+- **What**: Organized a weekly "lunch and learn" series for the engineering team.\
+  **Why**: To create a space for learning, sharing, and inspiration.\
+  **Impact**: This initiative fostered a stronger sense of community and sparked new ideas and conversations that often led to positive changes within the company.
 
-- **What**: Designed and implemented a Python Tornado web handler decorator responsible for acquiring/caching/revalidating an asymmetrical public key.\
-  **Why**: To protect services from unauthenticated access (the public key used to sign JWTs provided by an authentication proxy we had built in Go).\
-  **Impact**: Helped engineers to integrate with our custom built authentication service and provide a consistent experience across the platform.
+- **What**: Implemented a decorator to simplify JWT validation in our Python services.\
+  **Why**: To provide a simple and secure way for services to validate tokens from our new authentication proxy.\
+  **Impact**: The decorator made it trivial for engineering teams to integrate with the new authentication system, ensuring consistent and secure implementation across the platform.
 
-- **What**: Co-designed and co-implemented a Go based reverse proxy acting as an authentication layer infront of BuzzFeed services.\
-  **Why**: Part of a plan to decommission our legacy authentication system.\
-  **Impact**: The use of JWTs helped to develop a stateless system for providing authenticated access to services, thus making the system easier to reason about, and enabled teams to decouple themselves from our legacy Perl stack.
+- **What**: Co-designed and co-implemented a Go-based reverse proxy to act as an authentication layer.\
+  **Why**: To create a key component of our new, modern authentication system.\
+  **Impact**: The proxy provided a stateless and scalable authentication layer, making our system easier to reason about and enabling teams to decouple their services from the legacy monolith.
 
 ### 2017
 
-- **What**: Implemented README validator in Python.\
-  **Why**: As part of BuzzFeed's "Better Docs" initiative (of which I was a core member of its Working Group).\
-  **Impact**: This helped BuzzFeed to track the success of its new "Doc Day" event, which supports staff across the org in reviewing and improving software documentation.
+- **What**: Implemented a README validator to track documentation quality.\
+  **Why**: To support the company's 'Better Docs' initiative by programmatically tracking documentation quality.\
+  **Impact**: The tool provided concrete data on the success of our documentation initiatives, helping to drive a culture of better documentation across the engineering organization.
 
-- **What**: Led the effort to document, improve, and educate others on the state of BuzzFeed's monitoring.\
-  **Why**: Our monitoring system was noisy, which made going on-call a much more stressful proposition.\
-  **Impact**: I also wrote a [community blog post](/posts/monitoring-best-practices/) sharing and explaining a lot of what we did, along with sharing [a template Runbook](https://docs.google.com/document/d/1eaT9KMam5zq7lT-5OVz9T91RJQUx-qx2q6WnKSvxC_U/edit?usp=sharing) for operational safety.
+- **What**: Led an effort to improve our monitoring and on-call processes.\
+  **Why**: To reduce alert noise and make the on-call experience less stressful and more effective.\
+  **Impact**: This effort led to a significant reduction in alert fatigue and a more effective on-call rotation. I shared our learnings in a public blog post to benefit the wider community.
 
-- **What**: Core member of the BuzzFeed “Better-Docs” Working Group.\
-  **Why**: We aim to improve documentation and its discoverability for BuzzFeed Tech.\
-  **Impact**: We standardized the doc formats, the creation and maintenance of doc tooling, and continued to educate ourselves and the BF Tech community about the importance of good documentation.
+- **What**: Was a core member of the "Better-Docs" Working Group.\
+  **Why**: To improve the quality and discoverability of technical documentation across the company.\
+  **Impact**: The working group successfully standardized documentation formats and tooling, and promoted the importance of good documentation, making it easier for engineers to find the information they need.
 
-- **What**: Tech Lead for the Site Infra 'Resilience' team.\
-  **Why**: Necessary to help improve the stablity and resilience of BuzzFeed's existing services while helping to educate development teams on the best practices.\
-  **Impact**: We designed a disaster recovery strategy specific for BuzzFeed's needs (called 'Plan Z') which helped document failure scenarios and failovers for our service providers (alongside that primary task we helped improve the resilience for BuzzFeed services).
+- **What**: Served as Tech Lead for the Site Infrastructure 'Resilience' team.\
+  **Why**: To lead a team focused on improving the stability and resilience of BuzzFeed's services.\
+  **Impact**: As Tech Lead, I guided the team in designing and documenting a new disaster recovery strategy, which significantly improved our preparedness for major outages.
 
-- **What**: Built an operations Slackbot in Go.\
-  **Why**: I developed this as part of BuzzFeed's 'Hack Week'.\
-  **Impact**: Enabled all BuzzFeed staff (whether technical or not) to spin up either a public or private incident channel in Slack, while allowing interested parties to be auto-invited based upon an emoji reaction implementation. The tool also allowed people to search for operational runbooks stored within our organizations Google Drive.
+- **What**: Built an operations-focused Slackbot in Go.\
+  **Why**: To streamline incident response workflows during a company HackWeek.\
+  **Impact**: The bot made it easy for anyone in the company to manage incidents via Slack, improving communication and making it easier to access critical runbooks during an outage.
 
-- **What**: Designed and implemented a round-robin, multi-cloud provider nginx solution for serving static assets.\
-  **Why**: To help provide greater resilience when serving client-side static assets such as images or scripts.\
-  **Impact**: The tooling we built around this implementation helped to make the process of deploying and serving static assets efficiently much easier.
+- **What**: Designed and implemented a multi-cloud, round-robin solution for serving static assets.\
+  **Why**: To improve the resilience of our static asset delivery.\
+  **Impact**: The solution provided high availability for static assets by leveraging multiple cloud providers, and the associated tooling simplified the deployment process for engineers.
 
-- **What**: Technical Lead and architect for a dynamic video player service.\
-  **Why**: To enable asynchronous editor workflows.\
-  **Impact**: Enabled flexible video selection for end users, while helping to promote BuzzFeed's own brand of video content away from YouTube (which would otherwise require us to lose potential profit).
+- **What**: Was the Technical Lead and architect for a dynamic video player service.\
+  **Why**: To build a flexible video player service that supported the needs of our editorial team.\
+  **Impact**: The service gave editors more control over video content, and by hosting our own videos, we were able to increase revenue and promote the BuzzFeed brand.
 
-- **What**: Designed and implemented [a Go CLI tool for deploying Fastly VCL changes](https://github.com/integralist/go-fastly-cli).\
-  **Why**: The existing process for deploying Fastly VCL was manual and time consuming, and prone to mistakes.\
-  **Impact**: Helped unblock engineers who needed a more efficient way to rollout changes, while allowing them to diff and validate changes locally without having to sign-in to Fastly's otherwise confusing UI.
+- **What**: Built a Go-based CLI tool to automate CDN deployments.\
+  **Why**: To automate and de-risk the process of deploying changes to our CDN configuration.\
+  **Impact**: The tool made VCL deployments faster, safer, and more accessible to all engineers, removing a significant bottleneck and reducing the risk of production errors.
 
-- **What**: Refactored existing HTTP Cache Client Python package.\
-  **Why**: Original design was a facade around a multi-tiered cache abstraction over a Python HTTP client. This proved to be too limiting for engineers.\
-  **Impact**: Utilized an Adapter pattern internally to provide a unified interface, thus making it easier to provide custom HTTP clients instead of locking the caller down to a single client type.
+- **What**: Refactored a core HTTP caching library in Python.\
+  **Why**: To improve the flexibility and usability of the library.\
+  **Impact**: The refactor made the library more flexible and easier to use, allowing engineers to integrate it with their preferred HTTP clients.
 
-- **What**: Implemented GitHub hook mechanism for detecting API changes and generating updated documentation.\
-  **Why**: Documentation would often go stale because engineers would make changes but not re-run the rendering tools to generate new docs.\
-  **Impact**: Enabled engineers to make changes without having to think about generating new documentation or having to know how to use the tools for generating documentation.
+- **What**: Automated the generation of API documentation via a GitHub hook.\
+  **Why**: To ensure our API documentation was always up-to-date.\
+  **Impact**: This automation kept our documentation in sync with our code, and removed a tedious manual step from the developer workflow.
 
-- **What**: Refactored legacy VCL code and spent time building necessary abstractions.\
-  **Why**: Original code was difficult to understand and meant a blessed set of engineers understood how it all worked.\
-  **Impact**: Opened up the CDN to more engineers and helped to provide abstractions (such as for logging) to make working with VCL easier for those new to the language.
+- **What**: Refactored legacy VCL code and created new abstractions.\
+  **Why**: To make our complex CDN configuration more understandable and maintainable for all engineers.\
+  **Impact**: The refactoring and new abstractions made it possible for more engineers to safely work on our CDN configuration, removing a knowledge silo and increasing the team's velocity.
 
 ### 2016
 
-- **What**: Migrated Fastly’s version of varnish/vcl 2.x to standard 4.1.\
-  **Why**: Support switching to an alternative backup CDN.\
-  **Impact**: Strengthened our relationship with Site Reliability, while also building confidence in a failover CDN.
+- **What**: Migrated our CDN configuration from a legacy version of VCL to a modern, standard version.\
+  **Why**: To enable a multi-CDN strategy and improve maintainability.\
+  **Impact**: This project was a key step in improving our CDN resilience and fostered a stronger collaboration with the SRE team.
 
-- **What**: Designed and implemented generic GitHub Pull Request template file.\
-  **Why**: Consistency and standardization of how to structure pull requests. We based the final format was on an [old blog post](/posts/github-pull-request-formatting/) I wrote (back before GitHub offered their template feature).\
-  **Impact**: Clearer problem/solution descriptions that enabled engineers not familiar with the services to understand the changes proposed.
+- **What**: Designed and implemented a standard pull request template for all repositories.\
+  **Why**: To improve the clarity and consistency of pull requests across the organization.\
+  **Impact**: The template led to higher quality pull request descriptions, making code reviews more efficient and making it easier for engineers to understand changes in unfamiliar services.
 
-- **What**: Implemented a smoke test scheduler service in Python.\
-  **Why**: Catch regressions with BuzzFeed's primary routing service.\
-  **Impact**: Helped engineers to identify integration problems where routing changes would have adverse unexpected effects.
+- **What**: Implemented a service to automatically run smoke tests against our primary routing service.\
+  **Why**: To proactively detect regressions in a critical service.\
+  **Impact**: The service automatically caught integration issues before they reached production, preventing outages and improving the stability of the platform.
 
-- **What**: Led development across a global team (primarily US based), and the rollout of a new critical routing service.\
-  **Why**: The routing behaviours for BuzzFeed was accessible to a set of engineers who understood the CDN and VCL.\
-  **Impact**: Enabled the entire engineering department to make routing changes based on complex sets of dynamic input and requirements via a simple config driven workflow.
+- **What**: Led the development and rollout of a new, critical routing service.\
+  **Why**: To democratize the process of making routing changes, which was previously limited to a small number of specialists.\
+  **Impact**: The new service empowered all engineers to safely manage complex routing rules through a simple configuration file, dramatically increasing velocity and removing a major bottleneck.
 
-- **What**: Porting of Perl services over to Python [BFF](http://samnewman.io/patterns/architectural/bff/) services.\
-  **Why**: Decommission of 10yr+ monolithic Perl application.\
-  **Impact**: Increased BuzzFeed's recruitment opportunities by expanding the amount of services written in Python (compared to hiring Perl developers), as well as improving the code quality of those services migrated.
+- **What**: Ported legacy Perl services to modern Python services.\
+  **Why**: As part of a strategic initiative to decompose a 10-year-old Perl monolith.\
+  **Impact**: This work helped modernize our tech stack, improved our ability to hire new talent, and resulted in higher quality, more maintainable services.
 
-- **What**: Proposed usage of specific Python linters and related tooling.\
-  **Why**: Code consistency and easier debugging of code.\
-  **Impact**: Improved code quality.
+- **What**: Proposed and implemented standard Python linters and code quality tools.\
+  **Why**: To improve code quality and consistency across our Python services.\
+  **Impact**: The adoption of these tools led to a measurable improvement in code quality and consistency, making our services easier to maintain and debug.
 
 <p></p>
 <div id="impact-bbc"></div>
@@ -788,109 +788,109 @@ I'd like to share the projects I've worked on over the years and the impact/valu
 
 - **What**: Defined "[The Perfect Developer Qualities](https://gist.github.com/Integralist/3f8089345a1236b374a7a5b8a13591a1)".\
   **Why**: To inspire and motivate my colleagues.\
-  **Impact**: Engineers from across the organization reached out to me to share their thoughts, feedback and general appreciation for the time and consideration (as well as the obvious past experience) that led to this ideal list of character traits.
+  **Impact**: The document was widely shared and appreciated, sparking conversations about professional growth and what it means to be a great colleague.
 
 - **What**: Released the open-source project [go-elasticache](https://github.com/Integralist/go-elasticache).\
-  **Why**: Share useful tools that would benefit others.\
-  **Impact**: Improved the developer experience when working with AWS's ElastiCache service.
+  **Why**: To share a useful tool with the wider Go community.\
+  **Impact**: The project improved the developer experience for Go engineers working with AWS ElastiCache.
 
-- **What**: Led performance testing, analysis and resolution of scaling issues for the BBC's internal "Mozart" platform (written in Ruby).\
-  **Why**: Network bottlenecks were causing issues during load testing.\
-  **Impact**: Helped to identify specific service within the architecture that resulted in it being rewritten in Go and thus resolving the scaling performance issues.
+- **What**: Led performance testing and analysis for a critical internal platform.\
+  **Why**: The platform was experiencing scaling issues and network bottlenecks under load.\
+  **Impact**: My analysis identified the root cause of the performance issues, leading to a targeted rewrite of a key component in Go, which resolved the scaling problems.
 
-- **What**: Implemented simple, yet performant, URL monitoring system in Bash called [Bash Watchtower](/posts/bash-watchtower/).\
-  **Why**: Previous version was a complicated and over engineered Node application (a colleagues pet project, and no one in the organization used Node at the time). Being full of NPM packages made installing and running it a slow process.\
-  **Impact**: Improved deployment speed, helped other engineers understand the code base by using a language they were more familiar with, and simplified the code.
+- **What**: Implemented a simple, performant URL monitoring system in Bash.\
+  **Why**: The previous solution was over-engineered, slow, and used a technology stack unfamiliar to the team.\
+  **Impact**: The new system was faster, simpler, and easier for the team to maintain, improving both performance and developer productivity.
 
-- **What**: Created and led BBC News "Coding and Architecture" working group.\
-  **Why**: We were responsible for teams following best practices.\
-  **Impact**: Improved the quality of new services developed, and helped us to communicate with a wider range of the organization.
+- **What**: Created and led the BBC News "Coding and Architecture" working group.\
+  **Why**: To establish and promote engineering best practices across teams.\
+  **Impact**: The working group improved the quality and consistency of new services and fostered better communication and collaboration across the organization.
 
 - **What**: Co-designed and co-implemented the BBC News "Mozart" platform.\
-  **Why**: Simplify the ability to build up dynamic page composition.\
-  **Impact**: Enabled teams to build up complex pages of individual components. It also helped path the way for the organization to move away from internal hosted system to the AWS platform, while enabling developers to use easier languages and tools.
+  **Why**: To simplify the process of building dynamic pages from individual components.\
+  **Impact**: The platform empowered editorial teams by enabling flexible page composition and was a key step in the organization's strategic move to AWS.
 
 ### 2015
 
-- **What**: Represented BBC at AWS' week long re:Invent technical conference in Las Vegas.\
-  **Why**: To learn more about the new AWS services that could benefit the organization.\
-  **Impact**: Networking with lots of different companies and helping to promote the work that the BBC does (specifically the engineering arm of the organization).
+- **What**: Represented the BBC at the AWS re:Invent conference.\
+  **Why**: To learn about new AWS services and build relationships with other engineering organizations.\
+  **Impact**: I brought back valuable knowledge that informed our cloud strategy and helped to promote the BBC's engineering brand within the industry.
 
-- **What**: Co-designed and co-implemented a Go based CLI tool called "Apollo".\
-  **Why**: Abstract away certificate based authentication to internal APIs.\
-  **Impact**: Enabled teams to deploy services to the AWS platform.
+- **What**: Co-designed and co-implemented "Apollo", a Go-based CLI tool for authentication.\
+  **Why**: To simplify the process of authenticating with internal APIs on the AWS platform.\
+  **Impact**: The tool abstracted away the complexity of certificate-based authentication, making it easier and safer for teams to deploy services to AWS.
 
-- **What**: Team Lead for BBC News Frameworks team.\
-  **Why**: To help my team grow and to learn.\
-  **Impact**: Helped to promote a large segment of my team into senior position roles.
+- **What**: Served as Team Lead for the BBC News Frameworks team.\
+  **Why**: To mentor and guide a team of talented engineers.\
+  **Impact**: I successfully mentored team members, helping to promote a large portion of them into senior roles, strengthening the team's overall capability.
 
-- **What**: Won "Connecting the News" Hack Day event.\
-  **Why**: Event for different news organizations to come together around a shared data source (provided by the BBC) and to see what interesting tools and services can enhance that data.\
-  **Impact**: Networking with engineering teams across different news platforms helped to inform potential ideas for our own services. Showcased BBC News as a great place to work.
+- **What**: Won the "Connecting the News" Hack Day event.\
+  **Why**: To collaborate with other news organizations and explore innovative uses of a shared BBC data source.\
+  **Impact**: The event fostered valuable relationships with other engineering teams and showcased BBC News as an innovative and collaborative place to work.
 
 - **What**: Released BBC Newsbeat v2.\
-  **Why**: First fully AWS product from BBC News.\
-  **Impact**: Started the movement of services from using an internal hosting platform onto the AWS platform.
+  **Why**: This was the first major BBC News product to be launched entirely on AWS.\
+  **Impact**: The successful launch of this product was a major milestone in the BBC's transition to the cloud, paving the way for future AWS-based projects.
 
-- **What**: Tech Lead for General Elections.\
-  **Why**: The General Elections was a big event for BBC News.\
-  **Impact**: Successful build, deploy and monitoring of election reporting platform.
+- **What**: Served as Tech Lead for the General Elections platform.\
+  **Why**: The General Election is one of the biggest and most important events for BBC News.\
+  **Impact**: I successfully led the team in building, deploying, and monitoring the election reporting platform, ensuring a smooth and reliable experience for millions of users.
 
-- **What**: Rebuilt and migrated BBC's Market Data to AWS using the BBC's open-source Alephant framework, of which I was a co-author.\
-  **Why**: Fix an old and un-maintained, yet critical, data service.\
-  **Impact**: Modernized and improved this essential financial market service for its stakeholders and enabled further extension by other engineering teams.
+- **What**: Rebuilt and migrated the BBC's Market Data service to AWS.\
+  **Why**: To modernize a critical but old and unmaintained data service.\
+  **Impact**: The migration resulted in a more modern, reliable, and extensible service, ensuring the continued delivery of essential financial data to stakeholders.
 
 ### 2014
 
-- **What**: Designed and implemented "Jello" which was an internal synchronization service between Trello and Jira.\
-  **Why**: Teams preferred to use Trello, while the rest of the organization was using an old version of Jira.\
-  **Impact**: Teams benefited from the speed and feature set of Trello without having to manually track tasks back into Jira for the rest of the organizations visibility.
+- **What**: Designed and implemented "Jello", a Trello-to-Jira synchronization service.\
+  **Why**: To allow teams to use their preferred project management tool (Trello) while maintaining visibility for the rest of the organization (which used Jira).\
+  **Impact**: The service improved team productivity and happiness by allowing them to use the best tool for the job, without creating information silos.
 
-- **What**: Won "Most innovative use of Technology" BBC News Award (Docker CI).\
-  **Why**: Legacy Jenkins CI required a centralized operations team.\
-  **Impact**: Enabled teams to build and deploy software using any language or platform supported by Docker.
+- **What**: Won the "Most innovative use of Technology" BBC News Award for our Docker-based CI solution.\
+  **Why**: The legacy CI system was a bottleneck, requiring a centralized operations team to manage it.\
+  **Impact**: Our innovative use of Docker empowered teams to build and deploy their software independently, using any language or platform, which dramatically increased development velocity.
 
-- **What**: Won "Best Public Relations of the Year" BBC News Award (Pro Vim).\
-  **Why**: I like writing and sharing information that helps people be more proficient with the tools they use.\
-  **Impact**: Book was well received and opened the Vim editor to wider range of engineers.
+- **What**: Won the "Best Public Relations of the Year" BBC News Award for my book, "Pro Vim".\
+  **Why**: To share my passion for developer tools and help other engineers become more proficient.\
+  **Impact**: The book was well-received and helped to popularize the use of Vim within the engineering organization, improving developer productivity.
 
-- **What**: Co-designed and co-implemented cloud based distributed load testing tool.\
-  **Why**: Existing solutions weren't able to scale with our platform.\
-  **Impact**: Enabled engineers to load test their services at scale and identify performance bottlenecks.
+- **What**: Co-designed and co-implemented a cloud-based, distributed load testing tool.\
+  **Why**: Existing load testing solutions could not scale to meet the needs of our platform.\
+  **Impact**: The new tool enabled engineering teams to effectively load test their services at scale, allowing them to identify and resolve performance bottlenecks before they impacted users.
 
-- **What**: Organized public speaking event with [Sandi Metz](http://www.sandimetz.com/).\
-  **Why**: To build an engineering network event for the London tech community.\
-  **Impact**: London tech community got to see an otherwise often unseen internal look at BBC engineering talent and were able to discuss topics of interest.
+- **What**: Organized a public speaking event with renowned author and speaker, Sandi Metz.\
+  **Why**: To foster a sense of community and provide a learning opportunity for the wider London tech scene.\
+  **Impact**: The event was a great success, strengthening the BBC's reputation as a key player in the London tech community and providing a valuable networking opportunity for engineers.
 
 ### 2013
 
 - **What**: Voted "Developer of the Year" at the BBC News awards.\
-  **Why**: I had made sure to reach out and affect in a positive way every single aspect of the business and to make a real difference to the developer community within the BBC.\
-  **Impact**: A genuine sense of pride that I was able to achieve what I set out to do: make a difference.
+  **Why**: In recognition of my positive contributions across the business and my commitment to improving the developer community within the BBC.\
+  **Impact**: This award was a meaningful acknowledgment of my efforts to make a positive difference and support my colleagues.
 
-- **What**: Led development of the BBC News 'responsive navigation' redesign.\
-  **Why**: Part of the new BBC UX rebranding.\
-  **Impact**: Resulted in communication with product, design and engineering teams across the entire breadth of the BBC platform. Leading to a new responsive navigation that was able to accommodate all perspectives and requirements.
+- **What**: Led the development of the BBC News 'responsive navigation' redesign.\
+  **Why**: As part of a major, organization-wide UX rebranding initiative.\
+  **Impact**: I successfully led a complex, cross-team effort to deliver a new responsive navigation system that met the needs of all stakeholders and worked across the entire BBC platform.
 
-- **What**: Invited to [speak at Mozilla offices in Paris](https://speakerdeck.com/integralist/bbc-news-responsive-images).\
-  **Why**: To discuss the BBC News responsive images technique to browser vendors such as Apple, Microsoft, Opera, Mozilla and Google.\
-  **Impact**: I was able to establish myself as a person of interest to this organizations and an expert in the field when it came to client-side development.
+- **What**: Invited to speak at the Mozilla offices in Paris about responsive images.\
+  **Why**: To share the innovative techniques we had developed at the BBC with key industry players, including browser vendors.\
+  **Impact**: This speaking engagement established me as an expert in the field and allowed me to influence the future direction of web standards for responsive images.
 
-- **What**: Implemented new BBC UX framework.\
-  **Why**: The BBC brand was undergoing a organization wide redesign.\
-  **Impact**: This was a long and deliberate implementation and rollout process that helps re-establish BBC News as a leader in the responsive mobile development space and helped showcase BBC News engineering talents.
+- **What**: Implemented a new BBC-wide UX framework.\
+  **Why**: To support a major redesign of the BBC's brand and user experience.\
+  **Impact**: This long-term project re-established BBC News as a leader in responsive design and showcased the high quality of engineering talent at the BBC.
 
-- **What**: Implemented new BBC [responsive images solution](https://github.com/BBC-News/Imager.js/).\
-  **Why**: Scalable and responsive images was not widely supported by browsers with native APIs, requiring the development of custom solutions.\
-  **Impact**: [Public BBC News post](http://responsivenews.co.uk/post/58244240772/imagerjs) proposed our solution to the then difficult problem of how best to serve images in a scalable way to browsers and mobile devices.
+- **What**: Implemented a novel responsive images solution for BBC News.\
+  **Why**: At the time, browsers lacked native support for responsive images, requiring custom-built solutions to provide a good user experience on all devices.\
+  **Impact**: Our solution was a significant contribution to the web development community, and we shared our approach in a public blog post to help others facing the same challenge.
 
-- **What**: Introduced the use of [GruntJS](http://gruntjs.com/).\
-  **Why**: Using Ruby and Rake although engineers were unfamiliar with the language and were afraid to make changes or to build new tasks.\
-  **Impact**: Improved the ability of engineers to automate project tasks using JavaScript.
+- **What**: Introduced the use of GruntJS for task automation.\
+  **Why**: The existing solution used a technology stack that was unfamiliar to most engineers, creating a barrier to contribution.\
+  **Impact**: By switching to a JavaScript-based tool, I empowered more engineers to automate tedious tasks, improving developer productivity and happiness.
 
-- **What**: Member of the [BBC's GEL Responsive Working Group](http://www.bbc.co.uk/gel/).\
-  **Why**: To hear different engineering perspectives on how best to develop new UX designs.\
-  **Impact**: Simplified specific aspects of GELs design.
+- **What**: Was an active member of the BBC's GEL (Global Experience Language) Responsive Working Group.\
+  **Why**: To contribute to the design and development of the BBC's new responsive design system.\
+  **Impact**: My contributions helped to shape and simplify key aspects of the new design system, ensuring it was practical and easy for engineers to implement.
 
 ## Talks
 
