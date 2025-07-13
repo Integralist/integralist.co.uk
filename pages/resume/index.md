@@ -310,7 +310,7 @@ I'd like to share the projects I've worked on over the years and the impact/valu
   **Impact**: This proposal document kick-started a new initiative to ensure
   Terraform is treated as a first-class citizen within the Fastly ecosystem.
 
-- **What**: Redesigned internal boilerplate project used for create new
+- **What**: Redesigned internal boilerplate project used for creating new
   Go services at Fastly.\
   **Why**: As part of my work within a new team (although I was the sole
   engineer for quite a while) I needed to get a new API application onboarded
