@@ -58,28 +58,28 @@
                 <span class="icon fa-user"></span>
                 <div class="content">
                   <h3>Hard Worker</h3>
-                  <p>I bring dedication and focus to everything I do. I believe in rolling up my sleeves, going the extra mile, and delivering results that count. For me, hard work isn't just a habit—it's a mindset.</p>
+                  <p>I am dedicated to delivering high-quality results through focused effort and a commitment to seeing projects through to completion.</p>
                 </div>
               </article>
               <article>
                 <span class="icon solid fa-book-open"></span>
                 <div class="content">
                   <h3>Avid Learner</h3>
-                  <p>Curiosity fuels my journey. I'm passionate about expanding my horizons, mastering new skills, and staying ahead of the curve. Whether it's exploring cutting-edge ideas or honing tried-and-true techniques.</p>
+                  <p>I have a strong passion for continuous learning and professional growth, constantly seeking out new technologies and methodologies to improve my skill set.</p>
                 </div>
               </article>
               <article>
                 <span class="icon solid fa-star"></span>
                 <div class="content">
                   <h3>Star Performer</h3>
-                  <p>When it comes to excelling, I don't settle for anything less than my best. I thrive in challenges, embrace opportunities, and consistently aim to exceed expectations.</p>
+                  <p>I consistently strive for excellence in my work, taking on challenges and aiming to deliver outcomes that exceed expectations.</p>
                 </div>
               </article>
               <article>
                 <span class="icon solid fa-users"></span>
                 <div class="content">
                   <h3>Family Man</h3>
-                  <p>My family is my foundation. They inspire me to work hard and stay grounded. Whether it's sharing laughter, creating memories, or supporting one another, I treasure the moments that truly matter.</p>
+                  <p>My family is a central part of my life, providing balance and motivation. I value the time we spend together and the support we share.</p>
                 </div>
               </article>
             </div>
