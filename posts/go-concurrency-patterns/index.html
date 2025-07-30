@@ -376,74 +376,127 @@ forcefully cancelled):</p>
 
 import (
 	&quot;context&quot;
-	&quot;errors&quot;
 	&quot;fmt&quot;
+	&quot;net/http&quot;
 	&quot;time&quot;
 
 	&quot;golang.org/x/sync/errgroup&quot;
 )
 
 func main() {
+	ctx := context.Background()
+
 	// errgroup.WithContext creates a new Group and a derived Context.
 	// The errgroup context is cancelled when the first goroutine returns a non-nil
 	// error or when the g.Wait function returns.
-	g, ctx := errgroup.WithContext(context.Background())
+	g, ctx := errgroup.WithContext(ctx)
 
-	for i := range 10 {
+	// List of URLs to fetch
+	urls := []string{
+		&quot;https://http-me.fastly.dev/status=200&quot;,
+		&quot;https://http-me.fastly.dev/?wait=1000&amp;status=201&quot;, // This never completes (i.e. goroutine is cancelled)
+		&quot;https://http-me.fastly.dev/?wait=1000&amp;status=202&quot;, // This never completes (i.e. goroutine is cancelled)
+		&quot;https://http-me.fastly.dev/status=500&quot;,            // This one will return an error
+	}
+
+	for _, url := range urls {
+		u := url
+
+		// Start a goroutine for each URL
 		g.Go(func() error {
-			// Pass the errgroup context down to the worker.
-			return worker(ctx, i)
+			fmt.Println(&quot;Goroutine for &quot;, u)
+
+			// Create a request with context
+			req, err := http.NewRequestWithContext(ctx, http.MethodGet, u, nil)
+			if err != nil {
+				return fmt.Errorf(&quot;creating request: %w&quot;, err)
+			}
+
+			resp, err := http.DefaultClient.Do(req)
+			if err != nil {
+				return fmt.Errorf(&quot;request failed: %w&quot;, err)
+			}
+			defer resp.Body.Close()
+
+			// Treat non-200 status codes (1xx, 3xx, 4xx, 5xx) as errors
+			if resp.StatusCode &lt; http.StatusOK || resp.StatusCode &gt;= http.StatusMultipleChoices {
+				return fmt.Errorf(&quot;non-200 status: %d from %s&quot;, resp.StatusCode, u)
+			}
+
+			select {
+			case &lt;-time.After(time.Millisecond):
+				// don't block forever, just enough to check context.Done
+			case &lt;-ctx.Done():
+				// This block is executed if the context is cancelled before the work is finished.
+				fmt.Printf(&quot;Goroutine %s cancelled\n&quot;, u)
+				return ctx.Err()
+			}
+
+			fmt.Printf(&quot;Successfully fetched: %s\n&quot;, u)
+			return nil
 		})
 	}
-	
-	// Wait for all goroutines to finish.
-	// g.Wait will return the first non-nil error returned by a goroutine.
+
+	// Wait for all goroutines to complete or any to return an error
 	if err := g.Wait(); err != nil {
-		fmt.Printf(&quot;\nAn error occurred: %v\n&quot;, err)
+		fmt.Printf(&quot;Error: %v\n&quot;, err)
 	} else {
-		fmt.Println(&quot;\nAll workers done successfully.&quot;)
+		fmt.Println(&quot;All fetches succeeded.&quot;)
 	}
-}
-
-// worker accepts a context to enable cancellation.
-func worker(ctx context.Context, id int) error {
-	fmt.Printf(&quot;Worker %d starting\n&quot;, id)
-	var workDuration time.Duration
-
-	// Assign different work durations to simulate a realistic scenario
-	switch {
-	case id &lt; 3:
-		// These workers are fast and should complete successfully
-		workDuration = time.Duration(id+1) * 100 * time.Millisecond
-	case id == 4:
-		// This worker takes a bit longer and will fail
-		workDuration = 500 * time.Millisecond
-	default:
-		// These workers are slow and should be cancelled
-		workDuration = 2 * time.Second
-	}
-
-	select {
-	case &lt;-time.After(workDuration):
-		// The simulated &quot;work&quot; has finished.
-		// Now we check if this specific worker is supposed to produce an error.
-		if id == 4 {
-			fmt.Printf(&quot;Worker %d encountering an error\n&quot;, id)
-			return errors.New(&quot;something went wrong in worker 4&quot;)
-		}
-		fmt.Printf(&quot;Worker %d done\n&quot;, id)
-
-	case &lt;-ctx.Done():
-		// This block is executed if the context is cancelled before the work is finished.
-		fmt.Printf(&quot;Worker %d cancelled\n&quot;, id)
-		return ctx.Err()
-	}
-
-	return nil
 }
 </code></pre>
 
-<p><a href="https://play.golang.com/p/Xhdl5XU5Iwq" target="_blank">https://play.golang.com/p/Xhdl5XU5Iwq</a></p>
+<p>The output of the program is non-deterministic. So, for example, you might see:</p>
+
+<pre><code>Goroutine for  https://http-me.fastly.dev/status=500
+Goroutine for  https://http-me.fastly.dev/?wait=1000&amp;status=202
+Goroutine for  https://http-me.fastly.dev/status=200
+Goroutine for  https://http-me.fastly.dev/?wait=1000&amp;status=201
+Error: non-200 status: 500 from https://http-me.fastly.dev/status=500
+</code></pre>
+
+<p>Notice in the above output no goroutine is successful. The error is picked up
+from the <code>status=500</code> URL and so all other goroutines are cancelled immediately.</p>
+
+<p>Where as if you run the code again you might see this:</p>
+
+<pre><code>Goroutine for  https://http-me.fastly.dev/status=500
+Goroutine for  https://http-me.fastly.dev/status=200
+Goroutine for  https://http-me.fastly.dev/?wait=1000&amp;status=201
+Goroutine for  https://http-me.fastly.dev/?wait=1000&amp;status=202
+Goroutine https://http-me.fastly.dev/status=200 cancelled
+Error: non-200 status: 500 from https://http-me.fastly.dev/status=500
+</code></pre>
+
+<p>Notice in the above output we now see one of the goroutines were explicitly
+cancelled, i.e. the <code>select</code> statement had time to run the check on the
+<code>ctx.Done()</code> call.</p>
+
+<p>If we want to see any of these goroutines fail we need to play around with the
+delays to give one of them a chance of succeeding. So something like this would
+do it:</p>
+
+<pre><code class="language-go">urls := []string{
+	&quot;https://http-me.fastly.dev/status=200&quot;,
+	&quot;https://http-me.fastly.dev/?wait=1000&amp;status=201&quot;,
+	&quot;https://http-me.fastly.dev/?wait=1000&amp;status=202&quot;,
+	&quot;https://http-me.fastly.dev/?wait=500&amp;status=500&quot;,
+}
+</code></pre>
+
+<p>Notice we&rsquo;ve set a smaller delay (<code>wait=500</code>) on the <code>status=500</code> URL.</p>
+
+<p>When running the code again we&rsquo;d see something like this:</p>
+
+<pre><code>Goroutine for  https://http-me.fastly.dev/?wait=500&amp;status=500
+Goroutine for  https://http-me.fastly.dev/?wait=1000&amp;status=201
+Goroutine for  https://http-me.fastly.dev/status=200
+Goroutine for  https://http-me.fastly.dev/?wait=1000&amp;status=202
+Successfully fetched: https://http-me.fastly.dev/status=200
+Error: non-200 status: 500 from https://http-me.fastly.dev/?wait=500&amp;status=500
+</code></pre>
+
+<p>Notice in the above output we now see at least one successful case.</p>
 
 <blockquote>
 <p>[!TIP]
