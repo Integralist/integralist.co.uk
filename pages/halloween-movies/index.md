@@ -3,6 +3,7 @@
 1. An American Werewolf in London
 1. Basil The Great Mouse Detective
 1. Beetlejuice
+1. Big Trouble in Little China
 1. Bottom: Terror
 1. Bram Stoker's Dracula
 1. Candyman
