@@ -31,6 +31,7 @@
 1. Sleepy Hollow
 1. The Abyss
 1. The Addams Family (1991 + 2019)
+1. The Burbs
 1. The Dark Crystal
 1. The Evil Dead 2
 1. The Exorcist
@@ -44,3 +45,4 @@
 1. The Thing
 1. The Twilight Zone: The Movie (1983)
 1. The Witches
+1. They Live
