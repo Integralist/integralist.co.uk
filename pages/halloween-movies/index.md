@@ -24,6 +24,7 @@
 1. Legend
 1. Little Shop of Horrors
 1. Muppets Haunted Mansion
+1. Needful Things
 1. Pet Semetary
 1. Prince of Darkness
 1. Return to Oz
