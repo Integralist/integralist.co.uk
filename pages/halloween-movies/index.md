@@ -8,6 +8,7 @@
 1. Bram Stoker's Dracula
 1. Candyman
 1. Death Becomes Her
+1. Doghouse
 1. Friday the 13th 8
 1. From Hell
 1. Ghostbusters
