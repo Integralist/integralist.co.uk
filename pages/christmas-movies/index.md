@@ -13,7 +13,7 @@ Here are my top ten Christmas Movies:
 1. Home Alone
 1. Scrooged
 1. Batman Returns
-1. Gremlins
+1. Friday After Next
 
 > **Bonus:** Long Kiss Goodnight
 
@@ -47,6 +47,7 @@ Here is a more complete (sorted) list of Christmas movies/shows I like to watch:
 - Ice Age: A Mammoth Christmas
 - Jingle All the Way
 - Jonathan Creek Christmas Specials
+- Klaus
 - Lady and the Tramp
 - Long Kiss Goodnight
 - Love Actually
