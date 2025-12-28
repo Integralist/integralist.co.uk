@@ -9,7 +9,8 @@
 1. Candyman
 1. Death Becomes Her
 1. Doghouse
-1. Friday the 13th 8
+1. Friday the 13th VIII (Jason Takes Manhattan)
+1. From Dusk to Dawn
 1. From Hell
 1. Ghostbusters
 1. Gremlins
