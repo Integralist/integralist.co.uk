@@ -1,0 +1,93 @@
+---
+date: 2022-03-09
+---
+# Developer Tools
+
+I don't know who needs to hear this but:\
+**I love my developer tools**.
+
+## Core
+
+- **Package Manager**: [Homebrew](https://brew.sh/)
+- **Terminal**: [Ghostty](https://ghostty.org)
+- **Code Editor**: [Neovim](https://neovim.io)
+
+## History
+
+- Used stock macOS Terminal.app with [tmux](https://github.com/tmux/tmux/wiki)
+  for 10+ years.
+- I tried [iTerm2](https://iterm2.com/),
+  [Kitty](https://sw.kovidgoyal.net/kitty/), [Alacritty](https://alacritty.org/),
+  [WesTerm](https://wezfurlong.org/wezterm/) but none really fit well for me.
+- Constant colour issues forced me to switch from tmux to
+  [Zellij](https://zellij.dev).
+- I moved to using [Warp](https://www.warp.dev/) for a few years, but it still
+  had issues.
+- I finally landed on [Ghostty](https://ghostty.org) which has been great. Yes,
+  it still has minor issues but the community is active and open.
+
+## Workflow
+
+I use [Zsh](https://www.zsh.org) Autocomplete with
+[fzf-tab](https://github.com/Aloxaf/fzf-tab) to replace Zsh's default completion
+selection menu with [fzf](https://github.com/junegunn/fzf) which works really
+nicely.
+
+I mostly use terminal splits and tabs for dividing up projects and tasks, and on
+the occasion I'll use Neovim's built-in terminal across multiple splits or
+floating windows. Otherwise, the other part of Ghostty I use _a lot_ is its
+floating terminal that can be triggered from anywhere via a hotkey (as long as
+Ghostty is open somewhere).
+
+> 💡 You can find my Neovim config [here](https://github.com/integralist/nvim) and
+> my dotfiles [here](https://github.com/integralist/dotfiles).
+
+## Supplementary
+
+- **Code Statistics**: [Tokei](https://github.com/XAMPPRocky/tokei/blob/master/README.md)
+- **DNS Client**: [Doggo](https://github.com/mr-karan/doggo/blob/main/README.md)
+- **Directory Lister**: [Tree](<https://en.wikipedia.org/wiki/Tree_(command)>)
+- **Directory Navigator**: [Broot](https://github.com/Canop/broot/blob/master/README.md)
+- **Directory Switcher**: [Zoxide](https://github.com/ajeetdsouza/zoxide/blob/main/README.md)
+- **Disk Usage**: [Duf](https://github.com/muesli/duf/blob/master/README.md)
+- **Feed Reader**: [Tuifeed](https://github.com/veeso/tuifeed/blob/main/README.md)
+- **File Content Display**: [Bat](https://github.com/sharkdp/bat/blob/master/README.md)
+- **File Finder**: [Fd](https://github.com/sharkdp/fd/blob/master/README.md)
+- **File Lister**: [Exa](https://github.com/ogham/exa/blob/master/README.md)
+- **File Removal**: [Rip](https://github.com/nivekuil/rip/blob/master/README.org)
+- **File Space Usage**: [Dust](https://github.com/bootandy/dust/blob/master/README.md)
+- **Network Reachability**: [Gping](https://github.com/orf/gping/blob/master/readme.md)
+- **Network Utilisation**: [Bandwhich](https://github.com/imsnif/bandwhich/blob/main/README.md)
+- **Process Status**: [Procs](https://github.com/dalance/procs/blob/master/README.md)
+- **Process/System Monitor**: [Htop](https://github.com/htop-dev/htop/#readme) †
+- **Shell**: [Zsh](https://www.zsh.org)
+- **Shell Autocomplete**: [FZF-tab](https://github.com/Aloxaf/fzf-tab)
+- **Shell Prompt**: [Starship](https://starship.rs/)
+
+> † I had switched to
+> [Bottom](https://github.com/ClementTsang/bottom/blob/master/README.md) but
+> `htop` is so much more flexible and configurable, and although the graphs in
+> `btm` are nice, I don't _need_ them.
+
+## Browser
+
+Controversial, but I had moved away from
+[Firefox](https://www.mozilla.org/en-GB/firefox/new/) with a whole suite of
+security/privacy minded tools to [Apple's
+Safari](https://www.apple.com/uk/safari/) browser.
+
+I _was_ using Safari's ["Tab
+Group"](https://twitter.com/integralist/status/1514526555275501569?s=20&t=BJu3WlWq6dhoeAarJf91ig)
+feature, which I _really_ liked along with the following extensions...
+
+- AdBlock One
+- Dark Reader for Safari
+- SimplyJSON for Safari
+- Super Agent for Safari (Cookie Consent Automation)
+
+...but ultimately the Tab Groups feature ended up being super buggy and
+duplicating bookmarks and groups etc and I couldn't get the issue resolved, so I
+ended up back with Google Chrome.
+
+> 💡 In the future I'll likely switch over to using
+> [Ladybird](https://ladybird.org/).

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"fmt"
 	"io"
@@ -22,7 +23,7 @@ import (
 )
 
 var (
-	skipDirs         = []string{".git", "assets", "cmd"}
+	skipDirs         = []string{".git", "assets", "cmd", "docs"}
 	initOnce         sync.Once
 	contentSubPage   []byte
 	needleMainInsert = []byte("{INSERT_MAIN}")
@@ -42,7 +43,7 @@ func main() {
 			fmt.Printf("skipping: %+v\n", d.Name())
 			return filepath.SkipDir
 		}
-		if filepath.Ext(d.Name()) == ".md" && d.Name() != "README.md" {
+		if d.Name() == "index.html.md" {
 			pages = append(pages, path)
 		}
 		return nil
@@ -58,6 +59,7 @@ func main() {
 	}
 
 	renderHome(pages)
+	renderLLMsTxt(pages)
 }
 
 // initTemplates initializes the template content and ensures it runs only once.
@@ -90,13 +92,15 @@ func renderPosts(page, sideNavContent string) {
 		return
 	}
 
-	md, err := io.ReadAll(f)
+	rawMD, err := io.ReadAll(f)
 	if err != nil {
 		fmt.Printf("failed to read file '%s': %s\n", page, err)
 		_ = f.Close()
 		return
 	}
 	_ = f.Close()
+
+	md := stripFrontMatter(rawMD)
 
 	h := mdToHTML(md)
 	content := bytes.Replace(contentSubPage, needleMainInsert, h, 1)
@@ -120,30 +124,61 @@ func renderPosts(page, sideNavContent string) {
 	fmt.Printf("rendered: %s -> %s\n", page, dst)
 }
 
-// Helper function to extract link text from the content string
-// Example input: "\n\t<li><a href=\"...\">Link Text</a></li>\n\t"
-// Example output: "Link Text"
-func extractLinkText(content string) string {
-	// Find the position right after the opening '>' of the <a> tag
-	startIdx := strings.Index(content, ">")
-	if startIdx == -1 {
-		return content // Return original content as fallback if '>' not found
-	}
-	startIdx++ // Move past the '>'
+func renderLLMsTxt(pages []string) {
+	var (
+		pageLinks []*Page
+		postLinks []*Page
+	)
 
-	// Find the position of the closing '</a>' tag
-	endIdx := strings.Index(content, "</a>")
-	if endIdx == -1 || endIdx <= startIdx {
-		return content // Return original content as fallback if '</a>' not found or is before '>'
+	for _, path := range pages {
+		p, err := parsePage(path)
+		if err != nil {
+			continue
+		}
+		if p.Year == "index" {
+			pageLinks = append(pageLinks, p)
+		} else {
+			postLinks = append(postLinks, p)
+		}
 	}
 
-	// Extract the substring and trim leading/trailing whitespace
-	return strings.TrimSpace(content[startIdx:endIdx])
+	sort.Slice(pageLinks, func(i, j int) bool { return pageLinks[i].Title < pageLinks[j].Title })
+	sort.Slice(postLinks, func(i, j int) bool {
+		date1, _ := time.Parse("2006-01-02", postLinks[i].Date)
+		date2, _ := time.Parse("2006-01-02", postLinks[j].Date)
+		return date2.Before(date1)
+	})
+
+	var sb strings.Builder
+	sb.WriteString("# Integralist\n\n")
+	sb.WriteString("> Mark McDonnell's technical blog covering software engineering, architecture, and infrastructure.\n\n")
+
+	if len(pageLinks) > 0 {
+		sb.WriteString("## Pages\n\n")
+		for _, p := range pageLinks {
+			link := fmt.Sprintf("/%s/index.html.md", p.Dir)
+			sb.WriteString(fmt.Sprintf("- [%s](%s)\n", p.Title, link))
+		}
+		sb.WriteString("\n")
+	}
+
+	if len(postLinks) > 0 {
+		sb.WriteString("## Posts\n\n")
+		for _, p := range postLinks {
+			link := fmt.Sprintf("/%s/index.html.md", p.Dir)
+			sb.WriteString(fmt.Sprintf("- [%s](%s): %s\n", p.Title, link, p.Date))
+		}
+	}
+
+	err := writeFile("llms.txt", []byte(sb.String()))
+	if err != nil {
+		fmt.Printf("failed to write llms.txt: %s\n", err)
+	} else {
+		fmt.Println("rendered: llms.txt")
+	}
 }
 
 func renderSideNav(pages []string, root string) string {
-	caser := cases.Title(language.BritishEnglish)
-
 	tplNavGroupLinks := `
 	<li>
 	  <span class="opener">{YEAR}</span>
@@ -154,42 +189,19 @@ func renderSideNav(pages []string, root string) string {
 	`
 	tplNavSingleLink := `<li><a href="{LINK}">{TITLE}</a></li>`
 
-	type post struct {
-		date    string // expects ISO 8601 format, e.g., "2024-12-15" or "index"
-		year    string // e.g., "2024" or "index"
-		content string // HTML <li> content
-	}
-
 	// Create separate slices for pages and posts
-	pageLinks := make([]post, 0)
-	postLinks := make([]post, 0)
+	pageLinks := make([]*Page, 0)
+	postLinks := make([]*Page, 0)
 
 	// --- 1. Populate the separate slices ---
 	for _, path := range pages {
-		segs := strings.Split(path, "/")
-		if len(segs) < 3 {
-			fmt.Printf("Warning: Skipping path with unexpected format: %s\n", path)
-			continue // Skip malformed paths
-		}
-		dir := segs[0] + "/" + segs[1]
-		date := strings.Split(segs[2], ".")[0] // e.g., "index" or "2025-05-12"
-		year := date                           // Default year to date
-		if strings.Contains(date, "-") {
-			year = strings.Split(date, "-")[0] // e.g., "2025" if date has '-'
-		}
-		// Handle cases like "pages/resume/index.md" where year should be "index"
-		if date == "index" {
-			year = "index"
+		p, err := parsePage(path)
+		if err != nil {
+			fmt.Printf("Warning: Skipping path: %v\n", err)
+			continue
 		}
 
-		title := strings.ReplaceAll(caser.String(segs[1]), "-", " ")
-		link := filepath.Join(root, dir, "index.html")
-		contentNav := strings.Replace(tplNavSingleLink, "{TITLE}", title, 1)
-		contentNav = strings.Replace(contentNav, "{LINK}", link, 1)
-
-		p := post{date: date, year: year, content: contentNav}
-
-		if p.year == "index" {
+		if p.Year == "index" {
 			pageLinks = append(pageLinks, p)
 		} else {
 			postLinks = append(postLinks, p)
@@ -198,65 +210,62 @@ func renderSideNav(pages []string, root string) string {
 
 	// --- 2. Sort the pageLinks slice alphabetically by title ---
 	sort.Slice(pageLinks, func(i, j int) bool {
-		linkTextI := extractLinkText(pageLinks[i].content)
-		linkTextJ := extractLinkText(pageLinks[j].content)
-		return linkTextI < linkTextJ
+		return pageLinks[i].Title < pageLinks[j].Title
 	})
 
 	// --- 3. Sort the postLinks slice by date descending ---
 	sort.Slice(postLinks, func(i, j int) bool {
-		date1, err1 := time.Parse("2006-01-02", postLinks[i].date)
-		date2, err2 := time.Parse("2006-01-02", postLinks[j].date)
-		// Basic error handling: treat unparsable dates as "equal" or log them
+		date1, err1 := time.Parse("2006-01-02", postLinks[i].Date)
+		date2, err2 := time.Parse("2006-01-02", postLinks[j].Date)
 		if err1 != nil {
-			fmt.Printf("Warning: Could not parse date '%s' for sorting post '%s'\n", postLinks[i].date, extractLinkText(postLinks[i].content))
-			return false // Keep order stable relative to date2 if date1 fails
+			return false
 		}
 		if err2 != nil {
-			fmt.Printf("Warning: Could not parse date '%s' for sorting post '%s'\n", postLinks[j].date, extractLinkText(postLinks[j].content))
-			return true // Keep order stable relative to date1 if date2 fails
+			return true
 		}
 		return date2.Before(date1) // Descending order
 	})
 
 	// --- 4. Build the final navigation HTML string ---
-	var finalNav strings.Builder // Use strings.Builder for efficiency
+	var finalNav strings.Builder
+
+	// Helper to generate HTML for a list of pages
+	generateLinks := func(pages []*Page) string {
+		var sb strings.Builder
+		for _, p := range pages {
+			link := filepath.Join(root, p.Dir, "index.html")
+			contentNav := strings.Replace(tplNavSingleLink, "{TITLE}", p.Title, 1)
+			contentNav = strings.Replace(contentNav, "{LINK}", link, 1)
+			sb.WriteString(contentNav)
+		}
+		return sb.String()
+	}
 
 	// Add "Pages" section (if any pages exist)
 	if len(pageLinks) > 0 {
-		var pageContentLinks strings.Builder
-		for _, pLink := range pageLinks {
-			pageContentLinks.WriteString(pLink.content) // Append the pre-formatted <li>...</li>
-		}
-		// Use strings.ReplaceAll for potentially multiple replacements if templates change
 		pagesContainer := strings.ReplaceAll(tplNavGroupLinks, "{YEAR}", "Pages")
-		pagesContainer = strings.ReplaceAll(pagesContainer, "{YEAR_LINKS}", pageContentLinks.String())
+		pagesContainer = strings.ReplaceAll(pagesContainer, "{YEAR_LINKS}", generateLinks(pageLinks))
 		finalNav.WriteString(pagesContainer)
 	}
 
 	// Group sorted posts by year
-	postsByYear := make(map[string][]string)
-	yearOrder := make([]string, 0) // Keep track of year order as encountered in sorted posts
+	postsByYear := make(map[string][]*Page)
+	yearOrder := make([]string, 0)
 	yearSeen := make(map[string]bool)
 
-	for _, pLink := range postLinks { // Iterate sorted postLinks
-		year := pLink.year
-		postsByYear[year] = append(postsByYear[year], pLink.content)
+	for _, p := range postLinks {
+		year := p.Year
+		postsByYear[year] = append(postsByYear[year], p)
 		if !yearSeen[year] {
 			yearOrder = append(yearOrder, year)
 			yearSeen[year] = true
 		}
 	}
 
-	// Add post sections by year (already in descending date order from postLinks sort)
+	// Add post sections by year (already in descending date order)
 	for _, year := range yearOrder {
-		var yearContentLinks strings.Builder
-		// Links within postsByYear[year] are already sorted by date
-		for _, content := range postsByYear[year] {
-			yearContentLinks.WriteString(content)
-		}
 		yearContainer := strings.ReplaceAll(tplNavGroupLinks, "{YEAR}", year)
-		yearContainer = strings.ReplaceAll(yearContainer, "{YEAR_LINKS}", yearContentLinks.String())
+		yearContainer = strings.ReplaceAll(yearContainer, "{YEAR_LINKS}", generateLinks(postsByYear[year]))
 		finalNav.WriteString(yearContainer)
 	}
 
@@ -265,7 +274,6 @@ func renderSideNav(pages []string, root string) string {
 
 func renderHome(pages []string) { // nolint:revive // function-length
 	sideNavContent := renderSideNav(pages, "")
-	caser := cases.Title(language.BritishEnglish)
 
 	tplIndex := "assets/templates/index.tpl"
 
@@ -294,7 +302,6 @@ func renderHome(pages []string) { // nolint:revive // function-length
 
 	type post struct {
 		date    string // expects ISO 8601 format, e.g., "2024-12-15"
-		year    string
 		content string
 	}
 
@@ -304,23 +311,19 @@ func renderHome(pages []string) { // nolint:revive // function-length
 	)
 
 	for _, path := range pages {
-		segs := strings.Split(path, "/")
-		if len(segs) < 3 {
-			fmt.Printf("Warning: Skipping path with unexpected format in renderHome: %s\n", path)
+		p, err := parsePage(path)
+		if err != nil {
+			fmt.Printf("Warning: Skipping path in renderHome: %v\n", err)
 			continue
 		}
-		dir := segs[0] + "/" + segs[1]
-		date := strings.Split(segs[2], ".")[0]
-		year := strings.Split(date, "-")[0]
-		title := strings.ReplaceAll(caser.String(segs[1]), "-", " ")
-		link := filepath.Join(dir, dst)
-		contentMain := strings.Replace(tplMain, "{TITLE}", title, 1)
-		contentMain = strings.Replace(contentMain, "{LINK}", link, 1)
-		contentMain = strings.Replace(contentMain, "{DATE}", date, 1)
-		if year != "index" {
-			// Avoid adding generic pages to the home page list of pages in the
-			// main section (generic pages are fine to add to side nav `links`)
-			posts = append(posts, post{date: date, year: year, content: contentMain})
+
+		if p.Year != "index" {
+			link := filepath.Join(p.Dir, dst)
+			contentMain := strings.Replace(tplMain, "{TITLE}", p.Title, 1)
+			contentMain = strings.Replace(contentMain, "{LINK}", link, 1)
+			contentMain = strings.Replace(contentMain, "{DATE}", p.Date, 1)
+
+			posts = append(posts, post{date: p.Date, content: contentMain})
 		}
 	}
 
@@ -374,4 +377,102 @@ func mdToHTML(md []byte) []byte {
 	renderer := html.NewRenderer(opts)
 
 	return markdown.Render(doc, renderer)
+}
+
+type Page struct {
+	Title string
+	Date  string
+	Year  string
+	Dir   string
+	Path  string
+}
+
+func parsePage(path string) (*Page, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, fmt.Errorf("failed to open file %s: %w", path, err)
+	}
+	defer f.Close()
+
+	var (
+		title, date string
+		inFrontMatter bool
+	)
+
+	scanner := bufio.NewScanner(f)
+	lineCount := 0
+	for scanner.Scan() {
+		lineCount++
+		line := scanner.Text()
+		
+		if line == "---" {
+			if lineCount == 1 {
+				inFrontMatter = true
+				continue
+			}
+			if inFrontMatter {
+				break // End of front matter
+			}
+		}
+
+		if inFrontMatter {
+			if strings.HasPrefix(line, "date:") {
+				date = strings.TrimSpace(strings.TrimPrefix(line, "date:"))
+			}
+			if strings.HasPrefix(line, "title:") {
+				title = strings.TrimSpace(strings.TrimPrefix(line, "title:"))
+			}
+		}
+	}
+
+	if date == "" {
+		date = "index"
+	}
+
+	segs := strings.Split(path, "/")
+	if len(segs) < 3 {
+		return nil, fmt.Errorf("unexpected path format: %s", path)
+	}
+	dir := segs[0] + "/" + segs[1]
+
+	year := date
+	if strings.Contains(date, "-") {
+		year = strings.Split(date, "-")[0]
+	}
+
+	// Fallback to extracting title from directory if not in Front Matter
+	if title == "" {
+		caser := cases.Title(language.BritishEnglish)
+		title = strings.ReplaceAll(caser.String(segs[1]), "-", " ")
+	}
+
+	return &Page{
+		Title: title,
+		Date:  date,
+		Year:  year,
+		Dir:   dir,
+		Path:  path,
+	}, nil
+}
+
+func stripFrontMatter(content []byte) []byte {
+
+	if !bytes.HasPrefix(content, []byte("---\n")) {
+
+		return content
+
+	}
+
+
+
+	parts := bytes.SplitN(content, []byte("\n---\n"), 2)
+
+	if len(parts) == 2 {
+
+		return parts[1]
+
+	}
+
+	return content
+
 }

@@ -1,0 +1,115 @@
+# Integralist
+
+> Mark McDonnell's technical blog covering software engineering, architecture, and infrastructure.
+
+## Pages
+
+- [Christmas Movies](/pages/christmas-movies/index.html.md)
+- [Halloween Movies](/pages/halloween-movies/index.html.md)
+- [Resume](/pages/resume/index.html.md)
+
+## Posts
+
+- [Go Tools](/posts/go-tools/index.html.md): 2025-05-12
+- [Go Install And Switch](/posts/go-install-and-switch/index.html.md): 2025-02-02
+- [Go Concurrency Patterns](/posts/go-concurrency-patterns/index.html.md): 2024-11-15
+- [Bitwise Operations In Go](/posts/bitwise-operations-in-go/index.html.md): 2024-11-10
+- [Go Typed Nil](/posts/go-typed-nil/index.html.md): 2024-06-12
+- [Programming At The Edge With Fastly Compute](/posts/programming-at-the-edge-with-fastly-compute/index.html.md): 2024-06-12
+- [Ci Cd With Terraform Cloud And Github Actions](/posts/ci-cd-with-terraform-cloud-and-github-actions/index.html.md): 2024-03-10
+- [Openapi](/posts/openapi/index.html.md): 2023-08-18
+- [Terraform Build A Provider](/posts/terraform-build-a-provider/index.html.md): 2022-11-12
+- [Rust Smart Pointers](/posts/rust-smart-pointers/index.html.md): 2022-06-20
+- [Laptop Setup V2](/posts/laptop-setup-v2/index.html.md): 2022-05-26
+- [Go Install](/posts/go-install/index.html.md): 2022-04-22
+- [Neovim Rust Go](/posts/neovim-rust-go/index.html.md): 2022-04-14
+- [Vim Themes](/posts/vim-themes/index.html.md): 2022-04-14
+- [Dev Tools](/posts/dev-tools/index.html.md): 2022-03-09
+- [Go Style Guide](/posts/go-style-guide/index.html.md): 2022-01-11
+- [Github Actions](/posts/github-actions/index.html.md): 2021-12-01
+- [Vim Advanced](/posts/vim-advanced/index.html.md): 2021-06-15
+- [Rust Ownership](/posts/rust-ownership/index.html.md): 2021-03-28
+- [Go Reflection](/posts/go-reflection/index.html.md): 2020-08-17
+- [Software Comparison](/posts/software-comparison/index.html.md): 2020-07-18
+- [Rate Limiting](/posts/rate-limiting/index.html.md): 2020-07-08
+- [Git Internals](/posts/git-internals/index.html.md): 2020-03-29
+- [Python Context Managers](/posts/python-context-managers/index.html.md): 2020-01-06
+- [Python Generators](/posts/python-generators/index.html.md): 2019-12-28
+- [Tox Ini](/posts/tox-ini/index.html.md): 2019-12-18
+- [Python App Dependencies](/posts/python-app-dependencies/index.html.md): 2019-12-01
+- [Python Asyncio](/posts/python-asyncio/index.html.md): 2019-11-30
+- [Go Arrays And Slices](/posts/go-arrays-and-slices/index.html.md): 2019-11-17
+- [Anonymity](/posts/anonymity/index.html.md): 2019-09-04
+- [Http Caching Guide](/posts/http-caching-guide/index.html.md): 2019-08-06
+- [Laptop Setup](/posts/laptop-setup/index.html.md): 2019-04-10
+- [Git Multiple Branches](/posts/git-multiple-branches/index.html.md): 2019-03-22
+- [Algorithms In Python](/posts/algorithms-in-python/index.html.md): 2019-03-13
+- [Remote Working](/posts/remote-working/index.html.md): 2019-03-09
+- [Python Mocking](/posts/python-mocking/index.html.md): 2019-03-08
+- [Calculating Big O](/posts/calculating-big-o/index.html.md): 2019-02-28
+- [Algorithmic Complexity In Python](/posts/algorithmic-complexity-in-python/index.html.md): 2019-02-02
+- [Data Types And Data Structures](/posts/data-types-and-data-structures/index.html.md): 2019-01-30
+- [Design Python](/posts/design-python/index.html.md): 2019-01-02
+- [Js Modern](/posts/js-modern/index.html.md): 2018-09-29
+- [Engineer To Manager](/posts/engineer-to-manager/index.html.md): 2018-08-25
+- [Interview Techniques](/posts/interview-techniques/index.html.md): 2018-08-18
+- [Post Mortems](/posts/post-mortems/index.html.md): 2018-08-09
+- [Slackbot Opsbot](/posts/slackbot-opsbot/index.html.md): 2018-08-07
+- [Go Interfaces](/posts/go-interfaces/index.html.md): 2018-07-21
+- [Multigrain Services](/posts/multigrain-services/index.html.md): 2018-07-19
+- [Authentication With Aws Cognito](/posts/authentication-with-aws-cognito/index.html.md): 2018-06-15
+- [A Guide To Effective 1 1 Meetings](/posts/a-guide-to-effective-1-1-meetings/index.html.md): 2018-06-04
+- [Project Management](/posts/project-management/index.html.md): 2018-05-25
+- [Reading List](/posts/reading-list/index.html.md): 2018-05-25
+- [Python Security](/posts/python-security/index.html.md): 2018-05-15
+- [Static Site Search](/posts/static-site-search/index.html.md): 2018-05-10
+- [Interview Topics](/posts/interview-topics/index.html.md): 2018-04-08
+- [Go Reverse Proxy](/posts/go-reverse-proxy/index.html.md): 2018-03-03
+- [Hashing Encryption Encoding](/posts/hashing-encryption-encoding/index.html.md): 2018-02-16
+- [Computers 101](/posts/computers-101/index.html.md): 2018-01-30
+- [Statistics Basics](/posts/statistics-basics/index.html.md): 2017-12-19
+- [Queue Best Practices](/posts/queue-best-practices/index.html.md): 2017-11-26
+- [Monitoring Best Practices](/posts/monitoring-best-practices/index.html.md): 2017-11-15
+- [Load Testing Guidelines](/posts/load-testing-guidelines/index.html.md): 2017-11-13
+- [Logging 101](/posts/logging-101/index.html.md): 2017-11-12
+- [Fastly Varnish](/posts/fastly-varnish/index.html.md): 2017-11-02
+- [Profiling Python](/posts/profiling-python/index.html.md): 2017-10-31
+- [Profiling Go](/posts/profiling-go/index.html.md): 2017-10-31
+- [Dev Environments Within Docker Containers](/posts/dev-environments-within-docker-containers/index.html.md): 2017-03-29
+- [Key Architecture](/posts/key-architecture/index.html.md): 2016-12-10
+- [Go Hitchhikers Guide](/posts/go-hitchhikers-guide/index.html.md): 2016-12-02
+- [Concepts From The C Programming Language](/posts/concepts-from-the-c-programming-language/index.html.md): 2016-11-28
+- [Man Pages](/posts/man-pages/index.html.md): 2016-11-25
+- [C And Syscalls](/posts/c-and-syscalls/index.html.md): 2016-11-18
+- [Bits And Bytes](/posts/bits-and-bytes/index.html.md): 2016-11-16
+- [Terminal Password Manager](/posts/terminal-password-manager/index.html.md): 2016-10-19
+- [Terminal Utils](/posts/terminal-utils/index.html.md): 2016-09-12
+- [Github Pull Request Formatting](/posts/github-pull-request-formatting/index.html.md): 2016-08-22
+- [Big O For Beginners](/posts/big-o-for-beginners/index.html.md): 2016-06-28
+- [The Perfect Developer](/posts/the-perfect-developer/index.html.md): 2016-05-27
+- [Git Merge Strategies](/posts/git-merge-strategies/index.html.md): 2016-05-15
+- [Grpc For Beginners](/posts/grpc-for-beginners/index.html.md): 2016-04-11
+- [Bash Watchtower](/posts/bash-watchtower/index.html.md): 2016-03-03
+- [Rpc Variations In Go](/posts/rpc-variations-in-go/index.html.md): 2016-02-19
+- [Go Func Type](/posts/go-func-type/index.html.md): 2015-11-23
+- [Github Multiple Ssh](/posts/github-multiple-ssh/index.html.md): 2015-11-18
+- [Http2](/posts/http2/index.html.md): 2015-10-20
+- [Building Systems With Make](/posts/building-systems-with-make/index.html.md): 2015-10-07
+- [Client Cert Authentication](/posts/client-cert-authentication/index.html.md): 2015-10-03
+- [Dns 101](/posts/dns-101/index.html.md): 2015-09-30
+- [Security Basics](/posts/security-basics/index.html.md): 2015-08-25
+- [Docker Nginx](/posts/docker-nginx/index.html.md): 2015-08-04
+- [Designing For Simplicity](/posts/designing-for-simplicity/index.html.md): 2015-03-30
+- [Concurrency](/posts/concurrency/index.html.md): 2014-12-28
+- [Github Workflow](/posts/github-workflow/index.html.md): 2014-12-27
+- [Functional Recursive Javascript Programming](/posts/functional-recursive-javascript-programming/index.html.md): 2014-04-26
+- [Refactoring Techniques](/posts/refactoring-techniques/index.html.md): 2013-11-10
+- [Design Mvcp](/posts/design-mvcp/index.html.md): 2013-10-22
+- [Basic Shell Scripting](/posts/basic-shell-scripting/index.html.md): 2013-10-01
+- [Clean Coder](/posts/clean-coder/index.html.md): 2013-06-01
+- [Message Passing In Object Oriented Code](/posts/message-passing-in-object-oriented-code/index.html.md): 2013-03-31
+- [Design Oop](/posts/design-oop/index.html.md): 2013-02-12
+- [Git Tips](/posts/git-tips/index.html.md): 2012-12-16
+- [Javascript 101](/posts/javascript-101/index.html.md): 2012-11-02
+- [Maintainable Css With Bem](/posts/maintainable-css-with-bem/index.html.md): 2012-09-12
+- [Host Methods Vs Native Methods](/posts/host-methods-vs-native-methods/index.html.md): 2012-04-22

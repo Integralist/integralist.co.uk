@@ -1,6 +1,6 @@
 # llms.txt Integration
 
-- **Status**: Planning
+- **Status**: Completed
 - **Author**: Integralist
 - **Created**: 2026-01-14
 
@@ -29,24 +29,24 @@ The website is statically generated using a custom Go program located in `cmd/bl
 
 ### Phase 1: Preparation & Refactoring
 
-- [ ] **Task 1.1**: Refactor `cmd/blog/main.go` to extract the logic for parsing page metadata (Title, Date, Year, Link) from `renderSideNav` into a reusable helper function or struct method. This is necessary because `llms.txt` needs the same metadata.
+- [x] **Task 1.1**: Refactor `cmd/blog/main.go` to extract the logic for parsing page metadata (Title, Date, Year, Link) from `renderSideNav` into a reusable helper function or struct method. This is necessary because `llms.txt` needs the same metadata.
 
 ### Phase 2: Core Implementation
 
-- [ ] **Task 2.1**: Update `renderPosts` in `cmd/blog/main.go` to write a copy of the raw Markdown content to `index.html.md` in the same directory as the generated `index.html`.
-- [ ] **Task 2.2**: Implement a new function `renderLLMsTxt(pages []string)` in `cmd/blog/main.go`.
+- [x] **Task 2.1**: Update `renderPosts` in `cmd/blog/main.go` to write a copy of the raw Markdown content to `index.html.md` in the same directory as the generated `index.html`.
+- [x] **Task 2.2**: Implement a new function `renderLLMsTxt(pages []string)` in `cmd/blog/main.go`.
     - This function will generate the `llms.txt` content following the spec:
         - Header with Site Title and Description.
         - "Pages" section.
         - "Posts" section.
     - It will link to the `index.html.md` versions of the files.
-- [ ] **Task 2.3**: Call `renderLLMsTxt` within `main()` after page collection.
+- [x] **Task 2.3**: Call `renderLLMsTxt` within `main()` after page collection.
 
 ### Phase 3: Verification
 
-- [ ] **Task 3.1**: Run `make build` to generate the site.
-- [ ] **Task 3.2**: Verify `llms.txt` exists at the project root and contains valid links.
-- [ ] **Task 3.3**: Verify that for a sample post, an `index.html.md` file exists alongside `index.html`.
+- [x] **Task 3.1**: Run `make build` to generate the site.
+- [x] **Task 3.2**: Verify `llms.txt` exists at the project root and contains valid links.
+- [x] **Task 3.3**: Verify that for a sample post, an `index.html.md` file exists alongside `index.html`.
 
 ## File Changes
 
