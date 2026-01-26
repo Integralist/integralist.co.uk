@@ -90,7 +90,7 @@
               <h2>Articles</h2>
             </header>
             <div class="posts">
-							{INSERT_MAIN}
+							{{.Main}}
 							<!--
               <article>
                 <a href="./pages/ppv-wrestlemania-3.html" class="image"><img src="images/mania-3-index.jpg" alt="" /></a>
@@ -122,7 +122,7 @@
             <ul>
               <li><a href="index.html">Home</a></li>
 							<!--<li><a href="resume/index.html">Resume</a></li>-->
-							{INSERT_NAV}
+							{{.Nav}}
             </ul>
           </nav>
           <!-- Section -->

@@ -37,7 +37,7 @@
             </header>
             <span class="image main"><img src="../images/rumble-89.jpg" alt="" /></span>
 						-->
-						{INSERT_MAIN}
+						{{.Main}}
           </section>
         </div>
       </div>
@@ -58,7 +58,7 @@
       <ul>
         <li><a href="../../index.html">Home</a></li>
         <!--<li><a href="../resume/index.html">Resume</a></li>-->
-				{INSERT_NAV}
+				{{.Nav}}
       </ul>
     </nav>
     <!-- Section -->

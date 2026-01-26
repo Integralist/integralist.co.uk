@@ -3,6 +3,7 @@ package blog
 import (
 	"bytes"
 	"fmt"
+	"html/template"
 	"io"
 	"io/fs"
 	"os"
@@ -19,27 +20,32 @@ import (
 
 var (
 	skipDirs         = []string{`.git`, `assets`, `cmd`, `docs`, `internal`}
-	needleMainInsert = []byte("{INSERT_MAIN}")
-	needleNavInsert  = []byte("{INSERT_NAV}")
 )
 
 type Renderer struct {
-	contentSubPage []byte
+	tplPage *template.Template
+	tplHome *template.Template
+}
+
+type PageData struct {
+	Main template.HTML
+	Nav  template.HTML
 }
 
 func NewRenderer() (*Renderer, error) {
 	r := &Renderer{}
 
-	f, err := os.Open("assets/templates/page.tpl")
+	tplPage, err := template.ParseFiles("assets/templates/page.tpl")
 	if err != nil {
-		return nil, fmt.Errorf("failed to open page template: %w", err)
+		return nil, fmt.Errorf("failed to parse page template: %w", err)
 	}
-	defer f.Close()
+	r.tplPage = tplPage
 
-	r.contentSubPage, err = io.ReadAll(f)
+	tplHome, err := template.ParseFiles("assets/templates/index.tpl")
 	if err != nil {
-		return nil, fmt.Errorf("failed to read page template: %w", err)
+		return nil, fmt.Errorf("failed to parse index template: %w", err)
 	}
+	r.tplHome = tplHome
 
 	return r, nil
 }
@@ -98,12 +104,20 @@ func (r *Renderer) renderPost(p *Post, sideNavContent string) {
 
 	md := stripFrontMatter(rawMD)
 	h := mdToHTML(md)
-	content := bytes.Replace(r.contentSubPage, needleMainInsert, h, 1)
+	
+data := PageData{
+		Main: template.HTML(h),
+		Nav:  template.HTML(sideNavContent),
+	}
 
-	content = bytes.Replace(content, needleNavInsert, []byte(sideNavContent), 1)
+	var buf bytes.Buffer
+	if err := r.tplPage.Execute(&buf, data); err != nil {
+		fmt.Printf("failed to execute page template for '%s': %v\n", p.Path, err)
+		return
+	}
 
 	dst := filepath.Join(p.Dir, "index.html")
-	err = writeFile(dst, content)
+	err = writeFile(dst, buf.Bytes())
 	if err != nil {
 		fmt.Printf("failed to write file '%s': %s\n", dst, err)
 		return
@@ -198,20 +212,6 @@ func (r *Renderer) renderSideNav(posts []*Post, root string) string {
 func (r *Renderer) renderHome(posts []*Post) {
 	sideNavContent := r.renderSideNav(posts, "")
 
-	tplIndex := "assets/templates/index.tpl"
-
-	fi, err := os.Open(tplIndex)
-	if err != nil {
-		panic(fmt.Errorf("failed to open index template: %w", err))
-	}
-	defer fi.Close()
-
-	contentIndex, err := io.ReadAll(fi)
-	if err != nil {
-		panic(fmt.Errorf("failed to read index template: %w", err))
-	}
-
-	dst := "index.html"
 	tplMain := `
 	<article>
 	<h3>{TITLE}</h3>
@@ -239,23 +239,31 @@ func (r *Renderer) renderHome(posts []*Post) {
 	})
 
 	for _, p := range homePosts {
-		link := filepath.Join(p.Dir, dst)
+		link := filepath.Join(p.Dir, "index.html")
 		contentMain := strings.Replace(tplMain, "{TITLE}", p.Title, 1)
 		contentMain = strings.Replace(contentMain, "{LINK}", link, 1)
 		contentMain = strings.Replace(contentMain, "{DATE}", p.Date, 1)
 		bufMain.WriteString(contentMain)
 	}
 
-	contentIndex = bytes.Replace(contentIndex, needleMainInsert, bufMain.Bytes(), 1)
-	contentIndex = bytes.Replace(contentIndex, needleNavInsert, []byte(sideNavContent), 1)
+	data := PageData{
+		Main: template.HTML(bufMain.String()),
+		Nav:  template.HTML(sideNavContent),
+	}
 
-	err = writeFile("index.html", contentIndex)
+	var bufIndex bytes.Buffer
+	if err := r.tplHome.Execute(&bufIndex, data); err != nil {
+		fmt.Printf("failed to execute index template: %v\n", err)
+		return
+	}
+
+	err := writeFile("index.html", bufIndex.Bytes())
 	if err != nil {
 		fmt.Printf("failed to write index file: %s\n", err)
 		return
 	}
 
-	fmt.Printf("rendered: %s -> %s\n", tplIndex, dst)
+	fmt.Printf("rendered: assets/templates/index.tpl -> index.html\n")
 }
 
 func (r *Renderer) renderLLMsTxt(posts []*Post) {
