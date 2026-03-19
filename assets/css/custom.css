@@ -40,13 +40,13 @@
     content: "💡 Tip";
 }
 
-/* IMPORTANT - purple */
+/* IMPORTANT - red-orange */
 .admonition.important {
-    border-color: #6f42c1;
-    background-color: rgba(111, 66, 193, 0.3);
+    border-color: #e05a2b;
+    background-color: rgba(224, 90, 43, 0.5);
 }
 .admonition.important::before {
-    color: #6f42c1;
+    color: #e05a2b;
     content: "📌 Important";
 }
 

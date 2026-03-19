@@ -111,7 +111,7 @@ html {
   box-sizing: inherit; }
 
 body {
-  background: #541d1d; }
+  background: #3b4f5e; }
   body.is-preload *, body.is-preload *:before, body.is-preload *:after, body.is-resizing *, body.is-resizing *:before, body.is-resizing *:after {
     -moz-animation: none !important;
     -webkit-animation: none !important;
@@ -1999,6 +1999,10 @@ button,
   -ms-transition: margin-left 0.5s ease, box-shadow 0.5s ease;
   transition: margin-left 0.5s ease, box-shadow 0.5s ease;
   background-color: #b31d1d;
+  background-image: url('../img/sunn-life-metal.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   font-size: 0.9em;
   position: relative;
   width: 26em; }
