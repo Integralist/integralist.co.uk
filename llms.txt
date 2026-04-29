@@ -6,6 +6,7 @@
 
 - [Christmas Movies](/pages/christmas-movies/index.html.md)
 - [Halloween Movies](/pages/halloween-movies/index.html.md)
+- [Personal](/pages/personal/index.html.md)
 - [Resume](/pages/resume/index.html.md)
 
 ## Posts
