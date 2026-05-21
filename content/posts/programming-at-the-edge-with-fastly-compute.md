@@ -133,7 +133,6 @@ fastly compute serve
 > pass the `--watch` flag to have the CLI monitor your files for changes and to
 > hot reload your application.
 
-> [!NOTE]
 > [!TIP]
 > If you want to configure files to be ignored then create a
 > `.fastlyignore` file. It works like `.gitignore` so should be familiar to you.
@@ -357,7 +356,6 @@ again, but this time for the user's web browser by overriding the backend's
 resp.Header.Set("Cache-Control", "public, max-age=60")
 ```
 
-> [!NOTE]
 > [!WARNING]
 > There's a caveat to the readthrough cache that you'll want to
 > be careful with. If your backend sends `Cache-Control: private`, then

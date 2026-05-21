@@ -29,7 +29,6 @@ multiple OS threads (N). This allows the runtime to distribute goroutines across
 multiple CPU cores when possible, making Go’s concurrency model more efficient
 and scalable than traditional green threads.
 
-> [!NOTE]
 > [!IMPORTANT]
 > The following example uses a `time.Sleep` to wait for the goroutine to finish.\
 > This is done for simplicity. Do NOT use this approach.\
@@ -68,7 +67,6 @@ Channels in Go are a powerful way to communicate between goroutines and to
 synchronize them. They allow you to send and receive values across goroutines,
 and they help avoid race conditions by enabling safe data sharing.
 
-> [!NOTE]
 > [!IMPORTANT]
 > Sending and receiving channel messages can
 > [block](https://go.dev/tour/concurrency/2).\
@@ -104,7 +102,6 @@ func main() {
 
 https://play.golang.com/p/2Qn_NacVw-0
 
-> [!NOTE]
 > [!IMPORTANT]
 > You can `range` over a channel, but the loop will never stop unless the
 > channel is closed.\
@@ -116,7 +113,6 @@ https://play.golang.com/p/2Qn_NacVw-0
 > [buffered](https://go.dev/tour/concurrency/3) channels.\
 > Sends to a buffered channel block only when the buffer is full.
 
-> [!NOTE]
 > [!TIP]
 > The most crucial best practice is to close the channel from the sender side, not the receiver.\
 > The sender is the goroutine that writes data to the channel.\
@@ -131,7 +127,6 @@ handling multiple asynchronous tasks.
 Use `select` when you have multiple channels to listen to, and you want to
 respond to whichever channel receives data first.
 
-> [!NOTE]
 > [!IMPORTANT]
 > In the following example, the first goroutine uses a `time.Sleep`.\
 > This is to simulate the operation taking a long time.\
@@ -171,7 +166,6 @@ https://play.golang.com/p/HXe-bZ\_\_EEy
 
 A common use case for `select` is to timeout a potential deadlock:
 
-> [!NOTE]
 > [!IMPORTANT]
 > In the following example we use `time.After` to cause a timeout.
 
@@ -425,7 +419,6 @@ Error: non-200 status: 500 from https://http-me.fastly.dev/?wait=500&status=500
 
 Notice in the above output we now see at least one successful case.
 
-> [!NOTE]
 > [!TIP]
 > You can limit the number of active goroutines in the group with:\
 > `g.SetLimit(10)`\
@@ -582,7 +575,6 @@ https://play.golang.com/p/5J1ApCPc1iU
 Go's `context.Context` is not a strict concurrency primitive but is widely used
 to manage timeouts, cancellations, and deadlines across goroutines.
 
-> [!NOTE]
 > [!TIP]
 > You've seen context used in the [Error Groups](#error-groups) example earlier.
 
@@ -657,7 +649,6 @@ In the following example, `cond.Wait()` blocks until `cond.Signal()` is called.
 It's useful for waiting on complex conditions where other primitives like `chan`
 may not be ideal:
 
-> [!NOTE]
 > [!IMPORTANT]
 > The call to `cond.L.Lock()` in the main goroutine just before `for !ready` is
 > required, otherwise you'll get the error `fatal error: sync: unlock of unlocked mutex`. This is because `cond.Wait()` expects the caller to hold the
@@ -813,7 +804,6 @@ goroutines coordinated with both channels and wait groups.
 It's a nice example because it brings together several different concurrency
 primitives (goroutines, channels, select, wait groups, atomic operations).
 
-> [!NOTE]
 > [!TIP]
 > Keep reading after the code snippet for a brief breakdown of what the code
 > does.

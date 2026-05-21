@@ -81,7 +81,6 @@ tools.mod
 tools.sum
 ```
 
-> [!NOTE]
 > [!IMPORTANT]
 > If you give the `tools.mod` a unique module name, let's say `go.mod` uses `github.com/example/foo`, and so you make `tools.mod` use `github.com/example/foo/tools` then be aware that the use of `go mod` isn't going to make your `tools.mod` think it needs the module from `go.mod` and it'll add it as a dependency (this makes things weird in special cases), so it might be worth making the module name the same between `go.mod` and `tools.mod`.
 
@@ -95,7 +94,6 @@ go get -tool github.com/mgechev/revive
 go get -modfile=tools.mod -tool github.com/mgechev/revive
 ```
 
-> [!NOTE]
 > [!TIP]
 > To _remove_ a tool you can do the above but set the version to `@none`.
 
@@ -133,7 +131,6 @@ go tool
 go tool -modfile=tools.mod
 ```
 
-> [!NOTE]
 > [!TIP]
 > Can also try `go list -modfile=tools.mod tool`
 
@@ -186,7 +183,6 @@ tools-update:
     go mod tidy -modfile=tools.mod
 ```
 
-> [!NOTE]
 > [!IMPORTANT]
 > This approach keeps the main `go.mod` and `go.sum` clean of any tool dependencies, but not the other way around. So the `tools.mod` and `tools.sum` will ultimately contain all the dependencies from the main `go.mod` (that is a side-effect of running `go mod tidy -modfile=tools.mod` as `go mod` always consults the main `go.mod`, hence all of its dependencies end up in your `tools.mod` and `tools.sum`).
 >
@@ -255,7 +251,6 @@ go-gen: ## Invoke go generate
     go generate -v -x ./mustang/status/...
 ```
 
-> [!NOTE]
 > [!TIP]
 > If you're developing whilst offline, then one advantage the tools.go pattern
 > has is that it works whilst offline because the tool is explicitly installed.

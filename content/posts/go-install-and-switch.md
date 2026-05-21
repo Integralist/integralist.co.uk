@@ -23,7 +23,6 @@ The problem with using a third-party tool is that _if_ it does go wrong, it's
 very hard to debug and fix. With this in mind, I decided I would have a go at
 solving the problem in a way that worked for me.
 
-> [!NOTE]
 > [!WARNING]
 > This is NOT a perfect solution, and in some cases it's a _poor_ solution.
 
