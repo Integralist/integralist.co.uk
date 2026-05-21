@@ -15,8 +15,8 @@ Just a quick post to cover the key architecture I'm using currently. I'm very in
 
 Here is a high-level view of what I have currently:
 
-<a href="../../assets/images/key-architecture.png">
-<img src="../../assets/images/key-architecture.png">
+<a href="../../assets/img/key-architecture.png">
+<img src="../../assets/img/key-architecture.png">
 </a>
 
 ## Breakdown

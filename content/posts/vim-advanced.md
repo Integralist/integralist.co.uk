@@ -57,8 +57,8 @@ syntax on
 
 To try out this basic configuration use Vim's [`-u`](https://vimhelp.org/starting.txt.html#-u) flag. For example, you can start Vim with no configuration `vim -u NONE` and then manually apply the configuration as shown above, or you can put it into a separate file and start Vim with that configuration instead of your normal one `vim -u ~/.vimrc-basic`.
 
-<a href="../../assets/images/vimbasic.png">
-<img src="../../assets/images/vimbasic.png">
+<a href="../../assets/img/vimbasic.png">
+<img src="../../assets/img/vimbasic.png">
 </a>
 <p></p>
 

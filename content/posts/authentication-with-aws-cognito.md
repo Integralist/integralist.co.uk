@@ -263,8 +263,8 @@ With the hosted ui option you'll likely also need to utilise [AWS
 Lambda](https://aws.amazon.com/lambda/) in order to do some logic processing.
 The following diagram demonstrates how we were initially using the hosted ui:
 
-<a href="../../assets/images/cognito-high-level.png">
-  <img src="../../assets/images/cognito-high-level.png">
+<a href="../../assets/img/cognito-high-level.png">
+  <img src="../../assets/img/cognito-high-level.png">
 </a>
 
 1. We redirect an unauthenticated user to Cognito.
@@ -669,8 +669,8 @@ the best for our requirements, and gave us the most flexibility.
 
 If you're interested the updated architecture looked something like this...
 
-<a href="../../assets/images/cognito-high-level-new-arch.png">
-  <img src="../../assets/images/cognito-high-level-new-arch.png">
+<a href="../../assets/img/cognito-high-level-new-arch.png">
+  <img src="../../assets/img/cognito-high-level-new-arch.png">
 </a>
 
 None of the listed services are public, they're all internal. The "API Gateway"
@@ -690,8 +690,8 @@ We discovered that the social sign-in for native mobile apps doesn't work as
 well as the web SDK's. Mobile apps need to instead do things differently as
 their SDK's aren't as 'integrated' like web.
 
-<a href="../../assets/images/mobile-app-authentication-flow.png">
-  <img src="../../assets/images/mobile-app-authentication-flow.png">
+<a href="../../assets/img/mobile-app-authentication-flow.png">
+  <img src="../../assets/img/mobile-app-authentication-flow.png">
 </a>
 
 ## User Pool Configuration

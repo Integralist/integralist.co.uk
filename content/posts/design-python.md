@@ -333,8 +333,8 @@ Python has historically utilised a `requirements.txt` file for defining the depe
 One such concern is the setting up of multiple virtual environments for the various projects we need to work on:
 
 <center>
-  <a href="../../assets/images/python-env.png">
-<img src="../../assets/images/python-env.png">
+  <a href="../../assets/img/python-env.png">
+<img src="../../assets/img/python-env.png">
   </a>
 </center>
 

@@ -410,8 +410,8 @@ docker run --privileged pyflame > output.svg && tail -n+2 output.svg > output_st
 
 If we now open `output_stripped.svg` we should see the following interactive flame graph.
 
-<a href="../../assets/images/pyflame.png">
-<img src="../../assets/images/pyflame.png">
+<a href="../../assets/img/pyflame.png">
+<img src="../../assets/img/pyflame.png">
 </a>
 
 ## Conclusion

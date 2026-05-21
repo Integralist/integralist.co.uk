@@ -148,15 +148,15 @@ See also the article "[When life gives you lemons, write better error messages](
 
 **Bad error message**:
 
-<a href="../../assets/images/error-message-bad.png">
-<img src="../../assets/images/error-message-bad.png">
+<a href="../../assets/img/error-message-bad.png">
+<img src="../../assets/img/error-message-bad.png">
 </a>
 <p></p>
 
 **Good error message**:
 
-<a href="../../assets/images/error-message-good.png">
-<img src="../../assets/images/error-message-good.png">
+<a href="../../assets/img/error-message-good.png">
+<img src="../../assets/img/error-message-good.png">
 </a>
 <p></p>
 

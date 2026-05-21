@@ -72,8 +72,8 @@ command.
 The situation reminds me a lot of [XKCD's classic comic
 strip](https://xkcd.com/1987/)...
 
-<a href="../../assets/images/python_env.png">
-<img src="../../assets/images/python_env.png">
+<a href="../../assets/img/python_env.png">
+<img src="../../assets/img/python_env.png">
 </a>
 
 ## Package Manager

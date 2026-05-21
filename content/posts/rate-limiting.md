@@ -81,8 +81,8 @@ With the above understanding clear in our minds, let's take a look at the archit
 
 Visually this looks something like...
 
-<a href="../../assets/images/ratelimit.png">
-  <img src="../../assets/images/ratelimit.png" class="post-img" loading="lazy">
+<a href="../../assets/img/ratelimit.png">
+  <img src="../../assets/img/ratelimit.png" class="post-img" loading="lazy">
 </a>
 
 ______________________________________________________________________

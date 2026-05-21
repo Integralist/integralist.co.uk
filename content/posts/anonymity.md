@@ -83,8 +83,8 @@ I personally use the [Firefox](https://www.mozilla.org/en-GB/firefox/new/) as it
 
 The below image shows some of the add-ons I utilize:
 
-<a href="../../assets/images/firefox-addons.png">
-<img src="../../assets/images/firefox-addons.png">
+<a href="../../assets/img/firefox-addons.png">
+<img src="../../assets/img/firefox-addons.png">
 </a>
 
 The ones of relevance here are:
@@ -106,44 +106,44 @@ In the case of 'Cookie AutoDelete' I removed that once I installed 'Privacy Badg
 
 Below is a screenshot of what the 'NoScript' add-on looks like:
 
-<a href="../../assets/images/firefox-noscript-example.png">
-<img src="../../assets/images/firefox-noscript-example.png">
+<a href="../../assets/img/firefox-noscript-example.png">
+<img src="../../assets/img/firefox-noscript-example.png">
 </a>
 
 Below is a screenshot of what the 'uBlock' add-on looks like when visiting `google.com`:
 
-<a href="../../assets/images/firefox-ublock-example.png">
-<img src="../../assets/images/firefox-ublock-example.png">
+<a href="../../assets/img/firefox-ublock-example.png">
+<img src="../../assets/img/firefox-ublock-example.png">
 </a>
 
 Below is a screenshot of what the 'DuckDuckGo Privacy Essentials' add-on looks like:
 
-<a href="../../assets/images/firefox-duckduckgo.png">
-<img src="../../assets/images/firefox-duckduckgo.png">
+<a href="../../assets/img/firefox-duckduckgo.png">
+<img src="../../assets/img/firefox-duckduckgo.png">
 </a>
 
 Also, each release of Firefox improves the Privacy settings available and so things like content blocking and preventing '[browser fingerprinting](https://blog.mozilla.org/firefox/how-to-block-fingerprinting-with-firefox/)' is starting to be rolled out more generally for Firefox users:
 
-<a href="../../assets/images/firefox-security-strict.png">
-<img src="../../assets/images/firefox-security-strict.png">
+<a href="../../assets/img/firefox-security-strict.png">
+<img src="../../assets/img/firefox-security-strict.png">
 </a>
 
 Below is a screenshot of Firefox's built-in "Do Not Track" setting (which is definitely worth enabling, even if respecting it is only _voluntary_):
 
-<a href="../../assets/images/firefox-do-not-track.png">
-<img src="../../assets/images/firefox-do-not-track.png">
+<a href="../../assets/img/firefox-do-not-track.png">
+<img src="../../assets/img/firefox-do-not-track.png">
 </a>
 
 Below is a screenshot of what Firefox looks like when inspecting a web page that has had content blocked:
 
-<a href="../../assets/images/firefox-content-blocking.png">
-<img src="../../assets/images/firefox-content-blocking.png">
+<a href="../../assets/img/firefox-content-blocking.png">
+<img src="../../assets/img/firefox-content-blocking.png">
 </a>
 
 But all that said, it's still worth checking what your browser is doing. For example, Firefox enables specific types of data collection which may be worth you disabling:
 
-<a href="../../assets/images/firefox-data-collection.png">
-<img src="../../assets/images/firefox-data-collection.png">
+<a href="../../assets/img/firefox-data-collection.png">
+<img src="../../assets/img/firefox-data-collection.png">
 </a>
 
 ## Email
