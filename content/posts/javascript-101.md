@@ -78,6 +78,7 @@ The global object is different depending on the context. In a web browser enviro
 
 One quote you'll hear a lot in JavaScript is:
 
+> [!NOTE]
 > Don't pollute the global environment
 
 …and what this means is try to avoid creating global properties and methods. The less 'globals' you create then the less likely your code will conflict with another piece of code written by someone else that may be included in the same page.

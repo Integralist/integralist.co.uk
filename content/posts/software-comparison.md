@@ -26,6 +26,7 @@ A comparison matrix table should take into consideration the following propertie
 - **Suitability**: how effective is it (e.g. what core APIs/features does it provide).
 - **Usability**: how easy to use it is (warning: this is subjective).
 
+> [!NOTE]
 > † stability: we can't really judge the quality of issues raised, nor can we suggest that more issues is an indicator of poorly written software (e.g. a more popular tool is likely to have a larger number of issues raised compared to a tool with very few users).
 >
 > But we can at least compare the number of issues that have been closed vs those that are left open and stale (e.g. a code base may be very active and still have poor user engagement by ignoring opened issues).

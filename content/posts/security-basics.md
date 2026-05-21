@@ -5,6 +5,7 @@ description: A hands-on guide to cryptographic keys, PKI, GPG, OpenSSH, OpenSSL,
 tags: [security]
 ---
 
+> [!NOTE]
 > UPDATE: for those short on time, read the following [Introduction](#1), [What are keys and how do they work?](#2) and then skip over the sections "Understanding PKI" and "OpenSSL vs OpenSSH" as these just go into more depth on the technical aspect of different encryption concepts. Just skip until [What is GPG?](#5) (in there are two sub sections about "OpenSSH", "SSH Agent" and "OpenSSL", just skip those until you get to the next "GPG" section and continue all the way from there)
 
 ## Introduction
@@ -727,6 +728,7 @@ default-recipient some-user-id # In case you happen to only ever communicate wit
 
 Here's a quick question that people seem to ask a lot:
 
+> [!NOTE]
 > I heard some people have multiple key pairs, one for 'signing' and one for 'encryption'. Why is that?
 
 The answer is that you'll want to rotate your encryption key pair on a regular basis. Ideally you wouldn't have a key pair that never expires or doesn't expire for a very long time because if it becomes compromised (and you're unable to revoke) then you've got serious problems.
@@ -958,6 +960,7 @@ gpg --local-user Bob --detach-sign secret.txt
 
 So once you run this command you'll find a `secret.txt.sig` file has been generated (the `secret.txt` still hasn't been encrypted). You can't see the contents of the `.sig` file as it has been compressed †
 
+> [!NOTE]
 > † this is not the same as being 'encrypted', it is just compressed for the sake of performance and easier transportation
 
 This is better than `--clearsign` as the original file hasn't been modified in order to produce the signature. But this does mean in order for Alice to verify the signature, she needs to have the original plaintext file. If she doesn't, then you'll have to send her both the signature and the file.
@@ -1157,6 +1160,7 @@ gpg --import keybase.public.key
 gpg --allow-secret-key-import --import keybase.private.key
 ```
 
+> [!NOTE]
 > Notice the use of `-s` to export the private key
 
 Now you can encrypt data via GPG using your Keybase private key:

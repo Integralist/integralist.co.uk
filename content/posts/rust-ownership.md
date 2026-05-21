@@ -29,7 +29,7 @@ The only type of data that can be stored on the stack is data that has a known a
 
 The stack is very fast to access data because the data is close together, unlike heap memory, and also because the data that is stored is literal (i.e. primitive types like string literals, booleans, integers etc) it means the data itself can be hard coded into the compiled Rust binary.
 
-> \[!NOTE\]
+> [!NOTE]
 > Rust primitive/scalar types (int, bool, float, char, string literal etc) are stored in stack memory.
 
 ## Heap Memory
@@ -38,7 +38,7 @@ The heap is memory that is also available to your program at runtime but is much
 
 The heap is for memory that grows or has unknown size (such as when accepting user input, you don't know what data will be provided), and it will be allocated onto the heap by a 'memory allocator' that needs to first find a space in the heap large enough to hold the data, and then return a pointer to that space in the heap.
 
-> \[!NOTE\]
+> [!NOTE]
 > \*\*Rust complex types (String, Box etc.) are stored into heap memory.
 
 ## Ownership
@@ -362,7 +362,7 @@ fn return_ref<'a>() -> &'a String {
 }
 ```
 
-> \[!NOTE\]
+> [!NOTE]
 > the `<'a>` and `&'a` syntax will be explained in the next section called "Lifetimes".
 
 The above code will cause the following compiler error:
@@ -377,6 +377,7 @@ error[E0515]: cannot return reference to local variable `s`
 
 If you look at the compiler explanation for the error (`rustc --explain E0515`) it describes the reason, and the solution:
 
+> [!NOTE]
 > Local variables, function parameters and temporaries are all dropped before the end of the function body. So a reference to them cannot be returned. Consider returning an owned value instead.
 
 So the solution to this problem is to 'move' ownership of the data to whoever is calling the function, like so:

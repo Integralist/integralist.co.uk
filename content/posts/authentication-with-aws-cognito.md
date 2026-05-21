@@ -39,6 +39,7 @@ Let's start at the beginning...
 
 According to [the official blurb](https://aws.amazon.com/cognito/)...
 
+> [!NOTE]
 > Amazon Cognito lets you add user sign-up, sign-in, and access control to your
 > web and mobile apps quickly and easily.
 
@@ -85,6 +86,7 @@ design of the mobile SDKs), mobile applications do utilize Identity Pools for
 authentication, but the Identity Pool would be configured with a 'provider'
 which happened to be our User Pool.
 
+> [!NOTE]
 > If you're interested in the various Identity Pool concepts, then please refer
 > to [the official
 > documentation](https://docs.aws.amazon.com/cognito/latest/developerguide/authentication-flow.html).
@@ -211,6 +213,7 @@ But there are some caveats:
 - State parameter overloading
 - Can't access new signup passwords †
 
+> [!NOTE]
 > † this was necessary for my use case as I needed to co-support a legacy system
 > that wasn't ready to migrate over to Cognito
 
@@ -229,6 +232,7 @@ that they would be valid and untampered with (because when decoding the tokens
 we could verifiy this using the public signing key AWS uses to sign the tokens
 at point of generation).
 
+> [!NOTE]
 > † we only ever pass tokens around 'server-side', using secure cookies (with
 > HttpOnly and Secure attributes set) to avoid replay attacks that might occur
 > if we exposed the tokens to the client.
@@ -278,6 +282,7 @@ The following diagram demonstrates how we were initially using the hosted ui:
 1. Our API service redirects the user back to the CMS (with user tokens).
 1. The CMS asks the API service to validate the tokens.
 
+> [!NOTE]
 > † this service exchanges the given Cognito auth code for the user's Cognito
 > User Pool tokens.
 
@@ -508,6 +513,7 @@ But also, when making the request to the Auth API endpoint (e.g.
 `/oauth2/authorize`), I needed to append a `scope` query parameter:
 `&scope=scope=openid+aws.cognito.signin.user.admin`.
 
+> [!NOTE]
 > See [the API
 > docs](https://docs.aws.amazon.com/cognito/latest/developerguide/authorization-endpoint.html)
 > and the [UI
@@ -718,6 +724,7 @@ As far as the User Pool is concerned you'll need a few things:
   you'll need to create an IAM user and define the various Cognito APIs you want
   it to have access to.
 
+> [!NOTE]
 > † even if you opt for the 'hosted ui' solution, you'll still need an
 > application client (for two reasons). Firstly you'll configure which
 > 'providers' you want your client app to support, and this will affect what the

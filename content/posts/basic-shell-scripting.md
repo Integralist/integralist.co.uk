@@ -395,6 +395,7 @@ If you have multiple processes in the background then you can look up the proces
 
 The `tee` command you've seen already now (in our above example) but just to reiterate its use, here is how the manual describes it…
 
+> [!NOTE]
 > The tee utility copies standard input to standard output, making a copy in zero or more files.
 
 ### `dig`

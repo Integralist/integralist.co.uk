@@ -5,10 +5,12 @@ description: Lessons from building high-traffic systems at BBC News on complexit
 tags: [architecture, performance]
 ---
 
+> [!NOTE]
 > ⚠️  This post was originally written for [David Walsh back in 2015](https://davidwalsh.name/designing-simplicity). I've since decided to reproduce it here for my own records - Integralist: August, 2017.
 
 Before we get started, it's worth me spending a brief moment introducing myself to you. My name is Mark (or [@integralist](https://twitter.com/integralist) if Twitter happens to be your communication tool of choice) and I currently work for BBC News in London England as a principal engineer/tech lead; and I'm also the author of "[Pro Vim](http://www.apress.com/9781484202517)".
 
+> [!NOTE]
 > Quick shout out to [Steven Jack](https://twitter.com/stevenjack85) who took the time to review this post. A lot of what we've done right, he either helped instigate or was a fundamental part of its success
 
 The "responsive" BBC News website receives approximately 8 million visits per day (that's on average for a quiet news day). Those numbers will go much higher once the responsive site replaces the current static desktop offering and starts to incur many more users. But for the moment that gives a rough idea of the sort of traffic we get on a daily basis.
@@ -45,10 +47,12 @@ The reason I'm mentioning this upfront is because I do not want people to walk a
 
 With the discussion of complexity behind us, let's move onto what it means for software to be "simple". Why is simplicity a good thing? Simplicity itself is defined as:
 
+> [!NOTE]
 > "the quality or condition of being easy to understand or do".
 
 If a piece of software is considered "simple", then chances are it has been found to be easy to understand and easy to reason about. Simple software is also easy to manipulate and apply changes to. [Kent Beck](http://en.wikipedia.org/wiki/Kent_Beck) (renowned author of many top quality software engineering books and the co-creator of Extreme Programming, which then evolved into "agile" practices) made the following statement back in 2012:
 
+> [!NOTE]
 > "make the change easy, then make the easy change"
 
 What Kent was referring to, was that for a piece of software to be easily changed you needed to simplify its design in such a way for it to be able to facilitate a future requirement.
@@ -61,6 +65,7 @@ Simplicity can also (not always mind you) help towards other goals such as reusa
 
 Phil Karlton (Netscape engineer; sadly killed in 1997) once said:
 
+> [!NOTE]
 > There are only two hard things in Computer Science: cache invalidation and naming things
 
 You've likely heard this quote said many times already throughout your career. There's a reason for that: because it's a painfully universal truth. Nothing causes our team to sit pondering in deadlock (or maybe livelock would be more accurate) together, than when we're trying to figure out what to call our new library.
@@ -101,6 +106,7 @@ Along side the process of trying to speed up code by multi-threading, you'll nea
 
 Data consistency is where the "CAP theorem" comes into play. CAP states:
 
+> [!NOTE]
 > "it is impossible for a distributed computer system to simultaneously provide all three of the following guarantees: consistency, availability and partition tolerance"
 
 What this means in practice is:
@@ -301,6 +307,7 @@ There are a few ways my team automates and reduces duplication (you'll likely fi
 
 Deploying software within the BBC can be a complex process as we have lots of moving parts to take code from a developer's laptop and into a working release that's deployed to our cloud infrastructure. To make deploying software as simple as possible, we have since developed a complicated deployment pipeline to try and help achieve the end goal of having a "simple" release process.
 
+> [!NOTE]
 > Notice I said "complicated" :-(
 
 We currently use the [Jenkins](http://jenkins-ci.org/) continuous integration server to support our deployment process. Jenkins is an industry standard piece of software and no organization should be releasing software without some form of CI.
@@ -323,6 +330,7 @@ Remember not to make any rash decisions (e.g. let's implement a whole new CI/CD 
 
 If you're unfamiliar with CloudFormation, then I'll refer you to the official definition:
 
+> [!NOTE]
 > AWS CloudFormation gives developers and systems administrators an easy way to create and manage a collection of related AWS resources, provisioning and updating them in an orderly and predictable fashion
 
 The [AWS CloudFormation](http://aws.amazon.com/cloudformation/) service is great for two primary reasons:
@@ -380,6 +388,7 @@ The third library "Puma Init":
 - creates a `/home/component/.component_profile` file
 - this adds Puma specific configuration (and overrides `APP_DAEMON` to reference Puma)
 
+> [!NOTE]
 > [Puma](http://puma.io/) is a popular multi-threaded Ruby web server
 
 The following diagram provides a basic visualization of the inherited layers:
@@ -420,6 +429,7 @@ Currently there are helpers libraries that will configure the AWS SDK to utilise
 
 Now this by itself is very useful. We can spin up an instance of Spurious on our machine and start writing application code that interacts with a queue (SQS), a record store (DynamoDB) and a data store (S3), along with caching requests (via ElastiCache). But on top of that is the [Spurious Browser](https://github.com/spurious-io/browser) which allows us to peek inside each of these services using a standard web browser. Meaning, rather than having to waste time writing code to filter down a long list of results from S3; I can instead open Spurious Browser and click on a few links to drill down into the content I'm interested in and when I find it I can open the content to view it.
 
+> [!NOTE]
 > Spurious was born from the need to rapidly prototype new features for our Broker/Renderers, but to also avoid the whole deployment process
 
 It's still in development and has some rough edges (there is a rewrite planned, that will change the implementation language from Ruby to Go), but ultimately we've been using Spurious on quite a few projects now and it has become indepensible. I highly recommend you take a look.
@@ -436,6 +446,7 @@ One of the big selling points for (most) FP languages is support for immutabilit
 
 We've seen a recent spurt of interest around immutability (and FP in general) in the JavaScript community as of late (with [Mori.js](https://swannodette.github.io/mori/) and [immutable-js](https://facebook.github.io/immutable-js/) as a couple of examples, but there have been others and they've been around for much longer). Immutability can help to eradicate a whole host of bugs that can catch you out in a language as mutable as JavaScript (and even more so in languages where code can be multi-threaded).
 
+> [!NOTE]
 > Languages like Clojure, for example, also implement persistent data structures, that make immutability easy and inexpensive. I recommend visiting the [Clojure website](http://clojure.org/) and finding out more about the underlying implementation details, as it's quite an interesting read
 
 Typically you'll find a mixed bag of opinions: some organizations are OOP based, others prefer FP. What's worth being aware of is that this isn't an "either or" situation. You can find some benefits from having the structural/encapsulation benefits of OOP while implementing certain features in a functional way (but I think that's a topic for another day). The "OOP with FP" methodology is quite easy with a language like [Scala](http://www.scala-lang.org/) which seamlessly incorporates both styles within their language design.

@@ -9,6 +9,7 @@ tags: [python, architecture]
 
 This post is going to cover a few tools and features I plan on using when writing Python code in 2019.
 
+> [!NOTE]
 > † read my post "[Python Management and Project Dependencies](/posts/python-app-dependencies/)".
 
 ## Type Hints and Static Analysis

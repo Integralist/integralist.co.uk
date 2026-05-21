@@ -24,6 +24,7 @@ So in almost all cases you'll want to import it like so:
 import unittest.mock as mock
 ```
 
+> [!NOTE]
 > For more examples, see [this reference guide](http://www.voidspace.org.uk/python/mock/examples.html)
 
 ## Decorator
@@ -42,6 +43,7 @@ When you do this you'll need to pass an argument to your function (you can name 
 
 This means if you don't do anything else, then calls to `thing` will (in the example above at least) result in the value `123` being returned.
 
+> [!NOTE]
 > † convention is to name the variable `mock_<noun>`.
 
 If you're mocking multiple things then you'll stack the mock decorators ontop of each other, and pass them along in order to the test function:
@@ -323,6 +325,7 @@ def test_class(self, mock_car):
     ...
 ```
 
+> [!NOTE]
 > See other class related mocking tips [here](https://chase-seibert.github.io/blog/2015/06/25/python-mocking-cookbook.html)
 
 ## Mock Async Calls

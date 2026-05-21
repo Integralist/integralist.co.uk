@@ -262,6 +262,7 @@ go list strconv
 
 Will return just the import path `strconv`.
 
+> [!NOTE]
 > Documentation: `go help list | less`
 
 You can also utilise Go's templating functionality on the returned JSON object
@@ -296,6 +297,7 @@ compress/zlib -> bufio compress/flate errors fmt hash hash/adler32 io
 
 ## Dependency Management
 
+> [!NOTE]
 > Update (August 2017): there is an official tool now called
 > [dep](https://github.com/golang/dep).
 
@@ -404,6 +406,7 @@ godoc encoding/json Number
 godoc -src builtin make | less
 ```
 
+> [!NOTE]
 > Unlike with `go doc`, `godoc` doesn't allow filtering by `<method>`\
 > It only goes as far as `<pkg> <symbol>`
 >
@@ -456,6 +459,7 @@ func NewEncoder(w io.Writer) *Encoder
 func (enc *Encoder) Encode(v interface{}) error
 ```
 
+> [!NOTE]
 > Notice the functions don't have their documentation notes printed with `go doc`
 
 One other thing `godoc` has over `go doc` is the ability to view the source code

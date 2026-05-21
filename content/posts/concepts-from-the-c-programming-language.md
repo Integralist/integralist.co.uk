@@ -29,6 +29,7 @@ A language like [Python](https://www.python.org/) is an even 'higher-level' abst
 
 In order to convert C code into machine code, we need a compiler.
 
+> [!NOTE]
 > Strictly speaking you also need a [linker](<https://en.wikipedia.org/wiki/Linker_(computing)>) which takes multiple compiled objects and places them into a single executable file. Generally speaking, when we say "compile a C file", we're really combining two separate steps (compiling and linking) into the single generic term "compile"
 
 ### Compilers
@@ -66,12 +67,14 @@ InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault
 
 The first two alias' `gcc` and `llvm-gcc` are a little bit confusing and also a bit misleading, as they're not GNU's version. They're still the LLVM's compiler but with some modifications. In the first instance (`gcc`) the compiler is configured to use some additional libraries that are provided by c++.
 
+> [!NOTE]
 > You can tell this by the flag `--with-gxx-include-dir`
 
 It's worth noting that with a standard/simple C source code file, all these alias' work to compile the source code into an executable. But some compilers allow you to utilise additional extensions not provided by the standard C language (so you need to be careful your code doesn't try to utilise something that's not available at compilation time).
 
 LLVM's licensing is BSD, meaning Apple can embed it within their own software that is not GPL-licensed. Typically LLVM's compiler is faster than GNU's, but in some cases it might not support all the same targets as GNU's.
 
+> [!NOTE]
 > For more comparison details see [http://clang.llvm.org/comparison.html](http://clang.llvm.org/comparison.html)
 
 ### C11 safe functions?
@@ -140,6 +143,7 @@ Now you have a macOS compatible executable:
 ./hw # prints the message "Hello World"
 ```
 
+> [!NOTE]
 > To cross-compile for another OS (e.g. Linux) then use Docker or a VM\
 > Other modern languages like [Go](https://golang.org/) or [Rust](https://www.rust-lang.org/) allow you to cross-compiler without a VM
 
@@ -206,6 +210,7 @@ This happens even if the string you provide is just one character. Although, dep
 
 When assigning a character (e.g. `a`) to a variable of type `char` it takes on dual duty. Meaning the char type variable can represent the specific character `a` but really it stores the ASCII integer code that defines that character.
 
+> [!NOTE]
 > Take a look at an [ASCII table](http://www.asciitable.com/) to identify the code associated with a particular character
 
 This means we could also directly assign the integer `97` instead of the character `a` to the char type variable. But also, and more interestingly, because of these characteristics we can perform arithmetic on the variable:
@@ -286,6 +291,7 @@ Here are each of the steps broken down:
 - `bar = &bar_val;`: we initialize the pointer variable `bar` with the memory address of `bar_val`
 - `int bar_get_val = *bar;`: we dereference the address (i.e. follow the pointer) assigned to `bar` which leads us to the _value_ stored in that memory slot
 
+> [!NOTE]
 > † meaning we will be assigning an address to this pointer\
 > and the content at that memory address location will also be of type `int`
 
@@ -464,6 +470,7 @@ Because of this, an array variable automatically points to the first element wit
 
 This is why if you try to `printf` a string, the compiler will complain if you don't provide a pointer. Because it expects a string to have been stored within an array (which our earlier example didn't). But when storing a string inside an array, the variable that is passed to `printf` would _already_ be a pointer, due to it automatically referencing the first array element as its value.
 
+> [!NOTE]
 > Interestingly, an array's type is made up of the element type + the overall array dimension. So `int foo[3]` is a different type to `int bar[4]`. Even though the value type `int` is the same, the array dimension (size/length) is different.
 
 If you want to know how many bytes an array will occupy, then you calculate it based upon the number of elements multiplied by the size of each element.
@@ -520,6 +527,7 @@ printf("off: %d\n", off); // 2
 
 ## Memory Allocation with different Types
 
+> [!NOTE]
 > Read [this article](/posts/bits-and-bytes/) if you need a refresher on understanding RAM, bits, binary and stuff like that
 
 ### Array
@@ -692,6 +700,7 @@ char *lsh_read_line(void)
 }
 ```
 
+> [!NOTE]
 > Notice `c` variable is declared as an `int` and not a `char`, the author of the blog post makes mention of this as being because `EOF` is an `int` type
 
 The author then goes on to explain that in more recent releases, there is a much shorter version that can be implemented thanks to the `getline` function:

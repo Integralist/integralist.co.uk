@@ -21,6 +21,7 @@ Now these are all things that can be worked around (or I could just build the Go
 
 Google define gRPC as:
 
+> [!NOTE]
 > A high performance, open source, general RPC framework that puts mobile and HTTP/2 first
 
 ### How does it work?
@@ -33,6 +34,7 @@ Once you have your service *defined*, you can utilise a command line compiler to
 
 Google have built gRPC on top of the [HTTP/2 standard](https://http2.github.io/), meaning you get features such as bidirectional streaming, flow control, header compression and multiplexing requests over a single TCP connection.
 
+> [!NOTE]
 > See [here](http://www.grpc.io/posts/principles) for Google's "motivation and design principles" around gRPC
 
 Now the reason for this post is that I didn't find the documentation to be that intuitive. I thought I might be able to help people get started more quickly by detailing the steps in a more succinct fashion than found in Google's documentation, thus opening up gRPC to more users.

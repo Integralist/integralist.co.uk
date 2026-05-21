@@ -19,12 +19,14 @@ The summary of everything we'll be discussing below is this:
 - Coroutines _are_ Generators, but their `yield` accepts values.
 - Coroutines can pause and resume execution (great for concurrency).
 
+> [!NOTE]
 > † think [comprehensions](https://gist.github.com/e5310d1082b0ff8307e39b71a6f9bae5).
 
 ## Iterators
 
 According to the official [Python glossary](https://docs.python.org/3.7/glossary.html#term-iterator), an 'iterator' is...
 
+> [!NOTE]
 > An object representing a stream of data.
 
 ### Why use Iterators?
@@ -119,6 +121,7 @@ list(iterator)  # ["a", "b", "c"]
 
 According to the official [Python documentation](https://docs.python.org/3.7/library/stdtypes.html#generator-types), a 'generator' provides...
 
+> [!NOTE]
 > A convenient way to implement the iterator protocol. If a container object's `__iter__()` method is implemented as a generator, it will automatically return an iterator object.
 
 ### Why use Generators?
@@ -197,6 +200,7 @@ list(gen)  # [a, b, c]
 
 According to the official [PEP 289 document](https://www.python.org/dev/peps/pep-0289/) for generator expressions...
 
+> [!NOTE]
 > Generator expressions are a high-performance, memory–efficient generalization of list comprehensions and generators.
 
 In essence they are a way of creating a generator using a syntax very similar to [list comprehensions](https://gist.github.com/e5310d1082b0ff8307e39b71a6f9bae5).
@@ -304,6 +308,7 @@ for v in foo():
 
 Coroutines (as far as Python is concerned) have historically been designed to be an extension to [Generators](#generators).
 
+> [!NOTE]
 > Coroutines are computer program components that generalize subroutines for non-preemptive multitasking, by allowing execution to be suspended and resumed. -- [Wikipedia](https://en.wikipedia.org/wiki/Coroutine)
 
 ### Why use Coroutines?

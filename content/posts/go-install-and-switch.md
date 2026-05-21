@@ -23,7 +23,8 @@ The problem with using a third-party tool is that _if_ it does go wrong, it's
 very hard to debug and fix. With this in mind, I decided I would have a go at
 solving the problem in a way that worked for me.
 
-> \[!WARNING\]
+> [!NOTE]
+> [!WARNING]
 > This is NOT a perfect solution, and in some cases it's a _poor_ solution.
 
 In this article I'm going to show you the code I wrote to implement Go-version
@@ -35,7 +36,7 @@ scenario that I didn't account for when first creating it. This is why I provide
 the above warning note. **Feel free to use my approach, or use the code as an
 example from which to build your _own_ solution.**
 
-> \[!NOTE\]
+> [!NOTE]
 > As an alternative, some people prefer to have a single Go version install
 > (i.e. GOROOT) and then when they use the `go` binary to install other versions
 > they will simply create an alias (manually) or have a Makefile accept a
@@ -51,7 +52,7 @@ I have a `.zshrc` from which I then load in other shell scripts.
 
 To avoid muddying the water I'll show a truncated version:
 
-> \[!NOTE\]
+> [!NOTE]
 > If you want the full version of the code we're discussing,\
 > then refer to my [dotfiles repo][dotfiles].
 
@@ -133,7 +134,7 @@ if [ ! -f $GOROOT/bin/go ]; then
 fi
 ```
 
-> \[!NOTE\]
+> [!NOTE]
 > I've used `golatest` in the above code. The implementation for that is as
 > follows:
 
@@ -155,7 +156,7 @@ Changing directory is typically done using `cd` but it also works if you use a
 tool like [ajeetdsouza/zoxide][github-z] (like I do) to quickly jump around
 common project directories.
 
-> \[!NOTE\]
+> [!NOTE]
 > See the Zsh [hook functions][docs-chpwd] docs.
 
 Here is the relevant parts of our `chpwd` function:

@@ -124,6 +124,7 @@ Now if I look at my `git lg` I can see:
 
 We can see all the commits from `feat/foo` were replayed onto `master` successfully, but now you're able to more easily distinguish the three commits came from another branch (if using my `git lg` alias). Which is one of the main reasons to force a merge commit using `--no-ff` as it really helps keep a varied branch history.
 
+> [!NOTE]
 > Notice `git log` will also show in its output for the merge commit\
 > a field like `Merge: 75eb1cb 8e7965e 9e5626c 41d4115`\
 > Which helps (at a glance) to know more about what commits are inside the merge commit
@@ -138,6 +139,7 @@ git branch --contains 9e5626c
 
 In our case this will indicate that the commit we specified is part of our `master` branch. Now when you use `--contains` with a commit such as `9e5626c` (which was merged in from our feature branch) you'll see that git recognises this commit is part of multiple branches †.
 
+> [!NOTE]
 > † until you delete the branch (e.g. `git branch -D feat/foo`)
 
 ### Losing useful history

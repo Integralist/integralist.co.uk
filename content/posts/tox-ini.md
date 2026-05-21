@@ -15,6 +15,7 @@ In this post I'm going to briefly explain what the tox tool is, and what a `tox.
 
 Tox is a tool that creates [virtual environments](/posts/python-app-dependencies/#virtual-environments), and installs the configured dependencies for those environments, for the purpose of testing a Python package (i.e. something that will be shared via [PyPi](https://pypi.org/), and so it only works with code that defines a `setup.py`).
 
+> [!NOTE]
 > PyPi == Python Package Index (i.e. where you _typically_ install all your Python packages from, when executing `pip install`).
 
 The file that you use to configure tox can be one of the following...
@@ -115,6 +116,7 @@ markers =
 
 Although not directly related to the conversation about `tox.ini` I thought it worth mentioning that I discovered recently the Python logging library allows you to be able to configure logging via an ini configuration file!
 
+> [!NOTE]
 > Reference: [docs.python.org/3/howto/logging.html](https://docs.python.org/3/howto/logging.html#configuring-logging)
 
 The ini file might look something like the following:

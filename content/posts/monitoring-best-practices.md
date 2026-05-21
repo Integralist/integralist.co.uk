@@ -31,18 +31,22 @@ Below are some of the areas we'll be focusing in on...
 
 There is a lot of confusion around the difference between certain terms such as "observability", "monitoring", "instrumentation" and "telemetry". Let's start with defining what each of these mean...
 
+> [!NOTE]
 > <u>**Observability**</u> is a measure of how well internal states of a system can be inferred from knowledge of its external outputs – Wikipedia
 
 In that context, "observability" is the word you use when talking about how well your systems are doing in a broad overarching sense (is the system _observable_?). Beneath the umbrella term "observability" we'll then find "monitoring" and "instrumentation".
 
+> [!NOTE]
 > <u>**Monitoring**</u> is the translation of IT metrics into business meaning – Wikipedia
 
 In that context, "monitoring" is the word you use when talking about tools for viewing data that has been recorded by your systems (whether that be time series data, or logging etc). These monitoring tools are supposed to help you identify both the "what" and the "why" something has gone wrong.
 
+> [!NOTE]
 > <u>**Instrumentation**</u> refers to an ability to monitor or measure the level of a product's performance, to diagnose errors and to write trace information – Wikipedia
 
 In that context, "instrumentation" is the word you use when talking about how you're recording data to be viewed and monitored.
 
+> [!NOTE]
 > <u>**Telemetry**</u> is the process of gathering remote information that is collected by instrumentation – MSDN
 
 In that context, "telemetry" is the word you use when talking about the mechanisms for _acquiring_ the data that has been _gathered_ by your instrumentation (e.g. tools like [FluentD](https://www.fluentd.org/) or [Syslog](https://en.wikipedia.org/wiki/Syslog)).
@@ -83,6 +87,7 @@ There are also various metric _types_ you can collect data as. Two common ones a
 - **Gauge**: a point-in-time value (can arbitrarily go up and down).
 - **Histogram**: samples observations and counts them in configurable buckets.
 
+> [!NOTE]
 > Histograms might require a little extra clarification: they sample observations (e.g. request durations) and count different perspectives on the data. In the case of 'request duration' you'd likely see the different 'perspectives' being: count, avg, median, max and 95percentile.
 
 For more information, see these Datadog articles: [Metric Types](https://docs.datadoghq.com/metrictypes/) and [DogStatsD](https://docs.datadoghq.com/guides/dogstatsd/).
@@ -102,6 +107,7 @@ Synthetic monitoring causes data to be collected for analysis, thus allowing you
 
 Let's start with a quote from Charity Majors (author of [Database Reliability Engineering](http://shop.oreilly.com/product/0636920039761.do) and CEO of [honeycomb.io](http://honeycomb.io/)).
 
+> [!NOTE]
 > <u>**Don't attempt to "monitor everything"**</u>. You can't. Engineers often waste so much time doing this that they lose track of the critical path, <u>**and their important alerts drown in fluff and cruft**</u>.
 
 When a monitor triggers an alarm, it should first and foremost be "useful". Secondly, it should be "actionable". There should be something you can do to resolve the alarm and also be a set of steps (post-resolution) to prevent that alarm from triggering again.
@@ -112,6 +118,7 @@ If the alarm isn't _actionable_, then it just becomes noise.
 
 Below is a quote from Mike Julian (author of [Practical Monitoring](http://shop.oreilly.com/product/0636920050773.do) and [Monitoring Weekly](https://weekly.monitoring.love))
 
+> [!NOTE]
 > Go as deep and wide with your instrumentation as you want, but always be asking yourself, "<u>**How will these metrics show me the user impact?**</u>"
 
 Or put another way: "Who is your _customer_"?
@@ -167,6 +174,7 @@ If you don't do this, then you'll find people become fatigued by the sheer amoun
 
 To quote (again) Charity Majors...
 
+> [!NOTE]
 > In the chaotic future we're all hurtling toward, you need the discipline to <u>**have radically fewer paging alerts - not more**</u>.
 
 You should also consider sending a monitor's "warning" state to a different channel for similar reasons. You can define different channels in Datadog using the following template code:

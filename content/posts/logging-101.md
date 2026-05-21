@@ -15,6 +15,7 @@ But in some cases it is preferred to send this information to [stdout](https://e
 
 To quote [12factor](https://12factor.net/logs):
 
+> [!NOTE]
 > A (service) never concerns itself with routing or storage of its output stream. It should not attempt to write to or manage log files. Instead, each running process writes its event stream, unbuffered, to stdout.
 
 Applications should be conscious of the volume and [quality](#3) of the logs they emit. Logging isn't free, and high volume logs aren't necessarily more useful than fewer, thoughtful, log messages. Include important context with your log messages to be able to better understand the state of the system at that time.

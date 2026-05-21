@@ -143,6 +143,7 @@ Here is a list of the packages I'll install:
 - `tree`: displays directory heirarchy structures as a tree
 - `watch`: executes given command every N seconds
 
+> [!NOTE]
 > † see [transmission user guide](https://cli-ck.io/transmission-cli-user-guide/)
 
 Here's a handy one-liner:
@@ -179,6 +180,7 @@ Here is a list of the apps I'll install:
 - `spotify`: music streaming service
 - `vlc`: video player with support of lots of codecs
 
+> [!NOTE]
 > † if you installed the docker 'package', then you _need_ the docker 'app' as
 > well for it to work. You can't have one without the other (this is because the
 > app sets up the interface for macOS to interact with the underlying docker
@@ -614,6 +616,7 @@ The key flags are...
 - `--with-python3-command`: give it a path to a Python3 interpreter/binary (†)
 - `--with-python3-config-dir`: a configuration directory used by the version of Python3 you want to use.
 
+> [!NOTE]
 > † e.g. if I run that full path in my terminal shell it'll actually run the
 > Python3 REPL so I know it's a valid path to provide.
 

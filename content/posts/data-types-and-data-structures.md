@@ -17,7 +17,7 @@ A data type is an [attribute](https://english.stackexchange.com/a/28098/334144) 
 - **Composite**: any data type (struct, array, string etc.) composed of scalars or composite types (also referred to as a 'compound' type).
 - **Abstract**: data type that is defined by its behaviour (tuple, set, stack, queue, graph etc).
 
-> \[!NOTE\]
+> [!NOTE]
 > You might also have heard of a 'primitive' type, which is sometimes confused with the 'scalar' type. A primitive is typically used to represent a 'value type' (e.g. pass-by-value semantics) and this contrasts with 'reference types' (e.g. pass-by-reference semantics).
 
 If we consider a composite type, such as a 'string', it _describes_ a data structure which contains a sequence of char scalars (characters), and as such is referred to as being a 'composite' type. Whereas the underlying _implementation_ of the string composite type is typically implemented using an array data structure (we'll cover [data structures](#data-structures) shortly).
@@ -209,6 +209,7 @@ In essence there are three steps that need to be applied to the target node (`T`
   1. `R`'s _original_ left node `L` is now orphaned.
   1. `T`'s right node is now set to `L`.
 
+> [!NOTE]
 > † we now find `R`'s left pointer has to be set to `T` (in order for it to become the parent node), meaning `R`'s original left pointer is orphaned.
 
 - **Right Rotation**:
@@ -216,6 +217,7 @@ In essence there are three steps that need to be applied to the target node (`T`
   1. `L`'s _original_ right node `R` is now orphaned.
   1. `T`'s left node is now set to `R`.
 
+> [!NOTE]
 > † we now find `L`'s right pointer has to be set to `T` (in order for it to become the parent node), meaning `L`'s original right pointer is orphaned.
 
 Let's now visualize the movements for both rotations:

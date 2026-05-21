@@ -121,6 +121,7 @@ Presuming I'm still in the `foo_hotfix` directory and that's where I ran `git wo
 - `git rebase master` \< whoops! I need to stash my changes first †
 - `git stash pop`
 
+> [!NOTE]
 > † why yes, this does seem a bit strange considering that's what I was trying to avoid in the first place, but in this case it's a single 'stash' and so a simple `git stash pop` will suffice to get me back to where I need to be.
 
 I can now continue working on my `foo_contents` branch.

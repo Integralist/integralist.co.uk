@@ -7,10 +7,11 @@ tags: [vim]
 
 I see a lot of posts on Vim 'tips and tricks' and decided I'd have a go at putting together my own list of things that don't typically see the light of day, but are super powerful and useful to know about.
 
-> \[!IMPORTANT\]
+> [!NOTE]
+> [!IMPORTANT]
 > I want people to realise that they don't need super complex Vim configurations with lots of third-party plugins, and this entire post is built on that motivation. This means you'll find nearly everything described here is just plain Vim (no plugins). Don't get me wrong, I use [a few plugins](https://github.com/Integralist/dotfiles/blob/master/.vimrc#L120-L142), but I try to keep them to a minimum and rely more on the fundamentals of how Vim works.
 
-> \[!NOTE\]
+> [!NOTE]
 > Remember that `:help <some_phrase>` is your friend! So if you don't know about any features I mention (and I don't explain them in this post), then use Vim's help feature. You can also try https://vimhelp.org/ too, which is a nice UI with autocomplete search box.
 
 **Let's take a look at what we'll be covering...**
@@ -53,6 +54,7 @@ syntax on
 - `shiftwidth`: The number of spaces inserted for a tab (used for auto indenting).
 - `syntax on`: Enable basic syntax highlighting.
 
+> [!NOTE]
 > † Example: Using arrow keys in INSERT mode will send key sequences that are misinterpreted by `vi`.
 
 To try out this basic configuration use Vim's [`-u`](https://vimhelp.org/starting.txt.html#-u) flag. For example, you can start Vim with no configuration `vim -u NONE` and then manually apply the configuration as shown above, or you can put it into a separate file and start Vim with that configuration instead of your normal one `vim -u ~/.vimrc-basic`.
@@ -100,7 +102,7 @@ Now a more practical example of using `!` might be to take a single line of JSON
 :%!python -m json.tool
 ```
 
-> \[!NOTE\]
+> [!NOTE]
 > If you use [jq](https://stedolan.github.io/jq/) you can both prettify `%!jq` _and_ minify `%!jq -c`.
 
 Or if you didn't want to replace the current buffer, but instead _append_ a pretty printed version on the line(s) after the current line, then you would use `:read` like so:
@@ -123,7 +125,7 @@ autocmd BufWritePost *.go :cex system('revive '..expand('%:p')) | copen
 
 And the great thing about all of this is that there are _no_ plugins required. It's all standard Vim features. You just need to know they exist.
 
-> \[!NOTE\]
+> [!NOTE]
 > If you do decide to use plugins, then don't forget to `vim -c ":helptags ALL" -c ":q"` to ensure you get all the relevant help information loaded.
 
 Now, there may be times where you want a minimal config but with some extra treats, I'll typically have a `~/.vimrc-core` file with the following configuration that gives me the above 'basic' configuration (with some other configuration which isn't essential but also isn't superfluous either) along with some _core_ plugins I like to use):
@@ -215,7 +217,7 @@ If you execute `:reg` you'll see the `q` register contains something very simila
 0V:s/q//g^M
 ```
 
-> \[!NOTE\]
+> [!NOTE]
 > Once you've replayed a macro (e.g. `@q`) you can trigger it again without having to specify the register by typing `@` again, e.g. `@@` will rerun the last used macro.
 
 If you need to run a macro a certain number of times then just prefix it with that number. For example, to run a macro six times I'd type `6@<register>`.
@@ -238,7 +240,7 @@ You want to delete any lines that start with `foo`. To do that using the global 
 :g/^foo/d
 ```
 
-> \[!NOTE\]
+> [!NOTE]
 > If you just want to see what would match, you could either use the [`:p`](https://vimhelp.org/various.txt.html#%3Ap) command (e.g. `:g/^foo/p`) or just leave off the command altogether as `:p` is the default behaviour.
 
 What's cool about the `:global` command is that because the command can be _any_ Ex command, it means you can also use [macros](https://vimhelp.org/repeat.txt.html#recording) by way of the [`:norm`](https://vimhelp.org/various.txt.html#%3Anorm) command. In the following example we search for `foo` anywhere in the content and then apply the `@q` register to the matches...
@@ -287,6 +289,7 @@ Most people know how to use Vim's [`:substitute`](https://vimhelp.org/change.txt
 
 For me 'magic mode' really just means my regex pattern doesn't require escaping characters like `+` or `()` which is quite frustrating. I just prefix my pattern with `\v` and I can forget that for the most part (†). more like I'd expect it to from an engine supporting [PCRE](https://www.pcre.org/) (Perl Compatible Regular Expressions, probably the most common implementation).
 
+> [!NOTE]
 > † One caveat when using magic mode is that you _do_ need to escape curly brackets as most regex engines treat `{}` as a 'quantifier' such as `{1,3}` and so if I'm programming/coding and I need to search for a `{` (which is common in programming languages), then I have to escape it `\{`. You can learn more about Vim's regex engine via the help but also via [vimregex.com](http://vimregex.com/).
 
 Let's start off by looking at `\v` not using a substitution but with a standard [`/`](https://vimhelp.org/pattern.txt.html#%2F) search.
@@ -323,7 +326,7 @@ Or if you're using 'magic mode':
 
 Notice with magic mode we don't have to escape a bunch of things like the capture groups (i.e. the parenthesis) or the `@`.
 
-> \[!NOTE\]
+> [!NOTE]
 > If the number of permutations was small enough, then it's arguably simpler to use an alternator pipe like `/\vlevel\='(debug|error)` because remembering the lookaround syntax like `@!` (and its friends) might be hard to recall.
 
 Next we'll look at `\u` and `\U` (they have lowercase equivalents: `\l` and `\L`).
@@ -354,7 +357,7 @@ You could also use `\U` for uppercasing just the first letter, but you'd need to
 :%s/\v(l)(evel)/\U\1\e\2/
 ```
 
-> \[!NOTE\]
+> [!NOTE]
 > For more details refer to [`:h sub-replace-special`](https://vimhelp.org/change.txt.html#sub-replace-special), but also [`:h whitespace`](https://vimhelp.org/pattern.txt.html#whitespace) which elaborates on some other special regex pattern flags.
 
 ## Searching and filtering content
@@ -376,7 +379,7 @@ Example: we want to find a file called `next.config.js`:
 :find **/next.*.js 
 ```
 
-> \[!NOTE\]
+> [!NOTE]
 > We could have just done `**/next.config.js` but in case you weren't familiar with the filename, then using another wildcard like we did helps to narrow things down.
 
 ### Finding content within one or more files
@@ -397,7 +400,7 @@ This is the basic syntax structure:
 :lvimgrep /<searchTerm>/[gj] </path/to/project/*>
 ```
 
-> \[!NOTE\]
+> [!NOTE]
 > `j` prevents Vim from trying to open the first file match (also, if you don't use `j` then the location list won't be populated with results as it'll presume the first match was all you wanted), while `g` means "ensure every match on a single line is displayed".
 
 Example usage (we're searching for any reference to `class` anywhere in the project):
@@ -409,7 +412,7 @@ Example usage (we're searching for any reference to `class` anywhere in the proj
 
 For anyone unfamiliar, the `copen` command will open Vim's 'quickfix' window, while the `lopen` command will open the 'location list' (refer to `:h copen` and `:h lopen` to find related commands).
 
-> \[!NOTE\]
+> [!NOTE]
 > a nice trick if you're using the _append_ version of `vimgrep` (i.e. [`vimgrepa`](https://vimhelp.org/quickfix.txt.html#%3Avimgrepa)), is if you make a mistake populating the quickfix window, then you can use `:cex []` to clear it! See [`:cex`](https://vimhelp.org/quickfix.txt.html#%3Acex) for details.
 
 One interesting feature of `:vimgrep` is that you can use the result of a backtick expression to be the file source:
@@ -432,7 +435,7 @@ So you type `:vimgrep /` and after that is where you would typically start typin
 
 Imagine `...` was the last search pattern, this would mean the Ex mode command would currently look like `:vimgrep /...` so you would need to finish the command `/ *` (so it's almost like you wrote the command in its entirety).
 
-> \[!NOTE\]
+> [!NOTE]
 > if you use another plugin like `:Ack!` then `<C-r>/` works to insert the last search pattern still (e.g. `:Ack! '<C-r>/'`)
 
 ### Using external shell tool
@@ -459,7 +462,7 @@ I have mine set to use `ag` (i.e. the [Silver Searcher](https://github.com/ggree
 set grepprg=ag\ --nogroup\ --nocolor\ --skip-vcs-ignores
 ```
 
-> \[!NOTE\]
+> [!NOTE]
 > spaces have to be escaped with a backslash `\`.
 
 You can now use the new program like so (e.g. to find any reference to the word `class` using the Silver Searcher tool):
@@ -469,7 +472,7 @@ You can now use the new program like so (e.g. to find any reference to the word 
 :copen
 ```
 
-> \[!NOTE\]
+> [!NOTE]
 > you still need to open the 'quickfix' window manually afterwards to see the results.
 
 All this said, you can improve the performance of `:vimgrep` by prefixing it with [`:noautocmd`](https://vimhelp.org/autocmd.txt.html#%3Anoautocmd).
@@ -484,7 +487,7 @@ This is because `:vimgrep` uses Vim's procedures to read files, which can involv
 
 OK, the built-in tools are great and flexible, but I'll be honest with you and say that in my day-to-day Vim usage you'll find me using [`:FZF`](https://github.com/junegunn/fzf.vim) to find files and [`:Ack! '<regex>' <path>`](https://github.com/mileszs/ack.vim) to find files that contain a particular string.
 
-> \[!NOTE\]
+> [!NOTE]
 > Although I use the [Ack](https://github.com/mileszs/ack.vim) Vim plugin, I actually configure it to use the `ag` '[Silver Searcher](https://github.com/ggreer/the_silver_searcher)' shell command.
 
 ```viml
@@ -639,7 +642,7 @@ So what additional tools does Vim provide to us? In this case you can utilise ei
 
 Here is an example of how to use `Cfilter`. I'm going to search for the phrase "vim" across my blog, which ends up returning quite a few results across multiple files. Turns out I'm only interested in files that are Markdown files and so I need to filter the results to only show me those files...
 
-> \[!NOTE\]
+> [!NOTE]
 > Sure you could use [`wildignore`](https://vimhelp.org/options.txt.html#%27wildignore%27) (or maybe even [`suffixes`](https://vimhelp.org/options.txt.html#%27suffixes%27), although it won't solve our problem, only alleviate it slightly) but it's really a _hammer_ solution, where we want a scalpel.
 
 ```viml
@@ -656,7 +659,7 @@ This is why I also use the regex anchor `$` because it's less likely for me to a
 
 As you can see the default behaviour of the filter is to keep only those results that match your pattern. If you want the filter to work in reverse so it _removes_ anything that matches your pattern, then add `!` to the command like so `:Cfilter! /your_pattern/`.
 
-> \[!NOTE\]
+> [!NOTE]
 > As this is a regex pattern you can still use `\v` to get 'magic' mode. For example `/\vyour_pattern/`.
 
 ## Processing files with `<T>do`
@@ -735,7 +738,7 @@ foo
 
 When using the `-e` and `-s` flags, we're able to use `+` to execute Ex mode commands.
 
-> \[!NOTE\]
+> [!NOTE]
 > If you don't use `+'qa!'` then Vim will cause the terminal to hang. You also need the `!` otherwise `qa` would (if dealing with a traditional Vim UI) show a message saying the buffer has been edited and can't be quit.
 
 To avoid the `Vim: Reading from stdin...` message we need an additional flag `--not-a-term`:
@@ -754,7 +757,7 @@ $ echo foo | vim - -es --not-a-term +'norm VgU' +'%p' +'qa!'
 FOO
 ```
 
-> \[!NOTE\]
+> [!NOTE]
 > `norm` says execute the following characters as if the user is typing them, so `V` selects the entire line and `gU` uppercases the selection. We then print the output to stdout `%p` and then quit without trying to save the modifications.
 
 ## Starting Vim with your last workspace
@@ -789,7 +792,7 @@ If you want to see what's in your runtime path you can execute:
 :set runtimepath?
 ```
 
-> \[!NOTE\]
+> [!NOTE]
 > if you want to debug the start-up process: [`vim --startuptime some_log_filename`](https://vimhelp.org/starting.txt.html#--startuptime).
 
 To learn more about the various directories Vim uses, then refer to the `:help` documentation, for example:
@@ -847,7 +850,7 @@ n  \x            :ALENext<CR>
         Last set from ~/.vimrc
 ```
 
-> \[!NOTE\]
+> [!NOTE]
 > see `:h map-listing` for the various modes (`n` = normal, `x` = visual, etc).
 
 The same principle works with other mappings like `<Ctrl-k>` and `<Ctrl-j`...
@@ -870,7 +873,7 @@ v  <NL>          <Plug>MoveBlockDown
 
 If you want to know what the default commands that Vim defines, then take a look at [`:h index`](https://vimhelp.org/index.txt.html#index) and drill down into the various commands per 'mode'.
 
-> \[!NOTE\]
+> [!NOTE]
 > Vim also has a debugger you can use: `vim -D ~/.vimrc` (see reference below for details).
 
 Lastly, there is the `-V<N>` flag that sets the verbosity of Vim output when starting up...
@@ -887,7 +890,7 @@ Lastly, there is the `-V<N>` flag that sets the verbosity of Vim output when sta
 " >= 15 Every executed Ex command (truncated at 200 characters).
 ```
 
-> \[!NOTE\]
+> [!NOTE]
 > see `:h vbs` for details.
 
 Usage example: `vim -V9 ~/.vimrc`, but you can also write the output to a log file instead (pro tip: use the log file approach) such as `vim -V9foo ~/.vimrc` which will write the output to the log file `foo`.
@@ -911,6 +914,7 @@ Vim also provides the native command `<C-n>` for autocompletion based on words e
 
 This isn't necessarily a Vim specific thing but it used to catch me out all the time. _Looking_ for line breaks and _inserting_ line breaks are two different things.
 
+> [!NOTE]
 > The term **CRLF** refers to Carriage Return (ASCII 13, `\r`) Line Feed (ASCII 10, `\n`). They're used to note the termination of a line, however, dealt with differently in today's popular Operating Systems.
 
 - Windows: CRLF (`\r\n`)
@@ -958,6 +962,7 @@ Vim can highlight certain words inside of code comments, such as...
 - `TODO`
 - `XXX`
 
+> [!NOTE]
 > The `NOTE` works in both Go and Python files and yet it's not defined in the Go syntax file, which means it's likely inherited from a default syntax file.
 
 See the syntax files for...

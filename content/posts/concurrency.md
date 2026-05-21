@@ -5,6 +5,7 @@ description: An exploration of shared memory vs message passing concurrency mode
 tags: [architecture, go]
 ---
 
+> [!NOTE]
 > **2020.02.25 UPDATE**: this post was written a long time ago and I realize now (upon reflection) that it dips hazardously in-and-out between various programming languages without really warning the user properly ahead of time.
 >
 > The reason for using different languages was to highlight the fact that the various concurrency tools and mechanisms weren't fully supported across languages.
@@ -22,6 +23,7 @@ There are two fundamental models of concurrency:
 
 In the first, we have concepts such as Threads, Locks and Mutexes. In the latter we have patterns such as Actors and CSP, which rely on the mantra of...
 
+> [!NOTE]
 > "don't communicate by sharing memory; share memory by communicating"
 
 ### Shared Memory
@@ -234,12 +236,16 @@ Total balance is 1000
 > [!NOTE]
 > `println` is sending data to *stdout* (defined as a thread-local dynamic variable). This variable is binded to the current Thread by default (meaning values don't cross over into other Threads).
 
+> [!NOTE]
 > A `future` creates a new Thread, but the binding of *stdout* is inherited by the `future`'s parent process (i.e. any `println` calls within the `withdraw` function - which runs in the parent process - can appear in the `future`'s thread); meaning the output sent by `println` doesn't necessarily reflect the correct state.
 
+> [!NOTE]
 > For example, even when the transaction completes successfully, you might see the failure message printed - at some point in *stdout* - because the failing message is coming from an earlier transaction that indeed failed. But after a retry the transaction passed and so the message you see in *stdout* doesn't reflect the latest status of the application.
 
+> [!NOTE]
 > I would suggest that the `println` message be moved outside of the transaction and that you add additional logic after the transaction code (this means after the transaction has completed; inc. retries) as a way to work around this issue with printing messages to *stdout* prematurely after a failed transaction.
 
+> [!NOTE]
 > I didn't bother implementing this within my example, as it wasn't essential to understanding the code.
 
 ### JRuby example
@@ -492,6 +498,7 @@ A program is I/O bound if it would go faster if the I/O subsystem was faster.
 
 The following is an explanation from "Essentials of Computer Organization and Architecture"...
 
+> [!NOTE]
 > Input and output (I/O) devices allow us to communicate with the computer system. I/O is the transfer of data between primary memory and various I/O peripherals. These devices are not connected directly to the CPU. Instead, there is an interface that handles the data transfers. This interface converts the system bus signals to and from a format that is acceptable to the given device. The CPU communicates to these external devices via I/O registers.
 
 See also the following image that demonstrates how a CPU will allow interruptions for I/O based signals ([source](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/13_IOSystems.html)):

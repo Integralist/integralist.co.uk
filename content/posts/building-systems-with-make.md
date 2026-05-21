@@ -29,6 +29,7 @@ I couldn’t hope to cover every aspect of what Make offers, so please don’t m
 
 Let me start by referencing the [GNU website](http://www.gnu.org/software/make/) for its definition of what Make is and does:
 
+> [!NOTE]
 > GNU Make is a tool which controls the generation of executables and other non-source files of a program from the program’s source files
 
 Make relies on a _Makefile_ being defined and which consists of a set of instructions for building your software. If you’ve used another build system, such as [Grunt](http://gruntjs.com), you’ll notice that most of them use a naming convention taken from Make (e.g. _Gruntfile_).

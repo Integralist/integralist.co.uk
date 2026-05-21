@@ -118,6 +118,7 @@ Do you find yourself handling tasks, or using processes, that take up a lot of t
 
 The single biggest question you should now be asking yourself is:
 
+> [!NOTE]
 > "Why do I want to become an Engineering Manager?"
 
 This is really important, and requires you to be very honest and open with _yourself_ (not only will you suffer the consequences of a bad decision, but so will everyone else who is relying on you).

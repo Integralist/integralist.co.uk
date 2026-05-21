@@ -52,6 +52,7 @@ These meetings should be a safe space for you to share how you're feeling, and t
 
 Unfortunately most 1:1's end up being some form of status (or project) update, which isn't good because the focus of a 1:1 is for a report to communicate with their line manager about how _their_ doing and not how the project is going †
 
+> [!NOTE]
 > † that's what project/product managers are for.
 
 ## What about the silent types?
@@ -124,6 +125,7 @@ So to tackle this I like to ask specific questions such as: "ok, what happened i
 - Engaging
 - Boring
 
+> [!NOTE]
 > Notice I flip-flop between positive and negative toned queries
 
 This helps me to tease out characteristics of the report and this helps me to then align their interests with what's potentially happening within the organization.

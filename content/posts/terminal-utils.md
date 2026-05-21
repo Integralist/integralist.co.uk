@@ -185,6 +185,7 @@ docker run -it centos /bin/bash
 docker run -it ubuntu /bin/bash
 ```
 
+> [!NOTE]
 > Also, the usage between Mac OS and Linux can vary\
 > Example: `top -n` on Mac shows only n number of items; Linux runs n number of ticks before stopping\
 > If you notice something different, then it'll likely be the OS\
@@ -217,6 +218,7 @@ You can change which column controls the order display (the default being CPU) b
 - `+command`: order by the COMMAND column (ascending order)
 - `-command`: order by the COMMAND column (descending order)
 
+> [!NOTE]
 > `+` is implied (so no need to type it)
 
 The following key strokes can be executed whilst `top` is running...
@@ -300,6 +302,7 @@ With CentOS:
 yum install strace
 ```
 
+> [!NOTE]
 > Mac OS has `dtrace` but it does use quite different commands from `strace`\
 > Although I have seen articles online that help translate
 
@@ -742,6 +745,7 @@ Here are some useful examples you can try out:
 
 Effectively, if you've any kind of network issues, then this tool can help you potentially identify where it's coming from or going (or if it's not coming from or going to the expected source/destination).
 
+> [!NOTE]
 > Update: an easy way to remember this (thanks Julia Evans - see [honorable mentions](#16) is "tuna please" `netstat -tunapl`). You can use `lsof -i -P` on Mac OS
 
 ## ifconfig
@@ -779,6 +783,7 @@ lo        Link encap:Local Loopback
 
 We can see above that we have a single Ethernet card (`eth0`) and a loop back interface (`lo`)
 
+> [!NOTE]
 > In newer Linux OS' `eth<n>` is replaced by `p2p<n>`\
 > And on the Mac OS it becomes `en<n>`
 
@@ -931,6 +936,7 @@ The following are some examples to help you understand how to execute `tcpdump`,
 - `tcpdump -i eth0 -s 0`: include contents of each packet (not just the packet header)
 - `tcpdump -vvv -s 0 -l -n port 53 -XX`: watch all DNS traffic (which happens on port 53)
 
+> [!NOTE]
 > If you run tcpdump on a remote server, you'll want to use the `-w` flag to record the data into a pcap file, this is so you can scp the file back to your local machine for later aggregation/analysis with either tcpdump itself (`-r`) or by importing the pcap file into another tool such as [`wireshark`](#13) or [`tshark`](#14)
 
 The output of the program may look a little confusing but there is consistent structure you can look out for:
@@ -1041,6 +1047,7 @@ Apparently `--security-opt seccomp:unconfined` is an alternative option.
 
 The following is taken and paraphrased from the Docker website:
 
+> [!NOTE]
 > Doing this will allow Docker to access all devices on the host as well as set some configuration to allow the container to nearly all the same access to the host as processes running outside the containers on the host.
 
 For more details, please refer to the [documentation](https://docs.docker.com/engine/reference/run/#/runtime-privilege-and-linux-capabilities).

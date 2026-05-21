@@ -173,6 +173,7 @@ Here are some interesting ones:
 - `objects`: contains four types of 'objects' (commit, tree, blob, tag).
 - `refs`: contains pointers to 'commit' objects.
 
+> [!NOTE]
 > † this is separate from a local user's `.gitignore`.
 
 ## References and Objects
@@ -303,6 +304,7 @@ Internally git does recognize the reference and can resolve it to the appropriat
 
 Why is that? Well, if we look at the documentation for the checkout subcommand (`man git-checkout`) we would discover...
 
+> [!NOTE]
 > if it (the given branch name) refers to a branch (i.e., a name that, when prepended with "refs/heads/", is a valid ref), then that branch is checked out. Otherwise, if it refers to a valid commit, your HEAD becomes "detached" and you are no longer on any branch.
 
 Running `git checkout master` means you've given an identifier (i.e. `master`) that git can internally resolve to `refs/heads/master` and thus git will happily checkout that branch, while `git checkout refs/heads/master` is a _direct_ reference that git first resolves to a commit.

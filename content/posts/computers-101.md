@@ -14,7 +14,7 @@ One thing I want to clarify in the above image is that each box is _within_ the
 parent box. So for example, The "Program: terminal" is interacting with a
 contained shell, while the shell then spawns either a "Built-in" or "Program".
 
-> \[!NOTE\]
+> [!NOTE]
 > Nearly four years after this post was published someone else
 > published https://www.poor.dev/blog/terminal-anatomy/ which is an excellent
 > write up that provides a really good animation of how the terminal interacts
@@ -619,4 +619,5 @@ alias commands_dir='echo $PATH | tr ":" "\n" | sort | egrep "^/(usr|bin)"'
 alias commands='for i in $(commands_dir):; do eval "ls -l $i"; done'
 ```
 
+> [!NOTE]
 > Does anyone know of a better way? I'd ❤️ to hear about it

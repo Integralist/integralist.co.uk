@@ -34,6 +34,7 @@ So let's see two simple examples:
 
 You have a Python project you need to work on.
 
+> [!NOTE]
 > I won't explain how Python works,\
 > I'll just presume you're a Pythonista
 
@@ -150,6 +151,7 @@ That's it really. You can reuse the Dockerfile and Makefile for all your project
 
 You have a Go project you need to work on.
 
+> [!NOTE]
 > I won't explain how Go works,\
 > I'll just presume you're a Gopher
 
@@ -295,6 +297,7 @@ The tasks we run are:
 1. build the app using the default compiler for the OS †
 1. execute the compiled binary to show it can run correctly inside the container
 
+> [!NOTE]
 > † this means our compiled binary will be a linux based binary, so you can't run it on your host machine if it's not linux based (e.g. I'm using macOS). You'll see that to allow me to compiled my application for multiple OS's I've installed [Gox](https://github.com/mitchellh/gox)
 
 Now here is our Go application, it simply uses the logging dependency we've installed and that's it. Nothing too fancy necessary for this example.

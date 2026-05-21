@@ -42,6 +42,7 @@ I would highly recommend you read [Practical Object-Oriented Design in Ruby](htt
 
 The best description I have ever read regarding good Object-Oriented design goes like this...
 
+> [!NOTE]
 > Object-Oriented Design is about the messages that get sent between objects and not the objects themselves.
 
 This single line quote perfectly captures the intention behind good Object-Oriented design.
@@ -241,6 +242,7 @@ When considering the direction of your dependencies (e.g. does class A rely more
 
 And to quote another...
 
+> [!NOTE]
 > "Depend on things that change less often than you do"
 
 ## Flexible Interfaces
@@ -385,11 +387,13 @@ But composition from a design perspective is more about the resulting 'whole', t
 
 Inheritance is the more appropriate solution if your design dictates that the objects have a well defined concrete class of functionality and that most of that base functionality is the same for all other objects. With inheritance you would write only small amounts of new code to extend the base functionality so the extending objects become more specialised.
 
+> [!NOTE]
 > Inheritance is specialisation\
 > *Bertrand Meyer, Touch of Class*
 
 If on the other hand your objects are all different and the design of the objects dictates there could be multiple reusable 'parts', then composition would be the better solution.
 
+> [!NOTE]
 > Use composition when the behaviour is more than the sum of it's parts\
 > *Grady Booch, Object-Oriented Analysis and Design*
 

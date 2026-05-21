@@ -118,6 +118,7 @@ For example, don't just Slack people all the time. You should notice when conver
 
 With face-to-face people generally are more easily able to listen because the convention in our society isn't to shout interweavingly across each other. Instead, someone talks and (if you're doing what you're supposed to be) you'll be _listening_ and really taking in what the other person is saying. You'll then adapt your response based on what the other person has just said †
 
+> [!NOTE]
 > † this is much different to what a lot of people mistakenly do which is: stay quiet until the other person has stopped talking and then reply with their pre-canned response (i.e. again they're only interested in getting across _their_ own points).
 
 One thing that I like to do after taking a long Slack conversation into a face-to-face video call is to go back to Slack and to _summarize_ what was just disussed. There are a few reasons for doing this:

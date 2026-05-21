@@ -20,6 +20,7 @@ This blog post is the result of what I have learnt so far, and its motivation is
 
 So let's begin by defining what 'statistics' means...
 
+> [!NOTE]
 > **Statistics** is a branch of mathematics dealing with the collection, analysis, interpretation, presentation, and organization of data -- [Wikipedia](https://en.wikipedia.org/wiki/Statistics)
 
 OK, that seems reasonable enough. Statistics is an 'umbrella' term that encapsulates the complete pipeline of how data is acquired, analysed and visualised. So what _is_ data and what does it look like? Let's move onto the next section where we can begin to clarify and understand it a bit more...
@@ -53,6 +54,7 @@ Age
 
 When dealing with statistical data, the first thing you typically learn about is data "frequency". Let's start with a definition...
 
+> [!NOTE]
 > In statistics the frequency (or absolute frequency) of an event is the number of times the event occurred in an experiment or study. -- [Wikipedia](<https://en.wikipedia.org/wiki/Frequency_(statistics)>)
 
 Consider the following data:
@@ -96,6 +98,7 @@ At a quick glance (or if you just didn't know any better), you would see the fir
 
 This is because the first graph is zoomed in from the starting point `2.0` whereas the first graph is zoomed out at the correct level so you can see the data in a more accurate and representative form.
 
+> [!NOTE]
 > See also my comment in the next section about [pie charts](#5). You'll notice there that the data can be mis-represented if not all the information is made available to the user.
 >
 > So the data isn't lying, it's just the view the user has of the data isn't accurately portrayed due to purposeful data ommission (this is a trick newspapers and academic papers use to represent a point of view they wish to push).
@@ -108,6 +111,7 @@ Below is an example pie graph that uses the data `[150,200,50]`, which could rep
 
 <canvas id="simplePie"></canvas>
 
+> [!NOTE]
 > Here is how the graph data is calculated:
 >
 > Start by finding the total (i.e. sum all the data)\
@@ -222,6 +226,7 @@ Based on what I've read, there are some key differences between histograms and s
 
 The reason for histogram bar sizes being proportional (unlike a traditional bar chart †) is because histograms are usually best suited to dealing with **_grouped numerical data_**.
 
+> [!NOTE]
 > † remember: with a traditional bar chart, each bar width is the same and only the bar 'length' is relevant (as it's determined by the frequency).
 
 ### Calculating dimensions
@@ -342,6 +347,7 @@ We can now plot these onto a line graph by placing the cumulative frequencies on
 
 <canvas id="simpleLine"></canvas>
 
+> [!NOTE]
 > In the above example graph, if we asked "how many people were playing for up to 21 hours?" the answer would be approximately 11 people.
 
 ## Averages

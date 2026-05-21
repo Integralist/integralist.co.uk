@@ -53,6 +53,7 @@ Each manual section has an introduction page † that explains what the section 
 - man8: introduction to system maintenance and operation commands
 - man9: introduction to system kernel interfaces
 
+> [!NOTE]
 > † except for manual sections 4 and 6. I had to go to the online reference for [macOS](https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/) in order to find out what they contained
 
 If you wanted to know 'at a glance' what commands were available, then you could install the `tree` command and execute it at the current directory (`/usr/share/man`) and this would show you something like the following (cut short for brevity):

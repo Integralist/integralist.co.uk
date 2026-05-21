@@ -19,6 +19,7 @@ Big O doesn't tell you how fast in time (e.g. seconds) an algorithm is. Instead 
 
 Although we'll see how to calculate the speed of operations later on in this post, the primary benefit is to see 'at a glance' the growth of operations as your data becomes larger.
 
+> [!NOTE]
 > So the O in "Big O" means "Operation"
 
 This means in order for you to really understand Big O you're going to need to know some maths. Now, this is OK. I'm genuinely terrible at maths, but you'll see as we go along that it's not as complicated as you might think.
@@ -262,6 +263,7 @@ O(Log2(16))
 
 We know from our earlier discussions that this would result in a worst case result of `4` operations to find the item we're searching for.
 
+> [!NOTE]
 > Remember: `2x2x2x2 = 16`\
 > That's `4` times we multipled `2` by itself to reach `16`
 

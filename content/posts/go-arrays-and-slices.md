@@ -92,6 +92,7 @@ slice: []int
        []int{2, 3}
 ```
 
+> [!NOTE]
 > Notice that a slice 'type' looks the same as an array's, but just omits a length (e.g. slice: `[]int`, array: `[3]int`).
 
 Slices, much like arrays, cannot dynamically grow larger at runtime. When a slice is full we must create a _new_ slice, which requires the use of go's builtin functions.

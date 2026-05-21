@@ -164,6 +164,7 @@ So [Simon Thulbourn](https://twitter.com/sthulb) informed me that he personally 
 
 The way [`GIT_SSH`](https://www.kernel.org/pub/software/scm/git/docs/#_other) works is like so:
 
+> [!NOTE]
 > When set git fetch and git push will use the specified command\
 > instead of ssh when they need to connect to a remote system
 

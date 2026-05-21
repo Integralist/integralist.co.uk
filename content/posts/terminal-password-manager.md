@@ -73,6 +73,7 @@ So here's the super quick run down on how to use Pass:
 - `pass -c Foo/bar`: copy first line of data into clipboard
 - `pass rm Foo/bar`: remove the file `bar` ∆
 
+> [!NOTE]
 > ∆ to remove the whole directory: `pass rm -rf Foo`\
 > Once the last file in a directory is removed, so is the directory
 

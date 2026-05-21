@@ -9,6 +9,7 @@ tags: [architecture]
 
 In my [previous post](/posts/design-oop/) I quoted the following description of object-oriented design…
 
+> [!NOTE]
 > Object-Oriented Design is about the messages that get sent between objects and not the objects themselves.
 
 The reason I felt this quote was important for good code design was because it helped focus our attention on improving our object's interfaces.
@@ -25,6 +26,7 @@ When thinking about a statically typed language, object methods are generally co
 
 But in a dynamically typed language (such as Ruby) this doesn't make a lot of sense because the `account` object might not actually contain a method called `deposit` (statically typed languages are compiled and so we can be assured that if we call a method on an object, it will be there - otherwise the program would fail to compile) so talking about 'calling' a method on an object is not as accurate as describing it like so:
 
+> [!NOTE]
 > "we're sending a deposit message to an account object"
 
 ## The Proxy Design Pattern

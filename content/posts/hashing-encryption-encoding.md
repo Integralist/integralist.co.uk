@@ -42,6 +42,7 @@ and clear with what we really mean.
 - **authenticity**:\
   the communication is with who you expect it to be (not a man-in-the-middle).
 
+> [!NOTE]
 > For a longer "Security Glossary", please see [this Google
 > doc](https://docs.google.com/document/d/1qs3jEIQvocdVhSxCSPLF1BoLnp91aLnuUIasvl-maYo/edit?usp=sharing)
 > I created.
@@ -60,6 +61,7 @@ AES (a faster, but less secure algorithm †) for _encrypting_ data with a share
 key, while using a hash function for generating a message digest to ensure both
 parties can verify the _integrity_ of the payload sent/received.
 
+> [!NOTE]
 > † less secure in the sense that you have to share a secret key with the person
 > you wish to communicate with, but that's what public-key cryptography helps to
 > secure.
@@ -105,6 +107,7 @@ encryption algorithm (such as AES †) to verify the integrity of a message,
 whereas a 'HMAC' will use a hash function (such as SHA256) internally instead of
 an encryption algorithm.
 
+> [!NOTE]
 > † encryption algorithms: AES (Advanced Encryption Standard), Blowfish, DES
 > (Data Encryption Standard), Triple DES, Serpent, and Twofish.
 

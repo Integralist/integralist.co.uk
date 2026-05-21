@@ -266,6 +266,7 @@ The 'fix', like shown earlier, is `b := a[:2:2]` which sets the capacity of the 
 
 ## Quick guide to pass-by-value vs pass-by-pointer
 
+> [!NOTE]
 > Reference articles: [goinbigdata.com](https://goinbigdata.com/golang-pass-by-pointer-vs-pass-by-value/) and [dave.cheney.net](https://dave.cheney.net/2017/04/29/there-is-no-pass-by-reference-in-go) and [alexedwards.net](https://www.alexedwards.net/blog/demystifying-function-parameters-in-go).
 
 You'll commonly hear people use the phrase 'pass-by-reference'. The behaviour this phrase describes is: "You're not receiving a _copy_ of the thing being passed, you're getting _direct access_ to it".
@@ -287,6 +288,7 @@ Whereas maps, slices, and channels are all passed by pointer.
 
 Now, here's where I need to be more specific (and _accurate_):
 
+> [!NOTE]
 > In Go _every_ function operates on a _copy_ of the arguments passed into the function. No exceptions, that is what happens for every type.
 
 With the primitive/basic types, their _value_ is _copied_.

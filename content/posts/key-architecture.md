@@ -58,6 +58,7 @@ There are a few layers to this architecture and so I'm hoping this makes it hard
 
 If someone compromises my laptop (i.e. gets access to it), then they can't access the password data store as they can't access my private key.
 
+> [!NOTE]
 > Although a compromise _could_ result in a key logger being installed and record what I type for my passphrase
 
 The only way to get my private key is to locate my remotely stored and safe USB that homes the raw private key contents.

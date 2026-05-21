@@ -150,6 +150,7 @@ You can install it using:\
 
 To begin with, let’s understand what a “profile” is:
 
+> [!NOTE]
 > A Profile is a collection of stack traces showing the call sequences that led to instances of a particular event, such as allocation. Packages can create and maintain their own profiles; the most common use is for tracking resources that must be explicitly closed, such as files or network connections. -- [pkg/runtime/pprof](https://golang.org/pkg/runtime/pprof/#Profile)
 
 Now there are a couple of ways to use this tool:

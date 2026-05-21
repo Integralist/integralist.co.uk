@@ -17,7 +17,7 @@ ______________________________________________________________________
 
 This is going to be a very focused post because when you're looking to get your code editor configured you typically just want answers. Let's go...
 
-> \[!NOTE\]
+> [!NOTE]
 > I configure Neovim with `~/.config/nvim/init.vim`.
 
 ## Requirements

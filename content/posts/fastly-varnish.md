@@ -89,6 +89,7 @@ mentioned in this post, then I recommend reading:
 - [Varnish Blog](https://info.varnish-software.com/blog)
 - [Fastly Blog](https://www.fastly.com/blog)
 
+> [!NOTE]
 > Fastly also has a couple of _excellent_ articles on utilising the `Vary` HTTP
 > header, which is highly recommended reading.
 
@@ -287,6 +288,7 @@ backend!
 
 To quote Fastly directly...
 
+> [!NOTE]
 > We choose the first backend that was created that doesn't have a conditional
 > on it. If all of your backends have conditionals on them, I believe we then
 > just use the first backend that was created. If a backend has a conditional on
@@ -575,6 +577,7 @@ sub vcl_deliver {
 }
 ```
 
+> [!NOTE]
 > UPDATE 2020.02.25: Fastly have published a blog post that details what they
 > consider to be VCL anti-patterns and offer solutions/alternative patterns:
 > https://www.fastly.com/blog/maintainable-vcl
@@ -657,6 +660,7 @@ behaviour is applied. The following is a summary of these rules:
 - `Expires` ignored if `Cache-Control` is also set (recommended to avoid `Expires`).
 - `Pragma` is a legacy cache header only recommended if you need to support older HTTP/1.0 protocol.
 
+> [!NOTE]
 > † _except_ when `Cache-Control` contains `private`.
 
 Next in line is `Surrogate-Control` (see [my post on HTTP
@@ -823,6 +827,7 @@ Fastly still serves stale content if the `stale-while-revalidate` TTL is still
 valid but the output of the `fastly-debug-ttl` can be confusing and/or
 misleading.
 
+> [!NOTE]
 > Something else to note, while I write this August 2019 update is that the
 > `fastly-debug-ttl` only every displays the 'grace' value when it comes to
 > `stale-if-error`, meaning if you're trying to check if you're serving
@@ -991,6 +996,7 @@ Each Varnish 'state' has a set of built-in variables you can use.
 
 Below is a list of available variables and which states they're available to:
 
+> [!NOTE]
 > Based on Varnish 3.0 (which is the only explicit documentation I could find on
 > this), although you can see in various request flow diagrams for different
 > Varnish versions the variables listed next to each state. But
@@ -1032,6 +1038,7 @@ Here's a quick key for the various states:
 | `beresp.*`  | R/W |
 | `resp.*`    | R/W | R/W |
 
+> [!NOTE]
 > For the values assigned to each variable:\
 > `R/W` is "Read and Write",\
 > and `R` is "Read"\
@@ -1204,6 +1211,7 @@ used to identify a "primary" node, which is the node that will _always_ (†)
 'act' as a fetching node (i.e. it's the server that will be responsible for
 handling the request for that specific resource/object).
 
+> [!NOTE]
 > † well, _almost_ always. Except when the delivery node that ends up being
 > selected _is_ the "primary" node. Then the primary node is no longer acting as
 > a fetching node, as it's forced to act as a delivery node instead. Requiring a
@@ -1367,11 +1375,13 @@ clustering](#breaking-clustering)).
 
 When I pointed Fastly to their documentation, their response was:
 
+> [!NOTE]
 > “if you pass in recv, you’re saying no to cache lookup, and no to request
 > collapsing, so there’s no reason to cluster the request”
 
 Which was then followed with...
 
+> [!NOTE]
 > “big sigh, ok, I’m filing an issue”
 
 You definitely _can_ end up in `vcl_pass` on a fetching node, but admittedly it
@@ -1393,6 +1403,7 @@ handle the full request cycle. This is done for reasons of performance, such as
 finding stale content in the `vcl_deliver` state on the delivery node and
 wanting to serve that stale content †
 
+> [!NOTE]
 > † we'll learn about [serving stale](#6) later.
 
 Now go back to [the earlier 'request flow' diagram](#varnish-request-flow). Try
@@ -1470,6 +1481,7 @@ because the header was set on the `req` object while it was in a state that is
 executed on a fetching node; and so the `req` data set there doesn't persist a
 restart.
 
+> [!NOTE]
 > Summary: modifications on the fetching node don't persist to the delivery node.
 
 If you're starting to think: "this makes things tricky", you'd be right :-)
@@ -2222,6 +2234,7 @@ if (resp.http.X-Track-VCL-Route && fastly_info.state ~ "^MISS")
 { track the data that was stored in X-Track VCL-Route }
 ```
 
+> [!NOTE]
 > If you want more information on `fastly_info.state` see [this community
 > comment](https://community.fastly.com/t/useful-variables-to-log/303/3).
 
@@ -2332,6 +2345,7 @@ When we trigger an error an object is created for us. On that object I set our
 `X-VCL-Route` and assign it whatever was inside `req.http.X-VCL-Route` at that
 time †
 
+> [!NOTE]
 > † which would include `vcl_recv`, `vcl_hash` and `vcl_miss`. Remember the
 > `req` object _does_ persist across the delivery node/fetching node boundaries,
 > but _only_ when going from `vcl_recv`. After that, anything set on `req` is
@@ -2386,6 +2400,7 @@ Googling around I discovered some [Fastly
 documentation](https://docs.fastly.com/en/guides/resource-limits#request-and-header-limits)
 which makes reference to a `Header count`...
 
+> [!NOTE]
 > Exceeding the limit results in a Header overflow error. A small portion of
 > this limit is reserved for internal Fastly use, making the practical limit
 > closer to 85.
@@ -2399,6 +2414,7 @@ Was Fastly saying the overall request header size of `X-VCL-Route` was too large
 of error) or did it mean that I could only set that specific header 96 times and
 I was reaching that limit due to the number of restarts (surely not?)
 
+> [!NOTE]
 > Even if I restarted the request flow three times, there's only a total of
 > _eight_ VCL states and they don't all get executed in a single request flow,
 > so that's only a maximum of 24 times I would have called set on the
@@ -2410,6 +2426,7 @@ that.
 The official Fastly response to my question about what this documentation means
 was as follows...
 
+> [!NOTE]
 > `header count = 96` specifically means 96 headers can be present for an object
 > (this includes the request and response headers). The header overflow can be
 > caused by exceeding _any_ of the limits defined in the documentation
@@ -2442,6 +2459,7 @@ fetching the content from the origin. But when you `return(pass)` from
 `vcl_fetch` it causes a slightly different behaviour. Effectively we're telling
 Varnish we don't want to cache the content we've received from the origin.
 
+> [!NOTE]
 > In the case of the VCL logic above, we're not caching this content because we
 > can see there is a cookie set (indicating possibly unique user content).
 
@@ -2542,6 +2560,7 @@ It's important to note that an object can't be _re-cached_ (let's say the origin
 no longer sends a `private` directive) until either the hit-for-pass TTL expires
 _or_ the hit-for-pass object is purged.
 
+> [!NOTE]
 > See [this Varnish blog
 > post](https://info.varnish-software.com/blog/hit-for-pass-varnish-cache) for
 > the full details.
@@ -2585,6 +2604,7 @@ if (<object>.status >= 500 && <object>.status < 600) {
 }
 ```
 
+> [!NOTE]
 > Where `<object>` is either `beresp` (`vcl_fetch`) or `resp` (`vcl_deliver`).
 
 When looking at the value for `stale.exists`, if it returns 'true', it is
@@ -2598,6 +2618,7 @@ set beresp.stale_while_revalidate = <N>s;
 set beresp.stale_if_error = <N>s;
 ```
 
+> [!NOTE]
 > Where `<N>` is the amount of time in seconds you want to keep the object for
 > after its ttl has expired.
 
@@ -2607,6 +2628,7 @@ set beresp.stale_if_error = <N>s;
 - `stale_if_error`: request received, obj found in cache, but ttl has expired,
   so we go to origin and the origin returns an error, so we serve stale.
 
+> [!NOTE]
 > † if successful, new content is cached and the TTL is updated to whatever the
 > cache response headers dictate.
 
@@ -2648,6 +2670,7 @@ The use of `beresp.stale_if_error` is effectively the same as Varnish's
 `grace` feature, because it will override any Fastly behaviour that is using the
 `stale_if_error`.
 
+> [!NOTE]
 > You can find more details on Fastly's implementation
 > [here](https://docs.fastly.com/guides/performance-tuning/serving-stale-content)
 > as well as a blog post announcing this feature
@@ -2666,6 +2689,7 @@ only serve a stale cached object if the request ended up being routed through
 the POP that has the content cached (which is more difficult without shielding
 enabled).
 
+> [!NOTE]
 > Another reason would be to use "[soft
 > purging](https://docs.fastly.com/guides/purging/soft-purges)" rather than hard
 > purges.
@@ -2719,6 +2743,7 @@ works, that `vcl_fetch` and `vcl_deliver` generally run on _different_ servers
 (although that's not always the case, as we'll soon see) and so different
 servers will have different caches.
 
+> [!NOTE]
 > "What we refer to as 'clustering' is when two servers within the same POP
 > communicate with each other for cache optimization purposes" -- Fastly
 
@@ -3063,6 +3088,7 @@ log lines being generated. The cause of this turned out to be the Fastly
 'workspace' (as they refer to it) would run out of memory while generating our
 log output that they would stream to either GCS or AWS S3.
 
+> [!NOTE]
 > You can inspect the workspace using the undocumented `workspace.bytes_free`
 > property, and this value will change as you make modifications to your
 > request/response and other related objects.
@@ -3195,6 +3221,7 @@ been exhausted (the variable contains the error code raised by the last
 function). If we find an 'out of memory' error, then we won't attempt to call
 the `log` function (as that would result in the `(null)` for a log line).
 
+> [!NOTE]
 > Documentation:
 > [docs.fastly.com/vcl/variables/fastly-error/](https://docs.fastly.com/vcl/variables/fastly-error/)
 
@@ -3607,6 +3634,7 @@ DoS attacks if the attacker is rotating their IP or User-Agent.
 
 One caveat to this approach (as noted by Fastly) is as follows:
 
+> [!NOTE]
 > POST requests are also ineligible for clustering, ie transferring the request
 > to a consistently-hashed storage node. Since we don't expect POSTs to be
 > cached, this is an optimisation and we unfortunately don't provide a way for

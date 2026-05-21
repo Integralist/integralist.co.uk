@@ -189,6 +189,7 @@ X-Origin-Host: localhost:9000
 
 OK, so let's step through the `main` function of the advanced example code to see what's going on.
 
+> [!NOTE]
 > The core reverse proxy code and its concepts are effectively the same between the advanced and simple versions.
 
 First we set up our basic logging configuration:

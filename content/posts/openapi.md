@@ -134,7 +134,7 @@ Before diving into the intricacies of writing an OpenAPI document, let's set up 
 
 If at any point throughout this post you are in doubt or you require some additional clarity, then please refer to the [specification document](https://spec.openapis.org/oas/latest.html).
 
-> \[!NOTE\]
+> [!NOTE]
 > I've used version [`3.0.3`](https://spec.openapis.org/oas/v3.0.3) for my examples.
 
 ### Basic Structure
@@ -179,6 +179,7 @@ paths:
           description: Successful response
 ```
 
+> [!NOTE]
 > **REF:** [Path Item Object](https://spec.openapis.org/oas/v3.0.3#path-item-object).
 
 ### Parameters
@@ -198,6 +199,7 @@ paths:
 
 Possible values for the `in` field are: "query", "header", "path" or "cookie".
 
+> [!NOTE]
 > **REF:** [Parameter Object](https://spec.openapis.org/oas/v3.0.3#parameter-object).
 
 ## Structuring Data
@@ -222,6 +224,7 @@ paths:
 
 The use of `$ref` allows us to avoid having an inline schema for one that is defined separately from the path object. This is useful in scenarios where the referenced schema might need to be reused across different paths. We'll take a look at the `components/schemas` section [next](#data-types).
 
+> [!NOTE]
 > **REF:** [Operation Object](https://spec.openapis.org/oas/v3.0.3#operationObject) and [Request Body Object](https://spec.openapis.org/oas/v3.0.3#requestBodyObject).
 
 ### Data Types
@@ -243,6 +246,7 @@ components:
 
 The `components` section not only supports defining `schemas` separate from where they should be referenced but also `responses`, `parameters`, `examples` and more. We'll take a look at some of these fields in more detail later.
 
+> [!NOTE]
 > **REF:** [Components Object](https://spec.openapis.org/oas/v3.0.3#components-object).
 
 ## Adding Metadata
@@ -260,6 +264,7 @@ info:
   description: This is a sample API documentation.
 ```
 
+> [!NOTE]
 > **REF:** [Info Object](https://spec.openapis.org/oas/v3.0.3#info-object).
 
 ### Tags and Grouping
@@ -285,6 +290,7 @@ tags:
   - name: limited-availability # Display "LA" notice on DevHub
 ```
 
+> [!NOTE]
 > **REF:** [Tag Object](https://spec.openapis.org/oas/v3.0.3#tagObject).
 
 ## Handling Errors
@@ -308,6 +314,7 @@ paths:
 
 The `responses` field is a container for the expected responses of an operation. The container maps a HTTP response code (e.g. `200` or `404` etc) to the expected response.
 
+> [!NOTE]
 > **REF:** [Responses Object](https://spec.openapis.org/oas/v3.0.3#responsesObject).
 
 ### Error Responses
@@ -373,6 +380,7 @@ What this schema describes is the following example error JSON that a user might
  }
 ```
 
+> [!NOTE]
 > **REF:** [Response Object](https://spec.openapis.org/oas/v3.0.3#responseObject).
 
 ## Testing and Validation

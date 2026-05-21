@@ -29,7 +29,8 @@ multiple OS threads (N). This allows the runtime to distribute goroutines across
 multiple CPU cores when possible, making Go’s concurrency model more efficient
 and scalable than traditional green threads.
 
-> \[!IMPORTANT\]
+> [!NOTE]
+> [!IMPORTANT]
 > The following example uses a `time.Sleep` to wait for the goroutine to finish.\
 > This is done for simplicity. Do NOT use this approach.\
 > I'll explain alternative options afterwards.
@@ -56,7 +57,7 @@ func main() {
 
 https://play.golang.com/p/SdOdZ90-exI
 
-> \[!NOTE\]
+> [!NOTE]
 > In Go, the `main` function is effectively the "initial" goroutine.\
 > When a Go program starts, the Go runtime creates a goroutine to run `main`.\
 > This main goroutine can then spawn additional goroutines as needed.
@@ -67,7 +68,8 @@ Channels in Go are a powerful way to communicate between goroutines and to
 synchronize them. They allow you to send and receive values across goroutines,
 and they help avoid race conditions by enabling safe data sharing.
 
-> \[!IMPORTANT\]
+> [!NOTE]
+> [!IMPORTANT]
 > Sending and receiving channel messages can
 > [block](https://go.dev/tour/concurrency/2).\
 > In the following example the `<-ch` BLOCKS the `main()` function.\
@@ -102,18 +104,20 @@ func main() {
 
 https://play.golang.com/p/2Qn_NacVw-0
 
-> \[!IMPORTANT\]
+> [!NOTE]
+> [!IMPORTANT]
 > You can `range` over a channel, but the loop will never stop unless the
 > channel is closed.\
 > So when ranging over a channel, think how the program can proceed and when is
 > the channel going to be closed.
 
-> \[!NOTE\]
+> [!NOTE]
 > Depending on what you application needs, you can create
 > [buffered](https://go.dev/tour/concurrency/3) channels.\
 > Sends to a buffered channel block only when the buffer is full.
 
-> \[!TIP\]
+> [!NOTE]
+> [!TIP]
 > The most crucial best practice is to close the channel from the sender side, not the receiver.\
 > The sender is the goroutine that writes data to the channel.\
 > Hence the sender knows when there's no more data to be sent, not the receiver.
@@ -127,7 +131,8 @@ handling multiple asynchronous tasks.
 Use `select` when you have multiple channels to listen to, and you want to
 respond to whichever channel receives data first.
 
-> \[!IMPORTANT\]
+> [!NOTE]
+> [!IMPORTANT]
 > In the following example, the first goroutine uses a `time.Sleep`.\
 > This is to simulate the operation taking a long time.\
 > It results in the `select` pulling a value from the second goroutine.
@@ -166,7 +171,8 @@ https://play.golang.com/p/HXe-bZ\_\_EEy
 
 A common use case for `select` is to timeout a potential deadlock:
 
-> \[!IMPORTANT\]
+> [!NOTE]
+> [!IMPORTANT]
 > In the following example we use `time.After` to cause a timeout.
 
 ```go
@@ -243,6 +249,7 @@ func main() {
 
 https://play.golang.com/p/LhEdSQIPp1R
 
+> [!NOTE]
 > 💡 **UPDATE:**\
 > As of Go 1.25 you no longer need to `wg.Add`/`wg.Defer` for simple cases.\
 > Instead you can just use `wg.Go()`.
@@ -418,7 +425,8 @@ Error: non-200 status: 500 from https://http-me.fastly.dev/?wait=500&status=500
 
 Notice in the above output we now see at least one successful case.
 
-> \[!TIP\]
+> [!NOTE]
+> [!TIP]
 > You can limit the number of active goroutines in the group with:\
 > `g.SetLimit(10)`\
 > Calls to `g.Go` will block until an active goroutine can be added.
@@ -481,7 +489,7 @@ func main() {
 
 https://play.golang.com/p/VIbNkQaPfZI
 
-> \[!NOTE\]
+> [!NOTE]
 > The use of `defer` in the `Increment()` method is redundant.\
 > It's more useful for long complex functions where errors can occur.\
 > Here I should have just placed the `Unlock()` call after the `c.value++`.
@@ -574,7 +582,8 @@ https://play.golang.com/p/5J1ApCPc1iU
 Go's `context.Context` is not a strict concurrency primitive but is widely used
 to manage timeouts, cancellations, and deadlines across goroutines.
 
-> \[!TIP\]
+> [!NOTE]
+> [!TIP]
 > You've seen context used in the [Error Groups](#error-groups) example earlier.
 
 Use `context.Context` to signal cancellation or control the lifespan of
@@ -621,6 +630,7 @@ will likely not need to use.
 
 The Go authors even document it as such...
 
+> [!NOTE]
 > The Map type is specialized. Most code should use a plain Go map instead, with
 > separate locking or coordination, for better type safety and to make it easier
 > to maintain other invariants along with the map content.
@@ -647,7 +657,8 @@ In the following example, `cond.Wait()` blocks until `cond.Signal()` is called.
 It's useful for waiting on complex conditions where other primitives like `chan`
 may not be ideal:
 
-> \[!IMPORTANT\]
+> [!NOTE]
+> [!IMPORTANT]
 > The call to `cond.L.Lock()` in the main goroutine just before `for !ready` is
 > required, otherwise you'll get the error `fatal error: sync: unlock of unlocked mutex`. This is because `cond.Wait()` expects the caller to hold the
 > lock before calling `Wait()` (see [this
@@ -752,7 +763,7 @@ goroutines, allowing them to proceed simultaneously.
 This is useful for scenarios where multiple tasks need to wait for a common
 event or state change to proceed.
 
-> \[!NOTE\]
+> [!NOTE]
 > Notifications are not ordered.\
 > Any one of the waiting goroutines can be chosen to proceed first.\
 > Broadcast ensures that all waiting goroutines eventually proceed.
@@ -802,7 +813,8 @@ goroutines coordinated with both channels and wait groups.
 It's a nice example because it brings together several different concurrency
 primitives (goroutines, channels, select, wait groups, atomic operations).
 
-> \[!TIP\]
+> [!NOTE]
+> [!TIP]
 > Keep reading after the code snippet for a brief breakdown of what the code
 > does.
 
@@ -1112,6 +1124,7 @@ certificate that I wanted to have for an apex domain (example.com) and a CNAME
 
 The code for that looks like the following:
 
+> [!NOTE]
 > 💡 The reason I'm sharing this code is because it uses lots of different
 > concurrency mechanisms to ensure efficient use of memory resources (i.e. we
 > need to ensure goroutines finishes more quickly, and actually get cleaned up

@@ -44,6 +44,7 @@ When you say "whiteboard interview", people generally tend to cringe and think o
 
 But let's be honest, that rarely correlates to the _actual_ work you typically end up doing, and so to describe that format as "wrong" would be correct †
 
+> [!NOTE]
 > † although, as with everything, it can depend on the role you're hiring for of course.
 
 For me, that type of whiteboarding session is a problem. Whiteboard interviews of _that_ nature, the ones that have you jumping through hoops to perform some kind of mathematical trickery are at best useless, and at worst very stressful. They're also likely to result in a candidate leaving unenthused and saying bad things about the company and its interview process on social media.

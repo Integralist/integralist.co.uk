@@ -81,7 +81,8 @@ tools.mod
 tools.sum
 ```
 
-> \[!IMPORTANT\]
+> [!NOTE]
+> [!IMPORTANT]
 > If you give the `tools.mod` a unique module name, let's say `go.mod` uses `github.com/example/foo`, and so you make `tools.mod` use `github.com/example/foo/tools` then be aware that the use of `go mod` isn't going to make your `tools.mod` think it needs the module from `go.mod` and it'll add it as a dependency (this makes things weird in special cases), so it might be worth making the module name the same between `go.mod` and `tools.mod`.
 
 To install a new tool:
@@ -94,7 +95,8 @@ go get -tool github.com/mgechev/revive
 go get -modfile=tools.mod -tool github.com/mgechev/revive
 ```
 
-> \[!TIP\]
+> [!NOTE]
+> [!TIP]
 > To _remove_ a tool you can do the above but set the version to `@none`.
 
 And if we want to use that tool we have to make sure to specify the modfile:
@@ -131,7 +133,8 @@ go tool
 go tool -modfile=tools.mod
 ```
 
-> \[!TIP\]
+> [!NOTE]
+> [!TIP]
 > Can also try `go list -modfile=tools.mod tool`
 
 To verify the integrity of the tool dependencies:
@@ -183,7 +186,8 @@ tools-update:
     go mod tidy -modfile=tools.mod
 ```
 
-> \[!IMPORTANT\]
+> [!NOTE]
+> [!IMPORTANT]
 > This approach keeps the main `go.mod` and `go.sum` clean of any tool dependencies, but not the other way around. So the `tools.mod` and `tools.sum` will ultimately contain all the dependencies from the main `go.mod` (that is a side-effect of running `go mod tidy -modfile=tools.mod` as `go mod` always consults the main `go.mod`, hence all of its dependencies end up in your `tools.mod` and `tools.sum`).
 >
 > This is unavoidable. There is no way to get around it (trust me, I've tried 😅).
@@ -194,7 +198,7 @@ tools-update:
 
 ## tools.go
 
-> \[!NOTE\]
+> [!NOTE]
 > For more details on code generation in a general sense, refer to:\
 > https://gist.github.com/Integralist/8f39eb897316e1cbeaf9eff8326cfa59
 
@@ -251,7 +255,8 @@ go-gen: ## Invoke go generate
     go generate -v -x ./mustang/status/...
 ```
 
-> \[!TIP\]
+> [!NOTE]
+> [!TIP]
 > If you're developing whilst offline, then one advantage the tools.go pattern
 > has is that it works whilst offline because the tool is explicitly installed.
 > But to work around that with `go run` you can set `export GOPROXY=direct` and

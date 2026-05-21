@@ -17,6 +17,7 @@ I'll start by describing briefly what a virtual environment is, and then I'll mo
 
 ## Virtual Environments
 
+> [!NOTE]
 > A cooperatively isolated runtime environment that allows Python users and applications to install and upgrade Python distribution packages without interfering with the behaviour of other Python applications running on the same system. -- [Python Glossary](https://docs.python.org/3/glossary.html#term-virtual-environment)
 
 To simplify: if you work on multiple Python projects and each project uses the same external dependency (e.g. the [Requests](https://requests.readthedocs.io/en/master/) HTTP library), then it's possible your application (for _each_ project) will be written to support a specific version of that dependency.

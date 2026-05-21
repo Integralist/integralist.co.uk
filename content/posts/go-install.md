@@ -13,7 +13,7 @@ The installation directory will be: `/usr/local/go`.
 
 Once you have Go installed, you can then use the `go` command to either install go based tools/binaries or other versions of Go.
 
-> \[!NOTE\]
+> [!NOTE]
 > Additionally, you can automate the install via a terminal using the following shell function (only tested on macOS):
 
 ```bash
@@ -50,14 +50,14 @@ go install example.com/cmd@v1.0.0
 go install example.com/cmd@latest
 ```
 
-> \[!NOTE\]
+> [!NOTE]
 > See [reference documentation](https://go.dev/ref/mod#go-install).
 
 ## Installing different go versions
 
 The following is the 'official' approach...
 
-> \[!NOTE\]
+> [!NOTE]
 > See [reference documentation](https://go.dev/doc/manage-install#installing-multiple).
 
 ```bash
@@ -75,7 +75,7 @@ go1.18 download
 sudo cp $(which go1.18) $(which go)
 ```
 
-> \[!NOTE\]
+> [!NOTE]
 > This requires `sudo` as it's copying into `/usr/local/...`.
 
 If you want the latest 'tip' release (and maybe with additional/unreleased features, at the time of writing that might have included something like 'fuzzing' which was made available in `go1.18`):

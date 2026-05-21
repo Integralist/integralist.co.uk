@@ -61,6 +61,7 @@ The `Cache-Control` cache response header has many directives you can configure,
 - `no-store`: prevents client or proxies from caching the content.
 - `no-transform`: proxies aren't allowed to modify content (e.g. don't send compressed content if origin didn't).
 
+> [!NOTE]
 > References: [MDN: `Cache-Control`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control) and [W3C Specification](http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html) (see also: [MDN: Caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching)).
 
 ### client requests
@@ -71,6 +72,7 @@ This is an interesting perspective on caching that we rarely see.
 
 In the case of Fastly CDN, they will ignore the `Cache-Control` header and its directives when provided as part of the client request.
 
+> [!NOTE]
 > Reference: [RFC](https://tools.ietf.org/html/rfc7234#page-22).
 
 ### no-cache vs must-revalidate
@@ -103,6 +105,7 @@ Fastly [has some rules](https://docs.fastly.com/guides/tutorials/cache-control-t
 - `Expires` ignored if `Cache-Control` is also set (recommended to avoid `Expires`).
 - `Pragma` is a legacy cache header only recommended if you need to support older HTTP/1.0 protocol.
 
+> [!NOTE]
 > † _except_ when `Cache-Control` contains `private`.
 
 It's worth reiterating a segment of the above priority list which is that `Cache-Control` _can_ include serving stale directives such as `stale-while-revalidate` and `stale-if-error`, but they are typically utilized with `Surrogate-Control` more than they are with `Cache-Control`. If Fastly receives no `Surrogate-Control` but it does get `Cache-Control` with those directives it _will_ presume those are defined for its benefit.
@@ -121,6 +124,7 @@ Below is a (oversimplified †) summary of these rules.
 - 1hr TTL is set by [Fastly's VCL boilerplate](https://docs.fastly.com/vcl/custom-vcl/creating-custom-vcl/) (applied by default).
 - 1hr TTL can be overridden by your own custom VCL.
 
+> [!NOTE]
 > † Fastly has many factors it takes into account when deciding if an object stays in its cache (see: [LRU](https://docs.fastly.com/guides/performance-tuning/serving-stale-content#why-serving-stale-content-may-not-work-as-expected)).
 
 ## Disable Caching
@@ -159,6 +163,7 @@ There are many [conditional headers](https://developer.mozilla.org/en-US/docs/We
 - ETag: [`If-None-Match`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match)
 - Last-Modified: [`If-Modified-Since`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Modified-Since)
 
+> [!NOTE]
 > Reference: [sequence diagrams demonstrating the various request flows](https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests#Use_cases).
 
 If neither `ETag` nor `Last-Modified` is sent by the origin, then the cache will not be able to update the cache object. This means the object's TTL (i.e. `max-age`) will still be expired, and other properties of the cache object will also not be updated, such as its 'age' (reset it back to zero once the content is refreshed), nor its 'grace' period (how long it will be able to serve that content stale for).
@@ -167,6 +172,7 @@ If neither `ETag` nor `Last-Modified` is sent by the origin, then the cache will
 
 The official [W3C specification](https://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.3.4) provides 'rules' for when to use ETag vs Last-Modified. In summary...
 
+> [!NOTE]
 > the preferred behavior for an HTTP/1.1 origin server is to send **both** a strong entity tag and a Last-Modified value.
 
 A good additional reference is MDN's article on [Cache Validation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching#Cache_validation).
@@ -204,6 +210,7 @@ Otherwise, again if we were in that situation where we couldn't dynamically purg
 
 If you're using a CDN such as Fastly, you can utilize `Surrogate-Key` to purge your content dynamically whenever fresher versions have been published. Meaning, you could have a short revalidation TTL and if there was no fresh content within that time period you wouldn't actually have to worry about going to origin and getting the same content back but now with a long `max-age` TTL, because you know you could dynamically trigger a cache MISS whenever your fresh content was published anyway.
 
+> [!NOTE]
 > Open Question: do _you_ think `stale-while-revalidate` should contain a long or short TTL (and why)?
 
 ### Strong and Weak Validators

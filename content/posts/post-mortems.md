@@ -33,6 +33,7 @@ You should schedule the post-mortem to occur _as soon as possible_ after the eve
 
 The trouble with getting a post-mortem scheduled at the right time is that you'll need a prepared document (a post-mortem template) that is filled in with as much detail (as can be reasonably recalled from memory †) almost immediately after the incident. This document doesn't just magically appear, it's someones responsibility to create it.
 
+> [!NOTE]
 > † this is harder than you imagine, even with modern day communication tools like [Slack](https://slack.com/), there are so many things going on at once (multiple people chatting and trying to isolate the problem, then finding a quick and safe solution) that it's easy to forget things or not notice them happening (hence a post-mortem helps bring all this information together).
 
 You should have the post-mortem document filled in (as much as you can) _before_ having the post-mortem as a way to help drive the conversation, and (ideally) whoever was on-call at the time of the incident would be marked as the point-person for prepping this post-mortem document.

@@ -5,6 +5,7 @@ description: A concise project management checklist covering roles, priorities, 
 tags: [management]
 ---
 
+> [!NOTE]
 > 💡 Related information: [Project Planning](https://gist.github.com/Integralist/bfcad74c66dfa1e8eb5e2c07b13811df).\
 > Includes specific documents needed and also an [example matrix
 > spreadsheet](https://docs.google.com/spreadsheets/d/1ZnxIY4BCnsUaY65Cc2GCmzmq18XBJvG2iErSWfMjW10/edit?usp=sharing).
@@ -58,6 +59,7 @@ This is a short checklist of things you probably should be doing...
 - Once categorized, group related items (e.g. group together all high, medium, low items).
 - A table matrix can help visualise the various tasks and their importance.
 
+> [!NOTE]
 > Regardless of the approach you choose, you wont be able to prioritize using just a 'problem/solution/impact' approach. You'll need to document and consider both 'cost' and 'risk' as part of your assessment. [Here is an example document](https://docs.google.com/document/d/1Qd5wrcTLuwQFIUvHgpvYUC889tk1XLnFsRRbkjvTYpU/edit?usp=sharing) you can use.
 
 ### 🗒 Work through the unknowns
@@ -73,6 +75,7 @@ This is a short checklist of things you probably should be doing...
 - How far has the project come?
 - How far is it from completion?
 
+> [!NOTE]
 > Don't work _faster_ (and or _harder_) when you discover the team is missing deadlines (e.g. "it's ok, I know we missed this deadline/milestone, but we're _sooooo_ close, let's crank it up and get it done!"). **STOP!** take a breath and understand why the deadline was missed. Were there any trending patterns that are likely to repeat themselves?
 
 ### 📈 Track changes to requirements
@@ -127,6 +130,7 @@ Be aware of trends in people, otherwise you might find yourself in a bad situati
 
 In case you're not familiar with user stories...
 
+> [!NOTE]
 > Gherkin is plain-text with a little extra structure and is designed to be easy to learn by non-programmers, yet structured enough to allow concise description of examples to illustrate business rules in most real-world domains. -- [https://cucumber.io/docs/reference](https://cucumber.io/docs/reference)
 
 I find it's good for documentation, but it can also be helpful to some teams to use these user stories as a foundation for their own integration testing systems (although I personally wouldn't, I prefer just using them as a simple reference for what it is we want to achieve at a high-level).

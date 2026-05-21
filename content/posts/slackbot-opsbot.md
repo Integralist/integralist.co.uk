@@ -7,6 +7,7 @@ tags: [devops]
 
 So this post is a long time coming. It has been pushed to the forefront by the fact that BuzzFeed recently held its annual 'Hack Week', and riding on the wind of a massive success I've had with my hack project this past week...
 
+> [!NOTE]
 > "Mark has casually saved the company $60k a year by letting us break away from a commercial dependency without losing any features!" -- BuzzFeed UK Newsletter
 
 ...I've decided to revisit _last years_ hack week project: **OpsBot**, which is a Slackbot for operational tasks.
@@ -59,6 +60,7 @@ Notice that we automatically prefix the given incident name with the current dat
 
 If we're dealing with a service that we're unfamiliar with, then we might also want to look at the runbook(†) for that service.
 
+> [!NOTE]
 > † a runbook is a compilation of routine procedures and operations that the system administrator or operator carries out -- Wikipedia
 
 This is when someone runs the command: `/runbook site router` (or whatever the affected service is) and we'll see the following...
@@ -112,6 +114,7 @@ For us, a few things we planned to do but never quite got round to was...
 - Add runbook info to our deployment platform so OpsBot can pull it in auto-magically.
 - A _damn good refactor_ and some tests! (this was a 'hack' after all).
 
+> [!NOTE]
 > † this might materialise into another project we have for improving team relations called `#WhoWhatWhy` (coming soon).
 
 So that's OpsBot. If you're interested, the presentation slides for the OpsBot hack can be found [here](../../pdfs/hackweek_2017_opsbot.pdf)

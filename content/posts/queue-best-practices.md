@@ -144,6 +144,7 @@ Consider your upstream services and identify if there's ever a point where your 
 
 One example of this is a QR service which makes requests to a separate rendering service for HTML content to be backed up into AWS S3. There are periods where this rendering service will dynamically purge its cache (both its internal application cache, and also the outer CDN cache layer). In order to prevent the QR service from overloading the rendering service during this period where it's vulnerable(†), we automatically disable the QR service (we use a shared redis cluster to identify the switch in a key value; so we change it from disabled to enabled).
 
+> [!NOTE]
 > † due to it having no cache! none of these services we have are vulnerable in the security sense, as they're internal access only within a VPC
 
 The below example demonstrates an implementation used in one of our QR services, which was to use a Python decorator:

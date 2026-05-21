@@ -78,6 +78,7 @@ Meaning we can drop `1` from our syntax, resulting in just `O(n)` instead of `O(
 
 To clarify this further, I'm going to paste verbatim the interactivepython description, as I feel they explain this very well...
 
+> [!NOTE]
 > As another example, suppose that for some algorithm, the exact number of steps is `T(n) = 5n2 + 27n + 1005`.
 >
 > When `n` is small, say `1` or `2`, the constant `1005` seems to be the dominant part of the function.
@@ -134,6 +135,7 @@ With this in mind we can say the code is `O(n2)` because when we look at the exp
 
 Think about it: looping over `n` items and making two assignments within each iteration (which is the `2n`) is definitely less complexity than looping over `n` items _twice_ and within each iteration making three assignments (which is the `3n2`).
 
+> [!NOTE]
 > Remember: although we write 'Big-O' as `O(...)` the underlying principle is `O(f(...))`, where `f(...)` is the dominant part of `T(...)` and when focusing in on the dominant part of the time complexity we drop the constants -- also known as the _coefficient_ -- (e.g. `3n2` thus becomes `n2`). This is because the constants become _insignificant_ as `n` grows.
 
 ## When is Big-O not relevant?

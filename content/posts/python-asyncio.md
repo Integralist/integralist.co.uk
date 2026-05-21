@@ -43,6 +43,7 @@ Asyncio avoids these issues, so let's see how...
 
 ## A quick `asyncio` summary
 
+> [!NOTE]
 > asyncio is a library to write concurrent code using the `async`/`await` syntax. -- [docs.python.org/3.8/library/asyncio.html](https://docs.python.org/3.8/library/asyncio.html)
 
 The asyncio module provides both high-level and low-level APIs. Library and
@@ -73,6 +74,7 @@ safe).
 
 ## A quick `concurrent.futures` summary
 
+> [!NOTE]
 > The concurrent.futures module provides a high-level interface for
 > asynchronously executing callables. --
 > [docs.python.org/3.8/library/concurrent.futures.html](https://docs.python.org/3.8/library/concurrent.futures.html)
@@ -170,6 +172,7 @@ There are two closely related terms used here:
 - a _coroutine function_: an `async def` function.
 - a _coroutine object_: an object returned by calling a coroutine function.
 
+> [!NOTE]
 > Generator based coroutine functions (e.g. those defined by decorating a
 > function with `@asyncio.coroutine`) are superseded by the `async`/`await`
 > syntax, but will continue to be supported _until_ Python 3.10 --
@@ -291,6 +294,7 @@ asyncio REPL 3.8.0+ (heads/3.8:5f234538ab, Dec  1 2019, 11:05:25)
 Use "await" directly instead of "asyncio.run()".
 Type "help", "copyright", "credits" or "license" for more information.
 
+> [!NOTE]
 >>> import asyncio
 >>> async def foo():
 ...   await asyncio.sleep(5)
@@ -300,6 +304,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 done
 ```
 
+> [!NOTE]
 > Notice the REPL automatically executes `import asyncio` when starting up so
 > we're able to use any `asyncio` functions (such as the `.sleep` function)
 > without having to manually type that import statement ourselves.
@@ -310,6 +315,7 @@ If for some reason you didn't want to use the event loop provided by `asyncio`
 (which is a pure Python implementation), you can swap it out for another event
 loop such as [uvloop](https://github.com/MagicStack/uvloop/).
 
+> [!NOTE]
 > uvloop is a fast, drop-in replacement of the built-in asyncio event loop.
 > uvloop is implemented in [Cython](https://cython.org/) and uses
 > [libuv](https://libuv.org/) under the hood.
