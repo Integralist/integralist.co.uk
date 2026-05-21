@@ -22,11 +22,13 @@ A data type is an [attribute](https://english.stackexchange.com/a/28098/334144) 
 
 If we consider a composite type, such as a 'string', it _describes_ a data structure which contains a sequence of char scalars (characters), and as such is referred to as being a 'composite' type. Whereas the underlying _implementation_ of the string composite type is typically implemented using an array data structure (we'll cover [data structures](#data-structures) shortly).
 
-> Note: in a language like C the length of the string's underlying array will be the number of characters in the string followed by a '[null terminator](/posts/concepts-from-the-c-programming-language/#null-terminator)'.
+> [!NOTE]
+> in a language like C the length of the string's underlying array will be the number of characters in the string followed by a '[null terminator](/posts/concepts-from-the-c-programming-language/#null-terminator)'.
 
 An abstract data type (ADT) describes the expected _behaviour_ associated with a concrete data structure. For example, a 'list' is an abstract data type which represents a countable number of ordered values, but again the _implementation_ of such a data type could be implemented using a variety of different data structures, one being a '[linked list](https://en.wikipedia.org/wiki/Linked_list)'.
 
-> Note: an ADT describes behaviour from the perspective of a consumer of that type (e.g. it describes certain operations that can be performed on the data itself). For example, a list data type can be considered a sequence of values and so one available operation/behaviour would be that it must be iterable.
+> [!NOTE]
+> an ADT describes behaviour from the perspective of a consumer of that type (e.g. it describes certain operations that can be performed on the data itself). For example, a list data type can be considered a sequence of values and so one available operation/behaviour would be that it must be iterable.
 
 ## Data Structures
 
@@ -41,7 +43,8 @@ When we think of data structures, there are generally four forms:
 1. **Hash**: distributed hash table, hash tree etc.
 1. **Graphs**: decision, directed, acyclic etc.
 
-> Note: for a more complete reference,\
+> [!NOTE]
+> for a more complete reference,\
 > please see this [Wikipedia article](https://en.wikipedia.org/wiki/List_of_data_structures).
 
 Let's now take a look at the properties that make up a few of the more well known data structures.
@@ -64,7 +67,8 @@ So if you imagine you have an array and you want to remove an element from the m
 
 These types of operations, when done at scale, are the foundation behind why it's important to have an understanding of how data structures are implemented. The reason being, when you're writing an algorithm you will hopefully be able to recognize when you're about to do something (let's say modify an array many times within a loop construct) that could ultimately end up being quite a memory intensive set of operations.
 
-> Note: interestingly I've discovered that in some languages an array (as in the composite data type) has been implemented using a variety of different data structures such as hash table, linked list, and even a search tree.
+> [!NOTE]
+> interestingly I've discovered that in some languages an array (as in the composite data type) has been implemented using a variety of different data structures such as hash table, linked list, and even a search tree.
 
 ## Linked List
 
@@ -83,7 +87,8 @@ This is one of the key performance characteristics of a linked list, and is why 
 
 There is also a modified version of this data structure referred to as a 'doubly linked list' which is essentially the same concept but with the exception of a third attribute for each node: a pointer to the _previous_ node (whereas a normal linked list would only have a pointer to the _following_ node).
 
-> Note: again, performance considerations need to be given for the types of operations being made with a doubly linked list, such as the addition or removal of nodes in the list, because you now have not only the pointers to the following node that need to be updated, but also the pointers back to a previous node that now also need to be updated.
+> [!NOTE]
+> again, performance considerations need to be given for the types of operations being made with a doubly linked list, such as the addition or removal of nodes in the list, because you now have not only the pointers to the following node that need to be updated, but also the pointers back to a previous node that now also need to be updated.
 
 ## Tree
 
@@ -111,7 +116,8 @@ A binary tree is a 'rooted tree' and consists of nodes which have, at most, two 
 
 Rooted trees suggest a notion of _distance_ (i.e. distance from the 'root' node)
 
-> Note: in some cases you might refer to a binary tree as an 'undirected' graph (we'll look at [graphs](#graph) shortly) if talking in the context of graph theory or mathematics.
+> [!NOTE]
+> in some cases you might refer to a binary tree as an 'undirected' graph (we'll look at [graphs](#graph) shortly) if talking in the context of graph theory or mathematics.
 
 Binary trees are the building blocks of _other_ tree data structures (see also: [this reference](https://stackoverflow.com/a/2200588/4288305) for more details), and so when it comes to the performance of certain operations (insertion, deletion etc) consideration needs to be given to the number of 'hops' that need to be made as well as the re-balancing of the tree (much the same way as the pointers for a linked list need to be updated).
 
@@ -143,7 +149,8 @@ The logarithm (i.e. the inverse function of exponentiation) of 1000 to base 2, i
 
 When determining the 'time complexity' for operations on this type of data structure we typically use 'Big O' notation and thus the Big O complexity would be defined as `O(log n)` for the average search case (which is good), but the _worst case_ for searching would still be `O(n)` linear time (which is bad -- and I'll explain why in the next section on [red-black trees](#red-black-tree)).
 
-> Note: I've covered the basics of logarithm and binary search in a [much older post](/posts/big-o-for-beginners/#logarithms) about Big O notation, and so I'll refer you to that for more details.
+> [!NOTE]
+> I've covered the basics of logarithm and binary search in a [much older post](/posts/big-o-for-beginners/#logarithms) about Big O notation, and so I'll refer you to that for more details.
 
 Similarly when considering complexity for a particular algorithm, we should take into account both 'time' and 'space' complexity. The latter is the amount of memory necessary for the algorithm to execute and is similar to time complexity in that we're interested in how that resource (time vs space) will change and affect the performance depending on the size of the input.
 
@@ -174,7 +181,8 @@ Let's consider the properties of a red-black tree:
 - All paths from given node to NIL must have same num of black nodes.
 - New nodes should be red by default (we'll clarify below).
 
-> Note: when counting nodes we don't include the root node, and we count each black node up to (and including) the NIL node.
+> [!NOTE]
+> when counting nodes we don't include the root node, and we count each black node up to (and including) the NIL node.
 
 ![red black tree](/assets/img/red-black-tree.png)
 
@@ -191,7 +199,8 @@ On every node insertion, or deletion, we need to ensure we have not violated the
 
 The goal of a rotation is to decrease the height of the tree. The way we do this is by moving larger subtrees up the tree, and smaller subtrees down the tree. We rotate in the direction of the smaller subtree, so if the smaller side is the right side we'll do a right rotation.
 
-> Note: there is an inconsistency between what node/subtree is affected by a rotation. Does the subtree being moved into the parent position indicate the direction or does the target node affected by the newly moved subtree indicate the direction (I've opted for the latter, as we'll see below, but be aware of this when reading research material).
+> [!NOTE]
+> there is an inconsistency between what node/subtree is affected by a rotation. Does the subtree being moved into the parent position indicate the direction or does the target node affected by the newly moved subtree indicate the direction (I've opted for the latter, as we'll see below, but be aware of this when reading research material).
 
 In essence there are three steps that need to be applied to the target node (`T`) being rotated, and this is the same for either a left rotation or a right rotation. Let's quickly look at both of these rotation movements:
 
@@ -219,7 +228,8 @@ Let's now visualize the movements for both rotations:
 
 ![red black tree right rotation](/assets/img/red-black-tree-right-rotation.png)
 
-> Note: rotations are confusing, so I recommend watching [this short video](https://www.youtube.com/watch?v=95s3ndZRGbk) for some examples and pseudo-code.
+> [!NOTE]
+> rotations are confusing, so I recommend watching [this short video](https://www.youtube.com/watch?v=95s3ndZRGbk) for some examples and pseudo-code.
 
 ### B-tree
 
@@ -233,7 +243,8 @@ This type of I/O is expensive and so keeping the tree 'fat' (i.e. to have a very
 
 The design of a B-tree means that all nodes allow a set range for its children but not all nodes will need the full range, meaning that there is a potential for wasted space.
 
-> Note: there are also variants of the B-tree, such as B+ trees and B\* trees (which we'll leave as a research exercise for the reader).
+> [!NOTE]
+> there are also variants of the B-tree, such as B+ trees and B\* trees (which we'll leave as a research exercise for the reader).
 
 ### Weight-balanced Tree
 
@@ -294,7 +305,8 @@ With this option when a collision is found, the hash table will check to see if 
 
 The rationale behind this technique is that because the hash table keys are typically quite distributed (e.g. they're rarely sequential 0, 1, 2, 3, 4), then it's likely that you'll have many empty empty elements and you can use that empty space to store your colliding data.
 
-> Note: Linear Probing is suggested over Separate Chaining if your data structure is expected to be quite large.
+> [!NOTE]
+> Linear Probing is suggested over Separate Chaining if your data structure is expected to be quite large.
 
 Personally I don't like the idea of the Linear Probing technique as it feels like it'll introduce more complexity and bugs. Also, there is a problem with this technique which is that it relies on the top level data structure being an array. Which is fine if the key we're constructing is numerical, but if you want to have strings for your keys then that wont work very well and so you'll need to be clever with how you implement this.
 
@@ -311,7 +323,8 @@ The following image demonstrates a 'directed' graph (notice the edges have arrow
 
 ![graph directed](/assets/img/graph-directed.png)
 
-> Note: an 'undirected' graph simply has no arrow heads, so the flow between nodes can go in either direction.
+> [!NOTE]
+> an 'undirected' graph simply has no arrow heads, so the flow between nodes can go in either direction.
 
 Some graphs are 'weighted' which means each 'edge' has a numerical attribute assigned to them. These weights can indicate a stronger preference for a particular flow of direction.
 

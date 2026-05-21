@@ -15,11 +15,13 @@ The "responsive" BBC News website receives approximately 8 million visits per da
 
 This post aims to take a whirlwind tour of different code design and architectural discussion points that have cropped up at one point or another while I've been working at the BBC. We will be peeking at some top-level system infrastructure in a bid to provide you with some "food for thought" on these topics. I'll talk about some techniques and tools that work for us, and we'll also see some that didn't work quite so well. I've always been intrigued by how other developers work and think about different types of problems, so let's consider this a knowledge sharing experience from me to you.
 
-> Note: the thoughts and comments here are my own and do not necessarily represent those of my employer. Yup, I had to go there... just in case
+> [!NOTE]
+> the thoughts and comments here are my own and do not necessarily represent those of my employer. Yup, I had to go there... just in case
 
 Now some readers will probably not have to worry about the same sort of scalability problems the BBC has to deal with, when designing/building systems and applications. But this isn't to say the information and thoughts I'm going to share with you here in this post aren't transferable. In fact, much of what I'll be discussing are concepts that can be utilized in applications of any size (because good design is effective at any scale).
 
-> Note: this post covers very little front-end technologies and techniques. That topic of discussion is much more vast and has been covered substantially over the past few years (especially the topic of performance, which has - since ~2007 - been brought into the mainstream mindset of front-end engineers by [Steve Souders](http://stevesouders.com/).
+> [!NOTE]
+> this post covers very little front-end technologies and techniques. That topic of discussion is much more vast and has been covered substantially over the past few years (especially the topic of performance, which has - since ~2007 - been brought into the mainstream mindset of front-end engineers by [Steve Souders](http://stevesouders.com/).
 
 So without further ado, let's begin...
 
@@ -131,7 +133,8 @@ Using the following diagram as a basis, let's consider an application where the 
 
 This architecture will not scale very well, nor very easily.
 
-> Note: for brevity I've left out some details from this architecture, such as persisting URLs
+> [!NOTE]
+> for brevity I've left out some details from this architecture, such as persisting URLs
 
 Instead the process should be more decoupled, like so (see below diagram): user uploads an image (1), the server stores the image into an S3 bucket in its original form (2) and sends a message to an [AWS SQS](http://aws.amazon.com/sqs/) queue (3). The server then returns a message to the user to inform them the image is being processed along with the auto generated URL (4).
 
@@ -145,11 +148,13 @@ If the user visits the auto generated URL before the image has been processed, t
 
 One practical improvement here is that the new system is much more fault tolerant than the original. In the original system, if the server crashed then the user would likely be returned a [500 HTTP Status Code](http://en.wikipedia.org/wiki/List_of_HTTP_status_codes#500), whereas with the new system the user can continue to use the website (they'll see the message "Image waiting to be processed" until a new back-end server instance can be brought up, where by it'll continue to process messages off the image queue).
 
-> Note: fault tolerance is often referred to as "partition tolerance"; I mentioned this earlier when discussing CAP Theorem.
+> [!NOTE]
+> fault tolerance is often referred to as "partition tolerance"; I mentioned this earlier when discussing CAP Theorem.
 
 In the above example we've used queues to help decouple the individual parts of our software system (similar in spirit to creating microservices), but there are other mechanisms for decoupling code such as using a [message bus](http://en.wikipedia.org/w/index.php?title=Message-oriented_middleware&redirect=no). Best to research different techniques to see how your architecture could be designed to utilize them to avoid problems with scaling.
 
-> Note: depending on the purpose of the above application, you might decide that displaying the unoptimized image would be better than displaying a message to the user to say the image is still being processed. The reason I didn't do that here was because of performance reasons (the size of the image could be very large and not something you want a mobile user to have to download - especially if they're traveling with a poor network connection)
+> [!NOTE]
+> depending on the purpose of the above application, you might decide that displaying the unoptimized image would be better than displaying a message to the user to say the image is still being processed. The reason I didn't do that here was because of performance reasons (the size of the image could be very large and not something you want a mobile user to have to download - especially if they're traveling with a poor network connection)
 
 ## Broker/Renderers
 
@@ -157,7 +162,8 @@ At BBC News in London, my team have released an open-source framework written in
 
 We've used this particular framework on quite a few projects over the past year and a half; such as the Scottish Referendum, the local and general elections, an upcoming redesign of BBC Newsbeat as well as the World Service Kaleidoscope project (dynamic serving of image based content to devices with poor support for non-latin fonts).
 
-> Note: I'd like to give a shout out to [Robert Kenny](https://twitter.com/kenturamon) (formerly of BBC, and now working at the Guardian) as the original inspiration and developer for the Alephant framework. Although it has changed quite significantly since its inception, it was his solid work that helped to support some very important and high traffic events.
+> [!NOTE]
+> I'd like to give a shout out to [Robert Kenny](https://twitter.com/kenturamon) (formerly of BBC, and now working at the Guardian) as the original inspiration and developer for the Alephant framework. Although it has changed quite significantly since its inception, it was his solid work that helped to support some very important and high traffic events.
 
 The pattern is effectively a "broker" (i.e. mediator) and a "renderer". With this pattern, user requests are routed through to the relevant broker, who then decides where the request(s) should be directed. On the other end of the design are a bunch of "renderer" services, and their role changes depending on the type of model we use: push or pull.
 
@@ -181,7 +187,8 @@ To give you an example, imagine we have two Renderers: R1 and R2. Both of them t
 
 To avoid this contention we use a document store (AWS DynamoDB) to track the version of a message and when we come to store the rendered content of our data in our storage facility, we make sure the key we need to lookup that rendered content also includes its version number.
 
-> Note: this is something we did before DynamoDB added its "Conditional Put" feature
+> [!NOTE]
+> this is something we did before DynamoDB added its "Conditional Put" feature
 
 The broker in the push model, receives a request for a component, and is able to use the information it is provided to lookup the latest rendered version of a message. It does this by constructing a key that determines the location of the latest version within our storage facility. These lookups are also heavily cached to allow us to handle as much load as possible.
 
@@ -189,7 +196,8 @@ The following diagram gives you a top-level view of this architecture:
 
 ![Broker Renderer Pattern Push Model](/assets/img/broker-renderer-pattern-push-model.png)
 
-> Note: for brevity, in the above diagram, I'm not demonstrating either the caching of broker requests or the sequencing requirements (i.e. the storing off the version of a message into DynamoDB). As mentioned before, some queues have different guarantees and so I didn't want the diagram to be too tightly coupled to DynamoDB's implementation
+> [!NOTE]
+> for brevity, in the above diagram, I'm not demonstrating either the caching of broker requests or the sequencing requirements (i.e. the storing off the version of a message into DynamoDB). As mentioned before, some queues have different guarantees and so I didn't want the diagram to be too tightly coupled to DynamoDB's implementation
 
 There is another concern that we've accounted for, but I've left out for brevity, which is AWS S3's "eventual consistency" model. But I think for now this explanation should be enough to give you an idea of how the pattern works.
 
@@ -205,7 +213,8 @@ The following diagram gives you a top-level view of this architecture:
 
 ![Better Architecture](/assets/img/better-architecture.png)
 
-> Note: for brevity, in the above diagram, I'm not detailing the complexity of how you feed information to a broker so it knows which renderer to interrogate to satisfy the user's request
+> [!NOTE]
+> for brevity, in the above diagram, I'm not detailing the complexity of how you feed information to a broker so it knows which renderer to interrogate to satisfy the user's request
 
 There are some pitfalls to this model though. The main one being we're coupling our data to our templates. For example, if a change is required within the template (let's say a HTML `class` attribute is added to an element; but all other "structure" of the content is the same), then it would require a complete re-render of the component.
 
@@ -241,7 +250,8 @@ In this classic architectural model you lose (or at least complicate) maintainab
 
 Enter [Peter Chamberlin](https://twitter.com/pgchamberlin) and Liam Wilkins to take inspiration from both [Brad Frost's atomic design](http://bradfrost.com/blog/post/atomic-web-design/) and [Ian Feather's Rizzo](http://ianfeather.co.uk/a-maintainable-style-guide/) and helped to resolve this divide by creating the open-source project "[Chintz](https://github.com/BBC-News/chintz)" which combines the best aspects of both the former projects.
 
-> Note: this project is still WIP (work in progress) but we encourage the community to get involved and create an open discussion around how the specification evolves
+> [!NOTE]
+> this project is still WIP (work in progress) but we encourage the community to get involved and create an open discussion around how the specification evolves
 
 The driving force behind this specification was for it to be language agnostic. This was a fundamental requirement in allowing different language platforms to consume these components. The processing of components has a few simple requirements:
 
@@ -259,7 +269,8 @@ There are currently two (WIP) client parsers we've open-sourced:
 - [PHP](https://github.com/BBC-News/chintz-php)
 - [Ruby](https://github.com/BBC-News/chintz-ruby)
 
-> Note: we also hope to implement one utilizing JavaScript/Node
+> [!NOTE]
+> we also hope to implement one utilizing JavaScript/Node
 
 A manifest file could look something like:
 
@@ -502,7 +513,8 @@ The tooling available to debug containers is still considered to be quite immatu
 
 For example, a container wasn't logging any thing, and on top of that the application (which when run outside of the container, would run forever in an infinite loop) would run initially and then stop when run inside the container, and so the `exec` command was not an option as I couldn't jump inside a container that was no longer running.
 
-> Note: in the latest binary Docker has provided additional stats that are exposed via the [`docker stats {container}`](https://docs.docker.com/reference/commandline/cli/#stats) command
+> [!NOTE]
+> in the latest binary Docker has provided additional stats that are exposed via the [`docker stats {container}`](https://docs.docker.com/reference/commandline/cli/#stats) command
 
 ### Scaling
 

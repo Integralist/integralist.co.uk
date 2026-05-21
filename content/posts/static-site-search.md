@@ -59,7 +59,8 @@ OK, so here are the tasks we have to get a working solution:
 1. Write some _more_ JavaScript to accept user's input.
 1. Write _even more_ JavaScript to query your index JSON.
 
-> Note: I'm not a JavaScript fan, but needs must.
+> [!NOTE]
+> I'm not a JavaScript fan, but needs must.
 
 ## Setup
 

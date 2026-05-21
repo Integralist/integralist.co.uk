@@ -23,7 +23,8 @@ Machine code is as low-level as you can get when interacting with a computer. So
 
 A language like [Python](https://www.python.org/) is an even 'higher-level' abstraction, to save us from having to write C
 
-> Note: the Python language is actually written in C\
+> [!NOTE]
+> the Python language is actually written in C\
 > Although there are other Python interpreters implemented in different languages
 
 In order to convert C code into machine code, we need a compiler.
@@ -79,7 +80,8 @@ You'll likely be told that some functions provided within C aren't safe (usually
 
 C11 compatible compilers will provide an additional set of string functions that are _considered_ safe (although this is a contentious area of discussion as some C programmers believe that these functions are just as unsafe and if anything the claims are misleading! [See this comment on Stack Overflow which goes into more detail](http://stackoverflow.com/questions/40829032/how-to-install-c11-compiler-on-mac-os-with-optional-string-functions-included/40839702#40839702)).
 
-> Note: I've also discovered that none of the compilers I have on my OS support these functions, and I've since discovered one of the few environments to support these functions is the Windows platform
+> [!NOTE]
+> I've also discovered that none of the compilers I have on my OS support these functions, and I've since discovered one of the few environments to support these functions is the Windows platform
 
 Below is an example C file that demonstrates how to check if your compiler supports these additional safe functions:
 
@@ -197,7 +199,8 @@ When assigning a string, the pointer is to an _array_ where each element of the 
 ["a", "b", "c"]
 ```
 
-> Note: see section '[Null Terminator](#7)' to clarify above code
+> [!NOTE]
+> see section '[Null Terminator](#7)' to clarify above code
 
 This happens even if the string you provide is just one character. Although, depending on your program's design, it could be argued that you should not have assigned a single character string, but instead used single quotes to represent a single `char`.
 
@@ -240,7 +243,8 @@ The reason we specify a length of 4 and not 3 (as you would expect with a string
 
 The last element is known as the [null terminator](https://en.wikipedia.org/wiki/Null-terminated_string). When this data is stored in memory, we can start at the location in memory (the _address_) where the first element is stored and then step through memory until we reach the null terminator; where we'll then find the end of the string.
 
-> Note: you can set your variable to be the actual length of the content (e.g. `char my_string[1] = "a";`) but in some instances this can cause strange overlaps of data and strictly speaking isn't valid code either
+> [!NOTE]
+> you can set your variable to be the actual length of the content (e.g. `char my_string[1] = "a";`) but in some instances this can cause strange overlaps of data and strictly speaking isn't valid code either
 
 ## Pointers
 
@@ -319,7 +323,8 @@ int *bar;
 printf("bar: %d\n", *bar);
 ```
 
-> Note: `printf` will now try to use `*` to dereference the value from the variable `bar`
+> [!NOTE]
+> `printf` will now try to use `*` to dereference the value from the variable `bar`
 
 Unfortunately this code still causes an error. This time:
 
@@ -352,7 +357,8 @@ char foo = 'a';
 printf("address of foo: %p\n", &foo);
 ```
 
-> Note: the `&` isn't tied to `*` in any way.\
+> [!NOTE]
+> the `&` isn't tied to `*` in any way.\
 > Its purpose is just to return the memory address for a given variable
 
 Remember, a memory address isn't the value itself but a reference to where the value can be found. One analogy I've seen is of your home address on an envelope: the envelope isn't your home, nor is the address written on the envelope. The envelope just indicates where your home can be found.
@@ -370,7 +376,8 @@ printf("my pointer: %p\n", messagePtr);
 printf("my message: %s\n", message);
 ```
 
-> Note: compare C pointers and Go pointers here [https://dave.cheney.net/2014/03/17/pointers-in-go](https://dave.cheney.net/2014/03/17/pointers-in-go)
+> [!NOTE]
+> compare C pointers and Go pointers here [https://dave.cheney.net/2014/03/17/pointers-in-go](https://dave.cheney.net/2014/03/17/pointers-in-go)
 
 In C there are two ways to define a pointer:
 
@@ -581,13 +588,15 @@ size_t element_count = sizeof foo/sizeof foo[0];
 printf("element_count: %zu\n", element_count); // 3
 ```
 
-> Note: `%z` is for `size_t` and the `u` prevents an `invalid conversion specifier` error.
+> [!NOTE]
+> `%z` is for `size_t` and the `u` prevents an `invalid conversion specifier` error.
 
 ### Signed vs Unsigned
 
 In C you can define an integer to be either `signed` or `unsigned`. The former means the number can be both negative and positive as well as zero. Whereas the latter is always positive.
 
-> Note: typically, if a number is negative, you'll prefix it with `-`. If the number is positive, then it is just the number. For example, `-1` and `1`. This is a little more convoluted in binary though (resulting in concepts such as 'ones complement' and 'twos complement' - Google it if you want to know more though).
+> [!NOTE]
+> typically, if a number is negative, you'll prefix it with `-`. If the number is positive, then it is just the number. For example, `-1` and `1`. This is a little more convoluted in binary though (resulting in concepts such as 'ones complement' and 'twos complement' - Google it if you want to know more though).
 
 You don't need to explicitly provide the `signed` keyword (e.g. `signed int <var_name>`), it's just implied.
 

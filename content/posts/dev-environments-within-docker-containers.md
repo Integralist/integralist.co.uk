@@ -25,7 +25,8 @@ So let's see two simple examples:
 1. [Python](https://www.python.org/)
 1. [Go](https://golang.org/)
 
-> Note: I don't claim this to be 'the way' to do this.\
+> [!NOTE]
+> I don't claim this to be 'the way' to do this.\
 > This is just a setup that works well enough for me.\
 > I'm also a Vim user, so your mileage may vary.
 
@@ -74,7 +75,8 @@ We jump into a tmp directory so that we can install some dependencies required t
 
 After that we copy our `requirements.txt` file into the image and install the packages specified inside that file. We also add in our `.vim` directory and `.vimrc` file to the image.
 
-> Note: the Makefile has a command for copying `.vim/.vimrc` into the current project directory, as `docker build` has a specific context environment that is effectively the location of the Dockerfile
+> [!NOTE]
+> the Makefile has a command for copying `.vim/.vimrc` into the current project directory, as `docker build` has a specific context environment that is effectively the location of the Dockerfile
 
 Next we have the Makefile:
 
@@ -271,7 +273,8 @@ This time though, when the container is run we use a separate script as the `CMD
 
 Here is the contents of `compile.sh`:
 
-> Note: make sure you `chmod +x ./compile.sh` from your host
+> [!NOTE]
+> make sure you `chmod +x ./compile.sh` from your host
 
 ```
 #!/bin/sh

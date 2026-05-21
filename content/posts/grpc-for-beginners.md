@@ -70,7 +70,8 @@ Once you do that, you can execute the following steps:
 - `make check`
 - `sudo make install`
 
-> Note: each Make target took ~10mins each to run
+> [!NOTE]
+> each Make target took ~10mins each to run
 
 ## Hello World Proto Definition
 
@@ -96,7 +97,8 @@ message Response {
 }
 ```
 
-> Note: see [here](https://developers.google.com/protocol-buffers/docs/proto3#specifying-field-types) for full proto3 syntax documentation
+> [!NOTE]
+> see [here](https://developers.google.com/protocol-buffers/docs/proto3#specifying-field-types) for full proto3 syntax documentation
 
 In summary it defines an RPC service that exposes a `Process` method which can be called remotely. In reality, it's the same 'Hello World' app provided by the gRPC docs but with some changes in identifiers.
 
@@ -106,7 +108,8 @@ You can see the `package` statement near the top, which according to Google's do
 
 For example, in Ruby it'll generate a top level module that utilises that namespace. As you'll see shortly, I have two nested modules with the same name `Requester::Requester`. This is because the `package` setting is the top level and the nested module name is because that's what I named the `service`. So be careful what you name it as the compiled code might not be what you want.
 
-> Note: because the design has come from Google you're going to notice lots of design considerations that correlate to their opinions and choices with the Go programming language
+> [!NOTE]
+> because the design has come from Google you're going to notice lots of design considerations that correlate to their opinions and choices with the Go programming language
 
 In Go, the other language we're using, the `package` value is used (conveniently) as the name of the Go package. Which makes sense as there is a closer correlation in the design of Protocol Buffers and Go vs a dynamic language such as Ruby.
 
@@ -143,7 +146,8 @@ protoc --ruby_out=lib \
 --plugin=protoc-gen-grpc=`which grpc_ruby_plugin` ./requester.proto
 ```
 
-> Note: execute `mkdir lib` if that directory doesn't already exist
+> [!NOTE]
+> execute `mkdir lib` if that directory doesn't already exist
 
 This will generate two files `requester.rb` and `requester_services.rb` inside of the `lib` directory we've specified. The content of those files looks like the following. The first file being `requester.rb`:
 
@@ -562,7 +566,8 @@ Which should result in the output:
 "Greeting: Hello Mark"
 ```
 
-> Note: if you leave off the argument "Mark"\
+> [!NOTE]
+> if you leave off the argument "Mark"\
 > then the output will default to "Hello world" instead
 
 ## Conclusion

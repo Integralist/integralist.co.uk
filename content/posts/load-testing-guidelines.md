@@ -41,7 +41,8 @@ Write simple scripts that let you coordinate a fresh load test run. Such as conf
 
 It can be hard to include auth tokens/keys in load testing tools, and as such it is often easier to use a network secured backend and a custom code branch that either allows for auth bypass or has no authentication.
 
-> Note: although being able to load test with authentication is important as it could highlight important problem points in your architecture design.
+> [!NOTE]
+> although being able to load test with authentication is important as it could highlight important problem points in your architecture design.
 
 ## Don't immediately scale dependencies
 

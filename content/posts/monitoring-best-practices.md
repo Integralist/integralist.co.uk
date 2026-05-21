@@ -24,7 +24,8 @@ Below are some of the areas we'll be focusing in on...
 - [Choosing between a metric or log](#choosing-between-a-metric-or-log).
 - [Reference material](#reference-material).
 
-> Note: we primarily work with [Datadog](https://www.datadoghq.com/) so you'll see them mentioned a lot throughout this post.
+> [!NOTE]
+> we primarily work with [Datadog](https://www.datadoghq.com/) so you'll see them mentioned a lot throughout this post.
 
 ## Terminology
 
@@ -150,7 +151,8 @@ They also offer "[anomaly detection](https://docs.datadoghq.com/guides/anomalies
 
 Datadog also offers "[outlier monitoring](https://docs.datadoghq.com/guides/outliers/)" which detects when a specific member of a group (e.g., hosts, availability zones, partitions) is behaving unusually compared to the rest. They are useful for noticing when a given group, which should behave uniformly, isn't doing so.
 
-> Note: A summary of Datadog's various detection methods can be found [here](https://docs.datadoghq.com/guides/monitors/).
+> [!NOTE]
+> A summary of Datadog's various detection methods can be found [here](https://docs.datadoghq.com/guides/monitors/).
 
 ## Send critical and noncritical alarms to different channels
 
@@ -217,7 +219,8 @@ Alarms highlight the symptom and not the cause. So if at all possible, try to in
 
 When dealing with TSDB's ([Time Series Database](https://en.wikipedia.org/wiki/Time_series_database)) you'll find they will start aggregating multiple data points into a single data point. This is known as the "roll up" effect.
 
-> Note: if you weren't aware, a TSDB is made up of key/value pairs. The key is the timestamp and the value is the metric value at that point in time.
+> [!NOTE]
+> if you weren't aware, a TSDB is made up of key/value pairs. The key is the timestamp and the value is the metric value at that point in time.
 
 The problem with 'rolling up' data is that it _smooths_ out your data points. Meaning you shift from a graph that has lots of spikes (i.e. a graph that shows every possible false positive), to a graph that covers up those false positive spikes.
 
@@ -227,7 +230,8 @@ There have been examples in the past where _important_ spikes in CPU/Memory were
 
 Ultimately, you'll need to find the balance that works best for you and your monitoring requirements.
 
-> Note: you can read more about this smoothing out process [here](https://help.datadoghq.com/hc/en-us/articles/203571289-Why-does-zooming-out-a-timeframe-also-smooth-out-my-graphs-), as well as the `.rollup()` method Datadog provides to allow you to control this behaviour.
+> [!NOTE]
+> you can read more about this smoothing out process [here](https://help.datadoghq.com/hc/en-us/articles/203571289-Why-does-zooming-out-a-timeframe-also-smooth-out-my-graphs-), as well as the `.rollup()` method Datadog provides to allow you to control this behaviour.
 
 ## Know your graphs
 

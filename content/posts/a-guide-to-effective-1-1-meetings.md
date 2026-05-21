@@ -29,7 +29,8 @@ At least thirty minutes, no less as there just isn't enough time to really get i
 
 1:1's should happen regularly. Typically they are scheduled once a week, although fortnightly (i.e. once every two weeks) is more practical for some people. Just remember that if you have them weekly, then that helps to keep them shorter in length (increase the length of the 1:1 depending on how far apart they're scheduled).
 
-> Note: unless you're an experienced engineer of many years, don't fall into the trap of thinking "I don't _need_ regular 1:1's". You'll be surprised to discover what tidbits of feedback and shared experience can help you progress with both your practical and soft skills.
+> [!NOTE]
+> unless you're an experienced engineer of many years, don't fall into the trap of thinking "I don't _need_ regular 1:1's". You'll be surprised to discover what tidbits of feedback and shared experience can help you progress with both your practical and soft skills.
 
 ## What do we talk about in a 1:1 meeting?
 
@@ -166,7 +167,8 @@ Some managers like to jot down details of their reports alongside their normal w
 
 You can continue to write private thoughts separately of course, but having a document that's shared with the report so they can see how they're progressing and have a place to review previous conversations is a good way for them to feel these regular conversations are providing value.
 
-> Note: this will also be useful to you (either as a line manager or as a report) when it comes time to give/receive six monthly performance reviews, as you'll have a complete track record of all discussions.
+> [!NOTE]
+> this will also be useful to you (either as a line manager or as a report) when it comes time to give/receive six monthly performance reviews, as you'll have a complete track record of all discussions.
 
 It's important for reports to understand that they own their career progression, and so once you've had an opportunity to understand your report the next step is for the report to come up with their goals and to pro-actively work through the relevant steps that lead to the realization of those goals.
 

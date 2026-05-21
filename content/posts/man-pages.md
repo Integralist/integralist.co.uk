@@ -123,7 +123,8 @@ The above command will search through only sections 1 and 2, but it will still s
 
 But if you know for sure that the command you're looking for is somewhere within either the system call or C library manual pages, then `man -S 2:3 <your_command>` would prevent a command from manual section 1 getting matched first.
 
-> Note: to see the intro page for a section use `man <n> intro`
+> [!NOTE]
+> to see the intro page for a section use `man <n> intro`
 
 ## Searching by phrase
 

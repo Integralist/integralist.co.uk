@@ -38,7 +38,8 @@ This means, if your software creates some mutable data (e.g. in Ruby this could 
 
 Any time you create a new Thread and within that Thread you modify a mutable piece of data you should be concerned about how "thread-safe" that data is.
 
-> Note: if you're also utilising immutable data structures (as found in more functional languages, but also languages such as Go where they "pass by value" rather than "pass by reference") then this also makes code less prone to thread-safety concerns (but that's a discussion for another day)
+> [!NOTE]
+> if you're also utilising immutable data structures (as found in more functional languages, but also languages such as Go where they "pass by value" rather than "pass by reference") then this also makes code less prone to thread-safety concerns (but that's a discussion for another day)
 
 ### Message Passing
 
@@ -75,7 +76,8 @@ def update
 end
 ```
 
-> Note: for the full Mutex API see [http://www.ruby-doc.org/core-2.1.5/Mutex.html](http://www.ruby-doc.org/core-2.1.5/Mutex.html)
+> [!NOTE]
+> for the full Mutex API see [http://www.ruby-doc.org/core-2.1.5/Mutex.html](http://www.ruby-doc.org/core-2.1.5/Mutex.html)
 
 This particular solution is the simplest of the three. BUT it doesn't take into account any logic for handling unexpected changes to data (we'll see what that means later on in the [STM](#6) section).
 
@@ -134,7 +136,8 @@ If a change has been made to the shared data source, then the transation will st
 
 Because the STM retries transactions when they fail, we should ensure that code within a transaction is idempotent and side effect free. Otherwise if the code isn't idempotent, then that code will be run again and might mean data is changed or recorded in ways you didn't expect (e.g. a call to log some data within a transaction could be called multiple times!)
 
-> Note: the STM is best used for applications that have frequent reads and can allow for low to medium write collisions. If you expect lots of write collisions then it may be best to opt for another pattern, such as the [Actors](#7) pattern discussed in the following section.
+> [!NOTE]
+> the STM is best used for applications that have frequent reads and can allow for low to medium write collisions. If you expect lots of write collisions then it may be best to opt for another pattern, such as the [Actors](#7) pattern discussed in the following section.
 
 In the Clojure programming language you'll also find that the STM facilitates "embedded transactions", which allows for greater atomicity. What this means in pratice, is that if there is a transaction that contains a sub-transaction, then in some implementations of the STM a failed transaction won't necessarily cause the sub-transaction to fail. But in Clojure it will. Meaning that it's definitely an atomic operation (all or nothing).
 
@@ -160,7 +163,8 @@ A `ref` provides synchronised access to shared mutable state in a *coordinated* 
 
 Clojure's atom provides a validator function (pass `:validator` argument followed by a validating function), which prevents invalid values being set; similar to a function's pre/post assertion conditions. You are also able to "watch" atoms for state changes via `add-watch`.
 
-> Note: there is also `Var` type which is a mutable variable and is created via the `def` form. A variable is "thread-local" meaning it isn't shared across threads (whereas `atom`, `agent` and `ref` are all accessible across threads)
+> [!NOTE]
+> there is also `Var` type which is a mutable variable and is created via the `def` form. A variable is "thread-local" meaning it isn't shared across threads (whereas `atom`, `agent` and `ref` are all accessible across threads)
 
 Now let's consider the following functions:
 
@@ -227,7 +231,8 @@ Savings Account balance is 500
 Total balance is 1000
 ```
 
-> Note: `println` is sending data to *stdout* (defined as a thread-local dynamic variable). This variable is binded to the current Thread by default (meaning values don't cross over into other Threads).
+> [!NOTE]
+> `println` is sending data to *stdout* (defined as a thread-local dynamic variable). This variable is binded to the current Thread by default (meaning values don't cross over into other Threads).
 
 > A `future` creates a new Thread, but the binding of *stdout* is inherited by the `future`'s parent process (i.e. any `println` calls within the `withdraw` function - which runs in the parent process - can appear in the `future`'s thread); meaning the output sent by `println` doesn't necessarily reflect the correct state.
 
@@ -241,7 +246,8 @@ Total balance is 1000
 
 If Clojure is a bit too much of a head spin (Lisp based languages can be quite confusing if you're new to the syntax/concepts) then let's see a similar example written in JRuby.
 
-> Note: because JRuby runs on the JVM, like Clojure, we take advantage of that fact and import Clojure's STM functionality for us to utilise within our Ruby code
+> [!NOTE]
+> because JRuby runs on the JVM, like Clojure, we take advantage of that fact and import Clojure's STM functionality for us to utilise within our Ruby code
 
 In the following example we have downloaded the Clojure runtime as a jar (from [http://clojure.org/downloads](http://clojure.org/downloads)) and are adding its location to the Java `$CLASSPATH` environment variable so when we try to `java_import` the relevant libraries, Java will be able to locate them.
 
@@ -340,13 +346,15 @@ The basic premise of the Actors pattern is built upon it being a form of "messag
 
 Each Actor is typically run in their own thread (using a Thread Pool implementation to allow for better resource management/allocation). This also helps to facilitate "isolated mutability"; i.e. mutable state is contained within the Actor but only that actor can modify the state (and as the Actor sits inside it's own thread its mutable state is safe from other Actors).
 
-> Note: be very careful using the Actor pattern with languages that do not have native support for immutable data structures as you could open yourself up to hard to debug problems if your language allows mutability (e.g. Clojure supports immutability, but Ruby does not; Ruby does allow you to `freeze` an object, but that doesn't include any nested structures). Much like how we've utilised Clojure's STM in the above JRuby example, you can also import its immutable data structures. Although this won't help you if you're forced to use a non-JVM language such as MRI (which is the main Ruby interpreter written in C).
+> [!NOTE]
+> be very careful using the Actor pattern with languages that do not have native support for immutable data structures as you could open yourself up to hard to debug problems if your language allows mutability (e.g. Clojure supports immutability, but Ruby does not; Ruby does allow you to `freeze` an object, but that doesn't include any nested structures). Much like how we've utilised Clojure's STM in the above JRuby example, you can also import its immutable data structures. Although this won't help you if you're forced to use a non-JVM language such as MRI (which is the main Ruby interpreter written in C).
 
 The use of messages allows communication to become asynchronous and loosely coupled from the rest of the system. But this can result in non-sequential message order (unless you have an Actor whose role is to ensure ordering via some form of Queue).
 
 The Actor pattern has been made popular via Erlang and Scala (in the form of the [Akka](http://akka.io/) framework)
 
-> Note: Akka has bindings for other JVM based languages (Clojure, JRuby, Groovy): [http://doc.akka.io/docs/akka/2.3.4/additional/language-bindings.html](http://doc.akka.io/docs/akka/2.3.4/additional/language-bindings.html)
+> [!NOTE]
+> Akka has bindings for other JVM based languages (Clojure, JRuby, Groovy): [http://doc.akka.io/docs/akka/2.3.4/additional/language-bindings.html](http://doc.akka.io/docs/akka/2.3.4/additional/language-bindings.html)
 
 I've yet to get around to writing any Scala code and so because Scala is the defacto example of the Akka framework I've decided to borrow an example from the official Akka site:
 
@@ -368,19 +376,22 @@ greeter ! Greeting("Charlie Parker")
 
 Actors can also coordinate more safely by combining themselves via STM transactions. These are typically referred to as "transactors". The benefits of wrapping messages within a transaction is that we eliminate synchronisation concerns (i.e. as changes within a transaction are purposely *atomic*).
 
-> Note: in Clojure, when sending an action to an agent from inside a transaction, the call is still non-blocking and yet it also still abides by the STM rules (i.e. the action is *held* until the transaction commits)
+> [!NOTE]
+> in Clojure, when sending an action to an agent from inside a transaction, the call is still non-blocking and yet it also still abides by the STM rules (i.e. the action is *held* until the transaction commits)
 
 ### Actors in Clojure
 
 Clojure does not support Actors, although it does have a mechanism known as "[agents](http://clojure.org/agents)". An agent provides access to shared mutable state, but does so asynchronously (much like an Actor). Where an Actor receives a "message", an agent accepts an `action`.
 
-> Note: Actors and Agents have some surface similarities, but ultimately are different beasts. Actors "encapsulates" state and provides no means to access it from the outside. Whereas Agents contain a single value that can be retrieved and manipulated (via `send` or `send-off` - see below for details). Actors also encapsulate behaviour, whereas an Agent is provided the function that affects its value. Actors can be distributed, whereas Agents cannot
+> [!NOTE]
+> Actors and Agents have some surface similarities, but ultimately are different beasts. Actors "encapsulates" state and provides no means to access it from the outside. Whereas Agents contain a single value that can be retrieved and manipulated (via `send` or `send-off` - see below for details). Actors also encapsulate behaviour, whereas an Agent is provided the function that affects its value. Actors can be distributed, whereas Agents cannot
 
 Whereas the STM provides coordinated access to data (i.e. atomic - it verifies that there are no changes to shared data that has been written to; otherwise it'll cause the entire transaction to fail). Agents are independent; meaning that actions run concurrently (the call to `action` returns immediately), but the actions are executed sequentially via a separate thread. So where a transaction is a synchronous operation, an action handled by an agent is *asynchronous*.
 
 In Clojure, agents are transaction aware (whereas atoms are not) and the `!` at end of function name is an indicator of this: `swap!` (not coordinated) vs `send`.
 
-> Note: the agent API in Clojure provides two methods: `send-off` and `send`. The former creates a new thread specifically for that agent; whereas the latter selects a thread from a pre-defined thread pool. The problem with `send` is that agents fight for an available thread and so if your action does blocking I/O then you'll delay other agents from working (and thus reducing the extra concurrency benefits of using a thread pool)
+> [!NOTE]
+> the agent API in Clojure provides two methods: `send-off` and `send`. The former creates a new thread specifically for that agent; whereas the latter selects a thread from a pre-defined thread pool. The problem with `send` is that agents fight for an available thread and so if your action does blocking I/O then you'll delay other agents from working (and thus reducing the extra concurrency benefits of using a thread pool)
 
 Once the agent's state is changed, the next action is applied to the agent (now using the latest state it points to).
 
@@ -390,7 +401,8 @@ There is one distinctive difference between Erlang's Actor and Clojure's Agent, 
 
 ![actors vs agents](/assets/img/actors-vs-agents.png)
 
-> Note: in the above image we have two simultaneous requests to "increment" the value held by the Actor/Agent. One can succeed, the other goes onto a queue and is applied after the first call finishes.
+> [!NOTE]
+> in the above image we have two simultaneous requests to "increment" the value held by the Actor/Agent. One can succeed, the other goes onto a queue and is applied after the first call finishes.
 
 ### Limitations
 
@@ -466,7 +478,8 @@ Threads are prevalent across both the "shared memory" and "message passing" mode
 
 ### What is CPU bound vs I/O bound?
 
-> Note: the following is credited to [yaoyao.codes](http://yaoyao.codes/os/2017/03/20/cpu-bound-vs-io-bound).
+> [!NOTE]
+> the following is credited to [yaoyao.codes](http://yaoyao.codes/os/2017/03/20/cpu-bound-vs-io-bound).
 
 - **CPU bound**: the rate at which a process progresses is limited by the speed of the CPU.
 - **I/O bound**: the rate at which a process progresses is limited by the speed of the I/O subsystem.
@@ -501,7 +514,8 @@ To calculate how many more threads than cores you'll need for an intensive set o
 Number of Threads = Number of Available Cores / (1 - Blocking Coefficient)
 ```
 
-> Note: the blocking coefficient (coefficient being a fancy word that means: a value used as a multiplier) is different depending on the operation. For a computational operation it is 0, whereas a fully blocking operation it is 1.
+> [!NOTE]
+> the blocking coefficient (coefficient being a fancy word that means: a value used as a multiplier) is different depending on the operation. For a computational operation it is 0, whereas a fully blocking operation it is 1.
 
 An example of a blocking coefficient would be: `0.9` - which means a task blocks 90% (`0.9`) of the time & works only 10% (`0.1`) of the time. Meaning, if you had 2 cores then you'd want 20 threads.
 

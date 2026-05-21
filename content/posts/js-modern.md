@@ -9,14 +9,16 @@ tags: [javascript]
 
 This post will explain how to set-up and configure the various tooling necessary in order to be able to write cross-compatible modern (ES2015+) JavaScript code.
 
-> Note: if you're unsure of what 'modern' JavaScript looks like, then I'll refer you to [these compatibility tables](http://kangax.github.io/compat-table/es6/).
+> [!NOTE]
+> if you're unsure of what 'modern' JavaScript looks like, then I'll refer you to [these compatibility tables](http://kangax.github.io/compat-table/es6/).
 
 The tools we'll be using:
 
 - [Babel](https://babeljs.io/): transpiler of modern JS into ES5 compatible code.
 - [Webpack](https://webpack.github.io/): a js module bundler.
 
-> Note: webpack is actually capable of transforming, bundling, packaging just about anything (as we'll see shortly).
+> [!NOTE]
+> webpack is actually capable of transforming, bundling, packaging just about anything (as we'll see shortly).
 
 To clarify, you don't _need_ 'webpack', as babel handles transpiling modern JS code into ES5 compatible code, but it makes sense to use webpack still as a way to help with the performance of your client-side services.
 
@@ -36,7 +38,8 @@ Let's begin by creating our project directory:
 mkdir modern-js && cd modern-js
 ```
 
-> Note: I will be working exclusively from the terminal.
+> [!NOTE]
+> I will be working exclusively from the terminal.
 
 Now create an empty `package.json` file:
 
@@ -62,7 +65,8 @@ npm install --save-dev webpack \
 npm install --save @babel/polyfill
 ```
 
-> Note: the dev dependencies need to be installed in the order they're specified above, otherwise npm will complain/fail.
+> [!NOTE]
+> the dev dependencies need to be installed in the order they're specified above, otherwise npm will complain/fail.
 
 Your `package.json` should now have the following content:
 
@@ -107,7 +111,8 @@ The [@babel/polyfill](https://babeljs.io/docs/en/babel-polyfill) dependency will
 
 The [@babel/preset-env](https://babeljs.io/docs/en/babel-preset-env) helps manage the browser environment for you, so it'll handle determining what additional scripts/polyfills you need. By default it'll setup everything to support ES5 environments, but you can configure it for very specific browsers if you don't need to worry about older browsers.
 
-> Note: `@babel/polyfill` also provides a `useBuiltIns` flag which allows Babel to selectively polyfill built-in features that were introduced as part of ES6+. Because it filters polyfills to include only the ones required by the environment, we mitigate the cost of shipping with babel-polyfill in its entirety.
+> [!NOTE]
+> `@babel/polyfill` also provides a `useBuiltIns` flag which allows Babel to selectively polyfill built-in features that were introduced as part of ES6+. Because it filters polyfills to include only the ones required by the environment, we mitigate the cost of shipping with babel-polyfill in its entirety.
 
 Now let's create all the files we need to build out our example application:
 

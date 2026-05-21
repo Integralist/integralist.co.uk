@@ -55,7 +55,8 @@ We can use the `with` statement to define a similar block of code to our earlier
 
 The `with` statement expects a 'Context Manager' to be provided, and there are already a few built-in Python objects designed as Context Managers; such as the `open` function we saw used in our above example code.
 
-> Note: another example is [threading.Lock](https://docs.python.org/3/library/threading.html#threading.Lock).
+> [!NOTE]
+> another example is [threading.Lock](https://docs.python.org/3/library/threading.html#threading.Lock).
 
 Here is what the code might look like when using `with`:
 
@@ -121,7 +122,8 @@ for _ in range(100000):
         files.append(f)
 ```
 
-> Note: for more information, see [Context Manager Types](https://docs.python.org/3/library/stdtypes.html#typecontextmanager).
+> [!NOTE]
+> for more information, see [Context Manager Types](https://docs.python.org/3/library/stdtypes.html#typecontextmanager).
 
 ## When to use one or the other?
 

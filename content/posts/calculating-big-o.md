@@ -53,7 +53,8 @@ A critical part of understanding time complexity is that as the problem gets lar
 
 Instead of `T(1+n)` we could say the dominant part is `f(n)`, and is also referred to as being 'the order of magnitude' (which is what the 'O' in Big-O stands for).
 
-> Note: 'order of magnitude' describes the part of `T(n)` that increases the _fastest_ as `n` increases.
+> [!NOTE]
+> 'order of magnitude' describes the part of `T(n)` that increases the _fastest_ as `n` increases.
 
 We can represent the order of magnitude in 'Big-O' syntax like so:
 
@@ -147,7 +148,8 @@ I wasn't sure how to calculate the Big-O for this program because there didn't s
 
 Also, the implementation between web crawlers will determine different outcomes. So based on my implementation, the running time to handle a list of size `n` containing nested sublists of size `x` appears to be `O(nx)`. I had not seen this type of Big-O analysis before, and is an indication of maybe I'm analysing the wrong things.
 
-> Note: see my previous post for [common examples of Big-O](/posts/algorithmic-complexity-in-python/).
+> [!NOTE]
+> see my previous post for [common examples of Big-O](/posts/algorithmic-complexity-in-python/).
 
 So how did we come to `O(nx)`? Here's the breakdown:
 

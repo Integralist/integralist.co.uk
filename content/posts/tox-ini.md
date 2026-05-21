@@ -23,7 +23,8 @@ The file that you use to configure tox can be one of the following...
 - `pyproject.toml` (see [PEP 518](https://www.python.org/dev/peps/pep-0518/))
 - `setup.cfg` (see [official guide to distributing packages](https://packaging.python.org/guides/distributing-packages-using-setuptools/))
 
-> Note: these ^^ are all [ini file](https://en.wikipedia.org/wiki/INI_file) formats -- which is information that will become more relevant/important later on.
+> [!NOTE]
+> these ^^ are all [ini file](https://en.wikipedia.org/wiki/INI_file) formats -- which is information that will become more relevant/important later on.
 
 ## Example tox.ini
 
@@ -62,7 +63,8 @@ commands =
     mypy --verbose --ignore-missing-imports --package bf_tornado
 ```
 
-> Note: the name after `testenv:` is the _name_ of the virtual environment that will be created (e.g. `testenv:foo` will create a "foo" virtual environment).
+> [!NOTE]
+> the name after `testenv:` is the _name_ of the virtual environment that will be created (e.g. `testenv:foo` will create a "foo" virtual environment).
 
 ## Configuring _other_ packages
 

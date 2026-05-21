@@ -67,7 +67,8 @@ For me, I'm at a point in my career where discussions about programming language
 
 In most situations, if you do your due diligence and exhaust all means available to you to make the given tech work, you should be able to empirically prove it's not working, and thus are in a better position to justify a more appropriate language or tech stack. This all becomes trivial.
 
-> Note: in my experience, people tend to fall back on subjective opinions and hand wavey 'facts' rather than cracking on with solving the problem at hand.
+> [!NOTE]
+> in my experience, people tend to fall back on subjective opinions and hand wavey 'facts' rather than cracking on with solving the problem at hand.
 
 Remember, we're engineers, we can solve these issues in different ways. But I personally find the 'human' problem is something that is typically much harder to solve and ultimately will cause a lot more detrimental effect on our ability to learn, progress in, and emotionally stay connected to our jobs.
 

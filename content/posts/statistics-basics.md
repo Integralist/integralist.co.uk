@@ -13,7 +13,8 @@ Although, for the most part, everything worked as expected and I generally under
 
 This began my journey into learning about statistics (as a complete beginner). I picked up a book on the subject and started taking notes.
 
-> Note: I highly recommend reading [Head First Statistics](http://shop.oreilly.com/product/9780596527587.do) which is where the majority of this information has stemmed. There you'll find a lot more detail and better break downs of the ideas.
+> [!NOTE]
+> I highly recommend reading [Head First Statistics](http://shop.oreilly.com/product/9780596527587.do) which is where the majority of this information has stemmed. There you'll find a lot more detail and better break downs of the ideas.
 
 This blog post is the result of what I have learnt so far, and its motivation is to explain some of the basic concepts behind utilising statistics to represent data. This post is aimed at beginners, as I myself am very much a beginner in this space.
 
@@ -45,7 +46,8 @@ Age
 7
 ```
 
-> Note: data is either "numerical" (dealing with numbers), "quantitative" (describing quantities) or "categorical" (data is split into categories that describe qualities or characteristics - also referred to as "qualitative").
+> [!NOTE]
+> data is either "numerical" (dealing with numbers), "quantitative" (describing quantities) or "categorical" (data is split into categories that describe qualities or characteristics - also referred to as "qualitative").
 
 ## Frequency
 
@@ -71,7 +73,8 @@ Age, Frequency
 2,   1
 ```
 
-> Note: strictly speaking you might want to refer to the above snippet as **information** rather than **data** simply because the raw data now has 'context' added to it which clarifies what the numbers mean.
+> [!NOTE]
+> strictly speaking you might want to refer to the above snippet as **information** rather than **data** simply because the raw data now has 'context' added to it which clarifies what the numbers mean.
 
 The data/information can be visualised in many ways depending on the graph type you wish to use. Some graphs are better suited for representing certain types of data than others.
 
@@ -189,7 +192,8 @@ Bash,     50,   250
 
 To represent this multifaceted data you could use a specific type of bar chart known as a 'stacked' bar chart (see below). This type of graph is useful because it represents both the frequency _and_ the relative percentage of the various data types.
 
-> Note: stacked bar charts are also known as 'segmented'.
+> [!NOTE]
+> stacked bar charts are also known as 'segmented'.
 
 <canvas id="stackedBar"></canvas>
 
@@ -241,7 +245,8 @@ Here 'hours' is the grouped numerical data. As explained above, we would put the
 
 ![disproportionate historgram](/assets/img/disproportionate_historgram.png)
 
-> Note: we can see our first bar "0-1" spreads only one interval and "20-22" spreads only two intervals, whereas the middle bar "1-20" spreads over nineteen intervals!
+> [!NOTE]
+> we can see our first bar "0-1" spreads only one interval and "20-22" spreads only two intervals, whereas the middle bar "1-20" spreads over nineteen intervals!
 
 The problem with the above graph is that the height of the middle bar is wrong as we've set it to be as high as the frequency value itself (and the third bar is incorrect too!), which normally would be fine if the interval range were the same across all groups, but in this case it isn't the correct approach due to each group covering a different range from each other.
 
@@ -269,7 +274,8 @@ You would then apply this calculation to the height of each group/bar (see below
 
 ![disproportionate historgram area fixed](/assets/img/disproportionate_historgram_area_fixed.png)
 
-> Note: I appreciate the difference between the original height of 2 vs the correct height of 0.10 (for the range `1-20`) and 10 vs 5 (for the range `20-22`), when using this contrived example, isn't exactly ground breakingly different; but this is just to help you understand the general idea behind calculating histogram areas for groups that have inconsistent ranges.
+> [!NOTE]
+> I appreciate the difference between the original height of 2 vs the correct height of 0.10 (for the range `1-20`) and 10 vs 5 (for the range `20-22`), when using this contrived example, isn't exactly ground breakingly different; but this is just to help you understand the general idea behind calculating histogram areas for groups that have inconsistent ranges.
 
 We can now see the overall area (or shape) for each bar represents the actual frequency, and can be calculated like so:
 
@@ -291,7 +297,8 @@ The frequency density is _related_ to frequency but is focused more around its '
 
 If we wanted to calculate the _total frequency_ for the entire dataset then we would use the following calculation: `group range x group frequency density` for each group (which gives us the frequency for each group) and then we sum each of the frequencies together.
 
-> Note: this is as far as I got with histograms, as I felt I had learnt enough to be dangerous in a conversation. There may well be nuances, pros/cons and other aspects to histograms I've not fully understood. I'd welcome anyone who knows more to educate me on this :-)
+> [!NOTE]
+> this is as far as I got with histograms, as I felt I had learnt enough to be dangerous in a conversation. There may well be nuances, pros/cons and other aspects to histograms I've not fully understood. I'd welcome anyone who knows more to educate me on this :-)
 
 ## Line Graphs
 
@@ -299,7 +306,8 @@ We've already seen a couple of example line graphs at the start of this post. To
 
 These types of graphs are best for identifying _trends_ in your data and are most useful when applied across numerical data (such as time, which again helps with overarching trending patterns).
 
-> Note: compare this to bar charts, which are generally better for comparing values or categories.
+> [!NOTE]
+> compare this to bar charts, which are generally better for comparing values or categories.
 
 There are various types of line graphs, one is known as an "accumulative frequency graph" which we can demonstrate using the earlier grouped dataset of hours played online. If we were to take the hours data, we could graph a specific subset view of that data.
 
@@ -354,7 +362,8 @@ sum = 16 (2 + 5 + 9)
 mean = 3 (16 / 3)
 ```
 
-> Note: the mean average can be expressed mathematically by `Σx/n`. When broken down `Σx` (pronounced "sigma x") is a quick way of saying "add together the values of all the x's" without having to say what the values are. This also can be expressed with the Greek symbol `μ`.
+> [!NOTE]
+> the mean average can be expressed mathematically by `Σx/n`. When broken down `Σx` (pronounced "sigma x") is a quick way of saying "add together the values of all the x's" without having to say what the values are. This also can be expressed with the Greek symbol `μ`.
 
 When dealing with datasets that have frequencies we need to ensure the frequencies are included as part of the calculation. For example, consider the following data:
 
@@ -379,7 +388,8 @@ or
 100 / 5 = 20
 ```
 
-> Note: this type of mean average (i.e. one applied to data that has frequencies associated with it) can be expressed mathematically with `Σfx/Σf` and equates to "multiply each number by its frequency, then add the results together" (`Σfx`), then "divide the result by the sum of frequencies" (`Σf`).
+> [!NOTE]
+> this type of mean average (i.e. one applied to data that has frequencies associated with it) can be expressed mathematically with `Σfx/Σf` and equates to "multiply each number by its frequency, then add the results together" (`Σfx`), then "divide the result by the sum of frequencies" (`Σf`).
 
 There's an issue with using the mean average, and that's **outliers**.
 
@@ -400,13 +410,15 @@ This is telling us the average age is 38. That number doesn't actually _exist_ i
 
 What has happened is that the outliers (the large numbers at the end of the dataset: `145, 147`) have _pulled_ the mean higher, meaning the data is "skewed". Data can be skewed to the left (the mean is pulled lower) or it can be skewed to the right (the mean is pulled higher - as in the case of our example above).
 
-> Note: we say skewed "left" or "right" because when sorting the data in ascending order you would see the outliers are either mainly to the left or the right (depending on the data).
+> [!NOTE]
+> we say skewed "left" or "right" because when sorting the data in ascending order you would see the outliers are either mainly to the left or the right (depending on the data).
 
 If we were to look at this on a line histogram graph we would notice this 'pulling' of the mean:
 
 <canvas id="meanOutliers"></canvas>
 
-> Note: in the above graph you can see the longer 'tail' that indicates the outliers.
+> [!NOTE]
+> in the above graph you can see the longer 'tail' that indicates the outliers.
 
 How can we deal with outliers? Well, this is where the median can help...
 
@@ -431,7 +443,8 @@ There's 13 numbers in total (i.e. sum the frequencies `Σf` like so: `3+6+3+1`).
 
 So to find the exact middle we just divide the number by 2 (which gives us 6.5) and then round it (so it becomes 7). Meaning the seventh number in the dataset is the exact middle: `20`.
 
-> Note: alternatively it can be abstracted to `(n+1)/2`
+> [!NOTE]
+> alternatively it can be abstracted to `(n+1)/2`
 
 But what happens with a dataset with an _even_ set of numbers? Well, in that case you need to take the mean of the two middle numbers (i.e. sum them and divide the result by 2). Consider the following example:
 
@@ -443,7 +456,8 @@ There are 10 numbers so if we divide by 2 we'll get 5. If you count five items i
 
 So in this scenario you sum 20 and 21 (`20+21 = 41`) and divide the result by two (`41/2 = 20.5`). Meaning the median of the above dataset is `20.5`.
 
-> Note: what you'll typically find is that if the data is _symmetrical_ then the mean and the median will result in the same value.
+> [!NOTE]
+> what you'll typically find is that if the data is _symmetrical_ then the mean and the median will result in the same value.
 
 But what happens if a dataset has multiple clusters of values, so for example the dataset includes values that are at both low and high ends?
 
@@ -455,7 +469,8 @@ The solution to this problem is to return the most popular value (the one with t
 
 The mode is the third and final type of average, and it aims to return the value with the highest frequency. Which means the value that it gives as the result **MUST** exist within the dataset (unlike the mean which could result in a value that _doesn't_ exist).
 
-> Note: if there are multiple frequencies with the same value, then the dataset is considered "bimodal". Meaning there are multiple modes for the dataset.
+> [!NOTE]
+> if there are multiple frequencies with the same value, then the dataset is considered "bimodal". Meaning there are multiple modes for the dataset.
 
 The mode average is the only average that works not just on numerical data but categorical data. When you’re dealing with categorical data, the mode is the most frequently occurring category.
 
@@ -503,7 +518,8 @@ Imagine we have staff, managers and a CEO and they're all determining how pay ri
 - **CEO**: mode\
   considering there are many more staff than managers (or CEOs), the CEO prefers the mode because it results in the staff salary being the basis of a pay rise - resulting in paying out a lot less than is fair.
 
-> Note: the median is the most 'fair' when calculating a pay rise in this example scenario.
+> [!NOTE]
+> the median is the most 'fair' when calculating a pay rise in this example scenario.
 
 ## Ranges
 
@@ -519,7 +535,8 @@ upper bound - lower bound = range
 
 But you can be in a situation where two separate datasets have different distribution of data and yet they have the same 'range' value. This is because the range only indicates the _width_ of the data and not how it's dispersed inbetween the higher/lower bounds.
 
-> Note: the range value is very sensitive to outliers and so it can be misleading if used to identify data distribution.
+> [!NOTE]
+> the range value is very sensitive to outliers and so it can be misleading if used to identify data distribution.
 
 Consider this example dataset:
 
@@ -590,7 +607,8 @@ Consider the following sorted data:
 4, 7, 1, 0, 3, 8, 9, 2, 5, 10, 6
 ```
 
-> Note: there are 11 values in the above data
+> [!NOTE]
+> there are 11 values in the above data
 
 The calculation for finding the lower quartile is as follows:
 
@@ -614,7 +632,8 @@ Meaning the interquartile range can be found in-between the lower/upper quartile
 
 When dealing with quartiles (see above), you're splitting your data into quarters. When dealing with percentiles, you're splitting your data into percentages. Each percentage is a percentile. For example, the 20th percentile is the value that is found 20% into your data.
 
-> Note: quartiles are a type of percentile. For example, the lower quartile is the 25th percentile. Whereas the upper quarter is the 75th percentile. The median (or Q2) is the 50th percentile.
+> [!NOTE]
+> quartiles are a type of percentile. For example, the lower quartile is the 25th percentile. Whereas the upper quarter is the 75th percentile. The median (or Q2) is the 50th percentile.
 
 Percentiles are generally used as a means for identifing values for a specific percentage of your users. For example, if your dataset reported performance numbers, then you could look at the value at the 95th percentile of the data and say "95% of our users are seeing this measure of performance". Which is more relevant than looking at the average (i.e. mean/median/mode) of that performance data.
 
@@ -682,7 +701,8 @@ You need to realise when measuring the distance to the mean that you're actually
 1, 2, 3, [4], 5, 6, 7, 8, 9
 ```
 
-> Note: I've put a square bracket around the number `4` to indicate that it's the mean average.
+> [!NOTE]
+> I've put a square bracket around the number `4` to indicate that it's the mean average.
 
 If we look at the number `1` and count the distance to `4`, we're effectively counting _forward_ (i.e. positive) towards `4` (similarly with the number `2`). But with `9` we have to count _backwards_ (i.e. negative) towards `4`.
 
@@ -694,7 +714,8 @@ Finally, we divide by `N` (the number of items in the dataset).
 
 This ultimately gives us the "variance" of `12.67`.
 
-> Note: here's a shorter calculation for the variance `Σx²/n - μ²`
+> [!NOTE]
+> here's a shorter calculation for the variance `Σx²/n - μ²`
 
 The reason the variance is useful is because it has provided the measure of distance from the mean based on every value in the dataset. The downside to this approach is that you've calculated the variance from the mean _squared_ of the dataset and not just the mean.
 
@@ -708,7 +729,8 @@ If we calculate the standard deviation of the variance value `12.67` we'll find 
 
 You would then compare this standard devication to a standard deviation of another player's results to see which player ultimately performed better overall (i.e. if the standard deviation for player A was smaller than player B, then player A is a more consistent player).
 
-> Note: standard deviation has its own Greek symbol `σ` (referred to as the lowercase Sigma). Remember to calculate `σ` you start by calculating the variance, and then take the square root.
+> [!NOTE]
+> standard deviation has its own Greek symbol `σ` (referred to as the lowercase Sigma). Remember to calculate `σ` you start by calculating the variance, and then take the square root.
 
 Some other real-world examples would be a company that manufactures machine parts. For them, they want the standard deviation for their data to be small so they can be sure all the parts they build are the same size. Whereas if you were inspecting wages across a large organisation you would likely find that the standard deviation naturally becomes quite large.
 

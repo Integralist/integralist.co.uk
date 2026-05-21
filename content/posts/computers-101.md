@@ -40,7 +40,8 @@ execute.
 Your computer has many programs. One such example would be the 'terminal
 emulator' program.
 
-> Note: see next section for explanation of what a "terminal" is.
+> [!NOTE]
+> see next section for explanation of what a "terminal" is.
 
 Depending on the programming language used to create the program, either the
 program is _compiled_ down into binary so it can be understood by the computer,
@@ -53,7 +54,8 @@ Executables (or 'executable binaries') are programs.
 
 More specifically, an 'executable' is a file that _contains_ a program.
 
-> Note: these are also often referred to as just 'binaries'.
+> [!NOTE]
+> these are also often referred to as just 'binaries'.
 
 Executables are generally the _result_ of a program being turned into something
 that can be 'executed' by the computer.
@@ -67,7 +69,8 @@ $ echo $PATH
 /usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 ```
 
-> Note: separate the output by `:` and you see there are six directories
+> [!NOTE]
+> separate the output by `:` and you see there are six directories
 
 ## Terminal
 
@@ -510,7 +513,8 @@ $ declare -p BASH_CMDS
 declare -A BASH_CMDS=([which]="/usr/bin/which" [man]="/usr/bin/man" [clear]="/usr/bin/clear" )
 ```
 
-> Note: it's not as clear to read as the `hash` output, but this is probably
+> [!NOTE]
+> it's not as clear to read as the `hash` output, but this is probably
 > more useful for interacting with programatically.
 
 ## List of all builtins vs executables
@@ -583,7 +587,8 @@ enable unset
 enable wait
 ```
 
-> Note: an online reference can be found
+> [!NOTE]
+> an online reference can be found
 > [here](https://www.gnu.org/software/bash/manual/html_node/Bash-Builtins.html#Bash-Builtins)
 
 To list out all available executables is a little more tricky.
@@ -602,7 +607,8 @@ $ echo $PATH | tr ':' '\n' | sort | egrep '^/(usr|bin)'
 /usr/sbin
 ```
 
-> Note: tweak the regex as you see fit
+> [!NOTE]
+> tweak the regex as you see fit
 
 Then you need to list all the commands within those directories.
 

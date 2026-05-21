@@ -132,7 +132,8 @@ func main() {
 }
 ```
 
-> Note: I was a little confused originally about having to manually open a TCP socket. I just assumed that in using HTTP, that step would've been abstracted away for me. But it's not, oh well
+> [!NOTE]
+> I was a little confused originally about having to manually open a TCP socket. I just assumed that in using HTTP, that step would've been abstracted away for me. But it's not, oh well
 
 ### rpc-html-client.go
 

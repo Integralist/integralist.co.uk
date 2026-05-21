@@ -79,7 +79,8 @@ eval "$(ssh-agent -s)"
 ssh-add -K ~/.ssh/github_bbc_rsa
 ```
 
-> Note: `ssh-add -l` will show you what keys have been added to the agent
+> [!NOTE]
+> `ssh-add -l` will show you what keys have been added to the agent
 
 ## SSH Config
 
@@ -102,7 +103,8 @@ As you can see I've created two hosts:
 1. BBCMarkMcDonnell
 1. Integralist
 
-> Note: you can call them whatever you like, I opted for the username for each account
+> [!NOTE]
+> you can call them whatever you like, I opted for the username for each account
 
 The keys within these two hosts are exactly the same. They state for the user `git`, and the hostname `github.com` make sure you use the specified `IdentityFile`.
 
@@ -179,7 +181,8 @@ else
 fi
 ```
 
-> Note: script originally written by [Alvin Abad](https://alvinabad.wordpress.com/2013/03/23/how-to-specify-an-ssh-key-file-with-the-git-command/)
+> [!NOTE]
+> script originally written by [Alvin Abad](https://alvinabad.wordpress.com/2013/03/23/how-to-specify-an-ssh-key-file-with-the-git-command/)
 
 Next we'll need to make this custom script executable:
 
@@ -221,7 +224,8 @@ Host github.com
   IdentityFile ~/.ssh/github_bbc_rsa
 ```
 
-> Note: obviously change the IdentifyFile to point to your own private key
+> [!NOTE]
+> obviously change the IdentifyFile to point to your own private key
 
 Then if you have a project that requires you to use your work ssh keys then uncomment it so it becomes active.
 

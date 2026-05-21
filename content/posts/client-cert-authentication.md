@@ -9,7 +9,8 @@ tags: [security, docker]
 
 The purpose of this post is to demonstrate how to configure nginx to use client certificates for authenticated access to your back-end service (in this example: a Ruby/Sinatra application).
 
-> Note: the focus of this post isn't about Ruby/Sinatra so don't worry if your back-end service is built with another programming language
+> [!NOTE]
+> the focus of this post isn't about Ruby/Sinatra so don't worry if your back-end service is built with another programming language
 
 I won't be going into the details of how most of it was set-up, as the majority of this was already documented in a previous blog post here: [Setting up nginx with Docker](/posts/docker-nginx/) so I recommend reading through that first if you're new to Docker and nginx.
 
@@ -109,7 +110,8 @@ openssl req -new -x509 -days 365 -key ca.key -out ca.crt
 
 For the `ca.crt` generation I pretty much entered `.` (which means 'no value') for all details. The only exception was the `Common Name` field which I entered 'TheCA' (so I could recognise it as the 'ca', just in case I needed to inspect the certificate)
 
-> Note: all of these commands I ran inside of the `docker-nginx/certs` folder to make it easier later on to mount them as a volume into my Docker containers
+> [!NOTE]
+> all of these commands I ran inside of the `docker-nginx/certs` folder to make it easier later on to mount them as a volume into my Docker containers
 
 Next we'll create the server key along with a CSR (Certificate Signing Request) which the CA will use to generate the server's certificate:
 
@@ -120,7 +122,8 @@ openssl req -new -key server.key -out server.csr
 
 For the CSR I pretty much entered `.` (which means 'no value') for all details. The only exception was the `Common Name` field which I entered 'TheServer' (so I recognise it as the 'server', just in case I needed to inspect the certificate).
 
-> Note: I don't specify `-des3` in the command as I don't want to generate a passphrase for the private key. If I have to restart my server I don't want the automation to be affected by requiring me to manually enter the passphrase
+> [!NOTE]
+> I don't specify `-des3` in the command as I don't want to generate a passphrase for the private key. If I have to restart my server I don't want the automation to be affected by requiring me to manually enter the passphrase
 
 Now we'll self-sign the server's CSR and generate its own certificate (in case it's not clear: self-signing isn't something you want to do unless you know you are going to ask your users to trust your certificate and ignore big warnings about an unknown CA signing the server's cert):
 
@@ -139,7 +142,8 @@ You'll notice I've made the encryption length `2048` instead of `4096`. I did th
 
 For the CSR I pretty much entered `.` (which means 'no value') for all details. The only exceptions were the `Common Name` field which I entered 'Mark McDonnell' (so I recognise it as the 'client') and the `Email Address` field, which I entered something like `mark@integralist.com` (as I want to parse out that email in my Ruby application)
 
-> Note: again I don't specify `-des3` in the command, as I don't want to generate a passphrase for the private key
+> [!NOTE]
+> again I don't specify `-des3` in the command, as I don't want to generate a passphrase for the private key
 
 Finally, I sign the client CSR using the CA certificate:
 
@@ -287,7 +291,8 @@ curl --insecure --key $client_key --cert $client_crt https://<ip>:<nginx_port>/a
 curl --insecure --key $client_key --cert $client_crt https://<ip>:<nginx_port>/app/foo
 ```
 
-> Note: we use `--insecure` to trust the self-signed certificate, we could install the CA into our OS certificate store but I've not done that as this is just an example set-up and so I'm using `--insecure` as a quick win
+> [!NOTE]
+> we use `--insecure` to trust the self-signed certificate, we could install the CA into our OS certificate store but I've not done that as this is just an example set-up and so I'm using `--insecure` as a quick win
 
 Finally, let's test the client cert is being proxied through the HTTP request to the Ruby app:
 
@@ -336,7 +341,8 @@ ssl_crl                /etc/nginx/certs/crl.pem;
 
 Notice where we defined all the other `ssl_` configuration, we have now added `ssl_crl` at the bottom and pointed it to a `crl.pem` file that contains the list of revoked certificates.
 
-> Note: use `service nginx reload` to cause nginx to pick up any changes to the `crl.pem`
+> [!NOTE]
+> use `service nginx reload` to cause nginx to pick up any changes to the `crl.pem`
 
 ### CRL Management
 
@@ -437,7 +443,8 @@ basicConstraints            = CA:FALSE
 subjectKeyIdentifier        = hash
 ```
 
-> Note: for an excellent walk-through of the `openssl.conf` and what it all means, then I highly recommend reading [phildev.net/ssl/opensslconf](https://www.phildev.net/ssl/opensslconf.html)
+> [!NOTE]
+> for an excellent walk-through of the `openssl.conf` and what it all means, then I highly recommend reading [phildev.net/ssl/opensslconf](https://www.phildev.net/ssl/opensslconf.html)
 
 From here we now want to create some other directories referenced by `openssl.cnf`:
 
@@ -686,7 +693,8 @@ If you want to inspect the CRL file to see what's inside, then run the following
 openssl crl -text -noout -in revoked/crl.pem
 ```
 
-> Note: the `-noout` simply prevents the x509 CRL hash from being printed as well (which is what you would have seen if you had just run `cat revoked/crl.pem`)
+> [!NOTE]
+> the `-noout` simply prevents the x509 CRL hash from being printed as well (which is what you would have seen if you had just run `cat revoked/crl.pem`)
 
 The command will output something that looks like:
 
@@ -717,7 +725,8 @@ No Revoked Certificates.
         37:ba
 ```
 
-> Note: you can tell how many versions of the CRL have been generated by looking at the value assigned to `X509v3 CRL Number`
+> [!NOTE]
+> you can tell how many versions of the CRL have been generated by looking at the value assigned to `X509v3 CRL Number`
 
 The CRL itself has been configured (by the `openssl.conf`) to expire after 30 days. So even if you don't revoke any certificates in that time, you'll still want to regenerate the CRL. Meaning there needs to be a certain level of automation involved (which is outside the scope of this article).
 
@@ -797,7 +806,8 @@ R 161002113931Z 151003114104Z 100002 unknown /C=GB/CN=TheClient/emailAddress=cli
 
 You'll notice the `R` for "revoked" has been applied. The additional reference number `151003114104Z` is the revocation timestamp and you can see the full format [here](http://pki-tutorial.readthedocs.io/en/latest/cadb.html).
 
-> Note: as you can see, to revoke a certificate means you need to keep copies of all certificates that have been generated
+> [!NOTE]
+> as you can see, to revoke a certificate means you need to keep copies of all certificates that have been generated
 
 So now the client cert has been revoked, let's generate a new CRL and then apply that to the nginx container.
 

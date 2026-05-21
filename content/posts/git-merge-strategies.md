@@ -49,7 +49,8 @@ If the source branch `feat/foo` (the branch you want to merge from) can be merge
 
 What "fast-forward: means is that git will change the `HEAD` (on the destination branch) to point to the new latest commit, and all the other commits from your source branch will also appear in the git log/history of the destination branch.
 
-> Note: `HEAD` is an alias that points to a commit (typically `HEAD` is the latest commit in your branch). Even the branch name itself is an alias that refers to a commit (_most things_ in git do simply resolve to commits). This is why when you have a long branch name, instead of `git push origin really-long-branch-name` you can just use `git push origin head` and git will figure out which branch you're on
+> [!NOTE]
+> `HEAD` is an alias that points to a commit (typically `HEAD` is the latest commit in your branch). Even the branch name itself is an alias that refers to a commit (_most things_ in git do simply resolve to commits). This is why when you have a long branch name, instead of `git push origin really-long-branch-name` you can just use `git push origin head` and git will figure out which branch you're on
 
 If you check `git lg` after doing a `git merge feat/foo`, you should see something like:
 
@@ -62,7 +63,8 @@ If you check `git lg` after doing a `git merge feat/foo`, you should see somethi
 
 We can see all the commits from `feat/foo` were replayed onto `master` successfully.
 
-> Note: you might not realise that there is a short cut to checking out a branch and then merging another branch into it: `git merge <source> <destination>`, which is the same as doing `git checkout <destination>` followed by `git merge <source>`
+> [!NOTE]
+> you might not realise that there is a short cut to checking out a branch and then merging another branch into it: `git merge <source> <destination>`, which is the same as doing `git checkout <destination>` followed by `git merge <source>`
 
 ## `git merge --no-ff --edit`
 
@@ -74,7 +76,8 @@ Using our previous example, which merged cleanly, let's say that a merge commit 
 git reset --hard 75eb1cb
 ```
 
-> Note: `75eb1cb` being my first commit in `master`
+> [!NOTE]
+> `75eb1cb` being my first commit in `master`
 
 ### `git reset`
 
@@ -104,7 +107,8 @@ To force a merge commit you'll need to use the `--no-ff` flag and then also use 
 git merge --edit --no-ff feat/foo 
 ```
 
-> Note: `--edit` doesn't work without `--no-ff`, unless there is a _genuine_ merge conflict
+> [!NOTE]
+> `--edit` doesn't work without `--no-ff`, unless there is a _genuine_ merge conflict
 
 Now if I look at my `git lg` I can see:
 
@@ -290,7 +294,8 @@ This shows that the changes from `feat/foo` where replayed directly on top of `7
 
 Notice the `feat/foo` commits are on top of the `A to 9` commit and that might not necessarily be what we want to have happen.
 
-> Note: it's usually better to use `git pull --rebase <remote> <branch>` as this will ensure that you get the latest copy of changes for the specified branch (as apposed to `git rebase <branch>` which will just be the local copy of that branch (remember `git pull` is an abstraction on top of `git fetch`, then `git merge`).
+> [!NOTE]
+> it's usually better to use `git pull --rebase <remote> <branch>` as this will ensure that you get the latest copy of changes for the specified branch (as apposed to `git rebase <branch>` which will just be the local copy of that branch (remember `git pull` is an abstraction on top of `git fetch`, then `git merge`).
 
 ## `git rebase --interactive`
 
@@ -402,7 +407,8 @@ Imagine we've merged our `feat/foo` branch at this point into `master` using:
 git merge --squash feat/foo
 ```
 
-> Note: you'll need to fix a conflict first for it to be successful
+> [!NOTE]
+> you'll need to fix a conflict first for it to be successful
 
 So `master` should now have three commits:
 
@@ -418,7 +424,8 @@ What's the easiest way to delete the middle/second commit `3fc460b`? We could us
 git rebase --onto 75eb1cb 3fc460b
 ```
 
-> Note: in this scenario you'll get a conflict that you'll need to resolve first (e.g. we're removing a commit that sets A to the value 9 but that change was also pulled into the `feat/foo` branch so git isn't sure whether you definitely want that change any more or not), but in most cases you'll likely have a clean rebase
+> [!NOTE]
+> in this scenario you'll get a conflict that you'll need to resolve first (e.g. we're removing a commit that sets A to the value 9 but that change was also pulled into the `feat/foo` branch so git isn't sure whether you definitely want that change any more or not), but in most cases you'll likely have a clean rebase
 
 The basic structure of this command is:
 
@@ -445,7 +452,8 @@ This person would need to execute the following command:
 git format-patch master
 ```
 
-> Note: you can swap the branch `master` for any valid commit, alias or range
+> [!NOTE]
+> you can swap the branch `master` for any valid commit, alias or range
 
 What this will end up doing is generating a 'patch' file for each new commit that isn't available in master. Below is an example patch file generated from a test repo I was messing around with, and which actually generated two patch files for me (this being the first one):
 
@@ -472,7 +480,8 @@ index b1e6722..6f04b1d 100644
 2.7.4
 ```
 
-> Note: if you want a single patch file you can use\
+> [!NOTE]
+> if you want a single patch file you can use\
 > the `--stdout` flag and redirect the output to a file\
 > `git format-patch master --stdout > new-feature.patch`
 
@@ -503,7 +512,8 @@ So if you have a GitHub PR URL like `https://github.com/my-org/my-repo/pull/123`
 
 Git also offers you the `git apply` command to use in place of `git am`. The reason being is that `git am` actually commits the changes in the patch, whereas `git apply` will only affect your working directory, so you'll have the opportunity to stage and commit the changes however you like. Unless you use the `--cached` or `--index` flags (see `man git-apply` for details).
 
-> Note: `git apply` also has a `--reverse` flag to manipulate the order when applying multiple patchess
+> [!NOTE]
+> `git apply` also has a `--reverse` flag to manipulate the order when applying multiple patchess
 
 The other difference is that `git am` only accepts patch files, whereas `git apply` accepts patch files and also output from `git diff`. So you have more options available to you that way. For example:
 

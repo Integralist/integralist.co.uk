@@ -12,7 +12,8 @@ language](https://golang.org/) I created a gist and updated it on a regular
 basis as a sort of cheat sheet. I stumbled across this gist recently and decided
 I'd try and port it over to some form of semi-coherent blog post.
 
-> Note: the code will not be updated in any way so
+> [!NOTE]
+> the code will not be updated in any way so
 > [YMMV](http://dictionary.cambridge.org/dictionary/english/ymmv)
 
 What this isn't, is a walk-through of how to write Go code. I'd suggest trying
@@ -23,7 +24,8 @@ the vein of a resource like [Go by Example](https://gobyexample.com/).
 What this _is_, is a barren wasteland of old code. Passers by are forewarned to
 tread carefully.
 
-> Note: there's also not much in the way of code explanation, to the extent that
+> [!NOTE]
+> there's also not much in the way of code explanation, to the extent that
 > some of the testing examples are long and very context specific - you've been
 > warned
 
@@ -320,7 +322,8 @@ So to make this situation better we can use
 `Godeps` folder inside your project directory. You can then use `godep save -r ./...` to automatically update all your references to point to that local
 folder.
 
-> Note: you might need to remove the `Godeps` folder and run `go get` if you get
+> [!NOTE]
+> you might need to remove the `Godeps` folder and run `go get` if you get
 > strange conflicts. The `./...` means to target all `.go` files
 
 This way users who clone your repo don't need an internet connection to pull the
@@ -368,7 +371,8 @@ glide list                          # shows vendored deps
 go test $(glide novendor)           # test only your package (not vendored packages)
 ```
 
-> Note: to add a new dependency `glide get <pkg_name>`
+> [!NOTE]
+> to add a new dependency `glide get <pkg_name>`
 
 ## Documentation
 
@@ -489,7 +493,8 @@ godoc -http ':6060' -play
 
 ## Testing
 
-> Note: see also [examples
+> [!NOTE]
+> see also [examples
 > here](https://gist.github.com/Integralist/cf76668bc46d75058ab5f566d96ce74a)
 
 Test files are placed in the same directory as the file/package being tested.
@@ -500,7 +505,8 @@ Run the tests: `go test -v ./...`
 
 You can also run a specific test like so: `go test -v command/foo_test.go`
 
-> Note: remember that your test file should have the same package name as your
+> [!NOTE]
+> remember that your test file should have the same package name as your
 > code being tested. This means the test file will have access to all the public
 > functions and variables of that package (and so subsequently it'll have access
 > to the code being tested)
@@ -1085,7 +1091,8 @@ variables are exposed for the caller to utilise. So if you need a package to
 execute some bootstrapping code at the point of it being _loaded_, then you'll
 need to stick it inside of an `init` function.
 
-> Note: you can have multiple `init` functions inside a package e.g. one per
+> [!NOTE]
+> you can have multiple `init` functions inside a package e.g. one per
 > file within the package namespace
 
 But be careful using `init` as it can result in a race condition.
@@ -1466,7 +1473,8 @@ Which prints:
 {Circle:{Point:{X:8 Y:8} Radius:5} Spokes:20}
 ```
 
-> Note: anonymous fields don't work shorthand literal Struct
+> [!NOTE]
+> anonymous fields don't work shorthand literal Struct
 
 The following example demonstrates how methods of a composited object can be
 accessed from the consuming object:
@@ -2245,7 +2253,8 @@ func main() {
 }
 ```
 
-> Note: don't use this ☝️ as it has timeout set to infinity by default
+> [!NOTE]
+> don't use this ☝️ as it has timeout set to infinity by default
 
 Safer option is to create your own http.Client struct...
 
@@ -2455,7 +2464,8 @@ func main() {
 }
 ```
 
-> Note: compiler can only apply implicit dereference for variables and struct
+> [!NOTE]
+> compiler can only apply implicit dereference for variables and struct
 > fields. This wouldn't work `Point{1, 2}.scaleBy(5)`
 
 Results in the following output:
@@ -3075,7 +3085,8 @@ func main() {
 }
 ```
 
-> Note: `printf` is a built-in function for templating and is functionally
+> [!NOTE]
+> `printf` is a built-in function for templating and is functionally
 > equivalent to `fmt.Sprintf`
 
 Program output:
@@ -3176,7 +3187,8 @@ There are two main types of sockets:
 1. STREAM sockets (e.g. TCP)
 1. DATAGRAM sockets (e.g. UDP)
 
-> Note: a "unix domain socket" is actually a physical file\
+> [!NOTE]
+> a "unix domain socket" is actually a physical file\
 > it's useful for local (same host) data communication
 
 The principle steps behind a socket is:
@@ -3507,7 +3519,7 @@ defer func() {
 }()
 ```
 
-> Note:
+> [!NOTE]
 > [https://github.com/google/go-github/pull/317](https://github.com/google/go-github/pull/317)
 
 ## Writing your own Marshal/Unmarshal functions

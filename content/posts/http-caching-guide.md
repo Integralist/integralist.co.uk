@@ -9,7 +9,8 @@ tags: [networking, performance]
 
 Caching is hard. Let's try and understand it a little better.
 
-> Note: some sections are purposefully brief. I'm not aiming to be a specification document.
+> [!NOTE]
+> some sections are purposefully brief. I'm not aiming to be a specification document.
 
 ## Caching at multiple layers
 
@@ -30,7 +31,8 @@ We're able to control caching for both 'clients' and 'cache proxies', using the 
 
 In order to cache content efficiently we need to use a combination of the two headers.
 
-> Note: `Surrogate-Control` is typically stripped from the response, by a cache proxy, before the client receives it.
+> [!NOTE]
+> `Surrogate-Control` is typically stripped from the response, by a cache proxy, before the client receives it.
 
 - [Cache-Control Directives](#cache-control-directives)
   - [client requests](#client-requests)
@@ -132,7 +134,8 @@ Depending on your requirements, when trying to disable caching it can be confusi
   - `Pragma: no-cache`
   - `Expires: 0`
 
-> Note: regarding the disabling of caching at the client level, I reached out to Fastly because of their suggested use of `must-revalidate` _with_ `no-store` (which doesn't make sense). They have since consulted with their resident RFC expert who confirmed this was redundant, and so expect their documentation to be updated to just `no-store`.
+> [!NOTE]
+> regarding the disabling of caching at the client level, I reached out to Fastly because of their suggested use of `must-revalidate` _with_ `no-store` (which doesn't make sense). They have since consulted with their resident RFC expert who confirmed this was redundant, and so expect their documentation to be updated to just `no-store`.
 >
 > It's also worth mentioning that Fastly's use of `post-check` and `pre-check` is _also_ redundant as per [this old Microsoft article](https://blogs.msdn.microsoft.com/ie/2006/06/01/a-caching-issue-in-ie7-beta-2/) that states setting them to zero does not actually 'do anything'!
 
@@ -174,7 +177,8 @@ One aspect of serving stale content that normally confuses people is how to dete
 
 Consider the following diagram which highlights a typical request flow when using (for example) an `ETag` to handle the revalidation step:
 
-> Note: this diagram presumes the use of a CDN like Fastly which has specific behaviours, such as 'request collapsing' built-in.
+> [!NOTE]
+> this diagram presumes the use of a CDN like Fastly which has specific behaviours, such as 'request collapsing' built-in.
 
 ![http conditional requests](/assets/img/http-conditional-requests.png)
 
@@ -210,7 +214,8 @@ Of course there is the potential for the hash function to not be robust enough t
 
 These are things that you'll need to consider when generating an `ETag` for a resource, and it's recommended you read documentation on [what constitutes a "strong" or "weak" validator](https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests#Strong_validation).
 
-> Note: it's important to realize that generating an `ETag` and figuring out the `Last-Modified` date of a resource is outside the responsibility of a proxy, hence the proxy sat in front of our origins doesn't set these headers even when they aren't set by the origin.
+> [!NOTE]
+> it's important to realize that generating an `ETag` and figuring out the `Last-Modified` date of a resource is outside the responsibility of a proxy, hence the proxy sat in front of our origins doesn't set these headers even when they aren't set by the origin.
 
 In essence a strong ETag indicates that the resource's content is the same with regards to both the response body and the response headers, whereas a weak ETag indicates that the two representations are semantically equivalent. It compares only the response body. Weak ETags are prefixed with `W\` and thus can easily be distinguished between weak and strong.
 
@@ -235,7 +240,8 @@ This proxy layer will by default tell the client to _not_ cache your content, wh
 - `Cache-Control: no-store`
 - `Surrogate-Control: max-age=86400, stale-while-revalidate=60, stale-if-error=31536000`
 
-> Note: values are in seconds, so `86400` = 1 day, `60` = 1 minute, `31536000` = 1 year.
+> [!NOTE]
+> values are in seconds, so `86400` = 1 day, `60` = 1 minute, `31536000` = 1 year.
 
 The reason for choosing to only cache content at the CDN rather than the client is because we have very granular control over our CDN cached content (thanks to our CDN provider, [Fastly](https://www.fastly.com/)) and so its preferable, for our situation, to have complete control over the caching of our content rather than let a client's browser determine what happens.
 

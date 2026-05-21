@@ -29,7 +29,8 @@ When recording log data, there are various 'levels' you can utilise that indicat
 
 Below are some common log levels along with a short description that describes when you would/should expect to use that particular level...
 
-> Note: I saw these descriptions in a tweet a long time ago, and saved them off, and then months later when I've come to write this post I have since lost the link to the original tweet. If someone knows what it is, could you ping me on twitter and I'll get the author credited appropriately.
+> [!NOTE]
+> I saw these descriptions in a tweet a long time ago, and saved them off, and then months later when I've come to write this post I have since lost the link to the original tweet. If someone knows what it is, could you ping me on twitter and I'll get the author credited appropriately.
 
 ### Fatal
 

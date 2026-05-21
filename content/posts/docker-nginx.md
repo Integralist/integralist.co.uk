@@ -9,7 +9,8 @@ tags: [docker, networking]
 
 I wanted to learn about how to use the popular proxy server [nginx](http://nginx.org) for handling "reverse proxy" duties on a Ruby project I was working on. So I decided the easiest thing to do in order to play around with nginx (as I work on a MacBook Pro laptop), would be to install and run it (and my back-end application) within [Docker](http://docker.com/) containers.
 
-> Note: I did some preliminary Googling and sadly didn't find anything straightforward that demonstrated this relatively simple requirement (i.e. run nginx and have it proxy requests to a back-end service). So I decided it would be best to write about it myself
+> [!NOTE]
+> I did some preliminary Googling and sadly didn't find anything straightforward that demonstrated this relatively simple requirement (i.e. run nginx and have it proxy requests to a back-end service). So I decided it would be best to write about it myself
 
 Now if you're unsure of what a reverse proxy does, it simply takes *in* traffic (i.e. users requesting a website domain) and proxies those requests onto another service (the service could be external to the host server or it could be running on the same box - which is the scenario I have - and typically the service being proxied to isn't publically available to the internet).
 
@@ -31,7 +32,8 @@ So to begin with, I went to [Docker Hub](https://hub.docker.com/) and found the 
 docker run --name nginx-container -P -d nginx
 ```
 
-> Note: you can use the `-p <host_port>:<container_port>` option instead of `-P` if you're not going to be running multiple nginx instances (again, for the moment I was just following the recommendation from Docker Hub)
+> [!NOTE]
+> you can use the `-p <host_port>:<container_port>` option instead of `-P` if you're not going to be running multiple nginx instances (again, for the moment I was just following the recommendation from Docker Hub)
 
 Once the container was running I attempted to `curl` the endpoint (something like `http://localhost:<port_number_container_mapped_to>`) but I found this didn't work; and by that I mean it didn't return a recognisable nginx home page as was suggested it would. This was the first trip-up I made.
 
@@ -170,7 +172,8 @@ docker run --name nginx-container \
 
 In the above example, you can see I'm using the `-v` flag to mount my static files directory to `/usr/share/nginx/html` as well as mounting my own nginx configuration file into the container at `/etc/nginx/nginx.conf`.
 
-> Note: `:ro` sets the volumes to be "read only"
+> [!NOTE]
+> `:ro` sets the volumes to be "read only"
 
 So for me, a working example looked like the following:
 
@@ -181,7 +184,8 @@ docker run --name nginx-container \
   -P -d nginx
 ```
 
-> Note: the host path has to be absolute, so tweak it as necessary (I used `pwd` to make the command shorter)
+> [!NOTE]
+> the host path has to be absolute, so tweak it as necessary (I used `pwd` to make the command shorter)
 
 If you want to debug things, then you can run the container not as a daemon (`-d`) but with an interactive tty (`-it`) and drop yourself inside of a bash shell:
 
@@ -194,7 +198,8 @@ docker run -it --name nginx-container \
 
 Once the container is running and the `nginx.conf` and static files are mounted as a Volume, you can verify that nginx is serving the static files by trying to hit localhost on port `80` (as mentioned earlier: if you're on a Mac using Boot2Docker like me, then you'll need to access localhost via the Boot2Docker VM ip address instead):
 
-> Note: don't forget the port number I've used will be different for you (get yours from `docker ps`)
+> [!NOTE]
+> don't forget the port number I've used will be different for you (get yours from `docker ps`)
 
 ```
 curl http://$(boot2docker ip):32781
@@ -330,7 +335,8 @@ While you're still inside the temporarily running nginx container, we can clarif
 env | grep APP | sort
 ```
 
-> Note: we're `grep`ing for the phrase `APP` as that's what we specified in our `docker run` command (i.e. `--link ruby-app:app`)
+> [!NOTE]
+> we're `grep`ing for the phrase `APP` as that's what we specified in our `docker run` command (i.e. `--link ruby-app:app`)
 
 We should now see the following output (or something very similar):
 
@@ -427,7 +433,8 @@ EXPOSE 80 443
 CMD ["nginx", "-g", "daemon off;"]
 ```
 
-> Note: some bright chap by the name of [Steven Jack](https://twitter.com/stevenjack85) suggested setting `ENTRYPOINT` in the Dockerfile to `nginx` and have the two options (`-g` and `daemon off`) left in the `CMD`. Doing this means if you wanted to pass other options to nginx you wouldn't have to duplicate all of your CMD
+> [!NOTE]
+> some bright chap by the name of [Steven Jack](https://twitter.com/stevenjack85) suggested setting `ENTRYPOINT` in the Dockerfile to `nginx` and have the two options (`-g` and `daemon off`) left in the `CMD`. Doing this means if you wanted to pass other options to nginx you wouldn't have to duplicate all of your CMD
 
 So from the root of our project directory, let's complete the next step and build our new Docker images (technically you don't have to rebuild the Ruby application as there has been no changes to the `Dockerfile`, but just for completion I'll demonstrate the build command again).
 
@@ -467,7 +474,8 @@ docker run --name nginx-container \
 
 The final step is to verify that everything worked as expected (i.e. we should be able to make a request to our Boot2Docker VM's localhost and have it proxy the request through to our Ruby application server). But let's do it in stages, so the first stage is to hit the root of localhost:
 
-> Note: in the following example you'll need to get the dynamically allocated port number for the nginx container. You can do this by running `docker ps` and extracting the port number from the output provided
+> [!NOTE]
+> in the following example you'll need to get the dynamically allocated port number for the nginx container. You can do this by running `docker ps` and extracting the port number from the output provided
 
 ```
 curl http://$(boot2docker ip):<dynamic_port_number>

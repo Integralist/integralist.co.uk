@@ -5,7 +5,8 @@ description: Techniques and tools for profiling Go applications including pprof,
 tags: [go, performance]
 ---
 
-> Note: I highly recommend also reading [this](https://golang.org/doc/diagnostics.html) official diagnostics documentation.
+> [!NOTE]
+> I highly recommend also reading [this](https://golang.org/doc/diagnostics.html) official diagnostics documentation.
 
 ## Memory Management
 
@@ -156,7 +157,8 @@ Now there are a couple of ways to use this tool:
 1. Instrument code within binary to generate a `.profile` for analysis _during_ development.
 1. Remotely analyse binary via a web server (no `.profile` is explicitly generated).
 
-> Note: the profile file doesn’t have to use a `.profile` extension (it can be whatever you like)
+> [!NOTE]
+> the profile file doesn’t have to use a `.profile` extension (it can be whatever you like)
 
 ### Generate .profile for analysis during development
 
@@ -195,7 +197,8 @@ func main() {
 }
 ```
 
-> Note: we use `os.Stdout` to make the example easier (i.e. no need to create a file)
+> [!NOTE]
+> we use `os.Stdout` to make the example easier (i.e. no need to create a file)
 > We’ll just use the shell’s ability to redirect output to create the profile file instead.
 
 We can then build and run the application and save the profile data to a file:\
@@ -356,7 +359,8 @@ This indicates where all our memory is allocated on a “line-by-line” basis.
 
 In the following example we’ve modified the application to start up a web server and we’ve imported the `"net/http/pprof"` [package](https://golang.org/pkg/net/http/pprof/) which automatically profiles what’s happening.
 
-> Note: if your application already uses a web server, then you don’t need to start another. The pprof package will hook into your web server’s multiplexer.
+> [!NOTE]
+> if your application already uses a web server, then you don’t need to start another. The pprof package will hook into your web server’s multiplexer.
 
 ```go
 package main
@@ -429,7 +433,8 @@ The CPU profile endpoint is not listed when viewing `/debug/pprof/` simply becau
 
 The web server can also generate a “trace” file, which you can access via [http://localhost:6060/debug/pprof/trace?seconds=5](http://localhost:6060/debug/pprof/trace?seconds=5) (again, it’s not listed for similar reasons as the CPU profile - in that it generates file output that is downloaded to your file system). This trace file out requires the use of `go tool trace` (which we’ll cover in the next section).
 
-> Note: more info on pprof options can be found here: [golang.org/pkg/net/http/pprof/](https://golang.org/pkg/net/http/pprof/)
+> [!NOTE]
+> more info on pprof options can be found here: [golang.org/pkg/net/http/pprof/](https://golang.org/pkg/net/http/pprof/)
 
 ______________________________________________________________________
 
@@ -483,7 +488,8 @@ Entering interactive mode (type "help" for commands, "o" for options)
 (pprof)
 ```
 
-> Note: you’ll see the “type” is set to `inuse_space` (meaning how much memory is still in use)
+> [!NOTE]
+> you’ll see the “type” is set to `inuse_space` (meaning how much memory is still in use)
 
 As shown, you can type either `help` or `o` to see what’s available to use.
 
@@ -553,12 +559,14 @@ ROUTINE ======================== main.bigBytes in /.../go/profiling/main.go
          .          .     17:   var wg sync.WaitGroup
 ```
 
-> Note: if you wanted to be explicit you could have used the “in use” type like so:\
+> [!NOTE]
+> if you wanted to be explicit you could have used the “in use” type like so:\
 > `go tool pprof -inuse_space http://localhost:6060/debug/pprof/heap`
 
 The reason to choose either `-inuse_space` or `-alloc_space` will depend on where your specific concerns are focused. For example, if you’re concerned about garbage collection performance then you’ll want to look at the “allocated” memory (i.e. `-alloc_space`).
 
-> Note: you can also inspect the number of objects (not just their space) with `-inuse_objects` and `-alloc_objects`.
+> [!NOTE]
+> you can also inspect the number of objects (not just their space) with `-inuse_objects` and `-alloc_objects`.
 
 ### Image Generation
 
@@ -572,7 +580,8 @@ This generates an image that looks like the following (notice how the bigger the
 
 ![profiling go](/assets/img/profiling_go.png)
 
-> Note: you can also output as a PDF with `-pdf`.
+> [!NOTE]
+> you can also output as a PDF with `-pdf`.
 
 ### Web UI
 
@@ -587,7 +596,8 @@ But in short you can get the updated pprof tool from GitHub and then execute it 
 [Trace](https://golang.org/cmd/trace/) is a tool for visualization and analysis of trace data.\
 It’s suited at finding out what your program is doing over time, not in aggregate.
 
-> Note: if you want to track down slow functions, or generally find where your program is spending most of its CPU time, then you should consider using `go tool pprof` instead.
+> [!NOTE]
+> if you want to track down slow functions, or generally find where your program is spending most of its CPU time, then you should consider using `go tool pprof` instead.
 
 Let’s first modify our application to utilise tracing…
 
@@ -630,7 +640,8 @@ $ time ./app > app.trace
 $ go tool trace app.trace
 ```
 
-> Note: you can also generate a pprof compatible file from a trace by using the `-pprof` flag (if you decided you wanted to dynamically inspect the data that way). See the [go documentation](https://golang.org/cmd/trace/) for more details.
+> [!NOTE]
+> you can also generate a pprof compatible file from a trace by using the `-pprof` flag (if you decided you wanted to dynamically inspect the data that way). See the [go documentation](https://golang.org/cmd/trace/) for more details.
 
 Here’s the output from running `go tool trace app.trace`:
 
@@ -644,7 +655,8 @@ Here’s the output from running `go tool trace app.trace`:
 You’ll now see your default web browser should have automatically opened to:\
 [http://127.0.0.1:60331](http://127.0.0.1:60331/)
 
-> Note: it’s best to use Chrome, as `go tool trace` is designed to work best with it.
+> [!NOTE]
+> it’s best to use Chrome, as `go tool trace` is designed to work best with it.
 
 The page that is loaded will show the following list of links:
 
@@ -659,7 +671,8 @@ Each of these items can give a good insight as to what your application is doing
 
 ![profiling go 2](/assets/img/profiling_go_2.png)
 
-> Note: press `<Shift-?>` to show shortcut keys, like `w` and `s` for zooming in/out.
+> [!NOTE]
+> press `<Shift-?>` to show shortcut keys, like `w` and `s` for zooming in/out.
 
 ### Goroutines
 

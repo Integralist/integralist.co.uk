@@ -94,7 +94,8 @@ s3_resource = session.resource("s3", config=Config(
 )
 ```
 
-> Note: as per the example above, it’s worth tweaking the connection/read timeouts as well. For example we noticed that calls for `.xml` files from S3 were really slow and so in that service we had to increase the `read_connection` by a significant amount (but not too much; you don’t want the client to sit hanging for a long period of time, so it requires some fine tuning to get it right).
+> [!NOTE]
+> as per the example above, it’s worth tweaking the connection/read timeouts as well. For example we noticed that calls for `.xml` files from S3 were really slow and so in that service we had to increase the `read_connection` by a significant amount (but not too much; you don’t want the client to sit hanging for a long period of time, so it requires some fine tuning to get it right).
 
 ## Place blocking IO operations into a thread pool
 
@@ -127,13 +128,15 @@ def run_on_executor(*args, **kwargs):
 
 The above example needs to use a Tornado decorator as `ThreadPoolExecutor` doesn't work with native coroutines. It would require the use of `asyncio.wrap_future` which isn't much better than just using Tornado's own decorator.
 
-> Note: the `ThreadPoolExecutor` will only help you deal with IO bound tasks that need to be handled asynchronously (and whose library doesn't support natively). If the task to be executed is actually CPU bound then you'll want to utilise a [`ProcessPoolExecutor`](https://docs.python.org/3/library/concurrent.futures.html#processpoolexecutor) instead.
+> [!NOTE]
+> the `ThreadPoolExecutor` will only help you deal with IO bound tasks that need to be handled asynchronously (and whose library doesn't support natively). If the task to be executed is actually CPU bound then you'll want to utilise a [`ProcessPoolExecutor`](https://docs.python.org/3/library/concurrent.futures.html#processpoolexecutor) instead.
 
 ## Rate limit yourself
 
 In a service where there's a potential for lots of duplicate messages it can be useful to implement some simple rate limiting logic. In one of our QR services we use Redis to track duplicate requests and then execute some basic rate limiting logic in order to prevent overwhelming any upstream services that would otherwise be called.
 
-> Note: be aware that the rate limit you set can cause unwanted side-effects. For example, if you start to requeue messages during a rate limit period, you may start to see that messages aren't being processed quickly enough and so the queue depth will begin to increase (i.e. the queue will start to backup and fill up) and this might cause monitors (e.g. systems like Datadog/Nagios) to trigger.
+> [!NOTE]
+> be aware that the rate limit you set can cause unwanted side-effects. For example, if you start to requeue messages during a rate limit period, you may start to see that messages aren't being processed quickly enough and so the queue depth will begin to increase (i.e. the queue will start to backup and fill up) and this might cause monitors (e.g. systems like Datadog/Nagios) to trigger.
 
 ## Disable yourself
 

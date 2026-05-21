@@ -41,7 +41,8 @@ An 'iterator' is really just a container of some data. This 'container' must hav
 
 So you could design a single class that contains both the `__iter__` and `__next__` methods (like I demonstrate below), or you might want to have the `__next__` method defined as part of a separate class (it's up to you and whatever you feel works best for your project).
 
-> Note: the Python docs for [`collections.abc`](https://docs.python.org/3.7/library/collections.abc.html#collections.abc.Iterator) highlight the other 'protocols' that Python has and the various methods they require (see an [earlier post of mine](/posts/design-python/#interfaces-protocols-and-abstract-methods) that discusses protocols + abstract classes in detail). If you're unfamiliar with 'dunder' methods, then I'll refer you to an excellent post: [a guide to magic methods](https://rszalski.github.io/magicmethods/).
+> [!NOTE]
+> the Python docs for [`collections.abc`](https://docs.python.org/3.7/library/collections.abc.html#collections.abc.Iterator) highlight the other 'protocols' that Python has and the various methods they require (see an [earlier post of mine](/posts/design-python/#interfaces-protocols-and-abstract-methods) that discusses protocols + abstract classes in detail). If you're unfamiliar with 'dunder' methods, then I'll refer you to an excellent post: [a guide to magic methods](https://rszalski.github.io/magicmethods/).
 
 By implementing these two methods it enables Python to iterate over a 'collection'. It doesn't matter what the collection is, as long as the iterator object defines the behaviour that lets Python know how to iterate over it.
 
@@ -85,7 +86,8 @@ for element in Foo(["a", "b", "c"]):
     print(element)
 ```
 
-> Note: raising the `StopIteration` exception is a requirement for implementing an iterator correctly.
+> [!NOTE]
+> raising the `StopIteration` exception is a requirement for implementing an iterator correctly.
 
 With this example implementation, we can also iterate over our `Foo` class _manually_, using the `iter` and `next` functions, like so:
 
@@ -98,7 +100,8 @@ next(iterator)  # 'b'
 next(iterator)  # 'c'
 ```
 
-> Note: `iter(foo)` is the same as `foo.__iter__()`, while `next(iterator)` is the same as `iterator.__next__()` -- so these functions are basic syntactic sugar provided by the standard library that helps make our code look nicer.
+> [!NOTE]
+> `iter(foo)` is the same as `foo.__iter__()`, while `next(iterator)` is the same as `iterator.__next__()` -- so these functions are basic syntactic sugar provided by the standard library that helps make our code look nicer.
 
 This type of iterator is referred to as a 'class-based iterator' and isn't the only way to implement an _iterable_ object. [Generators](#generators) and [Generator Expressions](#generator-expressions) (see the following sections) are other ways of iterating over an object in a memory efficient way.
 
@@ -109,7 +112,8 @@ iterator = Foo(["a", "b", "c"])
 list(iterator)  # ["a", "b", "c"]
 ```
 
-> Note: be careful doing this, because if the iterator is yielding an unbounded number of elements, then this will exhaust your application's memory!
+> [!NOTE]
+> be careful doing this, because if the iterator is yielding an unbounded number of elements, then this will exhaust your application's memory!
 
 ## Generators
 
@@ -221,7 +225,8 @@ The syntax for a generator expression is also very similar to those used by comp
 (expression for item in collection if condition)
 ```
 
-> Note: so although not demonstrated, you can also 'filter' yielded values due to the support for "if" conditions.
+> [!NOTE]
+> so although not demonstrated, you can also 'filter' yielded values due to the support for "if" conditions.
 
 ### Nested Generators (i.e. `yield from`)
 
@@ -292,7 +297,8 @@ for v in foo():
     print(v)
 ```
 
-> Note: refer to [PEP 380](https://www.python.org/dev/peps/pep-0380/) for more details on `yield from` and the rationale for its inclusion in the Python language.
+> [!NOTE]
+> refer to [PEP 380](https://www.python.org/dev/peps/pep-0380/) for more details on `yield from` and the rationale for its inclusion in the Python language.
 
 ## Coroutines
 
@@ -314,7 +320,8 @@ Generators use the `yield` keyword to return a value at some point in time withi
 
 Below is an example of a coroutine. Remember! a coroutine is still a generator and so you'll see our example uses features that are related to generators (such as `yield` and the `next()` function):
 
-> Note: refer to the code comments for extra clarity.
+> [!NOTE]
+> refer to the code comments for extra clarity.
 
 ```
 def foo():
@@ -343,7 +350,8 @@ result = coro.send("bar")
 print(result)  # bar
 ```
 
-> Note: `coro` is an identifier commonly used to refer to a coroutine. For more information on other available coroutine methods, please refer to the [documentation](https://docs.python.org/3.8/reference/datamodel.html#coroutines).
+> [!NOTE]
+> `coro` is an identifier commonly used to refer to a coroutine. For more information on other available coroutine methods, please refer to the [documentation](https://docs.python.org/3.8/reference/datamodel.html#coroutines).
 
 Below is an example of a coroutine using `yield` to return a value to the caller prior to the value _received_ via a caller using the `.send()` method:
 
@@ -367,7 +375,8 @@ You can see in the above example that when we moved the generator coroutine to t
 
 When the `asyncio` module was first released it didn't support the `async`/`await` syntax, so when it was introduced, to ensure any legacy code that had a function that needed to be run concurrently (i.e. awaited) would have to use an `asyncio.coroutine` decorator function to allow it to be compatible with the new `async`/`await` syntax.
 
-> Note: refer to [the documentation](https://docs.python.org/3.8/library/asyncio-task.html#generator-based-coroutines) for information on this deprecated (as of Python 3.10) feature, as well as some other functions like `asyncio.iscoroutine` that are specific to generator based coroutines.
+> [!NOTE]
+> refer to [the documentation](https://docs.python.org/3.8/library/asyncio-task.html#generator-based-coroutines) for information on this deprecated (as of Python 3.10) feature, as well as some other functions like `asyncio.iscoroutine` that are specific to generator based coroutines.
 
 The original generator based coroutines meant any `asyncio` based code would have used `yield from` to await on [Futures](/posts/python-asyncio/#futures) and other coroutines.
 
@@ -403,7 +412,8 @@ They don't overlap, but do appear to be used together:
 - `types.coroutine`: converts generator function into a coroutine.
 - `asyncio.coroutine`: abstraction ensuring `asyncio` compatibility.
 
-> Note: as we'll see in a moment, `asyncio.coroutine` actually calls `types.coroutine`. You should ideally use the former when dealing with `asyncio` code.
+> [!NOTE]
+> as we'll see in a moment, `asyncio.coroutine` actually calls `types.coroutine`. You should ideally use the former when dealing with `asyncio` code.
 
 More specifically, if we look at the implementation of the [`asyncio.coroutine` code](https://github.com/python/cpython/blob/master/Lib/asyncio/coroutines.py#L105) we can see:
 

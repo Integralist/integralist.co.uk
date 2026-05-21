@@ -87,7 +87,8 @@ http {
 
 As you can see, the `listen` directive specifies `http2`. In essence this is all you would need to enable HTTP/2 using nginx. The reason we're restricting nginx to listening on port `443` and enabling `ssl` (+ specifying SSL certificates) is because the majority of web browsers require TLS in order to support HTTP/2, and also nginx's implementation relies upon TLS (see below for details).
 
-> Note: currently Opera and Safari 9 supports HTTP/2 without TLS
+> [!NOTE]
+> currently Opera and Safari 9 supports HTTP/2 without TLS
 
 Nginx is a reverse proxy and so because the client doesn't have direct access to the back-end services/applications, nginx is able to translate HTTP/2 into HTTP/1.x which also allows those services to not have to be rearchitected.
 
@@ -144,7 +145,8 @@ func ShowRequestInfoHandler(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-> Note: the above code has been slightly modified from an example originally conceived by [Kim Ilyong](https://plus.google.com/111824860449692850794/posts)
+> [!NOTE]
+> the above code has been slightly modified from an example originally conceived by [Kim Ilyong](https://plus.google.com/111824860449692850794/posts)
 
 If you stick the above code into a file called `http2.go`, run the program and visit `https://localhost:8080/` in your browser (using one that supports HTTP/2 obviously), then you should see the following output (or something similar):
 

@@ -42,7 +42,8 @@ In essence the Logarithm notation looks something like:
 Log n (х)
 ```
 
-> Note: I had used a nice `𝑛` icon instead of `n` but on my phone I noticed it wasn't showing :-/ so I had to change it to something that wasn't a symbol.
+> [!NOTE]
+> I had used a nice `𝑛` icon instead of `n` but on my phone I noticed it wasn't showing :-/ so I had to change it to something that wasn't a symbol.
 
 ...where the `n` is what's called the "base" and `х` is the number you're aiming for. But really what we're interested in is the _result_ of this calculation.
 
@@ -242,7 +243,8 @@ The answer to that question is ten operations:
 1 second / 0.1 = 10 operations
 ```
 
-> Note: your computer can handle more than 10 operations a second, but as we've said before, Big O is about worst case scenarios and so although not realistic; this number does give us a nice base line to work from
+> [!NOTE]
+> your computer can handle more than 10 operations a second, but as we've said before, Big O is about worst case scenarios and so although not realistic; this number does give us a nice base line to work from
 
 We can then calculate the _time_ associated with a number of operations.
 
@@ -283,7 +285,8 @@ Let's consider what Big O looks like for the Array and Linked List data structur
 
 An Array supports 'index access', meaning you can jump straight to an Array index. Whereas with Linked Lists you have to traverse the entire list in order to locate a specific item.
 
-> Note: another difference comes in memory management. Arrays require n number of memory 'slots' to be next to each other, whereas Linked List memory can be sparse and spread out due to how it implements its internal chaining of nodes. This is why Arrays are typically considered to be 'fixed size' and not easily expanded, because expansion of the Array's size could potentially require an expensive movement of the Array to a new location in memory in order to faciliate a new index and yet still have memory slots side-by-side
+> [!NOTE]
+> another difference comes in memory management. Arrays require n number of memory 'slots' to be next to each other, whereas Linked List memory can be sparse and spread out due to how it implements its internal chaining of nodes. This is why Arrays are typically considered to be 'fixed size' and not easily expanded, because expansion of the Array's size could potentially require an expensive movement of the Array to a new location in memory in order to faciliate a new index and yet still have memory slots side-by-side
 
 This suggests that Array lookups are `O(1)`, known as 'constant time' because the lookup growth stays the same no matter the length of the collection (i.e. it's constant).
 
@@ -301,7 +304,8 @@ Specifically you loop a number of times to match the collection length. Then you
 
 This ends up being `O(n₂)` (n to the power of 2, or `O(n * n)`).
 
-> Note: although you're looping over the collection multiple times, you are in fact looping over a slightly smaller collection each time. But it's _still_ considered `O(n)` for each time you loop over the collection because regardless of how many items are in there you treat it as abstract
+> [!NOTE]
+> although you're looping over the collection multiple times, you are in fact looping over a slightly smaller collection each time. But it's _still_ considered `O(n)` for each time you loop over the collection because regardless of how many items are in there you treat it as abstract
 
 So if your collection is 10 items long, then it would calculate as follows:
 

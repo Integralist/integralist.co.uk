@@ -7,7 +7,8 @@ tags: [management, architecture]
 
 I've long kept a list of books I've enjoyed reading, and decided I would share them as a blog post so others could benefit from their learnings.
 
-> Note: I generally keep the [original gist](https://gist.github.com/Integralist/77877126a0b13766f0de) the most up-to-date.
+> [!NOTE]
+> I generally keep the [original gist](https://gist.github.com/Integralist/77877126a0b13766f0de) the most up-to-date.
 
 ## Algorithms
 

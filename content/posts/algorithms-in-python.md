@@ -103,7 +103,8 @@ The algorithm can be broken down into the following pseudo-steps:
 - Create a list consisting of elements greater than pivot.
 - function return value is `fn(less) + pivot + fn(greater)`.
 
-> Note: notice the 'less' and 'greater' lists are passed recursively back through the quick sort function.
+> [!NOTE]
+> notice the 'less' and 'greater' lists are passed recursively back through the quick sort function.
 
 Below is an implementation of this sorting algorithm:
 
@@ -234,7 +235,8 @@ result = binary_search(collection, 9)
 print(f'the value was found at index {result}\n\n')  # index 4
 ```
 
-> Note: you could swap `round((start + stop) / 2)` for `(start + stop) // 2` which uses Python's `//` floor division operator, but I typically opt for the clarity of using the explicit `round` function.
+> [!NOTE]
+> you could swap `round((start + stop) / 2)` for `(start + stop) // 2` which uses Python's `//` floor division operator, but I typically opt for the clarity of using the explicit `round` function.
 
 ## Breadth First Search
 
@@ -248,7 +250,8 @@ We'll use the BFS (breadth first search) algorithm to locate 'Ethan'.
 
 The time complexity of this algorithm will be, at worst, `O(V+E)`.
 
-> Note: in the case of dealing with a graph, `V` = vertex (a node in the graph) and `E` = edge (the line between nodes), the worst case scenario will mean we have to explore every edge and node.
+> [!NOTE]
+> in the case of dealing with a graph, `V` = vertex (a node in the graph) and `E` = edge (the line between nodes), the worst case scenario will mean we have to explore every edge and node.
 
 The algorithm can be broken down into the following pseudo-steps:
 
@@ -302,7 +305,8 @@ starting_point = random.choice(list(graph.keys()))
 search(starting_point, 'ethan')
 ```
 
-> Note: an alternative implementation might use Python's `set` data structure to avoid having to filter already searched people.
+> [!NOTE]
+> an alternative implementation might use Python's `set` data structure to avoid having to filter already searched people.
 
 Let's take a look at the first run of this program:
 
@@ -345,7 +349,8 @@ person: ethan
 found a match: ethan
 ```
 
-> Note: I've used a dict to represent a graph, which helped to make the code simpler to understand. A different data structure (e.g. a directed tree) would require a different implementation of the algorithm. Remember, the basic premise is to search a graph node's adjacent fields, and then their adjacent nodes.
+> [!NOTE]
+> I've used a dict to represent a graph, which helped to make the code simpler to understand. A different data structure (e.g. a directed tree) would require a different implementation of the algorithm. Remember, the basic premise is to search a graph node's adjacent fields, and then their adjacent nodes.
 
 ## Depth First Search
 
@@ -363,7 +368,8 @@ Notice how if don't find a match for what we're looking for, then we backtrack u
 
 The time complexity of this algorithm will be, at worst, `O(V+E)` (as noted with Breath First Search, this means we could end up hitting every single node and edge in the data struture).
 
-> Note: this example uses a traditional tree data structure instead of a graph to represent the underlying data to be searched.
+> [!NOTE]
+> this example uses a traditional tree data structure instead of a graph to represent the underlying data to be searched.
 
 The algorithm can be broken down into the following pseudo-steps:
 
@@ -425,7 +431,8 @@ result = search_tree(tree, 'Ethan')
 print(f'result: {result}')
 ```
 
-> Note: in our example we use a simple tree data structure to represent the data to be searched. Our implementation is designed to work with that structure. So, for example, if we had multiple children per node (left and right child nodes), then we would need to account for the backtrack to the relevant child right node near the top of the tree.
+> [!NOTE]
+> in our example we use a simple tree data structure to represent the data to be searched. Our implementation is designed to work with that structure. So, for example, if we had multiple children per node (left and right child nodes), then we would need to account for the backtrack to the relevant child right node near the top of the tree.
 
 Let's take a look at the output of this program:
 
@@ -453,7 +460,8 @@ Generally BFS is better when dealing with relationships across fields, where as 
 
 That said, below is a short list of things to consider when opting for either a BFS or DFS:
 
-> Note: the data strutures used (including the implementation of your algorithm) can also contribute to your decision.
+> [!NOTE]
+> the data strutures used (including the implementation of your algorithm) can also contribute to your decision.
 
 - If you know the result is not far from the root: BFS.
 - If result(s) are located deep in the structure then: DFS.
@@ -480,7 +488,8 @@ In the above graph we have a few options:
 - Start > B > End (Cost: 7)
 - Start > B > A > End (Cost: 6)
 
-> Note: as you can see, the route that visually looks longer is actually quicker when considering the weighted nature of the graph.
+> [!NOTE]
+> as you can see, the route that visually looks longer is actually quicker when considering the weighted nature of the graph.
 
 The time complexity of this algorithm will be, at worst, `O(V+E)` (as noted with Breath First Search and Depth First Search, this means we could end up hitting every single node and edge in the data struture).
 

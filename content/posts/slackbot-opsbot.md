@@ -11,7 +11,8 @@ So this post is a long time coming. It has been pushed to the forefront by the f
 
 ...I've decided to revisit _last years_ hack week project: **OpsBot**, which is a Slackbot for operational tasks.
 
-> Note: for those interested, the presentation slides for my 2018 hack can be found [here](../../pdfs/hackweek_2018_nginx.pdf).
+> [!NOTE]
+> for those interested, the presentation slides for my 2018 hack can be found [here](../../pdfs/hackweek_2018_nginx.pdf).
 
 ## What does OpsBot do?
 
@@ -45,7 +46,8 @@ The following image demonstrates what that might look like...
 
 ![opsbot 1](/assets/img/opsbot_1.png)
 
-> Note: we have automated notifications sent to specific monitoring slack channels, and so people can also use the emoji reaction on those messages.
+> [!NOTE]
+> we have automated notifications sent to specific monitoring slack channels, and so people can also use the emoji reaction on those messages.
 
 Now imagine this incident has been triaged and yes it is indeed a problem. We'll need to spin up an incident channel so we can focus discussions and get a resolution in place.
 

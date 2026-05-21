@@ -20,7 +20,8 @@ As a software engineer you have a few different paths available to you for caree
 - Tech Lead
 - Engineering Manager
 
-> Note: the role hierarchy can change per organisation
+> [!NOTE]
+> the role hierarchy can change per organisation
 
 You may notice some of these roles are not like the others 😉 It's worth recognizing that there is a slight separation between the last two roles (Tech Lead, Engineering Manager) and the rest of the roles, in that the last two are more closely related to management than the other roles.
 
@@ -36,13 +37,15 @@ Below I have listed a few different areas of responsibility (as I see them) asso
 
 Meaning it's a good idea, when interviewing for an Engineering Manager role, to ask clarifying questions in order to help you understand the expectations of that role (in the specific context of that organisation).
 
-> Note: to learn more about _what_ to talk about during an interview, read my post '[Interview Topics](/posts/interview-topics/)'
+> [!NOTE]
+> to learn more about _what_ to talk about during an interview, read my post '[Interview Topics](/posts/interview-topics/)'
 
 For example, some companies have dedicated 'Project Managers'; meaning an Engineering Manager doesn't have to worry too much with that aspect of the job, and can instead focus on technical leadership responsibilities.
 
 Another example is the role of a 'Tech Lead'; some organisations use this name and 'Engineering Manager' interchangeably, while others treat them as distinct roles (and in some cases a less management/more code oriented role than an Engineering Manager).
 
-> Note: see also my post '[Project Management in Five Minutes](/posts/project-management/)' which discusses Lara Hogan's venn diagram of various leadership roles, as well as a project management checklist.
+> [!NOTE]
+> see also my post '[Project Management in Five Minutes](/posts/project-management/)' which discusses Lara Hogan's venn diagram of various leadership roles, as well as a project management checklist.
 
 ### Motivation
 
@@ -100,7 +103,8 @@ Below I've listed some useful resources for learning how to communicate effectiv
 - [SBI: Situation, Behaviour, Impact](https://gist.github.com/Integralist/24c8a9ce570d78d37ed0cf9967594e0e) a methodology developed by The Center for Creative Leadership.
 - [The Hard Thing About Hard Things](https://www.amazon.co.uk/Hard-Thing-About-Things-Building/dp/0062273205/ref=asap_bc) by Ben Horowitz.
 
-> Note: 'Authentic Communication' is actually taken from a larger work called [Conscious Business: How to build value through values](https://www.soundstrue.com/store/conscious-business-4036.html).
+> [!NOTE]
+> 'Authentic Communication' is actually taken from a larger work called [Conscious Business: How to build value through values](https://www.soundstrue.com/store/conscious-business-4036.html).
 
 ## Team Leader
 
@@ -131,7 +135,8 @@ If that is your motivation, then you have the right mentality for this type of r
 
 Ultimately if you want things like more money or a promotion or a better job title, that will require you to have more _impact_ at work, and to do _that_ means you need to lift your head up from your laptop and engage more widely with the organisation and the teams within and start demonstrating more broadly the potential positive impact that you can have.
 
-> Note: see also my post on '[Architecture Interviews (and other thoughts)](/posts/interview-techniques/)', where I cover what I look for when interviewing an Engineering Manager candidate.
+> [!NOTE]
+> see also my post on '[Architecture Interviews (and other thoughts)](/posts/interview-techniques/)', where I cover what I look for when interviewing an Engineering Manager candidate.
 
 ## Incremental Steps
 

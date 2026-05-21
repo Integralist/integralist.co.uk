@@ -139,7 +139,8 @@ I've written about [iterators, generators and
 coroutines](/posts/python-generators/) recently, so if you're interested in
 those concepts, then I'll refer you to that post.
 
-> Note: for more API information on the event loop, please refer to [the
+> [!NOTE]
+> for more API information on the event loop, please refer to [the
 > official Python
 > documentation](https://docs.python.org/3.8/library/asyncio-eventloop.html).
 
@@ -157,7 +158,8 @@ There are three main types of awaitables:
 1. Tasks
 1. Futures
 
-> Note: Futures is a _low-level_ type and so you shouldn't need to worry about
+> [!NOTE]
+> Futures is a _low-level_ type and so you shouldn't need to worry about
 > it too much if you're not a library/framework developer (as you should be
 > using the higher-level abstraction APIs instead).
 
@@ -202,7 +204,8 @@ low-level API `ensure_future` is used to convert the coroutine into a Future
 (see [source
 code](https://github.com/python/cpython/blob/master/Lib/asyncio/tasks.py#L653)).
 
-> Note: [here](https://gist.github.com/1efc8dcfc0b1e9e8e8b89a4b2019f3af) is a
+> [!NOTE]
+> [here](https://gist.github.com/1efc8dcfc0b1e9e8e8b89a4b2019f3af) is a
 > comparison of the various methods for validating if a function is a coroutine.
 > The results aren't necessarily what you might expect.
 
@@ -222,7 +225,8 @@ The following APIs let you see the state of the tasks running on the event loop:
 - `asyncio.current_task`
 - `asyncio.all_tasks`
 
-> Note: for other available methods on a Task object please refer to [the
+> [!NOTE]
+> for other available methods on a Task object please refer to [the
 > documentation](https://docs.python.org/3.8/library/asyncio-task.html#asyncio.Task).
 
 ### Futures
@@ -239,7 +243,8 @@ while
 is an example of an asyncio low-level API function that returns a Future (see
 also some of the APIs listed in [Concurrent Functions](#concurrent-functions)).
 
-> Note: for other available methods on a Future please refer to [the
+> [!NOTE]
+> for other available methods on a Future please refer to [the
 > documentation](https://docs.python.org/3.8/library/asyncio-future.html#asyncio.Future).
 
 ## Running an asyncio program
@@ -344,7 +349,8 @@ your application.
 - `asyncio.wait_for`: wait for a single awaitable, until the given 'timeout' is reached.
 - `asyncio.as_completed`: similar to `gather` but returns Futures that are populated when results are ready.
 
-> Note: `gather` has specific options for handling errors and cancellations. For
+> [!NOTE]
+> `gather` has specific options for handling errors and cancellations. For
 > example, if `return_exceptions: False` then the first exception raised by one
 > of the awaitables is returned to the caller of `gather`, where as if set to
 > `True` then the exceptions are aggregated in the list alongside successful
@@ -356,7 +362,8 @@ your application.
 - `@asyncio.coroutine`: removed in favour of `async def` in Python 3.10
 - `asyncio.sleep`: the `loop` parameter will be removed in Python 3.10
 
-> Note: you'll find in most of these APIs a `loop` argument can be provided to
+> [!NOTE]
+> you'll find in most of these APIs a `loop` argument can be provided to
 > enable you to indicate the specific event loop you want to utilize). It seems
 > Python has deprecated this argument in 3.8, and will remove it completely in
 > 3.10.
@@ -455,7 +462,8 @@ async def main():
 asyncio.run(main())
 ```
 
-> Note: the `asyncio.TimeoutError` doesn't provide any extra information so
+> [!NOTE]
+> the `asyncio.TimeoutError` doesn't provide any extra information so
 > there's no point in trying to use it in your output (e.g. `except asyncio.TimeoutError as err: print(err)`).
 
 ### `as_completed`
@@ -722,7 +730,8 @@ if __name__ == "__main__":
     print("program complete")
 ```
 
-> Note: be careful with a global process executor (e.g. placing something like
+> [!NOTE]
+> be careful with a global process executor (e.g. placing something like
 > `PROCESS_POOL = concurrent.futures.ProcessPoolExecutor()` within the global
 > scope and using that reference within our `do_something()` function) as this
 > means when the program is copied into a _new_ process you'll get an error from
@@ -772,7 +781,8 @@ calling `.shutdown()` and then immediately checking if the task is complete
 (e.g. `assert future.done()`) to cause an error to be raised as the future is
 unlikely to be finished.
 
-> Note: remember also if you call `.done()` on a future when a value has not yet
+> [!NOTE]
+> remember also if you call `.done()` on a future when a value has not yet
 > been set, then you'll see an exception such as `asyncio.InvalidStateError`.
 
 But no error is raised, and the future is indeed considered 'done' by the time

@@ -27,7 +27,8 @@ func main() {
 }
 ```
 
-> Note: `http://localhost:8080/World` will return `Hello World`
+> [!NOTE]
+> `http://localhost:8080/World` will return `Hello World`
 
 For most people, setting up a web server to handle incoming HTTP requests is considered a quick and simple introduction to the [Go programming language](https://golang.org/), and looking at the above code it's easy to see why that would be the case. But further investigation can yield some nice learnings about Go's built-in `func` type and how it is used as an adapter layer.
 
@@ -52,7 +53,8 @@ So here are each of the variations:
 
 The most basic implementation (and by basic I don't mean 'simplest', more... 'raw') is demonstrated in the below code sample, which calls `ListenAndServe` and passes in `db` as its second argument.
 
-> Note: although I wrote this blog post back in October 2015, I've rewritten the below examples based off inspiration from "The Go Programming" book I've been reading recently
+> [!NOTE]
+> although I wrote this blog post back in October 2015, I've rewritten the below examples based off inspiration from "The Go Programming" book I've been reading recently
 
 This first section will give us enough background and grounding to build upon in the latter sections:
 
@@ -231,7 +233,8 @@ func main() {
 
 As we can see, we create a new `ServeMux` instance using `http.NewServeMux` and then register our `database` methods as handlers for each of the route's we want to match them against. The `ServeMux` instance is a multiplexer, meaning we can pass it as the second argument to `http.ListenAndServe`.
 
-> Note: you can also see we demonstrate the shorthand `mux.HandleFunc` which is really a convenience method over both `mux.Handle` and `http.HandlerFunc`
+> [!NOTE]
+> you can also see we demonstrate the shorthand `mux.HandleFunc` which is really a convenience method over both `mux.Handle` and `http.HandlerFunc`
 
 So how does `http.HandlerFunc` and `mux.HandleFunc` allow us to use an arbitrary function (as none of those database functions have access to a `ServeHTTP` function as required by `ListenAndServe`)? We'll come back to the answer in a little bit. Let's quickly review the last variation of how to run a web server first...
 

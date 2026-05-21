@@ -109,7 +109,8 @@ Here is an example IPv4 IP:
 
 IPv4 IPs are expressed in decimal format.
 
-> Note: IPv6 IPs are eight 4-character hexadecimal numbers,\
+> [!NOTE]
+> IPv6 IPs are eight 4-character hexadecimal numbers,\
 > which represent 16 bits each (for a total of 128 bits)\
 > e.g. `2001:0db8:0a0b:12f0:0000:0000:0000:0001`
 
@@ -205,7 +206,8 @@ This is useful when you've converted a number like `75` into a different base (l
 
 ### Convert Base-10 into Base-2/8
 
-> Note: the steps are the same for converting to base-2 and base-8
+> [!NOTE]
+> the steps are the same for converting to base-2 and base-8
 
 Now let's consider how to convert the number `75` into another base, like base-8. To do so, follow these steps
 
@@ -311,13 +313,15 @@ So `10.0.0.0/24` gives us an ip range of `10.0.0.0` to `10.0.0.255` (256 IPs).
 
 Whereas `10.0.0.0/32` gives us an ip range of 1 ip (`10.0.0.0` to `10.0.0.0`).
 
-> Note: you can use a tool such as [http://www.ipaddressguide.com/cidr](http://www.ipaddressguide.com/cidr) to help you generate CIDRs
+> [!NOTE]
+> you can use a tool such as [http://www.ipaddressguide.com/cidr](http://www.ipaddressguide.com/cidr) to help you generate CIDRs
 
 We can use the earlier [byte visualisation](#visualisation) table matrix to help us manually calculate a CIDR range.
 
 I've reproduced it below with a HTML table:
 
-> Note: you'll likely need to scroll to the right to see the start of the 32-bit
+> [!NOTE]
+> you'll likely need to scroll to the right to see the start of the 32-bit
 
 <table border="1" id="table10" bordercolor="#000080" style="text-align: center; font-family: Verdana; font-size: 8pt; color: #000000">
   <tbody>

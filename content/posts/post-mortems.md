@@ -5,7 +5,8 @@ description: How to run effective blameless post-mortems, including scheduling, 
 tags: [devops, management]
 ---
 
-> Note: for those short on time: here's the [Post-Mortem Template](https://docs.google.com/document/d/1rYERE1LaobML3puIa94jJSh2cQ0kHflCk8zmVo3pWq0/edit?usp=sharing)
+> [!NOTE]
+> for those short on time: here's the [Post-Mortem Template](https://docs.google.com/document/d/1rYERE1LaobML3puIa94jJSh2cQ0kHflCk8zmVo3pWq0/edit?usp=sharing)
 
 ## What is a post-mortem?
 
@@ -80,7 +81,8 @@ Because of all that (and more), who you share the post-mortem document with real
 
 Below I link to a Google document we use as a template for our post mortem meetings, and I've included the relevant sections below just for an 'at a glance' view.
 
-> Note: you don't have to include all of these if you don't want. Take what is useful to you and leave whatever isn't.
+> [!NOTE]
+> you don't have to include all of these if you don't want. Take what is useful to you and leave whatever isn't.
 
 ### Observations
 
@@ -98,13 +100,15 @@ e.g. Users were seeing X output.
 
 What do we believe to be the contributing factors?
 
-> Note: there's typically never a single 'root cause'
+> [!NOTE]
+> there's typically never a single 'root cause'
 
 ### Remediation
 
 What did we do to resolve the incident?
 
-> Note: this isn't the same as 'fixing' the problem, which suggests something more long term was put in place.
+> [!NOTE]
+> this isn't the same as 'fixing' the problem, which suggests something more long term was put in place.
 
 e.g.
 
@@ -115,7 +119,8 @@ e.g.
 
 What was the 'cost' of this incident?
 
-> Note: this isn't the same thing as the symptoms.
+> [!NOTE]
+> this isn't the same thing as the symptoms.
 
 e.g.
 
@@ -136,7 +141,8 @@ e.g.
 
 Who was involved and what are their roles in the company.
 
-> Note: you don't know everyone and what they do, so make it easier for people reading the post-mortem to understand the breadth of skills involved.
+> [!NOTE]
+> you don't know everyone and what they do, so make it easier for people reading the post-mortem to understand the breadth of skills involved.
 
 e.g.
 
@@ -147,7 +153,8 @@ e.g.
 
 Describe what happened and when. This should be much more detail than those extracted for the 'key points' section.
 
-> Note: if you work for a distributed company, then identifying the timezone of the incident (or at least the timezone you're reporting it from) can help clarify when these things happened.
+> [!NOTE]
+> if you work for a distributed company, then identifying the timezone of the incident (or at least the timezone you're reporting it from) can help clarify when these things happened.
 
 e.g.
 

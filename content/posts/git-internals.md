@@ -13,7 +13,8 @@ Yet, it is a tool that is still vastly misunderstood and feared. In this post I 
 
 My hope is that by better understanding how git works, and the concepts it is built upon, readers will feel more empowered and confident when working with git (especially when they have issues and would normally be unsure of what to do).
 
-> Note: this article isn't an introduction to git, and does presume that the reader is familiar with (i.e. a user of) git.
+> [!NOTE]
+> this article isn't an introduction to git, and does presume that the reader is familiar with (i.e. a user of) git.
 
 ## General Concept
 
@@ -23,7 +24,8 @@ I wanted to take a quick moment just to clarify the terminology associated with 
 - **Staging Area**: a file that tracks the changes to your project files.
 - **Repository**: the location where your project files are stored.
 
-> Note: these bullet points are just summarizations, but I would like to extend upon it slightly in that: your 'working directory' can _change_ depending on what 'version' of the project you have 'checked out' from the git repository (i.e. this is what happens when you change your 'branch' with `git checkout <branch_name>`).
+> [!NOTE]
+> these bullet points are just summarizations, but I would like to extend upon it slightly in that: your 'working directory' can _change_ depending on what 'version' of the project you have 'checked out' from the git repository (i.e. this is what happens when you change your 'branch' with `git checkout <branch_name>`).
 
 So for example, commands like `git add` will copy objects from the working directory into the staging area (aka the 'index'), while `git reset` will _remove_ objects from the staging area.
 
@@ -35,7 +37,8 @@ The git version control system wasn't initially designed to be a user-friendly i
 
 This has resulted in much confusion around what commands are intended for use by general users and which commands exist for the purpose of internal use.
 
-> Note: although used internally, the low-level subcommands are also typically used by systems that require such granular operational control.
+> [!NOTE]
+> although used internally, the low-level subcommands are also typically used by systems that require such granular operational control.
 
 The `git` subcommands are generally split into one of two groups:
 
@@ -111,7 +114,8 @@ Most users do not diverge from the well trodden path of: `git add`, `git commit`
 
 What's interesting about the plumbing subcommands is that some of them are used internally by git when you're calling the porcelain subcommands (e.g. `git read-tree`, `git update-index`, `git update-ref` will be called by other porcelain commands such as `git add` or `git commit`).
 
-> Note: although we'll be looking at a couple of plumbing commands in this article, I'll refer you to the [git book](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects) for a look at the different plumbing commands available and how they're used.
+> [!NOTE]
+> although we'll be looking at a couple of plumbing commands in this article, I'll refer you to the [git book](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects) for a look at the different plumbing commands available and how they're used.
 
 ## The `.git` directory
 
@@ -158,7 +162,8 @@ $ tree .git/
 
 OK, so there's some important directories and files here that we need to learn a bit about in order to appreciate how git works.
 
-> Note: I'm not going to explain _every_ file and directory, only those necessary to understand the fundamentals.
+> [!NOTE]
+> I'm not going to explain _every_ file and directory, only those necessary to understand the fundamentals.
 
 Here are some interesting ones:
 
@@ -200,7 +205,8 @@ remote    branch     tag
            blob
 ```
 
-> Note: you can see from the above ascii graph that the 'commit' object itself points to a 'tree' object, and that tree object points to a 'blob' object.  We'll dig into these reference 'object' types in more detail in the "[Object Types](#object-types)" section.
+> [!NOTE]
+> you can see from the above ascii graph that the 'commit' object itself points to a 'tree' object, and that tree object points to a 'blob' object.  We'll dig into these reference 'object' types in more detail in the "[Object Types](#object-types)" section.
 
 It's worth clarifying now that although we conceptually talk in terms of 'branches' in git, the internal directory structure (where references to branches are stored) uses the term 'heads' instead. It's a terrible name (like most things in git's lexicon), but it's best to just accept it and move on.
 
@@ -232,7 +238,8 @@ But at this point in time I've only executed `git init`, and so I've not actuall
 
 If we look back at the earlier directory tree (which we printed after running `git init`), we'll notice that although there is a `.git/refs/heads` directory, there is no `master` file. A file called `master` won't exist in that subdirectory _until_ I make my first commit.
 
-> Note: if you recall from earlier I said that the `refs/heads` subdirectory was essentially a synonym for 'branches' created locally for this project. Hence, the default file referenced by the `HEAD` file is `master` (because it's referencing the `master` branch).
+> [!NOTE]
+> if you recall from earlier I said that the `refs/heads` subdirectory was essentially a synonym for 'branches' created locally for this project. Hence, the default file referenced by the `HEAD` file is `master` (because it's referencing the `master` branch).
 
 Let's now create a commit so that we can see a `refs/heads/master` file and what it points to...
 
@@ -283,7 +290,8 @@ $ git remote show origin
 
 So subsequently doing `git pull origin HEAD` would bring in _lots_ of unexpected changes to your local branch 😬
 
-> Note: using `HEAD` isn't a problem when doing something like `git push origin HEAD` because it's a fundamentally different operation and so git knows to reference the local `HEAD` file to get the commit range before _pushing_ to the remote.
+> [!NOTE]
+> using `HEAD` isn't a problem when doing something like `git push origin HEAD` because it's a fundamentally different operation and so git knows to reference the local `HEAD` file to get the commit range before _pushing_ to the remote.
 
 Similarly, using a shortened 'reference' isn't possible with a command like `git checkout` as its internal logic will cause a `detached HEAD` state (e.g. if you were to do something like `git checkout refs/heads/master` instead of `git checkout master`).
 
@@ -316,7 +324,8 @@ There are four main types of objects in git:
 1. blob
 1. tag
 
-> Note: we'll primarily be covering the first three object types.
+> [!NOTE]
+> we'll primarily be covering the first three object types.
 
 Since we committed a single file into git there has been a few new files and directories created:
 
@@ -352,7 +361,8 @@ It only has `foo.txt` tracked, which is correct. There are no other files or dir
 
 To look at the different 'objects' we'll use the `git cat-files` command which decompresses the file and displays the file contents (we'll use the `-t` flag to return the 'type' and the `-p` flag to 'print' the contents).
 
-> Note: we don't provide the path (e.g. `objects/../...`) as the argument, but the sha itself (shortened sha is acceptable too).
+> [!NOTE]
+> we don't provide the path (e.g. `objects/../...`) as the argument, but the sha itself (shortened sha is acceptable too).
 
 ```
 $ git cat-file -t 257cc5642cb1a054f08cc83f2d943e56fd3ebe99
@@ -549,4 +559,5 @@ Which itself is just a shortened way of doing:
 git diff master..c3865b72b019ced930cfc601b09b874685c29e72
 ```
 
-> Note: one last thing I wanted to mention (and there was no other place really to mention this) is that git comes with a UI! you can execute the command `gitk` to use it.
+> [!NOTE]
+> one last thing I wanted to mention (and there was no other place really to mention this) is that git comes with a UI! you can execute the command `gitk` to use it.

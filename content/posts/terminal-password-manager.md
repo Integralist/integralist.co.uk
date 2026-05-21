@@ -19,7 +19,8 @@ Pass is much simpler than that.
 
 On the plus side, Pass is based on standardised unix technology. Specifically [GPG](https://www.gnupg.org/), which can give you confidence in the security mechanisms being utilised.
 
-> Note: if you need a refresher on encryption and GPG, then I'll refer you to an [earlier blog post of mine](/posts/security-basics/) that covers the basics on this topic
+> [!NOTE]
+> if you need a refresher on encryption and GPG, then I'll refer you to an [earlier blog post of mine](/posts/security-basics/) that covers the basics on this topic
 
 ## Installation
 
@@ -37,7 +38,8 @@ For me on Bash this looks like this:
 echo "source /usr/local/etc/bash_completion.d/password-store" >> ~/.bashrc
 ```
 
-> Note: other distros available on the [Pass website](https://www.passwordstore.org/#download)
+> [!NOTE]
+> other distros available on the [Pass website](https://www.passwordstore.org/#download)
 
 At this point you need to initialize Pass:
 
@@ -182,7 +184,8 @@ pass insert 2FA/Amazon <your_google_token>
 
 That's all there is to it.
 
-> Note: see [this gist](https://gist.github.com/NapoleonWils0n/4005467) for more details on the Google 2FA setup process
+> [!NOTE]
+> see [this gist](https://gist.github.com/NapoleonWils0n/4005467) for more details on the Google 2FA setup process
 
 ## Conclusion
 

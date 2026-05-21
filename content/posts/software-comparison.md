@@ -41,7 +41,8 @@ We will use the following emojis to identify comparative outcomes:
 - ⚖️: balanced results
 - 🗑: no winner/no loser
 
-> **Note**: I will sometimes mark both tools as neither ‘winner’ or ‘loser’ due to the comparative value not necessarily being indicative of either. For example, the data point might just be ‘of interest’ (such as the date of when the project started).
+> [!NOTE]
+> I will sometimes mark both tools as neither ‘winner’ or ‘loser’ due to the comparative value not necessarily being indicative of either. For example, the data point might just be ‘of interest’ (such as the date of when the project started).
 
 ## Example
 

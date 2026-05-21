@@ -11,7 +11,8 @@ I recently implemented a Python library which acts as an abstraction layer on to
 
 The motivation was for allowing teams to have a consistent experience utilising encryption (and hashing) in their applications and services without necessarily having to know the ins-and-outs of what's important with regards to salts, key lengths etc.
 
-> Note: I always encourage people to understand what it is they're doing, but in some cases that's not always a practical mindset.
+> [!NOTE]
+> I always encourage people to understand what it is they're doing, but in some cases that's not always a practical mindset.
 
 The library provides three functions:
 
@@ -43,7 +44,8 @@ If a `password` argument is provided, then KDF will be used (along with a random
 
 If a `salt` is provided, then a PBKDF2 will be used to generate a _deterministic_ digest.
 
-> Note: salts should be a minimum of 128bits (~16 characters) in length. Also, when specifying a maxtime with `generate_digest`, ensure you include that same value when decrypting with `decrypt_digest` or validating via `validate_digest`.
+> [!NOTE]
+> salts should be a minimum of 128bits (~16 characters) in length. Also, when specifying a maxtime with `generate_digest`, ensure you include that same value when decrypting with `decrypt_digest` or validating via `validate_digest`.
 
 ## decrypt_digest and validate_digest
 
@@ -61,13 +63,15 @@ RUN apt-get update && apt-get install -y build-essential libssl-dev python-dev
 
 I suggest looking at the test suite (see below) to get an idea of how you would use the functions in this library.
 
-> Note: for a glossary of security terms, refer to [this document](https://docs.google.com/document/d/1qs3jEIQvocdVhSxCSPLF1BoLnp91aLnuUIasvl-maYo/edit?usp=sharing).
+> [!NOTE]
+> for a glossary of security terms, refer to [this document](https://docs.google.com/document/d/1qs3jEIQvocdVhSxCSPLF1BoLnp91aLnuUIasvl-maYo/edit?usp=sharing).
 
 ## Tests
 
 Before we look at the implementation of the library, let's take a moment to sift through its test suite.
 
-> Note: I named the library `secure` and have it running on a private PyPy instance. This code is [made available via GitHub](https://github.com/Integralist/Python-Encryption).
+> [!NOTE]
+> I named the library `secure` and have it running on a private PyPy instance. This code is [made available via GitHub](https://github.com/Integralist/Python-Encryption).
 
 ```
 import pytest
@@ -153,7 +157,8 @@ def test_decrypt_digest():
 
 OK, time to see the library code itself.
 
-> Note: I like to use [MyPy](http://mypy-lang.org/) for type hinting.
+> [!NOTE]
+> I like to use [MyPy](http://mypy-lang.org/) for type hinting.
 
 ```
 import scrypt

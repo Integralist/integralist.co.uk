@@ -94,7 +94,8 @@ so they can be inlined into HTML).
 How it works: Base64 encoding takes three bytes, each consisting of eight bits,
 and represents them as four printable characters in the ASCII standard.
 
-> Note: Base64 encoded strings are NOT secure.\
+> [!NOTE]
+> Base64 encoded strings are NOT secure.\
 > Remember, it _encodes_ data, not _encrypt_ it.
 
 ## MAC vs HMAC
@@ -126,7 +127,8 @@ The way you would use it is as follows:
 hmac sha256 "message to be hashed" secret-key
 ```
 
-> Note: you can swap `sha256` for any supported digest algorithm (see `openssl dgst -h` for details).
+> [!NOTE]
+> you can swap `sha256` for any supported digest algorithm (see `openssl dgst -h` for details).
 
 Which would generate the digest output:
 
@@ -155,7 +157,8 @@ use:
 cat plaintext.txt | openssl dgst -sha512 -binary | base64
 ```
 
-> Note: `base64` could be replaced with openssl's base64 encoding command:
+> [!NOTE]
+> `base64` could be replaced with openssl's base64 encoding command:
 > `openssl enc -base64 -A`
 
 ## Random Password Generation
@@ -194,7 +197,8 @@ hash algorithm:
 echo -n foobar | shasum -a 512
 ```
 
-> Note: see `shasum -h` for all available algorithms.
+> [!NOTE]
+> see `shasum -h` for all available algorithms.
 
 Which outputs:
 
@@ -278,7 +282,8 @@ and loading my SSH private key very quick and easy:
 alias sshagent='eval "$(ssh-agent -s)" && ssh-add -K ~/.ssh/github_rsa'
 ```
 
-> Note: the use of the `-K` flag is macOS specific, it means it'll add the key
+> [!NOTE]
+> the use of the `-K` flag is macOS specific, it means it'll add the key
 > into the macOS keychain program.
 
 ## OpenSSL
@@ -286,7 +291,8 @@ alias sshagent='eval "$(ssh-agent -s)" && ssh-add -K ~/.ssh/github_rsa'
 OpenSSL is designed to provide a method for securing web based communication
 (think HTTPS/TLS/SSL).
 
-> Note: for a full list of commands see: `openssl -h` and `openssl <command> -h`.
+> [!NOTE]
+> for a full list of commands see: `openssl -h` and `openssl <command> -h`.
 
 ### Key Exchanges
 
@@ -330,7 +336,8 @@ echo foobar | openssl enc -aes-256-cbc -out message.enc
 openssl enc -aes-256-cbc -in message.enc -d
 ```
 
-> Note: `.enc` is a commonly used format to indicate a file is encrypted (`.asc`
+> [!NOTE]
+> `.enc` is a commonly used format to indicate a file is encrypted (`.asc`
 > is specifically used for asymmetric encryption).
 
 I'm passing in the message via stdin (when encrypting), but specifying a file
@@ -361,7 +368,8 @@ $ echo foobar | openssl aes-256-cbc -a
 U2FsdGVkX19/L0WtkvCNlpMiQnvD1SWGM19lm4m6xK4=
 ```
 
-> Note: see `man enc` for details
+> [!NOTE]
+> see `man enc` for details
 
 #### Salts
 
@@ -414,7 +422,8 @@ openssl rsautl -decrypt -inkey private_key.pem -in secret.enc
 OpenSSL also offers a way to generate random binary data which you can then
 export as either hexidecimal or base64 formats:
 
-> Note: in the following examples, `64` is the number of bytes to be generated.
+> [!NOTE]
+> in the following examples, `64` is the number of bytes to be generated.
 
 ```
 $ openssl rand 64
@@ -577,7 +586,8 @@ could be. Let's use a 256bit encryption key:
 gpg --symmetric --cipher-algo AES256 plaintext.txt
 ```
 
-> Note: see `gpg --version` for all available ciphers
+> [!NOTE]
+> see `gpg --version` for all available ciphers
 
 ### Signing keys
 
@@ -599,7 +609,8 @@ you previously imported and signed:
 gpg --export --armor bob@example.org
 ```
 
-> Note: `--armor` simply outputs the binary data as ASCII
+> [!NOTE]
+> `--armor` simply outputs the binary data as ASCII
 
 ### Signing encrypted files
 
@@ -607,7 +618,8 @@ It can be useful to sign a file that you encrypt, so that the person who will
 decrypt the file can verify it was you who sent it to them, and also check that
 the integrity of the file is still intact.
 
-> Note: this provides a combination of _authenticity_ and _integrity_ (as
+> [!NOTE]
+> this provides a combination of _authenticity_ and _integrity_ (as
 > defined within the [terminology section](#1))
 
 You do this by using the `--sign` flag:
@@ -616,7 +628,8 @@ You do this by using the `--sign` flag:
 gpg --local-user Bob --encrypt --recipient Alice --sign plaintext.txt
 ```
 
-> Note: I'm using `--local-user` because I have many different key pairs setup
+> [!NOTE]
+> I'm using `--local-user` because I have many different key pairs setup
 > for testing.
 
 This will generate a `plaintext.txt.gpg` encrypted file.

@@ -160,7 +160,8 @@ Here is a table matrix that attempts to identify these 'layers':
 </table>
 -->
 
-> Note: you'll find many differing versions of the OSI Model (i.e. the layers described are always the same, but you may see more or less protocols defined depending on what version you look at), this is just one such version copied vertabim from Wikipedia
+> [!NOTE]
+> you'll find many differing versions of the OSI Model (i.e. the layers described are always the same, but you may see more or less protocols defined depending on what version you look at), this is just one such version copied vertabim from Wikipedia
 
 The reason this is useful, is because you can identify which layer the relevant tools are operating at. Tools like `netstat` operate at layer four (transport: `tcp`), whereas `telnet` operates at layer seven (application: it actually has its own protocol `telnet`).
 
@@ -270,7 +271,8 @@ Here are some useful commands you can try:
 - `ps aux`: shows all running processes (even those without a tty or are not owned by you)
 - `ps axjf`: shows parent process (ppids) & nested children pids with tree formatting
 
-> Note: the `f` option doesn't work the same on Mac OS (`man ps` for details)
+> [!NOTE]
+> the `f` option doesn't work the same on Mac OS (`man ps` for details)
 
 ## strace
 
@@ -613,7 +615,8 @@ strace -e trace=open,connect,access lsof
 
 You can also use `!` to negate the filter (see `man strace` for more details)
 
-> Note: if you try to use `grep` instead of `-e` then you'll need to ensure you redirect stderr to stdout or you wont see any output as strace sends to stderr by default; meaning you'd need to execute something like `strace uptime 2>&1 | grep open`
+> [!NOTE]
+> if you try to use `grep` instead of `-e` then you'll need to ensure you redirect stderr to stdout or you wont see any output as strace sends to stderr by default; meaning you'd need to execute something like `strace uptime 2>&1 | grep open`
 
 You might also find that using the `-t` flag useful for tracking _when_ the call was made:
 
@@ -631,7 +634,8 @@ As you can see `strace` is a really useful tool when the time comes.
 
 By the way, you should be careful with backgrounded processes. If you attach to a backgrounded process running in the same shell instance as your `strace` execution, then you'll be locked up.
 
-> Note: although `strace` is amazing, you might also want to read [this article](http://www.brendangregg.com/blog/2014-05-11/strace-wow-much-syscall.html) that discusses the oft-ignored performance overhead of using it in production
+> [!NOTE]
+> although `strace` is amazing, you might also want to read [this article](http://www.brendangregg.com/blog/2014-05-11/strace-wow-much-syscall.html) that discusses the oft-ignored performance overhead of using it in production
 
 ## lsof
 
@@ -853,7 +857,8 @@ Below is a simple command to get you started:
 sudo iftop -P -i en1
 ```
 
-> Note: use `ifconfig` to find the interface you're interested in
+> [!NOTE]
+> use `ifconfig` to find the interface you're interested in
 
 I personally find the standard output useful (as per image above), but if you press `?` while the program is running you'll see lots of additional options you can try:
 
@@ -934,7 +939,8 @@ The output of the program may look a little confusing but there is consistent st
 <date_time> <protocol> <src> > <dest>: Flags[<type>] <data>
 ```
 
-> Note: the `>` always sits between `src` and `dest` and indicates the direction of the request
+> [!NOTE]
+> the `>` always sits between `src` and `dest` and indicates the direction of the request
 
 #### Flags
 
@@ -986,7 +992,8 @@ This utility isn't available by default on any OS, so with Mac OS:
 brew install wireshark --with-qt5
 ```
 
-> Note: sometimes the flags that are available change. So I would suggest running the command `brew cat wireshark` first to see what's available first.
+> [!NOTE]
+> sometimes the flags that are available change. So I would suggest running the command `brew cat wireshark` first to see what's available first.
 
 With Ubuntu:
 
@@ -1006,13 +1013,15 @@ I typically have only ever used Wireshark with pcap files I've created via `tcpd
 
 1. execute `wireshark -r /path/to/pcap/file`
 
-> Note: if you just want to use Wireshark to monitor all network traffic, then execute `sudo wireshark -i <interface>` (use `ifconfig` or `sudo wireshark -D` to see what interfaces are available). Once the gui is open it'll have the specified interface pre-selected, so just double-click on it to start recording its traffic
+> [!NOTE]
+> if you just want to use Wireshark to monitor all network traffic, then execute `sudo wireshark -i <interface>` (use `ifconfig` or `sudo wireshark -D` to see what interfaces are available). Once the gui is open it'll have the specified interface pre-selected, so just double-click on it to start recording its traffic
 
 Every time there is (for example) a HTTP request, there might end up being 200 TCP packets recorded, which can be (as you could imagine) difficult to recognize and make sense of manually.
 
 But this problem can be simplified within Wireshark by clicking on "Statistics" and then "Conversations", where it will organize all these disparate packets into TCP sessions for you. Thus making analysing the data much easier.
 
-> Note: we cover 'filtering' more in the next section about tshark, but one simple search for a HTTP GET header in your recorded traffic is `frame contains "GET"`
+> [!NOTE]
+> we cover 'filtering' more in the next section about tshark, but one simple search for a HTTP GET header in your recorded traffic is `frame contains "GET"`
 
 #### Docker?
 
@@ -1106,7 +1115,8 @@ One useful trick some people aren't aware of, is that if you are writing automat
 
 For example, if you open the pcap in wireshark, you can find the filter you need by selecting the data manually via the UI and then right-click'ing the relevant data field and selecting "Prepare a Filter > Selected". This will generate the exact value you would assign to the tshark `-e` flag.
 
-> Note: the filtering system syntax is called BPF (Berkeley Packet Filter) and you can find [documentation here](http://biot.com/capstats/bpf.html)
+> [!NOTE]
+> the filtering system syntax is called BPF (Berkeley Packet Filter) and you can find [documentation here](http://biot.com/capstats/bpf.html)
 
 ## telnet
 
@@ -1118,7 +1128,8 @@ Telnet is both a tool `telnet` _and_ a Network Protocol of the same name: Telnet
 
 Telnet's usage nowadays is a little limited due to the massive success of protocols such as SSH, but it can be interesting to play around with (although I've never really had much of a 'need' for it myself).
 
-> Note: one such tool that is more useful in this respect is [`netcat`](http://nc110.sourceforge.net/) which reads and writes data across network connections, using the TCP or UDP protocols
+> [!NOTE]
+> one such tool that is more useful in this respect is [`netcat`](http://nc110.sourceforge.net/) which reads and writes data across network connections, using the TCP or UDP protocols
 
 To use the command you type `telnet <host> <port>`. Once 'connected' to the host you need to provide a command to be executed, for example a `GET` request.
 
@@ -1142,7 +1153,8 @@ From here we can provide our request:
 GET #q=cars HTTP/1.1
 ```
 
-> Note: you need to press <Enter> twice to send the request
+> [!NOTE]
+> you need to press <Enter> twice to send the request
 
 From here we get the following response:
 

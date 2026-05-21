@@ -66,7 +66,8 @@ To do this we needed a way for the CDN to be able to identify a client as one th
 
 I won't explain _why_ we didn't have enough programmatic access with Fastly, because it requires an understanding of Fastly and their services, which is outside the scope of this post.
 
-> Note: Fastly does have a beta product called [compute@edge](https://www.fastly.com/blog/join-the-beta-new-serverless-compute-environment-at-the-edge) but it's still very early stages and they don't recommend their customers use it for production workloads.
+> [!NOTE]
+> Fastly does have a beta product called [compute@edge](https://www.fastly.com/blog/join-the-beta-new-serverless-compute-environment-at-the-edge) but it's still very early stages and they don't recommend their customers use it for production workloads.
 
 ## Architecture
 
@@ -122,13 +123,15 @@ OK, so let's review the benefits of this design...
   - Clear a rate limited client from the Fastly edge dictionary.
   - Toggle on/off rate limiting at the edge.
 
-> Note: although not done yet, I intend on building an internal UI service for 'Rate Control' that will make interfacing with the various components easier (inc. all features currently present in the CLI).
+> [!NOTE]
+> although not done yet, I intend on building an internal UI service for 'Rate Control' that will make interfacing with the various components easier (inc. all features currently present in the CLI).
 
 ## Example Code
 
 Let's see some example VCL code to understand the CDN edge implementation a bit better...
 
-> Note: for brevity I've removed chunks of logic so we can more easily focus in on the 'control flow'.
+> [!NOTE]
+> for brevity I've removed chunks of logic so we can more easily focus in on the 'control flow'.
 
 ```
 sub ratelimit_trigger {
@@ -182,7 +185,8 @@ sub ratelimit_error {
 
 The above code would typically be a separate code file which we'd include in our standard VCL file and then call within the relevant state subroutines...
 
-> Note: again I've omitted chunks of code for the sake of brevity.
+> [!NOTE]
+> again I've omitted chunks of code for the sake of brevity.
 
 ```
 include "rate_limiting"
