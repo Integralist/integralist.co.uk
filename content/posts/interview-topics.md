@@ -6,7 +6,7 @@ tags: [management]
 ---
 
 > **UPDATE**: I moved on from BuzzFeed October 2020 and Joined [Fastly](https://www.fastly.com).\
-> See my [resume](/pages/resume) for details.
+> See my [resume](/resume/) for details.
 
 ## Introduction
 

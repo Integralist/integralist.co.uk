@@ -86,7 +86,7 @@ You can manually `@<username>` people within a comment in the pull request, or y
 
 ## Merge Strategies
 
-I've written in the past about different '[git merge strategies](/posts/git-merge-strategies.html)'. My preferred way is to `git merge --squash`, and luckily GitHub's UI provides a 'one click' way to squash merge a pull request.
+I've written in the past about different '[git merge strategies](/posts/git-merge-strategies/)'. My preferred way is to `git merge --squash`, and luckily GitHub's UI provides a 'one click' way to squash merge a pull request.
 
 That's what I suggest using for merging pull requests into `master`, but you may have different requirements in your team/organisation, so pick whatever works best.
 

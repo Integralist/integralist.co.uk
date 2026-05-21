@@ -412,4 +412,4 @@ I've not tried it yet, but it looks interesting.
 
 ### Update
 
-I've setup gRPC now. You can find a beginners guide I've written [here](http://www.integralist.co.uk/posts/grpc-for-beginners/)
+I've setup gRPC now. You can find a beginners guide I've written [here](/posts/grpc-for-beginners/)

@@ -360,7 +360,7 @@ So to fix this problem we'll convert the method invocation into an inlined piece
 
 ### Move Method
 
-In a previous post about [Object-Oriented Design](http://www.integralist.co.uk/posts/design-ood/#class-analysis) I explained that you should query your classes/objects to ensure the methods they define are actually where they should be (another reason is 'feature envy', if a method is asking another class a lot of questions then it may be an indication the method is on the wrong object).
+In a previous post about [Object-Oriented Design](/posts/design-oop/#class-analysis) I explained that you should query your classes/objects to ensure the methods they define are actually where they should be (another reason is 'feature envy', if a method is asking another class a lot of questions then it may be an indication the method is on the wrong object).
 
 The Move Method technique ensures this decoupling by simply moving the identified misplaced method onto the correct one.
 
@@ -848,7 +848,7 @@ def dynamic_methods(*method_names, &block)
 end 
 ```
 
-You can also use this technique to help ease creating properties on an object. For example, I used this technique in my [MVCP](http://www.integralist.co.uk/posts/design-mvcp/) blog post to dynamically create instance variables...
+You can also use this technique to help ease creating properties on an object. For example, I used this technique in my [MVCP](/posts/design-mvcp/) blog post to dynamically create instance variables...
 
 ```
 require 'app/presenters/base' 
@@ -927,7 +927,7 @@ If we changed `include Bar` for `include Baz`, or maybe we don't mixin a module 
 
 The motivation for this technique is to convert a simple data container which holds multiple data types into an object with clear and descriptive identifiers.
 
-This principle helps to present your complex data into a more sensible format (I demonstrated this in a previous post on [object-oriented design](/posts/design-ood/#direct-references)). This technique also makes the data interaction more maintainable by providing an easier and understandable interface to the data.
+This principle helps to present your complex data into a more sensible format (I demonstrated this in a previous post on [object-oriented design](/posts/design-oop/#direct-references)). This technique also makes the data interaction more maintainable by providing an easier and understandable interface to the data.
 
 Here is an example where we're violating the principle of a clean data interaction...
 

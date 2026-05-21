@@ -1176,7 +1176,7 @@ openssl x509 -req -days 365 -in csr.pem -signkey my-private-key.pem -out my-cert
 
 ### UPDATE
 
-OK so I ended up writing about this any way [in this article](http://www.integralist.co.uk/posts/client-cert-authentication/) where I discuss how to handle Client Certificate Authentication using Docker.
+OK so I ended up writing about this any way [in this article](/posts/client-cert-authentication/) where I discuss how to handle Client Certificate Authentication using Docker.
 
 ## Conclusion
 

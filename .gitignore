@@ -3,3 +3,4 @@ public
 *.swp
 .aider*
 ssg
+.claude/settings.local.json

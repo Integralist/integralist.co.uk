@@ -382,7 +382,7 @@ all the standard stuff you'd typically would need):
 ```
 #
 # detailed blog post on fastly's implementation details:
-# http://www.integralist.co.uk/posts/fastly-varnish/
+# https://www.integralist.co.uk/posts/fastly-varnish/
 #
 # fastly custom vcl boilerplate:
 # https://docs.fastly.com/vcl/custom-vcl/creating-custom-vcl/#fastlys-vcl-boilerplate

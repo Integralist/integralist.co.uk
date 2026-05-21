@@ -517,6 +517,6 @@ There are so many aspects to merging commits and dealing with git's commit histo
 
 For example, I've not covered anything to do with pulling commits: `git pull --strategy`, `git pull --squash`, `git pull --rebase`, `git pull --ff-only` and `git pull --no-commit`. Each have their use cases, but I think sometimes you're better picking a single strategy and defining it as a standard within your development team.
 
-If you're interested in one git workflow approach that utilises git's rebasing feature, and I've used with success in the past at the BBC, then I recommend you have a read of this blog post I wrote a few years ago: [integralist.co.uk/posts/github-workflow](http://www.integralist.co.uk/posts/github-workflow.html)
+If you're interested in one git workflow approach that utilises git's rebasing feature, and I've used with success in the past at the BBC, then I recommend you have a read of this blog post I wrote a few years ago: [integralist.co.uk/posts/github-workflow](/posts/github-workflow/)
 
 I've also written about other types of git "workflows" as part of BBC News' "Coding Best Practices" working group: [github.com/bbc/news-coding-best-practices/git-workflow](https://github.com/bbc/news-coding-best-practices/blob/master/git-workflow.md)
