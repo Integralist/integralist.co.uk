@@ -199,9 +199,7 @@ The `top` command displays processor activity and also displays tasks managed by
 
 Or maybe an application on your laptop is running very slowly? You can inspect its CPU consumption to see if it's doing something odd and maxing out at 99%
 
-<a href="../../assets/img/shell-top.jpg">
-<img src="../../assets/img/shell-top.jpg">
-</a>
+![shell top](/assets/img/shell-top.jpg)
 
 Here are some basic commands:
 
@@ -261,9 +259,7 @@ The `ps` command is useful for seeing 'at a glance' what process id's have been 
 
 Majority of the time you'll use `ps` just to identify the process id (`pid`) so you can then utilise another tool for inspecting the relevant process.
 
-<a href="../../assets/img/shell-ps.jpg">
-<img src="../../assets/img/shell-ps.jpg">
-</a>
+![shell ps](/assets/img/shell-ps.jpg)
 
 The differences between `ps` and `top` are subtle, both display details about active processes (albeit in different formats). But `top` is continuous whereas `ps` is just a snapshop.
 
@@ -286,9 +282,7 @@ Most high-level languages are written in C, and so those abstracted functions wi
 
 It's these 'system calls' that you'll end up tracing/tracking with `strace`.
 
-<a href="../../assets/img/shell-strace.jpg">
-<img src="../../assets/img/shell-strace.jpg">
-</a>
+![shell strace](/assets/img/shell-strace.jpg)
 
 This utility isn't available on Mac OS, so you'll need Linux:
 
@@ -643,9 +637,7 @@ By the way, you should be careful with backgrounded processes. If you attach to 
 
 **Summary**: lists open files
 
-<a href="../../assets/img/shell-lsof.jpg">
-<img src="../../assets/img/shell-lsof.jpg">
-</a>
+![shell lsof](/assets/img/shell-lsof.jpg)
 
 So we actually saw this used earlier when looking at `strace`. It will display all open files, and any one who knows a bit about operating systems will realise that an open file could in fact be any of the following:
 
@@ -677,9 +669,7 @@ The `netstat` (network statistics) command is useful because it allows us to see
 
 This gives us an insight into what network communications are going on and whether certain services are talking to the right endpoints, how often and whether their connections are being established or terminated correctly.
 
-<a href="../../assets/img/shell-netstat.jpg">
-<img src="../../assets/img/shell-netstat.jpg">
-</a>
+![shell netstat](/assets/img/shell-netstat.jpg)
 
 Here are some useful examples you can try out:
 
@@ -758,9 +748,7 @@ The `ifconfig` command is used to configure or review your network interfaces an
 
 Because networking is a big topic, and I'm not very good at it, I'll refer you to the following article which provides a breakdown of typical data ouput: [www.aboutlinux.info/2006/11/ifconfig-dissected-and-demystified](http://www.aboutlinux.info/2006/11/ifconfig-dissected-and-demystified.html)
 
-<a href="../../assets/img/shell-ifconfig.jpg">
-<img src="../../assets/img/shell-ifconfig.jpg">
-</a>
+![shell ifconfig](/assets/img/shell-ifconfig.jpg)
 
 If you don't want to configure a network interface, then running the `ifconfig` command without any arguments will display all existing network interfaces:
 
@@ -837,9 +825,7 @@ The `iftop` command is useful for identifying things like "why is our connection
 
 The command listens to network traffic on a named interface and displays a table of current bandwidth usage by pairs of hosts.
 
-<a href="../../assets/img/shell-iftop.jpg">
-<img src="../../assets/img/shell-iftop.jpg">
-</a>
+![shell iftop](/assets/img/shell-iftop.jpg)
 
 This utility isn't available by default on any OS, so with Mac OS:
 
@@ -895,9 +881,7 @@ Sorting:
 
 **Summary**: monitors network traffic (more visual than `netstat`, but not as detailed)
 
-<a href="../../assets/img/shell-iptraf.jpg">
-<img src="../../assets/img/shell-iptraf.jpg">
-</a>
+![shell iptraf](/assets/img/shell-iptraf.jpg)
 
 This utility isn't available on Mac OS, so you'll need Linux:
 
@@ -925,9 +909,7 @@ tcpdump is a powerful and widely used command-line package analyzer, which is us
 
 We can save the output of this program into a `pcap` file format, that can then be viewed by either tcpdump itself or via an open source GUI based tool such as [Wireshark](#13) that reads pcap format files and visualises the data.
 
-<a href="../../assets/img/shell-tcpdump.jpg">
-<img src="../../assets/img/shell-tcpdump.jpg">
-</a>
+![shell tcpdump](/assets/img/shell-tcpdump.jpg)
 
 The following are some examples to help you understand how to execute `tcpdump`, but be aware that on some hosts you might need to run it with `sudo`:
 
@@ -992,9 +974,7 @@ Although nothing to do with tcpdump, it is worth understanding (for the sake of 
 Wireshark is a network protocol analyzer.\
 It lets you see what's happening on your network at a microscopic level.
 
-<a href="../../assets/img/shell-wireshark.jpg">
-<img src="../../assets/img/shell-wireshark.jpg">
-</a>
+![shell wireshark](/assets/img/shell-wireshark.jpg)
 
 There's not a lot I can say about Wireshark other than you really will need to know how certain network protocols (such as TCP) work in order to understand the output that's being recorded.
 
@@ -1063,9 +1043,7 @@ For more details, please refer to the [documentation](https://docs.docker.com/en
 Tshark is a network protocol analyzer, but a terminal based one.\
 It lets you see what's happening on your network at a microscopic level.
 
-<a href="../../assets/img/shell-tshark.jpg">
-<img src="../../assets/img/shell-tshark.jpg">
-</a>
+![shell tshark](/assets/img/shell-tshark.jpg)
 
 As mentioned above in the Wireshark section, to get access to `tshark` on the Mac OS you need to install Wireshark. There are separate installs though for other OS'.
 
@@ -1136,9 +1114,7 @@ For example, if you open the pcap in wireshark, you can find the filter you need
 
 Telnet is both a tool `telnet` _and_ a Network Protocol of the same name: Telnet. The `telnet` program is used for interactive communication to a remote/external host on a given port. Once the connection to the remote host is established, an HTTP request can be sent to the host by typing it in the prompt.
 
-<a href="../../assets/img/shell-telnet.jpg">
-<img src="../../assets/img/shell-telnet.jpg">
-</a>
+![shell telnet](/assets/img/shell-telnet.jpg)
 
 Telnet's usage nowadays is a little limited due to the massive success of protocols such as SSH, but it can be interesting to play around with (although I've never really had much of a 'need' for it myself).
 

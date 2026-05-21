@@ -141,9 +141,7 @@ I recently asked in a computer science forum for help in understanding what the 
 
 The architecture of the program looks something like this:
 
-<a href="../../assets/img/go-web-crawler.png">
-<img src="../../assets/img/go-web-crawler.png">
-</a>
+![go web crawler](/assets/img/go-web-crawler.png)
 
 I wasn't sure how to calculate the Big-O for this program because there didn't seem to be any one unit of computation that made sense to use as the foundation of the algorithmic analysis. In the earlier examples it was the variable assignment, but in a web crawler there are so many different moving pieces that make up the whole program.
 

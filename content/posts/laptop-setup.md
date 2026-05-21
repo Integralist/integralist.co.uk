@@ -72,9 +72,7 @@ command.
 The situation reminds me a lot of [XKCD's classic comic
 strip](https://xkcd.com/1987/)...
 
-<a href="../../assets/img/python_env.png">
-<img src="../../assets/img/python_env.png">
-</a>
+![python env](/assets/img/python_env.png)
 
 ## Package Manager
 

@@ -8,9 +8,7 @@ tags: [shell, linux]
 Before we get started, here's a diagram to give you an overview of what we will
 be covering in this post:
 
-<a href="../../assets/img/terminals-kernals-shells.png">
-  <img src="../../assets/img/terminals-kernals-shells.png">
-</a>
+![terminals kernals shells](/assets/img/terminals-kernals-shells.png)
 
 One thing I want to clarify in the above image is that each box is _within_ the
 parent box. So for example, The "Program: terminal" is interacting with a

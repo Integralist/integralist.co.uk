@@ -57,9 +57,7 @@ syntax on
 
 To try out this basic configuration use Vim's [`-u`](https://vimhelp.org/starting.txt.html#-u) flag. For example, you can start Vim with no configuration `vim -u NONE` and then manually apply the configuration as shown above, or you can put it into a separate file and start Vim with that configuration instead of your normal one `vim -u ~/.vimrc-basic`.
 
-<a href="../../assets/img/vimbasic.png">
-<img src="../../assets/img/vimbasic.png">
-</a>
+![vimbasic](/assets/img/vimbasic.png)
 <p></p>
 
 In the above screenshot you can see I'm just using the basic configuration (looks quite nice) along with a couple of split buffer windows ([`:vs`](https://vimhelp.org/windows.txt.html#%3Avs)).

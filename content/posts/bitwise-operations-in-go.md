@@ -97,9 +97,7 @@ func main() {
 
 In case you need a reminder of a what bit alignment and shifting look like:
 
-<a href="../../assets/img/bits-visualised.png">
-<img src="../../assets/img/bits-visualised.png">
-</a>
+![bits visualised](/assets/img/bits-visualised.png)
 
 ## Defining Bit Flags
 

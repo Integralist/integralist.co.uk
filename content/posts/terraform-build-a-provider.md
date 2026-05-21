@@ -103,7 +103,7 @@ So there two parts to a Terraform provider, which will help to explain the above
 
 The following diagram is one I designed for the [Fastly blog post](https://www.fastly.com/blog/how-to-configure-your-fastly-services-with-terraform) I mentioned earlier, and it does a good job visualising the overall Terraform workflow coordination between your terminal shell, the Terraform CLI and the Terraform provider itself.
 
-<img src="../../assets/img/terraform-workflow.png">
+![terraform workflow](/assets/img/terraform-workflow.png)
 <p></p>
 
 > \[!NOTE\]

@@ -123,9 +123,7 @@ the problems inherent with 'green threads'...
 The core element of all asyncio applications is the 'event loop'. The event loop
 is what schedules and runs asynchronous tasks.
 
-<a href="../../assets/img/event-loop.png">
-<img src="../../assets/img/event-loop.png">
-</a>
+![event loop](/assets/img/event-loop.png)
 
 <div class="credit">
   <a href="https://eng.paxos.com/python-3s-killer-feature-asyncio">Image Credit</a>

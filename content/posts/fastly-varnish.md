@@ -35,7 +35,7 @@ their service offering.
 **Be warned: this post is a monster!<br>It'll take a long time to digest this
 information...**
 
-<img src="../../assets/img/asleep.webp" class="post-img" loading="lazy">
+![asleep](/assets/img/asleep.webp)
 
 ## Introduction
 
@@ -68,7 +68,7 @@ process and cache.
 
 **Simple, right?**
 
-<img src="../../assets/img/confusing.webp" class="post-img" loading="lazy">
+![confusing](/assets/img/confusing.webp)
 
 > Note: Fastly helps both with the HTTPS problem, and also with scaling Varnish
 > in general.
@@ -139,7 +139,7 @@ Lastly, as Varnish is a state machine, we have the ability to 'restart' a
 request (while also keeping any modifications you might have made to the request
 intact). To do that you would call `return(restart)`.
 
-<img src="../../assets/img/varnish.webp" class="post-img" loading="lazy">
+![varnish](/assets/img/varnish.webp)
 
 <small class="img-caption">^^ Varnish in action</small>
 
@@ -225,7 +225,7 @@ Below are some useful links to see Fastly's default VCL:
 > we (as customers) can see, and this VCL is used to help Fastly scale varnish
 > (e.g. handle things like their custom clustering solution).
 
-<img src="../../assets/img/cant-see-me.webp" class="post-img" loading="lazy">
+![cant see me](/assets/img/cant-see-me.webp)
 
 <small class="img-caption">fastly's master VCL be all like ^^</small>
 
@@ -370,7 +370,7 @@ sub vcl_hash {
 Interestingly Fastly's default VCL _doesn't_ require us to also set `set req.hash += "#####GENERATION#####";`, so they happily keep that part within
 their generated code 🤦
 
-<img src="../../assets/img/ok-fine.webp" class="post-img post-img-small" loading="lazy">
+![ok fine](/assets/img/ok-fine.webp)
 
 ### Example Boilerplate
 
@@ -717,9 +717,7 @@ Below is a diagram of Fastly's VCL request flow (including its WAF and
 Clustering logic). This is a great reference for confirming how your VCL logic
 is expected to behave.
 
-<a href="../../assets/img/fastly-request-flow.png">
-<img src="../../assets/img/fastly-request-flow.png">
-</a>
+![fastly request flow](/assets/img/fastly-request-flow.png)
 
 ### Fastly-Debug
 
@@ -831,7 +829,7 @@ will cache the response from the fetching node (including the MISS reported by
 `fastly-debug-ttl`) and so even if another request reaches the name delivery
 node, it will report a `MISS, HIT` combination.
 
-<img src="../../assets/img/you-lose.webp" class="post-img" loading="lazy">
+![you lose](/assets/img/you-lose.webp)
 
 <small class="img-caption">thanks Fastly, for this totally not confusing setup ^^</small>
 
@@ -1136,7 +1134,7 @@ will result in a 'last cached wins' scenario (e.g. if you have two requests now
 going simultaneously to origin, whichever responds first will be cached but then
 the one that responds last will overwrite the first cached response).
 
-<img src="../../assets/img/collapse.webp" class="post-img post-img-small" loading="lazy">
+![collapse](/assets/img/collapse.webp)
 
 <small class="img-caption">request collapsing in action ^^</small>
 
@@ -1155,9 +1153,7 @@ but for the sake of simplicity I've omitted most of the Varnish states from the
 'cluster shield' node.
 
 <div id="varnish-request-flow"></div>
-<a href="../../assets/img/varnish-request-flow.png">
-<img src="../../assets/img/varnish-request-flow.png">
-</a>
+![varnish request flow](/assets/img/varnish-request-flow.png)
 
 > Note: this diagram does not cover _all_ the states available to Fastly's
 > implementation of Varnish. There is also `vcl_log` which is executed after
@@ -1257,9 +1253,7 @@ The following image (and explanation) should help to clarify why this design is
 much better.
 
 <div id="fastly-pop"></div>
-<a href="../../assets/img/fastly-pop.png">
-<img src="../../assets/img/fastly-pop.png">
-</a>
+![fastly pop](/assets/img/fastly-pop.png)
 
 With clustering, the hash key for a requested resource is used, firstly to
 lookup the content in the cache of the current server (e.g. the delivery node),
@@ -1369,7 +1363,7 @@ happens less frequently because you would have to `return(pass)` from either
 `vcl_hit` or `vcl_miss` (and that’s not a typical state change flow for most
 people).
 
-<img src="../../assets/img/this-is-fine.webp" class="post-img" loading="lazy">
+![this is fine](/assets/img/this-is-fine.webp)
 
 <small class="img-caption">^^ whenever I learn something new about Fastly</small>
 
@@ -1603,7 +1597,7 @@ _could_ result in the edge POP getting a poor HIT ratio due to the fact that the
 shield has appended a header and then that header is appended again as part of
 the edge POP execution.
 
-<img src="../../assets/img/double.webp" class="post-img" loading="lazy">
+![double](/assets/img/double.webp)
 
 Consideration needs to be given to the use of `req.backend.is_shield` when you
 get a 5xx (or any other uncacheable error code) back from the origin to the
@@ -1782,7 +1776,7 @@ header). Implementing this feature is great for debugging purposes as it'll
 validate your understanding of how your requests are flowing through the varnish
 state machine.
 
-<img src="../../assets/img/debugging.webp" class="post-img" loading="lazy">
+![debugging](/assets/img/debugging.webp)
 
 First I'm going to show you the basic outline of the various vcl state
 subroutines and a set of function calls. Next I'll show you the code for those
@@ -2350,7 +2344,7 @@ Thankfully by going through this process there will be very little about
 Varnish's request flow that you won't now understand or have the ability to work
 around in future if the right problem scenario presents itself.
 
-<img src="../../assets/img/genius.webp" class="post-img" loading="lazy">
+![genius](/assets/img/genius.webp)
 
 ### Header Overflow Errors
 
@@ -2441,7 +2435,7 @@ cached.
 But you'll find that even though you've executed a `return(pass)` operation,
 Varnish will _still_ create an object and cache it.
 
-<img src="../../assets/img/miss.webp" class="post-img" loading="lazy">
+![miss](/assets/img/miss.webp)
 
 The object it creates is called a "hit-for-pass" (if you look back at the Fastly
 request flow diagram above you'll see it referenced) and it is given a ttl of
@@ -2538,7 +2532,7 @@ served stale if its 'stale ttl' has yet to expire).
 The reason we do this is because serving old (i.e. stale) content is better than
 serving an error.
 
-<img src="../../assets/img/stale.webp" class="post-img" loading="lazy">
+![stale](/assets/img/stale.webp)
 
 <small class="img-caption">stale content is always better, right! ^^</small>
 
@@ -3007,7 +3001,7 @@ final log call isn't executed, thus avoiding an unneccessary duplicate log call.
 
 Mystery solved.
 
-<img src="../../assets/img/sherlock.webp" class="post-img" loading="lazy">
+![sherlock](/assets/img/sherlock.webp)
 
 ### Filtering and Sampling Logs
 
@@ -3471,7 +3465,7 @@ Fastly internal state (i.e. `fastly_info.state`) to report as `ERROR` instead of
 a `HIT` (_that_ happens because we call `error` from within `vcl_recv` after
 restarting the request).
 
-<img src="../../assets/img/computer-says-no.webp" class="post-img" loading="lazy">
+![computer says no](/assets/img/computer-says-no.webp)
 
 This is why when we get back into `vcl_deliver` we override those headers
 according to the values we tracked within the initial request flow.
@@ -3597,7 +3591,7 @@ completely. You'll be able to see tell this if you check the special
 tool](https://fiddle.fastlydemo.net/fiddle/47871720)) as this will report back a
 `pass` state.
 
-<img src="../../assets/img/banned.webp" class="post-img" loading="lazy">
+![banned](/assets/img/banned.webp)
 
 ### Path Traversal
 

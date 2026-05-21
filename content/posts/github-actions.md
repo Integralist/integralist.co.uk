@@ -21,9 +21,7 @@ A workflow is a yaml configuration file that defines:
 
 GitHub has a nice visualisation of this...
 
-<a href="../../assets/img/overview-actions-simple.png">
-<img src="../../assets/img/overview-actions-simple.png">
-</a>
+![overview actions simple](/assets/img/overview-actions-simple.png)
 <p></p>
 
 > \[!NOTE\]

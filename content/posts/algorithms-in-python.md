@@ -242,9 +242,7 @@ A BFS (breadth first search) is an algorithm that searches a data structure from
 
 The following graph represents a group of people. Some people know each other (e.g. both Alice and Bob know each other), where as other people don't (e.g. Dave knows Ethan, but Ethan knows no one else in this group).
 
-<a href="../../assets/img/graph-bfs.png">
-<img src="../../assets/img/graph-bfs.png">
-</a>
+![graph bfs](/assets/img/graph-bfs.png)
 
 We'll use the BFS (breadth first search) algorithm to locate 'Ethan'.
 
@@ -353,9 +351,7 @@ found a match: ethan
 
 The following image shows a tree structure that represents various people...
 
-<a href="../../assets/img/graph-dfs.png">
-<img src="../../assets/img/graph-dfs.png">
-</a>
+![graph dfs](/assets/img/graph-dfs.png)
 
 A DFS (depth first search) is an algorithm that searches a data structure (such as a tree, or a graph) from its root node. It searches _downwards_ through each child node until there are no more children.
 
@@ -476,9 +472,7 @@ Another potential option is to run a linear search across multiple CPU cores so 
 
 The Dijkstra algorithm tells you the quickest path from A to B within a weighted graph.
 
-<a href="../../assets/img/graph-weighted.png">
-<img src="../../assets/img/graph-weighted.png">
-</a>
+![graph weighted](/assets/img/graph-weighted.png)
 
 In the above graph we have a few options:
 

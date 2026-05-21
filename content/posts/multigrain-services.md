@@ -11,9 +11,7 @@ It's worth mentioning that this _isn't_ a post about which pattern is the most a
 
 Below is an image that visualises the concept, and makes understanding these various patterns much easier (at a glance):
 
-<a href="../../assets/img/multigrain-services.png">
-  <img src="../../assets/img/multigrain-services.png">
-</a>
+![multigrain services](/assets/img/multigrain-services.png)
 <center><small>[source: thenewstack.io](https://thenewstack.io/miniservices-a-realistic-alternative-to-microservices/)</small></center>
 
 ## A rose by any other name

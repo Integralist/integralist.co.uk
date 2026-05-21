@@ -43,9 +43,7 @@ At that point people who are interested in the incident will use an 👀 emoji (
 
 The following image demonstrates what that might look like...
 
-<a href="../../assets/img/opsbot_1.png">
-<img src="../../assets/img/opsbot_1.png">
-</a>
+![opsbot 1](/assets/img/opsbot_1.png)
 
 > Note: we have automated notifications sent to specific monitoring slack channels, and so people can also use the emoji reaction on those messages.
 
@@ -53,9 +51,7 @@ Now imagine this incident has been triaged and yes it is indeed a problem. We'll
 
 It's at that point someone runs the command: `/incident bf4life` (or whatever you want to name the incident 😉) and we'll see the following...
 
-<a href="../../assets/img/opsbot_2.png">
-<img src="../../assets/img/opsbot_2.png">
-</a>
+![opsbot 2](/assets/img/opsbot_2.png)
 
 Notice that we automatically prefix the given incident name with the current date, so it's easier to go back and review/identify past incidents.
 
@@ -65,9 +61,7 @@ If we're dealing with a service that we're unfamiliar with, then we might also w
 
 This is when someone runs the command: `/runbook site router` (or whatever the affected service is) and we'll see the following...
 
-<a href="../../assets/img/opsbot_3.png">
-<img src="../../assets/img/opsbot_3.png">
-</a>
+![opsbot 3](/assets/img/opsbot_3.png)
 
 ## How does OpsBot work?
 
@@ -80,9 +74,7 @@ This works because OpsBot's logic is trying to match one of two possible pattern
 
 If the message is identified as an 'incident trigger' then that's what we link to within the incident channel...
 
-<a href="../../assets/img/opsbot_4.png">
-<img src="../../assets/img/opsbot_4.png">
-</a>
+![opsbot 4](/assets/img/opsbot_4.png)
 
 ## What did we learn?
 

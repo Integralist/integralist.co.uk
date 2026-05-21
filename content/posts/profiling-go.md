@@ -570,9 +570,7 @@ go tool pprof -png http://localhost:6060/debug/pprof/heap > data.png
 
 This generates an image that looks like the following (notice how the bigger the box, the more resources it’s consuming - this helps you ‘at a glance’ to identify a potential problem zone):
 
-<a href="../../assets/img/profiling_go.png">
-<img src="../../assets/img/profiling_go.png">
-</a>
+![profiling go](/assets/img/profiling_go.png)
 
 > Note: you can also output as a PDF with `-pdf`.
 
@@ -659,9 +657,7 @@ The page that is loaded will show the following list of links:
 
 Each of these items can give a good insight as to what your application is doing, but we’re most interested in the first one “view trace”. Click it and it’ll give you a complete overview of what your application is doing in an interactive graph.
 
-<a href="../../assets/img/profiling_go_2.png">
-<img src="../../assets/img/profiling_go_2.png">
-</a>
+![profiling go 2](/assets/img/profiling_go_2.png)
 
 > Note: press `<Shift-?>` to show shortcut keys, like `w` and `s` for zooming in/out.
 
@@ -693,9 +689,7 @@ In the “procs” section of the UI we can see during our large 500mb allocatio
 
 If you were to “View Options” and then tick “Flow events” you’ll see an arrow from the `main.main` function going towards the `main.main.func1` function running on a separate process/thread (probably a bit difficult to see in the below image, but it’s definitely there).
 
-<a href="../../assets/img/profiling_go_3.png">
-<img src="../../assets/img/profiling_go_3.png">
-</a>
+![profiling go 3](/assets/img/profiling_go_3.png)
 
 So it’s good to be able to visually see the correlation between first of all the `main.main.func1` goroutine running and the memory allocation occurring at that time, but also being able to see the cause and effect (i.e. the _flow_) of the program (i.e. knowing _what_ exactly triggered the new goroutine to be spun up).
 

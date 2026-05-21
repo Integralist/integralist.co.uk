@@ -43,9 +43,7 @@ A byte's unique number is also referred to as its _address_.
 
 ## Bit and RAM Visualisation
 
-<a href="../../assets/img/bits-visualised.png">
-<img src="../../assets/img/bits-visualised.png">
-</a>
+![bits visualised](/assets/img/bits-visualised.png)
 
 We can see that each bit has an associated value which is calculated using the power of base-2 (we'll cover [base numbers](#8) shortly).
 
@@ -165,17 +163,13 @@ These numbers (0-9) represent 'whole numbers', while in the base-10 system we ca
 
 Below is an image, credit to Jenny Eather, that helps us visualise this model:
 
-<a href="../../assets/img/base-10-system.png">
-<img src="../../assets/img/base-10-system.png">
-</a>
+![base 10 system](/assets/img/base-10-system.png)
 
 The 'base number' is the number of numbers within the system. So base-10 has 10 numbers (0,1,2,3,4,5,6,7,8,9) whereas binary is base-2 because it uses two numbers only (0, 1).
 
 If you want to know the unit each number in a system represents (we'll use base-10 as the example, thanks to the following visualisation credited to Jenny Eather), then you calculate this using the power of the base number.
 
-<a href="../../assets/img/base-10.png">
-<img src="../../assets/img/base-10.png">
-</a>
+![base 10](/assets/img/base-10.png)
 
 So, as per the above visualisation, we can see:
 

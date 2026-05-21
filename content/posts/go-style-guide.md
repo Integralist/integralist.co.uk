@@ -148,16 +148,12 @@ See also the article "[When life gives you lemons, write better error messages](
 
 **Bad error message**:
 
-<a href="../../assets/img/error-message-bad.png">
-<img src="../../assets/img/error-message-bad.png">
-</a>
+![error message bad](/assets/img/error-message-bad.png)
 <p></p>
 
 **Good error message**:
 
-<a href="../../assets/img/error-message-good.png">
-<img src="../../assets/img/error-message-good.png">
-</a>
+![error message good](/assets/img/error-message-good.png)
 <p></p>
 
 Essentially, the error "message" shouldn't necessarily be formatted like "error doing x" or "failed to do x" (as I had been led to believe the former was the standard way of writing an error message). After reviewing "good" examples of Go code (e.g. at the time of writing [this was one such example](https://github.com/search?q=repo%3Agoogle%2Fexposure-notifications-server%20errors.New&type=code)) it seems there is no 'format' for the error message other than to be direct/specific.

@@ -17,9 +17,7 @@ Caching can occur at both a 'client' level and a 'cache proxy' level.
 
 Consider the following request flow architecture diagram...
 
-<a href="../../assets/img/buzzfeed-request-flow-arch.png">
-<img src="../../assets/img/buzzfeed-request-flow-arch.png">
-</a>
+![buzzfeed request flow arch](/assets/img/buzzfeed-request-flow-arch.png)
 
 In the above diagram, the "CDN" is a 'caching proxy' and so caching can (and of course does) happen there.
 
@@ -178,9 +176,7 @@ Consider the following diagram which highlights a typical request flow when usin
 
 > Note: this diagram presumes the use of a CDN like Fastly which has specific behaviours, such as 'request collapsing' built-in.
 
-<a href="../../assets/img/http-conditional-requests.png">
-<img src="../../assets/img/http-conditional-requests.png">
-</a>
+![http conditional requests](/assets/img/http-conditional-requests.png)
 
 In this request flow we can see that although we're successfully serving stale content when a cached object's TTL has expired, this is still potentially going to result in multiple requests to the origin (rather than acting as a cache HIT) if we have an influx of requests for the same resource.
 

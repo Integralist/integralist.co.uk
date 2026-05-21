@@ -75,7 +75,7 @@ A linked list is different to an array in that the order of the elements within 
 
 The data is what you've assigned to that element/node, whereas the pointer is a memory address reference to the next node in the list.
 
-<img src="../../assets/img/linked-list.png">
+![linked list](/assets/img/linked-list.png)
 
 Also unlike an array, there is no index access. So in order to locate a specific piece of data you'll need to traverse the entire list until you find the data you're looking for.
 
@@ -89,7 +89,7 @@ There is also a modified version of this data structure referred to as a 'doubly
 
 The concept of a 'tree' in its simplest terms is to represent a hierarchical tree structure, with a root value and subtrees of children (with a parent node), represented as a set of linked nodes.
 
-<img src="../../assets/img/tree.png">
+![tree](/assets/img/tree.png)
 
 A tree contains "nodes" (a node has a value associated with it) and each node is connected by a line called an "edge". These lines represent the _relationship_ between the nodes.
 
@@ -119,7 +119,7 @@ Binary trees are the building blocks of _other_ tree data structures (see also: 
 
 A binary search tree is a 'sorted' tree, and is named as such because it helps to support the use of a 'binary search' algorithm for searching more efficiently for a particular node (more on that later).
 
-<img src="../../assets/img/binary-search-tree.png">
+![binary search tree](/assets/img/binary-search-tree.png)
 
 To understand the idea of the nodes being 'sorted' (or 'ordered') we need to compare the left node with the right node. The left node should always be a lesser number than the right node, and the parent node should be the decider as to whether a child node is placed to the left or the right.
 
@@ -159,7 +159,7 @@ To understand why that is, consider the following data stored in an array:
 
 If we construct a binary search tree from this data, what we would ultimately end up with is a very 'unbalanced' tree in the sense that all the nodes would be to the right, and none to the left.
 
-<img src="../../assets/img/bst-unbalanced.png">
+![bst unbalanced](/assets/img/bst-unbalanced.png)
 
 When we search this type of tree (which for all purposes is effectively a linked list) we would, worst case, end up with linear time complexity: `O(n)`. To resolve that problem we need a way to balance the nodes in the tree.
 
@@ -176,7 +176,7 @@ Let's consider the properties of a red-black tree:
 
 > Note: when counting nodes we don't include the root node, and we count each black node up to (and including) the NIL node.
 
-<img src="../../assets/img/red-black-tree.png">
+![red black tree](/assets/img/red-black-tree.png)
 
 The height of the tree is referred to as its 'black-height', which is the number of black nodes (not including the root) to the furthest leaf, and should be no longer than twice as long as the length of the shortest path (the nearest NIL).
 
@@ -213,11 +213,11 @@ Let's now visualize the movements for both rotations:
 
 **Left Rotation**
 
-<img src="../../assets/img/red-black-tree-left-rotation.png">
+![red black tree left rotation](/assets/img/red-black-tree-left-rotation.png)
 
 **Right Rotation**
 
-<img src="../../assets/img/red-black-tree-right-rotation.png">
+![red black tree right rotation](/assets/img/red-black-tree-right-rotation.png)
 
 > Note: rotations are confusing, so I recommend watching [this short video](https://www.youtube.com/watch?v=95s3ndZRGbk) for some examples and pseudo-code.
 
@@ -256,11 +256,11 @@ Below are some examples of a max and min binary heap tree structure.
 
 **Max Heap**:
 
-<img src="../../assets/img/binary-heap-max.png">
+![binary heap max](/assets/img/binary-heap-max.png)
 
 **Min Heap**:
 
-<img src="../../assets/img/binary-heap-min.png">
+![binary heap min](/assets/img/binary-heap-min.png)
 
 ## Hash Table
 
@@ -309,7 +309,7 @@ The data struture itself is non-linear and it consists of:
 
 The following image demonstrates a 'directed' graph (notice the edges have arrows indicating the direction and flow):
 
-<img src="../../assets/img/graph-directed.png">
+![graph directed](/assets/img/graph-directed.png)
 
 > Note: an 'undirected' graph simply has no arrow heads, so the flow between nodes can go in either direction.
 
