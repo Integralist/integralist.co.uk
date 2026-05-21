@@ -65,10 +65,10 @@ body {
 
 /* --- Links --- */
 a {
-  color: var(--color-text);
+  color: var(--color-coral);
   text-decoration-color: var(--color-border);
   text-underline-offset: 0.15em;
-  transition: text-decoration-color 0.15s;
+  transition: text-decoration-color 0.15s, color 0.15s;
 }
 
 a:hover {
@@ -261,7 +261,7 @@ pre {
   padding: 1.25rem;
   overflow-x: auto;
   margin-block: 1.5rem;
-  line-height: 1.5;
+  line-height: 1.2;
 }
 
 pre code {
@@ -399,6 +399,7 @@ aside,
 }
 
 .post-summary h2 a {
+  color: var(--color-text);
   text-decoration: none;
 }
 

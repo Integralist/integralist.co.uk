@@ -58,6 +58,59 @@ func TestMarkdownToHTML_ImageWrappedInLink(t *testing.T) {
 	}
 }
 
+// Verifies that alerts separated by other content don't swallow that content.
+func TestMarkdownToHTML_AlertsWithContentBetween(t *testing.T) {
+	input := "> [!IMPORTANT]\n> First.\n\n```go\nfmt.Println(\"hi\")\n```\n\nhttps://example.com\n\n> [!NOTE]\n> Second.\n"
+	got := string(parser.MarkdownToHTML([]byte(input)))
+
+	if !strings.Contains(got, "<pre>") {
+		t.Errorf("code block missing from output:\n%s", got)
+	}
+	if !strings.Contains(got, "alert-important") {
+		t.Errorf("missing alert-important:\n%s", got)
+	}
+	if !strings.Contains(got, "alert-note") {
+		t.Errorf("missing alert-note:\n%s", got)
+	}
+}
+
+// Verifies that consecutive GFM alerts separated by blank lines render as separate alert divs.
+func TestMarkdownToHTML_ConsecutiveAlerts(t *testing.T) {
+	input := "> [!IMPORTANT]\n> First.\n\n> [!NOTE]\n> Second.\n\n> [!TIP]\n> Third.\n"
+	got := string(parser.MarkdownToHTML([]byte(input)))
+
+	if strings.Count(got, `class="alert `) != 3 {
+		t.Errorf("expected 3 alert divs, got HTML:\n%s", got)
+	}
+	if strings.Contains(got, "<blockquote>") {
+		t.Errorf("blockquote should be fully transformed, got:\n%s", got)
+	}
+	for _, want := range []string{"alert-important", "alert-note", "alert-tip"} {
+		if !strings.Contains(got, want) {
+			t.Errorf("missing %s in:\n%s", want, got)
+		}
+	}
+}
+
+// Verifies consecutive multi-line alerts with inline markup render correctly.
+func TestMarkdownToHTML_ConsecutiveAlertsMultiLine(t *testing.T) {
+	input := "> [!IMPORTANT]\n> You can `range` over a channel, but the loop will never stop unless the\n> channel is closed.\\\n> So when ranging over a channel, think how the program can proceed.\n\n> [!NOTE]\n> You can create [buffered](https://go.dev/tour/concurrency/3) channels.\\\n> Sends to a buffered channel block only when the buffer is full.\n"
+	got := string(parser.MarkdownToHTML([]byte(input)))
+
+	if strings.Count(got, `class="alert `) != 2 {
+		t.Errorf("expected 2 alert divs, got HTML:\n%s", got)
+	}
+	if strings.Contains(got, "<blockquote>") {
+		t.Errorf("blockquote should be fully transformed, got:\n%s", got)
+	}
+	if !strings.Contains(got, "alert-important") {
+		t.Errorf("missing alert-important in:\n%s", got)
+	}
+	if !strings.Contains(got, "alert-note") {
+		t.Errorf("missing alert-note in:\n%s", got)
+	}
+}
+
 func TestMarkdownToHTML_AlertBlockquotes(t *testing.T) {
 	testCases := []struct {
 		name      string

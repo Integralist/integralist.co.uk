@@ -10,8 +10,9 @@ import (
 )
 
 var (
-	imgTag   = regexp.MustCompile(`<img\s+src="([^"]+)"([^/]*)/>`)
-	alertTag = regexp.MustCompile(`(?s)<blockquote>\s*<p>\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*\n?(.*?)</p>\s*</blockquote>`)
+	imgTag         = regexp.MustCompile(`<img\s+src="([^"]+)"([^/]*)/>`)
+	alertTag       = regexp.MustCompile(`(?s)<blockquote>\s*<p>\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*\n?(.*?)</p>\s*</blockquote>`)
+	alertParagraph = regexp.MustCompile(`(?s)<p>\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*\n?(.*?)</p>`)
 )
 
 var alertIcons = map[string]string{
@@ -45,6 +46,7 @@ func wrapImagesInLinks(html []byte) []byte {
 }
 
 func transformAlerts(src []byte) []byte {
+	src = splitMergedAlerts(src)
 	return alertTag.ReplaceAllFunc(src, func(match []byte) []byte {
 		groups := alertTag.FindSubmatch(match)
 		alertType := string(groups[1])
@@ -53,4 +55,40 @@ func transformAlerts(src []byte) []byte {
 		lower := strings.ToLower(alertType)
 		return []byte(`<div class="alert alert-` + lower + `"><p class="alert-title">` + icon + " " + alertType + `</p><p>` + body + `</p></div>`)
 	})
+}
+
+func splitMergedAlerts(src []byte) []byte {
+	s := string(src)
+	var result strings.Builder
+	for {
+		start := strings.Index(s, "<blockquote>")
+		if start == -1 {
+			result.WriteString(s)
+			break
+		}
+		end := strings.Index(s[start:], "</blockquote>")
+		if end == -1 {
+			result.WriteString(s)
+			break
+		}
+		end += start + len("</blockquote>")
+
+		result.WriteString(s[:start])
+		block := s[start:end]
+		inner := block[len("<blockquote>") : len(block)-len("</blockquote>")]
+
+		paragraphs := alertParagraph.FindAllString(inner, -1)
+		if len(paragraphs) >= 2 {
+			for _, p := range paragraphs {
+				result.WriteString("<blockquote>\n")
+				result.WriteString(p)
+				result.WriteString("\n</blockquote>\n")
+			}
+		} else {
+			result.WriteString(block)
+		}
+
+		s = s[end:]
+	}
+	return []byte(result.String())
 }
