@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"lostsgnl.com/internal/model"
-	"lostsgnl.com/internal/renderer"
+	"github.com/integralist/integralist.co.uk/internal/model"
+	"github.com/integralist/integralist.co.uk/internal/renderer"
 )
 
 const templateDir = "../../assets/templates"
@@ -43,7 +43,7 @@ func testSite() *model.Site {
 		{Name: "ssg", Slug: "ssg", Posts: posts, URL: "/tags/ssg/", Color: "#D4A04A"},
 	}
 
-	return &model.Site{BaseURL: "https://lostsgnl.com", Posts: posts, Pages: pages, Tags: tags}
+	return &model.Site{BaseURL: "https://www.integralist.co.uk", Posts: posts, Pages: pages, Tags: tags}
 }
 
 func TestRenderHome_ContainsPostLinks(t *testing.T) {
@@ -208,7 +208,7 @@ func TestRenderPost_ContainsTwitterURL(t *testing.T) {
 	if !strings.Contains(html, `twitter:url`) {
 		t.Error("post page missing twitter:url meta tag")
 	}
-	if !strings.Contains(html, `https://lostsgnl.com/posts/first-post/`) {
+	if !strings.Contains(html, `https://www.integralist.co.uk/posts/first-post/`) {
 		t.Error("post page missing canonical URL in twitter:url")
 	}
 }
@@ -260,7 +260,7 @@ func TestRenderPost_WithImage(t *testing.T) {
 	if !strings.Contains(html, `og:image`) {
 		t.Error("post page missing og:image meta tag")
 	}
-	if !strings.Contains(html, `https://lostsgnl.com/assets/img/hero.jpg`) {
+	if !strings.Contains(html, `https://www.integralist.co.uk/assets/img/hero.jpg`) {
 		t.Error("post page missing full image URL in og:image")
 	}
 	if !strings.Contains(html, `twitter:image`) {
@@ -366,13 +366,13 @@ func TestRenderPost_ContainsJSONLD(t *testing.T) {
 	if !strings.Contains(html, `"datePublished"`) {
 		t.Error("post page JSON-LD missing datePublished")
 	}
-	if !strings.Contains(html, `"https://lostsgnl.com/posts/first-post/"`) {
+	if !strings.Contains(html, `"https://www.integralist.co.uk/posts/first-post/"`) {
 		t.Error("post page JSON-LD missing url")
 	}
 	if !strings.Contains(html, `"name":"Mark"`) {
 		t.Error("post page JSON-LD missing author name")
 	}
-	if !strings.Contains(html, `"https://lostsgnl.com/assets/img/hero.jpg"`) {
+	if !strings.Contains(html, `"https://www.integralist.co.uk/assets/img/hero.jpg"`) {
 		t.Error("post page JSON-LD missing image")
 	}
 }

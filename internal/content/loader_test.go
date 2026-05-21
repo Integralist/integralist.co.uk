@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"lostsgnl.com/internal/content"
+	"github.com/integralist/integralist.co.uk/internal/content"
 )
 
 func writeFile(t *testing.T, dir, name, data string) {

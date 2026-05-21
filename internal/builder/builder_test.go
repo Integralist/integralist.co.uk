@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"lostsgnl.com/internal/builder"
+	"github.com/integralist/integralist.co.uk/internal/builder"
 )
 
 func setupTestProject(t *testing.T) (contentDir, assetsDir, outputDir string) {
@@ -62,7 +62,7 @@ This is about me.
 
 func TestBuild_CreatesOutputDir(t *testing.T) {
 	contentDir, assetsDir, outputDir := setupTestProject(t)
-	b := builder.New(contentDir, assetsDir, outputDir, "https://lostsgnl.com")
+	b := builder.New(contentDir, assetsDir, outputDir, "https://www.integralist.co.uk")
 
 	if err := b.Build(); err != nil {
 		t.Fatalf("Build error: %v", err)
@@ -75,7 +75,7 @@ func TestBuild_CreatesOutputDir(t *testing.T) {
 
 func TestBuild_CopiesAssets(t *testing.T) {
 	contentDir, assetsDir, outputDir := setupTestProject(t)
-	b := builder.New(contentDir, assetsDir, outputDir, "https://lostsgnl.com")
+	b := builder.New(contentDir, assetsDir, outputDir, "https://www.integralist.co.uk")
 
 	if err := b.Build(); err != nil {
 		t.Fatalf("Build error: %v", err)
@@ -95,7 +95,7 @@ func TestBuild_CopiesAssets(t *testing.T) {
 
 func TestBuild_GeneratesPostHTML(t *testing.T) {
 	contentDir, assetsDir, outputDir := setupTestProject(t)
-	b := builder.New(contentDir, assetsDir, outputDir, "https://lostsgnl.com")
+	b := builder.New(contentDir, assetsDir, outputDir, "https://www.integralist.co.uk")
 
 	if err := b.Build(); err != nil {
 		t.Fatalf("Build error: %v", err)
@@ -114,7 +114,7 @@ func TestBuild_GeneratesPostHTML(t *testing.T) {
 
 func TestBuild_GeneratesPostMarkdownSource(t *testing.T) {
 	contentDir, assetsDir, outputDir := setupTestProject(t)
-	b := builder.New(contentDir, assetsDir, outputDir, "https://lostsgnl.com")
+	b := builder.New(contentDir, assetsDir, outputDir, "https://www.integralist.co.uk")
 
 	if err := b.Build(); err != nil {
 		t.Fatalf("Build error: %v", err)
@@ -132,7 +132,7 @@ func TestBuild_GeneratesPostMarkdownSource(t *testing.T) {
 
 func TestBuild_GeneratesPageHTML(t *testing.T) {
 	contentDir, assetsDir, outputDir := setupTestProject(t)
-	b := builder.New(contentDir, assetsDir, outputDir, "https://lostsgnl.com")
+	b := builder.New(contentDir, assetsDir, outputDir, "https://www.integralist.co.uk")
 
 	if err := b.Build(); err != nil {
 		t.Fatalf("Build error: %v", err)
@@ -150,7 +150,7 @@ func TestBuild_GeneratesPageHTML(t *testing.T) {
 
 func TestBuild_GeneratesTagPages(t *testing.T) {
 	contentDir, assetsDir, outputDir := setupTestProject(t)
-	b := builder.New(contentDir, assetsDir, outputDir, "https://lostsgnl.com")
+	b := builder.New(contentDir, assetsDir, outputDir, "https://www.integralist.co.uk")
 
 	if err := b.Build(); err != nil {
 		t.Fatalf("Build error: %v", err)
@@ -168,7 +168,7 @@ func TestBuild_GeneratesTagPages(t *testing.T) {
 
 func TestBuild_GeneratesTagsIndex(t *testing.T) {
 	contentDir, assetsDir, outputDir := setupTestProject(t)
-	b := builder.New(contentDir, assetsDir, outputDir, "https://lostsgnl.com")
+	b := builder.New(contentDir, assetsDir, outputDir, "https://www.integralist.co.uk")
 
 	if err := b.Build(); err != nil {
 		t.Fatalf("Build error: %v", err)
@@ -187,7 +187,7 @@ func TestBuild_GeneratesTagsIndex(t *testing.T) {
 
 func TestBuild_GeneratesHomepage(t *testing.T) {
 	contentDir, assetsDir, outputDir := setupTestProject(t)
-	b := builder.New(contentDir, assetsDir, outputDir, "https://lostsgnl.com")
+	b := builder.New(contentDir, assetsDir, outputDir, "https://www.integralist.co.uk")
 
 	if err := b.Build(); err != nil {
 		t.Fatalf("Build error: %v", err)
@@ -210,7 +210,7 @@ func TestBuild_GeneratesHomepage(t *testing.T) {
 // Verifies that robots.txt is generated with sitemap directive and AI bot rules.
 func TestBuild_GeneratesRobotsTxt(t *testing.T) {
 	contentDir, assetsDir, outputDir := setupTestProject(t)
-	b := builder.New(contentDir, assetsDir, outputDir, "https://lostsgnl.com")
+	b := builder.New(contentDir, assetsDir, outputDir, "https://www.integralist.co.uk")
 
 	if err := b.Build(); err != nil {
 		t.Fatalf("Build error: %v", err)
@@ -235,7 +235,7 @@ func TestBuild_GeneratesRobotsTxt(t *testing.T) {
 // Verifies that sitemap.xml is generated with URLs for posts, pages, tags, and homepage.
 func TestBuild_GeneratesSitemapXml(t *testing.T) {
 	contentDir, assetsDir, outputDir := setupTestProject(t)
-	b := builder.New(contentDir, assetsDir, outputDir, "https://lostsgnl.com")
+	b := builder.New(contentDir, assetsDir, outputDir, "https://www.integralist.co.uk")
 
 	if err := b.Build(); err != nil {
 		t.Fatalf("Build error: %v", err)
@@ -246,19 +246,19 @@ func TestBuild_GeneratesSitemapXml(t *testing.T) {
 		t.Fatalf("sitemap.xml not generated: %v", err)
 	}
 	content := string(data)
-	if !strings.Contains(content, "https://lostsgnl.com/") {
+	if !strings.Contains(content, "https://www.integralist.co.uk/") {
 		t.Error("sitemap missing homepage URL")
 	}
-	if !strings.Contains(content, "https://lostsgnl.com/posts/hello-world/") {
+	if !strings.Contains(content, "https://www.integralist.co.uk/posts/hello-world/") {
 		t.Error("sitemap missing post URL")
 	}
-	if !strings.Contains(content, "https://lostsgnl.com/about/") {
+	if !strings.Contains(content, "https://www.integralist.co.uk/about/") {
 		t.Error("sitemap missing page URL")
 	}
-	if !strings.Contains(content, "https://lostsgnl.com/tags/go/") {
+	if !strings.Contains(content, "https://www.integralist.co.uk/tags/go/") {
 		t.Error("sitemap missing tag URL")
 	}
-	if !strings.Contains(content, "https://lostsgnl.com/tags/") {
+	if !strings.Contains(content, "https://www.integralist.co.uk/tags/") {
 		t.Error("sitemap missing tags index URL")
 	}
 	if !strings.Contains(content, "<urlset") {
@@ -269,7 +269,7 @@ func TestBuild_GeneratesSitemapXml(t *testing.T) {
 // Verifies that llms.txt is generated with site description and content listing.
 func TestBuild_GeneratesLlmsTxt(t *testing.T) {
 	contentDir, assetsDir, outputDir := setupTestProject(t)
-	b := builder.New(contentDir, assetsDir, outputDir, "https://lostsgnl.com")
+	b := builder.New(contentDir, assetsDir, outputDir, "https://www.integralist.co.uk")
 
 	if err := b.Build(); err != nil {
 		t.Fatalf("Build error: %v", err)
@@ -280,7 +280,7 @@ func TestBuild_GeneratesLlmsTxt(t *testing.T) {
 		t.Fatalf("llms.txt not generated: %v", err)
 	}
 	content := string(data)
-	if !strings.Contains(content, "lostsgnl") {
+	if !strings.Contains(content, "integralist") {
 		t.Error("llms.txt missing site name")
 	}
 	if !strings.Contains(content, "/posts/hello-world/index.md") {
@@ -294,7 +294,7 @@ func TestBuild_GeneratesLlmsTxt(t *testing.T) {
 // Verifies that rss.xml is generated with correct RSS 2.0 structure and post content.
 func TestBuild_GeneratesRSSFeed(t *testing.T) {
 	contentDir, assetsDir, outputDir := setupTestProject(t)
-	b := builder.New(contentDir, assetsDir, outputDir, "https://lostsgnl.com")
+	b := builder.New(contentDir, assetsDir, outputDir, "https://www.integralist.co.uk")
 
 	if err := b.Build(); err != nil {
 		t.Fatalf("Build error: %v", err)
@@ -314,10 +314,10 @@ func TestBuild_GeneratesRSSFeed(t *testing.T) {
 	if !strings.Contains(content, "<channel>") {
 		t.Error("rss.xml missing channel element")
 	}
-	if !strings.Contains(content, "<title>lostsgnl</title>") {
+	if !strings.Contains(content, "<title>integralist</title>") {
 		t.Error("rss.xml missing channel title")
 	}
-	if !strings.Contains(content, "https://lostsgnl.com/") {
+	if !strings.Contains(content, "https://www.integralist.co.uk/") {
 		t.Error("rss.xml missing site link")
 	}
 	if !strings.Contains(content, "<item>") {
@@ -326,7 +326,7 @@ func TestBuild_GeneratesRSSFeed(t *testing.T) {
 	if !strings.Contains(content, "<title>Hello World</title>") {
 		t.Error("rss.xml missing post title")
 	}
-	if !strings.Contains(content, "https://lostsgnl.com/posts/hello-world/") {
+	if !strings.Contains(content, "https://www.integralist.co.uk/posts/hello-world/") {
 		t.Error("rss.xml missing post link")
 	}
 	if !strings.Contains(content, "<description>") {
@@ -340,7 +340,7 @@ func TestBuild_GeneratesRSSFeed(t *testing.T) {
 // Verifies that the RSS link tag is present in generated HTML.
 func TestBuild_RSSLinkInHTML(t *testing.T) {
 	contentDir, assetsDir, outputDir := setupTestProject(t)
-	b := builder.New(contentDir, assetsDir, outputDir, "https://lostsgnl.com")
+	b := builder.New(contentDir, assetsDir, outputDir, "https://www.integralist.co.uk")
 
 	if err := b.Build(); err != nil {
 		t.Fatalf("Build error: %v", err)
@@ -361,7 +361,7 @@ func TestBuild_RSSLinkInHTML(t *testing.T) {
 
 func TestBuild_MarkdownAlternateLinkInHTML(t *testing.T) {
 	contentDir, assetsDir, outputDir := setupTestProject(t)
-	b := builder.New(contentDir, assetsDir, outputDir, "https://lostsgnl.com")
+	b := builder.New(contentDir, assetsDir, outputDir, "https://www.integralist.co.uk")
 
 	if err := b.Build(); err != nil {
 		t.Fatalf("Build error: %v", err)

@@ -3,7 +3,7 @@ package model_test
 import (
 	"testing"
 
-	"lostsgnl.com/internal/model"
+	"github.com/integralist/integralist.co.uk/internal/model"
 )
 
 func TestPost_ReadingTime(t *testing.T) {

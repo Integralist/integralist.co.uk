@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"lostsgnl.com/internal/parser"
+	"github.com/integralist/integralist.co.uk/internal/parser"
 )
 
 func TestMarkdownToHTML_Paragraph(t *testing.T) {

@@ -3,7 +3,7 @@ package parser_test
 import (
 	"testing"
 
-	"lostsgnl.com/internal/parser"
+	"github.com/integralist/integralist.co.uk/internal/parser"
 )
 
 func TestParseFrontMatter_ValidYAML(t *testing.T) {

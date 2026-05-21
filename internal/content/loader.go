@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"lostsgnl.com/internal/model"
-	"lostsgnl.com/internal/parser"
+	"github.com/integralist/integralist.co.uk/internal/model"
+	"github.com/integralist/integralist.co.uk/internal/parser"
 )
 
 var tagColors = []string{"#D4796A", "#D4A04A", "#6BA397", "#5B7FA5"}

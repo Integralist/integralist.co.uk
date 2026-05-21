@@ -9,9 +9,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"lostsgnl.com/internal/content"
-	"lostsgnl.com/internal/model"
-	"lostsgnl.com/internal/renderer"
+	"github.com/integralist/integralist.co.uk/internal/content"
+	"github.com/integralist/integralist.co.uk/internal/model"
+	"github.com/integralist/integralist.co.uk/internal/renderer"
 )
 
 // Builder orchestrates the static site build.
@@ -239,7 +239,7 @@ func (b *Builder) generateSitemap(site *model.Site) error {
 
 func (b *Builder) generateLlmsTxt(site *model.Site) error {
 	var buf strings.Builder
-	buf.WriteString("# lostsgnl.com\n\n")
+	buf.WriteString("# integralist.co.uk\n\n")
 	buf.WriteString("> A personal blog about emotions and the human experience.\n\n")
 	buf.WriteString("Every page has a companion Markdown file at the same path with an index.md suffix.\n\n")
 
@@ -298,7 +298,7 @@ func (b *Builder) generateRSS(site *model.Site) error {
 			Description: "A personal blog about emotions and the human experience.",
 			Items:       items,
 			Link:        site.BaseURL + "/",
-			Title:       "lostsgnl",
+			Title:       "integralist",
 		},
 	}
 

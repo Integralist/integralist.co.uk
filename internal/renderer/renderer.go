@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"lostsgnl.com/internal/model"
+	"github.com/integralist/integralist.co.uk/internal/model"
 )
 
 // TagWithColor pairs a tag name with its display color and URL for templates.
@@ -108,7 +108,7 @@ func (r *Renderer) RenderHome(site *model.Site) ([]byte, error) {
 		TagColors: buildTagColorMap(site.Tags),
 	}
 	data.Title = ""
-	data.Description = "lostsgnl.com"
+	data.Description = "integralist.co.uk"
 	data.CanonicalURL = site.BaseURL + "/"
 	return execute(r.home, data)
 }

@@ -4,11 +4,11 @@ import (
 	"log"
 	"os"
 
-	"lostsgnl.com/internal/builder"
+	"github.com/integralist/integralist.co.uk/internal/builder"
 )
 
 func main() {
-	b := builder.New("content", "assets", "public", "https://lostsgnl.com")
+	b := builder.New("content", "assets", "public", "https://www.integralist.co.uk")
 	if err := b.Build(); err != nil {
 		log.Fatal(err)
 	}
