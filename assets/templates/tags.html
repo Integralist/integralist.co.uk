@@ -1,0 +1,10 @@
+{{define "content"}}
+<section class="tags-index">
+    <h1>Tags</h1>
+    <div class="tag-cloud">
+        {{range .Tags}}
+        <a href="{{.URL}}" class="tag" style="background-color: {{.Color}}">{{.Name}} <span class="tag-count">({{len .Posts}})</span></a>
+        {{end}}
+    </div>
+</section>
+{{end}}

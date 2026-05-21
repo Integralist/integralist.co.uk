@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{if .Title}}{{.Title}} | {{end}}integralist</title>
+    {{if .Description}}<meta name="description" content="{{.Description}}">{{end}}
+    {{if .Keywords}}<meta name="keywords" content="{{.Keywords}}">{{end}}
+    {{if .CanonicalURL}}<link rel="canonical" href="{{.CanonicalURL}}">{{end}}
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <meta property="og:title" content="{{if .Title}}{{.Title}}{{else}}integralist{{end}}">
+    {{if .Description}}<meta property="og:description" content="{{.Description}}">{{end}}
+    <meta property="og:type" content="{{.OGType}}">
+    {{if .CanonicalURL}}<meta property="og:url" content="{{.CanonicalURL}}">{{end}}
+    <meta property="og:site_name" content="integralist">
+    {{if .Image}}<meta property="og:image" content="{{.Image}}">{{end}}
+    {{if .PublishedTime}}<meta property="article:published_time" content="{{.PublishedTime}}">{{end}}
+    {{range .ArticleTags}}<meta property="article:tag" content="{{.}}">
+    {{end}}<meta name="twitter:card" content="{{if .Image}}summary_large_image{{else}}summary{{end}}">
+    <meta name="twitter:title" content="{{if .Title}}{{.Title}}{{else}}integralist{{end}}">
+    {{if .Description}}<meta name="twitter:description" content="{{.Description}}">{{end}}
+    {{if .CanonicalURL}}<meta name="twitter:url" content="{{.CanonicalURL}}">{{end}}
+    {{if .Image}}<meta name="twitter:image" content="{{.Image}}">{{end}}
+    {{if .Author}}<meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="{{.Author}}">{{end}}
+    {{if .ArticleTags}}<meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="{{range $i, $t := .ArticleTags}}{{if $i}}, {{end}}{{$t}}{{end}}">{{end}}
+    <link rel="alternate" type="application/rss+xml" title="integralist" href="{{.BaseURL}}/rss.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    {{if .MarkdownURL}}<link rel="alternate" type="text/markdown" href="{{.MarkdownURL}}">{{end}}
+    {{.JSONLD}}
+</head>
+<body>
+    {{template "header" .}}
+    <main>
+        {{block "content" .}}{{end}}
+    </main>
+    {{template "footer" .}}
+</body>
+</html>

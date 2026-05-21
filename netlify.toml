@@ -1,0 +1,6 @@
+[build]
+command = "make run"
+publish = "public"
+
+[build.environment]
+GO_VERSION = "1.26.3"

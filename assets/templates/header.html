@@ -1,0 +1,14 @@
+{{define "header"}}
+<header>
+    <nav>
+        <a href="/" class="site-name"><svg class="site-logo" viewBox="0 0 64 64" aria-hidden="true"><!-- editor window --><rect x="4" y="8" width="38" height="44" rx="4" fill="#2a3040" stroke="#4a5568" stroke-width="1.5"/><rect x="4" y="8" width="38" height="8" rx="4" fill="#3a4255"/><circle cx="10" cy="12" r="1.5" fill="#D4796A"/><circle cx="15" cy="12" r="1.5" fill="#D4A04A"/><circle cx="20" cy="12" r="1.5" fill="#6BA397"/><!-- code lines --><rect x="10" y="21" width="14" height="2.5" rx="1" fill="#6BA397"/><rect x="10" y="27" width="20" height="2.5" rx="1" fill="#D4796A"/><rect x="10" y="33" width="16" height="2.5" rx="1" fill="#D4A04A"/><rect x="10" y="39" width="22" height="2.5" rx="1" fill="#5B7FA5"/><!-- quill pen --><path d="M38 52 C42 42, 48 30, 58 12 C59 10, 57 9, 55 11 C47 25, 43 37, 40 48 Z" fill="#f0ece4" stroke="#d4cfc6" stroke-width="0.5"/><path d="M38 52 L36 56 L40 54 Z" fill="#4a5568"/><path d="M36 56 L37 58 L40 54" fill="none" stroke="#6BA397" stroke-width="1.5" stroke-linecap="round"/></svg> integralist</a>
+        <div class="nav-links">
+            {{range .NavPages}}
+            <a href="{{.URL}}">{{.Title}}</a>
+            {{end}}
+            <a href="/tags/">Tags</a>
+        </div>
+    </nav>
+    <div class="rainbow-divider" aria-hidden="true"></div>
+</header>
+{{end}}

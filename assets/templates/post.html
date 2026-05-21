@@ -1,0 +1,21 @@
+{{define "content"}}
+<article class="post">
+    <header class="post-header">
+        {{if .Post.Tags}}
+        <div class="tag-list">
+            {{range .TagsWithColors}}<a href="{{.URL}}" class="tag" style="background-color: {{.Color}}">{{.Name}}</a> {{end}}
+        </div>
+        {{end}}
+        <h1>{{.Post.Title}}</h1>
+        {{if .Post.Description}}<p class="post-description">{{.Post.Description}}</p>{{end}}
+        <div class="post-meta">
+            <time datetime="{{.Post.Date.Format "2006-01-02"}}">{{.Post.Date.Format "January 2, 2006"}}</time>
+            <span class="reading-time">{{.Post.ReadingTime}} min read</span>
+        </div>
+    </header>
+    <div class="post-content">
+        {{if .Post.Image}}<a class="post-hero" href="{{.Post.Image}}" target="_blank" rel="noopener"><img src="{{.Post.Image}}" alt="{{.Post.Title}}"{{if .Post.ImagePosition}} style="object-position: {{.Post.ImagePosition}}"{{end}}></a>{{end}}
+        {{.Post.Content}}
+    </div>
+</article>
+{{end}}

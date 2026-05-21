@@ -1,0 +1,9 @@
+{{define "content"}}
+<article class="page">
+    <h1>{{.Page.Title}}</h1>
+    <div class="page-content">
+        {{if .Page.Image}}<a class="post-hero" href="{{.Page.Image}}" target="_blank" rel="noopener"><img src="{{.Page.Image}}" alt="{{.Page.Title}}"{{if .Page.ImagePosition}} style="object-position: {{.Page.ImagePosition}}"{{end}}></a>{{end}}
+        {{.Page.Content}}
+    </div>
+</article>
+{{end}}

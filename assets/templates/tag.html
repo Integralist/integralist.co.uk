@@ -1,0 +1,14 @@
+{{define "content"}}
+<section class="tag-page">
+    <h1>Posts tagged <span class="tag" style="background-color: {{.Tag.Color}}">{{.Tag.Name}}</span></h1>
+    <div class="post-list">
+        {{range .Tag.Posts}}
+        <article class="post-summary">
+            <h2><a href="{{.URL}}">{{.Title}}</a></h2>
+            <time datetime="{{.Date.Format "2006-01-02"}}">{{.Date.Format "January 2, 2006"}}</time>
+            {{if .Description}}<p>{{.Description}}</p>{{end}}
+        </article>
+        {{end}}
+    </div>
+</section>
+{{end}}

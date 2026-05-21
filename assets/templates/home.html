@@ -1,0 +1,19 @@
+{{define "content"}}
+<section class="post-list">
+    <h1>Recent Posts</h1>
+    {{range .Posts}}
+    <article class="post-summary">
+        {{if .Tags}}
+        <div class="tag-list">
+            {{range .Tags}}{{with index $.TagColors .}}<a href="{{.URL}}" class="tag" style="background-color: {{.Color}}">{{.Name}}</a> {{end}}{{end}}
+        </div>
+        {{end}}
+        <h2><a href="{{.URL}}">{{.Title}}</a></h2>
+        <time datetime="{{.Date.Format "2006-01-02"}}">{{.Date.Format "January 2, 2006"}}</time>
+        {{if .Description}}<p>{{.Description}}</p>{{end}}
+    </article>
+    {{else}}
+    <p>No posts yet.</p>
+    {{end}}
+</section>
+{{end}}
