@@ -250,7 +250,7 @@ img {
 code {
   font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
   font-size: 0.9em;
-  background: var(--color-callout-bg);
+  background: #3B526B;
   padding: 0.15em 0.35em;
   border-radius: 4px;
 }
