@@ -5,14 +5,14 @@ description: A hands-on guide to cryptographic keys, PKI, GPG, OpenSSH, OpenSSL,
 tags: [security]
 ---
 
-> [!NOTE]
+> [!TIP]
 > UPDATE: for those short on time, read the following [Introduction](#1), [What are keys and how do they work?](#2) and then skip over the sections "Understanding PKI" and "OpenSSL vs OpenSSH" as these just go into more depth on the technical aspect of different encryption concepts. Just skip until [What is GPG?](#5) (in there are two sub sections about "OpenSSH", "SSH Agent" and "OpenSSL", just skip those until you get to the next "GPG" section and continue all the way from there)
 
 ## Introduction
 
 This post **isn't** meant to be "this is how you do security". I'm not a security expert. I'm not even a security intermediate! When I titled this post "security basics" I wasn't kidding. If you're working with applications and/or servers in production then *please* consult someone better equipped on the subject of security.
 
-> [!NOTE]
+> [!CITE]
 > although quite a tough read at times, I would highly recommend "Bulletproof SSL and TLS" written by Ivan Ristić
 
 Now the actual purpose of this post was twofold:
@@ -47,7 +47,7 @@ To prevent this devious person from being able to see the password we would need
 
 In order to encrypt the plaintext into a cipher we need to use a technique that relies on the concept of a "key". A key is a mathematical algorithm for turning plaintext into seemingly random alphanumeric characters. A key can be used to both encrypt and decrypt plaintext.
 
-> [!NOTE]
+> [!INFO]
 > the longer the key, the more secure the encryption will be. This is why, when generating keys, you'll typically be asked to provide the key size (e.g. 128-bit) you want to use for your encryption key
 
 But in order for your recipient (Bob in this case) to know how to *decrypt* the cipher you've sent to them, they also need to know the key you've used.
@@ -71,7 +71,7 @@ Now that we have a basic understanding of public-key cryptography, you should be
 
 ### Public-key example
 
-> [!NOTE]
+> [!WARNING]
 > this example is INSECURE and I explain why afterwards
 
 In this example there are two prerequisites:
@@ -98,7 +98,7 @@ We arrive at yet another security problem with encrypting data, and although usi
 
 You might think for everyone to securely identify themselves they could publish their public keys online. This would mean instead of people having to provide you with their public key via an insecure communication channel, they could point you to a secure location where their public key resides. This is where a service such as [https://keybase.io/](https://keybase.io/) comes in (this is still in preview). There are also more traditional services that you can use, such as: [keyserver.ubuntu.com](http://keyserver.ubuntu.com:11371/), [pgp.mit.edu](http://pgp.mit.edu/) and [keyserver.pgp.com](https://keyserver.pgp.com/vkd/GetWelcomeScreen.event)
 
-> [!NOTE]
+> [!INFO]
 > You can access my public key here: [keybase.io/integralist](https://keybase.io/integralist)
 
 But unless you're talking (in real-life or over the phone) with the actual person you want to communicate with, then how do you *really* know who published the key was the person you think it is? Authenticating people is a difficult problem to solve and this is where PKI (Public-key infrastructure) comes in.
@@ -111,7 +111,7 @@ In the real world, the government is a trusted authority (ok so maybe that's que
 
 Now at this point it's worth pointing out that certificates are designed to identify websites rather than people and so PKI is built on the premise that you are communicating with a domain/web server. They don't really help us with regards to the problem we had earlier with transferring a cipher securely (I'll come back to that issue later).
 
-> [!NOTE]
+> [!INFO]
 > technically certificates are created using the [X.509 standard](https://en.wikipedia.org/wiki/X.509)
 
 What PKI can do is help verify the communication between you (e.g. your web browser) and another website is handled securely and is happening with the correct/relevant endpoint. This is useful because if you're doing some online banking, you want to be sure that communication between you and the bank are happening privately/securely without anyone being able to sniff your information over the wire. But also, you want to be sure you're communicating with your bank and not some devious endpoint *pretending* to be your bank but in fact is getting you to type in your account and password details.
@@ -126,7 +126,7 @@ Your web browser has a list of organisations it *trusts* (known as a "CA" or "Ce
 
 If a website uses a certificate that has not been issued (i.e. "signed") by one of these trusted CAs, then your web browser will display a warning that you probably shouldn't continue on to the website as it doesn't appear to be who it says it is (i.e. the website *could* be who they say they are - your bank - but we can't really trust them because the certificate they've presented to us wasn't issued by a CA we know of).
 
-> [!NOTE]
+> [!INFO]
 > certificates are created and then "signed" using an encrypted signature. This is done using the CAs private key. Because the CAs public key is, well... public, it means our browser can use the public key to verify that the certificate it is presented by a website was indeed issued by a CA we trust and wasn't created by some devious person/organisation instead
 
 So where do these trusted organisations come from? Well as you can imagine, there is a very high cost and detailed process involved with becoming an authorised CA. This is because we have to implicitly trust them to look after our best interests (and only issue certificates to companies/organisations who have proved their true identity through the CAs own rigorous registration process).
@@ -155,7 +155,7 @@ So far we've been talking about certificates being the solution to how we can au
 
 To help PKI achieve its goals, a cryptographic protocol was designed called SSL (Secure Socket Layers). This protocol was subsequently superseded by a new protocol called TLS (Transport Layer Security). PKI uses these protocols to enable the secure communication.
 
-> [!NOTE]
+> [!INFO]
 > you might wonder why you don't hear the phrase TLS used much, and instead see SSL referenced everywhere on the internet when talking about PKI security? This is just an unfortunate case of SSL having become a marketing term that most people can recognise and understand. The majority of the time if someone mentions they have SSL enabled, then what they probably really mean is that they're using the TLS protocol
 
 ### SSL handshake (Cipher Suites and Key Exchanges)
@@ -166,7 +166,7 @@ Remember from earlier we discussed how public-key cryptography works and that wi
 
 As we'll see in a moment, one of the steps in the SSL handshake is called the "key exchange"; this exchange between the client/server is for the encryption key, and is done using a public-key cryptography algorithm. The most popular choice (at the time of writing) is the [RSA algorithm](<https://en.wikipedia.org/wiki/RSA_(cryptosystem)>), which uses the server's public key (provided in the certificate the server sends to the client) to encrypt the key before sending it to the server.
 
-> [!NOTE]
+> [!INFO]
 > if you're using the [Diffie–Hellman key exchange algorithm](https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange) you'll find a great visual explanation of the process which uses the analogy of "mixing colours" to indicate the maths behind the equation (e.g. easy to calculate in one direction, but very difficult to reverse; much like mixing two colours together is easy, but unmixing would be quite arduous). There are also performance penalties associated with some more advanced key exchange algorithms that you need to take into consideration
 
 In order for the SSL handshake to proceed successfully, the client needs to provide the server with some preliminary options; one being a "cipher suite". A cipher suite has a structure that looks something like the following:
@@ -190,7 +190,7 @@ In the above example, we use `RSA` which is interpreted as *both* the key exchan
 
 The client supports various different cipher suites and so it'll send all of the different variations it is happy to handle, while the server's job is to find the most secure match and respond to confirm the cipher suite it has selected.
 
-> [!NOTE]
+> [!WARNING]
 > cipher suites are just one (of many) areas of communication open to a MITM (man-in-the-middle) attack. For example, a devious network sniffer intercepts your initial insecure communication with a server and removes all the cipher suites leaving only the weakest one. The server has no option but to select the one and only cipher suite left, meaning the attacker has an easier time brute forcing through the weaker encryption methods
 
 One other item we'll want to be aware of is what's called a MAC ([Message Authentication Code](https://en.wikipedia.org/wiki/Message_authentication_code)). The MAC is a way of ensuring authentication and integrity by combining an agreed key and a hashing cipher to create a signature for some content. If we send some data we'll also send a MAC with it and because both sides have the key/cipher information we can ensure the message content hasn't been tampered with. We'll see in just a moment that one of our handshake steps will be for the client/server to verify each other using a MAC.
@@ -214,7 +214,7 @@ Let's take a quick look at the SSL handshake (this isn't exhaustive, and I've le
 
 In the previous sub section I briefly ran through the different steps the client and server take in order to communicate securely with each other. But I'd like to add onto that some *examples* of these messages.
 
-> [!NOTE]
+> [!CITE]
 > these examples are copied verbatim from the excellent book "Bulletproof SSL and TLS" written by Ivan Ristić
 
 Here is the first example, this is the client opening communication with the server:
@@ -418,7 +418,7 @@ HEAD / HTTP/1.0
 Host: www.google.com
 ```
 
-> [!NOTE]
+> [!TIP]
 > remember to press `<Enter>` twice to send the request
 
 The above sends a request for just the headers for the specified host, and so the response looks something like the following:
@@ -483,7 +483,7 @@ Let's move on!
 
 If you want to generate your own keys and certificates, which will enable you to connect and transmit data more securely across the internet; then you're going to need to install the [OpenSSL](https://openssl.org/) command line toolkit. OpenSSL is a library designed to implement the SSL/TLS protocols
 
-> [!NOTE]
+> [!INFO]
 > the `openssl` command is a wrapper around the OpenSSL library
 
 What you might not be aware of though is how large a suite of cryptographic tools OpenSSL actually provides. Later on in this post we'll demonstrate a tiny selection of these tools in order to create our own keys and encrypt some data; but for now we'll focus more on the differences between OpenSSL and OpenSSH.
@@ -492,7 +492,7 @@ So where OpenSSL is designed to provide a method for securing web based communic
 
 OpenSSH has a different transport protocol compared to OpenSSL. Although OpenSSH does actually utilise OpenSSL for its cryptographic operations, such as key pair generation. So as long as you're using the same algorithms for generating keys you'll find no difference between OpenSSH and OpenSSL's level of security in that sense (although there is a larger attack vector with regards to OpenSSH so you could argue it's *potentially* more open to security concerns as attackers have more options available to them).
 
-> [!NOTE]
+> [!INFO]
 > the suite of command line tools people typically associate with OpenSSH are actually commands designed *around* the OpenSSH protocol standard (i.e. there isn't an actual `openssh` command; and as such, OpenSSH is just the 'protocol' and *not* the command line tools themselves)
 
 ### OpenSSH utilities
@@ -544,19 +544,19 @@ Running this command you'll be asked to provide a name for the keys and an (opti
 1. `foo_rsa`: contains your private key
 1. `foo_rsa.pub`: contains your public key
 
-> [!NOTE]
+> [!TIP]
 > you can change the passphrase associated with your private key by running `ssh-keygen -p`
 
 Now we have these keys, we can provide our public key to an external service such as [GitHub](https://help.github.com/articles/generating-ssh-keys/) or have them installed on a remote server. Either way this will allow us to connect our shell securely to these remote services/servers.
 
 In the case of connecting to a remote server, you would have your devops or operations people add your public key into a `~/.ssh/authorized_keys` file (or you could do it yourself: `cat foo_rsa.pub | ssh user@123.45.56.78 "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"`). Once your public key is added you'll be able to securely connect to the server without requiring your password because your private key will be used to authenticate your access.
 
-> [!NOTE]
+> [!TIP]
 > convention is for SSH keys to be placed inside a `~/.ssh` folder
 
 One final change that can be made on your remote server (again, this could be handled by your devops or operations team) is to restrict logins to your server to *only* happen via SSH keys. To do this you need to log into the server and change the file `/etc/ssh/sshd_config` by locating the line that specifies `PermitRootLogin` and changing its value like so: `PermitRootLogin without-password`. From there you would run `reload ssh` for the changes to take immediate effect.
 
-> [!NOTE]
+> [!TIP]
 > to find the fingerprint of your SSH key use:\
 > `ssh-keygen -E md5 -lf ~/.ssh/your_rsa.pub`\
 > The `-E md5` provides output as shown by GitHub/GitLab
@@ -585,7 +585,7 @@ So what's happening here is:
 - Copy my public key (and manually paste it into the GitHub GUI)
 - Verify the setup
 
-> [!NOTE]
+> [!TIP]
 > I also use the `-K` flag with `ssh-add` as that's specific to Mac OS X
 
 ### OpenSSL
@@ -605,7 +605,7 @@ openssl rsa -text -in private_key.pem
 
 ### GPG
 
-> [!NOTE]
+> [!TIP]
 > [here is a great and detailed article](https://alexcabal.com/creating-the-perfect-gpg-keypair/) on how to make the most secure key pair process possible
 
 Generating a key pair with GPG is a little bit more involved as you have some prompts you need to step through. The command to begin with is:
@@ -647,7 +647,7 @@ Key is valid for? (0)
 
 Finally, you'll need to input some personal details. I wont add those here, I'll just let you fill those in as needed. It's also worth being aware that GPG will use your system's [entropy](<https://en.wikipedia.org/wiki/Entropy_(computing)>) to aid its random number generation, so for a brief moment you'll see it request that you move your cursor around a bit to help build up the entrophy output.
 
-> [!NOTE]
+> [!TIP]
 > you could also provide all these details via an 'input' file (useful if you find yourself generating lots of key pairs), but that's a bit outside the scope of what we want to focus on here. If you're interested, you can find the [details here](https://www.gnupg.org/documentation/manuals/gnupg/Unattended-GPG-key-generation.html)
 
 Now before we go any further, it's important that at this point you now generate a revocation certificate:
@@ -686,7 +686,7 @@ uid                  Mark McDonnell (Hi) <my.email@domain.com>
 sub   4096R/A1F3D5B6 2015-08-14 [expires: 2016-08-13]
 ```
 
-> [!NOTE]
+> [!TIP]
 > there is an equivalent command for viewing your private keys `gpg --list-secret-keys`
 
 You can see there is a file `pubring.gpg` that appears to contain the details of all the keys I've created, and interestingly the file itself is protected; so if I try something like `cat ~/.gnupg/pubring.gpg` it'll spew out encrypted cipher text at me.
@@ -697,7 +697,7 @@ If you want to see your public key, then use the following command (notice I've 
 gpg --export --armor "Mark McDonnell" > gpg_public.key
 ```
 
-> [!NOTE]
+> [!INFO]
 > `--armor` creates ASCII armored output (a text format) instead of raw bytes (binary format)
 
 To get the private key, you'll use a slightly different flag, but effectively it's the same thing:
@@ -712,7 +712,7 @@ If you have multiple keys under the same name then you'll find that it'll typica
 gpg --export --armor my.email@gmail.com
 ```
 
-> [!NOTE]
+> [!INFO]
 > by default it prints to stdout
 
 In the following sections we'll see more of how to use GPG, but it's worth mentioning now that all the settings you use in the command line tool can be set as defaults in a dotfile: `~/.gnu/gpg.conf`
@@ -728,7 +728,7 @@ default-recipient some-user-id # In case you happen to only ever communicate wit
 
 Here's a quick question that people seem to ask a lot:
 
-> [!NOTE]
+> [!INFO]
 > I heard some people have multiple key pairs, one for 'signing' and one for 'encryption'. Why is that?
 
 The answer is that you'll want to rotate your encryption key pair on a regular basis. Ideally you wouldn't have a key pair that never expires or doesn't expire for a very long time because if it becomes compromised (and you're unable to revoke) then you've got serious problems.
@@ -761,7 +761,7 @@ With GPG you'll need the recipients public key in order to encrypt files. So onc
 gpg --import public.key
 ```
 
-> [!NOTE]
+> [!TIP]
 > to delete their public key afterwards, run `gpg --delete-key "User Name"`
 
 Before we continue, let's just consider a real-world scenario:
@@ -793,7 +793,7 @@ Now, once you have the public key of your recipient you can encrypt a file using
 gpg --encrypt -u "Sender User Name" -r "Receiver User Name" somefile
 ```
 
-> [!NOTE]
+> [!TIP]
 > it can sometimes be better to use the `pub` identifier number (especially when you have multiple keys with the same email). So if your pub id is `1234A/BC56D7E5` then you'd use `-u BC56D7E5`
 
 To decrypt a GPG encrypted file, the person sending you the encrypted file would have used your public key to encrypt the data. So the following command will locate your private key automatically (if you have multiple secret keys it'll ask for the password):
@@ -830,7 +830,7 @@ You can also modify the default cipher encryption algorithm, then use the `--cip
 gpg --verbose --cipher-algo AES256 --symmetric secrets.txt
 ```
 
-> [!NOTE]
+> [!TIP]
 > use `--verbose` without `--cipher-algo` to see GPG's default algorithm
 
 To see a list of available cipher algorithms, then execute the following command and look for the section `Cipher`:
@@ -960,7 +960,7 @@ gpg --local-user Bob --detach-sign secret.txt
 
 So once you run this command you'll find a `secret.txt.sig` file has been generated (the `secret.txt` still hasn't been encrypted). You can't see the contents of the `.sig` file as it has been compressed †
 
-> [!NOTE]
+> [!INFO]
 > † this is not the same as being 'encrypted', it is just compressed for the sake of performance and easier transportation
 
 This is better than `--clearsign` as the original file hasn't been modified in order to produce the signature. But this does mean in order for Alice to verify the signature, she needs to have the original plaintext file. If she doesn't, then you'll have to send her both the signature and the file.
@@ -1001,7 +1001,7 @@ gpg: Good signature from "Profile 1 (Bob) <example@integralist.co.uk>" [ultimate
 
 All other uses of `--decrypt` simply meant _decompress_ the file, hence no passphrase was required. This also explains why Bob had to explicitly specify `--recipient` when using `--encrypt`.
 
-> [!NOTE]
+> [!TIP]
 > in all these examples I use `--local-user` to change the GPG profile.\
 > But you could also use `--default-key` if you wanted
 
@@ -1019,7 +1019,7 @@ Then you want to regularly check those keys are still valid, and haven't been co
 gpg --refresh-keys
 ```
 
-> [!NOTE]
+> [!TIP]
 > you can specify `--keyserver` when refreshing key data
 
 ### OpenSSL encryption
@@ -1103,7 +1103,7 @@ Alternatively you might want to use an already existing private key:
 keybase pgp select
 ```
 
-> [!NOTE]
+> [!INFO]
 > the `keybase` program will push the public key part of your PGP or GPG key pair to the Keybase website and associate it with your Keybase account
 
 The point of Keybase is to help you verify the person you want to communicate with is who they say they are. So Keybase let's users prove who they are by authenticating with their social accounts. For example, if I search for a friend of mine on Keybase:
@@ -1136,7 +1136,7 @@ This will then display the following:
 ✔ "sthulb" on github: https://gist.github.com/13a7654d90750bf154c3
 ```
 
-> [!NOTE]
+> [!INFO]
 > `.asc` is a convention to indicate a file has been encrypted
 
 My friend would then be able to decrypt the encrypted file I send to him with:
@@ -1160,7 +1160,7 @@ gpg --import keybase.public.key
 gpg --allow-secret-key-import --import keybase.private.key
 ```
 
-> [!NOTE]
+> [!TIP]
 > Notice the use of `-s` to export the private key
 
 Now you can encrypt data via GPG using your Keybase private key:
@@ -1170,7 +1170,7 @@ echo foobar > secret.txt
 gpg --encrypt -u 123 -r 456 secret.txt
 ```
 
-> [!NOTE]
+> [!INFO]
 > `123` being your keybase identifier inside GPG and\
 > `456` being the recipient identifier\
 > (assuming you've imported their public key already)
@@ -1205,7 +1205,7 @@ You can then self-sign that certificate (while you wait for the CA to officially
 openssl x509 -req -days 365 -in csr.pem -signkey my-private-key.pem -out my-certificate.pem
 ```
 
-> [!NOTE]
+> [!TIP]
 > create key pair + cert in a one liner\
 > `openssl req -nodes -new -x509 -keyout server.key -out server.cert`
 

@@ -291,7 +291,7 @@ You can find me online at the following locations:
 
 ## 🚀 Impact
 
-> [!NOTE]
+> [!INFO]
 > Everything below has been accomplished as a **fully remote worker**, balancing
 > family life with a genuine desire to do excellent work for my team, our
 > customers, and the broader engineering community.

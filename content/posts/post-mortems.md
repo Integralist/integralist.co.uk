@@ -5,7 +5,7 @@ description: How to run effective blameless post-mortems, including scheduling, 
 tags: [devops, management]
 ---
 
-> [!NOTE]
+> [!TIP]
 > for those short on time: here's the [Post-Mortem Template](https://docs.google.com/document/d/1rYERE1LaobML3puIa94jJSh2cQ0kHflCk8zmVo3pWq0/edit?usp=sharing)
 
 ## What is a post-mortem?
@@ -33,7 +33,7 @@ You should schedule the post-mortem to occur _as soon as possible_ after the eve
 
 The trouble with getting a post-mortem scheduled at the right time is that you'll need a prepared document (a post-mortem template) that is filled in with as much detail (as can be reasonably recalled from memory †) almost immediately after the incident. This document doesn't just magically appear, it's someones responsibility to create it.
 
-> [!NOTE]
+> [!INFO]
 > † this is harder than you imagine, even with modern day communication tools like [Slack](https://slack.com/), there are so many things going on at once (multiple people chatting and trying to isolate the problem, then finding a quick and safe solution) that it's easy to forget things or not notice them happening (hence a post-mortem helps bring all this information together).
 
 You should have the post-mortem document filled in (as much as you can) _before_ having the post-mortem as a way to help drive the conversation, and (ideally) whoever was on-call at the time of the incident would be marked as the point-person for prepping this post-mortem document.
@@ -82,7 +82,7 @@ Because of all that (and more), who you share the post-mortem document with real
 
 Below I link to a Google document we use as a template for our post mortem meetings, and I've included the relevant sections below just for an 'at a glance' view.
 
-> [!NOTE]
+> [!TIP]
 > you don't have to include all of these if you don't want. Take what is useful to you and leave whatever isn't.
 
 ### Observations
@@ -101,14 +101,14 @@ e.g. Users were seeing X output.
 
 What do we believe to be the contributing factors?
 
-> [!NOTE]
+> [!IMPORTANT]
 > there's typically never a single 'root cause'
 
 ### Remediation
 
 What did we do to resolve the incident?
 
-> [!NOTE]
+> [!INFO]
 > this isn't the same as 'fixing' the problem, which suggests something more long term was put in place.
 
 e.g.
@@ -120,7 +120,7 @@ e.g.
 
 What was the 'cost' of this incident?
 
-> [!NOTE]
+> [!INFO]
 > this isn't the same thing as the symptoms.
 
 e.g.
@@ -142,7 +142,7 @@ e.g.
 
 Who was involved and what are their roles in the company.
 
-> [!NOTE]
+> [!INFO]
 > you don't know everyone and what they do, so make it easier for people reading the post-mortem to understand the breadth of skills involved.
 
 e.g.
@@ -154,7 +154,7 @@ e.g.
 
 Describe what happened and when. This should be much more detail than those extracted for the 'key points' section.
 
-> [!NOTE]
+> [!TIP]
 > if you work for a distributed company, then identifying the timezone of the incident (or at least the timezone you're reporting it from) can help clarify when these things happened.
 
 e.g.

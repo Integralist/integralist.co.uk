@@ -83,7 +83,7 @@ heavily moderated by Apple and an app can only be found there if it abides by
 Apple's own set of rules and criteria for what they consider to be 'safe'
 software.
 
-> [!NOTE]
+> [!INFO]
 > there are many apps that aren't available in the App Store because Apple
 > can be a bit anti-competition (see [Spotify's "time to play fair"
 > campaign](https://timetoplayfair.com)).
@@ -104,7 +104,7 @@ To install Homebrew, execute the following command in your terminal:
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
-> [!NOTE]
+> [!INFO]
 > notice that installation command uses the default installation of Ruby
 > which Homebrew presumes is available (and for the most part is a safe
 > presumption to make as Ruby as been provided by macOS for the longest time).
@@ -143,7 +143,7 @@ Here is a list of the packages I'll install:
 - `tree`: displays directory heirarchy structures as a tree
 - `watch`: executes given command every N seconds
 
-> [!NOTE]
+> [!TIP]
 > † see [transmission user guide](https://cli-ck.io/transmission-cli-user-guide/)
 
 Here's a handy one-liner:
@@ -180,7 +180,7 @@ Here is a list of the apps I'll install:
 - `spotify`: music streaming service
 - `vlc`: video player with support of lots of codecs
 
-> [!NOTE]
+> [!IMPORTANT]
 > † if you installed the docker 'package', then you _need_ the docker 'app' as
 > well for it to work. You can't have one without the other (this is because the
 > app sets up the interface for macOS to interact with the underlying docker
@@ -244,7 +244,7 @@ curl -LSso ~/.gitignore-global https://raw.githubusercontent.com/Integralist/dot
 curl -LSso ~/.gitconfig https://raw.githubusercontent.com/Integralist/dotfiles/master/.gitconfig
 ```
 
-> [!NOTE]
+> [!TIP]
 > it's always worth checking `~/.gitignore-global` is up to date (i.e. not
 > referencing file types I no longer work with).
 
@@ -273,7 +273,7 @@ curl -LSso ~/.bashrc https://raw.githubusercontent.com/Integralist/dotfiles/mast
 curl -LSso ~/.bash_profile https://raw.githubusercontent.com/Integralist/dotfiles/master/.bash_profile
 ```
 
-> [!NOTE]
+> [!TIP]
 > `~/.bashrc` references `~/.fzf.bash` which is needed, and comes from
 > installing the FZF vim plugin (which we'll sort out shortly).
 
@@ -288,7 +288,7 @@ open /tmp/Integralist.terminal
 rm /tmp/Integralist.terminal
 ```
 
-> [!NOTE]
+> [!TIP]
 > don't forget to change the terminal font to menlo (if not already set)
 > and also set `Integralist` theme as your default. I used to do this via
 > `defaults write com.apple.Terminal "Default Window Settings" Integralist` and
@@ -319,7 +319,7 @@ your SSH key is set-up correctly and working:
 ssh -T git@github.com
 ```
 
-> [!NOTE]
+> [!WARNING]
 > there is a slight catch-22 here which is if your password for GitHub is
 > in your Password Store (see next section), then that makes things trickier.
 > For me I also have a copy of the encrypted store on my phone and so I can
@@ -345,7 +345,7 @@ gpg --import <private-key>
 gpg --export <key-id> # public key by default
 ```
 
-> [!NOTE]
+> [!TIP]
 > don't forget you can _sign_ your git commits:\
 > `git config --global user.signingkey <key-id>`
 
@@ -364,7 +364,7 @@ zbarimg -q --raw /tmp/qr.png | pass otp insert Work/Acme/totp/foo`
 pass otp -c Work/Acme/totp/foo
 ```
 
-> [!NOTE]
+> [!INFO]
 > installing `zbar` provides the `zbarimg` command
 
 Lastly, we need to setup a new Password Store, and to do that we need to provide
@@ -386,7 +386,7 @@ pass git pull
 git branch --set-upstream-to=origin/master master
 ```
 
-> [!NOTE]
+> [!TIP]
 > I also like to ensure my encrypted datastore is sync'ed up to other
 > online providers, and symlinked to `~/.password-store` as well so changes are
 > backed up automatically in multiple places.
@@ -484,7 +484,7 @@ Here are some packages I like to install as a general rule...
 - [boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html): AWS CLI tool
 - [tox](https://tox.readthedocs.io/en/latest/): generic virtualenv management and testing tool
 
-> [!NOTE]
+> [!TIP]
 > for an example of how to configure Flake8 and its plugins, see [this
 > gist](https://gist.github.com/0ce27db1d7294f3af9896c0807ccfeed).
 
@@ -525,7 +525,7 @@ so:
 export PATH="/Users/integralist/.local/bin:$PATH"
 ```
 
-> [!NOTE]
+> [!WARNING]
 > if you install pipx via Homebrew then it'll be attached to that Python
 > version. Meaning if you upgrade your Python version, then pipx could break
 > (e.g. none of the installed packages will work). The solution is to run `pipx reinstall-all --python python3`.
@@ -540,7 +540,7 @@ brew install vim
 
 Or you can manually compile vim yourself:
 
-> [!NOTE]
+> [!INFO]
 > I manually compile vim as I need Python3 support baked in, which
 > Homebrew's version no longer does (it used to, but not any more). Python3
 > support means my Python linting tools will work as expected.
@@ -583,7 +583,7 @@ compilation (e.g. if I tell you to use Python `3.7.7` don't then go and try to
 be helpful and use a cached run where I was using `3.7.4` -- which really
 confused me for a long time!):
 
-> [!NOTE]
+> [!TIP]
 > now I should say, that if you can use the above example compilation
 > code, but just run `make clean distclean` first, then do that! I suspect I
 > could have done that and Vim would have been compiled with Python `3.7.7` just
@@ -616,7 +616,7 @@ The key flags are...
 - `--with-python3-command`: give it a path to a Python3 interpreter/binary (†)
 - `--with-python3-config-dir`: a configuration directory used by the version of Python3 you want to use.
 
-> [!NOTE]
+> [!INFO]
 > † e.g. if I run that full path in my terminal shell it'll actually run the
 > Python3 REPL so I know it's a valid path to provide.
 
@@ -660,7 +660,7 @@ virtual environment I created (which is going via the Homebrew installed version
 of Python) and Vim will know about the packages installed in that virtual
 environment.
 
-> [!NOTE]
+> [!WARNING]
 > even if I do `python3 --version` the shell will now report the Homebrew
 > version of Python (so it overrides the `pyenv` version that might have been
 > set via a `.python-version` file)!
@@ -689,7 +689,7 @@ Install plugins by opening vim and executing:
 :PlugInstall
 ```
 
-> [!NOTE]
+> [!TIP]
 > [fzf](https://github.com/junegunn/fzf) doesn't need a brew install when
 > installed via vim. See my `.vimrc` configuration file for more details, but in
 > essence it contains: `Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }`
@@ -716,7 +716,7 @@ curl -LSso ~/.tmux.conf https://raw.githubusercontent.com/Integralist/dotfiles/m
 curl -LSso ~/tmux.sh https://raw.githubusercontent.com/Integralist/dotfiles/master/tmux.sh
 ```
 
-> [!NOTE]
+> [!WARNING]
 > check `$PATH` to make sure tmux isn't double setting values in your PATH
 > as it starts up. If it does you can check an older version of my
 > [`~/.bash_profile`](https://github.com/Integralist/dotfiles/blob/cc906bd14636543e71d9c034d6507f5986a80bbd/.bash_profile#L18-L21)
@@ -763,7 +763,7 @@ there you can drill down into individual namespaces like so:
 defaults read "Apple Global Domain" com.apple.mouse.tapBehavior
 ```
 
-> [!NOTE]
+> [!TIP]
 > [here](https://github.com/Integralist/dotfiles/blob/cc906bd14636543e71d9c034d6507f5986a80bbd/bootstrap.sh#L7-L53)
 > are the settings I used to configure via the terminal.
 

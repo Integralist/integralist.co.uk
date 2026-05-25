@@ -23,7 +23,7 @@ The last book in that list is the focus of this post.
 
 Well, I've taken the liberty to reference the author directly here as I feel his words convey the book's focus more than I ever could…
 
-> [!NOTE]
+> [!CITE]
 > I presume you just picked up this book because you are a computer programmer and are intrigued by the notion of professionalism. You should be. Professionalism is something that our profession is in dire need of.
 > I'm a programmer too. I've been a programmer for 42 years (longer by the time you read this); and in that time I've seen it all. I've been fired. I've been lauded. I've been a team leader, a manager, a grunt and even a CEO. I've worked with brilliant programmers and I've worked with slugs. I've worked on high-tech cutting-edge embedded software/hardware systems, and I've worked on corporate payroll systems. I've programmed in COLBOL, FORTRAN, BAL, PDP-8, PDP-11, C, C++, Java, Ruby, Smalltalk, and a plethora of other languages and systems. I've worked with untrustworthy pay check thieves, and I've worked with consummate professionals. It is that last classification that is the topic of this book.
 > In the coming years I would be fired from one job for carelessly missing critical dates, and nearly fired from still another for inadvertently leaking confidential information to a customer. I would take the lead on a doomed project and ride it into the ground without calling for the help I knew I needed. I would aggressively defend my technical decisions even though they flew in the face of the customers’ needs. I would hire one wholly unqualified person, saddling my employer with a huge liability to deal with. And worst of all, I would get two other people fired because of my inability to lead.
@@ -68,7 +68,7 @@ Professionals will also know the pros and cons to specific techniques and when t
 
 Uncle Bob makes a comment which references the "Santayana's curse"…
 
-> [!NOTE]
+> [!CITE]
 > Those who cannot remember the past are condemned to repeat it.
 
 Here is a short list of things you should know (or at least be quite familiar with):

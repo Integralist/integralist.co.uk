@@ -13,7 +13,7 @@ Python manages memory using **reference counting** semantics. What this means is
 
 Now this can cause [problems](http://engineering.hearsaysocial.com/2013/06/16/circular-references-in-python/) when dealing with [cyclical references](https://stackoverflow.com/questions/9910774/what-is-a-reference-cycle-in-python), so that's something to be aware of when investigating memory leaks and other memory related concerns.
 
-> [!NOTE]
+> [!TIP]
 > for lots of details of how Python allocates memory, I highly recommend [this presentation](https://dmalcolm.fedorapeople.org/presentations/PyCon-US-2011/MemoryUsage.pdf).
 
 ## Types of Profiling
@@ -75,7 +75,7 @@ def expensive_function():
 print(expensive_function())
 ```
 
-> [!NOTE]
+> [!INFO]
 > I’m currently using Python version 3.6.3
 
 Running this program can take ~1.8 seconds and returns the value:
@@ -118,7 +118,7 @@ result = timeit.timeit(expensive_function, number=1)  # one repetition
 print(result)
 ```
 
-> [!NOTE]
+> [!TIP]
 > you can tweak the number param to determine how many repetitions it’ll run.
 
 Along with the `timeit` method, there is a `repeat` method that returns a set of averages across the number of repeated code executions.
@@ -133,7 +133,7 @@ In this case result would contain something like:
 [1.7263835030025803, 1.7080924350011628, 1.6802870190003887, 1.6736655100103235, 1.7003267239924753]
 ```
 
-> [!NOTE]
+> [!CITE]
 > according to the Python documentation when utilising the `repeat` method you should only be interested in the `min()` because…
 >
 > “In a typical case, the lowest value gives a lower bound for how fast your machine can run the given code snippet; higher values in the result vector are typically not caused by variability in Python’s speed, but by other processes interfering with your timing accuracy”.
@@ -148,7 +148,7 @@ There are two flavours of [profiler](https://docs.python.org/3/library/profile.h
 For example, the C profile took ~3 seconds to complete,
 whereas the Python version took over a minute.
 
-> [!NOTE]
+> [!TIP]
 > if using `cProfile` you would execute: `cProfile.run("expensive_function()")` otherwise you would execute `profile.run("expensive_function()")`.
 
 You should see something like the following displayed after executing your program:
@@ -174,7 +174,7 @@ So from these results we can see:
 - The `expensive_function` took a total of 2.090 seconds (exc. sub function calls).
 - The cumulative time (`cumtime`) is the `tottime` plus sub function calls.
 
-> [!NOTE]
+> [!INFO]
 > when there are two numbers in the first column (for example `3/1`), it means that the function recursed. The second value is the number of primitive calls and the former is the total number of calls. Note that when the function does not recurse, these two values are the same, and only the single figure is printed.
 
 Instead of printing the results you can pass the run method a second argument which is a filename you want to store the results in. Once there you can use the [pstats.Stats](https://docs.python.org/3/library/profile.html#pstats.Stats) module to carry out some post-processing on those results.
@@ -260,7 +260,7 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
 some result! 9999999
 ```
 
-> [!NOTE]
+> [!INFO]
 > the Line Profiler is pretty slow (~35s) in comparison to the cProfiler (~4s)
 
 The Line Profiler will typically only analyse the function being decorated. In order for it to include sub function calls, you’ll need to specify them (hence the decorator allows you to provide a list of functions and in there we’ve specified the `get_number` function).
@@ -366,7 +366,7 @@ some result! 9999999
 tracemalloc_example.py:17: size=106 B, count=2, average=53 B
 ```
 
-> [!NOTE]
+> [!TIP]
 > You might also consider [Pympler](https://pythonhosted.org/Pympler/muppy.html) or [ObjGraph](http://mg.pov.lt/objgraph/) for tracking memory usage & object refs.
 
 ## PyFlame (Flame Graphs)
@@ -379,7 +379,7 @@ For more details on the design decisions behind PyFlame and the shortcomings of 
 
 PyFlame only works with Linux operating systems and so in order to profile our code (if you’re using macOS like I am), then we’ll have to utilise [Docker](https://www.docker.com/) to help us. Below is a `Dockerfile` you can use as a basic starting point to try out PyFlame.
 
-> [!NOTE]
+> [!INFO]
 > we also require [FlameGraph](https://github.com/brendangregg/FlameGraph) in order to generate the flame graphs.
 
 ```
@@ -415,7 +415,7 @@ docker build -t pyflame .
 docker run --privileged pyflame > output.svg && tail -n+2 output.svg > output_stripped.svg
 ```
 
-> [!NOTE]
+> [!WARNING]
 > our application sends data to stdout (e.g. `some result! 9999999`) and so this ends up at the top of our `output.svg` file. This means we need to remove it. We could either modify the application code or you could do what I’ve done and strip it after the file is created by using the `tail` command and redirecting the stripped output to a new file: `output_stripped.svg`.
 
 If we now open `output_stripped.svg` we should see the following interactive flame graph.

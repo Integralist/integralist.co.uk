@@ -22,7 +22,7 @@ People complain about SOA and say it has lots of pain points that make it unusab
 
 Although maybe a new services lexicon † _is_ useful, at least for giving a consistent and modern terminology to these concepts we collectively understand.
 
-> [!NOTE]
+> [!INFO]
 > † the vocabulary of a person, language, or branch of knowledge.
 
 ## Definitions
@@ -37,7 +37,7 @@ Let's breakdown these concepts along with their old/new terminology:
 
 - **Nano Service**: we go to the extremes of boundary definitions and are working at the 'component' level (BBC explain their approach to this [here](https://medium.com/bbc-design-engineering/powering-bbc-online-with-nanoservices-727840ba015b)).
 
-> [!NOTE]
+> [!INFO]
 > Micro services are themselves a new'ish concept at ~7 years of age (at the time of writing). The term was first used in 2011.
 
 ## Real micro services?
@@ -54,12 +54,12 @@ So how do we achieve communication without relying on tried and tested HTTP/REST
 
 With the pub/sub model, the micro service publishes notifications whenever something happens and services can subscribe to those notifications. This means the micro service has no awareness of anything outside of itself, it just throws out a notification and there's either someone there to catch it and process it, or there isn't.
 
-> [!NOTE]
+> [!INFO]
 > Queue systems like RabbitMQ or SQS etc are used heavily in these cases to allow for that decoupling.
 
 ## What do you use?
 
 I tend to gravitate towards the SOA pattern † as it's a nice balance between loose coupling and separation of domain boundaries without descending into the co-ordination and infrastructure madness of micro services.
 
-> [!NOTE]
+> [!INFO]
 > † or "mini services" if that's the language you prefer, although I personally don't think I'll ever be able to bring myself to use it over "SOA".

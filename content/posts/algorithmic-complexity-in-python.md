@@ -21,7 +21,7 @@ We're interested in the last notation in that list ([Big O notation](https://en.
 
 The reason for selecting Big O over other notations is that it's the most relevant for performance analysis, as it helps us to understand the worst case behaviour.
 
-> [!NOTE]
+> [!TIP]
 > a fantastic 'quick' reference for Big O notation is [bigocheatsheet.com](http://bigocheatsheet.com/), but also Python [documents the time complexity](https://wiki.python.org/moin/TimeComplexity) associated with its various builtin functions (which is super useful).
 
 ## Measuring Algorithmic Performance
@@ -33,7 +33,7 @@ There are two types of complexity we might be interested in (both dependant upon
 1. **time**: quantifies the amount of time taken by the algorithm.
 1. **space**: quantifies the amount of memory used by the algorithm.
 
-> [!NOTE]
+> [!INFO]
 > the Big O notation used to describe these complexities is telling us the 'growth rate' of a function, which is typically referred to as the '**order** of the function' (hence the 'O' in Big O).
 
 ## Orders of Complexity
@@ -51,7 +51,7 @@ There are two types of complexity we might be interested in (both dependant upon
   - `O(2^n)`
   - `O(n!)`
 
-> [!NOTE]
+> [!INFO]
 > when writing a logarithm you are expected to specify the base: `log 2(n)` but with Big O notation you typically omit the two, resulting in: `O(log n)`.
 
 ## Growth Types
@@ -119,7 +119,7 @@ The algorithm used here is known as a 'binary search' and only works when the gi
 
 This algorithm fits the requirements of logarithmic time complexity because instead of iterating over the entire input list, we actually _shorten_ the input by half on each 'step' of the algorithm.
 
-> [!NOTE]
+> [!TIP]
 > I discuss [binary search](/posts/big-o-for-beginners/#binary-search) in more detail in an older post.
 
 ### Square Root Time
@@ -161,7 +161,7 @@ This example `search` function will loop over every element until it finds the n
 
 The worst case scenario is if `x` happens to be a number that doesn't exist in the given input. We would have to iterate over the entire input before we realized the number didn't exist.
 
-> [!NOTE]
+> [!TIP]
 > a much better algorithm to use (if the input was guaranteed to be ordered/sorted) would be a [binary search](/posts/big-o-for-beginners/#binary-search).
 
 What's interesting to keep in mind is that there are algorithms that are slower still than the example we've given above but are _still_ considered to be 'linear time' (e.g. `O(n)`). Consider a collection of ten items that you loop over twice! That's twice as many operations as our initial example but it's still `O(n)` and not something like `O(n*2)`.
@@ -192,7 +192,7 @@ def quicksort(arr):
 print("sorted:  ", quicksort(input))
 ```
 
-> [!NOTE]
+> [!TIP]
 > I discuss [quick sort](/posts/big-o-for-beginners/#quick-sort) in more detail in an older post.
 
 ### Quadratic Time
@@ -226,7 +226,7 @@ Now the difference comes when the exponent (`2`) in the polynomial equation is i
 
 An algorithm is 'exponential' when the number of operations grows exponentially with the number of elements (i.e. growth whose rate becomes ever more rapid in proportion to the growing total number or size).
 
-> [!NOTE]
+> [!INFO]
 > exponential time complexity `O(2^n)` is worse than polynomial `O(n^2)` because maths tells us that _over time_ exponential will quickly overtake polynomial.
 
 Consider an algorithm whose implementation is calculating fibonacci numbers (which grows exponentially relative to the calculated output).
@@ -317,5 +317,5 @@ The calculation for that would yield a disastrously large number:
 
 Hence this is the worst performing time complexity of the lot.
 
-> [!NOTE]
+> [!TIP]
 > I discuss [factorials](/posts/big-o-for-beginners/#factorials) in more detail in an older post.

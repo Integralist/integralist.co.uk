@@ -9,7 +9,7 @@ tags: [python, testing]
 
 Mocking resources when writing tests in Python can be confusing if you're unfamiliar with doing such things. In this post I am going to cover various aspects of mocking code, which will hopefully be a useful resource for those who are a bit stuck.
 
-> [!NOTE]
+> [!INFO]
 > in the code examples I'm using [pytest](https://docs.pytest.org/en/latest/), but for the most part that shouldn't matter.
 
 ## unittest.mock or mock
@@ -24,7 +24,7 @@ So in almost all cases you'll want to import it like so:
 import unittest.mock as mock
 ```
 
-> [!NOTE]
+> [!INFO]
 > For more examples, see [this reference guide](http://www.voidspace.org.uk/python/mock/examples.html)
 
 ## Decorator
@@ -43,7 +43,7 @@ When you do this you'll need to pass an argument to your function (you can name 
 
 This means if you don't do anything else, then calls to `thing` will (in the example above at least) result in the value `123` being returned.
 
-> [!NOTE]
+> [!TIP]
 > † convention is to name the variable `mock_<noun>`.
 
 If you're mocking multiple things then you'll stack the mock decorators ontop of each other, and pass them along in order to the test function:
@@ -84,7 +84,7 @@ If your function has a try/except around it, then you can use `side_effect` to c
 @mock.patch('app.aws.sdk.confirm_sign_up', side_effect=Exception('whoops'))
 ```
 
-> [!NOTE]
+> [!WARNING]
 > if you had used `return_value=Exception('whoops')` then the mock would return the string representation of the Exception rather than _raising_ an exception like `side_effect` does.
 
 Otherwise if you just need a _static_ value returned, so it's evaluated at the time it's defined (not when it's called), then you can use `return_value` instead:
@@ -191,7 +191,7 @@ def test_account_confirm_failure(mock_signup):
     assert str(exc_info.value) == 'SIGNUP_CONFIRMATION_FAILED'
 ```
 
-> [!NOTE]
+> [!WARNING]
 > don't make the mistake of putting any assertions within the `with` context manager. Once the Exception is raised by the function being called within the `with` context manager, all code after it inside the block is skipped.
 
 ## Clearing lru_cache
@@ -217,7 +217,7 @@ foo.cache_clear()
 foo()  # Executing foo... (notice the 'side effect of print is executed again)
 ```
 
-> [!NOTE]
+> [!WARNING]
 > debugging this isn't always obvious. Later on I demonstrate how to [mock the builtin `open` function](#mock-builtin-open-function), and in that scenario I stumbled across this issue, because although I wasn't mocking the top level function itself (I was mocking the call to `open` within), the contents of the file being opened was what was returned and being cached.
 
 ## Mock Module Level/Global Variables
@@ -280,7 +280,7 @@ def test_stuff(mock_class):
     mock_class.return_value.made_up_function.return_value = "123"
 ```
 
-> [!NOTE]
+> [!WARNING]
 > in the above example we mock the _entire_ class, which might not be what you want. If not, then use the previous `mock.patch.object` example instead.
 
 The reason the above example works is because we're setting `return_value` on our mock. Because this is a `MagicMock` every attribute referenced returns a new mock instance (a function or property you call on a mock doesn't have to exist) and so we call `made_up_function` on the returned mock, and on _that_ newly created mock we set the final `return_value` to `123`.
@@ -325,7 +325,7 @@ def test_class(self, mock_car):
     ...
 ```
 
-> [!NOTE]
+> [!INFO]
 > See other class related mocking tips [here](https://chase-seibert.github.io/blog/2015/06/25/python-mocking-cookbook.html)
 
 ## Mock Async Calls
@@ -343,7 +343,7 @@ async def do_thing(x):
 
 If we need to mock the coroutine `app.stuff.some_concurrent_function`, then we can solve this by creating a function that acts as a [coroutine](https://docs.python.org/3.7/library/asyncio-task.html#asyncio.coroutine) and allow it to be configurable for different types of responses:
 
-> [!NOTE]
+> [!INFO]
 > the example uses [tornado](https://www.tornadoweb.org/en/stable/) for running an asynchronous test.
 
 ```
@@ -427,7 +427,7 @@ If the above approach doesn't work for you, here are some alternatives...
 
 ### AsyncMock
 
-> [!NOTE]
+> [!INFO]
 > this utilizes the package `pytest-asyncio` to help with testing asyncio code
 
 Let's start with the code to be mocked...
@@ -528,7 +528,7 @@ Meaning, if you need to make a mock more like the concrete interface, then there
 
 We can use mock's `spec` feature to mimic all methods/attributes of the object being mocked. This ensures your mocks have the same api as the objects they are replacing.
 
-> [!NOTE]
+> [!INFO]
 > there is a stricter `spec_set` that will raise an `AttributeError`.
 
 This is best demonstrated with an example:

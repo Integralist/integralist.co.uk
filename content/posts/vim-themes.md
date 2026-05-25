@@ -10,7 +10,7 @@ I've been around the houses on this problem long enough, and after many years of
 1. Install a terminal that has good colour support (e.g. [Alacritty](https://alacritty.org/))
 1. Install a better Vim (i.e. [Neovim](https://neovim.io)) †
 
-> [!NOTE]
+> [!INFO]
 > † This should still work with standard Vim, but actually Neovim has so many performance improvements, and quality of life plugins it's not worth fighting for purity (trust me, I had been using standard vim and the standard macOS terminal app for 10 years before admitting I was fighting the tide).
 
 Now that you have the right tools, let's explain the configuration.

@@ -5,7 +5,7 @@ description: A comprehensive guide to building CI/CD pipelines with GitHub Actio
 tags: [github, devops]
 ---
 
-> [!NOTE]
+> [!CITE]
 > [GitHub Actions](https://github.com/features/actions) makes it easy to automate all your software workflows, now with world-class CI/CD. Build, test, and deploy your code right from GitHub.
 
 I've been using GitHub Actions a lot recently and I've found it to be immensely flexible and feature rich. I think it's well worth your time learning how to run your CI/CD pipelines via GitHub Actions, and in this post that's exactly what we're going to dig into.
@@ -25,7 +25,7 @@ GitHub has a nice visualisation of this...
 ![overview actions simple](/assets/img/overview-actions-simple.png)
 <p></p>
 
-> [!NOTE]
+> [!INFO]
 > Each job you define will run in parallel. If you need jobs to run sequentially, then you'll need to configure a job to depend on another job using the `needs` property (we'll see an example of this later).
 
 ## Documentation
@@ -83,7 +83,7 @@ So we can see I've given my workflow a name using the `name` key, and I've defin
 - `push`: any push to your repo, whether it be to your `main` branch or a pull-request branch, will trigger your job(s) to run.
 - `schedule`: run your job(s) on a schedule using cron syntax, which in this example triggers job(s) every five minutes and monthly.
 
-> [!NOTE]
+> [!TIP]
 > https://crontab.guru/ makes dealing with cron syntax easy.
 
 Refer to GitHub's [events documentation](https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows) to learn more about the various events you can configure. For example, you can restrict a workflow to only execute against a specific branch.
@@ -118,7 +118,7 @@ Let's now break apart this workflow to understand what it's doing...
       - `name`: the name of the step, which can be omitted but it makes the output in the GitHub UI nicer.
       - `run`: the shell command/script I want to run (in this example, my command prints the string `hello`).
 
-> [!NOTE]
+> [!TIP]
 > Refer to the GitHub [runner documentation](https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#github-hosted-runners) to see what other environments are available. Also refer to the [virtual-environments](https://github.com/actions/virtual-environments) repo to see what is installed on each runner's operating system.
 
 As you can see, defining a workflow and its jobs/steps is actually very simple and intuitive. Now we can start looking at using more features and how to take advantage of the platform.
@@ -240,7 +240,7 @@ jobs:
 
 The trick is to update a GitHub Actions provided environment variable called `$GITHUB_ENV`. All the following steps will then have an environment that includes whatever is in `$GITHUB_ENV`.
 
-> [!NOTE]
+> [!TIP]
 > You could also use the output of a step as the input to the `actions/setup-node` action, but we'll look at that feature later.
 
 ## Secrets
@@ -275,7 +275,7 @@ In the GitHub UI for a repo/project you can add secrets that are encrypted and m
 
 I'll just refer you to the GitHub documentation, as it explains it best:
 
-> [!NOTE]
+> [!CITE]
 > At the start of each workflow run, GitHub automatically creates a unique GITHUB_TOKEN secret to use in your workflow. When you enable GitHub Actions, GitHub installs a GitHub App on your repository. The GITHUB_TOKEN secret is a GitHub App installation access token. You can use the installation access token to authenticate on behalf of the GitHub App installed on your repository. The token's permissions are limited to the repository that contains your workflow.
 
 That last sentence is the important bit! What essentially it means is that you can't use `secrets.GITHUB_TOKEN` to access things outside of the project repo.
@@ -320,7 +320,7 @@ There are a bunch of third-party actions that you'll see used a lot...
 
 All of the above actions, with the exception of the last, are official GitHub maintained actions. This means they are considered safe to use in your workflows (remember that an action runner will be able to use your `secrets.GITHUB_TOKEN`). See also https://github.com/actions for more official/verified actions you can use.
 
-> [!NOTE]
+> [!INFO]
 > I've no idea why they don't provide a Rust action.
 
 ## Conditions
@@ -340,7 +340,7 @@ jobs:
       - run: echo hello
 ```
 
-> [!NOTE]
+> [!TIP]
 > Expressions can omit the surrounding `${{ ... }}` but I tend to include it.
 
 The above example won't work simply because the string `"main"` is using double quotes. You'll find the requirement for using single quotes is mentioned in the GitHub documentation for "[Literals](https://docs.github.com/en/actions/learn-github-actions/expressions#literals)".
@@ -361,7 +361,7 @@ Artifacts are slow as they need to upload and download files from GitHub's serve
 
 To persist data using a job's output requires a job to produce some data and to expose that data via the job's `outputs` field. A consumer can then use and parse that data however they see fit. This approach can also be useful for dynamically generating job matrix variants using a job's [`strategy.matrix`](https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idstrategy) field.
 
-> [!NOTE]
+> [!INFO]
 > A job has an `outputs` field, but also individual steps can access the output from a previous step by way of the same mechanism, which is a step needs to set an `id` field which either another step or the job itself can reference.
 
 The way your `run` code (or an external shell script) can produce data that the GitHub job can reference is to `echo` a specially formatted string:
@@ -390,7 +390,7 @@ jobs:
       - run: echo ${{ steps.produce-data.outputs.foo }}
 ```
 
-> [!NOTE]
+> [!IMPORTANT]
 > Be sure to use the `id` field so the second step can use it to reference the first step's output!
 
 ### Using shared job data to determine if subsequent job should run
@@ -431,7 +431,7 @@ jobs:
 
 The key part to getting job `bar` to determine if it should run is to use an `if` along with one of GitHub's native functions called [`contains()`](https://docs.github.com/en/actions/learn-github-actions/expressions#contains). You can see I use it twice to check if the persisted data contains the values I'm looking for.
 
-> [!NOTE]
+> [!IMPORTANT]
 > You'll likely want to use the `needs` property to help make the jobs run sequentially. Otherwise without it the jobs will run in parallel and this means there would be a data race in `bar` trying to access the `foo` job's output which might not yet be available and this would cause both the `bar` job and its dependant `build` job to not be run.
 
 ### Persist data using `strategy.matrix`
@@ -487,7 +487,7 @@ Now the important bit: the cache action has a 'post run' event that executes onc
 
 This means, when it comes to running another job, you need to ensure you define the cache action _again_ (the same as you defined it in your first job). This is so all of what I've just explained will happen again in your second job (i.e. it'll lookup the key but this time it'll find something in the cache thanks to the 'post run' step from the first job). The only difference now in the second job is that in the 'post run' event, when the action gets run again, you'll now see something like...
 
-> [!NOTE]
+> [!INFO]
 > Cache hit occurred on the primary key `Linux-my-cache-key`, not saving cache.
 
 Meaning there was nothing else to do. I imagine if there were changes to the files in the given path then it would indicate the cache was updated with the latest files.

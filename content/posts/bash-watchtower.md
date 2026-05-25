@@ -23,7 +23,7 @@ The script has the following steps:
 
 Well, the Node package has quite a few layers to it (e.g. Dockerfile, package.json, dependencies, multiple nested files that take some time to navigate around) whereas my 'Bash Watchtower' is a single shell script. So it's actually a lot easier and quicker (in my opinion at least) to understand what's going on and how things work.
 
-> [!NOTE]
+> [!INFO]
 > on the plus side, he's got tests :-)\
 > I couldn't be bothered with that for this quick hack
 
@@ -31,7 +31,7 @@ My initial concern was going to be around the performance of requesting multiple
 
 I'd argue (in theory, I haven't actually tested) that performance would be equal or better because I'm running the relevant sections of the code in *parallel* rather than *concurrently* using the shell's `&` operator to 'background' each request/notification into a separate subshell. I'm then utilising the `wait` command which (as the name suggests) waits for all currently active child processes to complete.
 
-> [!NOTE]
+> [!WARNING]
 > because of the background processes, this script will not scale and be as performant once the number of URLs you're looking to check against becomes very large. So if you're looking to validate 100's of URLs, then you'll likely hit performance issues
 
 ## Code
@@ -102,7 +102,7 @@ display results.txt
 parse results.txt
 ```
 
-> [!NOTE]
+> [!INFO]
 > I've multilined the `curl` request here for readability (but I prefer one liners)
 
 ## Explanation
@@ -124,7 +124,7 @@ trap cleanup EXIT
 
 If you've not seen this before then please refer to `help trap` for more details.
 
-> [!NOTE]
+> [!TIP]
 > most of the time the `man <command>` will help you locate information\
 > But with builtin commands (those that are part of the shell environment itself)\
 > you need to use: `help <command>` (e.g. `help trap` or `help wait`)\
@@ -134,7 +134,7 @@ If you've not seen this before then please refer to `help trap` for more details
 
 First we take in two arguments, the first we store in a local variable called `base` while the other is stored in a variable called `urls`. You'll notice we've had to convert the second argument into an Array by assigning something that resembles an Array (e.g. the parentheses `(...)`) and then expand the incoming string of elements inside it (`("${!2}")`).
 
-> [!NOTE]
+> [!INFO]
 > you'll notice that when we call `pull`\
 > we have to pass `endpoints[@]` and not `$endpoints`\
 > this is to ensure we properly expand all elements within the Array
@@ -160,7 +160,7 @@ http://www.bbc.co.uk/newsbeat/topics/surgery 200
 http://www.bbc.co.uk/newsbeat/article/32792353/im-engaged-but-will-i-ever-be-able-to-marry-my-boyfriend 500
 ```
 
-> [!NOTE]
+> [!EXAMPLE]
 > here the results suggest only one URL has returned a 500 status code
 
 We also store off our remote endpoint (in my case: our Slack incoming webhook URL) in a variable called `remote`. This is where we'll be sending our JSON data of failed URLs to.

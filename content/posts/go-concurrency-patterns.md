@@ -56,7 +56,7 @@ func main() {
 
 https://play.golang.com/p/SdOdZ90-exI
 
-> [!NOTE]
+> [!INFO]
 > In Go, the `main` function is effectively the "initial" goroutine.\
 > When a Go program starts, the Go runtime creates a goroutine to run `main`.\
 > This main goroutine can then spawn additional goroutines as needed.
@@ -108,7 +108,7 @@ https://play.golang.com/p/2Qn_NacVw-0
 > So when ranging over a channel, think how the program can proceed and when is
 > the channel going to be closed.
 
-> [!NOTE]
+> [!INFO]
 > Depending on what you application needs, you can create
 > [buffered](https://go.dev/tour/concurrency/3) channels.\
 > Sends to a buffered channel block only when the buffer is full.
@@ -243,7 +243,7 @@ func main() {
 
 https://play.golang.com/p/LhEdSQIPp1R
 
-> [!NOTE]
+> [!TIP]
 > 💡 **UPDATE:**\
 > As of Go 1.25 you no longer need to `wg.Add`/`wg.Defer` for simple cases.\
 > Instead you can just use `wg.Go()`.
@@ -482,7 +482,7 @@ func main() {
 
 https://play.golang.com/p/VIbNkQaPfZI
 
-> [!NOTE]
+> [!TIP]
 > The use of `defer` in the `Increment()` method is redundant.\
 > It's more useful for long complex functions where errors can occur.\
 > Here I should have just placed the `Unlock()` call after the `c.value++`.
@@ -622,7 +622,7 @@ will likely not need to use.
 
 The Go authors even document it as such...
 
-> [!NOTE]
+> [!CITE]
 > The Map type is specialized. Most code should use a plain Go map instead, with
 > separate locking or coordination, for better type safety and to make it easier
 > to maintain other invariants along with the map content.
@@ -754,7 +754,7 @@ goroutines, allowing them to proceed simultaneously.
 This is useful for scenarios where multiple tasks need to wait for a common
 event or state change to proceed.
 
-> [!NOTE]
+> [!INFO]
 > Notifications are not ordered.\
 > Any one of the waiting goroutines can be chosen to proceed first.\
 > Broadcast ensures that all waiting goroutines eventually proceed.
@@ -1114,7 +1114,7 @@ certificate that I wanted to have for an apex domain (example.com) and a CNAME
 
 The code for that looks like the following:
 
-> [!NOTE]
+> [!INFO]
 > 💡 The reason I'm sharing this code is because it uses lots of different
 > concurrency mechanisms to ensure efficient use of memory resources (i.e. we
 > need to ensure goroutines finishes more quickly, and actually get cleaned up

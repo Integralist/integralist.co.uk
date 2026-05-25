@@ -30,7 +30,7 @@ There are currently two forms that this type of encryption can take:
 - DNS over TLS (DoT)
 - DNS over HTTPS (DoH)
 
-> [!NOTE]
+> [!TIP]
 > there are arguments over which is better, see [this article](https://www.thesslstore.com/blog/dns-over-tls-vs-dns-over-https/) for a breakdown of what it all means.
 
 Here are some useful links to Cloudflare and Google if you're interested in their services:
@@ -48,14 +48,14 @@ VPN stands for "virtual private network", and is used to encrypt your internet t
 
 It's important to ensure your chosen VPN doesn't [leak DNS requests](https://www.expressvpn.com/dns-leak-test), which can occur if your VPN doesn't offer a feature such as a '[network kill switch](https://www.expressvpn.com/features/network-lock)' (or 'network lock'). Typically this is handled by the VPN software you download and run on your computer.
 
-> [!NOTE]
+> [!TIP]
 > there are [online tools](https://restoreprivacy.com/vpn-test/) available that help you verify your VPN isn't leaking data.
 
 Using a VPN also means your IP is protected and can't be identified because resources that are requested are actually requested from the VPN server(s). IP protection can also be increased if you utilize a request pattern such as [Double Hop](https://nordvpn.com/features/double-vpn/) or an extra service such as [Tor](#tor).
 
 Typically you pay for a VPN, although in some cases you might find one that offers a free tier (e.g. [Windscribe](https://windscribe.com/)). Although in the case of Windscribe that requires them to [monitor your logs](https://windscribe.com/features/no-logs) in order to distinguish between free tier users who are abusing their service.
 
-> [!NOTE]
+> [!TIP]
 > there are [online resources](https://thatoneprivacysite.net/) for comparing different VPNs, which can be useful for helping you choose who to use.
 
 Tracking bandwidth might be a concern to you if you're overly security-minded, or it might be an acceptable trade-off for utilizing a free service. I personally believe that you get what you pay for, and a VPN is usually money well spent.
@@ -78,7 +78,7 @@ If you feel using Tor would be a good thing, then it's best to first connect to 
 
 Equally, if there is a bug in Tor (this has happened), then the VPN will offer that extra layer of protection.
 
-> [!NOTE]
+> [!TIP]
 > there is even an entire OS that is bootable from a USB stick that routes all traffic through Tor, called [Tails](https://tails.boum.org/) (see [this simple rundown](https://www.theregister.co.uk/2019/01/30/tails_3_12/) for a recent update, and [this older review](https://www.expressvpn.com/blog/tails2-review/) for a more general feature run through).
 
 ## Web Browser Extensions
@@ -142,7 +142,7 @@ If you are not paying for the service then you're not a 'customer'. You are in f
 
 An alternative is to use an email provider that encrypts your messages and doesn't have access to their content in any way. A good option (which has a free tier, but obviously you'll use up that free tier pretty quickly) is [Proton](https://proton.me).
 
-> [!NOTE]
+> [!CAUTION]
 > due to how they encrypt your data, if you forget your password and try to reset it, you'll lose _all_ your email because they don't have a means to decrypt those files unless you provide the relevant password.
 
 ## Conclusion

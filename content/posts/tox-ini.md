@@ -15,7 +15,7 @@ In this post I'm going to briefly explain what the tox tool is, and what a `tox.
 
 Tox is a tool that creates [virtual environments](/posts/python-app-dependencies/#virtual-environments), and installs the configured dependencies for those environments, for the purpose of testing a Python package (i.e. something that will be shared via [PyPi](https://pypi.org/), and so it only works with code that defines a `setup.py`).
 
-> [!NOTE]
+> [!INFO]
 > PyPi == Python Package Index (i.e. where you _typically_ install all your Python packages from, when executing `pip install`).
 
 The file that you use to configure tox can be one of the following...
@@ -24,7 +24,7 @@ The file that you use to configure tox can be one of the following...
 - `pyproject.toml` (see [PEP 518](https://www.python.org/dev/peps/pep-0518/))
 - `setup.cfg` (see [official guide to distributing packages](https://packaging.python.org/guides/distributing-packages-using-setuptools/))
 
-> [!NOTE]
+> [!INFO]
 > these ^^ are all [ini file](https://en.wikipedia.org/wiki/INI_file) formats -- which is information that will become more relevant/important later on.
 
 ## Example tox.ini
@@ -64,7 +64,7 @@ commands =
     mypy --verbose --ignore-missing-imports --package bf_tornado
 ```
 
-> [!NOTE]
+> [!INFO]
 > the name after `testenv:` is the _name_ of the virtual environment that will be created (e.g. `testenv:foo` will create a "foo" virtual environment).
 
 ## Configuring _other_ packages
@@ -116,7 +116,7 @@ markers =
 
 Although not directly related to the conversation about `tox.ini` I thought it worth mentioning that I discovered recently the Python logging library allows you to be able to configure logging via an ini configuration file!
 
-> [!NOTE]
+> [!INFO]
 > Reference: [docs.python.org/3/howto/logging.html](https://docs.python.org/3/howto/logging.html#configuring-logging)
 
 The ini file might look something like the following:

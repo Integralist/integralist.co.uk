@@ -9,7 +9,7 @@ tags: [python, architecture]
 
 This post is going to cover a few tools and features I plan on using when writing Python code in 2019.
 
-> [!NOTE]
+> [!TIP]
 > † read my post "[Python Management and Project Dependencies](/posts/python-app-dependencies/)".
 
 ## Type Hints and Static Analysis
@@ -79,7 +79,7 @@ An interface is useful for when you don't necessarily care for a specific concre
 
 For the specific use case of interfaces Python has traditionally relied on 'duck typing', which is where a caller provides an object and the receiver will attempt to call the appropriate method on the object (thus trusting the object has a corresponding method available).
 
-> [!NOTE]
+> [!INFO]
 > this is where the term duck typing comes from "If it walks like a duck and it quacks like a duck, then it must be a duck". If the provided object has the expected method exposed, then we presume it's of a suitable type.
 
 In some cases, such as a reusable shared library, it might be preferable to write code defensibly. Meaning you verify the provided object has the interface the receiver is expecting. This is demonstrated in the following example which expects a `client` object to be provided, and that object needs to be a HTTP client and so must have both a `get` and a `post` method.
@@ -235,7 +235,7 @@ cp = CustomProtocol(Team(['beep', 'boop']))  # <class '__main__.Team'>
 print_size(cp)  # prints '2'
 ```
 
-> [!NOTE]
+> [!INFO]
 > when we create an instance of `CustomProtocol` the underlying 'type' is `Team`.
 
 The mypy static analysis tool can subsequently be used to verify code for both native protocols _and_ custom protocols, like so (see the type hint annotation added to the `print_size` function, which mypy is happy with):
@@ -261,7 +261,7 @@ cp = CustomProtocol(Team(['beep', 'boop']))
 print_size(cp)
 ```
 
-> [!NOTE]
+> [!INFO]
 > the argument type passed to `print_size` is `CustomProtocol` which doesn't make mypy complain because the underlying type for `CustomProtocol` is actually the `Team` class, and the underlying `Team` class is supporting the `typing.Sized` interface (which maps to the `collections.abc.Sized` protocol).
 
 If you want more information on mypy's support of protocols, I suggest reading their [specific documentation here](https://mypy.readthedocs.io/en/latest/protocols.html).
@@ -300,7 +300,7 @@ o.common()  # prints 'common behaviour'
 o.MyAbstractMethod()  # raises NotImplementedError
 ```
 
-> [!NOTE]
+> [!WARNING]
 > in other languages that support proper abstract classes, you would not be able to instantiate the abstract class directly (like we have done in our example).
 
 Luckily Python does also provide us with what it refers to as 'Abstract Base Classes' (here in referred to as ABC's) which are a form of traditional abstract class, so there's no need to necessarily mimic the behaviour like in our earlier example. See the following example that demonstrates this feature:
@@ -327,7 +327,7 @@ It's important to understand that the use of an abstract class is subtly differe
 
 For example, our `Thing` class is a _concrete_ implementation, and so we can't provide the receiver with a _different_ class (even if the other class also happened to inherit from `Foo`) as it won't be equivalent to a `Thing` type.
 
-> [!NOTE]
+> [!TIP]
 > the mypy docs have [a good detailed breakdown](https://mypy.readthedocs.io/en/latest/kinds_of_types.html#the-type-of-class-objects) of how to indicate a dependency of a specific class type.
 
 ## Dependency Management (with pipenv)
@@ -354,7 +354,7 @@ I'll be showing you the last tool in the list: **Pipenv**.
 
 Although _another_ alternative approach to the specific problem of virtual environments is to utilise docker containers for doing your development, but you'll need to be comfortable using a terminal editor like Vim (unless you want to jump through some X11 hoops). Using containers also doesn't eliminate the other issues with determining the right dependencies, so keep reading anyway.
 
-> [!NOTE]
+> [!TIP]
 > if using Docker with a terminal editor like Vim to solve this problem sounds like a good approach for you, then review [an older post of mine that explains how to do that](/posts/docker-nginx/).
 
 Here are the commands necessary to install Pipenv on macOS:
@@ -362,7 +362,7 @@ Here are the commands necessary to install Pipenv on macOS:
 - `brew install pyenv`
 - `pip install pipenv`
 
-> [!NOTE]
+> [!TIP]
 > you'll need [Homebrew](https://brew.sh/) to install the [`pyenv`](https://github.com/pyenv/pyenv) command (a sub dependency) using `brew`, and macOS should have Python 2.7.x installed by default so you should have the `pip` command available already.
 
 Here are my quick steps for setting up a new project with Pipenv:
@@ -370,7 +370,7 @@ Here are my quick steps for setting up a new project with Pipenv:
 - `mkdir foobar && cd foobar`
 - `pipenv --python 3.7`
 
-> [!NOTE]
+> [!TIP]
 > use `pyenv install --list` to find out what Python versions are available to install.
 
 Now when working on a Pipenv project:
@@ -378,7 +378,7 @@ Now when working on a Pipenv project:
 - `cd foobar`
 - `pipenv shell` or `pipenv run python ./app.py`
 
-> [!NOTE]
+> [!TIP]
 > use the `shell` subcommand to have your current terminal permanently use the chosen Python version (e.g. `python ./app.py` will work as if the current Python version is what you've defined), otherwise use the `run` subcommand to execute the given command (e.g. `python ./app.py`) within the chosen Python version temporarily.
 
 You can now install dependencies specifically for the project's specific Python environment:
@@ -386,7 +386,7 @@ You can now install dependencies specifically for the project's specific Python 
 - `pipenv install tornado==5.0.2`
 - `pipenv install --dev mypy tox flake8`
 
-> [!NOTE]
+> [!TIP]
 > if you have an existing `requirements.txt` file, then you can generate a Pipfile from that using `pipenv install -r requirements.txt`, alternatively if you need to do the reverse (generate a requirements from a Pipfile): `pipenv lock --requirements`
 
 Now none of these new tools are perfect, and if you want a good run down of one engineer's perspective on them, [read here](https://chriswarrick.com/blog/2018/07/17/pipenv-promises-a-lot-delivers-very-little/).

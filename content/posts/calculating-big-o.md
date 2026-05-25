@@ -53,7 +53,7 @@ A critical part of understanding time complexity is that as the problem gets lar
 
 Instead of `T(1+n)` we could say the dominant part is `f(n)`, and is also referred to as being 'the order of magnitude' (which is what the 'O' in Big-O stands for).
 
-> [!NOTE]
+> [!INFO]
 > 'order of magnitude' describes the part of `T(n)` that increases the _fastest_ as `n` increases.
 
 We can represent the order of magnitude in 'Big-O' syntax like so:
@@ -78,7 +78,7 @@ Meaning we can drop `1` from our syntax, resulting in just `O(n)` instead of `O(
 
 To clarify this further, I'm going to paste verbatim the interactivepython description, as I feel they explain this very well...
 
-> [!NOTE]
+> [!CITE]
 > As another example, suppose that for some algorithm, the exact number of steps is `T(n) = 5n2 + 27n + 1005`.
 >
 > When `n` is small, say `1` or `2`, the constant `1005` seems to be the dominant part of the function.
@@ -135,7 +135,7 @@ With this in mind we can say the code is `O(n2)` because when we look at the exp
 
 Think about it: looping over `n` items and making two assignments within each iteration (which is the `2n`) is definitely less complexity than looping over `n` items _twice_ and within each iteration making three assignments (which is the `3n2`).
 
-> [!NOTE]
+> [!IMPORTANT]
 > Remember: although we write 'Big-O' as `O(...)` the underlying principle is `O(f(...))`, where `f(...)` is the dominant part of `T(...)` and when focusing in on the dominant part of the time complexity we drop the constants -- also known as the _coefficient_ -- (e.g. `3n2` thus becomes `n2`). This is because the constants become _insignificant_ as `n` grows.
 
 ## When is Big-O not relevant?
@@ -150,7 +150,7 @@ I wasn't sure how to calculate the Big-O for this program because there didn't s
 
 Also, the implementation between web crawlers will determine different outcomes. So based on my implementation, the running time to handle a list of size `n` containing nested sublists of size `x` appears to be `O(nx)`. I had not seen this type of Big-O analysis before, and is an indication of maybe I'm analysing the wrong things.
 
-> [!NOTE]
+> [!TIP]
 > see my previous post for [common examples of Big-O](/posts/algorithmic-complexity-in-python/).
 
 So how did we come to `O(nx)`? Here's the breakdown:

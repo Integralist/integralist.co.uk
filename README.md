@@ -185,3 +185,98 @@ Netlify:
 | ----- | ---- | ----------------------------- |
 | ALIAS | @    | apex-loadbalancer.netlify.com |
 | CNAME | www  | integralist.netlify.app       |
+
+## Side Blocks
+
+This static generator supports GFM-style alert blocks. Use the type that best
+matches the _intent_ of the aside:
+
+```md
+> [!NOTE]
+> Supplementary context the reader should know, even when skimming.
+
+> [!TIP]
+> Actionable advice that helps the reader do something better.
+
+> [!HINT]
+> A playful nudge or Easter egg for attentive readers.
+
+> [!INFO]
+> Interesting trivia or background facts (fun facts, history, etymology).
+
+> [!IMPORTANT]
+> Key information the reader must not overlook.
+
+> [!ATTENTION]
+> Draws the reader's eye to a pattern or detail they might miss.
+
+> [!WARNING]
+> Potential pitfall or risk that could cause problems if ignored.
+
+> [!CAUTION]
+> Proceed carefully — real consequences if mishandled.
+
+> [!DANGER]
+> Serious risk of harm, data loss, or irreversible damage.
+
+> [!ABSTRACT]
+> High-level overview or thesis statement for the section that follows.
+
+> [!SUMMARY]
+> Condensed recap of preceding content.
+
+> [!TLDR]
+> Ultra-short version for readers in a hurry.
+
+> [!EXAMPLE]
+> A concrete illustration of the concept just discussed.
+
+> [!CITE]
+> A direct quotation with attribution (lyrics, literature, speeches).
+
+> [!QUOTE]
+> A paraphrased or indirect reference to another source.
+
+> [!FAQ]
+> A commonly asked question and its answer.
+
+> [!QUESTION]
+> An open question posed to the reader for reflection.
+
+> [!HELP]
+> Guidance for readers who may be stuck or confused.
+
+> [!BUG]
+> A known issue or defect being called out.
+
+> [!ERROR]
+> Something went wrong — describes the failure.
+
+> [!FAIL]
+> A specific test, check, or attempt that did not pass.
+
+> [!FAILURE]
+> A broader or more significant breakdown (alias for FAIL).
+
+> [!MISSING]
+> Expected content or functionality that is absent.
+
+> [!CHECK]
+> A verification step that passed or a condition confirmed.
+
+> [!DONE]
+> A task or milestone that has been completed.
+
+> [!SUCCESS]
+> A positive outcome worth celebrating.
+
+> [!TODO]
+> A task or item that still needs to be addressed.
+```
+
+### NOTE vs INFO
+
+- **NOTE** — supplementary context that clarifies or qualifies the surrounding
+  text. The reader needs this to correctly understand what they just read.
+- **INFO** — interesting but non-essential background (trivia, fun facts,
+  historical context). Skipping it doesn't change comprehension.

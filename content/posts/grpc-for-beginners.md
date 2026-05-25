@@ -21,7 +21,7 @@ Now these are all things that can be worked around (or I could just build the Go
 
 Google define gRPC as:
 
-> [!NOTE]
+> [!CITE]
 > A high performance, open source, general RPC framework that puts mobile and HTTP/2 first
 
 ### How does it work?
@@ -34,7 +34,7 @@ Once you have your service *defined*, you can utilise a command line compiler to
 
 Google have built gRPC on top of the [HTTP/2 standard](https://http2.github.io/), meaning you get features such as bidirectional streaming, flow control, header compression and multiplexing requests over a single TCP connection.
 
-> [!NOTE]
+> [!TIP]
 > See [here](http://www.grpc.io/posts/principles) for Google's "motivation and design principles" around gRPC
 
 Now the reason for this post is that I didn't find the documentation to be that intuitive. I thought I might be able to help people get started more quickly by detailing the steps in a more succinct fashion than found in Google's documentation, thus opening up gRPC to more users.
@@ -72,7 +72,7 @@ Once you do that, you can execute the following steps:
 - `make check`
 - `sudo make install`
 
-> [!NOTE]
+> [!INFO]
 > each Make target took ~10mins each to run
 
 ## Hello World Proto Definition
@@ -99,7 +99,7 @@ message Response {
 }
 ```
 
-> [!NOTE]
+> [!TIP]
 > see [here](https://developers.google.com/protocol-buffers/docs/proto3#specifying-field-types) for full proto3 syntax documentation
 
 In summary it defines an RPC service that exposes a `Process` method which can be called remotely. In reality, it's the same 'Hello World' app provided by the gRPC docs but with some changes in identifiers.
@@ -110,7 +110,7 @@ You can see the `package` statement near the top, which according to Google's do
 
 For example, in Ruby it'll generate a top level module that utilises that namespace. As you'll see shortly, I have two nested modules with the same name `Requester::Requester`. This is because the `package` setting is the top level and the nested module name is because that's what I named the `service`. So be careful what you name it as the compiled code might not be what you want.
 
-> [!NOTE]
+> [!INFO]
 > because the design has come from Google you're going to notice lots of design considerations that correlate to their opinions and choices with the Go programming language
 
 In Go, the other language we're using, the `package` value is used (conveniently) as the name of the Go package. Which makes sense as there is a closer correlation in the design of Protocol Buffers and Go vs a dynamic language such as Ruby.
@@ -148,7 +148,7 @@ protoc --ruby_out=lib \
 --plugin=protoc-gen-grpc=`which grpc_ruby_plugin` ./requester.proto
 ```
 
-> [!NOTE]
+> [!TIP]
 > execute `mkdir lib` if that directory doesn't already exist
 
 This will generate two files `requester.rb` and `requester_services.rb` inside of the `lib` directory we've specified. The content of those files looks like the following. The first file being `requester.rb`:
@@ -568,7 +568,7 @@ Which should result in the output:
 "Greeting: Hello Mark"
 ```
 
-> [!NOTE]
+> [!INFO]
 > if you leave off the argument "Mark"\
 > then the output will default to "Hello world" instead
 

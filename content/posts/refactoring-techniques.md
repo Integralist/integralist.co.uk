@@ -11,7 +11,7 @@ Let's begin by considering: "What is Refactoring?"
 
 The definition of refactoring is:
 
-> [!NOTE]
+> [!CITE]
 > a disciplined technique for restructuring an existing body of code, altering its internal structure without changing its external behaviour
 
 Refactoring is a term originated from the [Smalltalk](http://en.wikipedia.org/wiki/Smalltalk) community of developers back in the mid-late nineties.
@@ -52,7 +52,7 @@ But don't fall into the trap of thinking that refactoring is something you set a
 
 As the great [Uncle Bob](http://www.cleancoder.com/) once said:
 
-> [!NOTE]
+> [!CITE]
 > leave a module in a better state than you found it
 
 ...what this suggests is that refactoring is essential to your daily coding process.
@@ -65,7 +65,7 @@ You *can* refactor without tests, but realise that without tests to back you up 
 
 Refactoring can result in substantial changes to the code and architecture but still leave the top layer API the same. So while you're refactoring remember the old adage...
 
-> [!NOTE]
+> [!CITE]
 > program to an interface, not an implementation
 
 We want to avoid changing a public API where ever possible (as that's one of the tenets of refactoring).

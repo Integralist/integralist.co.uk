@@ -27,7 +27,7 @@ func main() {
 }
 ```
 
-> [!NOTE]
+> [!EXAMPLE]
 > `http://localhost:8080/World` will return `Hello World`
 
 For most people, setting up a web server to handle incoming HTTP requests is considered a quick and simple introduction to the [Go programming language](https://golang.org/), and looking at the above code it's easy to see why that would be the case. But further investigation can yield some nice learnings about Go's built-in `func` type and how it is used as an adapter layer.
@@ -53,7 +53,7 @@ So here are each of the variations:
 
 The most basic implementation (and by basic I don't mean 'simplest', more... 'raw') is demonstrated in the below code sample, which calls `ListenAndServe` and passes in `db` as its second argument.
 
-> [!NOTE]
+> [!INFO]
 > although I wrote this blog post back in October 2015, I've rewritten the below examples based off inspiration from "The Go Programming" book I've been reading recently
 
 This first section will give us enough background and grounding to build upon in the latter sections:
@@ -101,7 +101,7 @@ The `ServeHTTP` is required in order to satisfy the `ListenAndServe` method sign
 func ListenAndServe(addr string, handler Handler) error
 ```
 
-> [!NOTE]
+> [!TIP]
 > Documentation: `godoc net/http ListenAndServe | less`
 
 If we look at the source code for the `Handler` type (below) we can clearly see it requires a `ServeHTTP` method to be available (hence why our `database` type associates its own `ServeHTTP` method):
@@ -112,7 +112,7 @@ type Handler interface {
 }
 ```
 
-> [!NOTE]
+> [!TIP]
 > Documentation: `godoc net/http Handler | less`
 
 The above sample web server code will always serve the same response regardless of the URL that was specified. So for example...
@@ -173,7 +173,7 @@ func main() {
 
 Nothing else to say about this, other than we've implemented what we set out to do by utilising a simple `switch` statement that checks for known paths and writes to the `http.ResponseWriter` a different response depending on the request. If we can't match the URL then we'll instead send a `404` status code (`StatusNotFound`) followed by a message to notify the user we couldn't identify their request.
 
-> [!NOTE]
+> [!TIP]
 > Documentation: `godoc -src net/http WriteHeader | less`
 
 ### Multiplexer
@@ -182,7 +182,7 @@ So writing the above example demonstrates a bit of a code smell. We could extrac
 
 Instead it would be nice if you could just pick an arbitrary function and allow it to be used as a handler. That's exactly what `ServeMux` provides to us via its `HandleFunc` function (which is really just a convenience method on top of `http.HandlerFunc`).
 
-> [!NOTE]
+> [!TIP]
 > Documentation: `godoc net/http ServeMux | less`
 
 The following code sample demonstrates this in action, by removing the `ServeHTTP` method from the `database` type and instead implementing individual methods for our defined routes to call.
@@ -237,7 +237,7 @@ func main() {
 
 As we can see, we create a new `ServeMux` instance using `http.NewServeMux` and then register our `database` methods as handlers for each of the route's we want to match them against. The `ServeMux` instance is a multiplexer, meaning we can pass it as the second argument to `http.ListenAndServe`.
 
-> [!NOTE]
+> [!INFO]
 > you can also see we demonstrate the shorthand `mux.HandleFunc` which is really a convenience method over both `mux.Handle` and `http.HandlerFunc`
 
 So how does `http.HandlerFunc` and `mux.HandleFunc` allow us to use an arbitrary function (as none of those database functions have access to a `ServeHTTP` function as required by `ListenAndServe`)? We'll come back to the answer in a little bit. Let's quickly review the last variation of how to run a web server first...
@@ -246,7 +246,7 @@ So how does `http.HandlerFunc` and `mux.HandleFunc` allow us to use an arbitrary
 
 Typically you'll have your code split up into separate packages. So in order to setup your routing handlers, you would need to pass around your `ServeMux` instance to each of these packages. Instead, you can just utilise Go's global `DefaultServeMux`. To do that you pass `nil` as the second argument to `http.ListenAndServe`.
 
-> [!NOTE]
+> [!TIP]
 > Documentation: `godoc -src net/http DefaultServeMux | less`
 
 The following code sample demonstrates this:
@@ -380,20 +380,20 @@ Here is a useful summary for you...
 
 - `http.Handler` = interface
 
-> [!NOTE]
+> [!INFO]
 > you support `http.Handler` if you have a `ServeHTTP(w http.ResponseWriter, r *http.Request)` method available.
 
 - `http.Handle("/", <give me something that supports the http.Handler interface>)`
 
-> [!NOTE]
+> [!EXAMPLE]
 > e.g. an object with a `ServeHTTP` method.
 
 - `http.HandleFunc("/", <give me any function with the same signature as ServeHTTP >)`
 
-> [!NOTE]
+> [!EXAMPLE]
 > e.g. a function that accepts the arguments `(w http.ResponseWriter, r *http.Request)`.
 
 - `http.HandlerFunc` = func type used internally by `http.HandleFunc`
 
-> [!NOTE]
+> [!INFO]
 > e.g. it adapts the given function to the `http.HandlerFunc` type, which has an associated `ServeHTTP` method (that is able to call your original incompatible function).

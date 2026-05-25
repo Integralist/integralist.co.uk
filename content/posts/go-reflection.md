@@ -110,7 +110,7 @@ If you've ever written a CLI program in Go you'll inevitably use its [`flag`](ht
 
 This leads people to build their own abstraction patterns on top of the standard library, but from my experience the majority (if not _all_) of third-party flag packages are convoluted and confusing to work with. The user experience feels very poor IMHO.
 
-> [!NOTE]
+> [!INFO]
 > I'm not knocking these packages. They all do very complex things, and solve real problems, and are written by much smarter people than myself. But it doesn't change the fact that rarely do they come across as 'simple' and 'easy to use'.
 
 I wanted to solve the problem of handling flags and commands for a CLI based program in a simple way, that didn't require me to construct a whole bunch of boilerplate code and have to negotiate lots of types.
@@ -184,7 +184,7 @@ So how exactly does [`go-flags`](https://github.com/integralist/go-flags) achiev
 
 Let's step through the code and find out...
 
-> [!NOTE]
+> [!INFO]
 > I'm not an expert on the `reflect` package, nor was a lot of time spent on this package outside getting it functional, so there's likely many improvements that can be made to the code.
 
 We'll start with the [`Parse()`](https://github.com/Integralist/go-flags/blob/4704c0e/flags/flags.go#L22) function. Here we can see that the function accepts an argument of type `interface{}` which is the empty interface.
@@ -236,7 +236,7 @@ Now we understand the general steps taken, we can dig into each of those and und
 
 I won't be discussing the general code logic, just picking out the bits related to reflection. So if you want to understand the full go-flags implementation, then I recommend you read through the code base in its entirety after finishing this post.
 
-> [!NOTE]
+> [!INFO]
 > if I was working with Go 2.0 then I'd have access to generics and parts of this code could be reduced/simplified. Hello future readers who are lucky enough to have Go 2.0.
 
 As the majority of these steps are related to iterating over the user provided struct, let's start with the `IterFields` function that enables that.
@@ -249,7 +249,7 @@ We could have moved the check for a struct down into the `IterFields()` function
 
 Once we have the number of struct fields, we'll create a loop for that number and we'll use the incrementing `i` value to access each individual struct field by calling `.Field()` on the `v` variable's `reflect.Value` type.
 
-> [!NOTE]
+> [!INFO]
 > you'll find that when you call methods on a `reflect.Value` type you'll likely end up with ...another `reflect.Value` type!
 
 ```go

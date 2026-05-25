@@ -229,7 +229,7 @@ If you have multiple stashes under a branch (e.g. `stash@{1}` `stash@{2}` `stash
 git stash apply stash@{2}
 ```
 
-> [!NOTE]
+> [!INFO]
 > pre git `2.0` the following would work `git stash apply@{2}`.
 
 If you want to stash only specific changes then use the patch mode:
@@ -244,7 +244,7 @@ To view the contents of a stash use:
 git stash show -p stash@{n}
 ```
 
-> [!NOTE]
+> [!TIP]
 > with the `-p` to _print_ the output of the files, the `show` subcommand would simply print the filenames.
 
 …where 'n' is the numeric index of the stash (you can also use `git show stash@{n}`)
@@ -315,7 +315,7 @@ git reset --mixed B == move HEAD to B but keep C's changes unstaged
 git reset --hard B  == move HEAD to B but completely delete C (you've lost those changes forever)
 ```
 
-> [!NOTE]
+> [!TIP]
 > to undo a `reset` use `git reflog` to find the previous state (e.g. `HEAD@{1}`) and then reset again (e.g. `git reset HEAD@{1}`).
 
 ## Unstaging files
@@ -343,7 +343,7 @@ If you've staged files before any commits have been set (e.g. right at the start
 git rm --cached <file>
 ```
 
-> [!NOTE]
+> [!TIP]
 > you might need to replace `--cached` with `--staged` in newer versions of git.
 
 ## Untrack a file without deleting it
@@ -394,7 +394,7 @@ If your files have been added to the staging area already then you can use the `
 git diff --cached
 ```
 
-> [!NOTE]
+> [!INFO]
 > the use of `--cached` has now been replaced with the more appropriate `--staged`.
 
 To show specific changes use the `--word-diff` flag:
@@ -409,7 +409,7 @@ To see the diff between the working directory and a specific commit:
 git diff <hash> <file-name>
 ```
 
-> [!NOTE]
+> [!INFO]
 > the file name is optional
 
 To see the difference between branches:
@@ -484,7 +484,7 @@ git log --full-history  -- <path/to/file>
 
 To see the last change you’d use a negative numeral like so --full-history -1 and that should indicate when/where the file was deleted.
 
-> [!NOTE]
+> [!INFO]
 > if you didn’t use `--full-history` I believe that git gives you a _modified_ version of its history where the deleted file doesn’t even show up (e.g. if you had done `git log -- <path/to/file>`).
 
 ## Commiting only parts of a file rather than the whole file
@@ -567,7 +567,7 @@ dangling blob 49c0238e07d183407466c54f8ac5f7aa89889ae2
 dangling blob 5380475369f22f6021d94c636ae4b778d3a0c050
 ```
 
-> [!NOTE]
+> [!TIP]
 > git will extract data to `.git/lost-found`, use `--dangling` instead of `--lost-found` if you don't want that to happen.
 
 Useful when `git reflog` fails you (e.g. you executed `git reset --hard` while uncommitted files were staged).

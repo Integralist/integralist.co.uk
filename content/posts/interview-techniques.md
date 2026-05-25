@@ -15,7 +15,7 @@ An architecture review can be a few different things depending on the context of
 
 Typically, for a software engineering role, a candidate will be asked to design a system architecture based on the interviewer's given requirements.
 
-> [!NOTE]
+> [!INFO]
 > this is typically carried out on a whiteboard, but pen and paper is sufficent too (although harder for both candidate and interviewer to share and discuss over).
 
 Whereas for a more senior role, like an engineering manager (or even a director of engineering), the format will change to one where the candidate is asked to _present_ a system architecture they've been involved with.
@@ -33,7 +33,7 @@ No. To clarify: when interviewing a candidate, you won't give them a single arch
 - Cross-Discipline
 - Team Managment
 
-> [!NOTE]
+> [!INFO]
 > the above are based on a 'Director of Engineering' day of interviews, but you'd have similar formats for varying engineering roles.
 
 ## Aren't whiteboard interviews bad?
@@ -44,7 +44,7 @@ When you say "whiteboard interview", people generally tend to cringe and think o
 
 But let's be honest, that rarely correlates to the _actual_ work you typically end up doing, and so to describe that format as "wrong" would be correct †
 
-> [!NOTE]
+> [!INFO]
 > † although, as with everything, it can depend on the role you're hiring for of course.
 
 For me, that type of whiteboarding session is a problem. Whiteboard interviews of _that_ nature, the ones that have you jumping through hoops to perform some kind of mathematical trickery are at best useless, and at worst very stressful. They're also likely to result in a candidate leaving unenthused and saying bad things about the company and its interview process on social media.

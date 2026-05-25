@@ -25,7 +25,7 @@ I'll explain as we go), and to make things worse there aren't many reference
 points outside of the official documentation to help you. Hence this blog post
 now exists for those weary travellers looking for answers.
 
-> [!NOTE]
+> [!INFO]
 > this post was written approximately five months into a year long project
 > and so a lot has changed in the design of the system and the implementation.
 > But this post is still very relevant and useful for those looking to
@@ -39,7 +39,7 @@ Let's start at the beginning...
 
 According to [the official blurb](https://aws.amazon.com/cognito/)...
 
-> [!NOTE]
+> [!CITE]
 > Amazon Cognito lets you add user sign-up, sign-in, and access control to your
 > web and mobile apps quickly and easily.
 
@@ -59,7 +59,7 @@ authentication, and not _authorization_. They are two different concepts.
   which is different to (and commonly confused with) the process of
   authentication.
 
-> [!NOTE]
+> [!TIP]
 > if you're new to these types of security concepts, then take a look at
 > [this glossary
 > document](https://docs.google.com/document/d/1qs3jEIQvocdVhSxCSPLF1BoLnp91aLnuUIasvl-maYo/edit#)
@@ -86,7 +86,7 @@ design of the mobile SDKs), mobile applications do utilize Identity Pools for
 authentication, but the Identity Pool would be configured with a 'provider'
 which happened to be our User Pool.
 
-> [!NOTE]
+> [!TIP]
 > If you're interested in the various Identity Pool concepts, then please refer
 > to [the official
 > documentation](https://docs.aws.amazon.com/cognito/latest/developerguide/authentication-flow.html).
@@ -112,7 +112,7 @@ What you'll want to use instead is their new
 has a strong bias towards (or at least their 'solution architects' push it
 _really_ hard).
 
-> [!NOTE]
+> [!INFO]
 > I get the feeling AWS put a lot more time into Amplify and having it be
 > able to abstract away a lot of the Cognito complexity, that they're keen for
 > consumers to utilise it.
@@ -146,7 +146,7 @@ incidentally helped us to understand the AWS documentation because we were able
 to reverse-engineer the Warrant code to better understand the boto3 API calls
 that needed to be made.
 
-> [!NOTE]
+> [!INFO]
 > I think that says a lot about AWS documentation. If people need to read
 > through how an abstraction library is using your API, then your documentation
 > must be pretty bad. I would be the first to suggest maybe I'm just too dumb to
@@ -178,7 +178,7 @@ implementation](https://github.com/capless/warrant/blob/master/warrant/aws_srp.p
 and specifically how to generate an `SRP_A`, which also doesn't appear to be
 explained anywhere (no where obvious at least).
 
-> [!NOTE]
+> [!INFO]
 > it wasn't until much later, we discovered that we could (in the case of
 > `InitiateAuth` at least) have avoided writing all the SRP generation code and
 > instead used the _admin_ version of that API, called
@@ -197,7 +197,7 @@ https://{...}.auth.us-east-1.amazoncognito.com/login?\
 response_type={...}&client_id={...}&redirect_uri={...}&state={...}`
 ```
 
-> [!NOTE]
+> [!INFO]
 > a custom domain can also be configured, but it requires you use [AWS
 > Certificate Manager](https://aws.amazon.com/certificate-manager/) for the TLS
 > cert.
@@ -213,7 +213,7 @@ But there are some caveats:
 - State parameter overloading
 - Can't access new signup passwords †
 
-> [!NOTE]
+> [!INFO]
 > † this was necessary for my use case as I needed to co-support a legacy system
 > that wasn't ready to migrate over to Cognito
 
@@ -232,7 +232,7 @@ that they would be valid and untampered with (because when decoding the tokens
 we could verifiy this using the public signing key AWS uses to sign the tokens
 at point of generation).
 
-> [!NOTE]
+> [!IMPORTANT]
 > † we only ever pass tokens around 'server-side', using secure cookies (with
 > HttpOnly and Secure attributes set) to avoid replay attacks that might occur
 > if we exposed the tokens to the client.
@@ -282,7 +282,7 @@ The following diagram demonstrates how we were initially using the hosted ui:
 1. Our API service redirects the user back to the CMS (with user tokens).
 1. The CMS asks the API service to validate the tokens.
 
-> [!NOTE]
+> [!INFO]
 > † this service exchanges the given Cognito auth code for the user's Cognito
 > User Pool tokens.
 
@@ -308,7 +308,7 @@ auth related details we've pulled from their legacy account. We then return the
 the user within its User Pool (not returning the lambda event object indicates
 an error occurred and the whole request flow fails).
 
-> [!NOTE]
+> [!INFO]
 > with the 'user migration' for users from our legacy system over to
 > Cognito, before we return the event in the lambda, we make sure to mark the
 > new Cognito user as 'verified/confirmed' -- that way they don't need to enter
@@ -327,7 +327,7 @@ We had hoped the 'User Migration' lambda hook would have been triggered by both
 a Cognito User Pool account login and also a Social Provider account login, but
 it doesn't.
 
-> [!NOTE]
+> [!INFO]
 > when a user signs-in with a social account, they have an account created
 > within the Cognito User Pool, but they are also added to a specific group
 > (such as a Facebook group or a Google group).
@@ -462,7 +462,7 @@ The values you can assign to `identity_provider` are:
 - `Google`
 - `LoginWithAmazon`
 
-> [!NOTE]
+> [!INFO]
 > if you were planning on handling authentication at a very low level
 > (instead of an SDK), then for a User Pool login you would provide the value
 > `COGNITO`.
@@ -490,7 +490,7 @@ state=123_redirect=https://www.example.com
 The value `123` is the nonce (for CSRF) and the `_` gives us a way to split the
 query param server-side to extract the secondary redirect endpoint.
 
-> [!NOTE]
+> [!WARNING]
 > it's recommended you do validation on that input (e.g. a whitelist of
 > accepted URIs) so hackers can't manipulate the endpoint a user is sent to once
 > they've authenticated.
@@ -513,7 +513,7 @@ But also, when making the request to the Auth API endpoint (e.g.
 `/oauth2/authorize`), I needed to append a `scope` query parameter:
 `&scope=scope=openid+aws.cognito.signin.user.admin`.
 
-> [!NOTE]
+> [!TIP]
 > See [the API
 > docs](https://docs.aws.amazon.com/cognito/latest/developerguide/authorization-endpoint.html)
 > and the [UI
@@ -529,7 +529,7 @@ returned _three_ tokens:
 1. Access token
 1. Refresh token
 
-> [!NOTE]
+> [!TIP]
 > see documentation for more details on [these three
 > tokens](https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html).
 
@@ -554,7 +554,7 @@ endpoint:
 https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json.
 ```
 
-> [!NOTE]
+> [!IMPORTANT]
 > the JWK's are rotated every 24hrs (approx), and so you need to ensure
 > (if you're caching the response) your code gets a fresh copy of the JWK. You
 > can check this by inspecting the `Cache-Control` header set on the JWK
@@ -581,7 +581,7 @@ have on their browser.
 This is different to the 'signout' API functionality in that the user can call
 the `/logout` endpoint without any special tokens †
 
-> [!NOTE]
+> [!TIP]
 > you have to provide quite specific query params (e.g. `client_id` and
 > `logout_uri` -- so AWS can redirect back to a pre-configured logout page that
 > you host) and so it's likely you'll want to wrap that long and ugly URL within
@@ -711,7 +711,7 @@ their SDK's aren't as 'integrated' like web.
 
 As far as the User Pool is concerned you'll need a few things:
 
-> [!NOTE]
+> [!INFO]
 > this is based on a server-side solution.
 
 - **Application Client**: this will generate a client 'id' and 'secret', which
@@ -724,7 +724,7 @@ As far as the User Pool is concerned you'll need a few things:
   you'll need to create an IAM user and define the various Cognito APIs you want
   it to have access to.
 
-> [!NOTE]
+> [!INFO]
 > † even if you opt for the 'hosted ui' solution, you'll still need an
 > application client (for two reasons). Firstly you'll configure which
 > 'providers' you want your client app to support, and this will affect what the
@@ -807,7 +807,7 @@ the hosted ui option and need lambda for logic processing):
 It simply sets up CloudWatch logs access, and allows us (as an 'admin') to
 update user attributes within our User Pool.
 
-> [!NOTE]
+> [!IMPORTANT]
 > if you're 'copying and pasting', don't forget to update `aws_account_id`
 > and `user_pool_id` in the code snippet.
 

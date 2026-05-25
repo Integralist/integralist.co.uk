@@ -17,14 +17,14 @@ I'll start by describing briefly what a virtual environment is, and then I'll mo
 
 ## Virtual Environments
 
-> [!NOTE]
+> [!CITE]
 > A cooperatively isolated runtime environment that allows Python users and applications to install and upgrade Python distribution packages without interfering with the behaviour of other Python applications running on the same system. -- [Python Glossary](https://docs.python.org/3/glossary.html#term-virtual-environment)
 
 To simplify: if you work on multiple Python projects and each project uses the same external dependency (e.g. the [Requests](https://requests.readthedocs.io/en/master/) HTTP library), then it's possible your application (for _each_ project) will be written to support a specific version of that dependency.
 
 Having a virtual environment setup for each project means you can have project specific Python package installs. For example, project 'foo' can use the Request library version 1.0 while project 'bar' can use version 2.0 (which might introduce a different API).
 
-> [!NOTE]
+> [!INFO]
 > the official documentation on Virtual Environments can be found [here](https://docs.python.org/3/tutorial/venv.html).
 
 ## Creating Virtual Environments
@@ -43,7 +43,7 @@ The only downside of this very simple approach is that installing Python via Hom
 
 This consideration is actually _critical_ to understand when you consider the Linux OS internals use the same Python version as exposed to the end user. Meaning if you mess up your Python install on Linux, then there is a high chance you'll break the entire operating system!
 
-> [!NOTE]
+> [!TIP]
 > if you want to prevent accidentally executing `pip install` outside of a virtual environment then use `export PIP_REQUIRE_VIRTUALENV=true` (it can also be set in a [`~/.pip/pip.conf`](https://github.com/Integralist/dotfiles/blob/master/.pip/pip.conf))
 
 If you require virtual environments across _multiple_ Python versions, then read the following couple of sections...
@@ -72,7 +72,7 @@ To install `pyenv` execute:
 brew install pyenv
 ```
 
-> [!NOTE]
+> [!INFO]
 > yes, this means you need to be using [Homebrew](https://brew.sh/), but let's face it, it's the defacto standard for macOS package management.
 
 Once installed you'll be able to use the following commands:
@@ -107,7 +107,7 @@ pyenv activate foobar
 pyenv deactivate foobar
 ```
 
-> [!NOTE]
+> [!TIP]
 > if you want you can specify the Python version to create the virtual environment for: `pyenv virtualenv <version> <name>`.
 
 ## Shell Configuration
@@ -124,7 +124,7 @@ eval "$(pyenv virtualenv-init -)"
 
 When it comes to dealing with specific dependency versions, I like to use the method [Kenneth Reitz](https://www.kennethreitz.org/essays/a-better-pip-workflow) published back in 2016.
 
-> [!NOTE]
+> [!INFO]
 > this method keeps with the traditional `requirements.txt` file as utilized by [Pip](https://pip.pypa.io/en/stable/). I mention this as you'll notice with other tools (such as Pipenv or Poetry), that they move away from this established format and that can be a bit disruptive in terms of how Python teams have traditionally worked. I'm not saying it's a bad thing, but change isn't always good.
 
 ### Problem Summary
@@ -315,5 +315,5 @@ Now you're able to safely install command line Python tools, like so:
 pipx install pycowsay
 ```
 
-> [!NOTE]
+> [!WARNING]
 > if you use the `PIP_REQUIRE_VIRTUALENV` setting (mentioned earlier in this post) but you also installed `pipx` via Homebrew, then you'll find that doing so can cause problems because pipx can't use its internal list function (as no virtual environment is currently activated). So to fix the issue always set the environment variable to false: `PIP_REQUIRE_VIRTUALENV=false pipx list`.

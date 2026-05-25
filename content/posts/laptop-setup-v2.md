@@ -101,7 +101,7 @@ eval "$(ssh-agent -s)"
 ssh-add --apple-use-keychain ~/.ssh/github
 ```
 
-> [!NOTE]
+> [!INFO]
 > I've since moved to https://www.warp.dev/ (see my [Dev Tools post](/posts/dev-tools/))\
 > so I no longer use Alacritty or Fig (steps 5 and 6 below).
 
@@ -134,7 +134,7 @@ echo /opt/homebrew/bin/zsh | sudo tee -a /etc/shells
 chsh -s /opt/homebrew/bin/zsh
 ```
 
-> [!NOTE]
+> [!INFO]
 > I've since moved to https://neovim.io/ (see my [Dev Tools post](/posts/dev-tools/))\
 > so I no longer use Vim-Plug (step 9 below).
 
@@ -145,13 +145,13 @@ sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.
      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 ```
 
-> [!NOTE]
+> [!INFO]
 > I no longer use tmux (see my [Dev Tools post](/posts/dev-tools/))\
 > so a bunch of the following step 10 has changed.
 
 10. Setup dotfiles.
 
-> [!NOTE]
+> [!INFO]
 > Don't forget to execute 'prefix + I' in tmux to install plugins.
 
 ```bash
@@ -176,7 +176,7 @@ pass git remote add origin git@github.com:<private/repo>
 pass git pull
 ```
 
-> [!NOTE]
+> [!INFO]
 > I no longer use Safari (see my [Dev Tools post](/posts/dev-tools/))\
 > so step 12 is redundant now.
 

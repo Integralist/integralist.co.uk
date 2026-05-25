@@ -31,7 +31,7 @@ Now that I _have_ a family, that's critical time I get to spend with them before
 
 If you don't have children, then it's probably best that I explicitly state what otherwise might be considered 'stating the obvious' (and apologies if so), but just in case: getting children ready in the morning is a lot harder, time consuming and stressful than you'll probably realise. So it's important I help my wife with this otherwise it's a massive burden on her shoulders.
 
-> [!NOTE]
+> [!EXAMPLE]
 > this can often be something as simple (but meaningful) as looking after our son for a mere _ten minutes_ just so she can get washed and dressed!
 
 Not to mention things like getting deliveries to your home, or getting a plumber round to fix your sink, or even time to take your kids to the doctors.
@@ -50,7 +50,7 @@ OK, so not everything is roses. Here is a short list of things that can be a con
 - How do I avoid procrastinating?
 - How can I stay healthy?
 
-> [!NOTE]
+> [!INFO]
 > this is a small list from a much larger set of questions people often have about remote working, but hopefully these are enough items for me to discuss to help get across my thoughts.
 
 ### When do I start/finish?
@@ -73,7 +73,7 @@ This is actually a subtle question with many different layers to it. In most com
 
 But if you're starting off as a completely 100% remote worker, don't worry, building relationships is easy enough to do. It just takes a bit of effort on your part (which I'll explain next). I can say it's easy to do because I have built up many _great_ working relationships with my colleagues based in the United States (both in the eastern and western timezones).
 
-> [!NOTE]
+> [!INFO]
 > although reaching the western timezone is tricker than eastern as it's a solid eight hours behind. It's possible to do still, but again will take just a bit more effort if that's what you want.
 
 Ultimately it comes down to _communication_ (and _good_ communication at that). For communication to be considered 'good' it needs to happen at the right time and in the right medium (see [How should I communicate?](#how-should-i-communicate) for more details on this subject).
@@ -118,7 +118,7 @@ For example, don't just Slack people all the time. You should notice when conver
 
 With face-to-face people generally are more easily able to listen because the convention in our society isn't to shout interweavingly across each other. Instead, someone talks and (if you're doing what you're supposed to be) you'll be _listening_ and really taking in what the other person is saying. You'll then adapt your response based on what the other person has just said †
 
-> [!NOTE]
+> [!INFO]
 > † this is much different to what a lot of people mistakenly do which is: stay quiet until the other person has stopped talking and then reply with their pre-canned response (i.e. again they're only interested in getting across _their_ own points).
 
 One thing that I like to do after taking a long Slack conversation into a face-to-face video call is to go back to Slack and to _summarize_ what was just disussed. There are a few reasons for doing this:
@@ -195,7 +195,7 @@ As an example, a general day of eating will look something like...
 
 I also don't drink coffee or 'normal' tea. I'm primarily a drinker of water, peppermint tea, and if I need caffeine I'll drink a pot of [Guayusa](https://theguayusa.co/) green tea (which has more caffeine than coffee but is much healthier for you).
 
-> [!NOTE]
+> [!TIP]
 > if you're able to, try and do some exercise as well! A sedentary lifestyle is not good for us. If you can't get to a gym or aren't motivated to do exercise then don't kick yourself about it. But do get up and out of your chair for a walk every once in a while. Fresh air really does make a world of difference.
 
 The key thing is to be 'active' and to have space to think about _other_ things that aren't work related as this will actually help your subconscious to really kick-in behind the scenes and process conversations and other things going on at work.

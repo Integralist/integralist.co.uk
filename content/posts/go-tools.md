@@ -194,7 +194,7 @@ tools-update:
 
 ## tools.go
 
-> [!NOTE]
+> [!TIP]
 > For more details on code generation in a general sense, refer to:\
 > https://gist.github.com/Integralist/8f39eb897316e1cbeaf9eff8326cfa59
 

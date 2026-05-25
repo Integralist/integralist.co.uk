@@ -5,7 +5,7 @@ description: Key topics and questions to cover when interviewing at a new compan
 tags: [management]
 ---
 
-> [!NOTE]
+> [!INFO]
 > **UPDATE**: I moved on from BuzzFeed October 2020 and Joined [Fastly](https://www.fastly.com).\
 > See my [resume](/resume/) for details.
 
@@ -40,7 +40,7 @@ As far as interviewing, BuzzFeed also got brownie points for...
 - Paying for my accommodation and travel to NY (I live in the UK).
 - Not taking advantage of me †
 
-> [!NOTE]
+> [!INFO]
 > † one example being, they already knew my salary and still increased it by a significant percentage
 
 ## Did you talk to the Foo company?
@@ -59,7 +59,7 @@ But that said, there were some key aspects I took away from the conversation tha
 - **Money focused**. The biggest takeaway by far was they asked _constantly_ "What would it take for you to leave BuzzFeed?" †.
 - **No interest** in techniques that could help improve their ability to work more efficiently.
 
-> [!NOTE]
+> [!INFO]
 > † I realised they cared less about me as a 'person', someone the company could build a long term relationship with, and more about me as a 'number'. I was a resource, an entity they could own.
 
 ## What was the problem?
@@ -70,14 +70,14 @@ For me, I'm at a point in my career where discussions about programming language
 
 In most situations, if you do your due diligence and exhaust all means available to you to make the given tech work, you should be able to empirically prove it's not working, and thus are in a better position to justify a more appropriate language or tech stack. This all becomes trivial.
 
-> [!NOTE]
+> [!INFO]
 > in my experience, people tend to fall back on subjective opinions and hand wavey 'facts' rather than cracking on with solving the problem at hand.
 
 Remember, we're engineers, we can solve these issues in different ways. But I personally find the 'human' problem is something that is typically much harder to solve and ultimately will cause a lot more detrimental effect on our ability to learn, progress in, and emotionally stay connected to our jobs.
 
 After my conversation with the Foo company I already had an unsettling feeling about them, but decided that I would do some research on Glassdoor to see if my gut feelings, stemming from the feedback I received, were correlating to other people's past experiences working at the company. †
 
-> [!NOTE]
+> [!WARNING]
 > † it's important to realise that with sites like Glassdoor you're getting half the story, so take it with a pinch of salt. For me, I already had a lengthy conversation with the company and so I felt like I had enough information on which to corroborate my experience against.
 
 Turns out my gut instincts right. Others, and by that I mean: engineers either working still (or who used to work), at Foo had voiced concerns that if you want to get paid lots of money to work on software with lots of tech debt, and with management that doesn't care about improving the situation with how teams collaborate and/or communicate with each other, then company Foo might be the place for you.
@@ -112,7 +112,7 @@ But also remember that these perspectives will change over time, and that's ok t
 
 It's a good idea, at the start of _any_ conversation, to ask:
 
-> [!NOTE]
+> [!QUESTION]
 > What's the focus of today's conversation?
 
 i.e. What's important to the company (or individual) you're talking with, and what insights do _they_ want to take from this? Does it align with your agenda? If not, clarify what _you_ hope to get out of the conversation, so it's clear (on both sides) what intentions there are.

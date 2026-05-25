@@ -15,7 +15,7 @@ This is a fairly straightforward workflow, but there is a mild annoyance which i
 
 Ultimately, when I'm done with my urgent task and ready to go back to my other branch, I then have to sift through my stash to find the relevant one I want to pop. OK so not that tragic considering `git stash list` will indicate the branch on which the stash was taken (which helps), but I do then need to Google what the syntax is for popping a specific stash (e.g. it's `git stash apply stash@{n}` where `n` is the index you want to apply.)
 
-> [!NOTE]
+> [!INFO]
 > for the life of me I wish I could remember the syntax but it just eludes me every time.
 
 Oh, and then you have to think about whether you actually want to use `apply`, which leaves the stashed changes in the stack, or if you meant to actually `pop` the stashed content (`git stash pop stash@{n}`) so it's properly removed from the stack.
@@ -30,14 +30,14 @@ It does this by creating a new directory for you with a copy of your git reposit
 
 This is different to manually creating a new directory and git cloning your repo down, because with the worktree model the two sub directories are aware of each other.
 
-> [!NOTE]
+> [!INFO]
 > as you'll see, although this workflow is pretty cool, you _could_ argue that `git stash` is just plain simpler and easier for a human mind to reason about. I'll leave that up to the reader to decide.
 
 ## Example
 
 In the following example I'm going to create a new git repo. I'll make a change in `master`, then create a new branch for doing some work. We'll then imagine that I have been given an urgent task that I must complete _now_ and yet my current non-master branch is in such a state that I want to avoid just stashing everything.
 
-> [!NOTE]
+> [!TIP]
 > I use tmux to split my terminal into multiple windows, and this demonstration will require two windows (or two separate terminal instances if you're not using a screen multiplexer) for the sake of demonstration.
 
 ### Create a new repo
@@ -61,7 +61,7 @@ Now I'll create a new file and stage it for committing, but I won't commit it (t
 
 - `git worktree add ../foo_hotfix`
 
-> [!NOTE]
+> [!TIP]
 > you'll want to create the new worktree in a directory outside of your current repo's directory (just so there's a clear distinction).
 
 At this point you'll find your current terminal is still in the same `foo_contents`, but there is now a new directory called `foo_hotfix` outside your current repo's directory.
@@ -88,7 +88,7 @@ I don't want the commit `d374dcb` in there as it's coming from a branch (`foo_co
 
 - `git rebase -i 9ae3a7f`
 
-> [!NOTE]
+> [!INFO]
 > the rebase editor opens and I change `pick` to `drop` to get rid of the commit.
 
 Now at this point I have a new working directory that I can work in:
@@ -110,7 +110,7 @@ OK, so at this point we've merged our hotfix into `master`. I want to go back to
 
 To remove the worktree you can either remove it using the git interface (e.g. `git worktree remove foo_hotfix`) or manually remove it (e.g. `cd ../ && rm ./foo_hotfix`), where git will, at some point in the future, internally run a prune and remove any references to this orphaned branch/working tree (you could also manually trigger that prune using `git worktree prune`).
 
-> [!NOTE]
+> [!WARNING]
 > if I do `git worktree remove foo_hotfix` while currently residing inside the `foo_hotfix` directory, I'll find that the `.git` repository is removed from the directory.
 
 ### Continuing working on my feature branch
@@ -121,7 +121,7 @@ Presuming I'm still in the `foo_hotfix` directory and that's where I ran `git wo
 - `git rebase master` \< whoops! I need to stash my changes first †
 - `git stash pop`
 
-> [!NOTE]
+> [!INFO]
 > † why yes, this does seem a bit strange considering that's what I was trying to avoid in the first place, but in this case it's a single 'stash' and so a simple `git stash pop` will suffice to get me back to where I need to be.
 
 I can now continue working on my `foo_contents` branch.

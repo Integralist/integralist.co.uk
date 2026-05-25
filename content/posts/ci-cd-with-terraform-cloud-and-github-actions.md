@@ -58,7 +58,7 @@ Let's dig into each environment to understand how they use CI/CD.
 The development environment is spun-up automatically when pushing to a PR.\
 It is automatically spun-down when the associated PR is merged.
 
-> [!NOTE]
+> [!INFO]
 > We control which files will trigger the dev environment creation.
 
 The service name is `api-gateway-dev-<BRANCH>`.\
@@ -78,7 +78,7 @@ development environment that is isolated between different PR authors:
 
 The last step is required as we're deploying the service to [Fastly][4].
 
-> [!NOTE]
+> [!INFO]
 > You'll notice shortly that our stage and production flows use a
 > single service and workspace, where as our dev environment is a bit more
 > involved and requires its own dynamically created workspace and services. This
@@ -94,7 +94,7 @@ There are two scenarios where the staging environment is deployed to:
 1. Whenever a PR is merged
 1. Whenever a commit is pushed directly to the `main` branch
 
-> [!NOTE]
+> [!INFO]
 > Again, we control which files will trigger the environment creation.
 
 The service name is `api-gateway-stg`.\
@@ -915,7 +915,7 @@ runs:
         # NOTE: We only set the branch variable for dev (stg/prd will use an empty string).
 ```
 
-> [!NOTE]
+> [!INFO]
 > I had to update this action twice. The first was to replace dot
 > characters with a hyphen as TFC complained. The second was to replace
 > underscores with a hyphen as Fastly complained (i.e. an underscore is not a

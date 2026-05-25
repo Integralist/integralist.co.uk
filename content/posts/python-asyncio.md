@@ -43,7 +43,7 @@ Asyncio avoids these issues, so let's see how...
 
 ## A quick `asyncio` summary
 
-> [!NOTE]
+> [!CITE]
 > asyncio is a library to write concurrent code using the `async`/`await` syntax. -- [docs.python.org/3.8/library/asyncio.html](https://docs.python.org/3.8/library/asyncio.html)
 
 The asyncio module provides both high-level and low-level APIs. Library and
@@ -74,7 +74,7 @@ safe).
 
 ## A quick `concurrent.futures` summary
 
-> [!NOTE]
+> [!CITE]
 > The concurrent.futures module provides a high-level interface for
 > asynchronously executing callables. --
 > [docs.python.org/3.8/library/concurrent.futures.html](https://docs.python.org/3.8/library/concurrent.futures.html)
@@ -141,7 +141,7 @@ I've written about [iterators, generators and
 coroutines](/posts/python-generators/) recently, so if you're interested in
 those concepts, then I'll refer you to that post.
 
-> [!NOTE]
+> [!TIP]
 > for more API information on the event loop, please refer to [the
 > official Python
 > documentation](https://docs.python.org/3.8/library/asyncio-eventloop.html).
@@ -160,7 +160,7 @@ There are three main types of awaitables:
 1. Tasks
 1. Futures
 
-> [!NOTE]
+> [!INFO]
 > Futures is a _low-level_ type and so you shouldn't need to worry about
 > it too much if you're not a library/framework developer (as you should be
 > using the higher-level abstraction APIs instead).
@@ -172,7 +172,7 @@ There are two closely related terms used here:
 - a _coroutine function_: an `async def` function.
 - a _coroutine object_: an object returned by calling a coroutine function.
 
-> [!NOTE]
+> [!INFO]
 > Generator based coroutine functions (e.g. those defined by decorating a
 > function with `@asyncio.coroutine`) are superseded by the `async`/`await`
 > syntax, but will continue to be supported _until_ Python 3.10 --
@@ -207,7 +207,7 @@ low-level API `ensure_future` is used to convert the coroutine into a Future
 (see [source
 code](https://github.com/python/cpython/blob/master/Lib/asyncio/tasks.py#L653)).
 
-> [!NOTE]
+> [!INFO]
 > [here](https://gist.github.com/1efc8dcfc0b1e9e8e8b89a4b2019f3af) is a
 > comparison of the various methods for validating if a function is a coroutine.
 > The results aren't necessarily what you might expect.
@@ -228,7 +228,7 @@ The following APIs let you see the state of the tasks running on the event loop:
 - `asyncio.current_task`
 - `asyncio.all_tasks`
 
-> [!NOTE]
+> [!TIP]
 > for other available methods on a Task object please refer to [the
 > documentation](https://docs.python.org/3.8/library/asyncio-task.html#asyncio.Task).
 
@@ -246,7 +246,7 @@ while
 is an example of an asyncio low-level API function that returns a Future (see
 also some of the APIs listed in [Concurrent Functions](#concurrent-functions)).
 
-> [!NOTE]
+> [!TIP]
 > for other available methods on a Future please refer to [the
 > documentation](https://docs.python.org/3.8/library/asyncio-future.html#asyncio.Future).
 
@@ -294,7 +294,7 @@ asyncio REPL 3.8.0+ (heads/3.8:5f234538ab, Dec  1 2019, 11:05:25)
 Use "await" directly instead of "asyncio.run()".
 Type "help", "copyright", "credits" or "license" for more information.
 
-> [!NOTE]
+> [!EXAMPLE]
 >>> import asyncio
 >>> async def foo():
 ...   await asyncio.sleep(5)
@@ -304,7 +304,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 done
 ```
 
-> [!NOTE]
+> [!INFO]
 > Notice the REPL automatically executes `import asyncio` when starting up so
 > we're able to use any `asyncio` functions (such as the `.sleep` function)
 > without having to manually type that import statement ourselves.
@@ -315,7 +315,7 @@ If for some reason you didn't want to use the event loop provided by `asyncio`
 (which is a pure Python implementation), you can swap it out for another event
 loop such as [uvloop](https://github.com/MagicStack/uvloop/).
 
-> [!NOTE]
+> [!CITE]
 > uvloop is a fast, drop-in replacement of the built-in asyncio event loop.
 > uvloop is implemented in [Cython](https://cython.org/) and uses
 > [libuv](https://libuv.org/) under the hood.
@@ -355,7 +355,7 @@ your application.
 - `asyncio.wait_for`: wait for a single awaitable, until the given 'timeout' is reached.
 - `asyncio.as_completed`: similar to `gather` but returns Futures that are populated when results are ready.
 
-> [!NOTE]
+> [!IMPORTANT]
 > `gather` has specific options for handling errors and cancellations. For
 > example, if `return_exceptions: False` then the first exception raised by one
 > of the awaitables is returned to the caller of `gather`, where as if set to
@@ -368,7 +368,7 @@ your application.
 - `@asyncio.coroutine`: removed in favour of `async def` in Python 3.10
 - `asyncio.sleep`: the `loop` parameter will be removed in Python 3.10
 
-> [!NOTE]
+> [!INFO]
 > you'll find in most of these APIs a `loop` argument can be provided to
 > enable you to indicate the specific event loop you want to utilize). It seems
 > Python has deprecated this argument in 3.8, and will remove it completely in
@@ -468,7 +468,7 @@ async def main():
 asyncio.run(main())
 ```
 
-> [!NOTE]
+> [!INFO]
 > the `asyncio.TimeoutError` doesn't provide any extra information so
 > there's no point in trying to use it in your output (e.g. `except asyncio.TimeoutError as err: print(err)`).
 
@@ -736,7 +736,7 @@ if __name__ == "__main__":
     print("program complete")
 ```
 
-> [!NOTE]
+> [!WARNING]
 > be careful with a global process executor (e.g. placing something like
 > `PROCESS_POOL = concurrent.futures.ProcessPoolExecutor()` within the global
 > scope and using that reference within our `do_something()` function) as this
@@ -787,7 +787,7 @@ calling `.shutdown()` and then immediately checking if the task is complete
 (e.g. `assert future.done()`) to cause an error to be raised as the future is
 unlikely to be finished.
 
-> [!NOTE]
+> [!WARNING]
 > remember also if you call `.done()` on a future when a value has not yet
 > been set, then you'll see an exception such as `asyncio.InvalidStateError`.
 

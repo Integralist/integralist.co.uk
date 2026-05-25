@@ -17,14 +17,14 @@ A bit is either a `1` (true) or a `0` (false).
 
 Computers only understand the binary format (i.e. base-2)
 
-> [!NOTE]
+> [!TIP]
 > We discuss 'base' numbers [below](#8)
 
 ## Byte
 
 A grouping of eight _bits_ is called a _byte_.
 
-> [!NOTE]
+> [!TIP]
 > Read the next section to realise why I mention this tidbit of information
 
 ## RAM
@@ -97,7 +97,7 @@ Each code point has an associated binary number. For example, `a` has the binary
 
 The following explanation is taken from "Beginning C" by Apress Publishing...
 
-> [!NOTE]
+> [!CITE]
 > You might be wondering why we don’t work with simpler, more rounded numbers, such as a thousand, or a million, or a billion. The reason is this: there are 1,024 numbers from 0 to 1,023, and 1,023 happens to be 10 bits that are all 1 in binary: 11 1111 1111, which is a very convenient binary value. So while 1,000 is a very convenient decimal value, it’s actually rather inconvenient in a binary machine—it’s 11 1110 1000, which is not exactly neat and tidy. The kilobyte (1,024 bytes) is therefore defined in a manner that’s convenient for your computer, rather than for you.
 
 So if we add up `512+256+128+64+32+16+8+4+2+1` (notice this takes the existing 8 bit calculation from the above image and continues it for another two bits) we get `1023`.
@@ -112,7 +112,7 @@ Here is an example IPv4 IP:
 
 IPv4 IPs are expressed in decimal format.
 
-> [!NOTE]
+> [!INFO]
 > IPv6 IPs are eight 4-character hexadecimal numbers,\
 > which represent 16 bits each (for a total of 128 bits)\
 > e.g. `2001:0db8:0a0b:12f0:0000:0000:0000:0001`
@@ -138,7 +138,7 @@ Each bit can have two different states (1 or zero), meaning the total number of 
 
 We can see the decimal represenation of an IPv4 IP is made up of four base-10 numbers (216, 27, 61, 137). Where each of those four numbers represent the binary equivalent (216=11011000, 27=00011011, 61=00111101, 137=10001001), which is a base-2 representation of a byte (or octet).
 
-> [!NOTE]
+> [!TIP]
 > If you're unsure of what base numbers are and how they work, then read on...
 
 ## Base Numbers
@@ -160,7 +160,7 @@ The standard number system we (as humans) are most familiar with is called base-
 0,1,2,3,4,5,6,7,8,9
 ```
 
-> [!NOTE]
+> [!INFO]
 > Notice there are ten numbers, hence it is called the base-10 system
 
 If we were to look at a number like `66`, then this would tell us the number is made up of 6 tens and six units.
@@ -211,7 +211,7 @@ This is useful when you've converted a number like `75` into a different base (l
 
 ### Convert Base-10 into Base-2/8
 
-> [!NOTE]
+> [!INFO]
 > the steps are the same for converting to base-2 and base-8
 
 Now let's consider how to convert the number `75` into another base, like base-8. To do so, follow these steps
@@ -318,14 +318,14 @@ So `10.0.0.0/24` gives us an ip range of `10.0.0.0` to `10.0.0.255` (256 IPs).
 
 Whereas `10.0.0.0/32` gives us an ip range of 1 ip (`10.0.0.0` to `10.0.0.0`).
 
-> [!NOTE]
+> [!TIP]
 > you can use a tool such as [http://www.ipaddressguide.com/cidr](http://www.ipaddressguide.com/cidr) to help you generate CIDRs
 
 We can use the earlier [byte visualisation](#visualisation) table matrix to help us manually calculate a CIDR range.
 
 I've reproduced it below with a HTML table:
 
-> [!NOTE]
+> [!TIP]
 > you'll likely need to scroll to the right to see the start of the 32-bit
 
 <table border="1" id="table10" bordercolor="#000080" style="text-align: center; font-family: Verdana; font-size: 8pt; color: #000000">

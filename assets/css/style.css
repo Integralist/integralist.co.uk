@@ -300,44 +300,88 @@ aside,
   margin-block-end: 0.25rem;
 }
 
-.alert-note {
+.alert-note,
+.alert-info,
+.alert-abstract,
+.alert-summary,
+.alert-tldr,
+.alert-faq,
+.alert-help,
+.alert-question {
   border-color: var(--color-blue);
 }
 
-.alert-note .alert-title {
+.alert-note .alert-title,
+.alert-info .alert-title,
+.alert-abstract .alert-title,
+.alert-summary .alert-title,
+.alert-tldr .alert-title,
+.alert-faq .alert-title,
+.alert-help .alert-title,
+.alert-question .alert-title {
   color: var(--color-blue);
 }
 
-.alert-tip {
+.alert-tip,
+.alert-hint,
+.alert-check,
+.alert-done,
+.alert-success {
   border-color: var(--color-teal);
 }
 
-.alert-tip .alert-title {
+.alert-tip .alert-title,
+.alert-hint .alert-title,
+.alert-check .alert-title,
+.alert-done .alert-title,
+.alert-success .alert-title {
   color: var(--color-teal);
 }
 
-.alert-important {
+.alert-important,
+.alert-attention,
+.alert-warning,
+.alert-todo {
   border-color: var(--color-amber);
 }
 
-.alert-important .alert-title {
+.alert-important .alert-title,
+.alert-attention .alert-title,
+.alert-warning .alert-title,
+.alert-todo .alert-title {
   color: var(--color-amber);
 }
 
-.alert-warning {
+.alert-caution,
+.alert-danger,
+.alert-error,
+.alert-fail,
+.alert-failure,
+.alert-missing,
+.alert-bug {
   border-color: var(--color-coral);
 }
 
-.alert-warning .alert-title {
+.alert-caution .alert-title,
+.alert-danger .alert-title,
+.alert-error .alert-title,
+.alert-fail .alert-title,
+.alert-failure .alert-title,
+.alert-missing .alert-title,
+.alert-bug .alert-title {
   color: var(--color-coral);
 }
 
-.alert-caution {
-  border-color: #e55;
+.alert-cite,
+.alert-quote,
+.alert-example {
+  border-color: var(--color-text-muted);
 }
 
-.alert-caution .alert-title {
-  color: #e55;
+.alert-cite .alert-title,
+.alert-quote .alert-title,
+.alert-example .alert-title {
+  color: var(--color-text-muted);
 }
 
 /* --- Tags --- */

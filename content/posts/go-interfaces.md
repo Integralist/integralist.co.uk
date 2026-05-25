@@ -15,7 +15,7 @@ An 'interface' is a contract which describes _behaviour_ (not _data_).
 
 [Andrei Boar](https://medium.com/@andreiboar/7-common-interface-mistakes-in-go-1d3f8e58be60) said...
 
-> [!NOTE]
+> [!CITE]
 > When defining interfaces in Go, you don’t define what something _is_ but what it _provides_ — behavior, not things! That’s why there’s no File interface in Go, but a Reader and a Writer: these are behaviors, and File is a thing implementing Reader and Writer.
 
 ...which is important because this has a direct effect on the naming of an
@@ -30,7 +30,7 @@ type Fooer interface {
 }
 ```
 
-> [!NOTE]
+> [!INFO]
 > In Go, a capitalised name (method, field etc) is public, lowercase is private.
 
 If an object in your code implements a `Bar` function, with the exact same signature (e.g. accepts a string and returns either a string or an error), then that object is said to _implement_ the `Fooer` interface.
@@ -85,7 +85,7 @@ func (l *thing) Beep(s string) (string, error) {
 }
 ```
 
-> [!NOTE]
+> [!WARNING]
 > This is a bit of silly example, and so you'll notice the method signature for each type is effectively the same. Be careful when designing your interfaces, because in this case we could possibly combine these two interfaces into a single (more generic) interface.
 
 ## Name Your Interface Arguments
@@ -114,7 +114,7 @@ Now _that_ is better, because we can clearly see what the expectations are: the 
 
 You'll find in the [Go Proverbs](https://go-proverbs.github.io/), the following useful tip:
 
-> [!NOTE]
+> [!CITE]
 > The bigger the interface, the weaker the abstraction.
 
 The reason for this is due to how interfaces are designed in Go and the fact that an object can potentially support multiple interfaces.
@@ -269,7 +269,7 @@ The `FindItem` could be an internal library function that attempts to locate an 
 
 In this instance returning an interface allows the consumer to not have to worry about the change in underlying data types.
 
-> [!NOTE]
+> [!INFO]
 > It's possible the returned types could be consolidated into a single generic type struct, which means we can avoid returning an interface, but it depends on the exact scenario/use case.
 
 ## Use Existing Interfaces
@@ -327,7 +327,7 @@ So using Guru via my Vim editor I can see (when I have my cursor over the `testt
 
 Now whether you continue to define a new interface is up to you. There are actually quite a few places in the Go standard library where interfaces are duplicated for (what I believe to be) semantic reasoning, but otherwise if you don't need to make an explicit/semantic distinction, then I'd opt to reuse an existing interface.
 
-> [!NOTE]
+> [!TIP]
 > For more details on how to use Guru, see [this gist](https://gist.github.com/Integralist/20ff7427d3df5cc02d5a619ca0cd9695).
 
 ## Don't Force Interfaces
@@ -336,7 +336,7 @@ If your code doesn't require interfaces, then don't use them.
 
 No point making the design of your code more complicated for no reason. Consider the following code which returns an interface.
 
-> [!NOTE]
+> [!CITE]
 > The following example is modified from a much older post by [William Kennedy](https://www.ardanlabs.com/blog/2016/10/avoid-interface-pollution.html).
 
 ```go
@@ -460,7 +460,7 @@ func main() {
 
 In the above code we can see we have added a new method `baz` to our `Fooer` interface which means the concrete implementation `pt` is no longer satisfying the `Fooer` interface as it has no `baz` method.
 
-> [!NOTE]
+> [!INFO]
 > I appreciate the example is a bit silly because we could just update the code to support the new interface, but we have to imagine a world where your interface is provided as part of a public package that is consumed by lots of users.
 
 To solve this problem we need an intermediate interface. The following example demonstrates the process. The steps are...
@@ -527,7 +527,7 @@ func main() {
 }
 ```
 
-> [!NOTE]
+> [!INFO]
 > Again, the example is a bit silly in that we're handling everything within a single file, whereas in reality the consumer won't have access to the original interface/implementation code like we do here (so just use your imagination 🙂).
 
 The output of the above code is as follows:
@@ -661,7 +661,7 @@ The _how_ is not the responsibility of the `process` function, especially if we 
 
 Meaning, we need to provide that functionality to the `process` function. Let's see what this might look like in practice:
 
-> [!NOTE]
+> [!INFO]
 > This is just a first iteration, and is a poor design because although it shifts the problem slightly, there will still be tight coupling. I'll come back to this code later and refactor away the coupling completely. The reason I've not done that upfront is because there are learnings to be had from trying to write tests for this code (which we'll see in a minute).
 
 ```go
@@ -759,7 +759,7 @@ How far you take your interface design is up to you. You don't necessarily have 
 
 Meaning, this refactor _could_ be considered 'good enough' for your use cases. Alternatively your values and standards may differ, and so you need to consider your options for how you might what to design this solution in such a way that it would allow the code to not be so reliant on HTTP as the transport mechanism.
 
-> [!NOTE]
+> [!INFO]
 > We'll revisit this code later and consider another refactor that will help clean up this first pass of code decoupling.
 
 But first, let's look at how we might want to test this initial code refactor (as testing this code allows us to learn some interesting things when it comes to needing to mock interfaces).
@@ -815,7 +815,7 @@ ioutil.NopCloser(bytes.NewBufferString(body))
 
 If we remember from earlier:
 
-> [!NOTE]
+> [!INFO]
 > The `Body` field's 'type' is set to the `io.ReadCloser` interface.
 
 This means when mocking the `Body` value we need to return something that has both a `Read` and `Close` method. So we've used `ioutil.NopCloser` which, if we look at its signature, we see returns an `io.ReadCloser` interface:
@@ -844,7 +844,7 @@ If we look at the implementation of `Buffer` though, we will see that it does ac
 
 Great! Our test can now call the `process` function and process the mocked dependency and the code/test works as intended.
 
-> [!NOTE]
+> [!TIP]
 > Yes, we should probably use something more obvious and replace `bytes.NewBufferString` with something like `bytes.NewReader`, `strings.NewReader`.
 
 ## More flexible solutions?

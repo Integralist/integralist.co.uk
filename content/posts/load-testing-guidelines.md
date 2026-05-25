@@ -23,7 +23,7 @@ What users or upstreams will be affected by this additional load?
 
 Are there any vulnerable dependencies that should be: notified of the load test or protected from it? † ([see next section](#4))
 
-> [!NOTE]
+> [!WARNING]
 > † not all services are completely isolated. Consider what happens when your services is using an external API service. If the API is doing its job right it should start rate limiting you (or denies you access for exceeding your thresholds). But that still doesn't necessarily mean you have to be a bad web citizen and start hammering their service (on a side note: you should probably be considering caching).
 
 ## Stub services if necessary
@@ -42,7 +42,7 @@ Write simple scripts that let you coordinate a fresh load test run. Such as conf
 
 It can be hard to include auth tokens/keys in load testing tools, and as such it is often easier to use a network secured backend and a custom code branch that either allows for auth bypass or has no authentication.
 
-> [!NOTE]
+> [!IMPORTANT]
 > although being able to load test with authentication is important as it could highlight important problem points in your architecture design.
 
 ## Don't immediately scale dependencies

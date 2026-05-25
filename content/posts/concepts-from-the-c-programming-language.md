@@ -23,13 +23,13 @@ Machine code is as low-level as you can get when interacting with a computer. So
 
 A language like [Python](https://www.python.org/) is an even 'higher-level' abstraction, to save us from having to write C
 
-> [!NOTE]
+> [!INFO]
 > the Python language is actually written in C\
 > Although there are other Python interpreters implemented in different languages
 
 In order to convert C code into machine code, we need a compiler.
 
-> [!NOTE]
+> [!INFO]
 > Strictly speaking you also need a [linker](<https://en.wikipedia.org/wiki/Linker_(computing)>) which takes multiple compiled objects and places them into a single executable file. Generally speaking, when we say "compile a C file", we're really combining two separate steps (compiling and linking) into the single generic term "compile"
 
 ### Compilers
@@ -67,14 +67,14 @@ InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault
 
 The first two alias' `gcc` and `llvm-gcc` are a little bit confusing and also a bit misleading, as they're not GNU's version. They're still the LLVM's compiler but with some modifications. In the first instance (`gcc`) the compiler is configured to use some additional libraries that are provided by c++.
 
-> [!NOTE]
+> [!TIP]
 > You can tell this by the flag `--with-gxx-include-dir`
 
 It's worth noting that with a standard/simple C source code file, all these alias' work to compile the source code into an executable. But some compilers allow you to utilise additional extensions not provided by the standard C language (so you need to be careful your code doesn't try to utilise something that's not available at compilation time).
 
 LLVM's licensing is BSD, meaning Apple can embed it within their own software that is not GPL-licensed. Typically LLVM's compiler is faster than GNU's, but in some cases it might not support all the same targets as GNU's.
 
-> [!NOTE]
+> [!TIP]
 > For more comparison details see [http://clang.llvm.org/comparison.html](http://clang.llvm.org/comparison.html)
 
 ### C11 safe functions?
@@ -83,7 +83,7 @@ You'll likely be told that some functions provided within C aren't safe (usually
 
 C11 compatible compilers will provide an additional set of string functions that are _considered_ safe (although this is a contentious area of discussion as some C programmers believe that these functions are just as unsafe and if anything the claims are misleading! [See this comment on Stack Overflow which goes into more detail](http://stackoverflow.com/questions/40829032/how-to-install-c11-compiler-on-mac-os-with-optional-string-functions-included/40839702#40839702)).
 
-> [!NOTE]
+> [!INFO]
 > I've also discovered that none of the compilers I have on my OS support these functions, and I've since discovered one of the few environments to support these functions is the Windows platform
 
 Below is an example C file that demonstrates how to check if your compiler supports these additional safe functions:
@@ -143,7 +143,7 @@ Now you have a macOS compatible executable:
 ./hw # prints the message "Hello World"
 ```
 
-> [!NOTE]
+> [!TIP]
 > To cross-compile for another OS (e.g. Linux) then use Docker or a VM\
 > Other modern languages like [Go](https://golang.org/) or [Rust](https://www.rust-lang.org/) allow you to cross-compiler without a VM
 
@@ -203,14 +203,14 @@ When assigning a string, the pointer is to an _array_ where each element of the 
 ["a", "b", "c"]
 ```
 
-> [!NOTE]
+> [!TIP]
 > see section '[Null Terminator](#7)' to clarify above code
 
 This happens even if the string you provide is just one character. Although, depending on your program's design, it could be argued that you should not have assigned a single character string, but instead used single quotes to represent a single `char`.
 
 When assigning a character (e.g. `a`) to a variable of type `char` it takes on dual duty. Meaning the char type variable can represent the specific character `a` but really it stores the ASCII integer code that defines that character.
 
-> [!NOTE]
+> [!TIP]
 > Take a look at an [ASCII table](http://www.asciitable.com/) to identify the code associated with a particular character
 
 This means we could also directly assign the integer `97` instead of the character `a` to the char type variable. But also, and more interestingly, because of these characteristics we can perform arithmetic on the variable:
@@ -248,7 +248,7 @@ The reason we specify a length of 4 and not 3 (as you would expect with a string
 
 The last element is known as the [null terminator](https://en.wikipedia.org/wiki/Null-terminated_string). When this data is stored in memory, we can start at the location in memory (the _address_) where the first element is stored and then step through memory until we reach the null terminator; where we'll then find the end of the string.
 
-> [!NOTE]
+> [!WARNING]
 > you can set your variable to be the actual length of the content (e.g. `char my_string[1] = "a";`) but in some instances this can cause strange overlaps of data and strictly speaking isn't valid code either
 
 ## Pointers
@@ -291,7 +291,7 @@ Here are each of the steps broken down:
 - `bar = &bar_val;`: we initialize the pointer variable `bar` with the memory address of `bar_val`
 - `int bar_get_val = *bar;`: we dereference the address (i.e. follow the pointer) assigned to `bar` which leads us to the _value_ stored in that memory slot
 
-> [!NOTE]
+> [!INFO]
 > † meaning we will be assigning an address to this pointer\
 > and the content at that memory address location will also be of type `int`
 
@@ -329,7 +329,7 @@ int *bar;
 printf("bar: %d\n", *bar);
 ```
 
-> [!NOTE]
+> [!INFO]
 > `printf` will now try to use `*` to dereference the value from the variable `bar`
 
 Unfortunately this code still causes an error. This time:
@@ -363,7 +363,7 @@ char foo = 'a';
 printf("address of foo: %p\n", &foo);
 ```
 
-> [!NOTE]
+> [!INFO]
 > the `&` isn't tied to `*` in any way.\
 > Its purpose is just to return the memory address for a given variable
 
@@ -382,7 +382,7 @@ printf("my pointer: %p\n", messagePtr);
 printf("my message: %s\n", message);
 ```
 
-> [!NOTE]
+> [!TIP]
 > compare C pointers and Go pointers here [https://dave.cheney.net/2014/03/17/pointers-in-go](https://dave.cheney.net/2014/03/17/pointers-in-go)
 
 In C there are two ways to define a pointer:
@@ -470,7 +470,7 @@ Because of this, an array variable automatically points to the first element wit
 
 This is why if you try to `printf` a string, the compiler will complain if you don't provide a pointer. Because it expects a string to have been stored within an array (which our earlier example didn't). But when storing a string inside an array, the variable that is passed to `printf` would _already_ be a pointer, due to it automatically referencing the first array element as its value.
 
-> [!NOTE]
+> [!INFO]
 > Interestingly, an array's type is made up of the element type + the overall array dimension. So `int foo[3]` is a different type to `int bar[4]`. Even though the value type `int` is the same, the array dimension (size/length) is different.
 
 If you want to know how many bytes an array will occupy, then you calculate it based upon the number of elements multiplied by the size of each element.
@@ -527,7 +527,7 @@ printf("off: %d\n", off); // 2
 
 ## Memory Allocation with different Types
 
-> [!NOTE]
+> [!TIP]
 > Read [this article](/posts/bits-and-bytes/) if you need a refresher on understanding RAM, bits, binary and stuff like that
 
 ### Array
@@ -596,14 +596,14 @@ size_t element_count = sizeof foo/sizeof foo[0];
 printf("element_count: %zu\n", element_count); // 3
 ```
 
-> [!NOTE]
+> [!INFO]
 > `%z` is for `size_t` and the `u` prevents an `invalid conversion specifier` error.
 
 ### Signed vs Unsigned
 
 In C you can define an integer to be either `signed` or `unsigned`. The former means the number can be both negative and positive as well as zero. Whereas the latter is always positive.
 
-> [!NOTE]
+> [!INFO]
 > typically, if a number is negative, you'll prefix it with `-`. If the number is positive, then it is just the number. For example, `-1` and `1`. This is a little more convoluted in binary though (resulting in concepts such as 'ones complement' and 'twos complement' - Google it if you want to know more though).
 
 You don't need to explicitly provide the `signed` keyword (e.g. `signed int <var_name>`), it's just implied.
@@ -700,7 +700,7 @@ char *lsh_read_line(void)
 }
 ```
 
-> [!NOTE]
+> [!INFO]
 > Notice `c` variable is declared as an `int` and not a `char`, the author of the blog post makes mention of this as being because `EOF` is an `int` type
 
 The author then goes on to explain that in more recent releases, there is a much shorter version that can be implemented thanks to the `getline` function:

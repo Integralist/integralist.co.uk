@@ -145,7 +145,7 @@ If you want to process the results you get, without a pipe, then use `-exec <uti
 find . -name '*.go' -exec grep 'my_pattern_im_searching_for' {} \;
 ```
 
-> [!NOTE]
+> [!INFO]
 > where `{}` is a placeholder for the file path
 
 You'll see the `\;` at the end indicates the end of the command. You need to escape the `;` otherwise it won't work. Also you can replace it with `\+` which *appends* file paths. The reason you'd use this is if you want to execute your specified utility command once and have all matching file paths added as arguments. Whereas `\;` means it'll execute the command once for each file matched.
@@ -395,7 +395,7 @@ If you have multiple processes in the background then you can look up the proces
 
 The `tee` command you've seen already now (in our above example) but just to reiterate its use, here is how the manual describes it…
 
-> [!NOTE]
+> [!CITE]
 > The tee utility copies standard input to standard output, making a copy in zero or more files.
 
 ### `dig`

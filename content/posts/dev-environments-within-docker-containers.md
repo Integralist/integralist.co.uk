@@ -25,7 +25,7 @@ So let's see two simple examples:
 1. [Python](https://www.python.org/)
 1. [Go](https://golang.org/)
 
-> [!NOTE]
+> [!INFO]
 > I don't claim this to be 'the way' to do this.\
 > This is just a setup that works well enough for me.\
 > I'm also a Vim user, so your mileage may vary.
@@ -34,7 +34,7 @@ So let's see two simple examples:
 
 You have a Python project you need to work on.
 
-> [!NOTE]
+> [!INFO]
 > I won't explain how Python works,\
 > I'll just presume you're a Pythonista
 
@@ -76,7 +76,7 @@ We jump into a tmp directory so that we can install some dependencies required t
 
 After that we copy our `requirements.txt` file into the image and install the packages specified inside that file. We also add in our `.vim` directory and `.vimrc` file to the image.
 
-> [!NOTE]
+> [!INFO]
 > the Makefile has a command for copying `.vim/.vimrc` into the current project directory, as `docker build` has a specific context environment that is effectively the location of the Dockerfile
 
 Next we have the Makefile:
@@ -151,7 +151,7 @@ That's it really. You can reuse the Dockerfile and Makefile for all your project
 
 You have a Go project you need to work on.
 
-> [!NOTE]
+> [!INFO]
 > I won't explain how Go works,\
 > I'll just presume you're a Gopher
 
@@ -275,7 +275,7 @@ This time though, when the container is run we use a separate script as the `CMD
 
 Here is the contents of `compile.sh`:
 
-> [!NOTE]
+> [!IMPORTANT]
 > make sure you `chmod +x ./compile.sh` from your host
 
 ```
@@ -297,7 +297,7 @@ The tasks we run are:
 1. build the app using the default compiler for the OS †
 1. execute the compiled binary to show it can run correctly inside the container
 
-> [!NOTE]
+> [!INFO]
 > † this means our compiled binary will be a linux based binary, so you can't run it on your host machine if it's not linux based (e.g. I'm using macOS). You'll see that to allow me to compiled my application for multiple OS's I've installed [Gox](https://github.com/mitchellh/gox)
 
 Now here is our Go application, it simply uses the logging dependency we've installed and that's it. Nothing too fancy necessary for this example.

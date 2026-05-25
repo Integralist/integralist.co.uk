@@ -53,7 +53,7 @@ Each manual section has an introduction page † that explains what the section 
 - man8: introduction to system maintenance and operation commands
 - man9: introduction to system kernel interfaces
 
-> [!NOTE]
+> [!INFO]
 > † except for manual sections 4 and 6. I had to go to the online reference for [macOS](https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/) in order to find out what they contained
 
 If you wanted to know 'at a glance' what commands were available, then you could install the `tree` command and execute it at the current directory (`/usr/share/man`) and this would show you something like the following (cut short for brevity):
@@ -124,7 +124,7 @@ The above command will search through only sections 1 and 2, but it will still s
 
 But if you know for sure that the command you're looking for is somewhere within either the system call or C library manual pages, then `man -S 2:3 <your_command>` would prevent a command from manual section 1 getting matched first.
 
-> [!NOTE]
+> [!TIP]
 > to see the intro page for a section use `man <n> intro`
 
 ## Searching by phrase

@@ -9,7 +9,7 @@ tags: [go, grpc, networking]
 
 Let's begin by understanding what an RPC (Remote Procedure Call) actually is:
 
-> [!NOTE]
+> [!INFO]
 > RPC is a way of connecting two separate services via a raw TCP socket
 
 ### Outline
@@ -46,7 +46,7 @@ When utilising RPC you'll typically find there are three '*parts*':
 
 In most cases the backend will be unaffected. By this I mean, it's just a package with a set of behaviours/functionality which are being remotely exposed. The actual use of the `net/rpc` and `net/rpc/jsonrpc` packages are typically used within the Service and Client packages †
 
-> [!NOTE]
+> [!INFO]
 > † unless the client is implemented in another language,\
 > then you'll use whatever is best suited to that language
 
@@ -134,7 +134,7 @@ func main() {
 }
 ```
 
-> [!NOTE]
+> [!INFO]
 > I was a little confused originally about having to manually open a TCP socket. I just assumed that in using HTTP, that step would've been abstracted away for me. But it's not, oh well
 
 ### rpc-html-client.go
@@ -363,7 +363,7 @@ The 'reply' pointer value has been changed to: Blah!
 
 There is another option available when creating an RPC and that is to expose a JSON formatted variation (which is *required*† if you're planning on using a different programming language to communicate with your Go RPC service - as we'll see below when we write a client using the Ruby programming language).
 
-> [!NOTE]
+> [!IMPORTANT]
 > † The standard net/rpc package uses https://golang.org/pkg/encoding/gob/\
 > Which is a Go specific streaming binary format\
 > If your client isn't Go then it'll have a hard time communicating
@@ -408,7 +408,7 @@ The output from this program would be:
 
 Google has started work on a new package called gRPC which, as per the site: [grpc.io](http://www.grpc.io/), states...
 
-> [!NOTE]
+> [!CITE]
 > is a high performance, open source, general RPC framework that puts mobile and HTTP/2 first
 
 They currently support C++, Java, Objective-C, Python, Ruby, Go, C#, Node.js, and PHP. You can either go to the main GitHub repo ([github.com/grpc](https://github.com/grpc)) or if you're only interested in the Go version, then you can find it here: [github.com/grpc/grpc-go](https://github.com/grpc/grpc-go)

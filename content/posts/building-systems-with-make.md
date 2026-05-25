@@ -29,7 +29,7 @@ I couldn’t hope to cover every aspect of what Make offers, so please don’t m
 
 Let me start by referencing the [GNU website](http://www.gnu.org/software/make/) for its definition of what Make is and does:
 
-> [!NOTE]
+> [!CITE]
 > GNU Make is a tool which controls the generation of executables and other non-source files of a program from the program’s source files
 
 Make relies on a _Makefile_ being defined and which consists of a set of instructions for building your software. If you’ve used another build system, such as [Grunt](http://gruntjs.com), you’ll notice that most of them use a naming convention taken from Make (e.g. _Gruntfile_).
@@ -60,7 +60,7 @@ Which means I already have the `make` command available and I can start writing 
 
 Let’s consider a standard project requirement, which is to run a linter such as [JSHint](http://www.jshint.com/) over a JavaScript file (that is, analyze the code for formatting issues and general errors and warnings).
 
-> [!NOTE]
+> [!INFO]
 > as mentioned earlier, traditionally Make is used to compile program files. In this instance I’ve opted for a simple example that doesn’t require compilation but should instead demonstrate how Make is actually useful for many different types of task.
 
 Imagine you have a _test.js_ file and it contains the following content:
@@ -96,7 +96,7 @@ lint
   jshint *.js --show-non-errors
 ```
 
-> [!NOTE]
+> [!WARNING]
 > Makefiles use tabs instead of spaces, so if your editor is set up to replace spaces with tabs then you could find things don’t work as expected
 
 To run the Makefile above, we would need to use the `make` shell command. This by itself will run the first target it finds (this is also referred to as the _default target_) which in this case is `lint`. You can also be more explicit and specify the exact target you want to execute by providing the name of the target to the `make` command, like so:
@@ -117,7 +117,7 @@ In this instance, using Make means it’s easier to remember specific commands f
 
 The Makefile also acts as a documented file that can now be committed into version control, meaning we now have a record of the compilation step. Both these points become even more important as the compilation/build steps become more and more complicated, which they will as your application or software system naturally grows and evolves.
 
-> [!NOTE]
+> [!TIP]
 > if your Makefile is in a different directory, you can pass its location to the `make` command using the `-f` flag like so: `make -f <makefile>`
 
 The convention for writing Makefiles is to have the default command (your entry point) at the top of the file and have Make process the commands from the top down. You don’t have to do this, though (as you’ll see, I’ve not really worried about it with the examples throughout this post), and you’re free to put your rules in whatever order makes sense to you. But be aware that when you call the Make command, you’ll want to specify the specific target if it’s not the default.
@@ -160,7 +160,7 @@ How and why Make decides what to do when you run `make <target>` is very importa
 
 Make uses the modification timestamp to avoid duplicate processing. If the timestamp of the dependent files is older than the resulting output, then running Make won’t do anything. Hence you can force Make to recompile a file by simply using the `touch` command on the relevant files.
 
-> [!NOTE]
+> [!TIP]
 > if you want to see what Make will execute without it actually doing anything, then run the `make` command as you normally would but ensure you include the `-n` flag. This will cause Make to print out all commands that would be executed, including commands collated from any specified prerequisites.
 
 ## Automatic variables
@@ -201,7 +201,7 @@ Dependency: bar.txt
 Dependency: baz.txt
 ```
 
-> [!NOTE]
+> [!WARNING]
 > because Makefiles have their own special syntax, the use of `$` will conflict when writing our shell script (which also has its own special syntax around `$`). This means if we want to use the dollar character and not have it be Makefile specific, then we have to escape it using another dollar. So rather than writing `$i` – which works fine within the context of a normal shell script – we’ve had to write `$$i` instead.
 
 We’ll see a few different automatic variables throughout this post, but in the meantime check out the quick reference list below for some of the more useful ones:
@@ -233,7 +233,7 @@ The third way to silence output is to use the `.SILENCE` flag. The following sni
 .SILENT: foo bar baz
 ```
 
-> [!NOTE]
+> [!WARNING]
 > silencing the output unfortunately also means silencing any errors!
 
 Much like shell scripting, if you have a command that is more complicated than what can feasibly fit on a single line, then – for the sake of readability if nothing else – you’ll need to write it across multiple lines and escape the line breaks using the `\` character, as the following example demonstrates:
@@ -260,7 +260,7 @@ baz: foo bar
     @echo baz | cat - foo-file.txt bar-file.txt > baz-file.txt
 ```
 
-> [!NOTE]
+> [!INFO]
 > Make typically uses the convention of naming targets after the files they create. This isn’t a necessity but it’s generally considered good practice
 
 What we have are three targets: `foo`, `bar` and `baz`. The first two have no dependencies of their own and all they do is generate a new text file. The last target, `baz`, specifies the other two targets as its dependencies. So when we run `make baz` we should see no output (as we’ve used the special `@` syntax to silence any output) but we should find we have the following files created:
@@ -277,7 +277,7 @@ foo
 bar
 ```
 
-> [!NOTE]
+> [!INFO]
 > if you’ve not seen it used before, the `-` in the `cat` command is telling it to expect input from stdin (the `echo` command writes to stdout and that is piped `|` over to the `cat` command as stdin)
 
 ## Accessing Targets
@@ -374,7 +374,7 @@ bop.txt
 
 Depending on your requirements this can be quite a powerful tool to help you construct more complex commands.
 
-> [!NOTE]
+> [!TIP]
 > if you’re interested in knowing where your `make` binary is located then you can use the built-in `MAKE` special variable in your command: `@echo $(MAKE)`.
 
 ## Dynamic Targets
@@ -459,14 +459,14 @@ stuff:
 
 When we execute `make stuff` we see all the different messages printed to the screen. We could reuse this macro in many different target rules if we wanted to as well, which is really the whole point of them.
 
-> [!NOTE]
+> [!INFO]
 > notice that I had to escape the use of the single quote `'`. This was done because without it the command would fail due to a syntax error in Make.
 
 ## Functions
 
 As mentioned in the previous section, the `$()` utility worked to dereference a value, but it can also handle a number of built-in functions. Although some of the functions could be replaced with standard shell commands.
 
-> [!NOTE]
+> [!TIP]
 > a [full list of functions](https://www.gnu.org/software/make/manual/html_node/Functions.html) can be found on the GNU Make website.
 
 ### Filter
@@ -484,7 +484,7 @@ In this rule we use the `filter` function, which takes as its first argument the
 
 Outside of a target you can have a variable dynamically pull data from the shell environment by using the `v := $(shell <command>)` pattern.
 
-> [!NOTE]
+> [!WARNING]
 > because we’re using the `shell` function, we use `:=` for simple expansion rather than `=`, which would allow for recursive dereferencing and could cause problems depending on what your Makefile and shell script is doing.
 
 In the following example we use the `shell` function to calculate the result of adding 1 and 1. We then dereference that value from within our target:
@@ -495,7 +495,7 @@ shelled_value:
     @echo $(calculation)
 ```
 
-> [!NOTE]
+> [!INFO]
 > in the shell, to do arithmetic (and other such things) we need to use the expression utility `$((...))`, so don’t make the mistake of thinking it’s a syntax special to Make, because it’s not.
 
 ### Eval
@@ -547,7 +547,7 @@ The example above would be executed with `make call_foo`, and would result in th
 I was called with the argument: hello!
 ```
 
-> [!NOTE]
+> [!INFO]
 > earlier we noticed that Make would include a space when using the `+=` operator. The same happens with function arguments and so when creating the string that is printed I didn’t include a space after the `:` but the output shows a space thanks to Make.
 
 You can pass as many arguments as you like to a function and it’ll be accessible numerically (e.g. `$1`, `$2`, `$3` and so on). You can also call other functions from within a function and pass on the arguments, or pass different arguments using the `$(call function_name)` syntax.
@@ -567,7 +567,7 @@ help:
     @echo baz: does baz stuff
 ```
 
-> [!NOTE]
+> [!TIP]
 > you could use some clever shell scripting along with Makefile comments to dynamically generate the printed commands and their descriptions (e.g. read in the Makefile source and parse out the meta data/comments as part of a sub shell `$(shell ...)`).
 
 The third is to include a reference to a special target called `.PHONY` at either the top or bottom of your Makefile, followed by a list of target names. The purpose of `.PHONY` is to prevent conflicts with files within your current project directory that coincidentally match the name of your Makefile targets.
@@ -591,7 +591,7 @@ In the above example, running `make clean` will display the message “I’ll do
 make: 'clean' is up to date.
 ```
 
-> [!NOTE]
+> [!TIP]
 > like with automatic variables, there are many different special targets (so far we’ve seen `.PHONY` and `.SILENT`). One that’s worth further investigation is `.DELETE_ON_ERROR`, which indicates to Make that if any of the commands for your target rule fails then it should delete the associated target file in your project. A [list of special targets](https://www.gnu.org/software/make/manual/html_node/Special-Targets.html) is available on the GNU Make website.
 
 ## Revisiting The For Loop Example
@@ -651,7 +651,7 @@ my_included_foo := hi from the foo include
 
 When we run `make included_stuff`, we see `hi from the foo include` printed out.
 
-> [!NOTE]
+> [!TIP]
 > the `include` statement can also be written with a hyphen prefix like so `-include`, which means if there is an error loading the specified file then that error is ignored.
 
 ## Conclusion

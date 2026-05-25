@@ -149,7 +149,7 @@ Even down to the terminology used is simplified compared to other methodologies.
 
 BEM is different in that its terminology is based around the environment it works for: HTML and CSS. We all know when working in CSS what a 'block' is, it's the fundamental building block (no pun intended) of how elements on the page are rendered, but that term can also be understood when used like so…
 
-> [!NOTE]
+> [!EXAMPLE]
 > I saw this block of code the other day, it was hideous.
 
 …you know within the context of that sentence the person speaking is referring to a chunk of code, a grouping of code.
@@ -160,7 +160,7 @@ We also know when working in CSS that ultimately we're targeting 'elements'. No 
 
 And lastly, the word 'modifier' again is a simple but fully understood and familiar term used by developers…
 
-> [!NOTE]
+> [!EXAMPLE]
 > I want to modify this element, how should I do that?
 
 ### But still structured

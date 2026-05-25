@@ -15,7 +15,7 @@ understand how caching works there too.
 OK, first thing you're going to need is a [fastly account][3] so follow the link
 and sign up for FREE (for more details see [here][4]).
 
-> [!NOTE]
+> [!INFO]
 > Fastly has recently updated its [UI][7] to make creating a new
 > Compute service even easier by providing a step through wizard-style
 > experience to set up and configure a new service (go check it out).
@@ -128,7 +128,7 @@ your package and exposes a local web server for you to interact with:
 fastly compute serve
 ```
 
-> [!NOTE]
+> [!TIP]
 > If you want to iteratively develop your application then you can
 > pass the `--watch` flag to have the CLI monitor your files for changes and to
 > hot reload your application.
@@ -294,7 +294,7 @@ runtime in your code (see [here][16] for an example).
 Now let's look at Fastly's caching behaviour as it's a bit confusing. I'm going
 to reference the official Fastly doc [Caching content with Fastly][13]:
 
-> [!NOTE]
+> [!CITE]
 > The Fastly edge cache is an enormous pool of storage across our network which
 > allows you to satisfy end user requests with exceptional performance and
 > reduce the need for requests to your origin servers. Most use cases make use
@@ -323,7 +323,7 @@ But what about the `max-age`? Well, that's for the browser. The user's web
 browser will only see `Cache-Control: max-age=0` as `s-maxage` is for proxies
 and CDNs and so Fastly will strip it from the response header.
 
-> [!NOTE]
+> [!TIP]
 > If you want more information on HTTP caching then take a look at my
 > blog post [HTTP Caching Guide][12] which explains all the details.
 
@@ -343,7 +343,7 @@ r.CacheOptions.TTL = 30
 The reason we have to do this _before_ sending the request is because of how the
 readthrough cache works (i.e. it automatically handles caching the responses).
 
-> [!NOTE]
+> [!INFO]
 > Fastly also provides a 'simple' cache interface and a more advanced
 > 'core' cache interface exposed via the Compute SDKs. You can see examples
 > [here][17].

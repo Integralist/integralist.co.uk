@@ -9,7 +9,7 @@ tags: [rust]
 
 The five types covered: `Box`, `Rc`, `Arc`, `Cell`, `RefCell`.
 
-> [!NOTE]
+> [!INFO]
 > Not discussed are `Mutex<T>` and `RwLock<T>`,\
 > which provide mutual-exclusion.
 
@@ -47,7 +47,7 @@ A _pointer_ is a general concept for a variable that contains an address in memo
 
 _Smart pointers_, on the other hand, are data structures that act like a pointer but also have additional metadata and capabilities.
 
-> [!NOTE]
+> [!INFO]
 > Both `String` and `Vec<T>` types count as smart pointers because they own some memory and allow you to manipulate it. They also have metadata and extra capabilities or guarantees.
 
 Smart pointers are usually implemented using structs. Unlike an ordinary struct, smart pointers implement the `Deref` and `Drop` traits. The `Deref` trait allows an instance of the smart pointer struct to behave like a reference so you can write your code to work with either references or smart pointers. The `Drop` trait allows you to customize the code that's run when an instance of the smart pointer goes out of scope.
@@ -68,7 +68,7 @@ This type is an abbreviation for _reference counting_ and it enables multiple ow
 
 We use the `Rc<T>` type when we want to allocate some data on the heap for multiple parts of our program to read and we can’t determine at compile time which part will finish using the data last.
 
-> [!NOTE]
+> [!IMPORTANT]
 > `Rc<T>` is only for use in single-threaded scenarios. When shared ownership between threads is needed, `Arc<T>` (Atomic Reference Counted) can be used.
 
 ## `Arc<T>`
@@ -90,7 +90,7 @@ Borrows for `RefCell<T>`s are tracked _at runtime_, unlike Rust’s native refer
 
 Because `RefCell<T>` borrows are _dynamic_ it is possible to attempt to borrow a value that is already mutably borrowed; when this happens it results in thread panic.
 
-> [!NOTE]
+> [!IMPORTANT]
 > Neither `Cell<T>` nor `RefCell<T>` are thread-safe.\
 > The `Sync` marker trait is not implemented.
 

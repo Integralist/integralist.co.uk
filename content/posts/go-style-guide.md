@@ -22,7 +22,7 @@ The following reference materials are my 'go to' whenever I'm unsure of somethin
 - [Understanding memory allocation](https://gist.github.com/Integralist/22ced4b4700df1e6cbec88c1074c8b2d)
 - [Go Concurrency](https://gist.github.com/Integralist/05fb91c42021195b727be5afb28122ec)
 
-> [!NOTE]
+> [!TIP]
 > Refer to the [specification](https://golang.org/ref/spec) if ever confused about what the expected behaviour is.\
 > See also the [go.mod reference](https://go.dev/doc/modules/gomod-ref).
 
@@ -62,7 +62,7 @@ The following is a summary of how to name things in Go, gleaned from either my o
 - Tests:
   - Prefer `got, want` over alternatives like `have, want` ([official reference](https://github.com/golang/go/wiki/TestComments#got-before-want)).
 
-> [!NOTE]
+> [!TIP]
 > Refer also to https://github.com/kettanaito/naming-cheatsheet
 
 ## Whitespace
@@ -221,7 +221,7 @@ ______________________________________________________________________
 
 When taking a slice of a slice you might stumble into behaviour which appears confusing at first. The `cap`, `len` and `data` fields might change, but the underlying array is not re-allocated, nor copied over and so modifications to the slice will modify the original backing array.
 
-> [!NOTE]
+> [!TIP]
 > There are more examples/explanations in https://blogtitle.github.io/go-slices-gotchas/
 
 ### Ghost update 1
@@ -245,7 +245,7 @@ fmt.Println(a) // [42, 2]
 fmt.Println(b) // [42]
 ```
 
-> [!NOTE]
+> [!TIP]
 > Refer to the golang language specification section on ["full slice expressions"](https://golang.org/ref/spec#Slice_expressions) syntax (`[low : high : max]`) for controlling the capacity of a slice.
 
 ### Ghost update 2
@@ -266,7 +266,7 @@ The 'fix', like shown earlier, is `b := a[:2:2]` which sets the capacity of the 
 
 ## Quick guide to pass-by-value vs pass-by-pointer
 
-> [!NOTE]
+> [!TIP]
 > Reference articles: [goinbigdata.com](https://goinbigdata.com/golang-pass-by-pointer-vs-pass-by-value/) and [dave.cheney.net](https://dave.cheney.net/2017/04/29/there-is-no-pass-by-reference-in-go) and [alexedwards.net](https://www.alexedwards.net/blog/demystifying-function-parameters-in-go).
 
 You'll commonly hear people use the phrase 'pass-by-reference'. The behaviour this phrase describes is: "You're not receiving a _copy_ of the thing being passed, you're getting _direct access_ to it".
@@ -288,7 +288,7 @@ Whereas maps, slices, and channels are all passed by pointer.
 
 Now, here's where I need to be more specific (and _accurate_):
 
-> [!NOTE]
+> [!IMPORTANT]
 > In Go _every_ function operates on a _copy_ of the arguments passed into the function. No exceptions, that is what happens for every type.
 
 With the primitive/basic types, their _value_ is _copied_.

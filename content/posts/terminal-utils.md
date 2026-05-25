@@ -160,7 +160,7 @@ Here is a table matrix that attempts to identify these 'layers':
 </table>
 -->
 
-> [!NOTE]
+> [!INFO]
 > you'll find many differing versions of the OSI Model (i.e. the layers described are always the same, but you may see more or less protocols defined depending on what version you look at), this is just one such version copied vertabim from Wikipedia
 
 The reason this is useful, is because you can identify which layer the relevant tools are operating at. Tools like `netstat` operate at layer four (transport: `tcp`), whereas `telnet` operates at layer seven (application: it actually has its own protocol `telnet`).
@@ -185,7 +185,7 @@ docker run -it centos /bin/bash
 docker run -it ubuntu /bin/bash
 ```
 
-> [!NOTE]
+> [!WARNING]
 > Also, the usage between Mac OS and Linux can vary\
 > Example: `top -n` on Mac shows only n number of items; Linux runs n number of ticks before stopping\
 > If you notice something different, then it'll likely be the OS\
@@ -218,7 +218,7 @@ You can change which column controls the order display (the default being CPU) b
 - `+command`: order by the COMMAND column (ascending order)
 - `-command`: order by the COMMAND column (descending order)
 
-> [!NOTE]
+> [!TIP]
 > `+` is implied (so no need to type it)
 
 The following key strokes can be executed whilst `top` is running...
@@ -273,7 +273,7 @@ Here are some useful commands you can try:
 - `ps aux`: shows all running processes (even those without a tty or are not owned by you)
 - `ps axjf`: shows parent process (ppids) & nested children pids with tree formatting
 
-> [!NOTE]
+> [!WARNING]
 > the `f` option doesn't work the same on Mac OS (`man ps` for details)
 
 ## strace
@@ -302,7 +302,7 @@ With CentOS:
 yum install strace
 ```
 
-> [!NOTE]
+> [!INFO]
 > Mac OS has `dtrace` but it does use quite different commands from `strace`\
 > Although I have seen articles online that help translate
 
@@ -618,7 +618,7 @@ strace -e trace=open,connect,access lsof
 
 You can also use `!` to negate the filter (see `man strace` for more details)
 
-> [!NOTE]
+> [!TIP]
 > if you try to use `grep` instead of `-e` then you'll need to ensure you redirect stderr to stdout or you wont see any output as strace sends to stderr by default; meaning you'd need to execute something like `strace uptime 2>&1 | grep open`
 
 You might also find that using the `-t` flag useful for tracking _when_ the call was made:
@@ -637,7 +637,7 @@ As you can see `strace` is a really useful tool when the time comes.
 
 By the way, you should be careful with backgrounded processes. If you attach to a backgrounded process running in the same shell instance as your `strace` execution, then you'll be locked up.
 
-> [!NOTE]
+> [!WARNING]
 > although `strace` is amazing, you might also want to read [this article](http://www.brendangregg.com/blog/2014-05-11/strace-wow-much-syscall.html) that discusses the oft-ignored performance overhead of using it in production
 
 ## lsof
@@ -745,7 +745,7 @@ Here are some useful examples you can try out:
 
 Effectively, if you've any kind of network issues, then this tool can help you potentially identify where it's coming from or going (or if it's not coming from or going to the expected source/destination).
 
-> [!NOTE]
+> [!TIP]
 > Update: an easy way to remember this (thanks Julia Evans - see [honorable mentions](#16) is "tuna please" `netstat -tunapl`). You can use `lsof -i -P` on Mac OS
 
 ## ifconfig
@@ -783,7 +783,7 @@ lo        Link encap:Local Loopback
 
 We can see above that we have a single Ethernet card (`eth0`) and a loop back interface (`lo`)
 
-> [!NOTE]
+> [!INFO]
 > In newer Linux OS' `eth<n>` is replaced by `p2p<n>`\
 > And on the Mac OS it becomes `en<n>`
 
@@ -862,7 +862,7 @@ Below is a simple command to get you started:
 sudo iftop -P -i en1
 ```
 
-> [!NOTE]
+> [!TIP]
 > use `ifconfig` to find the interface you're interested in
 
 I personally find the standard output useful (as per image above), but if you press `?` while the program is running you'll see lots of additional options you can try:
@@ -936,7 +936,7 @@ The following are some examples to help you understand how to execute `tcpdump`,
 - `tcpdump -i eth0 -s 0`: include contents of each packet (not just the packet header)
 - `tcpdump -vvv -s 0 -l -n port 53 -XX`: watch all DNS traffic (which happens on port 53)
 
-> [!NOTE]
+> [!TIP]
 > If you run tcpdump on a remote server, you'll want to use the `-w` flag to record the data into a pcap file, this is so you can scp the file back to your local machine for later aggregation/analysis with either tcpdump itself (`-r`) or by importing the pcap file into another tool such as [`wireshark`](#13) or [`tshark`](#14)
 
 The output of the program may look a little confusing but there is consistent structure you can look out for:
@@ -945,7 +945,7 @@ The output of the program may look a little confusing but there is consistent st
 <date_time> <protocol> <src> > <dest>: Flags[<type>] <data>
 ```
 
-> [!NOTE]
+> [!INFO]
 > the `>` always sits between `src` and `dest` and indicates the direction of the request
 
 #### Flags
@@ -998,7 +998,7 @@ This utility isn't available by default on any OS, so with Mac OS:
 brew install wireshark --with-qt5
 ```
 
-> [!NOTE]
+> [!TIP]
 > sometimes the flags that are available change. So I would suggest running the command `brew cat wireshark` first to see what's available first.
 
 With Ubuntu:
@@ -1019,14 +1019,14 @@ I typically have only ever used Wireshark with pcap files I've created via `tcpd
 
 1. execute `wireshark -r /path/to/pcap/file`
 
-> [!NOTE]
+> [!TIP]
 > if you just want to use Wireshark to monitor all network traffic, then execute `sudo wireshark -i <interface>` (use `ifconfig` or `sudo wireshark -D` to see what interfaces are available). Once the gui is open it'll have the specified interface pre-selected, so just double-click on it to start recording its traffic
 
 Every time there is (for example) a HTTP request, there might end up being 200 TCP packets recorded, which can be (as you could imagine) difficult to recognize and make sense of manually.
 
 But this problem can be simplified within Wireshark by clicking on "Statistics" and then "Conversations", where it will organize all these disparate packets into TCP sessions for you. Thus making analysing the data much easier.
 
-> [!NOTE]
+> [!TIP]
 > we cover 'filtering' more in the next section about tshark, but one simple search for a HTTP GET header in your recorded traffic is `frame contains "GET"`
 
 #### Docker?
@@ -1047,7 +1047,7 @@ Apparently `--security-opt seccomp:unconfined` is an alternative option.
 
 The following is taken and paraphrased from the Docker website:
 
-> [!NOTE]
+> [!WARNING]
 > Doing this will allow Docker to access all devices on the host as well as set some configuration to allow the container to nearly all the same access to the host as processes running outside the containers on the host.
 
 For more details, please refer to the [documentation](https://docs.docker.com/engine/reference/run/#/runtime-privilege-and-linux-capabilities).
@@ -1122,7 +1122,7 @@ One useful trick some people aren't aware of, is that if you are writing automat
 
 For example, if you open the pcap in wireshark, you can find the filter you need by selecting the data manually via the UI and then right-click'ing the relevant data field and selecting "Prepare a Filter > Selected". This will generate the exact value you would assign to the tshark `-e` flag.
 
-> [!NOTE]
+> [!INFO]
 > the filtering system syntax is called BPF (Berkeley Packet Filter) and you can find [documentation here](http://biot.com/capstats/bpf.html)
 
 ## telnet
@@ -1135,7 +1135,7 @@ Telnet is both a tool `telnet` _and_ a Network Protocol of the same name: Telnet
 
 Telnet's usage nowadays is a little limited due to the massive success of protocols such as SSH, but it can be interesting to play around with (although I've never really had much of a 'need' for it myself).
 
-> [!NOTE]
+> [!TIP]
 > one such tool that is more useful in this respect is [`netcat`](http://nc110.sourceforge.net/) which reads and writes data across network connections, using the TCP or UDP protocols
 
 To use the command you type `telnet <host> <port>`. Once 'connected' to the host you need to provide a command to be executed, for example a `GET` request.
@@ -1160,7 +1160,7 @@ From here we can provide our request:
 GET #q=cars HTTP/1.1
 ```
 
-> [!NOTE]
+> [!TIP]
 > you need to press <Enter> twice to send the request
 
 From here we get the following response:

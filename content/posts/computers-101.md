@@ -14,7 +14,7 @@ One thing I want to clarify in the above image is that each box is _within_ the
 parent box. So for example, The "Program: terminal" is interacting with a
 contained shell, while the shell then spawns either a "Built-in" or "Program".
 
-> [!NOTE]
+> [!TIP]
 > Nearly four years after this post was published someone else
 > published https://www.poor.dev/blog/terminal-anatomy/ which is an excellent
 > write up that provides a really good animation of how the terminal interacts
@@ -40,7 +40,7 @@ execute.
 Your computer has many programs. One such example would be the 'terminal
 emulator' program.
 
-> [!NOTE]
+> [!INFO]
 > see next section for explanation of what a "terminal" is.
 
 Depending on the programming language used to create the program, either the
@@ -54,7 +54,7 @@ Executables (or 'executable binaries') are programs.
 
 More specifically, an 'executable' is a file that _contains_ a program.
 
-> [!NOTE]
+> [!INFO]
 > these are also often referred to as just 'binaries'.
 
 Executables are generally the _result_ of a program being turned into something
@@ -69,7 +69,7 @@ $ echo $PATH
 /usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 ```
 
-> [!NOTE]
+> [!TIP]
 > separate the output by `:` and you see there are six directories
 
 ## Terminal
@@ -513,7 +513,7 @@ $ declare -p BASH_CMDS
 declare -A BASH_CMDS=([which]="/usr/bin/which" [man]="/usr/bin/man" [clear]="/usr/bin/clear" )
 ```
 
-> [!NOTE]
+> [!INFO]
 > it's not as clear to read as the `hash` output, but this is probably
 > more useful for interacting with programatically.
 
@@ -587,7 +587,7 @@ enable unset
 enable wait
 ```
 
-> [!NOTE]
+> [!TIP]
 > an online reference can be found
 > [here](https://www.gnu.org/software/bash/manual/html_node/Bash-Builtins.html#Bash-Builtins)
 
@@ -607,7 +607,7 @@ $ echo $PATH | tr ':' '\n' | sort | egrep '^/(usr|bin)'
 /usr/sbin
 ```
 
-> [!NOTE]
+> [!TIP]
 > tweak the regex as you see fit
 
 Then you need to list all the commands within those directories.
@@ -619,5 +619,5 @@ alias commands_dir='echo $PATH | tr ":" "\n" | sort | egrep "^/(usr|bin)"'
 alias commands='for i in $(commands_dir):; do eval "ls -l $i"; done'
 ```
 
-> [!NOTE]
+> [!QUESTION]
 > Does anyone know of a better way? I'd ❤️ to hear about it

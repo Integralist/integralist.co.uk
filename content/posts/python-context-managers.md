@@ -21,7 +21,7 @@ In this post I wanted to discuss a relatively simple, but important topic: Conte
 
 Officially...
 
-> [!NOTE]
+> [!CITE]
 > A context manager is an object that defines the runtime context to be established when executing a with statement. The context manager handles the entry into, and the exit from, the desired runtime context for the execution of the block of code. Context managers are normally invoked using the `with` statement, but can also be used by directly invoking their methods. -- [Python Docs](https://docs.python.org/3/reference/datamodel.html#context-managers)
 
 In simpler terms it means: a Context Manager can ensure code that requires 'clean-up' logic to be executed, is done so in a more idiomatic/Pythonic way.
@@ -56,7 +56,7 @@ We can use the `with` statement to define a similar block of code to our earlier
 
 The `with` statement expects a 'Context Manager' to be provided, and there are already a few built-in Python objects designed as Context Managers; such as the `open` function we saw used in our above example code.
 
-> [!NOTE]
+> [!EXAMPLE]
 > another example is [threading.Lock](https://docs.python.org/3/library/threading.html#threading.Lock).
 
 Here is what the code might look like when using `with`:
@@ -123,7 +123,7 @@ for _ in range(100000):
         files.append(f)
 ```
 
-> [!NOTE]
+> [!INFO]
 > for more information, see [Context Manager Types](https://docs.python.org/3/library/stdtypes.html#typecontextmanager).
 
 ## When to use one or the other?

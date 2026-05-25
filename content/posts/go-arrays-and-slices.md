@@ -69,7 +69,7 @@ The slice data structure consists of the following fields:
 - **len**: length of slice (number of elements it contains).
 - **cap**: capacity of slice (number of elements in array, starting from the first element in the slice).
 
-> [!NOTE]
+> [!IMPORTANT]
 > a slice cannot grow larger than its capacity, nor can you reslice a slice to attempt to access earlier elements in the array.
 
 Here is an example program that creates an array and then makes a slice of a subsequence of the original array:
@@ -92,7 +92,7 @@ slice: []int
        []int{2, 3}
 ```
 
-> [!NOTE]
+> [!INFO]
 > Notice that a slice 'type' looks the same as an array's, but just omits a length (e.g. slice: `[]int`, array: `[3]int`).
 
 Slices, much like arrays, cannot dynamically grow larger at runtime. When a slice is full we must create a _new_ slice, which requires the use of go's builtin functions.
@@ -208,7 +208,7 @@ slice:  []int
     cap: 8
 ```
 
-> [!NOTE]
+> [!INFO]
 > the `append` function _always_ returns a new slice.
 
 Notice how `s` is showing an updated 'view' (e.g. `2, 3, 4, 5, 6`). What's interesting here is the new slice must have also resulted in a new array being allocated (and subsequently the new slice is pointing to it) because the original array (`a`) isn't showing the appended value (`6`).
@@ -235,7 +235,7 @@ fmt.Printf("hdr2: %#v\n", hdr2)   // &reflect.SliceHeader{Data:0x45e020, Len:5, 
 fmt.Printf("data2: %#v\n", data2) // [8]int{1, 2, 3, 4, 5, 0, 0, 0}
 ```
 
-> [!NOTE]
+> [!INFO]
 > `s := []int{1, 2, 3, 4}` causes an underlying array to be created and then referened by the slice we defined.
 
 The output of the above program is as follows:
@@ -313,5 +313,5 @@ Yes, this is confusing.
 
 See the [go tour for more examples](https://tour.golang.org/moretypes/11).
 
-> [!NOTE]
+> [!WARNING]
 > there's also a _gotcha_ which is worth being aware of, and is related to the fact that slices point to the same underlying array, which occurs when the slice modifications don't change the array's capacity. See https://yourbasic.org/golang/gotcha-append/ for details.

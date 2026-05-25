@@ -12,7 +12,7 @@ language](https://golang.org/) I created a gist and updated it on a regular
 basis as a sort of cheat sheet. I stumbled across this gist recently and decided
 I'd try and port it over to some form of semi-coherent blog post.
 
-> [!NOTE]
+> [!WARNING]
 > the code will not be updated in any way so
 > [YMMV](http://dictionary.cambridge.org/dictionary/english/ymmv)
 
@@ -24,7 +24,7 @@ the vein of a resource like [Go by Example](https://gobyexample.com/).
 What this _is_, is a barren wasteland of old code. Passers by are forewarned to
 tread carefully.
 
-> [!NOTE]
+> [!WARNING]
 > there's also not much in the way of code explanation, to the extent that
 > some of the testing examples are long and very context specific - you've been
 > warned
@@ -262,7 +262,7 @@ go list strconv
 
 Will return just the import path `strconv`.
 
-> [!NOTE]
+> [!TIP]
 > Documentation: `go help list | less`
 
 You can also utilise Go's templating functionality on the returned JSON object
@@ -297,7 +297,7 @@ compress/zlib -> bufio compress/flate errors fmt hash hash/adler32 io
 
 ## Dependency Management
 
-> [!NOTE]
+> [!INFO]
 > Update (August 2017): there is an official tool now called
 > [dep](https://github.com/golang/dep).
 
@@ -324,7 +324,7 @@ So to make this situation better we can use
 `Godeps` folder inside your project directory. You can then use `godep save -r ./...` to automatically update all your references to point to that local
 folder.
 
-> [!NOTE]
+> [!TIP]
 > you might need to remove the `Godeps` folder and run `go get` if you get
 > strange conflicts. The `./...` means to target all `.go` files
 
@@ -373,7 +373,7 @@ glide list                          # shows vendored deps
 go test $(glide novendor)           # test only your package (not vendored packages)
 ```
 
-> [!NOTE]
+> [!TIP]
 > to add a new dependency `glide get <pkg_name>`
 
 ## Documentation
@@ -406,7 +406,7 @@ godoc encoding/json Number
 godoc -src builtin make | less
 ```
 
-> [!NOTE]
+> [!TIP]
 > Unlike with `go doc`, `godoc` doesn't allow filtering by `<method>`\
 > It only goes as far as `<pkg> <symbol>`
 >
@@ -459,7 +459,7 @@ func NewEncoder(w io.Writer) *Encoder
 func (enc *Encoder) Encode(v interface{}) error
 ```
 
-> [!NOTE]
+> [!INFO]
 > Notice the functions don't have their documentation notes printed with `go doc`
 
 One other thing `godoc` has over `go doc` is the ability to view the source code
@@ -497,7 +497,7 @@ godoc -http ':6060' -play
 
 ## Testing
 
-> [!NOTE]
+> [!TIP]
 > see also [examples
 > here](https://gist.github.com/Integralist/cf76668bc46d75058ab5f566d96ce74a)
 
@@ -509,7 +509,7 @@ Run the tests: `go test -v ./...`
 
 You can also run a specific test like so: `go test -v command/foo_test.go`
 
-> [!NOTE]
+> [!INFO]
 > remember that your test file should have the same package name as your
 > code being tested. This means the test file will have access to all the public
 > functions and variables of that package (and so subsequently it'll have access
@@ -1095,7 +1095,7 @@ variables are exposed for the caller to utilise. So if you need a package to
 execute some bootstrapping code at the point of it being _loaded_, then you'll
 need to stick it inside of an `init` function.
 
-> [!NOTE]
+> [!INFO]
 > you can have multiple `init` functions inside a package e.g. one per
 > file within the package namespace
 
@@ -1477,7 +1477,7 @@ Which prints:
 {Circle:{Point:{X:8 Y:8} Radius:5} Spokes:20}
 ```
 
-> [!NOTE]
+> [!INFO]
 > anonymous fields don't work shorthand literal Struct
 
 The following example demonstrates how methods of a composited object can be
@@ -2257,7 +2257,7 @@ func main() {
 }
 ```
 
-> [!NOTE]
+> [!WARNING]
 > don't use this ☝️ as it has timeout set to infinity by default
 
 Safer option is to create your own http.Client struct...
@@ -2468,7 +2468,7 @@ func main() {
 }
 ```
 
-> [!NOTE]
+> [!INFO]
 > compiler can only apply implicit dereference for variables and struct
 > fields. This wouldn't work `Point{1, 2}.scaleBy(5)`
 
@@ -3089,7 +3089,7 @@ func main() {
 }
 ```
 
-> [!NOTE]
+> [!INFO]
 > `printf` is a built-in function for templating and is functionally
 > equivalent to `fmt.Sprintf`
 
@@ -3191,7 +3191,7 @@ There are two main types of sockets:
 1. STREAM sockets (e.g. TCP)
 1. DATAGRAM sockets (e.g. UDP)
 
-> [!NOTE]
+> [!INFO]
 > a "unix domain socket" is actually a physical file\
 > it's useful for local (same host) data communication
 
@@ -3523,7 +3523,7 @@ defer func() {
 }()
 ```
 
-> [!NOTE]
+> [!TIP]
 > [https://github.com/google/go-github/pull/317](https://github.com/google/go-github/pull/317)
 
 ## Writing your own Marshal/Unmarshal functions

@@ -41,7 +41,7 @@ floating windows. Otherwise, the other part of Ghostty I use _a lot_ is its
 floating terminal that can be triggered from anywhere via a hotkey (as long as
 Ghostty is open somewhere).
 
-> [!NOTE]
+> [!TIP]
 > 💡 You can find my Neovim config [here](https://github.com/integralist/nvim) and
 > my dotfiles [here](https://github.com/integralist/dotfiles).
 
@@ -67,7 +67,7 @@ Ghostty is open somewhere).
 - **Shell Autocomplete**: [FZF-tab](https://github.com/Aloxaf/fzf-tab)
 - **Shell Prompt**: [Starship](https://starship.rs/)
 
-> [!NOTE]
+> [!INFO]
 > † I had switched to
 > [Bottom](https://github.com/ClementTsang/bottom/blob/master/README.md) but
 > `htop` is so much more flexible and configurable, and although the graphs in
@@ -93,6 +93,6 @@ feature, which I _really_ liked along with the following extensions...
 duplicating bookmarks and groups etc and I couldn't get the issue resolved, so I
 ended up back with Google Chrome.
 
-> [!NOTE]
+> [!INFO]
 > 💡 In the future I'll likely switch over to using
 > [Ladybird](https://ladybird.org/).

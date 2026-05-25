@@ -64,7 +64,7 @@ In other programming languages the recursion could be rewritten in such a way th
 
 Unfortunately the JavaScript language doesn't implement this optimisation.
 
-> [!NOTE]
+> [!INFO]
 > apparently ECMAScript 6 has plans to implement TCO
 
 The following is an example of a tail optimised version of the previous code...
@@ -199,7 +199,7 @@ Be warned that understanding this code *could* take a while (lord knows it took 
 
 If you don't understand how the code works after the first time reading through these notes then it's probably best to execute the above code via your browser of choice's developer tools and use a `debugger` statement to step through the code whilst reading this explanation...
 
-> [!NOTE]
+> [!CITE]
 > the above code was written by Irakli Gozalishvili (an engineer at Mozilla): https://gist.github.com/Gozala/1697037. As you can see above, it makes tail call optimising any function really easy.
 
 - We store the result of calling `tco` (wrapped around our code) into the `sum` variable.

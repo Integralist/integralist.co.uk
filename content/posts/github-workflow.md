@@ -107,7 +107,7 @@ fixup a5827db Bar
 fixup 62d4c80 Baz
 ```
 
-> [!NOTE]
+> [!INFO]
 > we don't use `squash` as that automatically uses the existing commit message from the commit we're squashing other commits into (but our requirements mean we wish to modify that commit message); so we use `reword` and `fixup` instead
 
 Let's apply these changes by executing `:wq`. Once you do this, Git will carry out the rebase and then drop you back to the `COMMIT_EDITMSG` screen. You can now modify the commit message so it is the same as the title of your GitHub PR (and you can inform GitHub of what PR to automatically close when this commit arrives in `master` by using the keyword: [closes](https://help.github.com/articles/closing-issues-via-commit-messages/); you'll notice there is the keyword `fixes` which indicates a GitHub issue to close).
@@ -203,5 +203,5 @@ git commit -am "New Feature X"
 git rebase --continue
 ```
 
-> [!NOTE]
+> [!TIP]
 > if you forget where you are then running `git status` should give you the information you need to help you either continue rebasing or to abort the rebase

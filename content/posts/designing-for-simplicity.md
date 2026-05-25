@@ -5,24 +5,24 @@ description: Lessons from building high-traffic systems at BBC News on complexit
 tags: [architecture, performance]
 ---
 
-> [!NOTE]
+> [!INFO]
 > ⚠️  This post was originally written for [David Walsh back in 2015](https://davidwalsh.name/designing-simplicity). I've since decided to reproduce it here for my own records - Integralist: August, 2017.
 
 Before we get started, it's worth me spending a brief moment introducing myself to you. My name is Mark (or [@integralist](https://twitter.com/integralist) if Twitter happens to be your communication tool of choice) and I currently work for BBC News in London England as a principal engineer/tech lead; and I'm also the author of "[Pro Vim](http://www.apress.com/9781484202517)".
 
-> [!NOTE]
+> [!INFO]
 > Quick shout out to [Steven Jack](https://twitter.com/stevenjack85) who took the time to review this post. A lot of what we've done right, he either helped instigate or was a fundamental part of its success
 
 The "responsive" BBC News website receives approximately 8 million visits per day (that's on average for a quiet news day). Those numbers will go much higher once the responsive site replaces the current static desktop offering and starts to incur many more users. But for the moment that gives a rough idea of the sort of traffic we get on a daily basis.
 
 This post aims to take a whirlwind tour of different code design and architectural discussion points that have cropped up at one point or another while I've been working at the BBC. We will be peeking at some top-level system infrastructure in a bid to provide you with some "food for thought" on these topics. I'll talk about some techniques and tools that work for us, and we'll also see some that didn't work quite so well. I've always been intrigued by how other developers work and think about different types of problems, so let's consider this a knowledge sharing experience from me to you.
 
-> [!NOTE]
+> [!INFO]
 > the thoughts and comments here are my own and do not necessarily represent those of my employer. Yup, I had to go there... just in case
 
 Now some readers will probably not have to worry about the same sort of scalability problems the BBC has to deal with, when designing/building systems and applications. But this isn't to say the information and thoughts I'm going to share with you here in this post aren't transferable. In fact, much of what I'll be discussing are concepts that can be utilized in applications of any size (because good design is effective at any scale).
 
-> [!NOTE]
+> [!INFO]
 > this post covers very little front-end technologies and techniques. That topic of discussion is much more vast and has been covered substantially over the past few years (especially the topic of performance, which has - since ~2007 - been brought into the mainstream mindset of front-end engineers by [Steve Souders](http://stevesouders.com/).
 
 So without further ado, let's begin...
@@ -47,12 +47,12 @@ The reason I'm mentioning this upfront is because I do not want people to walk a
 
 With the discussion of complexity behind us, let's move onto what it means for software to be "simple". Why is simplicity a good thing? Simplicity itself is defined as:
 
-> [!NOTE]
+> [!CITE]
 > "the quality or condition of being easy to understand or do".
 
 If a piece of software is considered "simple", then chances are it has been found to be easy to understand and easy to reason about. Simple software is also easy to manipulate and apply changes to. [Kent Beck](http://en.wikipedia.org/wiki/Kent_Beck) (renowned author of many top quality software engineering books and the co-creator of Extreme Programming, which then evolved into "agile" practices) made the following statement back in 2012:
 
-> [!NOTE]
+> [!CITE]
 > "make the change easy, then make the easy change"
 
 What Kent was referring to, was that for a piece of software to be easily changed you needed to simplify its design in such a way for it to be able to facilitate a future requirement.
@@ -65,7 +65,7 @@ Simplicity can also (not always mind you) help towards other goals such as reusa
 
 Phil Karlton (Netscape engineer; sadly killed in 1997) once said:
 
-> [!NOTE]
+> [!CITE]
 > There are only two hard things in Computer Science: cache invalidation and naming things
 
 You've likely heard this quote said many times already throughout your career. There's a reason for that: because it's a painfully universal truth. Nothing causes our team to sit pondering in deadlock (or maybe livelock would be more accurate) together, than when we're trying to figure out what to call our new library.
@@ -106,7 +106,7 @@ Along side the process of trying to speed up code by multi-threading, you'll nea
 
 Data consistency is where the "CAP theorem" comes into play. CAP states:
 
-> [!NOTE]
+> [!CITE]
 > "it is impossible for a distributed computer system to simultaneously provide all three of the following guarantees: consistency, availability and partition tolerance"
 
 What this means in practice is:
@@ -139,7 +139,7 @@ Using the following diagram as a basis, let's consider an application where the 
 
 This architecture will not scale very well, nor very easily.
 
-> [!NOTE]
+> [!INFO]
 > for brevity I've left out some details from this architecture, such as persisting URLs
 
 Instead the process should be more decoupled, like so (see below diagram): user uploads an image (1), the server stores the image into an S3 bucket in its original form (2) and sends a message to an [AWS SQS](http://aws.amazon.com/sqs/) queue (3). The server then returns a message to the user to inform them the image is being processed along with the auto generated URL (4).
@@ -154,12 +154,12 @@ If the user visits the auto generated URL before the image has been processed, t
 
 One practical improvement here is that the new system is much more fault tolerant than the original. In the original system, if the server crashed then the user would likely be returned a [500 HTTP Status Code](http://en.wikipedia.org/wiki/List_of_HTTP_status_codes#500), whereas with the new system the user can continue to use the website (they'll see the message "Image waiting to be processed" until a new back-end server instance can be brought up, where by it'll continue to process messages off the image queue).
 
-> [!NOTE]
+> [!INFO]
 > fault tolerance is often referred to as "partition tolerance"; I mentioned this earlier when discussing CAP Theorem.
 
 In the above example we've used queues to help decouple the individual parts of our software system (similar in spirit to creating microservices), but there are other mechanisms for decoupling code such as using a [message bus](http://en.wikipedia.org/w/index.php?title=Message-oriented_middleware&redirect=no). Best to research different techniques to see how your architecture could be designed to utilize them to avoid problems with scaling.
 
-> [!NOTE]
+> [!INFO]
 > depending on the purpose of the above application, you might decide that displaying the unoptimized image would be better than displaying a message to the user to say the image is still being processed. The reason I didn't do that here was because of performance reasons (the size of the image could be very large and not something you want a mobile user to have to download - especially if they're traveling with a poor network connection)
 
 ## Broker/Renderers
@@ -168,7 +168,7 @@ At BBC News in London, my team have released an open-source framework written in
 
 We've used this particular framework on quite a few projects over the past year and a half; such as the Scottish Referendum, the local and general elections, an upcoming redesign of BBC Newsbeat as well as the World Service Kaleidoscope project (dynamic serving of image based content to devices with poor support for non-latin fonts).
 
-> [!NOTE]
+> [!INFO]
 > I'd like to give a shout out to [Robert Kenny](https://twitter.com/kenturamon) (formerly of BBC, and now working at the Guardian) as the original inspiration and developer for the Alephant framework. Although it has changed quite significantly since its inception, it was his solid work that helped to support some very important and high traffic events.
 
 The pattern is effectively a "broker" (i.e. mediator) and a "renderer". With this pattern, user requests are routed through to the relevant broker, who then decides where the request(s) should be directed. On the other end of the design are a bunch of "renderer" services, and their role changes depending on the type of model we use: push or pull.
@@ -193,7 +193,7 @@ To give you an example, imagine we have two Renderers: R1 and R2. Both of them t
 
 To avoid this contention we use a document store (AWS DynamoDB) to track the version of a message and when we come to store the rendered content of our data in our storage facility, we make sure the key we need to lookup that rendered content also includes its version number.
 
-> [!NOTE]
+> [!INFO]
 > this is something we did before DynamoDB added its "Conditional Put" feature
 
 The broker in the push model, receives a request for a component, and is able to use the information it is provided to lookup the latest rendered version of a message. It does this by constructing a key that determines the location of the latest version within our storage facility. These lookups are also heavily cached to allow us to handle as much load as possible.
@@ -202,7 +202,7 @@ The following diagram gives you a top-level view of this architecture:
 
 ![Broker Renderer Pattern Push Model](/assets/img/broker-renderer-pattern-push-model.png)
 
-> [!NOTE]
+> [!INFO]
 > for brevity, in the above diagram, I'm not demonstrating either the caching of broker requests or the sequencing requirements (i.e. the storing off the version of a message into DynamoDB). As mentioned before, some queues have different guarantees and so I didn't want the diagram to be too tightly coupled to DynamoDB's implementation
 
 There is another concern that we've accounted for, but I've left out for brevity, which is AWS S3's "eventual consistency" model. But I think for now this explanation should be enough to give you an idea of how the pattern works.
@@ -219,7 +219,7 @@ The following diagram gives you a top-level view of this architecture:
 
 ![Better Architecture](/assets/img/better-architecture.png)
 
-> [!NOTE]
+> [!INFO]
 > for brevity, in the above diagram, I'm not detailing the complexity of how you feed information to a broker so it knows which renderer to interrogate to satisfy the user's request
 
 There are some pitfalls to this model though. The main one being we're coupling our data to our templates. For example, if a change is required within the template (let's say a HTML `class` attribute is added to an element; but all other "structure" of the content is the same), then it would require a complete re-render of the component.
@@ -256,7 +256,7 @@ In this classic architectural model you lose (or at least complicate) maintainab
 
 Enter [Peter Chamberlin](https://twitter.com/pgchamberlin) and Liam Wilkins to take inspiration from both [Brad Frost's atomic design](http://bradfrost.com/blog/post/atomic-web-design/) and [Ian Feather's Rizzo](http://ianfeather.co.uk/a-maintainable-style-guide/) and helped to resolve this divide by creating the open-source project "[Chintz](https://github.com/BBC-News/chintz)" which combines the best aspects of both the former projects.
 
-> [!NOTE]
+> [!INFO]
 > this project is still WIP (work in progress) but we encourage the community to get involved and create an open discussion around how the specification evolves
 
 The driving force behind this specification was for it to be language agnostic. This was a fundamental requirement in allowing different language platforms to consume these components. The processing of components has a few simple requirements:
@@ -275,7 +275,7 @@ There are currently two (WIP) client parsers we've open-sourced:
 - [PHP](https://github.com/BBC-News/chintz-php)
 - [Ruby](https://github.com/BBC-News/chintz-ruby)
 
-> [!NOTE]
+> [!INFO]
 > we also hope to implement one utilizing JavaScript/Node
 
 A manifest file could look something like:
@@ -307,7 +307,7 @@ There are a few ways my team automates and reduces duplication (you'll likely fi
 
 Deploying software within the BBC can be a complex process as we have lots of moving parts to take code from a developer's laptop and into a working release that's deployed to our cloud infrastructure. To make deploying software as simple as possible, we have since developed a complicated deployment pipeline to try and help achieve the end goal of having a "simple" release process.
 
-> [!NOTE]
+> [!INFO]
 > Notice I said "complicated" :-(
 
 We currently use the [Jenkins](http://jenkins-ci.org/) continuous integration server to support our deployment process. Jenkins is an industry standard piece of software and no organization should be releasing software without some form of CI.
@@ -330,7 +330,7 @@ Remember not to make any rash decisions (e.g. let's implement a whole new CI/CD 
 
 If you're unfamiliar with CloudFormation, then I'll refer you to the official definition:
 
-> [!NOTE]
+> [!CITE]
 > AWS CloudFormation gives developers and systems administrators an easy way to create and manage a collection of related AWS resources, provisioning and updating them in an orderly and predictable fashion
 
 The [AWS CloudFormation](http://aws.amazon.com/cloudformation/) service is great for two primary reasons:
@@ -388,7 +388,7 @@ The third library "Puma Init":
 - creates a `/home/component/.component_profile` file
 - this adds Puma specific configuration (and overrides `APP_DAEMON` to reference Puma)
 
-> [!NOTE]
+> [!INFO]
 > [Puma](http://puma.io/) is a popular multi-threaded Ruby web server
 
 The following diagram provides a basic visualization of the inherited layers:
@@ -429,7 +429,7 @@ Currently there are helpers libraries that will configure the AWS SDK to utilise
 
 Now this by itself is very useful. We can spin up an instance of Spurious on our machine and start writing application code that interacts with a queue (SQS), a record store (DynamoDB) and a data store (S3), along with caching requests (via ElastiCache). But on top of that is the [Spurious Browser](https://github.com/spurious-io/browser) which allows us to peek inside each of these services using a standard web browser. Meaning, rather than having to waste time writing code to filter down a long list of results from S3; I can instead open Spurious Browser and click on a few links to drill down into the content I'm interested in and when I find it I can open the content to view it.
 
-> [!NOTE]
+> [!INFO]
 > Spurious was born from the need to rapidly prototype new features for our Broker/Renderers, but to also avoid the whole deployment process
 
 It's still in development and has some rough edges (there is a rewrite planned, that will change the implementation language from Ruby to Go), but ultimately we've been using Spurious on quite a few projects now and it has become indepensible. I highly recommend you take a look.
@@ -446,7 +446,7 @@ One of the big selling points for (most) FP languages is support for immutabilit
 
 We've seen a recent spurt of interest around immutability (and FP in general) in the JavaScript community as of late (with [Mori.js](https://swannodette.github.io/mori/) and [immutable-js](https://facebook.github.io/immutable-js/) as a couple of examples, but there have been others and they've been around for much longer). Immutability can help to eradicate a whole host of bugs that can catch you out in a language as mutable as JavaScript (and even more so in languages where code can be multi-threaded).
 
-> [!NOTE]
+> [!INFO]
 > Languages like Clojure, for example, also implement persistent data structures, that make immutability easy and inexpensive. I recommend visiting the [Clojure website](http://clojure.org/) and finding out more about the underlying implementation details, as it's quite an interesting read
 
 Typically you'll find a mixed bag of opinions: some organizations are OOP based, others prefer FP. What's worth being aware of is that this isn't an "either or" situation. You can find some benefits from having the structural/encapsulation benefits of OOP while implementing certain features in a functional way (but I think that's a topic for another day). The "OOP with FP" methodology is quite easy with a language like [Scala](http://www.scala-lang.org/) which seamlessly incorporates both styles within their language design.
@@ -524,7 +524,7 @@ The tooling available to debug containers is still considered to be quite immatu
 
 For example, a container wasn't logging any thing, and on top of that the application (which when run outside of the container, would run forever in an infinite loop) would run initially and then stop when run inside the container, and so the `exec` command was not an option as I couldn't jump inside a container that was no longer running.
 
-> [!NOTE]
+> [!TIP]
 > in the latest binary Docker has provided additional stats that are exposed via the [`docker stats {container}`](https://docs.docker.com/reference/commandline/cli/#stats) command
 
 ### Scaling
