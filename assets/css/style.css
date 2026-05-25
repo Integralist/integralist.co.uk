@@ -289,6 +289,10 @@ aside,
   background: var(--color-surface);
 }
 
+.alert p:last-child {
+  margin-block-end: 0;
+}
+
 .alert-title {
   font-weight: 700;
   font-family: var(--font-sans);
