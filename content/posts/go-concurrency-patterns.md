@@ -244,7 +244,6 @@ func main() {
 https://play.golang.com/p/LhEdSQIPp1R
 
 > [!TIP]
-> 💡 **UPDATE:**\
 > As of Go 1.25 you no longer need to `wg.Add`/`wg.Defer` for simple cases.\
 > Instead you can just use `wg.Go()`.
 
@@ -1115,7 +1114,7 @@ certificate that I wanted to have for an apex domain (example.com) and a CNAME
 The code for that looks like the following:
 
 > [!INFO]
-> 💡 The reason I'm sharing this code is because it uses lots of different
+> The reason I'm sharing this code is because it uses lots of different
 > concurrency mechanisms to ensure efficient use of memory resources (i.e. we
 > need to ensure goroutines finishes more quickly, and actually get cleaned up
 > completely and not leak memory).

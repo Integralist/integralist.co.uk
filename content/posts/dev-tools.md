@@ -42,7 +42,7 @@ floating terminal that can be triggered from anywhere via a hotkey (as long as
 Ghostty is open somewhere).
 
 > [!TIP]
-> 💡 You can find my Neovim config [here](https://github.com/integralist/nvim) and
+> You can find my Neovim config [here](https://github.com/integralist/nvim) and
 > my dotfiles [here](https://github.com/integralist/dotfiles).
 
 ## Supplementary
@@ -94,5 +94,5 @@ duplicating bookmarks and groups etc and I couldn't get the issue resolved, so I
 ended up back with Google Chrome.
 
 > [!INFO]
-> 💡 In the future I'll likely switch over to using
+> In the future I'll likely switch over to using
 > [Ladybird](https://ladybird.org/).

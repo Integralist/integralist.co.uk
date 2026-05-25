@@ -6,7 +6,7 @@ tags: [management]
 ---
 
 > [!TIP]
-> 💡 Related information: [Project Planning](https://gist.github.com/Integralist/bfcad74c66dfa1e8eb5e2c07b13811df).\
+> Related information: [Project Planning](https://gist.github.com/Integralist/bfcad74c66dfa1e8eb5e2c07b13811df).\
 > Includes specific documents needed and also an [example matrix
 > spreadsheet](https://docs.google.com/spreadsheets/d/1ZnxIY4BCnsUaY65Cc2GCmzmq18XBJvG2iErSWfMjW10/edit?usp=sharing).
 
