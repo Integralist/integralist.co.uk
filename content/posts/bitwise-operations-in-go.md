@@ -97,7 +97,7 @@ func main() {
 ## Visualising Bits
 
 In case you need a reminder of what bit alignment and shifting look like, take a
-look at the following image that shows a byte (which consists of `8` bits):
+look at the following diagram: which shows a byte consists of `8` bits:
 
 ```mermaid
 graph TD
@@ -178,9 +178,18 @@ use these distinct patterns to represent everything from letters and numbers to
 specific status flags in a program.
 
 > [!INFO]
-> You might wonder why we say a byte holds `256` values but the maximum is `255`.
-> `256` is the _quantity_ of numbers a byte can hold. `255` is the _highest_
-> number a byte can hold because `0` takes up the first spot.
+> You might wonder why we say a byte holds `256` values but the maximum is
+> `255`. The reason the sum of all bits equals `255` while `2^8` equals `256`
+> comes down to how computers count. A single byte has eight bits, yielding
+> `2^8` (or `256`) **total unique** combinations of ones and zeros, meaning it
+> can store exactly `256` _distinct_ values.
+>
+> However, because digital systems must use the very first combination
+> (`00000000`) to represent the number `0`, the remaining `255` combinations map
+> to the numbers `1` through `255`. Mathematically, the sum of any binary
+> sequence is always exactly one less than the value of the next positional
+> power of two, meaning the maximum value of an 8-bit byte tops out at `256 - 1`,
+> allowing it to span a range from `0` to `255`.
 
 ## Defining Bit Flags
 
