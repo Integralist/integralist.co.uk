@@ -84,6 +84,7 @@ func loadPosts(dir string) ([]*model.Post, error) {
 			Description:   getString(meta, "description"),
 			Image:         getString(meta, "image"),
 			ImagePosition: getString(meta, "image_position"),
+			JS:            getStringSlice(meta, "js"),
 			Keywords:      keywords,
 			MarkdownURL:   "/posts/" + slug + "/index.md",
 			Slug:          slug,

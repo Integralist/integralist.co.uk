@@ -39,5 +39,49 @@
         {{block "content" .}}{{end}}
     </main>
     {{template "footer" .}}
+    {{range .JS}}{{if eq . "mermaid"}}
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        import svgPanZoom from 'https://esm.sh/svg-pan-zoom@3.6.2';
+        mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+        document.querySelectorAll('code.language-mermaid').forEach(el => {
+            const pre = el.parentElement;
+            const container = document.createElement('div');
+            container.classList.add('mermaid');
+            container.textContent = el.textContent;
+            pre.replaceWith(container);
+        });
+        await mermaid.run();
+        document.querySelectorAll('.mermaid svg').forEach(svg => {
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('mermaid-container');
+            svg.parentElement.insertBefore(wrapper, svg);
+            wrapper.appendChild(svg);
+
+            const vb = svg.viewBox.baseVal;
+            if (vb.width && vb.height) {
+                const ratio = vb.height / vb.width;
+                const height = Math.min(500, wrapper.clientWidth * ratio);
+                wrapper.style.height = height + 'px';
+            } else {
+                wrapper.style.height = '300px';
+            }
+
+            svg.style.width = '100%';
+            svg.style.height = '100%';
+            svg.setAttribute('width', '100%');
+            svg.setAttribute('height', '100%');
+            const instance = svgPanZoom(svg, {
+                zoomEnabled: true,
+                controlIconsEnabled: true,
+                fit: true,
+                center: true,
+                minZoom: 0.5,
+                maxZoom: 10
+            });
+            new ResizeObserver(() => instance.resize()).observe(wrapper);
+        });
+    </script>
+    {{end}}{{end}}
 </body>
 </html>

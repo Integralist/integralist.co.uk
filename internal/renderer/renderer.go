@@ -78,6 +78,7 @@ type baseData struct {
 	CanonicalURL  string
 	Description   string
 	Image         string
+	JS            []string
 	JSONLD        template.HTML
 	Keywords      string
 	MarkdownURL   string
@@ -129,6 +130,7 @@ func (r *Renderer) RenderPost(post *model.Post, site *model.Site) ([]byte, error
 	data.Author = post.Author
 	data.CanonicalURL = site.BaseURL + post.URL
 	data.Description = post.Description
+	data.JS = post.JS
 	if post.Image != "" {
 		data.Image = site.BaseURL + post.Image
 	}

@@ -628,6 +628,16 @@ th {
   font-weight: 600;
 }
 
+/* --- Mermaid diagrams --- */
+.mermaid-container {
+  position: relative;
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  margin-block: 1.5rem;
+  overflow: hidden;
+}
+
 /* --- Print --- */
 @media print {
   header,

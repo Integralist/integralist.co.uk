@@ -15,6 +15,7 @@ type Post struct {
 	Description   string
 	Image         string
 	ImagePosition string
+	JS            []string
 	Keywords      []string
 	MarkdownURL   string
 	Slug          string
