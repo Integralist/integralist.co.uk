@@ -216,6 +216,18 @@ channels...
 	working with me.</p>
 </details>
 
+<details class="testimonial">
+	<summary>Associate Software Engineer - Domain Services Team at Fastly</summary>
+	<p><i>Thank you again for the ai run through, so cool to see the different ways it can be used ! Also you should definitely give a tech talk on this or something, not to be dramatic but my mind is blown , it was really cool thanks again!</i></p>
+	<p><small>Associate Software Engineer - Domain Services Team at Fastly</small></p>
+	<p class="review">I spent a couple of hours with a new member of the
+	team, guiding her around the various pitfalls of using AI, showing her
+	the custom Skills I've built, and explaining my planning and coding
+	workflows. I made sure to cover the key components for being successful
+	with AI (such as context management), and was very pleased to discover
+	she found it so useful and engaging.</p>
+</details>
+
 <hr>
 
 ## 💡 Summary
