@@ -9,49 +9,49 @@ Here are my favourite Halloween Movies:
 1. [Basil The Great Mouse Detective](https://www.rottentomatoes.com/m/the-great-mouse-detective)
 1. [Beetlejuice](https://www.rottentomatoes.com/m/beetlejuice)
 1. [Big Trouble in Little China](https://www.rottentomatoes.com/m/big_trouble_in_little_china)
-1. Bottom: Terror
-1. Bram Stoker's Dracula
-1. Candyman
-1. Death Becomes Her
-1. Doghouse
-1. Friday the 13th VIII (Jason Takes Manhattan)
-1. From Dusk to Dawn
-1. From Hell
-1. Ghostbusters
-1. Gremlins
-1. Halloween
-1. Hellraiser II
-1. Hocus Pocus
-1. House on Haunted Hill (1959)
-1. IT (1990 TV mini-series)
-1. In the Mouth of Madness
-1. Interview with the Vampire
-1. It's the Great Pumpkin, Charlie Brown
-1. Labyrinth
-1. Legend
-1. Little Shop of Horrors
-1. Muppets Haunted Mansion
-1. Needful Things
-1. Pet Semetary
-1. Prince of Darkness
-1. Return to Oz
-1. Scream
-1. Sleepy Hollow
-1. The Abyss
-1. The Addams Family (1991 + 2019)
-1. The Burbs
-1. The Dark Crystal
-1. The Evil Dead 2
-1. The Exorcist
-1. The Frighteners
-1. The Lost Boys
-1. The Monster Squad (1987)
-1. The Nightmare Before Christmas
-1. The Rocky Horror Show
-1. The Shining
-1. The Spiderwick Chronicles
-1. The Thing
-1. The Twilight Zone: The Movie (1983)
-1. The Witches
-1. They Live
-1. Wallace & Gromit: The Curse of the Were-Rabbit
+1. [Bottom: Terror](https://www.rottentomatoes.com/tv/bottom/s03/e02)
+1. [Bram Stoker's Dracula](https://www.rottentomatoes.com/m/bram_stokers_dracula)
+1. [Candyman](https://www.rottentomatoes.com/m/candyman)
+1. [Death Becomes Her](https://www.rottentomatoes.com/m/death_becomes_her)
+1. [Doghouse](https://www.rottentomatoes.com/m/doghouse)
+1. [Evil Dead II](https://www.rottentomatoes.com/m/evil_dead_ii)
+1. [Friday the 13th VIII (Jason Takes Manhattan)](https://www.rottentomatoes.com/m/friday_the_13th_part_viii_jason_takes_manhattan)
+1. [From Dusk to Dawn](https://www.rottentomatoes.com/m/from_dusk_till_dawn)
+1. [From Hell](https://www.rottentomatoes.com/m/from_hell)
+1. [Ghostbusters](https://www.rottentomatoes.com/m/ghostbusters)
+1. [Gremlins](https://www.rottentomatoes.com/m/gremlins)
+1. [Halloween](https://www.rottentomatoes.com/m/1009113-halloween)
+1. [Hellraiser II](https://www.rottentomatoes.com/m/hellbound_hellraiser_ii)
+1. [Hocus Pocus](https://www.rottentomatoes.com/m/hocus_pocus)
+1. [House on Haunted Hill (1959)](https://www.rottentomatoes.com/m/1010034-house_on_haunted_hill)
+1. [IT (1990 TV mini-series)](https://www.rottentomatoes.com/m/stephen_kings_it)
+1. [In the Mouth of Madness](https://www.rottentomatoes.com/m/in_the_mouth_of_madness)
+1. [Interview with the Vampire](https://www.rottentomatoes.com/m/interview_with_the_vampire)
+1. [It's the Great Pumpkin, Charlie Brown](https://www.rottentomatoes.com/m/its_the_great_pumpkin_charlie_brown)
+1. [Labyrinth](https://www.rottentomatoes.com/m/labyrinth)
+1. [Legend](https://www.rottentomatoes.com/m/1012164-legend)
+1. [Muppets Haunted Mansion](https://www.rottentomatoes.com/m/muppets_haunted_mansion)
+1. [Needful Things](https://www.rottentomatoes.com/m/needful_things)
+1. [Pet Semetary](https://www.rottentomatoes.com/m/pet_sematary)
+1. [Prince of Darkness](https://www.rottentomatoes.com/m/prince_of_darkness)
+1. [Return to Oz](https://www.rottentomatoes.com/m/1017488-return_to_oz)
+1. [Scream](https://www.rottentomatoes.com/m/1074316-scream)
+1. [Sleepy Hollow](https://www.rottentomatoes.com/m/sleepy_hollow)
+1. [The Abyss](https://www.rottentomatoes.com/m/abyss)
+1. [The Addams Family (1991)](https://www.rottentomatoes.com/m/addams_family)
+1. [The Addams Family (2019)](https://www.rottentomatoes.com/m/the_addams_family_2019)
+1. [The Burbs](https://www.rottentomatoes.com/m/the_burbs)
+1. [The Dark Crystal](https://www.rottentomatoes.com/m/the_dark_crystal)
+1. [The Exorcist](https://www.rottentomatoes.com/m/exorcist)
+1. [The Frighteners](https://www.rottentomatoes.com/m/the_frighteners)
+1. [The Lost Boys](https://www.rottentomatoes.com/m/lost_boys)
+1. [The Monster Squad (1987)](https://www.rottentomatoes.com/m/monster_squad)
+1. [The Nightmare Before Christmas](https://www.rottentomatoes.com/m/the_nightmare_before_christmas)
+1. [The Rocky Horror Show](https://www.rottentomatoes.com/m/rocky_horror_picture_show)
+1. [The Shining](https://www.rottentomatoes.com/m/shining)
+1. [The Spiderwick Chronicles](https://www.rottentomatoes.com/m/spiderwick_chronicles)
+1. [The Thing](https://www.rottentomatoes.com/m/1021244-thing)
+1. [The Twilight Zone: The Movie (1983)](https://www.rottentomatoes.com/m/twilight_zone_the_movie)
+1. [The Witches](https://www.rottentomatoes.com/m/the_witches)
+1. [They Live](https://www.rottentomatoes.com/m/they_live)
+1. [Wallace & Gromit: The Curse of the Were-Rabbit](https://www.rottentomatoes.com/m/wallace_and_gromit_the_curse_of_the_were_rabbit)
