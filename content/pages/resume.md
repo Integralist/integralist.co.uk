@@ -291,16 +291,6 @@ You can find me online at the following locations:
 
 <hr>
 
-> [!WARNING]
-> From here on we get deep into details. It's not necessary to read on unless
-> you're really interested in what I've been up to 🙂
->
-> I should also stress that I try my best to add things I've been doing, but the
-> reality is I do a lot of different types of things for my employer that I
-> can't share or I forget about 😅 so this isn't meant to be exhaustive.
-
-<hr>
-
 ## 🚀 Impact
 
 > [!INFO]
