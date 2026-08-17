@@ -232,13 +232,15 @@ channels...
 
 ## 💡 Summary
 
-I ideally want to get across five fundamental aspects about me:
+Most of my work sits across multiple teams, taking systems from early design through to running them in production. I like getting the architecture clear before writing code, checking in with the folks it affects, and making sure the teams around me have the documentation and tools they need to build with confidence.
+
+**Beyond the technical side, a few core principles guide how I work:**
 
 1. I care about the organisation I work for.
 1. I care about the people I work _with_.
 1. I care about our customers and their experiences.
-1. I'm passionate about programming and the openness of the web
-1. I love getting the chance to learn and experience new technology
+1. I'm passionate about programming and the openness of the web.
+1. I love getting the chance to learn and experience new technology.
 
 ## 🔗 Connect
 
@@ -261,7 +263,10 @@ You can find me online at the following locations:
 		help onboard and integrate a new API Fastly had acquired. This required
 	a significant amount of time and effort as (up until this point) I had only
 	worked on open-source projects at Fastly and this was my first exposure to
-		the internal systems and deployment platform and pipelines.<p>
+		the internal systems and deployment platform and pipelines.</p>
+	<p>In 2025, I designed and built a TLS certificate issuance service from an empty repository to production: discovery document, formal design review, an ACME implementation on an asynchronous message pipeline, and end-to-end load testing. In parallel, I began designing a control-plane API for edge routing configuration, serving as primary design reviewer for team API and system proposals.</p>
+	<p>In 2026, I led that routing service to general availability, owning all release gates including security review, SLOs, disaster recovery, data retention, runbooks, and production readiness. I also created a shared Go platform library adopted across four production services, and acted as design authority on a major routing product across eight design revisions and cross-org tech lead reviews.</p>
+	<p>I also lead initiatives on AI-assisted engineering across the organisation: contributing upstream to our open-source coding agent, authoring reusable agent workflows, and running internal technical talks and workshops.</p>
 </details>
 
 <details>
@@ -304,11 +309,19 @@ I've been the primary owner of Fastly's [Terraform provider](https://github.com/
 
 I designed and implemented SSO authentication (OAuth PKCE) for the Fastly CLI, built interactive tooling to generate OpenAPI schemas so developers couldn't accidentally break our code-generated API clients, and shipped auto-generated Go and Rust API clients from those same schemas. I also created training modules, best-practice guides, and Stack Overflow support to ensure customers could confidently adopt these tools.
 
+Recently, I unblocked and delivered a cross-repository initiative, shipping a new domain management API family across our Go SDK, CLI, and Terraform provider simultaneously. I replaced a legacy internal administration CLI with a modern Go tool and built an internal web UI for our certificate platform, eliminating support-page timeouts through hierarchical caching and query optimizations.
+
 At BuzzFeed I built a Go CLI tool that automated CDN (VCL) deployments, transforming what had been a risky, specialist-only process into something any engineer could do safely. I also built tooling to automate API documentation generation via GitHub hooks, keeping docs permanently in sync with code.
 
 ### ⚙️ Platform & Systems Engineering
 
-At Fastly I led the engineering effort for "Ascerta", a TLS certificate issuance and renewal service built on an asynchronous messaging pipeline (NSQ). I integrated multiple certificate authorities, implemented secrets synchronisation between 1Password and HashiCorp Vault, and designed multi-region redundancy strategies. I also led "Blue Ribbon", a major path-based routing project, authoring the core API design and driving the technical implementation. When I joined the Domain Services team as the sole engineer, I took over [Domainr](https://domainr.com/), built out CI/CD pipelines with Terraform Cloud and GitHub Actions, implemented CUE-based config validation to prevent bad deploys, and automated domain registry operator logins.
+At Fastly, I designed and built a TLS certificate issuance and renewal service from an empty repository to production. I authored the discovery and design documents, led formal review, implemented the ACME protocol (RFC 8555) over an asynchronous message pipeline (NSQ), unified multiple certificate authorities under a single API, and designed retry, dead-letter, and multi-region redundancy behaviors. Load testing surfaced critical concurrency and DNS resolution bottlenecks prior to launch. I also implemented secret synchronization between 1Password and HashiCorp Vault, reconciling undocumented secrets against security records.
+
+I then designed and shipped a multi-region control-plane API for edge routing configuration, owning all readiness gates for general availability (security review, SLIs/SLOs, disaster recovery, data retention, runbooks, and load testing). I diagnosed a critical read-after-write replication bug, introduced a dedicated authorization layer, and architected an out-of-band index rebalancing scheme to eliminate write amplification during large customer configuration reorders.
+
+To eliminate duplicated infrastructure across teams, I built a shared Go platform library (covering logging, tracing, HTTP clients, database metrics, health probes, and debug endpoints) and migrated four production services onto it with clear release and versioning policies. I also led cross-team infrastructure migrations, including a Kubernetes ingress controller replacement across three production services, a multi-repository container registry migration, CI migration off Jenkins, and standardized health probes across all Go services.
+
+When I joined the Domain Services team as the sole engineer, I took over [Domainr](https://domainr.com/), built out CI/CD pipelines with Terraform Cloud and GitHub Actions, implemented CUE-based config validation to prevent bad deploys, and automated domain registry operator logins. I've since handled a steady run of top-level-domain and registrar migrations, and pushed protocol-level fixes upstream into the public zone and registry-protocol libraries the domain industry depends on.
 
 At BuzzFeed I designed and built a global rate-limiting service providing DoS protection at the edge, architected the migration of HTTP routing from our CDN to an internal "perimeter" service (enabling a multi-CDN strategy), and led the development of a critical routing service that democratised routing changes via simple config files, removing a major bottleneck. I co-designed a modern authentication system using AWS Cognito (including the Go reverse proxy, JWT validation decorator, and password hashing library that underpinned it), and replaced NGINX+ with the open-source equivalent during a HackWeek, saving $60k per year in licensing. I also led the decomposition of a 10-year-old Perl monolith into Python and Go microservices.
 
@@ -320,9 +333,17 @@ I've consistently improved the operational health of the teams I work with. I've
 
 I implemented graceful shutdown logic in shared Go and Python web server libraries to prevent data loss during deploys, built smoke-testing services to de-risk CDN migrations, developed bots to automatically track partner maintenance windows so on-call engineers weren't caught off-guard, and designed multi-cloud round-robin solutions for high-availability static asset delivery. I also built an operations Slackbot in Go that let anyone in the company manage incidents and access runbooks directly from Slack.
 
+At Fastly, I built end-to-end monitoring pipelines from scratch. For certificate expiry, I delivered the entire observability stack: Go binaries, scheduled Kubernetes jobs, reusable notification packages, metrics, dashboards, alerts, and operational runbooks. I introduced stalled-consumer alerts on message pipelines and alerting for authentication and protocol failures missed by synthetic checks. I redesigned service boot sequences to ensure database or cache outages do not block deployments, adding backoff retries and dependency health reporting. Additionally, I partnered with platform and storage teams to right-size resource allocations across three services and continuously refined on-call documentation based on rotation retrospectives.
+
+### 🤖 AI-Assisted Engineering
+
+I drive production-grade AI-assisted engineering practices across the organisation. I maintain a fork of our team's open-source coding agent and have contributed roughly a dozen features upstream, including sub-agent cost reporting, model overrides, unified edit reviews, and command autocomplete. I build and distribute reusable agent skills to codify engineering standards for code reviews, refactoring, documentation, and database migrations. Beyond tooling, I delivered internal tech talks and panel discussions on practical AI workflows, run 1:1 shadowing sessions, and integrate multi-model adversarial reviews into my own development workflow.
+
 ### 🧭 Leadership, Mentorship & Culture
 
 I've served as Tech Lead for multiple teams: the BBC News Frameworks team (where I mentored engineers into senior roles), BuzzFeed's Site Infrastructure Resilience team (where I led disaster recovery planning), and as the sole engineer bootstrapping Fastly's Domain Services team before growing it. I led the internal API Versioning Working Group at Fastly, contributed to API design guilds, and ran cross-team working groups on documentation quality (including building tooling to programmatically track README standards across all repos).
+
+As a design authority at Fastly, I author technical design documents for complex initiatives, driving cross-team consensus across multiple revisions and area tech lead sign-offs. I proactively identify architectural risks early, including uncovering multi-tenant traffic isolation issues during core design reviews. I participate actively in our internal API design guild, both submitting designs and reviewing cross-organizational proposals. I regularly unblock pull requests across external team repositories and author proactive documentation, including rebuilding local development guides for dependent services.
 
 Beyond formal leadership, I organise lunch-and-learns, champion communication practices rooted in Radical Candor, create video tutorials for complex systems, and consistently invest time in onboarding new engineers. I designed and implemented standard PR templates adopted org-wide at BuzzFeed, proposed and rolled out Python linting standards, and introduced service contracts to document expected behaviours across teams.
 
@@ -331,6 +352,8 @@ I was voted "Developer of the Year" at the BBC, won awards for innovative Docker
 ### 💬 Customer & Community Impact
 
 My work is consistently driven by customer outcomes. I've resolved complex bugs that spanned multiple internal systems to get customers unblocked, built public tools to help customers validate Compute cache semantics (which also uncovered a bug in the underlying caching implementation), and implemented solutions for open-source fork PRs to safely run CI with secrets access.
+
+I prioritize fixing defects upstream over local workarounds. Recent contributions include resolving ACME protocol challenge issues, adding CAA record support to Ruby DNS libraries, fixing XML parser defects, and patching public zone and registry-protocol databases following production investigation.
 
 I've published articles in Smashing Magazine, NET Magazine, and NetTuts, been interviewed by InfoQ about BuzzFeed's monolith-to-microservices migration, and maintained open-source projects like [go-elasticache](https://github.com/Integralist/go-elasticache) and BBC's [Imager.js](https://github.com/BBC-News/Imager.js) (responsive images before `srcset` existed). I've given conference talks on CDN architecture, HTTP routing systems, and responsive image techniques.
 
