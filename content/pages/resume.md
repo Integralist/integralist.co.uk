@@ -228,6 +228,13 @@ channels...
 	she found it so useful and engaging.</p>
 </details>
 
+<details class="testimonial">
+	<summary>Sr. Engineering Manager - Domain Services Team at Fastly</summary>
+	<p><i>Ohhhhh….this is why we pay you the big bucks!</i></p>
+	<p><small>Sr. Engineering Manager - Domain Services Team at Fastly</small></p>
+	<p class="review">A bit of a joke, obviously, but I'll take it 😅 We ran into a slight snag where offboarding a user with admin rights broke our internal notifications. I managed to sort it out with a fairly simple tweak so everyone keeps getting alerts without any bother. </p>
+</details>
+
 <hr>
 
 ## 💡 Summary
