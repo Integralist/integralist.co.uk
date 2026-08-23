@@ -133,6 +133,11 @@ Before any code is written, the concept must be validated.
 - **`perspectives` & `decide`**: Evaluates alternatives through structured
   lenses (risks, benefits, costs) and produces a durable decision memo or ADR
   (Architecture Decision Record).
+- **`arena`**: Fans out parallel candidate attempts across multiple models for
+  non-trivial artifacts where a single shot risks locking in the wrong shape. It
+  scores candidates against a concrete rubric via an independent cross-judge,
+  picks a base, and grafts the best parts of the losing candidates into the
+  final synthesized output.
 
 ### Phase 2: Architecture and Planning
 
@@ -167,7 +172,8 @@ Reviewing code with AI goes both ways: having agents review code, and critically
 evaluating the feedback agents give you.
 
 - **`code-review`**: Runs multi-dimensional reviews across parallel subagents
-  (behavior, security, reliability, maintainability) to catch subtle defects.
+  (behavior, security, reliability, maintainability) using `pi-subagents` to
+  catch subtle defects without context bloat.
 - **`code-review-feedback` & `security-review-feedback`**: When an AI reviewer
   (or static analyzer) flags an issue, **do not reflexively accept it**. These
   skills force the agent to evaluate the claim with technical rigor. Is the
@@ -184,6 +190,18 @@ When the code is tested and clean, shipping is a single mechanical step.
   Solution sections.
 - **`bcp`**: Orchestrates branch creation, committing, and opening a PR in one
   command.
+
+### Choosing the Right Analysis Skill
+
+Different engineering challenges require different analytical lenses:
+
+| Skill              | Use when                                                     | Primary output                         |
+| ------------------ | ------------------------------------------------------------ | -------------------------------------- |
+| **`perspectives`** | Brainstorming or running a "what are we missing?" pass       | Multi-perspective analysis             |
+| **`decide`**       | Choosing between consequential engineering options           | Durable decision memo / ADR            |
+| **`arena`**        | Non-trivial artifact where one attempt risks the wrong shape | Synthesized multi-model artifact       |
+| **`precedent`**    | Ensuring new code matches existing codebase conventions      | Divergence report citing peer patterns |
+| **`code-review`**  | Code or diff exists and defects must be identified           | Verified findings across subagents     |
 
 ## Model Context Protocol (MCP) & Tooling
 
@@ -214,6 +232,14 @@ expensive. My setup enforces cost and delegation discipline:
   running tests) default to fast, cheap models (such as Gemini Flash or Claude
   Haiku). High-reasoning models are reserved for architecture, complex
   debugging, and grilling.
+- **[`pi-subagents`](https://github.com/Integralist/pi-subagents)**: An
+  extension I built (collaborating directly with AI agents to architect, code,
+  and test it) that runs isolated subagents inside the same process. Each
+  subagent gets its own context window, system prompt, and tool allowlist, so a
+  deep investigation costs the main session a single summary line instead of ten
+  thousand tokens. It features an interactive TUI list under the prompt, live
+  conversation inspection, and direct `@handle` message routing that steers
+  subagents without consuming main-model turns.
 - **`pi-intercom`**: Allows multiple Pi agent sessions on the same machine to
   communicate, delegate subtasks, and share context in real time.
 - **`pi-btw`**: Enables lightweight side-conversations without derailing the
