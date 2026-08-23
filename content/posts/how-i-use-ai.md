@@ -244,6 +244,11 @@ expensive. My setup enforces cost and delegation discipline:
   communicate, delegate subtasks, and share context in real time.
 - **`pi-btw`**: Enables lightweight side-conversations without derailing the
   main agent thread or polluting the primary context window.
+- **[`pi-statusbar`](https://github.com/Integralist/pi-statusbar)**: Another
+  extension I built with AI to replace the original statusline with real-time
+  telemetry, context window usage, token throughput, session cost, and the
+  active Git branch (the original only ever showed the project path and never
+  the git branch, which was very annoying).
 - **`caveman`**: An ultra-compressed communication mode (~75% token reduction)
   for rapid back-and-forth debugging when full conversational prose is just in
   the way.
