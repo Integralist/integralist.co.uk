@@ -34,6 +34,13 @@ channels...
 </details>
 
 <details class="testimonial">
+	<summary>CTO at Fastly</summary>
+	<p><i>I just read <a href="/posts/fastly-varnish/">https://www.integralist.co.uk/posts/fastly-varnish/</a> and it’s amazing</i></p>
+	<p><small>-- CTO at Fastly.</small></p>
+	<p class="review">I mean... come on, what more could you ask for 😂</p>
+</details>
+
+<details class="testimonial">
 	<summary>Engineering Manager at Fastly</summary>
 	<p><i>"Hi Mark, your name keeps coming up (in a good way 😉) and I wanted to put a face to a name. Folks on the team like working with you. You're responsive and provide good and timely feedback."</i></p>
 	<p><small>-- Engineering Manager at Fastly.</small></p>
