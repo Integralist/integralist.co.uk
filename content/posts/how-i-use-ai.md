@@ -30,8 +30,15 @@ every few months: Claude Code, Pi, Gemini CLI, OpenCode, Copilot CLI, and
 others.
 
 Tying your workflows, prompt templates, and custom tools to one proprietary
-agent harness is a fool's errand. The moment you switch tools, you lose all your
-institutional habits.
+agent harness is a fool's errand. The moment you switch tools, you lose all
+your institutional habits. I say this as someone who was once so dedicated to
+OpenCode that I [forked it to fix a bunch of issues](https://github.com/Integralist/opencode/blob/custom-features/FORK.md#changelog),
+adding things like prompt history search, subagent cost tracking, and skills
+autocomplete. But the ecosystem moves fast, and when you decide to switch, you
+don't want your entire workflow trapped in one tool.
+
+> [!NOTE]
+> Soon afterwards, I moved to the Pi harness 😅
 
 My `agent-skills` repository solves this with a single source of truth:
 
