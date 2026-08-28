@@ -242,6 +242,14 @@ channels...
 	<p class="review">A bit of a joke, obviously, but I'll take it 😅 We ran into a slight snag where offboarding a user with admin rights broke our internal notifications. I managed to sort it out with a fairly simple tweak so everyone keeps getting alerts without any bother. </p>
 </details>
 
+<details class="testimonial">
+	<summary>Senior Software Engineer - Domain Services Team at Fastly</summary>
+	<p><i>oh man, I'm going to miss you on domain services :sadblob:</i></p>
+	<p><small>Senior Software Engineer - Domain Services Team at Fastly</small></p>
+	<p class="review">A colleague I had built up a great relationship with was
+	sad to see me move to a new team to focus on some critical company AI-related work. I reassured him I wouldn't be far away 🙂</p>
+</details>
+
 <hr>
 
 ## 💡 Summary
