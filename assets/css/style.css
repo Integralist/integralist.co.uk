@@ -621,6 +621,11 @@ footer {
   padding-inline-start: 0.5rem;
 }
 
+.page-resume h2,
+.page-resume h3 {
+  margin-block-start: 2.75rem;
+}
+
 /* --- Tables --- */
 table {
   width: 100%;
