@@ -6,6 +6,7 @@ image_position: top
 ---
 
 <small class="image-note">🗒 Yes. That is my wife and kids. But I've no idea who the other guy is 😉</small>
+<small class="image-note">Ps, this is an old image (circa 2024) but I like it 🤗</small>
 
 ## 👋 Hello
 
@@ -292,10 +293,9 @@ Most of my work sits across multiple teams, taking systems from early design thr
 
 You can find me online at the following locations:
 
-- [integralist.co.uk](http://www.integralist.co.uk/)
-- [github.com/integralist](https://github.com/integralist)
-- [twitter.com/integralist](http://www.twitter.com/integralist)
-- [linkedin.com/mark-mcdonnell](https://www.linkedin.com/in/mark-mcdonnell-08800565)
+- [<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: -2px; display: inline-block; margin-right: 6px;"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76c.96 0 1.74-.78 1.74-1.75 0-.96-.78-1.74-1.74-1.74-.97 0-1.75.78-1.75 1.74 0 .97.78 1.75 1.75 1.75m1.39 9.74v-8.37H5.07v8.37h2.78z"/></svg>linkedin.com](https://www.linkedin.com/in/mark-mcdonnell-08800565)
+- [<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: -2px; display: inline-block; margin-right: 6px;"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>github.com/integralist](https://github.com/integralist)
+- [<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: -2px; display: inline-block; margin-right: 6px;"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm7.93 9h-3.18a15.66 15.66 0 0 0-1.38-4.68A8.03 8.03 0 0 1 19.93 11zM12 4.07c.96 1.48 1.7 3.4 2.05 5.93H9.95c.35-2.53 1.09-4.45 2.05-5.93zM4.07 13h3.18a15.66 15.66 0 0 0 1.38 4.68A8.03 8.03 0 0 1 4.07 13zm3.18-2H4.07a8.03 8.03 0 0 1 4.56-4.68A15.66 15.66 0 0 0 7.25 11zm2.7 0c-.35-2.53.39-4.45 1.35-5.93.96 1.48 1.7 3.4 2.05 5.93H9.95zm0 2h4.1c-.35 2.53-1.09 4.45-2.05 5.93-.96-1.48-1.7-3.4-2.05-5.93zm4.73 4.68c.55-1.43 1.03-3 1.38-4.68h3.18a8.03 8.03 0 0 1-4.56 4.68z"/></svg>integralist.co.uk](http://www.integralist.co.uk/) (well, you're here already 😉)
 
 ## 🗂️ Brief History
 
