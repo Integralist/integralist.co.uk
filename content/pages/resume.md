@@ -283,11 +283,13 @@ Most of my work sits across multiple teams, taking systems from early design thr
 
 **Beyond the technical side, a few core principles guide how I work:**
 
-1. I care about the organisation I work for.
-1. I care about the people I work _with_.
-1. I care about our customers and their experiences.
-1. I'm passionate about programming and the openness of the web.
-1. I love getting the chance to learn and experience new technology.
+<ul class="sparkle-list">
+  <li>I care about the organisation I work for.</li>
+  <li>I care about the people I work <em>with</em>.</li>
+  <li>I care about our customers and their experiences.</li>
+  <li>I'm passionate about programming and the openness of the web.</li>
+  <li>I love getting the chance to learn and experience new technology.</li>
+</ul>
 
 ## 🔗 Connect
 

@@ -612,6 +612,15 @@ footer {
   margin-block-end: 0.35rem;
 }
 
+.sparkle-list {
+  list-style-type: "💖 ";
+  padding-inline-start: 2rem;
+}
+
+.sparkle-list li {
+  padding-inline-start: 0.5rem;
+}
+
 /* --- Tables --- */
 table {
   width: 100%;
