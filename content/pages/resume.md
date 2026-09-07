@@ -250,6 +250,18 @@ channels...
 	sad to see me move to a new team to focus on some critical company AI-related work. I reassured him I wouldn't be far away 🙂</p>
 </details>
 
+<details class="testimonial">
+	<summary>Sr. Engineering Manager - Domain Services Team at Fastly</summary>
+	<p><i>Thank you so much for helping bring this together and making that one of the smoothest meetings I've been a part of!</i></p>
+	<p><small>Sr. Engineering Manager - Domain Services Team at Fastly</small></p>
+	<p class="review">I was the designated tech lead for a multi-team
+	initiative. I had to present our architecture design (over 6 months worth of
+	work and collaboration and discussions...with some tension thrown in) to the CTO and
+  SVP of Engineering. It was stressful to say the least 😅 but I pushed through,
+  and with some last minute tweaks managed (with the help of some very smart
+	and compassionate colleagues) to get the architecture approved 🎉</p>
+</details>
+
 <hr>
 
 ## 💡 Summary
@@ -288,7 +300,7 @@ You can find me online at the following locations:
 		the internal systems and deployment platform and pipelines.</p>
 	<p>In 2025, I designed and built a TLS certificate issuance service from an empty repository to production: discovery document, formal design review, an ACME implementation on an asynchronous message pipeline, and end-to-end load testing. In parallel, I began designing a control-plane API for edge routing configuration, serving as primary design reviewer for team API and system proposals.</p>
 	<p>In 2026, I led that routing service to general availability, owning all release gates including security review, SLOs, disaster recovery, data retention, runbooks, and production readiness. I also created a shared Go platform library adopted across four production services, and acted as design authority on a major routing product across eight design revisions and cross-org tech lead reviews.</p>
-	<p>I also lead initiatives on AI-assisted engineering across the organisation: contributing upstream to our open-source coding agent, authoring reusable agent workflows, and running internal technical talks and workshops.</p>
+	<p>As of September 2026, I am no longer part of the Domain Services team and have joined a new "Agentic Platform" team responsible for building AI tooling for our customers (and also internal systems and engineers). Alongside this, I lead initiatives on AI-assisted engineering across the organisation: contributing upstream to our open-source coding agent, authoring reusable agent workflows, and running internal technical talks and workshops.</p>
 </details>
 
 <details>
@@ -358,6 +370,10 @@ I implemented graceful shutdown logic in shared Go and Python web server librari
 At Fastly, I built end-to-end monitoring pipelines from scratch. For certificate expiry, I delivered the entire observability stack: Go binaries, scheduled Kubernetes jobs, reusable notification packages, metrics, dashboards, alerts, and operational runbooks. I introduced stalled-consumer alerts on message pipelines and alerting for authentication and protocol failures missed by synthetic checks. I redesigned service boot sequences to ensure database or cache outages do not block deployments, adding backoff retries and dependency health reporting. Additionally, I partnered with platform and storage teams to right-size resource allocations across three services and continuously refined on-call documentation based on rotation retrospectives.
 
 ### 🤖 AI-Assisted Engineering
+
+As of September 2026, I am no longer part of the Domain Services team and have
+moved to a new "Agentic Platform" team responsible for building AI tooling for
+our customers (and also internal systems and engineers).
 
 I drive production-grade AI-assisted engineering practices across the organisation. I maintain a fork of our team's open-source coding agent and have contributed roughly a dozen features upstream, including sub-agent cost reporting, model overrides, unified edit reviews, and command autocomplete. I build and distribute reusable agent skills to codify engineering standards for code reviews, refactoring, documentation, and database migrations. Beyond tooling, I delivered internal tech talks and panel discussions on practical AI workflows, run 1:1 shadowing sessions, and integrate multi-model adversarial reviews into my own development workflow.
 
