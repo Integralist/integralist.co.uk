@@ -262,6 +262,18 @@ channels...
 	and compassionate colleagues) to get the architecture approved 🎉</p>
 </details>
 
+<details class="testimonial">
+	<summary>Customer of Fastly</summary>
+	<p><i>Massive thank you to whoever was in charge of getting path-based routing out the door. It's making our VCL to Compute migration so much easier!</i></p>
+	<p><small>Customer of Fastly</small></p>
+	<p class="review">This was shared with me by my line manager after the
+	feedback bubbled up through various channels. I spent months designing,
+	building, testing, and collaborating across multiple teams (which meant
+	getting up to speed on parts of the infrastructure that were new to me).
+	Hearing that it made a customer's migration so much easier was deeply
+	gratifying.</p>
+</details>
+
 <hr>
 
 ## 💡 Summary
@@ -370,10 +382,6 @@ I implemented graceful shutdown logic in shared Go and Python web server librari
 At Fastly, I built end-to-end monitoring pipelines from scratch. For certificate expiry, I delivered the entire observability stack: Go binaries, scheduled Kubernetes jobs, reusable notification packages, metrics, dashboards, alerts, and operational runbooks. I introduced stalled-consumer alerts on message pipelines and alerting for authentication and protocol failures missed by synthetic checks. I redesigned service boot sequences to ensure database or cache outages do not block deployments, adding backoff retries and dependency health reporting. Additionally, I partnered with platform and storage teams to right-size resource allocations across three services and continuously refined on-call documentation based on rotation retrospectives.
 
 ### 🤖 AI-Assisted Engineering
-
-As of September 2026, I am no longer part of the Domain Services team and have
-moved to a new "Agentic Platform" team responsible for building AI tooling for
-our customers (and also internal systems and engineers).
 
 I drive production-grade AI-assisted engineering practices across the organisation. I maintain a fork of our team's open-source coding agent and have contributed roughly a dozen features upstream, including sub-agent cost reporting, model overrides, unified edit reviews, and command autocomplete. I build and distribute reusable agent skills to codify engineering standards for code reviews, refactoring, documentation, and database migrations. Beyond tooling, I delivered internal tech talks and panel discussions on practical AI workflows, run 1:1 shadowing sessions, and integrate multi-model adversarial reviews into my own development workflow.
 
