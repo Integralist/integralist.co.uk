@@ -314,7 +314,7 @@ You can find me online at the following locations:
 		the internal systems and deployment platform and pipelines.</p>
 	<p>In 2025, I designed and built a TLS certificate issuance service from an empty repository to production: discovery document, formal design review, an ACME implementation on an asynchronous message pipeline, and end-to-end load testing. In parallel, I began designing a control-plane API for edge routing configuration, serving as primary design reviewer for team API and system proposals.</p>
 	<p>In 2026, I led that routing service to general availability, owning all release gates including security review, SLOs, disaster recovery, data retention, runbooks, and production readiness. I also created a shared Go platform library adopted across four production services, and acted as design authority on a major routing product across eight design revisions and cross-org tech lead reviews.</p>
-	<p>As of September 2026, I am no longer part of the Domain Services team and have joined a new "Agentic Platform" team responsible for building AI tooling for our customers (and also internal systems and engineers). Alongside this, I lead initiatives on AI-assisted engineering across the organisation: contributing upstream to our open-source coding agent, authoring reusable agent workflows, and running internal technical talks and workshops.</p>
+	<p>As of September 2026, I am no longer part of the Domain Services team and have joined a new "Agentic Platform" team responsible for building AI tooling for our customers (and also internal systems and engineers). Alongside this, I lead initiatives on AI-assisted engineering across the organisation: authoring reusable agent workflows, building harness extensions, and running internal technical talks and workshops.</p>
 </details>
 
 <details>
@@ -385,7 +385,37 @@ At Fastly, I built end-to-end monitoring pipelines from scratch. For certificate
 
 ### 🤖 AI-Assisted Engineering
 
-I drive production-grade AI-assisted engineering practices across the organisation. I maintain a fork of our team's open-source coding agent and have contributed roughly a dozen features upstream, including sub-agent cost reporting, model overrides, unified edit reviews, and command autocomplete. I build and distribute reusable agent skills to codify engineering standards for code reviews, refactoring, documentation, and database migrations. Beyond tooling, I delivered internal tech talks and panel discussions on practical AI workflows, run 1:1 shadowing sessions, and integrate multi-model adversarial reviews into my own development workflow.
+I build and maintain open-source extensions for the Pi coding agent harness,
+including [`pi-subagents`](https://github.com/Integralist/pi-subagents) for
+in-process multi-agent orchestration,
+[`pi-statusbar`](https://github.com/Integralist/pi-statusbar) for real-time
+telemetry and token metrics, and
+[`pi-btw`](https://github.com/Integralist/pi-btw) for side-conversations.
+Before settling on Pi, I spent time maintaining a fork of OpenCode where I added
+roughly a dozen features (sub-agent cost reporting, model overrides, unified
+diff reviews, autocomplete). Not for the want of trying, those improvements
+never landed upstream because the project had hundreds of PRs sitting stale with
+an uninterested maintainer, and I quickly realised OpenCode had too many deeper
+issues to be viable long-term.
+
+To keep agents from wandering off or losing context on non-trivial work, I built
+an open-source [skills framework](https://github.com/Integralist/agent-skills).
+It was recently adopted by Fastly's Agentic Platform team to help standardize
+how we build agent tooling. The key shift was moving away from ephemeral chat
+prompts and toward durable filesystem artifacts: a coordinator skill like
+`architect` delegates work across dedicated sub-skills (`to-spec`, `to-plan`,
+`to-adr`, and `to-tasks`), generating version-controlled specs, vertical slice
+execution plans, and step-by-step TDD task lists. This prevents context drift,
+makes the agent's work fully auditable, and lets engineers inspect and tweak
+artifacts at every stage.
+
+I treat agent workflows like any other software system: constantly testing,
+evolving, and cutting out friction. My daily setup includes adversarial design
+stress-testing (`grilling`), cross-model consensus, automated codebase pattern
+matching (`precedent`), and stacked PR management with `gh stack`. Alongside
+building tooling, I run internal tech talks, workshops, and 1:1 shadowing
+sessions to help other engineers get past the hype and use agents reliably in
+day-to-day work.
 
 ### 🧭 Leadership, Mentorship & Culture
 
