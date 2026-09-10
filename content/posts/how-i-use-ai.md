@@ -31,14 +31,22 @@ others.
 
 Tying your workflows, prompt templates, and custom tools to one proprietary
 agent harness is a fool's errand. The moment you switch tools, you lose all
-your institutional habits. I say this as someone who was once so dedicated to
-OpenCode that I [forked it to fix a bunch of issues](https://github.com/Integralist/opencode/blob/custom-features/FORK.md#changelog),
-adding things like prompt history search, subagent cost tracking, and skills
-autocomplete. But the ecosystem moves fast, and when you decide to switch, you
-don't want your entire workflow trapped in one tool.
+your institutional habits.
 
-> [!NOTE]
-> Soon afterwards, I moved to the Pi harness 😅
+I say this as someone who was once so invested in OpenCode that I [forked it to
+fix a bunch of issues](https://github.com/Integralist/opencode/blob/custom-features/FORK.md#changelog),
+adding things like prompt history search, subagent cost tracking, and skills
+autocomplete. I tried contributing those changes back upstream, but with
+hundreds of PRs sitting stale and an author who wasn't interested, none of them
+were ever merged. It wasn't for the want of trying, but I quickly realised
+OpenCode had too many other issues under the hood and wasn't going to work out.
+I moved to the Pi harness shortly afterwards, where I now build and maintain
+extensions like [`pi-statusbar`](https://github.com/Integralist/pi-statusbar),
+[`pi-subagents`](https://github.com/Integralist/pi-subagents), and
+[`pi-btw`](https://github.com/Integralist/pi-btw).
+
+The broader lesson stuck: the ecosystem moves fast, and when you decide to
+switch tools, you don't want your entire workflow trapped in one harness.
 
 My `agent-skills` repository solves this with a single source of truth:
 
@@ -249,8 +257,9 @@ expensive. My setup enforces cost and delegation discipline:
   subagents without consuming main-model turns.
 - **`pi-intercom`**: Allows multiple Pi agent sessions on the same machine to
   communicate, delegate subtasks, and share context in real time.
-- **`pi-btw`**: Enables lightweight side-conversations without derailing the
-  main agent thread or polluting the primary context window.
+- **[`pi-btw`](https://github.com/Integralist/pi-btw)**: Enables lightweight
+  side-conversations without derailing the main agent thread or polluting the
+  primary context window.
 - **[`pi-statusbar`](https://github.com/Integralist/pi-statusbar)**: Another
   extension I built with AI to replace the original statusline with real-time
   telemetry, context window usage, token throughput, session cost, and the
