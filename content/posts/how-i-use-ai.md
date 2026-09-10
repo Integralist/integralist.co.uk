@@ -75,8 +75,9 @@ or OpenCode) load them directly from `~/.agents/skills/`.
 
 When Claude Code supports unique capabilities (like path-scoped rules in
 `.claude/rules/`), those rule files are automatically generated from the
-corresponding canonical skills (`go-conventions`, `markdown-conventions`,
-`sql-conventions`) via `make rules`.
+corresponding canonical skills (`conventions-go`, `conventions-markdown`,
+`conventions-mermaid`, `conventions-python`, `conventions-sql`) via
+`make rules`.
 
 ```bash
 # Install everything across all harnesses cleanly
@@ -104,12 +105,17 @@ My global `AGENTS.md` sets the ground rules.
 - **Conciseness:** Use the shortest complete response. Group lists by priority
   and cap them at roughly five items.
 - **Bound multi-step work:** Number multi-step execution explicitly.
+- **No mannered prose:** Drop literary flourishes, hedging throat-clearing, and
+  self-conscious asides. Keep it warm, plainspoken, and peer-to-peer.
+- **Load-bearing emoji only:** Use emoji solely when they signal status or
+  structure faster than words (✅ pass, ❌ fail, ⚠️ caution). Keep them out of
+  running prose, headings, and code.
 
 ### 2. Engineering Discipline & TDD
 
-- **Strict TDD:** No production code without a failing test first. Write the
-  minimum code to pass, and delete assertions that survive an inverted
-  requirement.
+- **Strict TDD:** No production code without a failing test first. Stub first,
+  prove failure on assertion (not compilation), write the minimum code to pass,
+  and delete assertions that survive an inverted requirement.
 - **Simplicity over abstractions:** Solve problems by deleting components or
   reducing layers, not by stacking new frameworks or wrapper functions.
 - **Cite sources:** Never rely on general memory for specific headers, API
@@ -133,7 +139,7 @@ That almost always produces buggy, over-engineered slop.
 Instead, I break work down into a pipeline of distinct, specialized skills.
 
 ```txt
-clarify → grilling → architect → next-task → code-review → bcp
+clarify → grilling → architect → to-plan → to-tasks → next-slice → code-review → bcp
 ```
 
 ### Phase 1: Exploration and Stress Testing
@@ -148,6 +154,8 @@ Before any code is written, the concept must be validated.
 - **`perspectives` & `decide`**: Evaluates alternatives through structured
   lenses (risks, benefits, costs) and produces a durable decision memo or ADR
   (Architecture Decision Record).
+- **`consensus`**: Drives cross-model debate through gated discussion rounds,
+  preserving healthy dissent when evaluating high-stakes architectural choices.
 - **`arena`**: Fans out parallel candidate attempts across multiple models for
   non-trivial artifacts where a single shot risks locking in the wrong shape. It
   scores candidates against a concrete rubric via an independent cross-judge,
@@ -156,25 +164,36 @@ Before any code is written, the concept must be validated.
 
 ### Phase 2: Architecture and Planning
 
-Once the design survives the grilling phase, it gets structured.
+Once the design survives the grilling phase, it gets structured. Everything for
+a given initiative is co-located under a single directory at
+`projects/<yyyy-mm-dd-slug>/` (housing the spec, plan, tasks, and ADRs) rather
+than scattering them across separate `docs/` folders.
 
 - **`architect`**: Coordinates the transition from concept to concrete
-  artifacts.
-- **`to-spec`**: Generates a formal specification (`docs/specifications/`) with
-  user stories, acceptance criteria, and testing seams.
-- **`project-plan`**: Breaks the spec into vertical implementation slices with
-  explicit `Blocked-by` dependency edges.
-- **`tasks`**: Crystallizes the plan into a mechanical, TDD-shaped task list at
-  `docs/tasks/` with exact code and test verification steps.
+  artifacts, anchoring domain terminology before planning begins.
+- **`to-spec`**: Generates an implementation-ready capability specification
+  (`spec.md`) with user stories, acceptance criteria, and testing seams. Living
+  specs stay validated via CI so contracts do not rot.
+- **`to-plan`**: Breaks the specification into vertical implementation slices
+  (`plan.md`) with explicit `Blocked-by` dependency edges and pull-request
+  groupings.
+- **`to-tasks`**: Compiles a single plan slice just-in-time into a mechanical,
+  TDD-shaped runbook (`tasks.md`) with verbatim code and assertions, avoiding
+  upfront plan decay.
 
 ### Phase 3: Execution and Quality
 
-With tasks written, execution is fast and deterministic.
+With tasks compiled, execution is fast and deterministic.
 
-- **`next-task`**: Reads the task file, executes the current step using TDD,
-  verifies test output, and moves to the next item.
-- **`go-conventions` / `go-testing`**: Enforces strict language conventions
-  (table-driven tests, proper error wrapping, no unkeyed struct literals).
+- **`next-task` & `next-slice`**: `next-task` implements and verifies the next
+  single item in the runbook, while `next-slice` works through an entire
+  vertical plan slice in one go.
+- **`conventions-*` & `go-testing`**: Enforces strict language conventions
+  (`conventions-go`, `conventions-python`, `conventions-sql`, etc.) and testing
+  discipline (table-driven tests, `t.Context()`, bounded waits, public API
+  testing, and zero unkeyed struct literals).
+- **`unslop`**: Strips AI tells, buzzwords, puffery, and robotic cadence from
+  documentation and prose to restore a clean, authentic human voice.
 - **`cleanup`**: Runs a background audit specifically hunting for AI-generated
   clutter, dead code, and unnecessary abstractions.
 - **`precedent`**: Audits newly written code against existing conventions in the
@@ -197,26 +216,32 @@ evaluating the feedback agents give you.
 
 ### Phase 5: Shipping
 
-When the code is tested and clean, shipping is a single mechanical step.
+When the code is tested and clean, shipping is a deterministic, mechanical step.
 
 - **`branch`**: Cuts a feature branch using session context and standard naming.
-- **`commit`**: Stages and groups files intelligently with clean messages.
+- **`commit`**: Stages and groups files intelligently, enforcing
+  consequence-focused titles that explain why the change matters rather than
+  listing raw mechanical steps.
 - **`draft-pr`**: Generates a concise pull request with clear Problem and
-  Solution sections.
-- **`bcp`**: Orchestrates branch creation, committing, and opening a PR in one
-  command.
+  Solution sections, consequence-driven titles, and load-bearing emoji.
+- **`stacked-prs`**: Coordinates dependent PR chains with the official
+  `gh-stack` CLI extension, mapping vertical slices from `to-plan` directly into
+  isolated, easily reviewable PR layers.
+- **`bcp`**: Orchestrates branch creation, committing, and opening a PR (or
+  submitting a stacked branch) in one command.
 
 ### Choosing the Right Analysis Skill
 
 Different engineering challenges require different analytical lenses:
 
-| Skill              | Use when                                                     | Primary output                         |
-| ------------------ | ------------------------------------------------------------ | -------------------------------------- |
-| **`perspectives`** | Brainstorming or running a "what are we missing?" pass       | Multi-perspective analysis             |
-| **`decide`**       | Choosing between consequential engineering options           | Durable decision memo / ADR            |
-| **`arena`**        | Non-trivial artifact where one attempt risks the wrong shape | Synthesized multi-model artifact       |
-| **`precedent`**    | Ensuring new code matches existing codebase conventions      | Divergence report citing peer patterns |
-| **`code-review`**  | Code or diff exists and defects must be identified           | Verified findings across subagents     |
+| Skill              | Use when                                                                                   | Primary output                                               |
+| ------------------ | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
+| **`perspectives`** | Brainstorming or running a "what are we missing?" pass                                     | Multi-perspective analysis                                   |
+| **`decide`**       | Choosing between consequential engineering options                                         | Durable decision memo / ADR                                  |
+| **`consensus`**    | A complex design or implementation needs independent cross-model review and approval gates | Reviewed assessment or implementation with dissent preserved |
+| **`arena`**        | Non-trivial artifact where one attempt risks the wrong shape                               | Synthesized multi-model artifact                             |
+| **`precedent`**    | Ensuring new code matches existing codebase conventions                                    | Divergence report citing peer patterns                       |
+| **`code-review`**  | Code or diff exists and defects must be identified                                         | Verified findings across subagents                           |
 
 ## Model Context Protocol (MCP) & Tooling
 
@@ -260,6 +285,11 @@ expensive. My setup enforces cost and delegation discipline:
 - **[`pi-btw`](https://github.com/Integralist/pi-btw)**: Enables lightweight
   side-conversations without derailing the main agent thread or polluting the
   primary context window.
+- **`ghostty`**: Automates the Ghostty terminal on macOS via AppleScript to
+  manage window layouts, splits, and tabs. Heavy, long-running tasks like
+  integration test suites, watcher loops, and Docker builds get dispatched
+  out-of-band in a separate terminal pane, keeping the agent's context clean and
+  preventing multi-thousand-line logs from blowing up the conversation.
 - **[`pi-statusbar`](https://github.com/Integralist/pi-statusbar)**: Another
   extension I built with AI to replace the original statusline with real-time
   telemetry, context window usage, token throughput, session cost, and the
