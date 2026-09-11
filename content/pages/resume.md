@@ -60,7 +60,7 @@ channels...
 	<summary>Senior Sales Engineer at Fastly</summary>
 	<p><i>"Hey Man… you are a true powerhouse in fixing issues and handling customers… i’m truly impressed by you! Thanks and keep it up!"</i></p>
 	<p><small>-- Senior Sales Engineer at Fastly.</small></p>
-	<p class="review">I work hard to ensure customers get the support they need. This feedback was the result of another example of my work ethic.</p>
+	<p class="review">I genuinely care about getting customers unstuck, so it's always lovely when someone notices the extra effort.</p>
 </details>
 
 <details class="testimonial">
@@ -76,8 +76,8 @@ channels...
 	<p><small>-- Customer</small></p>
 	<p><i>Hey Mark, just wanted to say thanks a lot for helping out with the Terraform issue, really appreciated! 🙂</i></p>
 	<p><small>-- CSE (Customer Support Engineer) at Fastly</small></p>
-	<p class="review">We had a strange bug materialize in the Fastly Terraform provider that was causing some issues for customers. I investigated on behalf of CSE as I'm the core SME (Subject Matter Expert) for Terraform and I not only resolved the specific issue but managed to identify a couple of other unnoticed bugs elsewhere in the system which I worked cross-team to help get resolved.</p>
-	<p class="review">It was important to me that this customer (like all our customers) got their issues resolved as quickly as possible, with frequent updates to keep them in the loop and extra detailed explanations so they were better informed. It was a tough set of bugs to identify but I was pleased for the customer when they confirmed their services were all good again.</p>
+	<p class="review">We had a strange bug crop up in the Fastly Terraform provider that was causing havoc for customers. I dug into it on behalf of support, tracked down the problem, and ended up spotting a couple of other subtle bugs elsewhere in the pipeline while I was in there.</p>
+	<p class="review">Nobody enjoys seeing unexpected terraform diffs in production, so I made sure to keep the customer posted with detailed updates while we worked through it. Tricky set of bugs to pin down, but getting their environments stable again was well worth the headache.</p>
 </details>
 
 <details class="testimonial">
@@ -303,43 +303,35 @@ You can find me online at the following locations:
 
 <details>
  <summary>Fastly (October 2020 - present)</summary>
-	<p>I was a former customer of Fastly, and had become well known for publishing probably the longest known article on the subject of Varnish, VCL and Fastly's implementation.<p>
-	<p>I joined Fastly to work within its new (at the time) Developer Relations team helping to manage, support and be the core developer for their suite of API clients (inc. orchestration tools such as Terraform and Fastly's own <a href="https://github.com/fastly/terraform-provider-fastly" target="_blank">Terraform provider</a>, and the <a href="https://github.com/fastly/cli" target="_blank">Fastly CLI</a>).<p>
-	<p>While working within the Developer Relations team I had the opportunity to work on critical Rust projects such as https://fiddle.fastly.dev and to work cross-team to develop a new authentication model for customer services.<p>
-	<p>In 2023 it became apparent that the tools I was responsible for maintaining were becoming even more important for our customers and so I was able to move from DevRel into my own dedicated team (Customer Developer Tools) to continue to support them without having to also support the various DevRel related projects and services.<p>
-	<p>In 2024, I was brought into a new team (a team of one for about a year) called "Domain Services" to
-		help onboard and integrate a new API Fastly had acquired. This required
-	a significant amount of time and effort as (up until this point) I had only
-	worked on open-source projects at Fastly and this was my first exposure to
-		the internal systems and deployment platform and pipelines.</p>
-	<p>In 2025, I designed and built a TLS certificate issuance service from an empty repository to production: discovery document, formal design review, an ACME implementation on an asynchronous message pipeline, and end-to-end load testing. In parallel, I began designing a control-plane API for edge routing configuration, serving as primary design reviewer for team API and system proposals.</p>
-	<p>In 2026, I led that routing service to general availability, owning all release gates including security review, SLOs, disaster recovery, data retention, runbooks, and production readiness. I also created a shared Go platform library adopted across four production services, and acted as design authority on a major routing product across eight design revisions and cross-org tech lead reviews.</p>
-	<p>As of September 2026, I am no longer part of the Domain Services team and have joined a new "Agentic Platform" team responsible for building AI tooling for our customers (and also internal systems and engineers). Alongside this, I lead initiatives on AI-assisted engineering across the organisation: authoring reusable agent workflows, building harness extensions, and running internal technical talks and workshops.</p>
+	<p>I was an existing customer who wrote what was basically an absurdly long deep-dive on Varnish, VCL, and how Fastly works under the hood. Fastly noticed and hired me into the DevRel team to look after our developer tooling (the Terraform provider, CLI, and API clients).</p>
+	<p>During that time I also got to dive into some fun Rust work on <a href="https://fiddle.fastly.dev" target="_blank">fiddle.fastly.dev</a> and worked cross-team to build a new authentication model for customer services.</p>
+	<p>By 2023, the tooling needed dedicated focus, so I moved out of DevRel into a new team (Customer Developer Tools) to look after the CLI and Terraform full-time without general DevRel distractions.</p>
+	<p>In 2024, I was dropped into a brand new "Domain Services" team (a team of one for about a year, lol) to integrate an acquired API (Domainr). That was quite the baptism of fire, as everything I'd touched at Fastly up to that point had been open source, so this was my first proper dive into our internal production platforms and deployment pipelines.</p>
+	<p>In 2025, I built a TLS certificate issuance service from scratch (empty repo all the way to production), wired up ACME on an async message queue, and stress-tested it until it stopped falling over. Along the way, I started designing a control-plane API for edge routing and helped review system designs across the team.</p>
+	<p>In 2026, I took that edge routing service over the line to general availability (sorting out the security review, alerts, runbooks, and disaster recovery so on-call wouldn't hate us). I also built a shared Go platform library that four production services ended up adopting, and helped steer the architecture for a major routing product across plenty of design reviews and debates with tech leads.</p>
+	<p>As of September 2026, I'm part of our Agentic Platform team. Now I spend my time building AI tooling for customers and internal teams, writing reusable agent workflows and harness plugins, and running talks and workshops to help engineers get past the hype and actually get useful work out of LLMs.</p>
 </details>
 
 <details>
  <summary>BuzzFeed (June 2016 - October 2020)</summary>
-	<p>I joined as a Senior Software Engineer as part of a new 'core' UK dev team. We were responsible for decommissioning a 10yr+ legacy Perl monolithic application stack over to individual Python and Go services.<p>
-	<p>I was working primarily within BuzzFeed's OO-INFRA group, which sits somewhere in-between traditional infrastructure/operation teams and engineering teams building user facing products. Our motivations were to make the lives of our fellow engineers easier by building tools, services and abstractions that enabled them to work more quickly and efficiently.<p>
-	<p>January 2018 BuzzFeed promoted me to Staff Software Engineer, after helping to design/architect, develop and maintain some of BuzzFeed's key infrastructure and software (CDN, caching strategies, routing behaviours, and security/authentication related concerns).<p>
-	<p>January 2019 I moved over to the Core Infrastructure team (which consists of separate sub teams). I was part of the 'Infra Edge' team, and we were responsible for strengthening and securing our edge infrastructure and applications. The 'edge' is the surface area of our infrastructure that is in direct contact with the public internet. It includes DNS and the various services that accept ingress traffic from the Big Bad Internet. It is essential to our business that our Edge be a resilient and security-focused layer of our infrastructure.<p>
-	<p>Each year I participated in different working groups and mentoring programs, and became part of the 'on-call' rota, and handled interactions with the Hackerone program.<p>
-	<blockquote>
-		<p>⚠️  <b>NOTE</b><br>I'm a remote worker and my team resides primarily in New York, so good communication, focus and work ethic was essential.</p>
-	</blockquote>
+	<p>I joined as a Senior Software Engineer in a small UK 'core' team tasked with dismantling a ten-year-old Perl monolith and replacing it with focused Python and Go services.</p>
+	<p>I worked in the OO-INFRA group, basically acting as a bridge between pure ops and product teams. The goal was simple: build tools and services that got out of product engineers' way and let them ship faster.</p>
+	<p>In 2018 BuzzFeed promoted me to Staff Engineer after doing a lot of heavy lifting across our CDN caching, edge routing, and authentication layers.</p>
+	<p>In 2019 I moved into the Infra Edge team, looking after the front door of BuzzFeed's infrastructure: DNS, ingress, and rate limiting against whatever chaos the public internet felt like throwing at us that day.</p>
+	<p>I also mentored newer engineers, took regular turns on the on-call rota, and helped triage security reports coming through HackerOne (all while working remotely from the UK with the rest of the team based in New York).</p>
 </details>
 
 <details>
  <summary>BBC (Jan 2013 - June 2016)</summary>
-	<p>I joined <a href="http://www.bbc.co.uk/news" target="_blank">BBC News</a> as a client-side/mobile specialist within their Core News team. Within the year I had moved into a senior engineering role. The (then) Technical Lead for the BBC News Frameworks team requested I join them in order to help the organisation transition from its current platform over to one built upon the AWS platform.<p>
-	<p>I started in the Frameworks team building and designing back-end architecture for different microservices hosted upon the AWS platform, and we developed these services primarily using JRuby. In October 2014, I was offered the role of Technical Lead.<p>
-	<p>Near the end of 2015 I decided to change roles to Principal Software Engineer, as my previous role involved more meetings and handling line manager duties, whereas I wanted to focus my time more on helping my team solve technical problems.<p>
+	<p>I joined <a href="http://www.bbc.co.uk/news" target="_blank">BBC News</a> as a front-end and mobile specialist in the Core News team, moving into a senior role within a year.</p>
+	<p>The Tech Lead for BBC News Frameworks asked me over to help migrate the estate from legacy on-prem hosting onto AWS. We designed back-end microservices (mostly in JRuby back then), and in late 2014 I stepped up to Tech Lead for the team.</p>
+	<p>Near the end of 2015 I switched over to Principal Engineer. Being a Tech Lead meant a lot of spreadsheets, meetings, and line management; what I really cared about was getting stuck into gnarly technical problems with the team.</p>
 </details>
 
 <details>
  <summary>Storm Creative (Feb 2001 - Dec 2012)</summary>
-	<p>I started working at the agency <a href="http://www.stormcreative.co.uk/" target="_blank">Storm Creative</a> straight out of college. I was always focused on learning and improving my skill set - both technical and communication skills - the latter helped me communicate better with both clients and other stakeholders/colleagues.<p>
-	<p>I progressed upwards through the organisation, moving from initially being a client-side web developer (this included doing animations utilising ActionScript 3.0) to becoming a server-side developer (ASP.NET, PHP and Ruby), then onto becoming a Technical Lead across all projects and finally becoming the Digital Media Manager responsible for my own team of four engineers and overseeing all aspects of our projects.<p>
+	<p>I started here straight out of college and stayed for over a decade. In agency life you have to learn fast because every client wants something completely different.</p>
+	<p>I started out building client-side websites and Flash animations (ActionScript 3, good times), transitioned into back-end work (ASP.NET, PHP, and Ruby), and eventually became Tech Lead and Digital Media Manager leading a small team of four engineers across all our client projects.</p>
 </details>
 
 <hr>
@@ -357,17 +349,17 @@ I've been the primary owner of Fastly's [Terraform provider](https://github.com/
 
 I designed and implemented SSO authentication (OAuth PKCE) for the Fastly CLI, built interactive tooling to generate OpenAPI schemas so developers couldn't accidentally break our code-generated API clients, and shipped auto-generated Go and Rust API clients from those same schemas. I also created training modules, best-practice guides, and Stack Overflow support to ensure customers could confidently adopt these tools.
 
-Recently, I unblocked and delivered a cross-repository initiative, shipping a new domain management API family across our Go SDK, CLI, and Terraform provider simultaneously. I replaced a legacy internal administration CLI with a modern Go tool and built an internal web UI for our certificate platform, eliminating support-page timeouts through hierarchical caching and query optimizations.
+I also delivered a new domain management API family across our Go SDK, CLI, and Terraform provider simultaneously, keeping everything in lockstep for launch. I replaced a creaky legacy administration CLI with a modern Go tool, and built an internal web UI for our certificate platform that eliminated support-page timeouts through hierarchical caching and query optimisations.
 
 At BuzzFeed I built a Go CLI tool that automated CDN (VCL) deployments, transforming what had been a risky, specialist-only process into something any engineer could do safely. I also built tooling to automate API documentation generation via GitHub hooks, keeping docs permanently in sync with code.
 
 ### ⚙️ Platform & Systems Engineering
 
-At Fastly, I designed and built a TLS certificate issuance and renewal service from an empty repository to production. I authored the discovery and design documents, led formal review, implemented the ACME protocol (RFC 8555) over an asynchronous message pipeline (NSQ), unified multiple certificate authorities under a single API, and designed retry, dead-letter, and multi-region redundancy behaviors. Load testing surfaced critical concurrency and DNS resolution bottlenecks prior to launch. I also implemented secret synchronization between 1Password and HashiCorp Vault, reconciling undocumented secrets against security records.
+At Fastly, I built a TLS certificate issuance and renewal service from an empty repository all the way to production. I wrote the discovery and design docs, led the architectural review, and implemented ACME (RFC 8555) over an asynchronous message pipeline (NSQ) to unify multiple certificate authorities under a single API. I also sorted out retry queues, dead-letter handling, and multi-region failover, load testing it beforehand to catch concurrency and DNS bottlenecks before customers did. Along the way, I built secret synchronisation between 1Password and HashiCorp Vault to clean up undocumented legacy credentials.
 
-I then designed and shipped a multi-region control-plane API for edge routing configuration, owning all readiness gates for general availability (security review, SLIs/SLOs, disaster recovery, data retention, runbooks, and load testing). I diagnosed a critical read-after-write replication bug, introduced a dedicated authorization layer, and architected an out-of-band index rebalancing scheme to eliminate write amplification during large customer configuration reorders.
+Next up was a multi-region control-plane API for edge routing configuration. I took it through general availability, managing the security review, SLOs, runbooks, and disaster recovery testing. I also tracked down a tricky read-after-write replication bug, added a dedicated authorisation layer, and redesigned index rebalancing out-of-band so large configuration reorders wouldn't hammer the database with write amplification.
 
-To eliminate duplicated infrastructure across teams, I built a shared Go platform library (covering logging, tracing, HTTP clients, database metrics, health probes, and debug endpoints) and migrated four production services onto it with clear release and versioning policies. I also led cross-team infrastructure migrations, including a Kubernetes ingress controller replacement across three production services, a multi-repository container registry migration, CI migration off Jenkins, and standardized health probes across all Go services.
+To stop teams reinventing the wheel, I built a shared Go platform library (covering logging, tracing, HTTP clients, database metrics, and health probes) and migrated four production services onto it. I also helped steer cross-team migrations, like swapping out Kubernetes ingress controllers across three production services, moving container registries, migrating CI off Jenkins, and standardising health checks across our Go services.
 
 When I joined the Domain Services team as the sole engineer, I took over [Domainr](https://domainr.com/), built out CI/CD pipelines with Terraform Cloud and GitHub Actions, implemented CUE-based config validation to prevent bad deploys, and automated domain registry operator logins. I've since handled a steady run of top-level-domain and registrar migrations, and pushed protocol-level fixes upstream into the public zone and registry-protocol libraries the domain industry depends on.
 
@@ -377,11 +369,11 @@ At the BBC I co-designed and co-implemented the "Mozart" platform for dynamic pa
 
 ### 📟 Reliability & Operational Excellence
 
-I've consistently improved the operational health of the teams I work with. I've authored on-call processes, defined SLIs/SLOs/SLAs, built monitoring alarm suites, written disaster recovery plans, and created runbooks. At BuzzFeed I led a cost-reduction initiative across hundreds of microservices that saved ~$40k in metric costs, and separately built tooling that identified unused metrics across all services, dashboards, and monitors so teams could efficiently clean up.
+I've always cared a lot about making sure on-call doesn't suck. Over the years I've written plenty of runbooks, set up SLOs and alerting, and put together disaster recovery plans that people can actually follow when things catch fire. At BuzzFeed, I ran an initiative across hundreds of microservices that cut ~$40k in metric costs, and wrote a tool to spot unused metrics so teams could tidy them up without guessing.
 
-I implemented graceful shutdown logic in shared Go and Python web server libraries to prevent data loss during deploys, built smoke-testing services to de-risk CDN migrations, developed bots to automatically track partner maintenance windows so on-call engineers weren't caught off-guard, and designed multi-cloud round-robin solutions for high-availability static asset delivery. I also built an operations Slackbot in Go that let anyone in the company manage incidents and access runbooks directly from Slack.
+I added graceful shutdown logic in shared Go and Python web server libraries to prevent dropped requests during deploys, built smoke-testing tools to de-risk CDN migrations, created bots to track partner maintenance windows so on-call engineers weren't caught off-guard, and set up multi-cloud round-robin delivery for static assets. I also built an operations Slackbot in Go that let anyone in the company manage incidents and pull up runbooks directly from Slack.
 
-At Fastly, I built end-to-end monitoring pipelines from scratch. For certificate expiry, I delivered the entire observability stack: Go binaries, scheduled Kubernetes jobs, reusable notification packages, metrics, dashboards, alerts, and operational runbooks. I introduced stalled-consumer alerts on message pipelines and alerting for authentication and protocol failures missed by synthetic checks. I redesigned service boot sequences to ensure database or cache outages do not block deployments, adding backoff retries and dependency health reporting. Additionally, I partnered with platform and storage teams to right-size resource allocations across three services and continuously refined on-call documentation based on rotation retrospectives.
+At Fastly, I built end-to-end monitoring for our certificate services from the ground up: Go binaries, scheduled Kubernetes jobs, Slack and email alerts, Grafana dashboards, and step-by-step runbooks. I added alerts for stalled message consumers and caught auth and protocol errors that standard synthetic tests completely missed. I also reworked service boot sequences with backoff retries so a flaky database or cache wouldn't block a deploy, and partnered with storage teams to right-size resource requests across three services.
 
 ### 🤖 AI-Assisted Engineering
 
@@ -419,23 +411,23 @@ day-to-day work.
 
 ### 🧭 Leadership, Mentorship & Culture
 
-I've served as Tech Lead for multiple teams: the BBC News Frameworks team (where I mentored engineers into senior roles), BuzzFeed's Site Infrastructure Resilience team (where I led disaster recovery planning), and as the sole engineer bootstrapping Fastly's Domain Services team before growing it. I led the internal API Versioning Working Group at Fastly, contributed to API design guilds, and ran cross-team working groups on documentation quality (including building tooling to programmatically track README standards across all repos).
+I've served as Tech Lead across a few different teams: BBC News Frameworks (where I mentored engineers into senior roles), BuzzFeed's Site Infrastructure Resilience team, and bootstrapping Fastly's Domain Services team as a solo engineer. I led the internal API Versioning Working Group at Fastly, contributed to API design guilds, and ran working groups focused on documentation quality (including building tools to automatically check README standards across repos).
 
-As a design authority at Fastly, I author technical design documents for complex initiatives, driving cross-team consensus across multiple revisions and area tech lead sign-offs. I proactively identify architectural risks early, including uncovering multi-tenant traffic isolation issues during core design reviews. I participate actively in our internal API design guild, both submitting designs and reviewing cross-organizational proposals. I regularly unblock pull requests across external team repositories and author proactive documentation, including rebuilding local development guides for dependent services.
+As a design authority at Fastly, I write technical designs for complex projects and work through reviews with tech leads across different orgs until everyone is confident in the plan. I like catching architectural snags early, like spotting multi-tenant traffic isolation gaps before code gets written. I also spend time unblocking pull requests across other teams' repos and rewriting local dev guides when setups become outdated.
 
-Beyond formal leadership, I organise lunch-and-learns, champion communication practices rooted in Radical Candor, create video tutorials for complex systems, and consistently invest time in onboarding new engineers. I designed and implemented standard PR templates adopted org-wide at BuzzFeed, proposed and rolled out Python linting standards, and introduced service contracts to document expected behaviours across teams.
+Beyond formal roles, I run lunch-and-learns, share video walkthroughs of complex systems, and spend time helping newer engineers find their feet. At BuzzFeed I introduced standard PR templates, helped establish Python linting standards, and set up service contracts so teams had clear expectations between services.
 
 I was voted "Developer of the Year" at the BBC, won awards for innovative Docker-based CI and for my published book "Pro Vim", and was invited to speak at Mozilla's Paris offices alongside representatives from Google, Apple, Microsoft, and the W3C. I also organised a public speaking event with Sandi Metz, strengthening the BBC's presence in the London tech community.
 
 ### 💬 Customer & Community Impact
 
-My work is consistently driven by customer outcomes. I've resolved complex bugs that spanned multiple internal systems to get customers unblocked, built public tools to help customers validate Compute cache semantics (which also uncovered a bug in the underlying caching implementation), and implemented solutions for open-source fork PRs to safely run CI with secrets access.
+Customer problems have always been my main driver. I've tracked down tricky bugs spanning multiple internal systems to get customers unblocked, built public tools to help developers test Compute cache semantics (which ended up exposing an edge-case bug in the caching layer itself), and worked out ways for open-source forks to run CI safely with secret access.
 
-I prioritize fixing defects upstream over local workarounds. Recent contributions include resolving ACME protocol challenge issues, adding CAA record support to Ruby DNS libraries, fixing XML parser defects, and patching public zone and registry-protocol databases following production investigation.
+Whenever possible, I prefer fixing bugs upstream rather than bodging a workaround locally. That has included sorting out ACME protocol challenges, adding CAA record support to Ruby DNS libraries, fixing XML parser bugs, and submitting patches to public zone and registry databases.
 
 I've published articles in Smashing Magazine, NET Magazine, and NetTuts, been interviewed by InfoQ about BuzzFeed's monolith-to-microservices migration, and maintained open-source projects like [go-elasticache](https://github.com/Integralist/go-elasticache) and BBC's [Imager.js](https://github.com/BBC-News/Imager.js) (responsive images before `srcset` existed). I've given conference talks on CDN architecture, HTTP routing systems, and responsive image techniques.
 
-Customers have specifically praised the Fastly Terraform provider as "a lot simpler, and just as powerful" compared to competitors, and feedback like that has been shared across sales and engineering leadership. One customer's endorsement prompted a chain of internal shout-outs from a Senior Principal Sales Engineer, TLS Manager, Sr. Principal Engineer, and Cloud Engineering Manager all attributing the provider's quality to my work.
+Customers have praised the Fastly Terraform provider as "a lot simpler, and just as powerful" compared to competitors, which led to a lovely chain of internal shout-outs across sales and engineering leadership attributing the provider's reputation to my work.
 
 ## 🎤 Talks
 
