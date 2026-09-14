@@ -1,54 +1,63 @@
 ---
 title: "How I Use AI"
 date: 2026-08-17
-description: "A deep dive into my agent-skills configuration: harness-agnostic architecture, strict operational rules, MCP servers, and repeatable skill pipelines."
+description: "How I configure agent-skills: keeping things harness-agnostic, strict operational rules, MCP servers, and repeatable skill pipelines."
 tags: [ai, tooling]
 ---
 
-Most conversations about using AI for software engineering boil down to two
-extremes: breathless hype about autonomous agents replacing engineers by next
-Tuesday, or cynical dismissals based on an LLM botching a regex query.
+Most chat around using AI for engineering seems to land on two extremes:
+either people claiming agents will replace developers by next month, or
+complete cynicism because a model botched a regex. Neither feels particularly
+helpful to be honest.
 
-Neither perspective is useful.
+I use coding agents every single day across multiple codebases. I don't treat
+them like magical answers to everything, and I definitely don't let them dump
+unvetted code into my repositories. For me, an agent is essentially a very fast,
+enthusiastic junior engineer who happens to be a bit careless if you leave them
+unsupervised. That means giving them strict boundaries, making TDD
+non-negotiable, and having zero patience for apologies or boilerplate slop.
 
-I use AI coding agents every single day across multiple codebases. But I don't
-use them as magical oracles, nor do I let them spray unvetted code into my
-repositories. I treat an agent like a fast, capable, but occasionally careless
-junior or mid-level engineer. That means strict boundaries, deterministic
-workflows, mandatory test-driven development, and zero tolerance for sycophancy
-or boilerplate slop.
+All of this lives in my
+[`agent-skills`](https://github.com/Integralist/agent-skills) repo. Here is a
+look at the mental model, the setup, and how work actually gets done.
 
-All of this is codified in my
-[`agent-skills`](https://github.com/Integralist/agent-skills) repository.
-Here is a look under the hood at the mental model, architecture, and daily
-workflows that make AI genuinely effective in my engineering work.
+## 🔌 Don't Marry Your Harness (Stay Agnostic)
 
-## The Mental Model: Harness Agnostic
+The CLI agent ecosystem moves ridiculous fast. Every few months there's another
+tool or harness turning up: Claude Code, Pi, Gemini CLI, OpenCode, Copilot CLI,
+and whatever else launched this morning. Tying your prompts, custom tools, and
+habits to one specific harness is a bad idea. The second you want to switch (or
+the project dies), you lose everything.
 
-The agent ecosystem is moving quickly. New CLI harnesses and models pop up
-every few months: Claude Code, Pi, Gemini CLI, OpenCode, Copilot CLI, and
-others.
+I say this from painful personal experience. I was once so invested in OpenCode
+that I [forked it to fix a bunch of
+issues](https://github.com/Integralist/opencode/blob/custom-features/FORK.md#changelog),
+adding prompt history search, subagent cost tracking, and skill autocomplete. I
+tried contributing those changes back upstream. But with hundreds of PRs
+sitting stale and an unresponsive maintainer, none of it got merged. It wasn't
+for lack of trying, but I quickly realised OpenCode had too many architectural
+headaches under the hood and wasn't going to work out long term.
 
-Tying your workflows, prompt templates, and custom tools to one proprietary
-agent harness is a fool's errand. The moment you switch tools, you lose all
-your institutional habits.
-
-I say this as someone who was once so invested in OpenCode that I [forked it to
-fix a bunch of issues](https://github.com/Integralist/opencode/blob/custom-features/FORK.md#changelog),
-adding things like prompt history search, subagent cost tracking, and skills
-autocomplete. I tried contributing those changes back upstream, but with
-hundreds of PRs sitting stale and an author who wasn't interested, none of them
-were ever merged. It wasn't for the want of trying, but I quickly realised
-OpenCode had too many other issues under the hood and wasn't going to work out.
-I moved to the Pi harness shortly afterwards, where I now build and maintain
-extensions like [`pi-statusbar`](https://github.com/Integralist/pi-statusbar),
+So I moved over to the Pi harness instead. Naturally, I still wanted deeper
+capabilities like subagent orchestration, better terminal telemetry, and side
+conversations. So I built extensions for them:
+[`pi-statusbar`](https://github.com/Integralist/pi-statusbar),
 [`pi-subagents`](https://github.com/Integralist/pi-subagents), and
 [`pi-btw`](https://github.com/Integralist/pi-btw).
 
-The broader lesson stuck: the ecosystem moves fast, and when you decide to
-switch tools, you don't want your entire workflow trapped in one harness.
+There is an important distinction to make here, though. Right now, the industry
+doesn't have a cross-harness standard for runtime extensions. If you want rich
+runtime features like subagents or custom terminal UI, you inevitably have to
+write against whatever plugin API your harness provides. If I switch harnesses
+down the road, that glue code is what I'd have to adapt.
 
-My `agent-skills` repository solves this with a single source of truth:
+What *can* be standardised, however, is the actual intelligence: the prompt
+logic, workflows, and operational conventions. The emerging "Skills" format
+gives us a portable way to do that. By keeping the core skills and conventions
+strictly harness-agnostic, the way I actually work isn't locked into Pi, Claude
+Code, or anything else.
+
+My `agent-skills` repo reflects this separation with a single source of truth:
 
 ```txt
 .agents/                            # Canonical skills + conventions
@@ -67,17 +76,14 @@ My `agent-skills` repository solves this with a single source of truth:
 mcp/google-workspace/               # Bundled Google Workspace MCP server
 ```
 
-The core directory is `.agents/skills/`. Every skill is written using generic,
-harness-agnostic instructions ("prompt the user", "spawn a subagent", "read the
-file"). Claude Code accesses them via a symlink
-(`.claude/skills -> ../.agents/skills`), while other harnesses (like Pi, Gemini,
-or OpenCode) load them directly from `~/.agents/skills/`.
+The core directory is `.agents/skills/`. Every skill is written using generic
+instructions ("prompt the user", "spawn a subagent", "read the file"). Claude
+Code gets access via a symlink (`.claude/skills -> ../.agents/skills`), while Pi
+or Gemini CLI load them straight from `~/.agents/skills/`.
 
-When Claude Code supports unique capabilities (like path-scoped rules in
-`.claude/rules/`), those rule files are automatically generated from the
-corresponding canonical skills (`conventions-go`, `conventions-markdown`,
-`conventions-mermaid`, `conventions-python`, `conventions-sql`) via
-`make rules`.
+When Claude Code supports handy features like path-scoped rules in
+`.claude/rules/`, I generate them automatically from the canonical conventions
+skills (`conventions-go`, `conventions-python`, and so on) via `make rules`.
 
 ```bash
 # Install everything across all harnesses cleanly
@@ -86,68 +92,69 @@ make install
 
 `make install` uses
 [`scripts/op-inject.sh`](https://github.com/Integralist/agent-skills/blob/main/scripts/op-inject.sh)
-to resolve 1Password secret references for API keys and MCP endpoints at
-install time. If 1Password isn't authenticated, it gracefully skips those
-injections rather than failing loudly.
+to inject 1Password secrets for API keys and MCP configs at install time. If
+1Password isn't signed in, it quietly skips those injections instead of
+blowing up.
 
-## Rules of Engagement (`AGENTS.md`)
+## 📜 Ground Rules (Stop the Fluff)
 
-An agent without explicit behavioral constraints will default to people-pleasing
-nonsense: apologizing profusely, hallucinating APIs, writing paragraphs of
-fluff, and modifying files you never asked it to touch.
+Left to their own devices, agents default to people-pleasing nonsense. They
+apologise constantly, hallucinate libraries, churn out paragraphs of
+throat-clearing filler, and edit files nobody asked them to touch. My global
+`AGENTS.md` sets the boundaries so we don't have to have that argument every
+session.
 
-My global `AGENTS.md` sets the ground rules.
+### 💬 1. Communication and Tone
 
-### 1. Communication and Tone
+- **Cut the sycophancy:** Drop the "I would be delighted to help with that!"
+  nonsense. Lead with the direct answer.
+- **Keep it brief:** Shortest complete response wins. Cap lists at around five
+  items and group them by priority.
+- **Bound the steps:** If a task takes multiple steps, number them upfront so I
+  know where we are.
+- **No robotic fluff:** Drop literary flourishes and hedging throat-clearing.
+  Keep the tone warm, plainspoken, and peer-to-peer.
+- **Load-bearing emoji only:** Emoji are fine if they signal status faster than
+  words (✅ pass, ❌ fail, ⚠️ caution). Otherwise keep them out of running
+  prose and code.
 
-- **No sycophancy:** Cut out "Sure! I'd be happy to help with that!" Lead with
-  the direct answer.
-- **Conciseness:** Use the shortest complete response. Group lists by priority
-  and cap them at roughly five items.
-- **Bound multi-step work:** Number multi-step execution explicitly.
-- **No mannered prose:** Drop literary flourishes, hedging throat-clearing, and
-  self-conscious asides. Keep it warm, plainspoken, and peer-to-peer.
-- **Load-bearing emoji only:** Use emoji solely when they signal status or
-  structure faster than words (✅ pass, ❌ fail, ⚠️ caution). Keep them out of
-  running prose, headings, and code.
-
-### 2. Engineering Discipline & TDD
+### 🧪 2. Engineering Discipline & TDD
 
 - **Strict TDD:** No production code without a failing test first. Stub first,
-  prove failure on assertion (not compilation), write the minimum code to pass,
-  and delete assertions that survive an inverted requirement.
-- **Simplicity over abstractions:** Solve problems by deleting components or
-  reducing layers, not by stacking new frameworks or wrapper functions.
-- **Cite sources:** Never rely on general memory for specific headers, API
-  signatures, or configs. Cite the exact file and line number
-  (`internal/parser/frontmatter.go:42`). If uncited, label it as an unverified
+  prove failure on assertion (not compilation failure), write the minimum code
+  to pass, and delete assertions that survive an inverted requirement.
+- **Simplicity over layers:** I prefer solving problems by removing components
+  rather than stacking abstractions or wrapper functions.
+- **Cite actual sources:** Never guess an API signature or config header from
+  vague memory. Cite the file and line number
+  (`internal/parser/frontmatter.go:42`), or explicitly flag it as an unverified
   assumption.
 
-### 3. Skeptical Code Edits
+### ✋ 3. Sceptical Code Edits
 
-- **Ask before editing:** A user question is an inquiry, not an open invitation
-  to rewrite files. The agent must propose diffs in chat and get explicit
-  approval before invoking code-editing tools.
-- **Summarize large changes:** If a diff exceeds 40 lines, provide a one-line
-  summary first and ask before dumping the whole diff or modifying the file.
+- **Ask before editing:** An inquiry is just an inquiry, not an open invite to
+  start hacking on files. The agent has to propose the diff in chat and wait for
+  approval before running edit tools.
+- **Summarise large diffs:** Anything over 40 lines gets a one-line summary
+  first, rather than dumping a massive wall of code into chat unprompted.
 
-## The Skill Pipeline: From Idea to Shipped PR
+## ⚙️ The Skill Pipeline: How Work Actually Gets Done
 
 A common mistake is asking an agent to "build feature X" in a single prompt.
-That almost always produces buggy, over-engineered slop.
-
-Instead, I break work down into a pipeline of distinct, specialized skills.
+That almost always produces over-engineered junk (and a massive headache to
+debug). Instead, I break work down into a pipeline of smaller, specialised
+skills.
 
 ```txt
-clarify → grilling → architect → to-plan → to-tasks → next-slice → code-review → bcp
+clarify → grilling → architect → to-plan → to-tasks → next-slice → code-review → crit → bcp
 ```
 
-### Phase 1: Exploration and Stress Testing
+### 🕵️ Phase 1: Interrogation (Poking Holes First)
 
-Before any code is written, the concept must be validated.
+Before touching code, the idea needs stress-testing.
 
-- **`clarify`**: Elicits and pins down the user's core intent. If a request is
-  vague, this skill asks targeted questions to eliminate ambiguity upfront.
+- **`clarify`**: Digs into what you actually want when a prompt is too vague. It
+  asks targeted questions to remove ambiguity upfront.
 - **`grilling`** (and `grill-me`): Puts the idea through an adversarial
   interrogation. The agent relentlessly challenges your assumptions, edge
   cases, and architecture choices across the design tree.
@@ -156,72 +163,69 @@ Before any code is written, the concept must be validated.
   (Architecture Decision Record).
 - **`consensus`**: Drives cross-model debate through gated discussion rounds,
   preserving healthy dissent when evaluating high-stakes architectural choices.
-- **`arena`**: Fans out parallel candidate attempts across multiple models for
-  non-trivial artifacts where a single shot risks locking in the wrong shape. It
-  scores candidates against a concrete rubric via an independent cross-judge,
-  picks a base, and grafts the best parts of the losing candidates into the
-  final synthesized output.
+- **`arena`**: Runs parallel candidate attempts across multiple models for
+  tricky pieces where a single shot risks locking in the wrong shape. It scores
+  candidates against a concrete rubric via an independent cross-judge, picks a
+  base, and borrows the best bits from the runners-up.
 
-### Phase 2: Architecture and Planning
+### 📐 Phase 2: Architecture and Planning (Before the Code Rot)
 
-Once the design survives the grilling phase, it gets structured. Everything for
-a given initiative is co-located under a single directory at
-`projects/<yyyy-mm-dd-slug>/` (housing the spec, plan, tasks, and ADRs) rather
-than scattering them across separate `docs/` folders.
+Once the idea survives the grilling phase, it gets structured. Everything for a
+given initiative lives under a single directory at `projects/<yyyy-mm-dd-slug>/`
+(housing the spec, plan, tasks, and ADRs) rather than scattering them across
+random documentation folders.
 
-- **`architect`**: Coordinates the transition from concept to concrete
-  artifacts, anchoring domain terminology before planning begins.
-- **`to-spec`**: Generates an implementation-ready capability specification
-  (`spec.md`) with user stories, acceptance criteria, and testing seams. Living
-  specs stay validated via CI so contracts do not rot.
+- **`architect`**: Coordinates the move from concept to concrete artefacts,
+  sorting out domain terminology before planning begins.
+- **`to-spec`**: Generates a solid capability specification (`spec.md`) with
+  user stories, acceptance criteria, and testing seams. Living specs stay
+  validated in CI so contracts don't rot.
 - **`to-plan`**: Breaks the specification into vertical implementation slices
-  (`plan.md`) with explicit `Blocked-by` dependency edges and pull-request
-  groupings.
+  (`plan.md`) with explicit `Blocked-by` dependency edges and PR groupings.
 - **`to-tasks`**: Compiles a single plan slice just-in-time into a mechanical,
   TDD-shaped runbook (`tasks.md`) with verbatim code and assertions, avoiding
   upfront plan decay.
 
-### Phase 3: Execution and Quality
+### 🔨 Phase 3: Building (Small, Mechanical Slices)
 
-With tasks compiled, execution is fast and deterministic.
+With tasks compiled, execution becomes fast and predictable.
 
 - **`next-task` & `next-slice`**: `next-task` implements and verifies the next
-  single item in the runbook, while `next-slice` works through an entire
-  vertical plan slice in one go.
+  item in the runbook, while `next-slice` works through an entire vertical plan
+  slice in one go.
 - **`conventions-*` & `go-testing`**: Enforces strict language conventions
-  (`conventions-go`, `conventions-python`, `conventions-sql`, etc.) and testing
-  discipline (table-driven tests, `t.Context()`, bounded waits, public API
-  testing, and zero unkeyed struct literals).
+  (`conventions-go`, `conventions-python`, `conventions-sql`, and others) and
+  testing discipline (table-driven tests, `t.Context()`, bounded waits, public
+  API testing, and zero unkeyed struct literals).
 - **`unslop`**: Strips AI tells, buzzwords, puffery, and robotic cadence from
   documentation and prose to restore a clean, authentic human voice.
-- **`cleanup`**: Runs a background audit specifically hunting for AI-generated
-  clutter, dead code, and unnecessary abstractions.
+- **`cleanup`**: Runs a background audit hunting for AI-generated clutter, dead
+  code, and unnecessary abstractions.
 - **`precedent`**: Audits newly written code against existing conventions in the
   codebase, flagging any inconsistencies in naming, error handling, or API
   signatures.
 
-### Phase 4: Skeptical Review (Don't Be a Pushover)
+### 🧐 Phase 4: Sceptical Review (Don't Be a Pushover)
 
-Reviewing code with AI goes both ways: having agents review code, and critically
-evaluating the feedback agents give you.
+Reviewing code with AI works both ways: having agents review code, and
+critically evaluating the feedback agents give you.
 
 - **`code-review`**: Runs multi-dimensional reviews across parallel subagents
-  (behavior, security, reliability, maintainability) using `pi-subagents` to
-  catch subtle defects without context bloat.
+  (behaviour, security, reliability, maintainability) using `pi-subagents` to
+  catch subtle bugs without blowing up the context window.
 - **`code-review-feedback` & `security-review-feedback`**: When an AI reviewer
-  (or static analyzer) flags an issue, **do not reflexively accept it**. These
-  skills force the agent to evaluate the claim with technical rigor. Is the
-  vulnerability actually reachable? Is the suggested refactor introducing
-  hidden complexity? If a suggestion is invalid, reject it with proof.
+  (or static analyser) flags an issue, you shouldn't reflexively accept it.
+  These skills force the agent to evaluate the claim with technical rigour. Is
+  the vulnerability actually reachable? Is the suggested refactor introducing
+  hidden complexity? If a suggestion is rubbish, reject it with proof.
 
-### Phase 5: Shipping
+### 🚢 Phase 5: Shipping Without the Drama
 
 When the code is tested and clean, shipping is a deterministic, mechanical step.
 
 - **`branch`**: Cuts a feature branch using session context and standard naming.
-- **`commit`**: Stages and groups files intelligently, enforcing
-  consequence-focused titles that explain why the change matters rather than
-  listing raw mechanical steps.
+- **`commit`**: Stages and groups files sensibly, enforcing titles that explain
+  why the change matters rather than listing raw mechanical steps.
 - **`draft-pr`**: Generates a concise pull request with clear Problem and
   Solution sections, consequence-driven titles, and load-bearing emoji.
 - **`stacked-prs`**: Coordinates dependent PR chains with the official
@@ -230,31 +234,66 @@ When the code is tested and clean, shipping is a deterministic, mechanical step.
 - **`bcp`**: Orchestrates branch creation, committing, and opening a PR (or
   submitting a stacked branch) in one command.
 
-### Choosing the Right Analysis Skill
+### 🧭 Choosing the Right Analysis Skill
 
-Different engineering challenges require different analytical lenses:
+Different engineering problems call for different analytical lenses:
 
 | Skill              | Use when                                                                                   | Primary output                                               |
 | ------------------ | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
 | **`perspectives`** | Brainstorming or running a "what are we missing?" pass                                     | Multi-perspective analysis                                   |
 | **`decide`**       | Choosing between consequential engineering options                                         | Durable decision memo / ADR                                  |
 | **`consensus`**    | A complex design or implementation needs independent cross-model review and approval gates | Reviewed assessment or implementation with dissent preserved |
-| **`arena`**        | Non-trivial artifact where one attempt risks the wrong shape                               | Synthesized multi-model artifact                             |
+| **`arena`**        | Non-trivial artefact where one attempt risks the wrong shape                               | Synthesised multi-model artefact                             |
 | **`precedent`**    | Ensuring new code matches existing codebase conventions                                    | Divergence report citing peer patterns                       |
 | **`code-review`**  | Code or diff exists and defects must be identified                                         | Verified findings across subagents                           |
 
-## Model Context Protocol (MCP) & Tooling
+## 🔍 Tight Feedback Loops with Crit
 
-Agents are only as useful as the context they have access to. I use several MCP
-servers to bridge the gap between local code and external tools:
+One of the biggest friction points with AI workflows is the review loop.
+Normally, you're either squinting at terminal diffs trying to explain in chat
+which line needs changing, or you're pushing half-baked branches up to GitHub
+just to use their pull request UI. Both options are clunky. Terminal diffs are
+annoying to comment on with precision, and pushing to GitHub drags remote
+latency and premature commits into what should be a fast local experiment.
+
+This is where [Crit](https://github.com/tomasz-tomczyk/crit) fits in. Crit is a
+lightweight, local review tool that runs in your browser. When an agent finishes
+drafting a plan, generating a spec, or writing a chunk of code, I run `crit` (or
+the agent triggers it via my `crit` skill). It opens an interactive review UI in
+the browser where I can see the full diff, highlight specific lines, leave
+inline comments, file-level notes, or general feedback, just like a GitHub PR
+review, but completely local.
+
+```bash
+crit                           # branch diff against main
+crit <plan-file>               # review an implementation plan or spec
+crit --pr <num|url>            # fetch and review a GitHub PR locally
+```
+
+The real beauty is how it closes the loop with the agent. Crit stores review
+feedback in a structured local JSON file. The agent reads that file, finds any
+unresolved comments, fixes the code or plan, and replies directly to each
+comment with what it changed. Once the edits are done, the agent re-runs `crit`
+to trigger the next review round.
+
+We can iterate through three or four review rounds locally in minutes, without
+pushing a single commit upstream. And when everything finally looks right, `crit
+push` can sync those local comments straight up to the GitHub PR review if
+needed. It keeps the human firmly in the driving seat without breaking the flow.
+
+## 🌐 MCP & Wiring Up Context
+
+Agents are only as useful as the context you feed them. I use a handful of MCP
+servers to bridge the gap between local code and the tools I use every day:
 
 - **Google Workspace MCP**: Bundled locally in `mcp/google-workspace/` (an
-  unmodified build of upstream `gemini-cli-extensions/workspace`). Provides
-  secure access to Calendar, Drive, Docs, Sheets, and Gmail via local OAuth.
+  unmodified build of upstream `gemini-cli-extensions/workspace`). Gives the
+  agent secure access to Calendar, Drive, Docs, Sheets, and Gmail via local
+  OAuth.
 - **Atlassian MCP**: Connects to Jira and Confluence using the modern MCP
   Streamable HTTP transport via `mcp-remote` with `--transport http-only`.
-- **Language Servers (`gopls`)**: Provides real-time compiler diagnostics,
-  symbol definitions, and type navigation directly to the agent.
+- **Language Servers (`gopls`)**: Supplies real-time compiler diagnostics and
+  symbol definitions directly to the agent.
 - **Context7**: Live documentation indexing and retrieval for up-to-date
   third-party libraries.
 
@@ -263,54 +302,52 @@ servers to bridge the gap between local code and external tools:
 > CLI templates (`.claude.json.tmpl`, `.copilot/mcp-config.json.tmpl`), ensuring
 > no secrets ever leak into version control.
 
-## Multi-Agent Orchestration & Cost Control
+## 💰 Keeping Costs Sane (and Subagents in Line)
 
 Running every simple command through top-tier frontier models is slow and
-expensive. My setup enforces cost and delegation discipline:
+expensive. My setup enforces a bit of financial and delegation discipline:
 
 - **Model Tiering**: Mechanical tasks (searching files, drafting changelogs,
-  running tests) default to fast, cheap models (such as Gemini Flash or Claude
-  Haiku). High-reasoning models are reserved for architecture, complex
-  debugging, and grilling.
+  running tests) default to fast, cheap models like Gemini Flash or Claude
+  Haiku. Heavy reasoning models are kept for architecture, gnarly debugging, and
+  grilling.
 - **[`pi-subagents`](https://github.com/Integralist/pi-subagents)**: An
   extension I built (collaborating directly with AI agents to architect, code,
   and test it) that runs isolated subagents inside the same process. Each
-  subagent gets its own context window, system prompt, and tool allowlist, so a
+  subagent gets its own context window, system prompt, and tool allowlist. A
   deep investigation costs the main session a single summary line instead of ten
-  thousand tokens. It features an interactive TUI list under the prompt, live
+  thousand tokens. It includes an interactive TUI list under the prompt, live
   conversation inspection, and direct `@handle` message routing that steers
   subagents without consuming main-model turns.
 - **`pi-intercom`**: Allows multiple Pi agent sessions on the same machine to
-  communicate, delegate subtasks, and share context in real time.
-- **[`pi-btw`](https://github.com/Integralist/pi-btw)**: Enables lightweight
-  side-conversations without derailing the main agent thread or polluting the
-  primary context window.
+  chat to each other, delegate subtasks, and share context in real time.
+- **[`pi-btw`](https://github.com/Integralist/pi-btw)**: Lets me run quick
+  side-conversations without derailing the main thread or cluttering the primary
+  context window.
 - **`ghostty`**: Automates the Ghostty terminal on macOS via AppleScript to
-  manage window layouts, splits, and tabs. Heavy, long-running tasks like
-  integration test suites, watcher loops, and Docker builds get dispatched
-  out-of-band in a separate terminal pane, keeping the agent's context clean and
-  preventing multi-thousand-line logs from blowing up the conversation.
+  manage splits and tabs. Heavy, long-running tasks like test suites, watcher
+  loops, and Docker builds get dispatched out-of-band in a separate terminal
+  pane. That keeps the agent's context clean and stops massive build logs from
+  eating up memory.
 - **[`pi-statusbar`](https://github.com/Integralist/pi-statusbar)**: Another
-  extension I built with AI to replace the original statusline with real-time
-  telemetry, context window usage, token throughput, session cost, and the
-  active Git branch (the original only ever showed the project path and never
-  the git branch, which was very annoying).
+  extension I built to replace the default statusline with real-time telemetry,
+  context window usage, token throughput, session cost, and the active Git
+  branch (the original only ever showed the project path and never the git
+  branch, which was driving me mad).
 - **`caveman`**: An ultra-compressed communication mode (~75% token reduction)
   for rapid back-and-forth debugging when full conversational prose is just in
   the way.
 
-## Conclusion
+## 🏁 Wrapping Up
 
-AI coding agents are neither replacing software engineers nor are they useless
-gimmicks. They are powerful multipliers when paired with sound engineering
-practices.
+I don't think coding agents are going to replace engineers anytime soon.
+Equally, writing them off as useless gimmicks misses how much time they can save
+when you treat them properly.
 
-If you let an agent write code without tests, without planning, and without
-architectural constraints, you will get unmaintainable junk. But if you wrap
-the agent in a structured pipeline of modular skills, enforce strict TDD, and
-demand source verification, it becomes one of the most effective tools in your
-developer toolkit.
+If you let an agent write code without tests or boundaries, you'll end up with
+unmaintainable junk. Wrap them in a sensible pipeline, make TDD non-negotiable,
+and demand proof for every claim, and they become genuinely useful.
 
-Feel free to explore the
-[agent-skills repository](https://github.com/Integralist/agent-skills) and adapt
-the skills and conventions for your own workflow.
+If you want to borrow any of the skills or conventions, have a browse around the
+[`agent-skills`](https://github.com/Integralist/agent-skills) repo and tweak
+them to suit your own workflow.
