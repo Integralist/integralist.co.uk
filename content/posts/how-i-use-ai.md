@@ -146,7 +146,9 @@ debug). Instead, I break work down into a pipeline of smaller, specialised
 skills.
 
 ```txt
-clarify → grilling → architect → to-plan → to-tasks → next-slice → code-review → crit → bcp
+Product track:     pdd (project → discovery → design) ─┐
+                                                       ├─→ to-spec → to-plan → to-tasks → next-slice
+Engineering track: architect (research → grill) ───────┘
 ```
 
 ### 🕵️ Phase 1: Interrogation (Poking Holes First)
@@ -170,13 +172,62 @@ Before touching code, the idea needs stress-testing.
 
 ### 📐 Phase 2: Architecture and Planning (Before the Code Rot)
 
-Once the idea survives the grilling phase, it gets structured. Everything for a
-given initiative lives under a single directory at `projects/<yyyy-mm-dd-slug>/`
-(housing the spec, plan, tasks, and ADRs) rather than scattering them across
-random documentation folders.
+Once an idea survives the initial interrogation, it needs structuring. But not
+all work starts from the same place. Some initiatives are cross-functional,
+needing agreement between Product and Engineering on scope, milestones, and
+system design. Others are purely engineering-led problems where we already know
+we need to build something, but need to research the shape and plan the work.
 
-- **`architect`**: Coordinates the move from concept to concrete artefacts,
-  sorting out domain terminology before planning begins.
+My setup splits this into two distinct tracks: `pdd` for cross-functional
+initiatives, and `architect` for engineering-led features.
+
+#### Cross-functional alignment: `pdd`
+
+When Product and Engineering need to agree before anyone touches code, I use
+`pdd` (Project, Discovery, Design). It treats governance as a series of three
+explicit, human-in-the-loop approval gates:
+
+1. **Project (`project.md`)**: Agrees on what the initiative actually is, why
+   it matters, and when milestones should land.
+2. **Discovery (`discovery.md`)**: Evaluates solution directions and trade-offs
+   for a milestone without committing to implementation details.
+3. **Design (`design.md`)**: Documents the approved system-level architecture
+   thoroughly enough for Product, Engineering, and reviewers to sign off.
+
+Unlike most agent skills that run through to the end autonomously, `pdd` stops
+dead at each gate (`Awaiting approval`). It refuses to advance to Discovery
+until Project is approved, and will not touch Design until Discovery is signed
+off.
+
+Crucially, `design.md` is not an implementation plan (`plan.md`). It answers
+what system solution is being approved, not how an engineer will slice the pull
+requests. Once Design is approved, `pdd` hands off directly to `to-spec` to
+define the technical contracts. You do not run `architect` afterwards, because
+doing so would pointlessly duplicate the discovery you just agreed upon.
+
+#### Engineering-led coordination: `architect`
+
+When an initiative is driven entirely by engineering, running through a
+three-stage product governance dance is overkill. That is where `architect`
+comes in.
+
+Where `pdd` is a gated approval workflow for cross-functional consensus,
+`architect` is an automated coordinator for engineering delivery. It chains
+five phases together in sequence: bootstrapping project rules (`agents-md`),
+deep research (`research`), writing the functional specification (`to-spec`),
+adversarial stress-testing (`grill-with-docs`), and implementation planning
+(`to-plan`).
+
+If `pdd` is about deciding what to build with Product, `architect` is about
+taking an engineering idea and autonomously generating the technical artefacts
+needed to build it safely.
+
+#### The engineering handoff: specs, plans, and tasks
+
+Regardless of whether an initiative starts in `pdd` or `architect`, both tracks
+converge on the same engineering delivery pipeline under
+`projects/<yyyy-mm-dd-slug>/`:
+
 - **`to-spec`**: Generates a solid capability specification (`spec.md`) with
   user stories, acceptance criteria, and testing seams. Living specs stay
   validated in CI so contracts don't rot.
