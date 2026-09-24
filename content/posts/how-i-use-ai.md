@@ -39,11 +39,12 @@ for lack of trying, but I quickly realised OpenCode had too many architectural
 headaches under the hood and wasn't going to work out long term.
 
 So I moved over to the Pi harness instead. Naturally, I still wanted deeper
-capabilities like subagent orchestration, better terminal telemetry, and side
-conversations. So I built extensions for them:
+capabilities like subagent orchestration, better terminal telemetry, transcript
+highlighting, and side conversations. So I built extensions for them:
 [`pi-statusbar`](https://github.com/Integralist/pi-statusbar),
-[`pi-subagents`](https://github.com/Integralist/pi-subagents), and
-[`pi-btw`](https://github.com/Integralist/pi-btw).
+[`pi-subagents`](https://github.com/Integralist/pi-subagents),
+[`pi-btw`](https://github.com/Integralist/pi-btw), and
+[`pi-transcript-enhancer`](https://github.com/Integralist/pi-transcript-enhancer).
 
 There is an important distinction to make here, though. Right now, the industry
 doesn't have a cross-harness standard for runtime extensions. If you want rich
@@ -111,7 +112,11 @@ session.
 - **Keep it brief:** Shortest complete response wins. Cap lists at around five
   items and group them by priority.
 - **Bound the steps:** If a task takes multiple steps, number them upfront so I
-  know where we are.
+  know where we are. My
+  [`pi-transcript-enhancer`](https://github.com/Integralist/pi-transcript-enhancer)
+  extension parses progress labels (like `Step X/Y: <summary>`) and renders them
+  as high-contrast gold blocks in the TUI, keeping long sessions scannable at a
+  glance without modifying the raw message sent to the model.
 - **No robotic fluff:** Drop literary flourishes and hedging throat-clearing.
   Keep the tone warm, plainspoken, and peer-to-peer.
 - **Load-bearing emoji only:** Emoji are fine if they signal status faster than
@@ -332,6 +337,25 @@ pushing a single commit upstream. And when everything finally looks right, `crit
 push` can sync those local comments straight up to the GitHub PR review if
 needed. It keeps the human firmly in the driving seat without breaking the flow.
 
+## 🧑‍🏫 Teaching with Slides (Beyond Code)
+
+Engineering isn't just churning out code. A good chunk of the job is explaining
+complex systems to peers, onboarding team members, or helping someone grasp an
+unfamiliar concept without overwhelming them.
+
+That is where [`teach-with-slides`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/teach-with-slides/SKILL.md)
+comes in. Instead of spitting out a dry wall of text or generic bullet points,
+it builds a structured, beginner-friendly learning deck. It establishes a
+proper learning arc, starting with a relatable hook, introducing the core
+mental model, and breaking the topic down into digestible steps.
+
+It also handles the presentation format depending on what I need: HTML for a
+quick browser deck, PPTX or Google Slides when it needs editing, or PDF for
+sharing. It keeps slides focused on a single idea, leans heavily on Mermaid
+diagrams to show relationships rather than describing them, and applies clean
+visual themes (a warm Claude-inspired palette or an informal Fastly-inspired
+style for colleagues).
+
 ## 🌐 MCP & Wiring Up Context
 
 Agents are only as useful as the context you feed them. I use a handful of MCP
@@ -353,38 +377,25 @@ servers to bridge the gap between local code and the tools I use every day:
 > CLI templates (`.claude.json.tmpl`, `.copilot/mcp-config.json.tmpl`), ensuring
 > no secrets ever leak into version control.
 
-## 💰 Keeping Costs Sane (and Subagents in Line)
+## 💰 Keeping Costs Sane
 
 Running every simple command through top-tier frontier models is slow and
-expensive. My setup enforces a bit of financial and delegation discipline:
+expensive. My setup enforces a bit of financial and token discipline:
 
 - **Model Tiering**: Mechanical tasks (searching files, drafting changelogs,
   running tests) default to fast, cheap models like Gemini Flash or Claude
   Haiku. Heavy reasoning models are kept for architecture, gnarly debugging, and
   grilling.
 - **[`pi-subagents`](https://github.com/Integralist/pi-subagents)**: An
-  extension I built (collaborating directly with AI agents to architect, code,
-  and test it) that runs isolated subagents inside the same process. Each
-  subagent gets its own context window, system prompt, and tool allowlist. A
-  deep investigation costs the main session a single summary line instead of ten
-  thousand tokens. It includes an interactive TUI list under the prompt, live
-  conversation inspection, and direct `@handle` message routing that steers
-  subagents without consuming main-model turns.
-- **`pi-intercom`**: Allows multiple Pi agent sessions on the same machine to
-  chat to each other, delegate subtasks, and share context in real time.
-- **[`pi-btw`](https://github.com/Integralist/pi-btw)**: Lets me run quick
-  side-conversations without derailing the main thread or cluttering the primary
-  context window.
-- **`ghostty`**: Automates the Ghostty terminal on macOS via AppleScript to
-  manage splits and tabs. Heavy, long-running tasks like test suites, watcher
-  loops, and Docker builds get dispatched out-of-band in a separate terminal
-  pane. That keeps the agent's context clean and stops massive build logs from
-  eating up memory.
-- **[`pi-statusbar`](https://github.com/Integralist/pi-statusbar)**: Another
-  extension I built to replace the default statusline with real-time telemetry,
-  context window usage, token throughput, session cost, and the active Git
-  branch (the original only ever showed the project path and never the git
-  branch, which was driving me mad).
+  extension I built to run isolated subagents in the same process. Each subagent
+  gets its own context window and tool allowlist, so a deep investigation costs
+  the main session a single summary line instead of ten thousand tokens.
+- **[`model-stats`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/model-stats/SKILL.md)**:
+  A skill that parses local logs across every harness I use (Claude Code, Pi,
+  Codex, OpenCode, Gemini CLI, Copilot CLI) and renders an interactive HTML
+  dashboard showing token consumption, spending, and reasoning effort by
+  provider, model, and project. When a harness doesn't log costs directly, it
+  estimates them using LiteLLM pricing data.
 - **`caveman`**: An ultra-compressed communication mode (~75% token reduction)
   for rapid back-and-forth debugging when full conversational prose is just in
   the way.
