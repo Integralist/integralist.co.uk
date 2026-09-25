@@ -509,6 +509,20 @@ aside,
   border-block-end: 1px solid var(--color-border);
 }
 
+.post-content h3,
+.page-content h3 {
+  margin-block: 2rem 1rem;
+  padding-inline-start: 0.75rem;
+  border-inline-start: 4px solid var(--color-teal);
+}
+
+.post-content h4,
+.page-content h4 {
+  margin-block: 1.75rem 0.75rem;
+  padding-inline-start: 0.625rem;
+  border-inline-start: 3px solid var(--color-blue);
+}
+
 .post-content .post-hero,
 .page-content .post-hero {
   margin-block-end: 1.5rem;
