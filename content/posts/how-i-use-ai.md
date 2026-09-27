@@ -269,6 +269,13 @@ critically evaluating the feedback agents give you.
 - **`code-review`**: Runs multi-dimensional reviews across parallel subagents
   (behaviour, security, reliability, maintainability) using `pi-subagents` to
   catch subtle bugs without blowing up the context window.
+- **`is-it-safe`**: Rather than general reviews or speculative risk matrices,
+  this runs an adversarial impact analysis answering one question: what is the
+  worst credible outcome if this exact diff is merged? It uses an independent
+  max-effort subagent pass to trace a concrete failure path (trigger, changed
+  behaviour, blast radius) and test safeguards before returning a clear verdict
+  (🟢 `PROCEED`, 🟡 `HOLD`, 🔴 `STOP`). It catches nasty blast-radius surprises
+  so changes ship safely without relying solely on green tests.
 - **`code-review-feedback` & `security-review-feedback`**: When an AI reviewer
   (or static analyser) flags an issue, you shouldn't reflexively accept it.
   These skills force the agent to evaluate the claim with technical rigour. Is
@@ -302,6 +309,7 @@ Different engineering problems call for different analytical lenses:
 | **`arena`**        | Non-trivial artefact where one attempt risks the wrong shape                               | Synthesised multi-model artefact                             |
 | **`precedent`**    | Ensuring new code matches existing codebase conventions                                    | Divergence report citing peer patterns                       |
 | **`code-review`**  | Code or diff exists and defects must be identified                                         | Verified findings across subagents                           |
+| **`is-it-safe`**   | Assessing the worst credible failure mode and blast radius before merge                    | Adversarial impact report with a PROCEED/HOLD/STOP verdict   |
 
 ## 🔍 Tight Feedback Loops with Crit
 
