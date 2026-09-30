@@ -1,4 +1,4 @@
-.PHONY: all build run clean serve test
+.PHONY: all build run clean serve test update
 
 all: run
 
@@ -16,3 +16,7 @@ serve: run
 
 test:
 	go test ./...
+
+update:
+	go get -u ./...
+	go mod tidy
