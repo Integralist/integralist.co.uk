@@ -280,3 +280,11 @@ matches the _intent_ of the aside:
   text. The reader needs this to correctly understand what they just read.
 - **INFO** — interesting but non-essential background (trivia, fun facts,
   historical context). Skipping it doesn't change comprehension.
+
+## ASCII Video Recordings
+
+```shell
+asciinema record ai-architect-skill
+asciinema play ai-architect-skill
+asciinema upload --title "AI Architect Skill" --visibility "unlisted" ai-architect-skill
+```
