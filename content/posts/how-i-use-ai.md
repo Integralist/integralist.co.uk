@@ -408,6 +408,30 @@ expensive. My setup enforces a bit of financial and token discipline:
   for rapid back-and-forth debugging when full conversational prose is just in
   the way.
 
+## 🎬 Examples in Action
+
+### 🚀 The BCP Workflow
+
+The `bcp` skill ties together the final shipping loop: "Branch, Commit, Pull
+Request".
+
+A quick caveat before watching the recording below: performance here looks a
+bit sluggish, but that is entirely down to my own laziness. I recorded this
+using my session defaults (GPT 6.1 Sol with `xhigh` thinking effort), which is
+massive overkill for mechanical git operations. Running this against a lighter
+model like GPT Luna on `medium` effort makes the whole flow significantly
+faster (and cheaper).
+
+You might also wonder whether having an agent create branches, commit code, and
+draft PRs is complete overkill. Personally, I don't think so. Crafting
+descriptive branch names, staging logical commits with useful context, and
+writing PR descriptions that clearly outline the problem, solution, and
+supporting diagrams takes genuine effort and mental bandwidth. Offloading that
+ceremony lets me stay focused on the actual problem without cutting corners on
+repository hygiene.
+
+<script src="https://asciinema.org/a/Sn4shgXE3mYhLdgW.js" id="asciicast-Sn4shgXE3mYhLdgW" async="true"></script>
+
 ## 🏁 Wrapping Up
 
 I don't think coding agents are going to replace engineers anytime soon.
