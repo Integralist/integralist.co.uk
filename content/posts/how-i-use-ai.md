@@ -281,6 +281,15 @@ critically evaluating the feedback agents give you.
   These skills force the agent to evaluate the claim with technical rigour. Is
   the vulnerability actually reachable? Is the suggested refactor introducing
   hidden complexity? If a suggestion is rubbish, reject it with proof.
+- **[`explain-code`](https://github.com/Integralist/agent-skills/blob/f881746f1836d0ac1277dd4a76445b7c0fa638da/.agents/skills/explain-code/SKILL.md)**:
+  Not every question about a PR or diff is a request for a review. Sometimes I
+  just want to understand what changed, why it matters, and how it fits into an
+  unfamiliar system. The skill gives newcomers a concise Problem/Solution
+  walkthrough of a PR, branch, commit, or scoped code, with a small Mermaid
+  diagram when there’s a useful flow to show and references to the sources. It
+  explains behaviour and purpose rather than hunting for defects or judging
+  whether a change should merge. For a PR, it can also draft a clarification
+  comment for the author, but posting needs separate approval.
 
 ### 🚢 Phase 5: Shipping Without the Drama
 
