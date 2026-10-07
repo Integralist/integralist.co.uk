@@ -194,9 +194,9 @@ explicit, human-in-the-loop approval gates:
 
 1. **Project (`project.md`)**: Agrees on what the initiative actually is, why
    it matters, and when milestones should land.
-2. **Discovery (`discovery.md`)**: Evaluates solution directions and trade-offs
+1. **Discovery (`discovery.md`)**: Evaluates solution directions and trade-offs
    for a milestone without committing to implementation details.
-3. **Design (`design.md`)**: Documents the approved system-level architecture
+1. **Design (`design.md`)**: Documents the approved system-level architecture
    thoroughly enough for Product, Engineering, and reviewers to sign off.
 
 Unlike most agent skills that run through to the end autonomously, `pdd` stops
@@ -281,7 +281,7 @@ critically evaluating the feedback agents give you.
   These skills force the agent to evaluate the claim with technical rigour. Is
   the vulnerability actually reachable? Is the suggested refactor introducing
   hidden complexity? If a suggestion is rubbish, reject it with proof.
-- **[`explain-code`](https://github.com/Integralist/agent-skills/blob/f881746f1836d0ac1277dd4a76445b7c0fa638da/.agents/skills/explain-code/SKILL.md)**:
+- **`explain-code`**:
   Not every question about a PR or diff is a request for a review. Sometimes I
   just want to understand what changed, why it matters, and how it fits into an
   unfamiliar system. The skill gives newcomers a concise Problem/Solution
@@ -350,8 +350,7 @@ comment with what it changed. Once the edits are done, the agent re-runs `crit`
 to trigger the next review round.
 
 We can iterate through three or four review rounds locally in minutes, without
-pushing a single commit upstream. And when everything finally looks right, `crit
-push` can sync those local comments straight up to the GitHub PR review if
+pushing a single commit upstream. And when everything finally looks right, `crit push` can sync those local comments straight up to the GitHub PR review if
 needed. It keeps the human firmly in the driving seat without breaking the flow.
 
 ## 🧑‍🏫 Teaching with Slides (Beyond Code)
