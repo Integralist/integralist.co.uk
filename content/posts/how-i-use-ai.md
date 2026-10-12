@@ -401,6 +401,27 @@ diagrams to show relationships rather than describing them, and applies clean
 visual themes (a warm Claude-inspired palette or an informal Fastly-inspired
 style for colleagues).
 
+## 💬 Prepping Retros and 1:1s (Recency Bias Sucks)
+
+Another awkward part of engineering is preparing for team retrospectives and
+one-to-ones. Most of us rely on whatever annoyed us over the last forty-eight
+hours, meaning chronic friction gets forgotten while yesterday's hiccup takes
+centre stage. The real trail is in Slack, scattered across team channels and
+DMs.
+
+That is where [`talking-points`](https://github.com/Integralist/agent-skills/blob/328bc82b4874e50c2c1bbc3b8b25ee50e595fa3d/.agents/skills/talking-points/SKILL.md)
+comes in. It uses a Slack MCP connector to search messages, team channels, and
+DMs across a configurable lookback window (defaulting to two weeks). Rather
+than dumping raw hits, it clusters messages by topic and scores them by
+frequency, breadth across teammates, recency, and emotional intensity
+(weighting your own complaints highest as your strongest signal).
+
+Crucially, it tags the audience for each item (`retro` for public channel
+topics, `1:1` for private DMs or personal behaviour). It prints a ranked
+terminal summary with the signal and a concrete proposal to bring, while keeping
+everything local: basic config on disk, messages in chat, DMs paraphrased, and
+credentials redacted on the fly.
+
 ## 🌐 MCP & Wiring Up Context
 
 Agents are only as useful as the context you feed them. I use a handful of MCP
@@ -416,6 +437,8 @@ servers to bridge the gap between local code and the tools I use every day:
   symbol definitions directly to the agent.
 - **Context7**: Live documentation indexing and retrieval for up-to-date
   third-party libraries.
+- **Slack MCP**: Searches public channels, team channels, and DMs to retrieve
+  conversations, decisions, and recurring friction for `talking-points`.
 
 > [!NOTE]
 > All sensitive endpoints and API keys are injected dynamically via 1Password
