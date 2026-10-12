@@ -242,6 +242,35 @@ converge on the same engineering delivery pipeline under
   TDD-shaped runbook (`tasks.md`) with verbatim code and assertions, avoiding
   upfront plan decay.
 
+#### Automating the handoff: `execute-plan`
+
+Until now, I've described a manual loop: run `to-tasks` for a slice, then start
+`next-task` or `next-slice`, and repeat. It works, but I'm the one joining the
+steps up and keeping track of what comes next.
+
+[`execute-plan`](https://github.com/Integralist/agent-skills/blob/a442db988eccf58be425f7145f752ec1e20c8392/.agents/skills/execute-plan/SKILL.md)
+turns that choreography into one opt-in workflow. I give it an existing plan;
+my selected session compiles only the next unblocked slice against the live
+code, then delegates one task at a time to a configured lower-cost worker. The
+selected session stays in charge: it inspects each change, runs the checks,
+handles corrections, and commits verified tasks before moving on. It reviews
+the whole slice before compiling the next one, and records evidence and
+task-to-commit links so resuming doesn't depend on checkboxes or chat history.
+
+The value isn't handing decisions to a cheaper model. It's avoiding the manual
+skill-to-skill handoffs while keeping verification and acceptance with the
+coordinator. I do give up some of the minute-by-minute control, and when I'm
+working manually I occasionally course-correct code to match my conventions or
+preferences. In practice, those tend to be small syntax or style adjustments,
+not problems with the code or the planned approach. So I can let the task loop
+run, review the final code and complete commit list, suggest any small edits,
+then decide whether to push or draft a PR. That makes the overall flow faster for me.
+
+Execution still needs explicit authorisation for the model settings and
+task-level commits. PDD approval gates remain, and the workflow won't push or
+deploy. I can still run the existing skills manually when I want to stay closer
+to each step.
+
 ### 🔨 Phase 3: Building (Small, Mechanical Slices)
 
 With tasks compiled, execution becomes fast and predictable.
