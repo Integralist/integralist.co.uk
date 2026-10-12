@@ -40,14 +40,15 @@ headaches under the hood and wasn't going to work out long term.
 
 So I moved over to the Pi harness instead. Naturally, I still wanted deeper
 capabilities like subagent orchestration, better terminal telemetry, transcript
-highlighting, side conversations, and inline skill argument hints. So I built
-extensions for them:
+highlighting, side conversations, inline skill argument hints, and in-place
+context shaking. So I built extensions for them:
 [`pi-statusbar`](https://github.com/Integralist/pi-statusbar),
 [`pi-subagents`](https://github.com/Integralist/pi-subagents),
 [`pi-btw`](https://github.com/Integralist/pi-btw),
 [`pi-transcript-enhancer`](https://github.com/Integralist/pi-transcript-enhancer),
+[`pi-skill-argument-hints`](https://github.com/Integralist/pi-skill-argument-hints),
 and
-[`pi-skill-argument-hints`](https://github.com/Integralist/pi-skill-argument-hints).
+[`pi-context-shake`](https://github.com/Integralist/pi-context-shake).
 
 There is an important distinction to make here, though. Right now, the industry
 doesn't have a cross-harness standard for runtime extensions. If you want rich
@@ -470,6 +471,12 @@ expensive. My setup enforces a bit of financial and token discipline:
   extension I built to run isolated subagents in the same process. Each subagent
   gets its own context window and tool allowlist, so a deep investigation costs
   the main session a single summary line instead of ten thousand tokens.
+- **[`pi-context-shake`](https://github.com/Integralist/pi-context-shake)**:
+  An extension inspired by omp's `/shake` that shakes bloated content (massive
+  tool output, images, verbose thinking) out of session history in place. It
+  atomically rewrites the session's `.jsonl` file and uses a context hook to
+  keep the live LLM payload trimmed, saving tokens and stopping annoying
+  compaction loops without losing the running session.
 - **[`model-stats`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/model-stats/SKILL.md)**:
   A skill that parses local logs across every harness I use (Claude Code, Pi,
   Codex, OpenCode, Gemini CLI, Copilot CLI) and renders an interactive HTML
