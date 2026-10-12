@@ -40,11 +40,14 @@ headaches under the hood and wasn't going to work out long term.
 
 So I moved over to the Pi harness instead. Naturally, I still wanted deeper
 capabilities like subagent orchestration, better terminal telemetry, transcript
-highlighting, and side conversations. So I built extensions for them:
+highlighting, side conversations, and inline skill argument hints. So I built
+extensions for them:
 [`pi-statusbar`](https://github.com/Integralist/pi-statusbar),
 [`pi-subagents`](https://github.com/Integralist/pi-subagents),
-[`pi-btw`](https://github.com/Integralist/pi-btw), and
-[`pi-transcript-enhancer`](https://github.com/Integralist/pi-transcript-enhancer).
+[`pi-btw`](https://github.com/Integralist/pi-btw),
+[`pi-transcript-enhancer`](https://github.com/Integralist/pi-transcript-enhancer),
+and
+[`pi-skill-argument-hints`](https://github.com/Integralist/pi-skill-argument-hints).
 
 There is an important distinction to make here, though. Right now, the industry
 doesn't have a cross-harness standard for runtime extensions. If you want rich
@@ -85,6 +88,15 @@ or Gemini CLI load them straight from `~/.agents/skills/`.
 When Claude Code supports handy features like path-scoped rules in
 `.claude/rules/`, I generate them automatically from the canonical conventions
 skills (`conventions-go`, `conventions-python`, and so on) via `make rules`.
+
+Similarly, Claude Code supports an `argument-hint` frontmatter key in
+`SKILL.md` to show syntax hints when typing slash commands (such as
+`[--edit] [--days N]` for `talking-points`). Pi does not display these
+natively, so I wrote
+[`pi-skill-argument-hints`](https://github.com/Integralist/pi-skill-argument-hints)
+to bridge the gap. When typing `/skill:<name>`, it reads the frontmatter
+verbatim and renders a muted inline hint right after the cursor that auto-hides
+the moment you type an argument or space.
 
 ```bash
 # Install everything across all harnesses cleanly
