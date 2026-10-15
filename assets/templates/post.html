@@ -17,5 +17,6 @@
         {{if .Post.Image}}<a class="post-hero" href="{{.Post.Image}}" target="_blank" rel="noopener"><img src="{{.Post.Image}}" alt="{{.Post.Title}}"{{if .Post.ImagePosition}} style="object-position: {{.Post.ImagePosition}}"{{end}}></a>{{end}}
         {{.Post.Content}}
     </div>
+    {{template "toc" .}}
 </article>
 {{end}}

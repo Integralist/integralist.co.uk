@@ -1,16 +1,21 @@
 package parser
 
 import (
+	stdhtml "html"
 	"regexp"
 	"strings"
 
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/html"
 	mdparser "github.com/gomarkdown/markdown/parser"
+
+	"github.com/integralist/integralist.co.uk/internal/model"
 )
 
 var (
 	imgTag         = regexp.MustCompile(`<img\s+src="([^"]+)"([^/]*)/>`)
+	headingTag     = regexp.MustCompile(`(?s)<h2\s+[^>]*id="([^"]+)"[^>]*>(.*?)</h2>`)
+	htmlTag        = regexp.MustCompile(`<[^>]+>`)
 	alertTag       = regexp.MustCompile(`(?s)<blockquote>\s*<p>\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION|ABSTRACT|ATTENTION|BUG|CHECK|CITE|DANGER|DONE|ERROR|EXAMPLE|FAIL|FAILURE|FAQ|HELP|HINT|INFO|MISSING|QUESTION|QUOTE|SUCCESS|SUMMARY|TLDR|TODO)\]\s*\n?(.*?)</p>\s*</blockquote>`)
 	alertParagraph = regexp.MustCompile(`(?s)<p>\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION|ABSTRACT|ATTENTION|BUG|CHECK|CITE|DANGER|DONE|ERROR|EXAMPLE|FAIL|FAILURE|FAQ|HELP|HINT|INFO|MISSING|QUESTION|QUOTE|SUCCESS|SUMMARY|TLDR|TODO)\]\s*\n?(.*?)</p>`)
 )
@@ -57,6 +62,26 @@ func MarkdownToHTML(md []byte) []byte {
 	out = wrapImagesInLinks(out)
 	out = transformAlerts(out)
 	return out
+}
+
+// ExtractHeadings extracts h2 headings from rendered HTML for a table of contents.
+func ExtractHeadings(src []byte) []model.Heading {
+	matches := headingTag.FindAllSubmatch(src, -1)
+	if len(matches) == 0 {
+		return nil
+	}
+	headings := make([]model.Heading, 0, len(matches))
+	for _, m := range matches {
+		id := string(m[1])
+		plain := htmlTag.ReplaceAllString(string(m[2]), "")
+		plain = strings.TrimSpace(stdhtml.UnescapeString(plain))
+		headings = append(headings, model.Heading{
+			ID:    id,
+			Level: 2,
+			Text:  plain,
+		})
+	}
+	return headings
 }
 
 func wrapImagesInLinks(html []byte) []byte {

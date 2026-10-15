@@ -77,11 +77,13 @@ func loadPosts(dir string) ([]*model.Post, error) {
 		if len(keywords) == 0 {
 			keywords = tags
 		}
+		rendered := parser.MarkdownToHTML(body)
 		post := &model.Post{
 			Author:        getString(meta, "author"),
-			Content:       template.HTML(parser.MarkdownToHTML(body)),
+			Content:       template.HTML(rendered),
 			Date:          getTime(meta, "date"),
 			Description:   getString(meta, "description"),
+			Headings:      parser.ExtractHeadings(rendered),
 			Image:         getString(meta, "image"),
 			ImagePosition: getString(meta, "image_position"),
 			JS:            getStringSlice(meta, "js"),
@@ -129,9 +131,11 @@ func loadPages(dir string) ([]*model.Page, error) {
 		}
 
 		slug := strings.TrimSuffix(e.Name(), ".md")
+		rendered := parser.MarkdownToHTML(body)
 		page := &model.Page{
-			Content:       template.HTML(parser.MarkdownToHTML(body)),
+			Content:       template.HTML(rendered),
 			Description:   getString(meta, "description"),
+			Headings:      parser.ExtractHeadings(rendered),
 			Image:         getString(meta, "image"),
 			ImagePosition: getString(meta, "image_position"),
 			Keywords:      getStringSlice(meta, "keywords"),

@@ -34,6 +34,7 @@ func New(templateDir string) (*Renderer, error) {
 		filepath.Join(templateDir, "base.html"),
 		filepath.Join(templateDir, "header.html"),
 		filepath.Join(templateDir, "footer.html"),
+		filepath.Join(templateDir, "toc.html"),
 	}
 
 	parse := func(contentTemplate string) (*template.Template, error) {
@@ -77,6 +78,7 @@ type baseData struct {
 	BaseURL       string
 	CanonicalURL  string
 	Description   string
+	Headings      []model.Heading
 	Image         string
 	JS            []string
 	JSONLD        template.HTML
@@ -130,6 +132,7 @@ func (r *Renderer) RenderPost(post *model.Post, site *model.Site) ([]byte, error
 	data.Author = post.Author
 	data.CanonicalURL = site.BaseURL + post.URL
 	data.Description = post.Description
+	data.Headings = post.Headings
 	data.JS = post.JS
 	if post.Image != "" {
 		data.Image = site.BaseURL + post.Image
@@ -153,6 +156,7 @@ func (r *Renderer) RenderPage(page *model.Page, site *model.Site) ([]byte, error
 	}
 	data.Title = page.Title
 	data.Description = page.Description
+	data.Headings = page.Headings
 	data.Keywords = strings.Join(page.Keywords, ", ")
 	data.CanonicalURL = site.BaseURL + page.URL
 	data.MarkdownURL = "index.md"

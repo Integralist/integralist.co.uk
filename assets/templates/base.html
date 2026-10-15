@@ -39,6 +39,61 @@
         {{block "content" .}}{{end}}
     </main>
     {{template "footer" .}}
+    {{if gt (len .Headings) 1}}
+    <script>
+        (() => {
+            const toc = document.querySelector('.toc');
+            if (!toc) return;
+            const links = Array.from(toc.querySelectorAll('a[href^="#"]'));
+            const headings = links
+                .map(link => document.getElementById(link.getAttribute('href').slice(1)))
+                .filter(Boolean);
+            if (!headings.length) return;
+
+            let activeId = '';
+            const setActive = id => {
+                if (id === activeId) return;
+                activeId = id;
+                links.forEach(link => {
+                    const isActive = link.getAttribute('href') === '#' + id;
+                    link.classList.toggle('active', isActive);
+                    if (isActive) {
+                        link.scrollIntoView({ block: 'nearest' });
+                    }
+                });
+            };
+
+            const update = () => {
+                const offset = 120;
+                let current = headings[0].id;
+                for (const h of headings) {
+                    if (h.getBoundingClientRect().top <= offset) {
+                        current = h.id;
+                    } else {
+                        break;
+                    }
+                }
+                if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 10) {
+                    current = headings[headings.length - 1].id;
+                }
+                setActive(current);
+            };
+
+            let ticking = false;
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        update();
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }, { passive: true });
+            window.addEventListener('resize', update, { passive: true });
+            update();
+        })();
+    </script>
+    {{end}}
     {{range .JS}}{{if eq . "mermaid"}}
     <script type="module">
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';

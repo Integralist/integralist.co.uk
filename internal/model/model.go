@@ -8,11 +8,18 @@ import (
 	"time"
 )
 
+type Heading struct {
+	ID    string
+	Level int
+	Text  string
+}
+
 type Post struct {
 	Author        string
 	Content       template.HTML
 	Date          time.Time
 	Description   string
+	Headings      []Heading
 	Image         string
 	ImagePosition string
 	JS            []string
@@ -33,6 +40,7 @@ func (p Post) ReadingTime() int {
 type Page struct {
 	Content       template.HTML
 	Description   string
+	Headings      []Heading
 	Image         string
 	ImagePosition string
 	Keywords      []string

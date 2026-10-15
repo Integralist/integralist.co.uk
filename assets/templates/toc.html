@@ -1,0 +1,12 @@
+{{define "toc"}}
+{{if gt (len .Headings) 1}}
+<aside class="toc" aria-label="Table of contents">
+    <p class="toc-title">On this page</p>
+    <ul>
+        {{range .Headings}}
+        <li><a href="#{{.ID}}">{{.Text}}</a></li>
+        {{end}}
+    </ul>
+</aside>
+{{end}}
+{{end}}
