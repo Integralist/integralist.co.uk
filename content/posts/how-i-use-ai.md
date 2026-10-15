@@ -362,7 +362,7 @@ Different engineering problems call for different analytical lenses:
 | **`code-review`**  | Code or diff exists and defects must be identified                                         | Verified findings across subagents                           |
 | **`is-it-safe`**   | Assessing the worst credible failure mode and blast radius before merge                    | Adversarial impact report with a PROCEED/HOLD/STOP verdict   |
 
-## 🔍 Tight Feedback Loops with Crit
+## 🔍 Tight Feedback Loops with Crit and Hunk
 
 One of the biggest friction points with AI workflows is the review loop.
 Normally, you're either squinting at terminal diffs trying to explain in chat
@@ -394,6 +394,29 @@ to trigger the next review round.
 We can iterate through three or four review rounds locally in minutes, without
 pushing a single commit upstream. And when everything finally looks right, `crit push` can sync those local comments straight up to the GitHub PR review if
 needed. It keeps the human firmly in the driving seat without breaking the flow.
+
+That said, I actually prefer a terminal experience over a browser UI, so
+nowadays I tend to use [Hunk](https://www.hunk.dev/) instead. It gives me that
+same local review loop without ever leaving my terminal window.
+
+To wire it into my agent workflow, I built a
+[`hunk`](https://github.com/Integralist/agent-skills/blob/cc1bf18b5a6acb1b448f550f48a02c36cdfd51f9/.agents/skills/hunk/SKILL.md)
+skill that drives a live
+`hunk diff` TUI session through `hunk session` CLI commands. I keep ownership of
+the interactive terminal window while the agent reloads it onto whatever I'm
+reviewing: uncommitted or staged changes, a branch diff, a specific commit, or a
+remote GitHub PR (for cross-repo PRs, it drops the unified diff into
+`.git/hunk-review-$SESSION_ID.patch` so concurrent sessions don't clobber each
+other and the working tree stays clean).
+
+When the agent reviews a changeset, it batch-applies inline notes, scrolls the
+TUI to the first stop, and highlights the exact character span I should look at.
+I can step through findings by replying `next` or `prev` in chat, or press `c`
+in Hunk to leave my own inline notes. Running `/hunk comments` tells the agent
+to read my threads, make any approved code edits, reply directly under each
+note, and refresh the view in place. When I'm done, `/hunk done` clears the
+session notes, prunes any orphaned patch files, and restores the working-tree
+diff.
 
 ## 🧑‍🏫 Teaching with Slides (Beyond Code)
 
