@@ -289,3 +289,50 @@ func TestLoadSite_IgnoresNonMarkdown(t *testing.T) {
 		t.Errorf("got %d posts, want 0 (non-markdown ignored)", len(site.Posts))
 	}
 }
+
+func TestLoadSite_ExtractsHeadingsForPostsAndPages(t *testing.T) {
+	dir := t.TempDir()
+	os.MkdirAll(filepath.Join(dir, "posts"), 0o755)
+	os.MkdirAll(filepath.Join(dir, "pages"), 0o755)
+
+	writeFile(t, dir, "posts/guide.md", `---
+title: "Guide"
+date: 2026-04-12
+---
+## Intro
+
+Text.
+
+## Details
+
+More text.`)
+
+	writeFile(t, dir, "pages/resume.md", `---
+title: "Resume"
+nav_order: 1
+---
+## Experience
+
+Text.
+
+## Education
+
+More text.`)
+
+	site, err := content.LoadSite(dir)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(site.Posts[0].Headings) != 2 {
+		t.Fatalf("post headings = %+v, want 2 headings", site.Posts[0].Headings)
+	}
+	if site.Posts[0].Headings[0].ID != "intro" || site.Posts[0].Headings[0].Text != "Intro" {
+		t.Errorf("post heading[0] = %+v, want intro/Intro", site.Posts[0].Headings[0])
+	}
+	if len(site.Pages[0].Headings) != 2 {
+		t.Fatalf("page headings = %+v, want 2 headings", site.Pages[0].Headings)
+	}
+	if site.Pages[0].Headings[0].ID != "experience" || site.Pages[0].Headings[0].Text != "Experience" {
+		t.Errorf("page heading[0] = %+v, want experience/Experience", site.Pages[0].Headings[0])
+	}
+}

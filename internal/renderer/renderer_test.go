@@ -452,3 +452,88 @@ func TestRenderTagsIndex_ListsAllTags(t *testing.T) {
 		t.Error("tags index missing ssg tag link")
 	}
 }
+
+func TestRenderPost_TableOfContents(t *testing.T) {
+	r, err := renderer.New(templateDir)
+	if err != nil {
+		t.Fatalf("failed to create renderer: %v", err)
+	}
+
+	t.Run("renders TOC when post has 2 or more headings", func(t *testing.T) {
+		site := testSite()
+		site.Posts[0].Headings = []model.Heading{
+			{ID: "first-section", Level: 2, Text: "First Section"},
+			{ID: "second-section", Level: 2, Text: "Second Section"},
+		}
+		out, err := r.RenderPost(site.Posts[0], site)
+		if err != nil {
+			t.Fatalf("RenderPost error: %v", err)
+		}
+		html := string(out)
+		if !strings.Contains(html, `class="toc"`) {
+			t.Error("expected TOC aside when post has 2 headings")
+		}
+		if !strings.Contains(html, `href="#first-section"`) || !strings.Contains(html, "First Section") {
+			t.Error("expected first section link in TOC")
+		}
+		if !strings.Contains(html, `href="#second-section"`) || !strings.Contains(html, "Second Section") {
+			t.Error("expected second section link in TOC")
+		}
+	})
+
+	t.Run("omits TOC when post has fewer than 2 headings", func(t *testing.T) {
+		site := testSite()
+		site.Posts[0].Headings = []model.Heading{
+			{ID: "only-one", Level: 2, Text: "Only One"},
+		}
+		out, err := r.RenderPost(site.Posts[0], site)
+		if err != nil {
+			t.Fatalf("RenderPost error: %v", err)
+		}
+		html := string(out)
+		if strings.Contains(html, `class="toc"`) {
+			t.Error("did not expect TOC aside when post has only 1 heading")
+		}
+	})
+}
+
+func TestRenderPage_TableOfContents(t *testing.T) {
+	r, err := renderer.New(templateDir)
+	if err != nil {
+		t.Fatalf("failed to create renderer: %v", err)
+	}
+
+	t.Run("renders TOC when page has 2 or more headings", func(t *testing.T) {
+		site := testSite()
+		site.Pages[0].Headings = []model.Heading{
+			{ID: "hello", Level: 2, Text: "Hello"},
+			{ID: "previously", Level: 2, Text: "Previously"},
+		}
+		out, err := r.RenderPage(site.Pages[0], site)
+		if err != nil {
+			t.Fatalf("RenderPage error: %v", err)
+		}
+		html := string(out)
+		if !strings.Contains(html, `class="toc"`) {
+			t.Error("expected TOC aside when page has 2 headings")
+		}
+		if !strings.Contains(html, `href="#hello"`) || !strings.Contains(html, `href="#previously"`) {
+			t.Error("expected heading links in page TOC")
+		}
+	})
+
+	t.Run("omits TOC when page has fewer than 2 headings", func(t *testing.T) {
+		site := testSite()
+		site.Pages[0].Headings = []model.Heading{
+			{ID: "only-one", Level: 2, Text: "Only One"},
+		}
+		out, err := r.RenderPage(site.Pages[0], site)
+		if err != nil {
+			t.Fatalf("RenderPage error: %v", err)
+		}
+		html := string(out)
+		if strings.Contains(html, `class="toc"`) {
+			t.Error("did not expect TOC aside when page has only 1 heading")
+		}
+	})
+}

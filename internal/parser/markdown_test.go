@@ -4,6 +4,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/integralist/integralist.co.uk/internal/model"
 	"github.com/integralist/integralist.co.uk/internal/parser"
 )
 
@@ -138,5 +139,33 @@ func TestMarkdownToHTML_AlertBlockquotes(t *testing.T) {
 				t.Errorf("got %q, blockquote should be transformed", got)
 			}
 		})
+	}
+}
+
+func TestExtractHeadings(t *testing.T) {
+	input := strings.Join([]string{
+		"# Ignored H1",
+		"## First Section",
+		"### Ignored H3",
+		"## `Code` and _Emphasis_ & `<Type>`",
+		"## First Section",
+	}, "\n\n")
+
+	html := parser.MarkdownToHTML([]byte(input))
+	got := parser.ExtractHeadings(html)
+
+	want := []model.Heading{
+		{ID: "first-section", Level: 2, Text: "First Section"},
+		{ID: "code-and-emphasis-type", Level: 2, Text: "Code and Emphasis & <Type>"},
+		{ID: "first-section-1", Level: 2, Text: "First Section"},
+	}
+
+	if len(got) != len(want) {
+		t.Fatalf("got %d headings (%+v), want %d (%+v)", len(got), got, len(want), want)
+	}
+	for i := range want {
+		if got[i] != want[i] {
+			t.Errorf("heading[%d] = %+v, want %+v", i, got[i], want[i])
+		}
 	}
 }
