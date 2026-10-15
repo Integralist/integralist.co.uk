@@ -15,13 +15,13 @@ So this post is a long time coming. It has been pushed to the forefront by the f
 > [!INFO]
 > for those interested, the presentation slides for my 2018 hack can be found [here](../../pdfs/hackweek_2018_nginx.pdf).
 
-## What does OpsBot do?
+## 🤖 What does OpsBot do?
 
 - Creates standardized incident channels.
 - Auto-invite users to incident channel based on emoji reactions.
 - Looks up service runbooks.
 
-## How do you use OpsBot?
+## 🎮 How do you use OpsBot?
 
 - `/incident <name> [visibility] [reporter]`
 - `/runbook <service>`
@@ -37,7 +37,7 @@ Let's break down the arguments provided to each command:
 - `service` (required):\
   searches our company Google Drive for specified runbook
 
-## Incident Example
+## 🚨 Incident Example
 
 Imagine I've noticed something bad has happened. I'll go to the appropriate Slack channel and report it.
 
@@ -67,7 +67,7 @@ This is when someone runs the command: `/runbook site router` (or whatever the a
 
 ![opsbot 3](/assets/img/opsbot_3.png)
 
-## How does OpsBot work?
+## ⚙️ How does OpsBot work?
 
 When creating an incident channel, OpsBot will link back to the channel that reported the incident as well as linking to the specific notification in that channel.
 
@@ -80,13 +80,13 @@ If the message is identified as an 'incident trigger' then that's what we link t
 
 ![opsbot 4](/assets/img/opsbot_4.png)
 
-## What did we learn?
+## 🎓 What did we learn?
 
 - Have a pre-hack document with feature specifications in place.
 - Slackbots are fun to create.
 - The Google API was ~~kinda tricky~~ a PITA.
 
-## What could we improve?
+## 🚀 What could we improve?
 
 Two issues cropped up fairly early on in the design:
 
@@ -103,7 +103,7 @@ Now when we create the incident channel, it'll look for the _first_ NAGIOS warni
 
 Although this isn't the end of the world as people can still see the incident channel link generated (if it's a public channel) and click on that to access the incident channel.
 
-## What else _could_ OpsBot do?
+## 🔮 What else _could_ OpsBot do?
 
 OpsBot has the potential to do lots of things, it just depends on your needs and use cases.
 

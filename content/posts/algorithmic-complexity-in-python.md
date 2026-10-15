@@ -5,11 +5,11 @@ description: "An introduction to Big O notation and algorithmic time complexity 
 tags: [python, performance]
 ---
 
-## Introduction
+## 📖 Introduction
 
 In this post we're going to review some different algorithmic time complexities. Let me begin by clarifying, when I say 'algorithm' I mean: 'logic written in code' and when I say 'operation' I mean: 'a unit of code was evaluated', and that operation could be something as simple as `x + y`.
 
-## Asymptotic Analysis
+## 📐 Asymptotic Analysis
 
 Asymptotic analysis is the computing of an algorithm's running time, and there are actually a few different variations that allow us to measure different aspects of that running time:
 
@@ -24,7 +24,7 @@ The reason for selecting Big O over other notations is that it's the most releva
 > [!TIP]
 > a fantastic 'quick' reference for Big O notation is [bigocheatsheet.com](http://bigocheatsheet.com/), but also Python [documents the time complexity](https://wiki.python.org/moin/TimeComplexity) associated with its various builtin functions (which is super useful).
 
-## Measuring Algorithmic Performance
+## ⏱️ Measuring Algorithmic Performance
 
 When measuring the performance of an algorithm we're interested in how the increase in input size will affect the growth rate of operations required, and this attribute is typically referred to as the algorithm's 'time complexity'.
 
@@ -36,7 +36,7 @@ There are two types of complexity we might be interested in (both dependant upon
 > [!INFO]
 > the Big O notation used to describe these complexities is telling us the 'growth rate' of a function, which is typically referred to as the '**order** of the function' (hence the 'O' in Big O).
 
-## Orders of Complexity
+## 📊 Orders of Complexity
 
 - Good:
   - `O(1)`
@@ -54,7 +54,7 @@ There are two types of complexity we might be interested in (both dependant upon
 > [!INFO]
 > when writing a logarithm you are expected to specify the base: `log 2(n)` but with Big O notation you typically omit the two, resulting in: `O(log n)`.
 
-## Growth Types
+## 📈 Growth Types
 
 - `O(1)`: [constant time](#constant-time)
 - `O(Log n)`: [logarithmic time](#logarithmic-time)

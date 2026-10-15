@@ -5,13 +5,13 @@ description: Lessons learned from years of remote working, covering routines, co
 tags: [management]
 ---
 
-## Introduction
+## 📖 Introduction
 
 I was asked on twitter recently about how I am able to be successful and impactful at an organization as a remote worker. What follows is a run down of how I work remotely, and how it has changed over the last seven years.
 
 This is _not_ a "rules for how you should do remote working" but more so a single perspective on the problem of remote working and my own simplified set of guidelines that I feel have worked for me.
 
-## Why Remote?
+## 🏠 Why Remote?
 
 Let's start off by talking about why I am a remote worker. I typically work for organizations who have an office in Central London, while my home is out on the east coast of England.
 
@@ -38,7 +38,7 @@ Not to mention things like getting deliveries to your home, or getting a plumber
 
 All of these things that people have to deal with in their day-to-day lives can be made easier if we were able to work from home.
 
-## Problems with Remote Working
+## ⚠️ Problems with Remote Working
 
 OK, so not everything is roses. Here is a short list of things that can be a concern when working from home (and I'll dig into each afterwards):
 
@@ -204,7 +204,7 @@ It's also important to realize that you're _remote_ so you don't _have_ to work 
 
 I've never done it but I could imagine going to my local library and working from there to be quite nice. Maybe going to a bustling coffee shop with free wifi? Either way, get out and away from your home as often as you can so you don't start building up a form of 'cabin fever'.
 
-## What doesn't work well?
+## 📉 What doesn't work well?
 
 OK, there are some things that still don't work that great when being a remote. Below is a small selection:
 
@@ -214,6 +214,6 @@ OK, there are some things that still don't work that great when being a remote. 
 
 That said, there's not much that's so problematic that remote working couldn't be a consideration for most organizations.
 
-## Conclusion
+## 🏁 Conclusion
 
 Hopefully you've found this rundown of remote working (from someone who has been remote working for many many years now with great success and much learnings under his belt). If you have any additional questions then do please reach out to me on twitter.

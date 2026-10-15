@@ -5,7 +5,7 @@ description: "How to manage multiple Python versions, set up virtual environment
 tags: [python]
 ---
 
-## Introduction
+## 📖 Introduction
 
 This blog post aims to demonstrate the most practical way to install multiple versions of Python, and of setting up 'virtual environments' for macOS userso
 
@@ -15,7 +15,7 @@ Why is this not a simple thing to do? I hear you ask! Well, because we don't liv
 
 I'll start by describing briefly what a virtual environment is, and then I'll move onto the point of this article and the options we have available to us.
 
-## Virtual Environments
+## 📦 Virtual Environments
 
 > [!CITE]
 > A cooperatively isolated runtime environment that allows Python users and applications to install and upgrade Python distribution packages without interfering with the behaviour of other Python applications running on the same system. -- [Python Glossary](https://docs.python.org/3/glossary.html#term-virtual-environment)
@@ -27,7 +27,7 @@ Having a virtual environment setup for each project means you can have project s
 > [!INFO]
 > the official documentation on Virtual Environments can be found [here](https://docs.python.org/3/tutorial/venv.html).
 
-## Creating Virtual Environments
+## 🛠️ Creating Virtual Environments
 
 If you installed Python using Homebrew (e.g. `brew install python3`) and you don't care what version of Python you have, you only care about having virtual environments, then you can utilize the built-in `venv` module like so:
 
@@ -48,7 +48,7 @@ This consideration is actually _critical_ to understand when you consider the Li
 
 If you require virtual environments across _multiple_ Python versions, then read the following couple of sections...
 
-## Installing Python Versions
+## 🐍 Installing Python Versions
 
 So there are in fact _two_ ways of installing Python versions, but it's much less practical in reality and so i'm only going to demonstrate _one_ of them.
 
@@ -89,7 +89,7 @@ What the first point does is it'll allow your shell to respond to any `.python-v
 
 What generates the `.python-version` file is the latter point.
 
-## Virtual Environments for multiple Pythons
+## 🗂️ Virtual Environments for multiple Pythons
 
 To setup virtual environments with Python is actually very simple (as we saw in the earlier part of this post), but not compatible when using an external build tool such as `pyenv` because of where `pyenv` installs Python binaries and how it switches between versions.
 
@@ -110,7 +110,7 @@ pyenv deactivate foobar
 > [!TIP]
 > if you want you can specify the Python version to create the virtual environment for: `pyenv virtualenv <version> <name>`.
 
-## Shell Configuration
+## 🐚 Shell Configuration
 
 This is just a quick summary of the configuration lines added to my `.bashrc`:
 
@@ -120,7 +120,7 @@ eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 ```
 
-## Managing Dependencies
+## 📋 Managing Dependencies
 
 When it comes to dealing with specific dependency versions, I like to use the method [Kenneth Reitz](https://www.kennethreitz.org/essays/a-better-pip-workflow) published back in 2016.
 
@@ -257,7 +257,7 @@ cat >/tmp/requirements-to-freeze.txt
 /venv/bin/pip freeze -r /tmp/requirements-to-freeze.txt'
 ```
 
-## Caching Dependencies
+## ⚡ Caching Dependencies
 
 Starting with pip version 6.0 you can prevent having to reinstall dependencies that are used across multiple virtual environments by caching them (this is especially useful with Continuous Integration builds).
 
@@ -275,7 +275,7 @@ require-virtualenv = true
 download-cache = $HOME/.pip/cache
 ```
 
-## Command Line Packages
+## 💻 Command Line Packages
 
 As a bonus section I'm going to quickly mention the tool [`pipx`](https://github.com/pipxproject/pipx) which allows us to install Python command line tools such that they are isolated binaries and so they don't clutter up our top-level Python runtime space.
 

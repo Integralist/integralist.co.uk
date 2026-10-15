@@ -8,13 +8,13 @@ tags: [shell, neovim]
 I don't know who needs to hear this but:\
 **I love my developer tools**.
 
-## Core
+## ⚙️ Core
 
 - **Package Manager**: [Homebrew](https://brew.sh/)
 - **Terminal**: [Ghostty](https://ghostty.org)
 - **Code Editor**: [Neovim](https://neovim.io)
 
-## History
+## 📜 History
 
 - Used stock macOS Terminal.app with [tmux](https://github.com/tmux/tmux/wiki)
   for 10+ years.
@@ -28,7 +28,7 @@ I don't know who needs to hear this but:\
 - I finally landed on [Ghostty](https://ghostty.org) which has been great. Yes,
   it still has minor issues but the community is active and open.
 
-## Workflow
+## 🔄 Workflow
 
 I use [Zsh](https://www.zsh.org) Autocomplete with
 [fzf-tab](https://github.com/Aloxaf/fzf-tab) to replace Zsh's default completion
@@ -45,7 +45,7 @@ Ghostty is open somewhere).
 > You can find my Neovim config [here](https://github.com/integralist/nvim) and
 > my dotfiles [here](https://github.com/integralist/dotfiles).
 
-## Supplementary
+## 🧰 Supplementary
 
 - **Code Statistics**: [Tokei](https://github.com/XAMPPRocky/tokei/blob/master/README.md)
 - **DNS Client**: [Doggo](https://github.com/mr-karan/doggo/blob/main/README.md)
@@ -73,7 +73,7 @@ Ghostty is open somewhere).
 > `htop` is so much more flexible and configurable, and although the graphs in
 > `btm` are nice, I don't _need_ them.
 
-## Browser
+## 🌐 Browser
 
 Controversial, but I had moved away from
 [Firefox](https://www.mozilla.org/en-GB/firefox/new/) with a whole suite of

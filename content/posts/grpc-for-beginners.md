@@ -5,7 +5,7 @@ description: An introduction to Google's gRPC framework covering Protocol Buffer
 tags: [grpc, go]
 ---
 
-## Introduction
+## 📖 Introduction
 
 I started designing a new microservice that I wanted to write in [Go](https://golang.org/). The service was to be a JSON RPC service over TCP, and the expected consumer servicer I would build using [Ruby](https://www.ruby-lang.org/).
 
@@ -41,7 +41,7 @@ Now the reason for this post is that I didn't find the documentation to be that 
 
 So with this in mind, let's crack on...
 
-## Install gRPC
+## ⚙️ Install gRPC
 
 First thing we need to do is install gRPC's C based libraries. Once we have this installed we will later install plugin extensions for other programming languages (such as Go and Ruby, but there are other languages available).
 
@@ -53,7 +53,7 @@ One of the things I discovered further along in my research of gRPC (and I wish 
 - `make`
 - `make install`
 
-## Install Proto Buffer Compiler
+## 🏗️ Install Proto Buffer Compiler
 
 Now that we have gRPC installed we also need the compiler for the Protocol Buffer definition file. This is the file that defines our service and which we'll get round to writing shortly. In order to install the compiler you'll first need to make sure you have the [requisite dependencies installed](https://github.com/google/protobuf/tree/master/src).
 
@@ -75,7 +75,7 @@ Once you do that, you can execute the following steps:
 > [!INFO]
 > each Make target took ~10mins each to run
 
-## Hello World Proto Definition
+## 📄 Hello World Proto Definition
 
 Protocol Buffers are designed by Google to be language and platform neutral, and so in theory you can use it with your own RPC implementation. But in reality most people will use gRPC with Protocol Buffers.
 
@@ -356,7 +356,7 @@ var fileDescriptor0 = []byte{
 }
 ```
 
-## Ruby Example
+## 💎 Ruby Example
 
 OK, so we've defined what our service does: it's an RPC service that exposes a `Process` method that takes an argument. But what that method returns we've yet to build (that's not the responsibility of the definition file).
 
@@ -455,7 +455,7 @@ Which should result in the output:
 "Greeting: Hello Mark"
 ```
 
-## Go Example
+## 🐹 Go Example
 
 We can set up our services to use Go completely or we can mix and match. But let's see how to use both the client and server from Go. As with Ruby, we've defined what our service does: it's an RPC service that exposes a `Process` method that takes an argument. But what that method returns we've yet to build.
 
@@ -572,7 +572,7 @@ Which should result in the output:
 > if you leave off the argument "Mark"\
 > then the output will default to "Hello world" instead
 
-## Conclusion
+## 🏁 Conclusion
 
 So there you go. Hopefully you've found this break down useful. The principles of gRPC seem promising, and although I'm not keen on the design of the auto-generated code being not as 'idiomatic' as you'd expect for a language such as Ruby (I'm not sure what the other language implementations are like) I still think this could be an interesting evolution of the microservices movement.
 

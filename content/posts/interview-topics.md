@@ -9,21 +9,21 @@ tags: [management]
 > **UPDATE**: I moved on from BuzzFeed October 2020 and Joined [Fastly](https://www.fastly.com).\
 > See my [resume](/resume/) for details.
 
-## Introduction
+## 📖 Introduction
 
 An organisation reached out to me about whether I would like to work for them. The focus of this post **_isn't_** that company (hence I've not mentioned their name), but more about a set of experiences I've had when changing jobs and how I think they're important to keep in mind, along with specific topics of interest you should look to include, when considering future opportunities.
 
-## What Happened?
+## 🕵️ What Happened?
 
 A recruiter, let's say they were calling on behalf of the "Foo" company, contacted me to say they (and their CTO) had stumbled across and enjoyed a selection of my blog posts, and found my profile on LinkedIn to fit the candidate they were looking for.
 
-## My current work situation
+## 🏢 My current work situation
 
 I work at a company called [BuzzFeed](https://www.buzzfeed.com/).
 
 I've been here for almost two years now, and I came to them from the [BBC](http://www.bbc.co.uk/news).
 
-## Am I happy at BuzzFeed?
+## 😊 Am I happy at BuzzFeed?
 
 Yes. 🙂
 
@@ -43,11 +43,11 @@ As far as interviewing, BuzzFeed also got brownie points for...
 > [!INFO]
 > † one example being, they already knew my salary and still increased it by a significant percentage
 
-## Did you talk to the Foo company?
+## 💬 Did you talk to the Foo company?
 
 Yes. I wanted to see how they compared.
 
-## How _did_ they compare?
+## ⚖️ How _did_ they compare?
 
 Well, I didn't get past the initial conversation because they didn't have a "remote role" for me, so I couldn't say with 100% certainty how they would have compared.
 
@@ -62,7 +62,7 @@ But that said, there were some key aspects I took away from the conversation tha
 > [!INFO]
 > † I realised they cared less about me as a 'person', someone the company could build a long term relationship with, and more about me as a 'number'. I was a resource, an entity they could own.
 
-## What was the problem?
+## ⚠️ What was the problem?
 
 This company is (as they themselves stated) entirely made up of engineers, with the lightest touch of management. Through my discussion it became obvious that building new products with new tech was the focus and drive for those working there. But in that environment, being able to work _effectively_, _efficiently_ and with _good communication_ (along with making sure you're working on _the right thing_ and _at the right time_) is not usually the case (in my experience).
 
@@ -88,7 +88,7 @@ For me, getting paid is important (because ultimately it allows me to look after
 
 I've been fortunate enough with my privilege to _be able_ to have that opinion, and I appreciate that for others this isn't necessarily going to be the case, and so for those of you who don't feel that way because of circumstances: that's of course ok and valid. So with that in mind, I will cover what I feel are those _other_ important topics next...
 
-## What's important to _you_?
+## 🧭 What's important to _you_?
 
 First, I want to take a moment to re-iterate, that you need to find what's important _to you_.
 
@@ -108,7 +108,7 @@ At any rate, figure out _your_ priorities, _your_ standards and _your_ values, w
 
 But also remember that these perspectives will change over time, and that's ok too (sometimes we need stability in a fragile industry and nothing else).
 
-## What should you talk about?
+## 🗣️ What should you talk about?
 
 It's a good idea, at the start of _any_ conversation, to ask:
 
@@ -180,7 +180,7 @@ Otherwise, here are the list of questions/topics I like to cover...
   - Where is this company going?
   - What are the end goals?
 
-## Conclusion
+## 🏁 Conclusion
 
 I think that pretty much covers everything of interest. To me at least these broad topics will give you a good indicator of what an organisation is like (or the _potential_ they have), depending on how they answer these questions.
 

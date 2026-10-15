@@ -11,7 +11,7 @@ You're also likely to discover that there are many tools available that claim to
 
 You should carefully compare the value of each individual tool that is under consideration, and to do _that_ we typically utilize a comparative table.
 
-## Comparison Matrix
+## 📊 Comparison Matrix
 
 A comparison matrix table should take into consideration the following properties:
 
@@ -33,7 +33,7 @@ A comparison matrix table should take into consideration the following propertie
 >
 > Although again, this is flawed because a code base with a much higher number of users (and thus a much higher number of issues raised) may not be able to review issues as quickly as a code base with very few users.
 
-## Emoji Key
+## 🔑 Emoji Key
 
 We will use the following emojis to identify comparative outcomes:
 
@@ -45,7 +45,7 @@ We will use the following emojis to identify comparative outcomes:
 > [!INFO]
 > I will sometimes mark both tools as neither ‘winner’ or ‘loser’ due to the comparative value not necessarily being indicative of either. For example, the data point might just be ‘of interest’ (such as the date of when the project started).
 
-## Example
+## 💡 Example
 
 |            | Tool A | Tool B |
 |------------|--------|--------|

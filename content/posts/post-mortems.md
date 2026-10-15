@@ -8,13 +8,13 @@ tags: [devops, management]
 > [!TIP]
 > for those short on time: here's the [Post-Mortem Template](https://docs.google.com/document/d/1rYERE1LaobML3puIa94jJSh2cQ0kHflCk8zmVo3pWq0/edit?usp=sharing)
 
-## What is a post-mortem?
+## 🩺 What is a post-mortem?
 
 When you have a service outage, or any form of unexpected service disruption, you first resolve the issue and then proceed to discuss what happened, why and how.
 
 The process of discussion is referred to as a 'post-mortem'.
 
-## How do we make post-mortems effective?
+## 🎯 How do we make post-mortems effective?
 
 You shouldn't just get a bunch of people together in a room to discuss an incident. You need to:
 
@@ -78,7 +78,7 @@ It highlights to others (not just tech and engineering) that these mistakes aren
 
 Because of all that (and more), who you share the post-mortem document with really does depend on you and your company's values/standards.
 
-## A template for success
+## 📋 A template for success
 
 Below I link to a Google document we use as a template for our post mortem meetings, and I've included the relevant sections below just for an 'at a glance' view.
 
@@ -226,10 +226,10 @@ e.g.
 
 A list of the things we should pro-actively improve upon. Generally this will be resolutions to the things that didn't go well.
 
-## Template Document
+## 📄 Template Document
 
 View the [Post-Mortem Template](https://docs.google.com/document/d/1rYERE1LaobML3puIa94jJSh2cQ0kHflCk8zmVo3pWq0/edit?usp=sharing)
 
-## Conclusion
+## 🏁 Conclusion
 
 Let me know what you think on twitter. If you have any improvements or you think I have things totally wrong, then I'd love to hear about it.

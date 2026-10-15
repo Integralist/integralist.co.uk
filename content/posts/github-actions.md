@@ -10,7 +10,7 @@ tags: [github, devops]
 
 I've been using GitHub Actions a lot recently and I've found it to be immensely flexible and feature rich. I think it's well worth your time learning how to run your CI/CD pipelines via GitHub Actions, and in this post that's exactly what we're going to dig into.
 
-## Terminology
+## 🔤 Terminology
 
 It all starts with a 'workflow'.
 
@@ -28,7 +28,7 @@ GitHub has a nice visualisation of this...
 > [!INFO]
 > Each job you define will run in parallel. If you need jobs to run sequentially, then you'll need to configure a job to depend on another job using the `needs` property (we'll see an example of this later).
 
-## Documentation
+## 📚 Documentation
 
 I would strongly suggest bookmarking the [official documentation](https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions) because it's very thorough. Unfortunately it's so thorough that it can be a bit overwhelming, but don't worry, once you've gotten familiar with the various concepts you'll start to remember where the important information is located.
 
@@ -41,13 +41,13 @@ The pages I use the most are:
 - **[Environment variables](https://docs.github.com/en/actions/learn-github-actions/environment-variables)**: most of the 'context' properties are also exposed as environment variables to make it easier for your shell commands/scripts to utilise.
 - **[Reusing workflows](https://docs.github.com/en/actions/learn-github-actions/reusing-workflows)**: If you have a bunch of jobs all doing a similar thing (e.g. you've three jobs and each of them setup a specific set of environment variables before installing the rust programming language), then you can move that duplication into a separate workflow file that your main workflow can call out to.
 
-## Experimenting
+## 🧪 Experimenting
 
 The best thing to do when it comes to learning GitHub Actions is to create a test repo as a playground, like I did here: https://github.com/Integralist/actions-testing.
 
 You can of course use an existing repo if you want, but I prefer to use something completely decoupled when I'm testing a new tool.
 
-## Workflows
+## ⚙️ Workflows
 
 As I mentioned earlier: everything starts with a workflow.
 
@@ -65,7 +65,7 @@ In the following example you'll see I have created three separate workflows:
 
 You can create as many workflows as you need to, and you can name a workflow file anything you like.
 
-## Events
+## 🔔 Events
 
 Once we create a workflow file, let's see how we can trigger any jobs that are defined within the workflow. Be aware that in the following example workflow I have not defined any jobs, I'm focusing on the events configuration only:
 
@@ -88,11 +88,11 @@ So we can see I've given my workflow a name using the `name` key, and I've defin
 
 Refer to GitHub's [events documentation](https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows) to learn more about the various events you can configure. For example, you can restrict a workflow to only execute against a specific branch.
 
-## Environment
+## 🖥️ Environment
 
 Each job runs inside its own virtual machine 'runner', which means (just as an example) files you create, or data you produce, will not persist across jobs. This includes things like environment variables.
 
-## Example Job
+## 💼 Example Job
 
 Let's take a look at a very simple job:
 
@@ -123,7 +123,7 @@ Let's now break apart this workflow to understand what it's doing...
 
 As you can see, defining a workflow and its jobs/steps is actually very simple and intuitive. Now we can start looking at using more features and how to take advantage of the platform.
 
-## Environment Variables
+## 🌲 Environment Variables
 
 GitHub Actions let you configure environment variables in multiple places depending on the scope they should have.
 
@@ -243,7 +243,7 @@ The trick is to update a GitHub Actions provided environment variable called `$G
 > [!TIP]
 > You could also use the output of a step as the input to the `actions/setup-node` action, but we'll look at that feature later.
 
-## Secrets
+## 🔐 Secrets
 
 The previous Node.js example workflow actually leads us quite nicely into this section about [secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets#using-encrypted-secrets-in-a-workflow).
 
@@ -304,7 +304,7 @@ jobs:
 
 Notice that the workflow file basically hasn't changed, except we swapped `secrets.GITHUB_TOKEN` for `secrets.NPM_AUTH_TOKEN`.
 
-## Third Party Actions
+## 🧩 Third Party Actions
 
 An action is just code that interacts with your repository. It's possible to write your own custom actions and to share them with the community.
 
@@ -323,7 +323,7 @@ All of the above actions, with the exception of the last, are official GitHub ma
 > [!INFO]
 > I've no idea why they don't provide a Rust action.
 
-## Conditions
+## 🔀 Conditions
 
 You can use an `if` conditional statement to control whether a job or step is run. It's best to use this feature if you need to _skip_ a job/step apposed to using an exit code from within a `run` shell command/script to stop a job/step that has already started to run.
 
@@ -347,7 +347,7 @@ The above example won't work simply because the string `"main"` is using double 
 
 If you want to learn more about the available operators, like `==`, `!=` and `&&` etc, then refer to the [operators documentation](https://docs.github.com/en/actions/learn-github-actions/expressions#operators).
 
-## Persisting Data
+## 💾 Persisting Data
 
 A GitHub Action job does not persist data by default, as each job runs within its own 'runner'. To persist data we can use either a:
 
@@ -492,7 +492,7 @@ This means, when it comes to running another job, you need to ensure you define 
 
 Meaning there was nothing else to do. I imagine if there were changes to the files in the given path then it would indicate the cache was updated with the latest files.
 
-## Reusable Workflows
+## ♻️ Reusable Workflows
 
 If you have a bunch of setup configuration that is the same between jobs, then you can move that configuration into a separate workflow file that can then be imported and used by each job in your main workflow file.
 
@@ -589,6 +589,6 @@ Now one important consideration is that the reusable workflow will not inherit t
 
 Annoyingly you can't just set an input with `${{ env.FOO }}` because the `env` context object can't be referenced. So if your reusable job is used a lot then you either have to hardcode the value as an `input` to the reusable workflow or you store the environment variable as a secret in the GitHub UI so that you can reference it from the `workflow_call.secrets` property.
 
-## Conclusion
+## 🏁 Conclusion
 
 There is so much more to explore with GitHub Actions. The bits I've mentioned here are just the tip of the iceberg. I strongly recommend you read the documentation and have a play around with these, and other features. Let me know on twitter what you think of GitHub Actions and whether you're using it in your projects.

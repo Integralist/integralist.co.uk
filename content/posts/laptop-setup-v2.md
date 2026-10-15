@@ -5,11 +5,11 @@ description: Updated guide for setting up a new macOS laptop including GPG/SSH k
 tags: [shell, security]
 ---
 
-## Introduction
+## 📖 Introduction
 
 This is the second edition to ["New Laptop Configuration"](/posts/laptop-setup/).
 
-## Backup
+## 💾 Backup
 
 When moving laptops I will temporarily backup my existing GPG and SSH keys (encrypted) to an external data storage device.
 
@@ -61,7 +61,7 @@ Then I clear out the temporary directory:
 rm -rf /tmp/keys
 ```
 
-## Steps
+## 🪜 Steps
 
 1. Install Rust.
 

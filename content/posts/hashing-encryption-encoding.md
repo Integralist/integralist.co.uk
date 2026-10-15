@@ -5,7 +5,7 @@ description: A concise reference explaining the differences between hashing, enc
 tags: [security]
 ---
 
-## Introduction
+## 📖 Introduction
 
 I've [written previously](/posts/security-basics/) (and in-depth) on the subject
 of security basics, using tools such as GPG, OpenSSH, OpenSSL, and Keybase. But
@@ -13,7 +13,7 @@ this time I wanted to focus in on the differences between encryption and
 hashing, whilst also providing a slightly more concise reference point for those
 already familiar with these concepts.
 
-## Terminology
+## 📚 Terminology
 
 OK, so using the correct terminology is essential and helps us to be explicit
 and clear with what we really mean.
@@ -47,7 +47,7 @@ and clear with what we really mean.
 > doc](https://docs.google.com/document/d/1qs3jEIQvocdVhSxCSPLF1BoLnp91aLnuUIasvl-maYo/edit?usp=sharing)
 > I created.
 
-## Hashing vs Encryption
+## ⚖️ Hashing vs Encryption
 
 In essence:
 
@@ -86,7 +86,7 @@ If the digest you generated is the same as the decrypted digest, then we can be
 sure the message was delivered unmodified whilst in transit (e.g.
 'man-in-the-middle').
 
-## Base64 Encoding
+## 🔤 Base64 Encoding
 
 Base64 is a way of taking binary data and transforming it into a text-based
 format. It is commonly used when there is a need to transfer the binary data
@@ -100,7 +100,7 @@ and represents them as four printable characters in the ASCII standard.
 > Base64 encoded strings are NOT secure.\
 > Remember, it _encodes_ data, not _encrypt_ it.
 
-## MAC vs HMAC
+## 🛡️ MAC vs HMAC
 
 A 'MAC' (Message Authentication Code) uses symmetrical cryptography with an
 encryption algorithm (such as AES †) to verify the integrity of a message,
@@ -164,7 +164,7 @@ cat plaintext.txt | openssl dgst -sha512 -binary | base64
 > `base64` could be replaced with openssl's base64 encoding command:
 > `openssl enc -base64 -A`
 
-## Random Password Generation
+## 🎲 Random Password Generation
 
 Generating random passwords that are complex enough to make automated attacks
 difficult can be a bit tedious, yet important. But if you install a program such
@@ -184,7 +184,7 @@ following:
 |93<3(M;r?~40c$A@>{\
 ```
 
-## Hash Functions
+## 🧮 Hash Functions
 
 There are many different ways of accessing a hash function, two options we'll
 look at will be using the executable `shasum` (provided by macOS) and the
@@ -250,7 +250,7 @@ Which outputs:
 The first number is the checksum and the second number is the amount of data in
 bytes.
 
-## OpenSSH
+## 🔑 OpenSSH
 
 OpenSSH provides secure and encrypted tunneling capabilities and is typically
 used to enable secure shell connections from your machine to external servers.
@@ -289,7 +289,7 @@ alias sshagent='eval "$(ssh-agent -s)" && ssh-add -K ~/.ssh/github_rsa'
 > the use of the `-K` flag is macOS specific, it means it'll add the key
 > into the macOS keychain program.
 
-## OpenSSL
+## 🔒 OpenSSL
 
 OpenSSL is designed to provide a method for securing web based communication
 (think HTTPS/TLS/SSL).
@@ -444,7 +444,7 @@ JIPU5SiCgKP3XVrnef1gY+PxjBvjdQgSN+OJoBAdWmCa/cRvDdFl01GQiSwFimQ5
 1lVa/7hfYIK6Z5jjHNauaQ==
 ```
 
-## GPG
+## 🔏 GPG
 
 GPG is a tool which provides encryption and signing capabilities, and supports
 both symmetrical and asymmetrical encryption + digital signing of your encrypted
@@ -649,7 +649,7 @@ gpg:                using RSA key F2G91BE243E405E5B64B08A1CB5EBDB2561C861B
 gpg: Good signature from "Bob <bob@example.com>" [ultimate]
 ```
 
-## Keybase
+## 👤 Keybase
 
 [Keybase](https://keybase.io/) is a public-key directory that maps social media
 identities to encryption keys in a publicly auditable manner. Keybase offers an

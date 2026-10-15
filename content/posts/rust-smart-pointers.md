@@ -5,7 +5,7 @@ description: "A reference guide to Rust's smart pointer types: Box, Rc, Arc, Cel
 tags: [rust]
 ---
 
-## Summary
+## 📝 Summary
 
 The five types covered: `Box`, `Rc`, `Arc`, `Cell`, `RefCell`.
 
@@ -30,7 +30,7 @@ So choose `Rc` whenever possible.
 
 Subsequently `RefCell` introduces the possibility of ending up with multiple mutable borrows. The borrow rules for `RefCell` aren't statically checked at compile time but dynamically checked at _runtime_, which means this type is capable of triggering a panic if multiple mutable borrows is detected.
 
-## IMPORTANT
+## ⚠️ IMPORTANT
 
 I'm not the author of the _following_ content.
 
@@ -41,7 +41,7 @@ Rather than link off to various intertwined documentation pages, with lots of ex
 This means I take no credit for the following content.\
 It was written by many people much smarter than me.
 
-## Context
+## 🗺️ Context
 
 A _pointer_ is a general concept for a variable that contains an address in memory. This address refers to, or “points at,” some other data. The most common kind of pointer in Rust is a reference. References are indicated by the & symbol and borrow the value they point to. They don’t have any special capabilities other than referring to data, and have no overhead.
 
@@ -52,7 +52,7 @@ _Smart pointers_, on the other hand, are data structures that act like a pointer
 
 Smart pointers are usually implemented using structs. Unlike an ordinary struct, smart pointers implement the `Deref` and `Drop` traits. The `Deref` trait allows an instance of the smart pointer struct to behave like a reference so you can write your code to work with either references or smart pointers. The `Drop` trait allows you to customize the code that's run when an instance of the smart pointer goes out of scope.
 
-## `Box<T>`
+## 📦 `Box<T>`
 
 Boxes allow you to store data on the heap rather than the stack. What remains on the stack is the pointer to the heap data.
 
@@ -62,7 +62,7 @@ Usage:
 - When you have a large amount of data and you want to transfer ownership but ensure the data won’t be copied when you do so (e.g. only the small amount of pointer data is copied around on the stack, while the data it references stays in one place on the heap).
 - When you want to own a value and you care only that it’s a type that implements a particular trait rather than being of a specific type (i.e. _trait objects_ used for dynamic dispatch).
 
-## `Rc<T>`
+## 🔗 `Rc<T>`
 
 This type is an abbreviation for _reference counting_ and it enables multiple ownership. It lets us have multiple “owning” pointers to the same data, and the data will be freed (destructors will be run) when all pointers are out of scope.
 
@@ -71,11 +71,11 @@ We use the `Rc<T>` type when we want to allocate some data on the heap for multi
 > [!IMPORTANT]
 > `Rc<T>` is only for use in single-threaded scenarios. When shared ownership between threads is needed, `Arc<T>` (Atomic Reference Counted) can be used.
 
-## `Arc<T>`
+## 🌐 `Arc<T>`
 
 The same as `Rc<T>` but thread-safe (it has the same API as `Rc<T>` to make them interchangeable). But thread-safety comes with a performance cost so if you don't need thread-safety, then definitely opt for `Rc<T>` instead.
 
-## `Cell<T>`/`RefCell<T>`
+## 🧪 `Cell<T>`/`RefCell<T>`
 
 Rust memory safety is based on this rule: Given an object `T`, it is only possible to have one of the following:
 

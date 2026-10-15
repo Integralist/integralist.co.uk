@@ -9,7 +9,7 @@ I'm going to walk you through how to understand reflection in Go using the [`ref
 
 The use of reflection is often frowned upon because it side steps the 'compile time' type safety we get in Go. So I'll also explain how we can still ensure a level of type safety even at runtime.
 
-## What is reflection?
+## 🪞 What is reflection?
 
 > Reflection in computing is the ability of a program to examine its own structure, particularly through types; it's a form of metaprogramming. It's also a great source of confusion.\
 > -- [The Laws of Reflection](https://blog.golang.org/laws-of-reflection)
@@ -18,7 +18,7 @@ The above quote comes from the opening of the Go Blog post [The Laws of Reflecti
 
 There will be a summarized version of that information here, but ultimately what differentiates their post from mine is that I'll be discussing examples that are more practical and based on a _real_ project (e.g. [`go-flags`](https://github.com/integralist/go-flags)).
 
-## Understanding Interfaces in Go
+## 💡 Understanding Interfaces in Go
 
 In Go an 'interface type' is a collection of methods which can be defined like so:
 
@@ -83,13 +83,13 @@ This probably sounds like common sense (and as such not that interesting) but if
 
 Instead the fact it does implement the interface, and doing so is being _dynamically_ understood by the compiler is a super powerful feature.
 
-## Why do we need Reflection?
+## 🤔 Why do we need Reflection?
 
 You need reflection whenever dealing with information that wasn't known at the time of the program being written. One such example might be that you need to populate a struct with configuration data that comes from a external file.
 
 There are many other examples, and the one I'll be using today is similar in that I wanted to populate a struct with values provided by a user at runtime, specifically CLI flag values.
 
-## The building blocks of Reflection
+## 🧱 The building blocks of Reflection
 
 So let's consider what are probably the two _primary_ reflection methods people learn about first when dealing with reflection (these were used in our example code earlier):
 
@@ -104,7 +104,7 @@ Once you have either a `reflect.Value` or a `reflect.Type`, then you can start d
 
 This is where exploring a real-world use case can be handy, as it helps to clarify _why_ certain methods on these objects are called (compared to using a more _contrived_ example).
 
-## Package Walk-through: Go-Flags
+## 🚶 Package Walk-through: Go-Flags
 
 If you've ever written a CLI program in Go you'll inevitably use its [`flag`](https://golang.org/pkg/flag/) package. Most people find this package unintuitive and in some cases just downright difficult to work with or to build nice patterns of use from.
 
@@ -178,7 +178,7 @@ An example of how a user might then run this program would be:
 my_cli_app -debug -n 123 -m "something here" foo -a beepboop -b 666
 ```
 
-## Explaining how go-flags uses Reflection
+## 🔍 Explaining how go-flags uses Reflection
 
 So how exactly does [`go-flags`](https://github.com/integralist/go-flags) achieve this magic using reflection?
 
@@ -337,7 +337,7 @@ Once we know what type the field is we type assert the flag value to the relevan
 
 To fix that we call `reflect.ValueOf()` and pass it the value we're trying to set, and then pass that resulting `reflect.Value` type into `.Set()`.
 
-## Conclusion
+## 🏁 Conclusion
 
 Well, that's it! There is _sooooo_ much more to reflection than what I have had time to describe in this post, but hopefully this has been enough to help you in the future if you ever stumble across a need for reflection.
 

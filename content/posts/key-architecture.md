@@ -5,20 +5,20 @@ description: An overview of a layered personal security architecture using GPG k
 tags: [security]
 ---
 
-## Introduction
+## 📖 Introduction
 
 Just a quick post to cover the key architecture I'm using currently. I'm very interested to know how others are doing things in the hope that I can improve the security of my setup.
 
 > [!INFO]
 > I'm not a security paranoia nut, so I'm not looking for the most concrete solution. But definitely want to be sure I'm not missing anything obvious either
 
-## Visual
+## 🗺️ Visual
 
 Here is a high-level view of what I have currently:
 
 ![key architecture](/assets/img/key-architecture.png)
 
-## Breakdown
+## 🔍 Breakdown
 
 Let's start at the top...
 
@@ -52,7 +52,7 @@ If my laptop was lost, then I'd need to rely on the service provider's ability t
 
 I mention replacing the SSH key because I don't back it up. I feel this SSH key doesn't need to be a long lasting key (unlike my private GPG key which I intend to keep as safe as possible + the offline backup as a fallback).
 
-## Vulnerabilities?
+## 🛡️ Vulnerabilities?
 
 There are a few layers to this architecture and so I'm hoping this makes it harder for a compromise to be effective.
 
@@ -68,7 +68,7 @@ If someone compromises the private git repository, they again can't do anything 
 > [!INFO]
 > when exporting a private key from GPG, it is by default encrypted with its passphrase (it's not the raw key)
 
-## Conclusion
+## 🏁 Conclusion
 
 So what do you think? Is this good, bad or just plain terrible?
 

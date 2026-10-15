@@ -5,11 +5,11 @@ description: A tour through bits, bytes, RAM, base number systems, and binary en
 tags: [networking]
 ---
 
-## Introduction
+## 📖 Introduction
 
 So this is a bit of a random journey through some different computer based subjects. Things that I felt I should try to better understand. Some of it will be very basic, but hopefully it'll be useful to those who are new to tech, and are interested in learning these things (or old dogs like me who should know better).
 
-## Bit
+## 🔢 Bit
 
 The word _bit_ is short for _binary digit_.
 
@@ -20,14 +20,14 @@ Computers only understand the binary format (i.e. base-2)
 > [!TIP]
 > We discuss 'base' numbers [below](#8)
 
-## Byte
+## 🔢 Byte
 
 A grouping of eight _bits_ is called a _byte_.
 
 > [!TIP]
 > Read the next section to realise why I mention this tidbit of information
 
-## RAM
+## 💾 RAM
 
 The word _ram_ is an acronym for _random access memory_.
 
@@ -43,7 +43,7 @@ Bytes are uniquely numbered to allow easy lookup of their contents.
 
 A byte's unique number is also referred to as its _address_.
 
-## Bit and RAM Visualisation
+## 📊 Bit and RAM Visualisation
 
 ![bits visualised](/assets/img/bits-visualised.png)
 
@@ -83,13 +83,13 @@ Similarly, if we start with the bit value `1` and move to the left by `15` bits 
 
 For more bitwise operators, refer to these posts: https://wiki.python.org/moin/BitwiseOperators and https://medium.com/learning-the-go-programming-language/bit-hacking-with-go-e0acee258827
 
-## Bits and ASCII
+## 🔤 Bits and ASCII
 
 ASCII is a set of codes where each 'code point' represents a textual character such as a `1`, `a`, `z`, `!`, `?` etc.
 
 Each code point has an associated binary number. For example, `a` has the binary number `0110 0001` which if we add up the values associated with those specific bits we'll find it'll yield the code point number `97`. In ASCII the character `a` is code point `97`.
 
-## Bits and Numbers
+## 🧮 Bits and Numbers
 
 1 kilobyte (or 1KB) is 1,024 bytes.
 
@@ -102,7 +102,7 @@ The following explanation is taken from "Beginning C" by Apress Publishing...
 
 So if we add up `512+256+128+64+32+16+8+4+2+1` (notice this takes the existing 8 bit calculation from the above image and continues it for another two bits) we get `1023`.
 
-## IPs
+## 🌐 IPs
 
 Here is an example IPv4 IP:
 
@@ -141,7 +141,7 @@ We can see the decimal represenation of an IPv4 IP is made up of four base-10 nu
 > [!TIP]
 > If you're unsure of what base numbers are and how they work, then read on...
 
-## Base Numbers
+## 📐 Base Numbers
 
 It's worth quickly covering what base numbers are as they help us understand the other different protocols we use on a regular basis, such as binary and things like IPs.
 
@@ -292,7 +292,7 @@ Let's try one more conversion between base-16 to base-10. The number is `1A4`:
 - 1 x 16<sup>2</sup> = 256
 - 4 + 160 + 256 = 420
 
-## CIDR
+## 🗂️ CIDR
 
 A CIDR is a range of IP addresses. We can use our understanding of bits, bytes and octets to understand the format of a CIDR.
 
@@ -452,6 +452,6 @@ I've reproduced it below with a HTML table:
   </tbody>
 </table>
 
-## Conclusion
+## 🏁 Conclusion
 
 There you go. A whirlwind ride through different basic computer tech topics. As always, if I've gotten anything wrong then just let me know on twitter.

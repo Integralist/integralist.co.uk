@@ -5,7 +5,7 @@ description: How to navigate Unix manual page sections, sub-sections, and search
 tags: [shell, linux]
 ---
 
-## Introduction
+## 📖 Introduction
 
 Your operating system provides manual pages that explain what specific commands do and where they can be located on your computer.
 
@@ -25,7 +25,7 @@ man chmod(2)
 
 So let's understand why that is and what it means.
 
-## Sections
+## 📑 Sections
 
 So the manual pages are separated into 'sections'. This is what the number within the parentheses represents (i.e. `chmod(2)` represents the `chmod` command from section 2 of the OS manual).
 
@@ -78,7 +78,7 @@ If you wanted to know 'at a glance' what commands were available, then you could
 │   ├── aio_read.2
 ```
 
-## Sub sections
+## 📂 Sub sections
 
 You'll notice that most page files within each manual section have an extension that matches the section they're contained within (e.g. `ab.1` for `ab` command inside manual 1 or `aio_read.2` for `aio_read` command inside manual 2).
 
@@ -100,7 +100,7 @@ By looking back at the [online macOS manual pages reference](https://developer.a
 - <u>Section n</u>: contains documentation about Tcl/Tk
 - <u>Section ntcl</u>: contains documentation about Tcl/Tk
 
-## Accessing different sections
+## 🔍 Accessing different sections
 
 Typically when we type `man <some_command>`, the `man` command will search all the sections looking for the specified command.
 
@@ -127,7 +127,7 @@ But if you know for sure that the command you're looking for is somewhere within
 > [!TIP]
 > to see the intro page for a section use `man <n> intro`
 
-## Searching by phrase
+## 🔎 Searching by phrase
 
 In case you're unsure where to find a specific piece of information, you can use the `-K` flag which will search _all_ manuals for the given search term/phrase. This can be slow, so it's best to also provide a manual to scope the search down to.
 

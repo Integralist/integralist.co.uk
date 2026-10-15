@@ -5,7 +5,7 @@ description: Configuring Neovim with LSP support for Rust and Go development, in
 tags: [neovim, rust, go]
 ---
 
-## UPDATE November 2022
+## 📢 UPDATE November 2022
 
 Not long after I wrote this post I had switched from VimScript to using Lua and also making large sets of changes and tweaks to my configuration. The source of truth is:
 
@@ -20,7 +20,7 @@ This is going to be a very focused post because when you're looking to get your 
 > [!TIP]
 > I configure Neovim with `~/.config/nvim/init.vim`.
 
-## Requirements
+## 📋 Requirements
 
 - Executables.
 - Plugin manager.

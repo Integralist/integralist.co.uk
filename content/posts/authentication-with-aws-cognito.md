@@ -5,7 +5,7 @@ description: A deep dive into AWS Cognito covering user pools, identity pools, a
 tags: [aws, security]
 ---
 
-## Introduction
+## 📖 Introduction
 
 In this post I would like to introduce you to the [AWS
 Cognito](https://aws.amazon.com/cognito/) service, and to explain its various
@@ -35,7 +35,7 @@ now exists for those weary travellers looking for answers.
 
 Let's start at the beginning...
 
-## What is Cognito?
+## ☁️ What is Cognito?
 
 According to [the official blurb](https://aws.amazon.com/cognito/)...
 
@@ -47,7 +47,7 @@ In essence, Cognito provides features that let you _authenticate_ access to your
 services, while also providing features to let you _authorize_ access to your
 AWS resources.
 
-## Authentication vs Authorization
+## 🔐 Authentication vs Authorization
 
 It's important to clarify that in this blog post we're only really discussing
 authentication, and not _authorization_. They are two different concepts.
@@ -65,7 +65,7 @@ authentication, and not _authorization_. They are two different concepts.
 > document](https://docs.google.com/document/d/1qs3jEIQvocdVhSxCSPLF1BoLnp91aLnuUIasvl-maYo/edit#)
 > I put together which covers the various terminology.
 
-## User Pools vs Identity Pools
+## 👥 User Pools vs Identity Pools
 
 In order for you to be able to _authenticate_ and _authorize_ access, Cognito
 provides two separate services:
@@ -91,7 +91,7 @@ which happened to be our User Pool.
 > to [the official
 > documentation](https://docs.aws.amazon.com/cognito/latest/developerguide/authentication-flow.html).
 
-## Implementation Options
+## 🛠️ Implementation Options
 
 There are fundamentally three options available for implementing User Pools:
 
@@ -223,7 +223,7 @@ cases it does the job well enough to put up with them.
 The 'state' parameter overloading is an interesting issue and I'll come back to
 that later on when I discuss a little bit about sign-ins with social providers.
 
-## Stateless Authentication
+## 🎫 Stateless Authentication
 
 The thing we liked about Cognito was that it would allow us to build a
 'stateless' authentication system. Due to the use of [JWT](https://jwt.io/)s we
@@ -267,7 +267,7 @@ _if_ (for _whatever_ reason) we had a set of compromised users we'd otherwise
 have no way to invalidate their sessions (and we didn't want to have to build
 our own session state datastore to track all this).
 
-## Logic Processing with AWS Lambda
+## ⚡ Logic Processing with AWS Lambda
 
 With the hosted ui option you'll likely also need to utilise [AWS
 Lambda](https://aws.amazon.com/lambda/) in order to do some logic processing.
@@ -289,7 +289,7 @@ The following diagram demonstrates how we were initially using the hosted ui:
 Once the tokens are validated, the CMS will allow the user to view the relevant
 page.
 
-## Beware the Lambdas
+## ⚠️ Beware the Lambdas
 
 It's worth noting the second half of the above diagram (the section _after_ the
 lambda is triggered). What we have there are two separate lambda's, and which
@@ -357,7 +357,7 @@ their 'verification code' for the first time (and thus become marked as
 automatically considered _confirmed_ once they authenticate for the first time
 (hence why that event would trigger when we needed it to).
 
-## Useful Lambdas
+## 💡 Useful Lambdas
 
 There are some useful lambda's though, for example, the [Custom Message Lambda
 Trigger](https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-custom-message.html)
@@ -424,7 +424,7 @@ enter anything).
 Just something to consider when using Cognito: can I use lambda triggers to
 _improve_ the user flow?
 
-## Social Logins
+## 📱 Social Logins
 
 One thing that might not be clear when opting for a server-side solution is how
 to handle social logins (e.g. users signing in/up using facebook or google).
@@ -520,7 +520,7 @@ But also, when making the request to the Auth API endpoint (e.g.
 > docs](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-app-idp-settings.html)
 > for more information on the reasoning.
 
-## JWTs
+## 🪙 JWTs
 
 When you exchange the cognito 'code' for a user pool 'token', you'll actually be
 returned _three_ tokens:
@@ -560,7 +560,7 @@ https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json.
 > can check this by inspecting the `Cache-Control` header set on the JWK
 > response.
 
-## API Limits
+## 🚦 API Limits
 
 One issue we stumbled across recently was the API limits, which meant we
 couldn't make any further API requests (and for an indeterminate amount of time)
@@ -571,7 +571,7 @@ limits](https://docs.aws.amazon.com/cognito/latest/developerguide/limits.html)
 reference page, but it's still unclear how long you have to wait before you can
 start making requests again.
 
-## Logout Issues
+## 🚪 Logout Issues
 
 AWS provides a
 [`/logout`](https://docs.aws.amazon.com/cognito/latest/developerguide/logout-endpoint.html)
@@ -651,7 +651,7 @@ Our failure page is configured with a conditional check that says "if an
 So that's how we're resolving this issue currently. It's not elegant for sure
 but it works.
 
-## Other Concerns?
+## ❓ Other Concerns?
 
 It's worth me mentioning a few other concerns we had, the first of which wasn't
 directly related to Cognito but was specific to the system we were designing,
@@ -673,7 +673,7 @@ services in front of these upstreams are generally nginx instances and so we
 would use `large_client_header_buffers` to allow an increased size until such a
 time we could figure out an appropriate solution.
 
-## Which is the right solution?
+## 🧭 Which is the right solution?
 
 The answer: it depends.
 
@@ -682,7 +682,7 @@ the beginning (primarily due to documentation and general mis-understandings
 about the difference between User Pools and Identity Pools) we found it worked
 the best for our requirements, and gave us the most flexibility.
 
-## Updated Architecture
+## 🏛️ Updated Architecture
 
 If you're interested the updated architecture looked something like this...
 
@@ -699,7 +699,7 @@ behaviours that interacted with fields that needed sync'ing between Cognito and
 our legacy datastore. As times goes on, we'll start to migrate more and more
 functionality out into separate services.
 
-## Native Mobile Social Sign-ins
+## 📲 Native Mobile Social Sign-ins
 
 We discovered that the social sign-in for native mobile apps doesn't work as
 well as the web SDK's. Mobile apps need to instead do things differently as
@@ -707,7 +707,7 @@ their SDK's aren't as 'integrated' like web.
 
 ![mobile app authentication flow](/assets/img/mobile-app-authentication-flow.png)
 
-## User Pool Configuration
+## ⚙️ User Pool Configuration
 
 As far as the User Pool is concerned you'll need a few things:
 
@@ -732,7 +732,7 @@ As far as the User Pool is concerned you'll need a few things:
 > part of the hosted ui uri; meaning you can have _different_ hosted ui's (all
 > configured slightly differently).
 
-## IAM User
+## 👤 IAM User
 
 The IAM _user_ is necessary as we have to provide some credentials to the [boto
 client](https://boto3.readthedocs.io/en/latest/reference/services/cognito-idp.html)
@@ -775,7 +775,7 @@ It's the little details that can really make a difference to even the simplest
 aspects of using an SDK/API, and why Amazon's atrocious documentation is a real
 detriment to its users.
 
-## Lambda IAM Role
+## 🔑 Lambda IAM Role
 
 Below is an example IAM role policy you can use for AWS Lambda (if you're using
 the hosted ui option and need lambda for logic processing):
@@ -811,7 +811,7 @@ update user attributes within our User Pool.
 > if you're 'copying and pasting', don't forget to update `aws_account_id`
 > and `user_pool_id` in the code snippet.
 
-## Example Python API code
+## 🐍 Example Python API code
 
 This is a small slice of some Python code I wrote for abstracting away the API
 interactions with Cognito. Some readers might find it useful for understanding
@@ -1172,7 +1172,7 @@ async def resend_confirmation_code(username) -> bool:
     return True
 ```
 
-## Example Cognito App Settings
+## 🎛️ Example Cognito App Settings
 
 This isn't meant to be an exhaustive example, but it gives you an idea of some
 of the configuration you'll need.
@@ -1193,7 +1193,7 @@ of the configuration you'll need.
   profile\
   aws.cognito.signin.user.admin
 
-## Example Cognito User Pool "Federation: Identity Providers"
+## 🤝 Example Cognito User Pool "Federation: Identity Providers"
 
 For each provider there is a "Authorize Scope" section.
 
@@ -1215,7 +1215,7 @@ For each provider there is a "Authorize Scope" section.
 - google: `name` --> user_pool: `Name`
 - google: `sub` --> user_pool: `Username`
 
-## Example Facebook App Configuration
+## 📘 Example Facebook App Configuration
 
 https://developers.facebook.com/apps
 
@@ -1243,7 +1243,7 @@ https://developers.facebook.com/apps
   https://your-organisation.auth.us-east-1.amazoncognito.com/oauth2/idpresponse\
   https://auth-api.example.com/auth/signin/callback
 
-## Example Google App Configuration
+## 🔍 Example Google App Configuration
 
 https://console.developers.google.com/
 
@@ -1263,7 +1263,7 @@ https://console.developers.google.com/
   https://your-organisation.auth.us-east-1.amazoncognito.com/oauth2/idpresponse\
   https://auth-api.example.com/auth/signin/callback
 
-## Terraform Example
+## 🏗️ Terraform Example
 
 ```
 # Examples for Cognito User Pools can be found here:
@@ -1893,7 +1893,7 @@ variable "root_domain" {
 }
 ```
 
-## Conclusion
+## 🏁 Conclusion
 
 There's so much more to the story, but I think this post is long enough as it is
 and I don't want to keep you any longer. If you have any questions, then please

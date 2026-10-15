@@ -14,7 +14,7 @@ Below is an image that visualises the concept, and makes understanding these var
 ![multigrain services](/assets/img/multigrain-services.png)
 <center><small>[source: thenewstack.io](https://thenewstack.io/miniservices-a-realistic-alternative-to-microservices/)</small></center>
 
-## A rose by any other name
+## 🌹 A rose by any other name
 
 To me "mini services" isn't anything new, nor do I think it necessarily needs a new term to be applied to it. For me "mini services" are effectively just [SOA](https://en.wikipedia.org/wiki/Service-oriented_architecture) (Service Oriented Architecture), but done right.
 
@@ -25,7 +25,7 @@ Although maybe a new services lexicon † _is_ useful, at least for giving a con
 > [!INFO]
 > † the vocabulary of a person, language, or branch of knowledge.
 
-## Definitions
+## 📖 Definitions
 
 Let's breakdown these concepts along with their old/new terminology:
 
@@ -40,7 +40,7 @@ Let's breakdown these concepts along with their old/new terminology:
 > [!INFO]
 > Micro services are themselves a new'ish concept at ~7 years of age (at the time of writing). The term was first used in 2011.
 
-## Real micro services?
+## 🔬 Real micro services?
 
 Martin Fowler famously defined microservices as having a very specific design application and that most "micro services" aren't conforming to that. Specifically he says that they should:
 
@@ -57,7 +57,7 @@ With the pub/sub model, the micro service publishes notifications whenever somet
 > [!INFO]
 > Queue systems like RabbitMQ or SQS etc are used heavily in these cases to allow for that decoupling.
 
-## What do you use?
+## 🛠️ What do you use?
 
 I tend to gravitate towards the SOA pattern † as it's a nice balance between loose coupling and separation of domain boundaries without descending into the co-ordination and infrastructure madness of micro services.
 

@@ -20,14 +20,14 @@ I should also be clear and say that this isn't a 'complete' guide. There are man
 
 That all said, let's get started...
 
-## Prerequisite
+## 📋 Prerequisite
 
 I've presumed the reader:
 
 1. Is familiar with the [Go](https://go.dev) programming language and how to write programs with it.
 1. Is familiar with what [Terraform](https://www.terraform.io) is (and ideally has used it before).
 
-## go.mod
+## 🐹 go.mod
 
 Let's start with the _direct_ dependencies needed by my 'mock' provider:
 
@@ -52,7 +52,7 @@ Hashicorp is working on a replacement to the terraform-plugin-sdk called the [Te
 
 **UPDATE**: I have since discovered there is a 'scaffold' project that Hashicorp provides here https://github.com/hashicorp/terraform-provider-scaffolding that is similar to my mock provider! So I would recomend, once you finish reading this post, giving that a read to see how their hierarchy compares to my mock provider (there's also one for the new plugin framework, which I'll be checking out: https://github.com/hashicorp/terraform-provider-scaffolding-framework).
 
-## main.go
+## 💻 main.go
 
 Now let's take a look at our `main` package entry point, which is 'short and sweet'...
 
@@ -386,7 +386,7 @@ The next time the user runs `terraform apply` they'll find Terraform will trigge
 
 Let's now look at each CRUD function individually...
 
-## Create
+## ➕ Create
 
 The CREATE operation typically will make API calls to create resources. It won't set anything in the terraform state, with the exception of setting a unique ID that will be used by all the other functions to access the resource data from state.
 
@@ -418,7 +418,7 @@ Finally, we call the READ function (`resourceRead()`) and pass through the `d` a
 
 It's up to you whether that's something you want to do, as a READ could fail due to a network issue and not necessarily mean there was an error with the CREATE operation.
 
-## Read
+## 📖 Read
 
 The READ operation must handle three things:
 
@@ -462,7 +462,7 @@ Once that's done we're able to set the updated data structure into the local sta
 
 Remember that the `last_updated` attribute was also marked as 'computed' as so we need to set that dynamically too (and for that I just set the value using the current timestamp, and to be fair I could of done the same for the `version` attribute rather than use an external uuid package).
 
-## Update
+## 🔄 Update
 
 The UPDATE operation is similar to the READ but we typically use additional SDK methods to help us know if there's been a change that would require a modification to the data.
 
@@ -485,7 +485,7 @@ So some similar stuff here. First we get the resource's ID with `d.Id()` but now
 
 Lastly, we do a READ operation to be sure we get the updated API changes stored into our local state.
 
-## Delete
+## 🗑️ Delete
 
 The DELETE operation is very simple. In order to delete a resource from the local Terraform state we simply need to set the ID for the resource to an empty string...
 
@@ -499,7 +499,7 @@ func resourceDelete(d *schema.ResourceData, m any) error {
 
 Now in our mock provider you'll see we get the resource ID and although that looks pointless, in a real provider, you would want to get the resource ID because remember you'd need to make an API call to delete the resource first before deleting it from the Terraform state.
 
-## Data Sources
+## 🗄️ Data Sources
 
 OK, before we wrap up, let's look at our example data source to see the schema structure:
 
@@ -568,7 +568,7 @@ We then set the `things` data back into the local state using `d.Set()`.
 
 Now we've reached the final interesting part, which is the `d.SetId()` call. So to explain, we don't have a unique ID for this data resource so we create one using a timestamp format. I typically see people use a hash of the returned API data as a unique key, so pick your poison.
 
-## How to use this provider
+## 🚀 How to use this provider
 
 Now if my mock provider was published to the Terraform registry it would be very simple to consume, but I've not done that because I wanted an opportunity to explain how to test your own provider locally to be sure it's working first.
 
@@ -599,7 +599,7 @@ So, to consume this mock provider without it being published to the Terraform re
 > [!IMPORTANT]
 > every time you make a change to the Terraform provider code, you'll need to rebuild the binary and then go to your consuming Terraform project and reinitialize (i.e. `terraform init`) so it picks up the latest version of the `terraform-provider-mock` binary.
 
-## Local Development
+## 🛠️ Local Development
 
 When running:
 
@@ -645,7 +645,7 @@ This error is expected because we've not actually published this provider to the
 
 **UPDATE**: I've since discovered https://pkg.go.dev/github.com/hashicorp/terraform-plugin-log/tflog
 
-## Debugging a Terraform Provider
+## 🐛 Debugging a Terraform Provider
 
 There are essentially two approaches:
 
@@ -654,7 +654,7 @@ There are essentially two approaches:
 
 Refer to the [official Hashicorp plugin documentation](https://www.terraform.io/plugin/sdkv2/debugging) and also the [Fastly Terraform provider](https://github.com/fastly/terraform-provider-fastly#debugging-the-provider) documents, which demonstrates the latter approach.
 
-## Conclusion
+## 🏁 Conclusion
 
 There we have it! A simple Terraform provider broken down as simply as I could manage.
 

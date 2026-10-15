@@ -5,7 +5,7 @@ description: Essential Go concurrency patterns including goroutines, channels, m
 tags: [go]
 ---
 
-## Goroutines
+## 🧵 Goroutines
 
 The `go` keyword is used to start a goroutine.
 
@@ -61,7 +61,7 @@ https://play.golang.com/p/SdOdZ90-exI
 > When a Go program starts, the Go runtime creates a goroutine to run `main`.\
 > This main goroutine can then spawn additional goroutines as needed.
 
-## Channels
+## 📨 Channels
 
 Channels in Go are a powerful way to communicate between goroutines and to
 synchronize them. They allow you to send and receive values across goroutines,
@@ -118,7 +118,7 @@ https://play.golang.com/p/2Qn_NacVw-0
 > The sender is the goroutine that writes data to the channel.\
 > Hence the sender knows when there's no more data to be sent, not the receiver.
 
-## Select Statement
+## 🔀 Select Statement
 
 The `select` statement is used to wait on multiple channel operations.\
 It blocks until one of its cases can proceed, which makes it essential for
@@ -198,7 +198,7 @@ func main() {
 
 https://play.golang.com/p/6BMPeUKdqkg
 
-## Wait Groups
+## ⏳ Wait Groups
 
 A `sync.WaitGroup` waits for a collection of goroutines to finish. It helps
 coordinate a group of goroutines and ensures the program waits until all of them
@@ -273,7 +273,7 @@ func main() {
 
 https://go.dev/play/p/b_WdOO7IYVM?v=gotip
 
-## Error Groups
+## 🚨 Error Groups
 
 The [errgroup](https://pkg.go.dev/golang.org/x/sync/errgroup) package is like a
 `sync.WaitGroup` but with added capabilities for error handling and context
@@ -423,7 +423,7 @@ Notice in the above output we now see at least one successful case.
 > `g.SetLimit(10)`\
 > Calls to `g.Go` will block until an active goroutine can be added.
 
-## Mutex
+## 🔒 Mutex
 
 Go's `sync.Mutex` provides mutual exclusion, allowing only one goroutine at a
 time to access a critical section of code.\
@@ -486,7 +486,7 @@ https://play.golang.com/p/VIbNkQaPfZI
 > It's more useful for long complex functions where errors can occur.\
 > Here I should have just placed the `Unlock()` call after the `c.value++`.
 
-## Atomic Operations
+## ⚛️ Atomic Operations
 
 <!--alex ignore simple-->
 
@@ -528,7 +528,7 @@ func main() {
 
 https://play.golang.com/p/qsRPoC4GPNv
 
-## Once
+## 🔒 Once
 
 Go's `sync.Once` ensures that a function only executes once, even if multiple
 goroutines attempt to run it.
@@ -569,7 +569,7 @@ func main() {
 
 https://play.golang.com/p/5J1ApCPc1iU
 
-## Context
+## 🧭 Context
 
 Go's `context.Context` is not a strict concurrency primitive but is widely used
 to manage timeouts, cancellations, and deadlines across goroutines.
@@ -614,7 +614,7 @@ func main() {
 
 https://play.golang.com/p/diSmAp0SJkg
 
-## Map
+## 🗺️ Map
 
 The `sync` package has a [`Map`](https://pkg.go.dev/sync#Map) type which you
 will likely not need to use.
@@ -633,7 +633,7 @@ The Go authors even document it as such...
 > reduce lock contention compared to a Go map paired with a separate Mutex or
 > RWMutex.
 
-## Conditions
+## 🔔 Conditions
 
 Go's `sync.Cond` is probably the most confusing and hard to use of all
 concurrency tools (hence I've left it till last). It's used for signaling
@@ -785,7 +785,7 @@ and signaling conditions, especially when you need more control over
 synchronization and when goroutines are reacting to shared state changes rather
 than discrete message passing.
 
-## Real Examples
+## 💻 Real Examples
 
 Here are some real world application code I've had to write.
 
@@ -1414,7 +1414,7 @@ is as robust as possible.
 
 <!-- markdownlint-enable -->
 
-## Reference Material
+## 📚 Reference Material
 
 - [Go Style Guide](../go-style-guide/index.html)
 - [go.dev/doc/effective_go](https://go.dev/doc/effective_go#concurrency)

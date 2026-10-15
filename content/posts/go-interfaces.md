@@ -9,7 +9,7 @@ This post is going to explain the importance of interfaces, and the concept of p
 
 While treading what might seem like familiar ground to some readers, this is a fundamental skill to understand because it enables you to design more flexible and maintable services.
 
-## Interfaces in Go
+## 🐹 Interfaces in Go
 
 An 'interface' is a contract which describes _behaviour_ (not _data_).
 
@@ -88,7 +88,7 @@ func (l *thing) Beep(s string) (string, error) {
 > [!WARNING]
 > This is a bit of silly example, and so you'll notice the method signature for each type is effectively the same. Be careful when designing your interfaces, because in this case we could possibly combine these two interfaces into a single (more generic) interface.
 
-## Name Your Interface Arguments
+## 🏷️ Name Your Interface Arguments
 
 Consider the following interface:
 
@@ -110,7 +110,7 @@ type Mover interface {
 
 Now _that_ is better, because we can clearly see what the expectations are: the second argument is the 'source' and the third argument is the 'destination'.
 
-## Keep Interfaces Small
+## 🤏 Keep Interfaces Small
 
 You'll find in the [Go Proverbs](https://go-proverbs.github.io/), the following useful tip:
 
@@ -160,7 +160,7 @@ Alternatively, if we were to break the `FooBeeper` interface up into separate sm
 
 That's ultimately what this Go proverb is suggesting: smaller interfaces allow for greater code reuse.
 
-## Accept Interfaces, Return Concrete Types
+## 📥 Accept Interfaces, Return Concrete Types
 
 If your function accepts a concrete type then you've limited the consumers ability to provide different implementations.
 
@@ -217,7 +217,7 @@ fmt.Println(s.Debug) // true
 
 This is the 'indirection' I was referring to, and is a tedious step for a consumer of this code. They wouldn't need to do this if our `foo` function had returned the concrete `S` type.
 
-## Don't Return Concrete Types
+## 🚫 Don't Return Concrete Types
 
 This is to keep you on your toes 😉
 
@@ -272,7 +272,7 @@ In this instance returning an interface allows the consumer to not have to worry
 > [!INFO]
 > It's possible the returned types could be consolidated into a single generic type struct, which means we can avoid returning an interface, but it depends on the exact scenario/use case.
 
-## Use Existing Interfaces
+## ♻️ Use Existing Interfaces
 
 It's important to not 'reinvent the wheel' and to utilise existing interfaces wherever possible (otherwise you'll suffer from a condition known as 'interface pollution').
 
@@ -330,7 +330,7 @@ Now whether you continue to define a new interface is up to you. There are actua
 > [!TIP]
 > For more details on how to use Guru, see [this gist](https://gist.github.com/Integralist/20ff7427d3df5cc02d5a619ca0cd9695).
 
-## Don't Force Interfaces
+## 🛑 Don't Force Interfaces
 
 If your code doesn't require interfaces, then don't use them.
 
@@ -372,7 +372,7 @@ The use of an interface here is a bit pointless. We should instead just return a
 
 ⚠️ There is also an important performance consideration to using interfaces that is often neglected: method calls on an interface type will be using [dynamic dispatch](https://en.wikipedia.org/wiki/Dynamic_dispatch) not [static dispatch](https://en.wikipedia.org/wiki/Static_dispatch) and in a code hot path that can be a problem because the memory associated with the call can escape to the heap (stack memory is much more efficient). Consider `r` had an interface type `io.Reader`. A call to `r.Read(b)` would result in both the value of `r` and the backing array of the `b` byte slice to be allocated onto the heap.
 
-## Embedding Interfaces
+## 🪆 Embedding Interfaces
 
 Sometimes a code base will define a very large interface. Now we can probably agree it's not a good idea but let's just accept that in the real-world this kind of thing happens.
 
@@ -419,7 +419,7 @@ func TestExample(t *testing.T) {
 
 But be aware that because you're not providing a concrete implementation of the interface when instantiating your struct, it means that the value of that embedded field will be `nil`. This means that if the function you pass your struct into calls any of the interface methods _not_ implemented by your mock struct, then there will be a runtime 'nil pointer dereference' error (but I argue that's a good thing because in a test environment you want to know if your code is calling something for real).
 
-## Upgrading Interfaces
+## 🆙 Upgrading Interfaces
 
 If you use have an interface that's used by lots of people, how do you add a new method to it without breaking their code? The moment you add a new method to the interface, their existing code that handles the concrete implementation will fail.
 
@@ -559,7 +559,7 @@ func(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-## Standard Library Interfaces
+## 📚 Standard Library Interfaces
 
 Imagine we have a function `process`, whose responsibility is to make a HTTP request and do something with the response data:
 
@@ -641,7 +641,7 @@ What the `io.Reader` interface means for our code is that the input we provide t
 
 So already we've seen quite a few built-in interfaces being utilised to support the standard library code we're using. More importantly, you'll find the use of these interfaces (`io.ReadCloser`, `io.Reader`, `io.Closer` and others) are used _everywhere_ in the Go codebase (highlighting again how small interfaces enable greater code re-usability).
 
-## Tight Coupling
+## 🔗 Tight Coupling
 
 Now there's an issue with the above code, specifically the `process` function, and that is we've tightly coupled the `net/http` package to the function.
 
@@ -651,7 +651,7 @@ Also, if we want to test this function we're going to have a harder time because
 
 The solution to this problem is to invert the responsibility of the `process` function, also known as 'dependency injection'. This is the basis of one of the [S.O.L.I.D](https://en.wikipedia.org/wiki/SOLID) principles: 'inversion of control'.
 
-## Dependency Injection
+## 💉 Dependency Injection
 
 If we call a function, then it is our responsibility to provide it with all the things it needs in order to do its job.
 
@@ -719,7 +719,7 @@ func main() {
 }
 ```
 
-## Refactoring Considerations
+## 🔄 Refactoring Considerations
 
 Let's start by looking at the interface we've defined:
 
@@ -764,7 +764,7 @@ Meaning, this refactor _could_ be considered 'good enough' for your use cases. A
 
 But first, let's look at how we might want to test this initial code refactor (as testing this code allows us to learn some interesting things when it comes to needing to mock interfaces).
 
-## Testing
+## 🧪 Testing
 
 Below is a simple test suite that demonstrates how we're now able to construct our own object, with a stubbed response, and pass that to the `process` function:
 
@@ -847,7 +847,7 @@ Great! Our test can now call the `process` function and process the mocked depen
 > [!TIP]
 > Yes, we should probably use something more obvious and replace `bytes.NewBufferString` with something like `bytes.NewReader`, `strings.NewReader`.
 
-## More flexible solutions?
+## 🤔 More flexible solutions?
 
 OK, so we've already explained why this implementation might not be the best we could do. Let's now consider an alternative implementation:
 
@@ -933,7 +933,7 @@ func TestBasics(t *testing.T) {
 
 Now our `fakeHTTPBin.Get` only has to return a byte array.
 
-## Conclusion
+## 🏁 Conclusion
 
 Is there more we can do to improve this code's design? Sure. But we'll leave a new refactor iteration to another post.
 

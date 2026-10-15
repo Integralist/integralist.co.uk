@@ -5,7 +5,7 @@ description: Step-by-step guide for setting up a new macOS development environme
 tags: [shell, vim]
 ---
 
-## Introduction
+## 📖 Introduction
 
 I'm an engineer with a _new_ laptop, which requires setting up with various
 development tools and configuration. This post is my attempt to capture and
@@ -23,7 +23,7 @@ Given a straight forward set of instructions, doing things _manually_ doesn't
 take long at all, and you can modify things at that point in time without just
 blindly installing various things you no longer need.
 
-## Defaults
+## ⚙️ Defaults
 
 It's good to begin by surveying your current system and understanding what you
 have already installed. For me this looked something like:
@@ -74,7 +74,7 @@ strip](https://xkcd.com/1987/)...
 
 ![python env](/assets/img/python_env.png)
 
-## Package Manager
+## 🍺 Package Manager
 
 Let's begin our journey by first installing a 'package manager'. This software
 will enable us to search and install various pieces of software. The macOS
@@ -113,7 +113,7 @@ If you need to update Homebrew you can execute a `brew update` command, but the
 installation will install the latest version any way, so that won't be
 necessary.
 
-## Essential Packages
+## 📦 Essential Packages
 
 OK, so I start with what I refer to as a 'essential packages', and specifically
 these are packages that do not require any configuration on my part. Meaning, I
@@ -152,7 +152,7 @@ Here's a handy one-liner:
 brew install ag gnu-sed jq docker hugo node pwgen reattach-to-user-namespace shellcheck tree watch
 ```
 
-## Essential Apps
+## 📱 Essential Apps
 
 Homebrew now allows you to also install GUI applications, not just command line
 tools, but to do this you'll need to configure Homebrew to use `Cask`:
@@ -214,7 +214,7 @@ A couple of apps probably worth mentioning are:
 - https://github.com/dwarvesf/hidden
 - https://github.com/leits/MeetingBar
 
-## Curl
+## 🌐 Curl
 
 I like to use a more modern version of `curl` (e.g. supports HTTP/2, and other features):
 
@@ -228,7 +228,7 @@ But in order to use this version of curl you'll need to modify your `$PATH`:
 export PATH="/usr/local/opt/curl/bin:$PATH"
 ```
 
-## Git
+## 🐙 Git
 
 Similarly to curl, I like to have the most recent version of `git` installed:
 
@@ -248,7 +248,7 @@ curl -LSso ~/.gitconfig https://raw.githubusercontent.com/Integralist/dotfiles/m
 > it's always worth checking `~/.gitignore-global` is up to date (i.e. not
 > referencing file types I no longer work with).
 
-## Shell
+## 🐚 Shell
 
 To install and configure latest version of the Bash shell, execute the following
 commands:
@@ -277,7 +277,7 @@ curl -LSso ~/.bash_profile https://raw.githubusercontent.com/Integralist/dotfile
 > `~/.bashrc` references `~/.fzf.bash` which is needed, and comes from
 > installing the FZF vim plugin (which we'll sort out shortly).
 
-## Terminal
+## 💻 Terminal
 
 To install my custom terminal theme:
 
@@ -300,7 +300,7 @@ rm /tmp/Integralist.terminal
 I've reverted to using the "Basic" theme provided by macOS, and just modifying
 the font to be "Menlo Regular 16 pt."
 
-## GitHub
+## 🐈 GitHub
 
 Let's now set-up a new SSH key for GitHub access:
 
@@ -327,7 +327,7 @@ ssh -T git@github.com
 > your password' in GitHub UI's and follow the email instructions to gain access
 > and thus login and add your new SSH key.
 
-## Password Store
+## 🔐 Password Store
 
 I use the open-source [password store](https://www.passwordstore.org) for
 handling secrets and passwords. This tool provides the `pass` command, and that
@@ -427,7 +427,7 @@ decrypt files that would have been encrypted using your public key.
   - Select "OpenPGP Provider" (choose: OpenKeychain)
   - Select "OpenPGP Key id" (choose: the imported public key)
 
-## Go
+## 🐹 Go
 
 We'll install the latest version of `go` (as far as Homebrew is concerned):
 
@@ -447,7 +447,7 @@ installed binaries will be available:
 export PATH="$HOME/go/bin:$PATH"
 ```
 
-## Python
+## 🐍 Python
 
 The macOS comes only with Python 2.x and although the specific version _should_
 (according to the Python docs) have the `pip` command available, that's not the
@@ -530,7 +530,7 @@ export PATH="/Users/integralist/.local/bin:$PATH"
 > version. Meaning if you upgrade your Python version, then pipx could break
 > (e.g. none of the installed packages will work). The solution is to run `pipx reinstall-all --python python3`.
 
-## Vim
+## 📝 Vim
 
 You can either install more recent version of vim via Homebrew:
 
@@ -700,7 +700,7 @@ Also ensure the Golang environment has what it needs by executing:
 :GoInstallBinaries
 ```
 
-## Tmux
+## 🖥️ Tmux
 
 Install `tmux`:
 
@@ -722,7 +722,7 @@ curl -LSso ~/tmux.sh https://raw.githubusercontent.com/Integralist/dotfiles/mast
 > [`~/.bash_profile`](https://github.com/Integralist/dotfiles/blob/cc906bd14636543e71d9c034d6507f5986a80bbd/.bash_profile#L18-L21)
 > for a work-around.
 
-## Miscellaneous
+## 🧰 Miscellaneous
 
 Not every app can be installed via Homebrew.
 [Monosnap](https://monosnap.com/welcome) is one such example.
@@ -735,7 +735,7 @@ Also, if you're into torrents, then the [transmission
 server/client](https://cli-ck.io/transmission-cli-user-guide/) (or alternatively
 `npm install -g t-get`) might be of interest to you.
 
-## macOS
+## 🍏 macOS
 
 It can be cool to configure the macOS via the terminal, things like mouse cursor
 speed or keyboard repeat key performance. But unfortunately that all changed

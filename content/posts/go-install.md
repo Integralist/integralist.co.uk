@@ -5,7 +5,7 @@ description: How to install, manage, and switch between multiple Go versions usi
 tags: [go, shell]
 ---
 
-## Installing Go
+## 🐹 Installing Go
 
 All versions of Go are available to download here: https://go.dev/dl/
 
@@ -41,7 +41,7 @@ function go_install {
 }
 ```
 
-## Installing binaries
+## 📦 Installing binaries
 
 As of version go 1.16 `go install` is now responsible only for installing binaries, _not_ modifying a `go.mod` file (that's what `go get` is for).
 
@@ -53,7 +53,7 @@ go install example.com/cmd@latest
 > [!TIP]
 > See [reference documentation](https://go.dev/ref/mod#go-install).
 
-## Installing different go versions
+## 🔢 Installing different go versions
 
 The following is the 'official' approach...
 
@@ -86,7 +86,7 @@ gotip download dev.fuzz # also download a dev/tip specific tool/feature
 gotip test -fuzz=FuzzFoo
 ```
 
-## Basic switcher using `go.mod` as reference
+## 🔀 Basic switcher using `go.mod` as reference
 
 ```bash
 # This function identifies the go version specified in a project's go.mod
@@ -132,7 +132,7 @@ function cd {
 }
 ```
 
-## Unofficial: goenv
+## 🛠️ Unofficial: goenv
 
 https://github.com/syndbg/goenv
 

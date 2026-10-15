@@ -9,7 +9,7 @@ In this post we will be looking briefly at, and at a high-level, the various dat
 
 There are _many_ data structures, and even the ones that are covered here have many nuances that make it impossible to cover every possible detail. But my hope is that this will give you an interest to research them further.
 
-## Data Types
+## 🏷️ Data Types
 
 A data type is an [attribute](https://english.stackexchange.com/a/28098/334144) of data which tells the compiler (or interpreter) how the programmer intends to use the data.
 
@@ -30,7 +30,7 @@ An abstract data type (ADT) describes the expected _behaviour_ associated with a
 > [!INFO]
 > an ADT describes behaviour from the perspective of a consumer of that type (e.g. it describes certain operations that can be performed on the data itself). For example, a list data type can be considered a sequence of values and so one available operation/behaviour would be that it must be iterable.
 
-## Data Structures
+## 🏗️ Data Structures
 
 A data structure is a collection of data type 'values' which are stored and organized in such a way that it allows for efficient access and modification. In some cases a data structure can become the underlying implementation for a particular data type.
 
@@ -49,7 +49,7 @@ When we think of data structures, there are generally four forms:
 
 Let's now take a look at the properties that make up a few of the more well known data structures.
 
-## Array
+## 📊 Array
 
 An array is a finite group of data, which is allocated contiguous (i.e. sharing a common border) memory locations, and each element within the array is accessed via an index key (typically numerical, and zero based).
 
@@ -70,7 +70,7 @@ These types of operations, when done at scale, are the foundation behind why it'
 > [!INFO]
 > interestingly I've discovered that in some languages an array (as in the composite data type) has been implemented using a variety of different data structures such as hash table, linked list, and even a search tree.
 
-## Linked List
+## 🔗 Linked List
 
 A linked list is different to an array in that the order of the elements within the list are not determined by a contiguous memory allocation. Instead the elements of the linked list can be sporadically placed in memory due to its design, which is that each element of the list (also referred to as a 'node') consists of two parts:
 
@@ -90,7 +90,7 @@ There is also a modified version of this data structure referred to as a 'doubly
 > [!INFO]
 > again, performance considerations need to be given for the types of operations being made with a doubly linked list, such as the addition or removal of nodes in the list, because you now have not only the pointers to the following node that need to be updated, but also the pointers back to a previous node that now also need to be updated.
 
-## Tree
+## 🌲 Tree
 
 The concept of a 'tree' in its simplest terms is to represent a hierarchical tree structure, with a root value and subtrees of children (with a parent node), represented as a set of linked nodes.
 
@@ -275,7 +275,7 @@ Below are some examples of a max and min binary heap tree structure.
 
 ![binary heap min](/assets/img/binary-heap-min.png)
 
-## Hash Table
+## 🗂️ Hash Table
 
 A hash table is a data structure which is capable of maping 'keys' to 'values', and you'll typically find this is abstracted and enhanced with additional behaviours by many high-level programming languages such that they behave like an '[associative array](https://en.wikipedia.org/wiki/Associative_array)' abstract data type.
 
@@ -312,7 +312,7 @@ The rationale behind this technique is that because the hash table keys are typi
 
 Personally I don't like the idea of the Linear Probing technique as it feels like it'll introduce more complexity and bugs. Also, there is a problem with this technique which is that it relies on the top level data structure being an array. Which is fine if the key we're constructing is numerical, but if you want to have strings for your keys then that wont work very well and so you'll need to be clever with how you implement this.
 
-## Graph
+## 🕸️ Graph
 
 A graph is an abstract data type intended to guide the implementation of a data structure following the principles of [graph theory](https://en.wikipedia.org/wiki/Graph_theory).
 
@@ -339,7 +339,7 @@ When it comes to searching a graph, there are two methods:
 
 Which approach you choose depends on the type of values you're searching for. For example, relationship across fields would lend itself to BFS, whereas hierarchical tree searches would be better suited to DFS.
 
-## Conclusion
+## 🏁 Conclusion
 
 The discussion of data structures (and the various high-level data types) in computing is a massive topic, and so we cannot hope to try and cover every aspect and detail due to the sheer broad scope.
 

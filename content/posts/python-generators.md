@@ -9,7 +9,7 @@ In this post I'm going to be talking about what a generator is and how it compar
 
 Each section leads onto the next, so it's best to read this post in the order the sections are defined. Unless you're already familiar with earlier segments and prefer to jump ahead.
 
-## Summary
+## 📝 Summary
 
 The summary of everything we'll be discussing below is this:
 
@@ -22,7 +22,7 @@ The summary of everything we'll be discussing below is this:
 > [!INFO]
 > † think [comprehensions](https://gist.github.com/e5310d1082b0ff8307e39b71a6f9bae5).
 
-## Iterators
+## 🔁 Iterators
 
 According to the official [Python glossary](https://docs.python.org/3.7/glossary.html#term-iterator), an 'iterator' is...
 
@@ -117,7 +117,7 @@ list(iterator)  # ["a", "b", "c"]
 > [!WARNING]
 > be careful doing this, because if the iterator is yielding an unbounded number of elements, then this will exhaust your application's memory!
 
-## Generators
+## ⚙️ Generators
 
 According to the official [Python documentation](https://docs.python.org/3.7/library/stdtypes.html#generator-types), a 'generator' provides...
 
@@ -304,7 +304,7 @@ for v in foo():
 > [!INFO]
 > refer to [PEP 380](https://www.python.org/dev/peps/pep-0380/) for more details on `yield from` and the rationale for its inclusion in the Python language.
 
-## Coroutines
+## 🔀 Coroutines
 
 Coroutines (as far as Python is concerned) have historically been designed to be an extension to [Generators](#generators).
 

@@ -5,7 +5,7 @@ description: A comprehensive cheat sheet covering Go fundamentals, from types an
 tags: [go]
 ---
 
-## Introduction
+## 📖 Introduction
 
 A few years ago when I was learning the [Go programming
 language](https://golang.org/) I created a gist and updated it on a regular
@@ -36,7 +36,7 @@ great quality either.
 Take this as what it is, a sharing exercise. Take what you need and leave the
 rest. I wont be offended.
 
-## Private Repo Access
+## 🔐 Private Repo Access
 
 `go get` uses HTTPS so to be able to pull dependencies from a private
 repository, you'll need to force it to use SSH so it can access your keys and
@@ -58,7 +58,7 @@ So when you want a private dependency like: `git@github.com:foo/private.git`:
 go get github.com/foo/private
 ```
 
-## Build and Compilation
+## 🏗️ Build and Compilation
 
 As of Go 1.5 you can use:
 
@@ -121,7 +121,7 @@ In short, if you dont' use `go build -a -v .` then Go won't know if any packages
 are missing (you can find the gory details
 [here](https://medium.com/@felixge/why-you-should-use-go-build-a-or-gb-c469157d5c1b#.jf5orcwrj))
 
-## Build Time Dynamic Variables
+## 🏷️ Build Time Dynamic Variables
 
 Imagine you have a global variable called `version` in your `main` package and
 you want to update that value at build time:
@@ -157,7 +157,7 @@ You would compile the above `version` variable using:
 go build -tags prod
 ```
 
-## Package Naming
+## 📦 Package Naming
 
 In Go, the name of the package is used to refer to the exported item:
 `fmt.Println`, `http.RegisterFunc` etc. Because the package name is so visible,
@@ -171,7 +171,7 @@ discovered what I had done I went back and made two separate packages `legacy`
 and `aws` so that I could have a consistent `CreateUser` function within both
 (e.g. `aws.CreateUser` and `legacy.CreateUser`).
 
-## Dependency Information
+## ℹ️ Dependency Information
 
 To see a list of dependencies for a given Go package you can utilise the `go list` command:
 
@@ -295,7 +295,7 @@ compress/lzw -> bufio errors fmt io
 compress/zlib -> bufio compress/flate errors fmt hash hash/adler32 io
 ```
 
-## Dependency Management
+## 🧶 Dependency Management
 
 > [!INFO]
 > Update (August 2017): there is an official tool now called
@@ -376,7 +376,7 @@ go test $(glide novendor)           # test only your package (not vendored packa
 > [!TIP]
 > to add a new dependency `glide get <pkg_name>`
 
-## Documentation
+## 📚 Documentation
 
 `Godoc` is the original implementation for viewing documentation. Previous to
 `Godoc` there was `go doc`, but that was removed and then added *back* with
@@ -495,7 +495,7 @@ does require an internet connection to compile:
 godoc -http ':6060' -play
 ```
 
-## Testing
+## 🧪 Testing
 
 > [!TIP]
 > see also [examples
@@ -999,7 +999,7 @@ func err(response, expected string, t *testing.T) {
 }
 ```
 
-## Logging
+## 🪵 Logging
 
 Using the standard Logger:
 
@@ -1056,7 +1056,7 @@ func main() {
 }
 ```
 
-## Godo
+## 🛠️ Godo
 
 Godo is a build tool in a similar vein to rake or gulp.
 
@@ -1088,7 +1088,7 @@ func main() {
 }
 ```
 
-## Import Race Conditions
+## 🏁 Import Race Conditions
 
 When you import a package within a Go script, only the public functions and
 variables are exposed for the caller to utilise. So if you need a package to
@@ -1120,7 +1120,7 @@ The solution was to rename all the `init` functions to `Init` and explicitly
 call them to bootstrap the package when needed (i.e. they didn't automatically
 bootstrap themselves and so we avoided that race condition).
 
-## New vs Make
+## ⚖️ New vs Make
 
 - `func new(Type) *Type`: allocate memory for custom-user type
 - `func make(Type, size IntegerType) Type`: allocate memory for builtin types
@@ -1146,7 +1146,7 @@ func main() {
 }
 ```
 
-## Custom Types
+## 🧩 Custom Types
 
 ```
 package main
@@ -1207,7 +1207,7 @@ func (f *foo) Bar() {
 }
 ```
 
-## Custom Errors
+## 🚨 Custom Errors
 
 ```
 package main
@@ -1274,7 +1274,7 @@ return errCustom{
 }
 ```
 
-## Function Types
+## 🔣 Function Types
 
 ```
 package main
@@ -1337,7 +1337,7 @@ func main() {
 }
 ```
 
-## Enumerator IOTA
+## 🔢 Enumerator IOTA
 
 Within a constant declaration, the predeclared identifier `iota` represents
 successive untyped integer constants. It is reset to 0 whenever the reserved
@@ -1366,7 +1366,7 @@ func main() {
 }
 ```
 
-## Struct: Var vs Type
+## 🧱 Struct: Var vs Type
 
 A variable of Struct type doesn't need to be instantiated like a type struct:
 
@@ -1399,7 +1399,7 @@ func main() {
 }
 ```
 
-## Embedded Structs
+## 🪆 Embedded Structs
 
 The first example demonstrates a 'named' field utilising an embedded Struct:
 
@@ -1600,7 +1600,7 @@ func main() {
 }
 ```
 
-## Reference vs Value
+## 🎭 Reference vs Value
 
 Summary: limit passing by reference unless the size of the copied value is a
 problem (i.e. memory allocations).
@@ -1734,7 +1734,7 @@ func main() {
 }
 ```
 
-## See all methods on `<Type>`
+## 🔍 See all methods on `<Type>`
 
 ```
 errType := reflect.TypeOf(err)
@@ -1744,7 +1744,7 @@ for i := 0; i < errType.NumMethod(); i++ {
 }
 ```
 
-## Convert Struct into JSON
+## 🔄 Convert Struct into JSON
 
 ```
 package main
@@ -1771,7 +1771,7 @@ func main() {
 }
 ```
 
-## Pretty Printing JSON String
+## 💅 Pretty Printing JSON String
 
 ```
 package main
@@ -1801,7 +1801,7 @@ func main() {
 }
 ```
 
-## Convert Struct into YAML
+## 📜 Convert Struct into YAML
 
 ```
 package main
@@ -1876,7 +1876,7 @@ func main() {
 }
 ```
 
-## Sorting Structs
+## 📶 Sorting Structs
 
 ```
 package main
@@ -1975,7 +1975,7 @@ Which results in:
 [{Jill 9} {Jack 10}]
 ```
 
-## Read Users Input
+## ⌨️ Read Users Input
 
 ```
 reader := bufio.NewReader(os.Stdin)
@@ -1984,7 +1984,7 @@ text, _ := reader.ReadString('\n')
 fmt.Println(text)
 ```
 
-## HTTP Middleware
+## 🔌 HTTP Middleware
 
 This code was modified from
 [@matryer](https://medium.com/@matryer/writing-middleware-in-golang-and-how-go-makes-it-so-much-fun-4375c1246e81):
@@ -2071,7 +2071,7 @@ server: middleware.go:38: after
 after
 ```
 
-## Sessions
+## 🍪 Sessions
 
 ```
 package main
@@ -2157,7 +2157,7 @@ func admin(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-## HTTPS TLS Request
+## 🔒 HTTPS TLS Request
 
 ```
 package requester
@@ -2226,7 +2226,7 @@ req.Header.Set("Content-Type", "application/json")
 resp, err := client.Do(req)
 ```
 
-## HTTP GET Web Page
+## 🌐 HTTP GET Web Page
 
 ```
 package main
@@ -2369,7 +2369,7 @@ func main() {
 }
 ```
 
-## Custom HTTP Request Methods
+## 📬 Custom HTTP Request Methods
 
 Go doesn't provide abstractions for all the various HTTP request types, so for
 things like `PUT` you have to implement it yourself. The following is an example
@@ -2421,7 +2421,7 @@ func configureTLS() *http.Transport {
 }
 ```
 
-## Pointers
+## 👉 Pointers
 
 ```
 package main
@@ -2551,7 +2551,7 @@ func main() {
 }
 ```
 
-## Type Assertion
+## 🕵️ Type Assertion
 
 ```
 if e, ok := err.(net.Error); ok && e.Timeout() {
@@ -2572,7 +2572,7 @@ if ae, ok := e.(*argError); ok {
 }
 ```
 
-## Line Counting
+## 📏 Line Counting
 
 Demonstrates how to use `bufio` package to scan a file and read it line by line,
 and then how to increment a map integer value using the shortcut `map[key]++`.
@@ -2626,7 +2626,7 @@ func countLines(f *os.File, filename string, counts map[string]map[string]int) {
 }
 ```
 
-## Reading File in Chunks
+## 🍰 Reading File in Chunks
 
 ```
 package main
@@ -2701,7 +2701,7 @@ func main() {
 }
 ```
 
-## Time
+## ⏰ Time
 
 ```
 now := time.Now()
@@ -2850,7 +2850,7 @@ Ticker ticked
 Done
 ```
 
-## Starting and Stopping things with Channels
+## 🚦 Starting and Stopping things with Channels
 
 I would imagine that for most cases you'll want to use a `time.NewTimer` as seen
 in previous examples if you want to stop a goroutine that's processing a long
@@ -2956,7 +2956,7 @@ func main() {
 }
 ```
 
-## Channel Pipelines
+## 🚰 Channel Pipelines
 
 The principle of a pipeline, is to take data from one function and pass it into
 another function, that receiving function will process the received data and
@@ -3038,7 +3038,7 @@ func main() {
 }
 ```
 
-## Templating
+## 📑 Templating
 
 Here is a basic program that uses a Struct for its data source:
 
@@ -3138,7 +3138,7 @@ The output would be:
 <p>B: <b>Hello</b></p>
 ```
 
-## Error handling
+## ⚠️ Error handling
 
 The following code outputs:
 
@@ -3184,7 +3184,7 @@ func main() {
 }
 ```
 
-## Socket Programming
+## 🔌 Socket Programming
 
 There are two main types of sockets:
 
@@ -3301,7 +3301,7 @@ func main() {
 }
 ```
 
-## Comparing Maps
+## 🗺️ Comparing Maps
 
 This code demonstrates how to be careful about false positives!
 
@@ -3341,7 +3341,7 @@ func main() {
 }
 ```
 
-## Zip File Contents
+## 🗜️ Zip File Contents
 
 ```
 package main
@@ -3414,7 +3414,7 @@ func main() {
 }
 ```
 
-## Shell Commands
+## 🐚 Shell Commands
 
 Here is a simple example that writes the output of a command to a file:
 
@@ -3463,7 +3463,7 @@ if cmdOut, err = exec.Command(cmdName, cmdArgs...).Output(); err != nil {
 fmt.Println(string(cmdOut))
 ```
 
-## New Instance Idiom
+## 🐣 New Instance Idiom
 
 ```
 package main
@@ -3489,7 +3489,7 @@ func main() {
 }
 ```
 
-## JSON Connection Draining
+## 🚿 JSON Connection Draining
 
 When using `json.NewDecoder`:
 
@@ -3526,7 +3526,7 @@ defer func() {
 > [!TIP]
 > [https://github.com/google/go-github/pull/317](https://github.com/google/go-github/pull/317)
 
-## Writing your own Marshal/Unmarshal functions
+## ✍️ Writing your own Marshal/Unmarshal functions
 
 ```
 package main

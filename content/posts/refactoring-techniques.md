@@ -5,7 +5,7 @@ description: A summarised reference of commonly used refactoring techniques dist
 tags: [architecture]
 ---
 
-## Introduction
+## 📖 Introduction
 
 Let's begin by considering: "What is Refactoring?"
 
@@ -22,7 +22,7 @@ In 2009 both Martin and Kent helped with a rewrite of the book that focused more
 
 Since reading the Ruby edition I wanted to have a short summarised version of some of the more commonly used refactoring techniques (mainly for my own reference). By that I mean the techniques described in the book that I find interesting and use a lot in my day to day programming life.
 
-## Languages
+## 🗣️ Languages
 
 These refactoring techniques aren't specific to the Ruby language (although my _implementation_ examples are). You can use them when working with JavaScript or PHP (or any other language for that matter).
 
@@ -30,7 +30,7 @@ Programming languages don't all offer identical APIs and so sometimes you might 
 
 Regardless, the idioms and syntax differences between languages become redundant when you just focus on the pattern(s) behind the proposed solution.
 
-## Why refactor?
+## 💡 Why refactor?
 
 The purpose of refactoring is to improve the quality, clarity and maintainability of your code. Simple really.
 
@@ -40,7 +40,7 @@ Think about it, if you inherit a poorly designed code base that you've not seen 
 
 Otherwise you would be forced to retro fit your new code on top of a poorly designed foundation and that would be the start of a very unhappy relationship.
 
-## When should you refactor?
+## ⏰ When should you refactor?
 
 You'll usually find the time you start refactoring the most is when you are fixing bugs or adding new features.
 
@@ -57,7 +57,7 @@ As the great [Uncle Bob](http://www.cleancoder.com/) once said:
 
 ...what this suggests is that refactoring is essential to your daily coding process.
 
-## Tests
+## 🧪 Tests
 
 Before we get started, it's important to mention that you should have tests in place when you're refactoring.
 
@@ -78,7 +78,7 @@ Code should be tested regularly while refactoring to ensure you don't break anyt
 
 So although I won't explicitly mention it below when discussing the different refactoring techniques, it is implied that on every change to your code you should really be running the relevant tests to ensure no broken code appears.
 
-## Refactoring Techniques
+## 🔧 Refactoring Techniques
 
 There are many documented refactoring techniques and I do not attempt to cover them all, as this post would end up becoming a book in itself. So I've picked what I feel are the most common and useful refactoring techniques and I try my best to explain them in a short and concise way.
 
@@ -1177,6 +1177,6 @@ Post.find_and_publish(1) # displays true
 
 This way we're using objects to handle our logic. Yes, we end up with more code (one extra Class) but ultimately this is more maintainable and understandable than lots of inline logic.
 
-## Conclusion
+## 🏁 Conclusion
 
 There are still many different refactoring techniques that I've not included. But hopefully you've found this quick reference useful so far.

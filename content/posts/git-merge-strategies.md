@@ -5,7 +5,7 @@ description: Explains the differences between git merge, rebase, and squash stra
 tags: [git]
 ---
 
-## Introduction
+## 📖 Introduction
 
 Imagine I have a `master` branch with one commit:
 
@@ -41,7 +41,7 @@ Just to quickly clarify, you'll notice throughout this post that I use the comma
 log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
 ```
 
-## `git merge`
+## 🔀 `git merge`
 
 So `git merge` is the standard workhorse for merging branches in git. It'll try to resolve the differences between the two branches the best way it can.
 
@@ -66,7 +66,7 @@ We can see all the commits from `feat/foo` were replayed onto `master` successfu
 > [!TIP]
 > you might not realise that there is a short cut to checking out a branch and then merging another branch into it: `git merge <source> <destination>`, which is the same as doing `git checkout <destination>` followed by `git merge <source>`
 
-## `git merge --no-ff --edit`
+## 🌿 `git merge --no-ff --edit`
 
 Let's say you wanted a "merge commit" to happen (i.e. merge commits typically only occur if there has been a divergence between the branches which means git has to resolve the problem for you), then you can force git to use a "merge commit" even when there is no need for one (as is the case for me here).
 
@@ -170,7 +170,7 @@ commit ff7e7dabf745ac4d73b52644c3d29ea05d5c318f
 commit 36f1c5bc5949f01117c1d57e6ab12f05c2a202f5
 ```
 
-## `git merge --squash`
+## 🗜️ `git merge --squash`
 
 So what if you don't want all those commits in your `master`? You could instead "squash" all the commits down into a single commit using the `--squash` command:
 
@@ -186,7 +186,7 @@ These collection of changes _now_ appear as a single change to the file. They ar
 git commit -m "your own custom commit message"
 ```
 
-## `git rebase`
+## 🛤️ `git rebase`
 
 The `git rebase` feature in essence is solving the same problem as `git merge` (they both integrate a set of changes), but they do them in fundamentally different ways.
 
@@ -299,7 +299,7 @@ Notice the `feat/foo` commits are on top of the `A to 9` commit and that might n
 > [!TIP]
 > it's usually better to use `git pull --rebase <remote> <branch>` as this will ensure that you get the latest copy of changes for the specified branch (as apposed to `git rebase <branch>` which will just be the local copy of that branch (remember `git pull` is an abstraction on top of `git fetch`, then `git merge`).
 
-## `git rebase --interactive`
+## ✏️ `git rebase --interactive`
 
 The `--interactive` flag is useful for letting us rewrite our git history. We're able to move the order of our commits as well as squash commits down and change their recorded message.
 
@@ -401,7 +401,7 @@ Now if we run `git lg -p` we'll see the new squashed commit does indeed contain 
 | +- C: 3
 ```
 
-## `git rebase --onto`
+## 🎯 `git rebase --onto`
 
 Imagine we've merged our `feat/foo` branch at this point into `master` using:
 
@@ -440,7 +440,7 @@ For more information see the documentation for `git rebase`:
 - `man git-rebase`
 - [git-scm.com/docs/git-rebase](https://git-scm.com/docs/git-rebase)
 
-## `git format-patch`
+## 🩹 `git format-patch`
 
 At this point you're likely using a service such as [GitHub](https://github.com/) or [GitLab](https://about.gitlab.com/) for creating projects and opening pull requests, as apposed to Git's own native pull request feature which is substantially less feature rich than these commercial abstraction layers.
 
@@ -523,7 +523,7 @@ The other difference is that `git am` only accepts patch files, whereas `git app
 curl https://gist.githubusercontent.com/anonymous/x/raw/x/test.diff | git apply
 ```
 
-## Conclusion
+## 🏁 Conclusion
 
 There are so many aspects to merging commits and dealing with git's commit history, that it's difficult to cover everything without people having to mentally store too much information that most of the time you wont utilise.
 

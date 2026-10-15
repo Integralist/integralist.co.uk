@@ -5,7 +5,7 @@ description: A breakdown of the MVC pattern and its evolution into MVCP with a d
 tags: [architecture]
 ---
 
-## Introduction
+## 📖 Introduction
 
 Model, View, Controller (MVC). This is a pretty standard architectural pattern and has been in use when developing software since the early 1970's.
 
@@ -23,7 +23,7 @@ The view is your user interface. This is what the client will interact with when
 
 The controller is the boss. He sits at the top and delegates responsibilities to either the view or the model.
 
-## Mixed definitions
+## ❓ Mixed definitions
 
 There seems to be a dispute in the dev community regarding how the responsibilities should be divided.
 
@@ -72,7 +72,7 @@ Note: as I mentioned in the previous section, BBC News had a sort of 'God Contro
 
 The next step from here was to separate out our logic even further by implementing Presenters, and it was our tech lead at BBC News ([John Cleveley](http://twitter.com/jcleveley)) who made that decision which resulted in a much more efficient, maintainable and scalable code base.
 
-## Presenters
+## 🎨 Presenters
 
 ### What problem are Presenters trying to solve?
 
@@ -100,7 +100,7 @@ For example, at BBC News we initially were manually creating new Presenter insta
 
 I'm not going to go into the configuration set-up we use at BBC News. Instead I'll focus on the basic principles of how Presenters work, which is quite simply a case of moving the logic (getting component specific Model data and assigning it to to component specific variables) into separate files called Presenters which you can instantiate within your controller.
 
-## Code Example
+## 💻 Code Example
 
 ### Controller
 
@@ -189,7 +189,7 @@ end
 
 …it's just a module namespace with a base class that has a single method `prepare_view_data` which dynamically generates instance variables based on the data we passed through from the inheriting Presenter class and which then are usable within the View.
 
-## Conclusion
+## 🏁 Conclusion
 
 That's all there is to it as far as understanding the Presenter pattern. It's a nice clean solution for componentising your different page features and keeping your code more easily maintainable.
 

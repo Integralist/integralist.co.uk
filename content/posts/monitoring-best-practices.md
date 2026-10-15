@@ -27,7 +27,7 @@ Below are some of the areas we'll be focusing in on...
 > [!INFO]
 > we primarily work with [Datadog](https://www.datadoghq.com/) so you'll see them mentioned a lot throughout this post.
 
-## Terminology
+## 📚 Terminology
 
 There is a lot of confusion around the difference between certain terms such as "observability", "monitoring", "instrumentation" and "telemetry". Let's start with defining what each of these mean...
 
@@ -51,7 +51,7 @@ In that context, "instrumentation" is the word you use when talking about how yo
 
 In that context, "telemetry" is the word you use when talking about the mechanisms for _acquiring_ the data that has been _gathered_ by your instrumentation (e.g. tools like [FluentD](https://www.fluentd.org/) or [Syslog](https://en.wikipedia.org/wiki/Syslog)).
 
-## Understand the different types of monitoring
+## 👁️ Understand the different types of monitoring
 
 Although most of this document is based around one specific type of monitoring ([APM](https://en.wikipedia.org/wiki/Application_performance_management)), it's good to be aware of the various types of monitoring available across an entire system.
 
@@ -103,7 +103,7 @@ The difference between them has to do with the _type_ of traffic that is trigger
 
 Synthetic monitoring causes data to be collected for analysis, thus allowing you to identify the availability and performance of your system by constructing very specific test cases.
 
-## Make it useful, then actionable
+## 🎯 Make it useful, then actionable
 
 Let's start with a quote from Charity Majors (author of [Database Reliability Engineering](http://shop.oreilly.com/product/0636920039761.do) and CEO of [honeycomb.io](http://honeycomb.io/)).
 
@@ -114,7 +114,7 @@ When a monitor triggers an alarm, it should first and foremost be "useful". Seco
 
 If the alarm isn't _actionable_, then it just becomes noise.
 
-## Focus on user impact
+## 👥 Focus on user impact
 
 Below is a quote from Mike Julian (author of [Practical Monitoring](http://shop.oreilly.com/product/0636920050773.do) and [Monitoring Weekly](https://weekly.monitoring.love))
 
@@ -144,7 +144,7 @@ Instead, try monitoring 5xx errors and very slow latency times. These metrics ar
 
 Ultimately, the deeper you go, the more specific your alarms become, and the less useful they are at identifying trends and patterns.
 
-## Favour organic changes over static thresholds
+## 📈 Favour organic changes over static thresholds
 
 Static thresholds such as "the number of errors reported has exceeded N" have a habit of raising false alarms, due typically to unexpected spikes in data (anomalies).
 
@@ -161,7 +161,7 @@ Datadog also offers "[outlier monitoring](https://docs.datadoghq.com/guides/outl
 > [!TIP]
 > A summary of Datadog's various detection methods can be found [here](https://docs.datadoghq.com/guides/monitors/).
 
-## Send critical and noncritical alarms to different channels
+## 🚨 Send critical and noncritical alarms to different channels
 
 At BuzzFeed I work in the software infrastructure team and there we have two separate Slack channels for handling monitoring notifications:
 
@@ -189,7 +189,7 @@ You should also consider sending a monitor's "warning" state to a different chan
 {{/is_warning}}
 ```
 
-## Give context
+## 🧩 Give context
 
 When an monitor triggers an alarm, and you're on-call that night, then you might be unfamiliar with the system and its dependencies. One quick way to help people on-call is to provide them with additional context about the alarm and the affected system.
 
@@ -223,7 +223,7 @@ Please refer to the monitoring for more details:
 
 Alarms highlight the symptom and not the cause. So if at all possible, try to include information or data that might aid the on-call person in identifying the root cause of the issue.
 
-## Think about data aggregation
+## 📊 Think about data aggregation
 
 When dealing with TSDB's ([Time Series Database](https://en.wikipedia.org/wiki/Time_series_database)) you'll find they will start aggregating multiple data points into a single data point. This is known as the "roll up" effect.
 
@@ -241,7 +241,7 @@ Ultimately, you'll need to find the balance that works best for you and your mon
 > [!TIP]
 > you can read more about this smoothing out process [here](https://help.datadoghq.com/hc/en-us/articles/203571289-Why-does-zooming-out-a-timeframe-also-smooth-out-my-graphs-), as well as the `.rollup()` method Datadog provides to allow you to control this behaviour.
 
-## Know your graphs
+## 📉 Know your graphs
 
 We won't repeat the details here, but suffice to say, each graph in Datadog has a purpose and specialised use case. You should review Datadog's articles on the various graphs they offer and the whys/when of using them:
 
@@ -254,7 +254,7 @@ I've since written a blog post about stastistics (aimed at beginners) and so by 
 
 You can read the post here: [Statistics and Graphs: The Basics](/posts/statistics-basics/)
 
-## Map your graphs
+## 🗺️ Map your graphs
 
 It can be useful to order your graphs (within a dashboard/timeboard) _chronologically_. For example, CDN -> LB -> Service. This can help you mentally model the request flow through your system, such that you know the request starts by hitting your CDN layer, it's then routed inside of your infrastructure and hits a load balancer, finally that load balancer distributes the request to a specific service node.
 
@@ -264,7 +264,7 @@ An alternative approach is to have a dashboard that focuses on the key metrics f
 
 Some companies even take that approach a step further and formalize this process and subsequently define a standardized structure for dashboards (i.e. all dashboards are structurally the same). The benefit of that approach is that people on-call can start at the beginning of a request and then follow the dashboards like a thread until they reach a service that is the root cause of the problem being reported.
 
-## Choosing between a metric or log
+## ⚖️ Choosing between a metric or log
 
 In order to help individual teams identify whether they should collect data as a metric or as a log, one recommended approach is to ask the following questions:
 
@@ -295,7 +295,7 @@ We can't answer these questions for you, but we have generally found the followi
   - Because the mean can miss important slow requests.
 - Load balancer metrics can also be useful to monitor (especially if service is falling over).
 
-## Reference material
+## 📚 Reference material
 
 - [Practical Monitoring: Effective Strategies for the Real World](http://shop.oreilly.com/product/0636920050773.do) (book)
 - [Observability and Understanding the Operational Ramifications of a System.](https://www.infoq.com/articles/charity-majors-observability-failure)

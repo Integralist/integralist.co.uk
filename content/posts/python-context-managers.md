@@ -5,11 +5,11 @@ description: "Understanding Python context managers: what they are, why they mat
 tags: [python]
 ---
 
-## Introduction
+## 📖 Introduction
 
 In this post I wanted to discuss a relatively simple, but important topic: Context Managers. I want to cover the what, the why and the how.
 
-## Summary
+## 📝 Summary
 
 - Content Managers abstract away 'clean-up' logic.
 - Define a class with `__enter__`/`__exit__` methods.
@@ -17,7 +17,7 @@ In this post I wanted to discuss a relatively simple, but important topic: Conte
 - The `__exit__` method is similar to a `finally` block.
 - Reduce boilerplate with [`@contextlib.contextmanager`](https://docs.python.org/3/library/contextlib.html#contextlib.contextmanager).
 
-## What is a Context Manager?
+## ❓ What is a Context Manager?
 
 Officially...
 
@@ -26,7 +26,7 @@ Officially...
 
 In simpler terms it means: a Context Manager can ensure code that requires 'clean-up' logic to be executed, is done so in a more idiomatic/Pythonic way.
 
-## Why use a Context Manager?
+## 💡 Why use a Context Manager?
 
 The classic example given is when opening lots of file in Python:
 
@@ -43,7 +43,7 @@ Notice each file object's `.close()` method is called to ensure the file descrip
 
 To make this code more Pythonic and cleaner, we can utilize Context Managers.
 
-## How to use a Context Manager?
+## 🛠️ How to use a Context Manager?
 
 There are two ways to utilize a Context Manager...
 
@@ -97,7 +97,7 @@ for _ in range(100000):
 
 In the above example code we've effectively recreated the `open` Context Manager just to demonstrate the principle.
 
-## How to implement a Context Manager?
+## 🏗️ How to implement a Context Manager?
 
 Now we've already seen how to implement a Context Manager using the `@contextlib.contextmanager` decorator (see previous sub-section), but how do we implement a class-based version of a Context Manager?
 
@@ -126,7 +126,7 @@ for _ in range(100000):
 > [!INFO]
 > for more information, see [Context Manager Types](https://docs.python.org/3/library/stdtypes.html#typecontextmanager).
 
-## When to use one or the other?
+## 🤔 When to use one or the other?
 
 One thing I noticed recently was that the `contextmanager` variation wouldn't execute an 'exit' if an exception was raised during execution of the code, while the more verbose 'class-based' implementation _would_. See the following code for an example...
 
@@ -215,7 +215,7 @@ whoops: unexpected
 
 When choosing between the two options `contextmanager` and 'class-based' implementation, it might be worth keeping this caveat in mind.
 
-## Multiple Context Managers in a single With statement
+## 📦 Multiple Context Managers in a single With statement
 
 One interesting aspect of the `with` statement is that you can execute multiple context managers as part of its block control. Meaning when the `with` block completes, then all context managers will be cleaned up.
 

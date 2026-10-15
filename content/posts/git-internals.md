@@ -5,7 +5,7 @@ description: A deep dive into the .git directory, plumbing vs porcelain commands
 tags: [git]
 ---
 
-## Introduction
+## 📖 Introduction
 
 There are many version control systems, but [git](https://git-scm.com/) is undoubtedly the most popular, and regularly used, thanks to online social platforms such as [GitHub](https://www.github.com/) and [GitLab](https://gitlab.com/).
 
@@ -16,7 +16,7 @@ My hope is that by better understanding how git works, and the concepts it is bu
 > [!INFO]
 > this article isn't an introduction to git, and does presume that the reader is familiar with (i.e. a user of) git.
 
-## General Concept
+## 💡 General Concept
 
 I wanted to take a quick moment just to clarify the terminology associated with the general concepts of how git works (so we're all on the same page):
 
@@ -31,7 +31,7 @@ So for example, commands like `git add` will copy objects from the working direc
 
 A command such as `git diff` compares your working directory to your staging area, while using the `--staged` flag will change this behaviour such that git will compare your staging area to your actual repository state.
 
-## Subcommands: Porcelain and Plumbing
+## 🪠 Subcommands: Porcelain and Plumbing
 
 The git version control system wasn't initially designed to be a user-friendly interface, and so alongside the more commonly used subcommands are commands that can carry out very low-level operations.
 
@@ -117,7 +117,7 @@ What's interesting about the plumbing subcommands is that some of them are used 
 > [!TIP]
 > although we'll be looking at a couple of plumbing commands in this article, I'll refer you to the [git book](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects) for a look at the different plumbing commands available and how they're used.
 
-## The `.git` directory
+## 📁 The `.git` directory
 
 When you start a new project that you want to use version control for, you'll typically run the `git init` subcommand:
 
@@ -176,7 +176,7 @@ Here are some interesting ones:
 > [!INFO]
 > † this is separate from a local user's `.gitignore`.
 
-## References and Objects
+## 🔗 References and Objects
 
 The two most important concepts in git are: **references** and **objects**.
 
@@ -317,7 +317,7 @@ I've never had a need to work 'off' a branch (`:shrugs:`) and so I can only pres
 
 OK, now that we have our first commit let's dig a little deeping into the 'objects' git defines, and how the `.git` directory structure has changed...
 
-## Object Types
+## 📦 Object Types
 
 There are four main types of objects in git:
 
@@ -445,7 +445,7 @@ baz/qux.txt
 foo.txt
 ```
 
-## Tags
+## 🔖 Tags
 
 Along the way I've been tagging my commits. A tag (as far as git internals are concerned) is another 'object' type. Let's look at my tags:
 
@@ -505,7 +505,7 @@ A lightweight tag is just a reference to a commit hash, but an annotated tag is 
 
 We can see the tag object includes a pointer to the 'commit' object (`0b56156eba23ae9bee8c32137605397cf7c9e88e`) as well as information about the 'tagger' (in this case _me_!)
 
-## Remotes
+## 🌐 Remotes
 
 When you add a remote like so:
 

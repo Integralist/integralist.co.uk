@@ -5,7 +5,7 @@ description: Key concepts from learning C including compilation, memory manageme
 tags: [linux]
 ---
 
-## Introduction
+## 📖 Introduction
 
 I decided recently to read a book on the C programming language. The idea was to learn some more low-level concepts that other higher-level languages were abstracting away from me.
 
@@ -15,7 +15,7 @@ Some of the stuff covered will be obvious, but I appreciate some concepts won't 
 
 In other words: your mileage may vary...
 
-## Compilation
+## ⚙️ Compilation
 
 When writing a program in a language like [C](<https://en.wikipedia.org/wiki/C_(programming_language)>), you'll find that by itself it is not executable (i.e. you can't run a C file directly). You need to convert the C source code into [machine code](https://en.wikipedia.org/wiki/Machine_code) (i.e. something the computer's CPU can understand).
 
@@ -112,7 +112,7 @@ If your compiler supports these optional (safe) string functions, then to _enabl
 
 If you don't set `__STDC_WANT_LIB_EXT1__` to `1`, then the header `string.h` will utilise the old (unsafe) string functions.
 
-## Hello World
+## 👋 Hello World
 
 Below is a simple 'hello world' C example:
 
@@ -147,7 +147,7 @@ Now you have a macOS compatible executable:
 > To cross-compile for another OS (e.g. Linux) then use Docker or a VM\
 > Other modern languages like [Go](https://golang.org/) or [Rust](https://www.rust-lang.org/) allow you to cross-compiler without a VM
 
-## Constants vs Directives
+## 🏷️ Constants vs Directives
 
 We saw in the above 'Hello World' example the use of the directive `#define` which allowed us to use a single identifier (`NAME` in this case) throughout our program. The benefit is that we can change the value once and have it updated everywhere.
 
@@ -167,7 +167,7 @@ int main(void) {
 
 What this gives you is a variable that has an actual type assigned to it (`char`). Meaning the compiler will help you identify an incorrect value if necessary, much more easily than using the `#define` directive.
 
-## Quotations
+## 💬 Quotations
 
 In C single quotes denote a `char` type and double quotes denote a string.
 
@@ -193,7 +193,7 @@ printf("foo: %s\n", &foo);
 
 We'll come back to the `&` operator (and understand what `*` means) later, when we discuss [pointers](#8).
 
-## Char Type
+## 🔤 Char Type
 
 When creating a variable, and assigning a string to it, the value assigned is really a pointer to a location in memory. The `char` type is used when storing characters such as `'a'`, but it also allows storing of strings such as `"abc"`.
 
@@ -232,7 +232,7 @@ int main(void) {
 }
 ```
 
-## Null Terminator
+## 🛑 Null Terminator
 
 Consider the following code:
 
@@ -251,7 +251,7 @@ The last element is known as the [null terminator](https://en.wikipedia.org/wiki
 > [!WARNING]
 > you can set your variable to be the actual length of the content (e.g. `char my_string[1] = "a";`) but in some instances this can cause strange overlaps of data and strictly speaking isn't valid code either
 
-## Pointers
+## 👉 Pointers
 
 When declaring a variable, the computer sets aside some memory for the variable.
 
@@ -415,7 +415,7 @@ int *const pcount = &count;
 
 We prefix the `const` keyword with the value-at operator `*` and not the variable name.
 
-## Arrays
+## 📊 Arrays
 
 Consider the following code (which is broken by the way):
 
@@ -483,7 +483,7 @@ char foobar[] = "No dimension provided!";
 
 What this does is leave the decision of how much memory to allocate to the compiler. But you can only do this when you initialize the variable with a value. Although you couldn't do `char foobar[];` as there is no value for the compiler to utilise to know how much memory to allocate.
 
-## Enumerators
+## 🔢 Enumerators
 
 Enumerators allow you to define new variable types. They automatically assign numerical values to each of the identifiers within the enumerator (although you do also have control over the specific values as well).
 
@@ -525,7 +525,7 @@ printf("on: %d\n", on);   // 1
 printf("off: %d\n", off); // 2
 ```
 
-## Memory Allocation with different Types
+## 💾 Memory Allocation with different Types
 
 > [!TIP]
 > Read [this article](/posts/bits-and-bytes/) if you need a refresher on understanding RAM, bits, binary and stuff like that
@@ -612,7 +612,7 @@ The latter (`unsigned`) is an integer that can only be positive. So if you need 
 
 So although the underlying memory allocation is the same for signed or unsigned, the actual values represented are slightly different, in that unsigned allows for storing values that are twice the size of signed, because half of signed's values have to account for negatives.
 
-## Reallocating Memory
+## 🔄 Reallocating Memory
 
 With strings you typically define them as follows (i.e. the underlying data structure is an array):
 
@@ -715,7 +715,7 @@ char *lsh_read_line(void)
 }
 ```
 
-## Function Prototypes
+## 📝 Function Prototypes
 
 A compiler will error if you try to call a function before it has been defined. This can be mitigated by utilising function prototypes that let you define the signature of the function up front and defer the definition until a later point in time (sort of like defining an interface type):
 
@@ -732,7 +732,7 @@ int main(void) {
 // Definitions for Foo() and Bar()
 ```
 
-## Conclusion
+## 🏁 Conclusion
 
 So that covers most of what I found interesting about C over the last few days. I'm not planning on writing any C code in the future (why bother when I can get pretty compariable performance + great tooling etc etc with a language like [Go](https://golang.org)).
 

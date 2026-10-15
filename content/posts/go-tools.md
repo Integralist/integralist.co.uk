@@ -7,7 +7,7 @@ tags: [go, make]
 
 There are multiple ways to deal with non-application dependencies (i.e. "tools" that your project needs).
 
-## go tool
+## 🛠️ go tool
 
 As of Go 1.24 (Feb 2025)
 
@@ -192,7 +192,7 @@ tools-update:
 >
 > One thing you could do, is only run the `go get -u -modfile=tools.mod tool` command, which would keep your `tools.mod` clean, and would only update `tools.sum` with the relevant updated dependencies. The problem with that is the old dependencies aren't cleaned out. e.g. if you updated tool "foo" from version 1.0 to 2.0 then both versions appear in your `tools.sum` (this is why we have `go mod tidy` to ensure only 2.0 is present in the `tools.sum`). So one approach would simple be to manually clean up the `go.sum` everytime after running `go get -u -modfile=tools.mod tool` -- it's not that difficult as you just look for the new tool version added and remove the old one, but it's a manual process and that sucks).
 
-## tools.go
+## 📄 tools.go
 
 > [!TIP]
 > For more details on code generation in a general sense, refer to:\
@@ -234,7 +234,7 @@ tools: internal/tools/tools.go
     go generate -v -x -tags tools ./internal/tools/...
 ```
 
-## go run
+## 🚀 go run
 
 An alternative to this approach is to use `go run` directly, which downloads tools to a cache but doesn't install them and yet still gives you explicit versioning consistency across developer's machines...
 

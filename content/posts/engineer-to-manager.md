@@ -9,7 +9,7 @@ You're a software engineer with many years of technical experience, and you've d
 
 So what do you need to know? Let's discuss...
 
-## Roles
+## 👥 Roles
 
 As a software engineer you have a few different paths available to you for career progression:
 
@@ -31,7 +31,7 @@ This doesn't _have_ to be the case though. You might decide to make that shift t
 
 When moving up the career ladder you'll typically find that between roles there is a fair amount of cross-over responsibilities, but for the purposes of this post let's focus in on the last role ('Engineering Manager') and what that entails.
 
-## Responsibilities
+## 🎯 Responsibilities
 
 Below I have listed a few different areas of responsibility (as I see them) associated with an Engineering Manager role, and of course these responsibilities can change depending on the culture of where you work.
 
@@ -80,7 +80,7 @@ With that in mind, the following list feels like (to me) a reasonable breakdown 
   - Interview candidates
   - Assist onboarding new recruits
 
-## Communication
+## 💬 Communication
 
 The most important skill you'll need, if you are to be effective as a manager of people (e.g. your direct reports, your managers, your stake holders: both technical and non-technical), is communication.
 
@@ -106,7 +106,7 @@ Below I've listed some useful resources for learning how to communicate effectiv
 > [!INFO]
 > 'Authentic Communication' is actually taken from a larger work called [Conscious Business: How to build value through values](https://www.soundstrue.com/store/conscious-business-4036.html).
 
-## Team Leader
+## 🧭 Team Leader
 
 As someone who is going to be mentoring and supporting a team of engineers, it is important you understand the motivations and what drives your team. In doing so you'll be better equipped to find them the right roles within the organisation that brings out their best work and allows them to grow in the areas that matter the most to them.
 
@@ -114,7 +114,7 @@ It's also important to sometimes think as an 'engineer' again. When you design a
 
 Do you find yourself handling tasks, or using processes, that take up a lot of time? This might be ok for now while you're responsible for a small team but how will that work out for you once you start taking on _more_ teams and more responsibilities? Be mindful of the tools and processes you use and refine them constantly.
 
-## Why?
+## 🤔 Why?
 
 The single biggest question you should now be asking yourself is:
 
@@ -139,7 +139,7 @@ Ultimately if you want things like more money or a promotion or a better job tit
 > [!TIP]
 > see also my post on '[Architecture Interviews (and other thoughts)](/posts/interview-techniques/)', where I cover what I look for when interviewing an Engineering Manager candidate.
 
-## Incremental Steps
+## 🪜 Incremental Steps
 
 You might not be quite ready for a straight jump up to Engineering Manager, so what can you do in the meantime to help you move towards that goal? Here are some ideas...
 
@@ -154,7 +154,7 @@ You might not be quite ready for a straight jump up to Engineering Manager, so w
   - Beyond that take the opportunity to lead a team
   - Help non-technical stakeholders understand the team's work
 
-## Manager Cheat Sheet
+## 📝 Manager Cheat Sheet
 
 [BuzzFeed](https://www.buzzfeed.com/) recently hired a new Engineering Manager 🎉 🙂
 
@@ -229,6 +229,6 @@ Here's an example of what such a 'cheat sheet' might look like:
   - Any strategic hires needed?
   - Budget and capacity planning
 
-## Conclusion
+## 🏁 Conclusion
 
 So what do _you_ think? Is there anything here that you disagree with, or something you feel I missed altogether? Let me know on twitter!

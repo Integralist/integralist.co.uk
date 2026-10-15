@@ -5,7 +5,7 @@ description: How to use Docker containers as clean, isolated development environ
 tags: [docker, python, go]
 ---
 
-## Introduction
+## 📖 Introduction
 
 You're a software engineer with a new laptop.\
 You're going to be writing code in multiple languages.\
@@ -30,7 +30,7 @@ So let's see two simple examples:
 > This is just a setup that works well enough for me.\
 > I'm also a Vim user, so your mileage may vary.
 
-## Python
+## 🐍 Python
 
 You have a Python project you need to work on.
 
@@ -147,7 +147,7 @@ We can see from the `requirements.txt` file that we've installed a few different
 
 That's it really. You can reuse the Dockerfile and Makefile for all your projects as they don't do anything specific to this project. Just setup the docker image/container so you can execute `make run` and start developing.
 
-## Go
+## 🐹 Go
 
 You have a Go project you need to work on.
 
@@ -337,7 +337,7 @@ github.com/mitchellh/gox c9740af9c6574448fd48eb30a71f964014c7a837
 github.com/sirupsen/logrus 10f801ebc38b33738c9d17d50860f484a0988ff5
 ```
 
-## Mounting Volumes
+## 📁 Mounting Volumes
 
 Just remember that when making changes inside the container, because you've mounted your host project directory as a volume, if you make a change or add a new file or compile something inside of the container; then it'll be available on your host machine.
 

@@ -12,7 +12,7 @@ tags: [architecture, go]
 >
 > Feel free to skip over these code examples if you like. The explanations that precede the examples should hopefully suffice.
 
-## Introduction
+## 📖 Introduction
 
 Concurrency is a difficult concept. Regardless of programming language or idiom that you use, the practice of programming a "thread-safe" application can be harder than you think.
 
@@ -49,7 +49,7 @@ The message passing model relies on no data being shared, but rather communicati
 
 As well as avoiding the issue of data being shared, it also avoids the issue of trying to recover from failures (which thread/process is the correct one); which is a hard problem to reason about.
 
-## Various options
+## 🔀 Various options
 
 There are four main types of solutions to the problem of thread-safe concurrency:
 
@@ -60,7 +60,7 @@ There are four main types of solutions to the problem of thread-safe concurrency
 
 Let's investigate each of these in turn:
 
-## Mutexes/Semaphores
+## 🔒 Mutexes/Semaphores
 
 We'll be discussing specifically "mutexes" rather than "semaphores" (they have very similar purposes - in that they control access to specific data - although a mutex offers some additional guarantees).
 
@@ -128,7 +128,7 @@ Notice how we have a similar API to a mutex (e.g. with a mutex you have to acqui
 
 Locks and mutexes allow operations to become *atomic*, meaning that the change happens "as a whole". Meaning it becomes thread safe because another thread can't accidentally read a piece of data/state/memory that is half done (e.g. `+=` in the above Ruby example would not be thread safe without the Mutex because a thread could read the value of `data` inbetween the read and the assignment that `+=` carries out).
 
-## STM
+## 🔄 STM
 
 Software Transactional Memory is known as being an "optimistic" process. Compare this to the lock-synchronisation mechanism of a Mutex, which implies the onus of whether a write action will succeed, should be on the "writer" (i.e. the "writer" locks the data, writes the data, then releases the lock).
 
@@ -346,7 +346,7 @@ The output of the above program is as follows… (notice that we see the deposit
 "Balance of 'to' account (2) is $600"
 ```
 
-## Actors
+## 🎭 Actors
 
 The basic premise of the Actors pattern is built upon it being a form of "message bus". The philosophy of the pattern is that *everything is an Actor*. An Actor receives messages and based on its state can determine whether it wants to handle the task defined in the message it has received, or to delegate the task off to other subordinates. An Actor can also create more Actors dynamically.
 
@@ -423,7 +423,7 @@ The Actor pattern does have some limitations:
 - The Actor pattern works best when problems can be divided into sections that do not rely on each other
   - i.e. communication can be sporadic. If frequent interaction is needed or each section has a dependency on each other to coordinate the task then choose an alternative combination of concurrency models
 
-## CSP
+## 📬 CSP
 
 Communicating Sequential Processes is an alternative mechanism for expressing concurrency, which has been popularized by recent languages [Clojure](http://clojure.org/) and [Go](http://golang.org/). It also is based on the idea of message passing, similar to the Actor pattern.
 
@@ -478,7 +478,7 @@ func createChannel(msg string, size int) <-chan string {
 
 Again, it's important to realise that Channels are synchronous and can block/cause deadlocks. In Go you can implement a timeout as a way of avoiding deadlocks. I'm not currently sure if Clojure has a similar work-around built into the language or whether you have to manually implement that yourself.
 
-## Threads
+## 🧵 Threads
 
 Threads are prevalent across both the "shared memory" and "message passing" models. The discussion of how many threads to create is an important one and depends on the type of tasks your application is expected to handle: CPU bound or I/O bound. In the following sections we'll cover this topic, as well as describing an algorithm for calculating this.
 
@@ -540,7 +540,7 @@ This means one core will be sitting idle while the other core is still processin
 
 What would be better is to have more *parts* than threads/cores. So if one "part" finishes more quickly than expected, then another part can be picked up. Simply diving our tasks into two parts means one core will likely be sitting idle for longer than the other core. But if we divide our tasks into more granular parts, then we can aim to utilise as much of each core as possible.
 
-## Conclusion
+## 🏁 Conclusion
 
 As mentioned at the start of this post: solving the problem of thread-safe concurrency isn't necessarily as straight forward as you would have hoped (if you're new to the concepts). Throw in distributed systems and the problem is conflated even further.
 

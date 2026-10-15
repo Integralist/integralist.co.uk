@@ -5,7 +5,7 @@ description: A beginner-friendly introduction to statistics covering data types,
 tags: [performance]
 ---
 
-## Introduction
+## 📖 Introduction
 
 I started learning about statistics because I found myself doing a lot of operational monitoring (i.e. making systems more observable, instrumenting individual services, and monitoring that data via custom built dashboards).
 
@@ -25,7 +25,7 @@ So let's begin by defining what 'statistics' means...
 
 OK, that seems reasonable enough. Statistics is an 'umbrella' term that encapsulates the complete pipeline of how data is acquired, analysed and visualised. So what _is_ data and what does it look like? Let's move onto the next section where we can begin to clarify and understand it a bit more...
 
-## Information vs Data
+## 🧠 Information vs Data
 
 If you're like me, you may well have confused the words "data" and "information" as being the same thing. But there are actually important differences that should be understood:
 
@@ -50,7 +50,7 @@ Age
 > [!INFO]
 > data is either "numerical" (dealing with numbers), "quantitative" (describing quantities) or "categorical" (data is split into categories that describe qualities or characteristics - also referred to as "qualitative").
 
-## Frequency
+## 📶 Frequency
 
 When dealing with statistical data, the first thing you typically learn about is data "frequency". Let's start with a definition...
 
@@ -82,7 +82,7 @@ The data/information can be visualised in many ways depending on the graph type 
 
 We'll take a look at some different graph types to see how they work, but first let's take a moment to consider how data can trick us...
 
-## Watch out for misleading data
+## ⚠️ Watch out for misleading data
 
 The following example is very contrived and silly, but it does illustrate the point about being aware of how data can be manipulated to represent what you want it to.
 
@@ -103,7 +103,7 @@ This is because the first graph is zoomed in from the starting point `2.0` where
 >
 > So the data isn't lying, it's just the view the user has of the data isn't accurately portrayed due to purposeful data ommission (this is a trick newspapers and academic papers use to represent a point of view they wish to push).
 
-## Pie Chart
+## 🥧 Pie Chart
 
 A graph, such as a pie chart, will split your data up into distinct 'groups'. These groups are represented as relative percentages of the total group, meaning the total area adds up to 100%.
 
@@ -158,7 +158,7 @@ So you have to be careful with data to make sure it's as inclusive as possible o
 
 Earlier we mentioned a problem of data groups percentages being too close together resulting in a graph that was hard to distinguish subtle differences. In those scenarios you might find a more suitable option would be the bar chart...
 
-## Bar Chart
+## 📊 Bar Chart
 
 If you wanted to see the 'programming language' data in a format that is more suitable for subtle differences, then one option would be a bar chart.
 
@@ -213,7 +213,7 @@ Another type of bar chart is called 'split-category' and is useful for _comparin
 
 <canvas id="splitBar"></canvas>
 
-## Histograms
+## 📉 Histograms
 
 I've yet to find a charting library that let's me create an actual histogram in the strict definition (most libraries seem to call standard bar charts 'histograms'?), which makes it hard for me to visually demonstrate them, unless I hand draw a chart (which is what I've had to resort to below).
 
@@ -305,7 +305,7 @@ If we wanted to calculate the _total frequency_ for the entire dataset then we w
 > [!INFO]
 > this is as far as I got with histograms, as I felt I had learnt enough to be dangerous in a conversation. There may well be nuances, pros/cons and other aspects to histograms I've not fully understood. I'd welcome anyone who knows more to educate me on this :-)
 
-## Line Graphs
+## 📈 Line Graphs
 
 We've already seen a couple of example line graphs at the start of this post. To create a line graph you require two axis (x and y) and the data to be mapped onto different points across these axis' which allow us to plot a line between the dots we mark.
 
@@ -350,7 +350,7 @@ We can now plot these onto a line graph by placing the cumulative frequencies on
 > [!EXAMPLE]
 > In the above example graph, if we asked "how many people were playing for up to 21 hours?" the answer would be approximately 11 people.
 
-## Averages
+## 🎯 Averages
 
 When looking at data and graphs, people are generally interested in 'averages' because they help us better gauge what/where the majority is. But there are actually three different types of 'average', and each one has a different purpose:
 
@@ -511,7 +511,7 @@ Frequency: 3, 7, 7
 
 The above dataset actually contains multiple modes (i.e. multiple modes with the same frequency which happens to be the highest in the set). The modes being `2` and `3` (whose frequency is `7`).
 
-## Which average to use?
+## 🤔 Which average to use?
 
 Imagine we have staff, managers and a CEO and they're all determining how pay rises should be calculated when based on the average salary. Below is a suggestion as to which average each one of them might suggest using and why:
 
@@ -527,7 +527,7 @@ Imagine we have staff, managers and a CEO and they're all determining how pay ri
 > [!INFO]
 > the median is the most 'fair' when calculating a pay rise in this example scenario.
 
-## Ranges
+## 📏 Ranges
 
 Averages help identify the center of our data (and via various perspectives as we've already seen: mean, median and mode). But this isn't useful when it comes to understanding how the data itself varies.
 
@@ -634,7 +634,7 @@ So this would be `3 x 2.75`, which gives us the result of `8.25` that we then ro
 
 Meaning the interquartile range can be found in-between the lower/upper quartile positions, thus giving us the central 50% of the data to focus on.
 
-## Percentiles
+## 📐 Percentiles
 
 When dealing with quartiles (see above), you're splitting your data into quarters. When dealing with percentiles, you're splitting your data into percentages. Each percentage is a percentile. For example, the 20th percentile is the value that is found 20% into your data.
 
@@ -663,7 +663,7 @@ For example, if you have 125 numbers in a dataset and you wished to see the 10th
 
 So the 10th percentile would be the value at position 13 in your dataset.
 
-## Variance
+## 🎲 Variance
 
 Measuring the 'spread' of data isn't always as useful as being able to measure the consistency of that spread, in that if our data represented player scores in a game, then we might want to identify how consistent (or reliable) a player was. Did they perform better and more reliably than another player?
 
@@ -742,7 +742,7 @@ Some other real-world examples would be a company that manufactures machine part
 
 Standard deviation is also measured in the same units as your data. So if your dataset values are, for example, centimeters and the standard deviation is `1`, this means that the values are typically 1 centimeter away from the mean.
 
-## Conclusion
+## 🏁 Conclusion
 
 So there we have it, a run through of some statistic basics. We've covered a few different graph types (pie, bar, histograms, line) and explained what averages are and how they're calculated in different scenarios. We've also looked at how data is distributed and how you might measure that to identify whether some results are more consistent than others.
 

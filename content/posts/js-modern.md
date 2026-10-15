@@ -5,7 +5,7 @@ description: How to set up and configure Webpack and Babel for writing cross-com
 tags: [javascript]
 ---
 
-## Introduction
+## 📖 Introduction
 
 This post will explain how to set-up and configure the various tooling necessary in order to be able to write cross-compatible modern (ES2015+) JavaScript code.
 
@@ -26,7 +26,7 @@ With that in mind the configuration I'll be describing will be using webpack pri
 
 If you weren't using webpack, the configuration would be different as you'd be configuring babel directly instead of webpack.
 
-## Example Project
+## 🧪 Example Project
 
 We're going to create a very basic project. It's so basic, it doesn't really do anything. It's the bare minimum required in order to demonstrate the setup and configuration of webpack and babel (I purposely did this because learning new tech can be confusing enough without needing to understand a real-world application at the same time).
 
@@ -330,7 +330,7 @@ body {
 
 This is a simple Sass file that demonstrates how to use a 'variable' to generate dynamic CSS output (in this case, the body element should have a blue background).
 
-## Webpack Configuration
+## 📦 Webpack Configuration
 
 OK, at this point we have a set of JS files that can't be used in some browsers due to the fact that they use features not supported by most web browsers. So we want to compile this code down into something that _is_ understandable to most browsers (i.e. ES5 standardized code).
 
@@ -404,7 +404,7 @@ styleLoader(cssLoader(sassLoader("source")))
 
 Where the source file is passed into the Sass loader, and so transforming the Sass into CSS. That CSS is then passed into the CSS loader, which allows it to be parsed by JavaScript. Finally, the Style loader places our CSS into a `<style>` tag within our HTML page.
 
-## Package.json Update
+## 📝 Package.json Update
 
 As mentioned earlier, we want to modify the `package.json` so that we have two `npm run ...` commands for letting us run our code in development mode (i.e. locally) or compile our code ready for use in production.
 
@@ -433,6 +433,6 @@ In the case of `--mode=production` the `webpack` tool will make additional modif
 
 Whereas `--mode=development` will allow for the generation of webpack source map files (to aid you in debugging).
 
-## Conclusion
+## 🏁 Conclusion
 
 This should be the basics covered of how to use babel with webpack, and hopefully is enough to help you kickstart your exploration of new JavaScript features.

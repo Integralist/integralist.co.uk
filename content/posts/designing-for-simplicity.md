@@ -27,7 +27,7 @@ Now some readers will probably not have to worry about the same sort of scalabil
 
 So without further ado, let's begin...
 
-## Complexity vs Complicated
+## ⚖️ Complexity vs Complicated
 
 When describing a piece of software, you'll often here the words "complex" and "complicated" used. We need to be careful when using these phrases that we select the one that accurately expresses our opinion. For example, some one might say a piece of software is "complicated", when really they mean it's "complex" (and vice versa). Unfortunately the definition of both these words doesn't help to clarify which we should use and in which context. This can make it harder to express what we really mean to say.
 
@@ -43,7 +43,7 @@ Good code design doesn't always help you to see the bigger picture. What good co
 
 The reason I'm mentioning this upfront is because I do not want people to walk away (mistakenly) thinking their existing software, or its architecture, is fundamentally flawed or broken. You must always take a critical eye to your systems/applications; but be aware that although they may be "complex", that might be the natural order of things. A complete rewrite is not necessarily required.
 
-## Promoting simplicity
+## ✨ Promoting simplicity
 
 With the discussion of complexity behind us, let's move onto what it means for software to be "simple". Why is simplicity a good thing? Simplicity itself is defined as:
 
@@ -61,7 +61,7 @@ Simplicity will also tend to result in less bugs, because there are less complic
 
 Simplicity can also (not always mind you) help towards other goals such as reusability and portability of your software.
 
-## Naming things
+## 🏷️ Naming things
 
 Phil Karlton (Netscape engineer; sadly killed in 1997) once said:
 
@@ -80,7 +80,7 @@ For example, if you have a class that acts as a mediator between two objects, ha
 
 Either way, you need to not underestimate the problems and confusion that can be caused by a badly named object/class/thing. Be vigilant, and if you're unsure then discuss it with your team. But be warned, this isn't always a quick or obvious process.
 
-## Growth
+## 🌱 Growth
 
 Applications are organic; they grow and evolve over time, which can increase their complexity. But software also needs to contend with growing popularity, which means increased traffic and the need to always be available (i.e. up and running!). All software should have a modicum of scalability in mind when within the design stages. It would be foolish not to at least consider what happens when your system comes under heavy load.
 
@@ -121,7 +121,7 @@ The problem of growth and scaling applications can be simplified by splitting up
 
 This leads us nicely onto the topic of "Microservices"...
 
-## The micro fallacy?
+## 🔬 The micro fallacy?
 
 As of 2014/2015, microservices is a bit of a buzzword. Lots of organizations and companies are talking about designing microservices and using tools (like [Docker](https://www.docker.com/)) to enable them to more easily build and scale their growing set of microservices.
 
@@ -129,7 +129,7 @@ I felt it was important to make a very quick mention of the fact that people ten
 
 With that being said, I personally see microservices as the way we will, and should, be designing and building _large scale_ systems moving forward; as overall it offers many more benefits compared to old school monolithic applications. It's important when designing services that you split up the responsibilities in your application appropriately, and try to find a sweet spot between separation of concerns and domains vs fragmentation.
 
-## Decoupling systems
+## 🧩 Decoupling systems
 
 When considering the design of a complex system, we ideally want to decouple our code by individual domain areas. The reason for this is that it allows us to scale any particular part of the system that becomes a bottle neck; rather than carrying out a blanket scale up of the entire system; which is not only expensive but impractical.
 
@@ -162,7 +162,7 @@ In the above example we've used queues to help decouple the individual parts of 
 > [!INFO]
 > depending on the purpose of the above application, you might decide that displaying the unoptimized image would be better than displaying a message to the user to say the image is still being processed. The reason I didn't do that here was because of performance reasons (the size of the image could be very large and not something you want a mobile user to have to download - especially if they're traveling with a poor network connection)
 
-## Broker/Renderers
+## 📡 Broker/Renderers
 
 At BBC News in London, my team have released an open-source framework written in Ruby called [Alephant](https://github.com/BBC-News/Alephant), which abstracts a common pattern we find useful for decoupling our data driven applications.
 
@@ -234,7 +234,7 @@ This is the essence of composability, it's like lego bricks slotting together to
 
 It's an interesting mix of SRP (Single Responsibility Principle) and the composability of FP (Functional Programming).
 
-## How low can you (or should you) go?
+## 🤿 How low can you (or should you) go?
 
 For any performance critical (and scalable) application, it's important to consider the overhead of certain technologies. For example, when it came to building the Alephant framework (discussed in the previous section), we decided that [Sinatra](http://sinatrarb.com/) (a very popular Ruby web framework that is preferred over a monolithic framework such as [Ruby on Rails](http://rubyonrails.org/)) was still too bulky for our needs.
 
@@ -242,7 +242,7 @@ By that I mean, it had all sorts of web related features that we didn't need for
 
 It's important to realize that stripping back the layers of complexity can help to better reveal the intent of your code. Making it easier to understand and to reason about.
 
-## Language agnostic templates
+## 📄 Language agnostic templates
 
 At the BBC we discovered (the hard way) that our approach for managing the storage and deployment of front-end components wasn't scalable. The problem stemmed from a more traditional method of structuring front-end applications, which meant separating JavaScript, CSS and images into separate folders.
 
@@ -292,7 +292,7 @@ This manifest file makes it simple to understand the complexity of a single comp
 
 The hope moving forward is for our internal component pattern library, built on top of Chintz, to be utilised across teams working on different platforms. For example, the BBC News core team work on a traditional PHP platform, while the Elections Presentation team develop cloud based components (generated with Ruby) that are consumed by the core team's platform.
 
-## Automation and Duplication
+## 🤖 Automation and Duplication
 
 When dealing with large software systems, you'll need to ensure you're automating things and reducing the amount of repeatable work you have. This is essential when managing software of any substantial scale.
 
@@ -412,7 +412,7 @@ We use Docker in a variety of different situations:
 
 All that being said: Docker isn't a panacea. It doesn't fit all project requirements and in some cases it's not the right solution at all. As with all things, consider the pros and cons and use where and when appropriate.
 
-## Tooling
+## 🧰 Tooling
 
 The tools you utilize during (and post) development can be fundamental to the success of your project. I wont cover all the various tooling solutions we have in place (as there are just far too many), but there is one tool in particular I want to focus on: [Spurious](https://github.com/spurious-io/).
 
@@ -434,7 +434,7 @@ Now this by itself is very useful. We can spin up an instance of Spurious on our
 
 It's still in development and has some rough edges (there is a rewrite planned, that will change the implementation language from Ruby to Go), but ultimately we've been using Spurious on quite a few projects now and it has become indepensible. I highly recommend you take a look.
 
-## FP, OOP and MVC
+## 🏛️ FP, OOP and MVC
 
 So far in this post we've been discussing top-level system and architectural design, tooling and other associated processes. In this section I want to take it down a level and briefly express my love for Functional Programming (FP), which will require me to make some comparisons to Object-Oriented Programming (OOP).
 
@@ -465,7 +465,7 @@ Regardless of its apparent popularity, MVC isn't always the right tool for the j
 
 The (ab)use of MVC has also become standard fare within the realm of front-end JavaScript libraries. Again, I'm not saying MVC is bad or wrong; but what I am saying is "do you need it?". Remember to consider what it is you're signing up to when you utilise a particular open-source (or even commercial) library within your application. Simplicity is the key.
 
-## Inherent complexity
+## 🕸️ Inherent complexity
 
 There are some pieces of software and tools that are inherently complex by design. As an example, I want to demonstrate this by taking a look at our application deployment pipeline, which utilizes [Jenkins](http://jenkins-ci.org/) and provides us with a full circle continuous deployment process.
 
@@ -497,7 +497,7 @@ In a bid to simplify our deployment pipeline we have planned to take the followi
 - We will then investigate alternative methods for making Jenkins work with complex deployment pipelines (such as [Jenkin Templates](https://wiki.jenkins-ci.org/display/JENKINS/Template+Project+Plugin))
 - Then, when we get capacity within the team, we'll look to set-up [GOCD](http://www.go.cd/) which we set-up as a tech spike previously and found it worked very well with our team's workflow.
 
-## Containerization
+## 🐳 Containerization
 
 As of 2014/2015 the tech world is buzzing about [Docker](https://www.docker.com/). If you want to find out more about what Docker is and how it works then I recommend going through their website as it has a wealth of good information. But in summary: a docker "container" is an isolated set of processes that can be connected with other "containers" to create different types of software applications, but in a more manageable way.
 
@@ -555,7 +555,7 @@ An alternative suggestion from [Steven Jack](https://twitter.com/stevenjack85) w
 docker build -t some/image -e MY_SECRET=KEY
 ```
 
-## Optimizing user experience
+## 🎨 Optimizing user experience
 
 I said at the start of this post that I wouldn't be covering very much front-end technologies because they were vast, complex and the recommended patterns seem to change on a regular basis. But this isn't to say there aren't things you should be doing when designing your user facing applications. Below is a short list of topics that you should spend some time investigating:
 
@@ -565,7 +565,7 @@ I said at the start of this post that I wouldn't be covering very much front-end
 - BEM: Block Element Modifier is a predescribed notation for writing CSS that allows it to reduce complexity/specificity, while increasing maintainability and reusability. [Harry Roberts](http://csswizardry.com/) has written extensively about it; and in fact I would recommend reading anything he has to say on the subject of CSS and how to write it to support large scale applications.
 - RWD: Responsive Web Design is neither new or an easy topic. There is a myriad of techniques for implementing RWD properly and in a progressively enhanced/performant fashion. I would recommend reading anything [Brad Frost](http://bradfrost.com/) has to say. See his [Pattern Library](http://www.pattern-lab.info/) for lots of good code examples.
 
-## Where have we succeeded/failed?
+## 📊 Where have we succeeded/failed?
 
 Admitting failure is never easy, and so you don't often see blog posts describing how some new feature or technology didn't quite work out as planned. I'm personally of the opinion that recognizing situations where we've failed (and aiming to "fail fast") is a healthy way to react. Much like in the world of distributed computing, you have to accept the fact that services are going to fail and instead focus on improving the situation if it were to arise.
 
@@ -589,7 +589,7 @@ When we originally were building our monitoring solution we were able to prototy
 
 In some places we've succeeded by catching ourselves trying to over engineer specific solutions. As an example, we recently had a need to archive some components that our Alephant Framework was used to render. We needed to move the rendered components from one S3 bucket to another S3 bucket. This archiving process would only happen once (after the event the components were associated with - so this wasn't a service that needed to run 24/7). We initially started setting up an EC2 server and all that goes along with deploying it via our own infrastructure (which is an abstraction on top of AWS), only to find that really the best solution was to utilize the new (as of 2015) [AWS Lambda](http://aws.amazon.com/lambda/) service; which was built specifically for these isolated event based scenarios. It helped to simplify the solution itself as well as reduce overall costs. Plus we had the opportunity to play around with some new technology; which is always fun :-)
 
-## Summary
+## 🏁 Summary
 
 So here we are finally at the end of my whirlwind tour of software design and tooling. We've covered mainly back-end/dev-ops related technologies and ever so briefly considered some pointers for the front-end.
 

@@ -5,11 +5,11 @@ description: How to conduct architecture interviews effectively, why whiteboard 
 tags: [management, architecture]
 ---
 
-## Introduction
+## 📖 Introduction
 
 This post will explain a little bit about a particular type of interview: an architecture interview. It'll breakdown what it is, why using whiteboards isn't necessarily a bad thing to use in an interview context, as well as understanding a bit about what it is we're looking for from a particular candidate (in this post the information will be related to interviewing someone for an Engineering Manager opportunity).
 
-## What is an architecture interview?
+## 🏛️ What is an architecture interview?
 
 An architecture review can be a few different things depending on the context of the interview and the type of role being applied for.
 
@@ -22,7 +22,7 @@ Whereas for a more senior role, like an engineering manager (or even a director 
 
 The reason for the switch around of formats is that generally the more senior roles won't necesarily be controlling the system design (they'll have input, but generally speaking this would be the responsibility of individual teams), and so what you're trying to gauge from that type of interview is an understanding of whether they have a solid technical grounding, because their other skills are of a bigger priority.
 
-## Is one interview all it takes?
+## ⏱️ Is one interview all it takes?
 
 No. To clarify: when interviewing a candidate, you won't give them a single architecture interview and call it a day (i.e. make a decision). There are many interviews that need to happen before you can make such a decision:
 
@@ -36,7 +36,7 @@ No. To clarify: when interviewing a candidate, you won't give them a single arch
 > [!INFO]
 > the above are based on a 'Director of Engineering' day of interviews, but you'd have similar formats for varying engineering roles.
 
-## Aren't whiteboard interviews bad?
+## 🖊️ Aren't whiteboard interviews bad?
 
 In summary: no (at least they're not inherently bad).
 
@@ -53,7 +53,7 @@ You should not be having whiteboard interviews consisting of questions of that k
 
 If structured (and presented) correctly by the interviewer, a whiteboard interview (such as an architecture interview) can actually be fun for both the candidate and the interviewer, and be an enlightening experience rather than a stressful one.
 
-## How should an architecture interview be handled?
+## 🤝 How should an architecture interview be handled?
 
 The goal (for _any_ interview) is to allow the candidate to shine, and to present themselves in the best light that they can. Even if you decide they're not right for the role or the organisation, you want them to walk away feeling good about themselves and what they did that day.
 
@@ -69,7 +69,7 @@ As far as the actual 'test' portion of the architecture interview, remember that
 
 Lastly, and most importantly, when dealing with a software engineer (i.e. you're giving them requirements to fulfill as part of the design), make sure you're working _with_ that person. Help guide them when it looks like they might be losing their way, you don't have to outright tell them the answer, but you can ask leading questions that should otherwise help kickstart their thinking down a better path. You'd do this for any colleague you work with, so afford this person the same respect and kindness.
 
-## What are you looking for from a candidate?
+## 🔍 What are you looking for from a candidate?
 
 Well, for me, it depends on the role. I've carried out quite a few 'Engineering Manager' interviews recently and so they're the most prominent in my mind so I'll use that as my measuring stick (but just remember, none of this is set in stone and is open for interpretation and tweaking/evolving).
 
@@ -118,6 +118,6 @@ So below are the high-level perspectives I'm looking for, and taking notes on. B
 - **Interest**:
   - Is the candidate excited to work for/with us? What about our organisation do they like the most? (this isn't a deal breaker, this is more out of interest)
 
-## Anything else?
+## 💭 Anything else?
 
 I don't know, but maybe you could let me know on twitter if there's anything I've missed or should be doing differently. Feedback appreciated.

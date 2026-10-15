@@ -5,7 +5,7 @@ description: A beginner-friendly guide to common unix shell commands and scripti
 tags: [shell]
 ---
 
-## Introduction
+## 📖 Introduction
 
 The unix command line has a hundred or so commands, and a small majority of those you can realistically find yourself using on a regular basis. In this post I want to cover some common commands that can actually be quite useful to you.
 
@@ -13,7 +13,7 @@ Shell commands aren't something you can cover in one post. Entire books have bee
 
 So let's begin…
 
-## Basics
+## 🔰 Basics
 
 OK, so I'll assume you have absolutely no prior command line experience which means we need to start at the basics.
 
@@ -93,7 +93,7 @@ To create a directory you can use the make directory command `mkdir my_folder_na
 
 To make creating lots of sub directories easier you can pass a `-p` flag like so `mkdir -p Assets/{Scripts,Styles}` (notice we use interpolation `{}` which lets use specify multiple folder names in the current directory level).
 
-## Find (searching for files)
+## 📁 Find (searching for files)
 
 The `find` command is useful for walking a directory hierarchy and returning a list of files found based on a set of criteria you have determined.
 
@@ -166,7 +166,7 @@ find . -size +0 -a -size -500c # (-a is AND, -c is bytes)
 find . -size 0 -o -atime +365
 ```
 
-## Grep (Searching for patterns)
+## 🔍 Grep (Searching for patterns)
 
 Grep is a command that lets you find a pattern (either a string or a regular expression) inside of a file or list of files.
 
@@ -176,7 +176,7 @@ To use grep on a directory of files then we need to use an additional flag: `-r`
 
 So: `grep -r 'something' ~/Desktop` looks for the word 'something' inside of any files on the Desktop.
 
-## Sed (Find and Replace)
+## ✂️ Sed (Find and Replace)
 
 The `sed` command stands for (S)tream (Ed)itor and allows you to  read in the contents of a file and then write the modified output to another file or pipe it through to another I/O command (we'll cover piping later).
 
@@ -210,7 +210,7 @@ You can also 'edit in place' if you're feeling brave:
 find . -name '*.go' -exec sed -i '' 's/<patten>/<replacement>/' {} \;
 ```
 
-## Awk (Looping Logic)
+## 🔄 Awk (Looping Logic)
 
 The `awk` command reads in each line of a file and splits the line into fields (using whitespace - space, tab - as its default delimiter).
 
@@ -247,7 +247,7 @@ Let's break this command down a little…
 - `NF` stands for (N)umber of (F)ields.
 - The `$()` wrapping around `NF` is our 'process substitution'. This means we're not just outputting some data but manipulating it by using logic to give us 1 field back from the last, hence it needs to be wrapped in `$()`
 
-## Piping I/O
+## 🚰 Piping I/O
 
 The previous commands `awk`, `sed`, `grep` are all really useful, but it's when you can combine them that their true power shines.
 
@@ -371,7 +371,7 @@ The use of `&&` between commands means the commands are run in a sequence. So fo
 
 The use of a single `&` between commands means the commands are run in parallel (meaning they don't wait for each other). So for example, `x & y` will mean `x` and `y` both run *at the same time*.
 
-## Processes
+## ⚙️ Processes
 
 Each command you execute is a "process". So when we execute the command `vim` (which opens up the Vim text editor) we have effectively started up a new "process".
 
@@ -389,7 +389,7 @@ To then bring the latest process (i.e. the last process that was put into the ba
 
 If you have multiple processes in the background then you can look up the processes using `job` and then pick one and foreground it using the command `fg %n` where `n` is the number of the job.
 
-## Miscellaneous Commands
+## 🧰 Miscellaneous Commands
 
 ### `tee`
 
@@ -569,7 +569,7 @@ Sometimes you need to execute a command using `sudo` privileges. If you forget t
 
 Rather than try to remember an old command you typed a few hours ago, let the terminal remember for you. If you press `<C-r>` (which is `<Ctrl>` and `r` keys at the same time) then start typing what you think the command was, the terminal will start to autocomplete using your command history. You can even press `<C-r>` multiple times to start cycling through your command history.
 
-## Conclusion
+## 🏁 Conclusion
 
 This was a pretty fast paced run through of some different unix commands. As time goes on I'll update this post to include other commands and real work use cases that I think would be interesting and useful to those readers new to the command line.
 

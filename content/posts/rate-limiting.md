@@ -5,7 +5,7 @@ description: Implementing rate limiting at the CDN edge for public-facing servic
 tags: [networking, fastly, performance]
 ---
 
-## What is Rate Limiting?
+## 🚦 What is Rate Limiting?
 
 Rate Limiting is a technique used to control the rate of requests received.
 
@@ -13,7 +13,7 @@ It exists to help online services to stay up and running even when clients of th
 
 Think of an API such as the [GitHub API](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting). If they didn't rate limit their clients, then it's very possible a single client could consume most of their resources (either accidentally or intentionally, i.e. a "bad actor").
 
-## Problems with Rate Limiting
+## ⚠️ Problems with Rate Limiting
 
 There are two key issues that I needed to address for my employer. The first is very specific to the needs we were trying to solve, and the other is a general issue...
 
@@ -69,7 +69,7 @@ I won't explain _why_ we didn't have enough programmatic access with Fastly, bec
 > [!INFO]
 > Fastly does have a beta product called [compute@edge](https://www.fastly.com/blog/join-the-beta-new-serverless-compute-environment-at-the-edge) but it's still very early stages and they don't recommend their customers use it for production workloads.
 
-## Architecture
+## 🏛️ Architecture
 
 With the above understanding clear in our minds, let's take a look at the architecture I ended up designing/implementing:
 
@@ -91,7 +91,7 @@ Two things worth clarifying in the above architecture diagram...
 1. We'll attempt to serve a cached response from the CDN otherwise we'll attempt to serve stale (if available), before finally falling back to a synthetic `429 Too Many Requests`.
 1. The "Perimeter" service directly behind the CDN was a pre-existing custom built reverse proxy (only slightly modified for the purpose of putting clients into redis).
 
-## Downsides
+## 📉 Downsides
 
 The biggest downside is that there is a delay in applying rate limits, as processing data isn’t happening at runtime (i.e. the 'Rate Control' service is decoupled from the perimeter proxy).
 
@@ -101,7 +101,7 @@ Subsequently this design will allow more requests through to our internal infras
 
 Lastly, although this works well for our purposes I appreciate it is not a perfect solution, and is merely a tourniquet.
 
-## Features
+## ✨ Features
 
 OK, so let's review the benefits of this design...
 
@@ -126,7 +126,7 @@ OK, so let's review the benefits of this design...
 > [!INFO]
 > although not done yet, I intend on building an internal UI service for 'Rate Control' that will make interfacing with the various components easier (inc. all features currently present in the CLI).
 
-## Example Code
+## 💻 Example Code
 
 Let's see some example VCL code to understand the CDN edge implementation a bit better...
 

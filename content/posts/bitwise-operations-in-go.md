@@ -94,7 +94,7 @@ func main() {
 }
 ```
 
-## Visualising Bits
+## 👁️ Visualising Bits
 
 In case you need a reminder of what bit alignment and shifting look like, take a
 look at the following diagram: which shows a byte consists of `8` bits:
@@ -191,7 +191,7 @@ specific status flags in a program.
 > power of two, meaning the maximum value of an 8-bit byte tops out at `256 - 1`,
 > allowing it to span a range from `0` to `255`.
 
-## Defining Bit Flags
+## 🚩 Defining Bit Flags
 
 You can utilize the bitwise `OR` assignment operator (`|=`) to selectively flip
 these individual bit switches 'ON' (setting them to `1`). We can then use this "bit
@@ -205,7 +205,7 @@ shifting (`1 << iota`). This ensured each flag only affected a single bit:
 - `StatusBanned` has the binary value `0100` (`1 << 2` == 4 in decimal).
 - `StatusVerified` has the binary value `1000` (`1 << 3` == 8 in decimal).
 
-## Setting Statuses
+## 🔘 Setting Statuses
 
 The following example combines two separate status flags:
 
@@ -238,7 +238,7 @@ decimal; the earlier diagram/image showed a byte and its first bit is `1` and
 its fourth bit is `8`: `1+8` is `9`), which means both the "active" and
 "verified" flags are set.
 
-## Adding and Removing Flags
+## ➕ Adding and Removing Flags
 
 The following example sets the "admin" bit without affecting the other bits, resulting in `1011` (11 in decimal):
 
@@ -246,7 +246,7 @@ The following example sets the "admin" bit without affecting the other bits, res
 userStatus |= StatusAdmin
 ```
 
-## Comparing Statuses
+## ⚖️ Comparing Statuses
 
 Once `userStatus` has combined flags we can use the `&` operator to perform a bitwise `AND` operation, which means it compares each bit of two integers. For each bit position, if both bits are 1, the result at that position will be 1; otherwise, it will be 0.
 

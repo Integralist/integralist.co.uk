@@ -21,7 +21,7 @@ So I know from prior experience the real learning curve involved with this langu
 
 Understanding the first section (ownership) requires an understanding of 'stack' vs 'heap' memory, which you may be unfamiliar with depending on your programming experience and if you've used only high-level programming languages. So here's a quick rundown...
 
-## Stack Memory
+## 🥞 Stack Memory
 
 The stack is memory that is available to your program at runtime. Data that is assigned to variables or passed as arguments to function calls are allocated onto the stack in a 'Last In, First Out' (LIFO) model, much like a stack of plates.
 
@@ -32,7 +32,7 @@ The stack is very fast to access data because the data is close together, unlike
 > [!INFO]
 > Rust primitive/scalar types (int, bool, float, char, string literal etc) are stored in stack memory.
 
-## Heap Memory
+## 📦 Heap Memory
 
 The heap is memory that is also available to your program at runtime but is much slower to access than stack memory. This is because it requires a 'pointer' to locate the stored data, of which the storage area is large and very unorganized.
 
@@ -41,7 +41,7 @@ The heap is for memory that grows or has unknown size (such as when accepting us
 > [!INFO]
 > \*\*Rust complex types (String, Box etc.) are stored into heap memory.
 
-## Ownership
+## 🔑 Ownership
 
 The rules for ownership are quite simple:
 
@@ -113,7 +113,7 @@ It's important to realise that passing a variable to a function will either move
 
 In that scenario the complex type's `drop` function is _not_ called, as would normally be the case if a variable went out of scope at the end of a function (even if the original variable/owner was created within the function) as the compiler is able to determine that the value shouldn't be dropped and instead is being _moved_ to a new owner somewhere else in your program.
 
-## Borrowing
+## 🤝 Borrowing
 
 The concept of borrowing is designed to make dealing with ownership changes easier. It does this by avoiding the _moving_ of owners. The way it does this is by letting your program provide a 'reference' to the data. This means the receiver of the reference (e.g. a function, struct field or a variable etc) can use the value temporarily without taking ownership of it.
 
@@ -396,7 +396,7 @@ fn return_ref() -> String {
 
 In the above example the `r` variable is now the new owner of the data.
 
-## Lifetimes
+## ⏳ Lifetimes
 
 Lifetimes are tightly coupled to 'references'.
 
@@ -464,7 +464,7 @@ error[E0597]: `string2` does not live long enough
   |                                          ------ borrow later used here
 ```
 
-## Conclusion
+## 🏁 Conclusion
 
 Although I'm very new to these concepts that Rust defines, I get the feeling that although understanding them at a high-level (as I've described them in this post) is reasonably easy. Being able to fully appreciate them and more importantly getting _comfortable_ with them is just something that's going to take time.
 

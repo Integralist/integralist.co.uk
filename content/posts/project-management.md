@@ -10,7 +10,7 @@ tags: [management]
 > Includes specific documents needed and also an [example matrix
 > spreadsheet](https://docs.google.com/spreadsheets/d/1ZnxIY4BCnsUaY65Cc2GCmzmq18XBJvG2iErSWfMjW10/edit?usp=sharing).
 
-## Introduction
+## 📖 Introduction
 
 If you're a technical lead (aka engineering lead, lead developer, etc), then there comes a time where you'll be put in charge of a project.
 
@@ -24,7 +24,7 @@ I suggest you take what you want and leave the rest.
 
 But first, let's take a moment to recognise and understand a few distinct roles that otherwise can appear to have a lot of cross-over responsibilities (this has been summarised from the great work originally published by [Lara Hogan](https://medium.com/@lara.hogan) - I highly recommend you check out her work).
 
-## What Who How Why?
+## ❓ What Who How Why?
 
 - **Product Manager**: owns the story of "what"
 - **Engineering Manager**: owns the story of "who"
@@ -35,7 +35,7 @@ But first, let's take a moment to recognise and understand a few distinct roles 
 
 [More details...](https://medium.com/making-meetup/em-el-pm-venn-diagram-764e79b42baf) (Lara Hogan's original post)
 
-## Project Management Checklist
+## ✅ Project Management Checklist
 
 This is a short checklist of things you probably should be doing...
 
@@ -104,19 +104,19 @@ This is a short checklist of things you probably should be doing...
 
 - Doesn't matter how big or small the project, or whether it was difficult at times. Always, always, celebrate the finishing line and thank your team for their hard work.
 
-## Shielding
+## 🛡️ Shielding
 
 Don't shield the team from issues that are arising around them (e.g. don't think "oh, they're stressed and missing deadlines, so I need to pretend like everything is ok" -- it's not ok). Treat the team with respect, as adults, and let them know things aren't working and that we need to adjust the process to resolve that.
 
 Yes, shield the team from _distractions_, but that is something altogether different than shielding them from bombs exploding around them. They can help you negotiate those mindfields if you let them. We're working with adults, and they don't need to have scary things hidden from them.
 
-## Positive Mindset
+## 🌟 Positive Mindset
 
 I've found that swapping the word "problem" for "challenge" a good thing to do in general, whether it be talking about an actual technical challenge or discussing a challenging interaction with another employee.
 
 The subtle switch in language helps me refocus on a more positive and motivated projectory (rather than setting myself up to be in a negative mindset for the conversation).
 
-## Recognising Trends
+## 📈 Recognising Trends
 
 As time goes on, you might start having issues with your team (for various reasons - we're humans, we're notoriously difficult creatures).
 
@@ -126,7 +126,7 @@ Depending on the situation, explicit examples aren't always possible to recall. 
 
 Be aware of trends in people, otherwise you might find yourself in a bad situation and not sure how or why you got there in the first place. If you catch problems early enough, you can help work towards a solution that gets your team back on track.
 
-## User Stories
+## 👤 User Stories
 
 In case you're not familiar with user stories...
 

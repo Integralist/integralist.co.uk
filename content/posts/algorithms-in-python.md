@@ -22,7 +22,7 @@ Three out of the four 'search' algorithms listed above will be implemented aroun
 
 Graphs can also be 'weighted', so they can indicate that a relationship between two nodes within the graph are possibly stronger than another connection, and is typically used in road maps for determining the quickest path to a particular node (we'll come back to this later when reviewing [Dijkstra's Algorithm](#dijkstra-s-algorithm)).
 
-## Merge Sort
+## 🔀 Merge Sort
 
 Given an unsorted list of integers, the merge sort algorithm enables us to sort the list.
 
@@ -87,7 +87,7 @@ result = merge_sort(collection)
 print(f'merge sort of {collection} result: {result}\n\n')
 ```
 
-## Quick Sort
+## ⚡ Quick Sort
 
 Given an unsorted list of integers, the merge sort algorithm enables us to sort the list.
 
@@ -132,7 +132,7 @@ result = quicksort(cloned_collection)
 print(f'quick sort of {collection} result: {result}\n\n')
 ```
 
-## Difference between Merge and Quick sort
+## ⚖️ Difference between Merge and Quick sort
 
 Both merge sort and quick sort are 'divide and conquer' algorithms, e.g. they divide a problem up into two and then process the individual partitions, and will keep dividing up the problem for as a long as it can.
 
@@ -188,7 +188,7 @@ It's an interesting algorithm but ultimately is quite limited and so other sorti
 
 Radix sort is also targeted at integers, fixed size strings, floating points and `<`, `>` or lexicographic order comparison predicates.
 
-## Binary Search
+## 🔍 Binary Search
 
 The most popular algorithm (by far) for searching a value in a _sorted_ list is 'binary search'. The reason for its popularity is that it provides [logarithmic performance](/posts/algorithmic-complexity-in-python/#logarithmic-time) (on average) for access, search, insertion and deletion operations.
 
@@ -238,7 +238,7 @@ print(f'the value was found at index {result}\n\n')  # index 4
 > [!TIP]
 > you could swap `round((start + stop) / 2)` for `(start + stop) // 2` which uses Python's `//` floor division operator, but I typically opt for the clarity of using the explicit `round` function.
 
-## Breadth First Search
+## 🌐 Breadth First Search
 
 A BFS (breadth first search) is an algorithm that searches a data structure from either a root node or some arbitrary starting point. It does this by exploring all the neighbouring nodes, before moving onto other connected nodes.
 
@@ -352,7 +352,7 @@ found a match: ethan
 > [!INFO]
 > I've used a dict to represent a graph, which helped to make the code simpler to understand. A different data structure (e.g. a directed tree) would require a different implementation of the algorithm. Remember, the basic premise is to search a graph node's adjacent fields, and then their adjacent nodes.
 
-## Depth First Search
+## 🌲 Depth First Search
 
 The following image shows a tree structure that represents various people...
 
@@ -454,7 +454,7 @@ result: Ethan
 
 So from this output we can see we started at Alice, and first checked Bob but because Bob has no children we moved back up to Charlie. From Charlie we go down to Fred but as there's no more children we move back up to Dave. Finally we check Dave's children to find Ethan.
 
-## When to choose BFS vs DFS?
+## 🤔 When to choose BFS vs DFS?
 
 Generally BFS is better when dealing with relationships across fields, where as DFS is better suited to tree hierarchies.
 
@@ -470,13 +470,13 @@ That said, below is a short list of things to consider when opting for either a 
 
 Ultimately, it all depends.
 
-## Searching an unsorted collection?
+## ❓ Searching an unsorted collection?
 
 If you have an unsorted collection, then your only option for searching is a linear time complexity `O(n)`. To improve that performance we would need to first sort the collection so we could use a binary search on it.
 
 Another potential option is to run a linear search across multiple CPU cores so you're effectively parallelizing the processing. It's still `O(n)` linear time complexity, but the perceived time would be shorter (depending on the restructuring of the collection split chunks).
 
-## Dijkstra's Algorithm
+## 🗺️ Dijkstra's Algorithm
 
 The Dijkstra algorithm tells you the quickest path from A to B within a weighted graph.
 

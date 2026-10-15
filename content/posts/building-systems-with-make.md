@@ -5,7 +5,7 @@ description: An introduction to using GNU Make as a modern build and automation 
 tags: [make, shell]
 ---
 
-## Introduction
+## 📖 Introduction
 
 Most web developers use a **build tool** of some sort nowadays. I’m not refering to continuous integration software like [Jenkins CI](http://jenkins-ci.org/) (a very popular build system), but the lower-level software it uses to actually acquire dependencies and construct your applications with.
 
@@ -56,7 +56,7 @@ This program built for i386-apple-darwin11.3.0
 
 Which means I already have the `make` command available and I can start writing my Makefile right away.
 
-## Simple Example
+## 💡 Simple Example
 
 Let’s consider a standard project requirement, which is to run a linter such as [JSHint](http://www.jshint.com/) over a JavaScript file (that is, analyze the code for formatting issues and general errors and warnings).
 
@@ -122,7 +122,7 @@ The Makefile also acts as a documented file that can now be committed into versi
 
 The convention for writing Makefiles is to have the default command (your entry point) at the top of the file and have Make process the commands from the top down. You don’t have to do this, though (as you’ll see, I’ve not really worried about it with the examples throughout this post), and you’re free to put your rules in whatever order makes sense to you. But be aware that when you call the Make command, you’ll want to specify the specific target if it’s not the default.
 
-## Terminology
+## 📖 Terminology
 
 There are three key phrases you need to be aware of when talking about a Makefile:
 
@@ -139,7 +139,7 @@ target: prereq1 prereq2
 
 You can see we have: a single target (this is what we reference when running the command `make <target>`); a set of dependencies (i.e. prerequisites); and a command to execute (e.g. `jshint test.js --show-non-errors`). This entire structure is collectively referred to as a “rule” and a Makefile is typically made up of multiple rules.
 
-## Prerequisites
+## 🔗 Prerequisites
 
 Prerequisites are the dependencies for the target. What this means is that the target cannot be built successfully without the dependencies first being resolved.
 
@@ -154,7 +154,7 @@ In the above example we specified the prerequisite as being `foo.scss`; meaning 
 
 We don’t have a target named `foo.scss` and so if that file also didn’t exist, then we couldn’t resolve the dependency and subsequently the rule would fail (if it can’t resolve the dependency then the command in the rule won’t be executed).
 
-## How Make Decides What To Do
+## 🧠 How Make Decides What To Do
 
 How and why Make decides what to do when you run `make <target>` is very important as it’ll help you understand the performance implications of certain tasks. The rule of thumb for Make is pretty simple: if the target (or any of its prerequisite files) are out of date or missing, then the commands for that target will be executed.
 
@@ -163,7 +163,7 @@ Make uses the modification timestamp to avoid duplicate processing. If the times
 > [!TIP]
 > if you want to see what Make will execute without it actually doing anything, then run the `make` command as you normally would but ensure you include the `-n` flag. This will cause Make to print out all commands that would be executed, including commands collated from any specified prerequisites.
 
-## Automatic variables
+## 💲 Automatic variables
 
 Let’s consider another example whereby we want to compile a [Sass](http://sass-lang.com/) style sheet into CSS:
 
@@ -216,7 +216,7 @@ The [full reference of automatic variables](http://www.gnu.org/software/make/man
 
 Later on in this post we’ll revisit this `for` loop example and demonstrate a more idiomatic way to achieve the result we want.
 
-## Commands
+## 💻 Commands
 
 It’s worth being aware that each command provided inside the overall rule is considered a separate shell context. This means if you export a shell environment variable in one command, it won’t be available within the next command. Once the first command has finished, a fresh shell is spawned for the next command, and so on.
 
@@ -245,7 +245,7 @@ list: foo.txt bar.txt baz.txt
     done
 ```
 
-## Targets As Prerequisites
+## 🎯 Targets As Prerequisites
 
 So far our prerequisites have been physical files that already existed. But what if you need to dynamically create the files first via other targets? Make allows you to specify targets as dependencies, so that’s not a problem. Let’s see how this works in the following example:
 
@@ -280,7 +280,7 @@ bar
 > [!INFO]
 > if you’ve not seen it used before, the `-` in the `cat` command is telling it to expect input from stdin (the `echo` command writes to stdout and that is piped `|` over to the `cat` command as stdin)
 
-## Accessing Targets
+## 🔍 Accessing Targets
 
 In the above example, I was generating a file based on the contents of two other targets (which themselves dynamically generated some files). There was a slight bit of repetition that could have been cleaned up if we used another automatic variable provided by Make, specifically `$@`.
 
@@ -344,7 +344,7 @@ The command takes the dynamic part of the rule (the `foo` and `bar` parts) and m
 
 We’ve now resolved the `baz` rule’s dependencies and we can move on to executing its command, which completes the requirements as we’ve already seen.
 
-## Parsing Targets And Prerequisites
+## 🧩 Parsing Targets And Prerequisites
 
 There are many different automatic variables available for Make and we’ll see a few more of them as we go along. But as we’ve already discussed `$@` and `$<`, it’s worth noting that you are also able to parse the specific directory and file name details for the first dependency and the target by using the syntax `$(<D)`/`$(<F)` for the prerequisite, and `$(@D)`/`$(@F)` for the target.
 
@@ -377,7 +377,7 @@ Depending on your requirements this can be quite a powerful tool to help you con
 > [!TIP]
 > if you’re interested in knowing where your `make` binary is located then you can use the built-in `MAKE` special variable in your command: `@echo $(MAKE)`.
 
-## Dynamic Targets
+## ⚡ Dynamic Targets
 
 Targets can dynamically match mulitiple unknown values and allow for abstracting away common functionality, such as generating files that have similar names (to give a simplified example).
 
@@ -394,7 +394,7 @@ If you run the target using `make dynamic-foo` then you’ll get the following r
 Placeholder value: foo and target value: dynamic-foo
 ```
 
-## Dereferencing (Variables and Macros)
+## 📦 Dereferencing (Variables and Macros)
 
 Make provides the multipurpose utility `$()`, which is used to dereference values. The values can be functions (Make has many functions built in and we’ll take a quick glance at some of them later on) or they can be variable names. Let’s consider a simple example where we dereference a variable:
 
@@ -462,7 +462,7 @@ When we execute `make stuff` we see all the different messages printed to the sc
 > [!INFO]
 > notice that I had to escape the use of the single quote `'`. This was done because without it the command would fail due to a syntax error in Make.
 
-## Functions
+## ⚙️ Functions
 
 As mentioned in the previous section, the `$()` utility worked to dereference a value, but it can also handle a number of built-in functions. Although some of the functions could be replaced with standard shell commands.
 
@@ -528,7 +528,7 @@ foo.doc bar.doc baz.doc
 
 There are many functions and techniques to help you extend the capabilities within Make and so I would highly recommend you have a read through [the functions listed in the GNU Make manual](https://www.gnu.org/software/make/manual/html_node/Functions.html).
 
-## User-Defined Functions
+## 🛠️ User-Defined Functions
 
 You’ve already seen the use of macros via the syntax `define`. User-defined functions work exactly the same way but you call them differently to macros (you’ll use the Make built-in `call` function), and this is so that you can pass arguments to the definition. This is best demonstrated with an example:
 
@@ -552,7 +552,7 @@ I was called with the argument: hello!
 
 You can pass as many arguments as you like to a function and it’ll be accessible numerically (e.g. `$1`, `$2`, `$3` and so on). You can also call other functions from within a function and pass on the arguments, or pass different arguments using the `$(call function_name)` syntax.
 
-## Conventions
+## 📜 Conventions
 
 There are some well-known conventions and idioms used by the Make community, and a few of the most prominent ones are detailed in this section.
 
@@ -594,7 +594,7 @@ make: 'clean' is up to date.
 > [!TIP]
 > like with automatic variables, there are many different special targets (so far we’ve seen `.PHONY` and `.SILENT`). One that’s worth further investigation is `.DELETE_ON_ERROR`, which indicates to Make that if any of the commands for your target rule fails then it should delete the associated target file in your project. A [list of special targets](https://www.gnu.org/software/make/manual/html_node/Special-Targets.html) is available on the GNU Make website.
 
-## Revisiting The For Loop Example
+## 🔄 Revisiting The For Loop Example
 
 Earlier on we looked at a way of using a for loop as a command to loop over a list of text files and to print their names.
 
@@ -632,7 +632,7 @@ Again, let’s take a moment to break this down so we understand how it works:
 - The next step is to define a `.PHONY` target. We do this because in the subsequent step we define a virtual rule, but we don’t specify any prerequisites. This means as we have actual files in our directory that match the potential target name, the rule will never be executed unless we specify it as being `.PHONY`.
 - Now we define our virtual rule and we use the `$@` to print the name of the file when we execute `make print_list`.
 
-## Includes
+## 📥 Includes
 
 Make allows you to import more Make specific-functionality via its `include` statement. If you create a file with a `.mk` extension then that file’s Make related code can be included in your running Makefile. The following example demonstrates how it works:
 
@@ -654,7 +654,7 @@ When we run `make included_stuff`, we see `hi from the foo include` printed out.
 > [!TIP]
 > the `include` statement can also be written with a hyphen prefix like so `-include`, which means if there is an error loading the specified file then that error is ignored.
 
-## Conclusion
+## 🏁 Conclusion
 
 We’ve barely even scratched the surface of what’s possible using Make, but hopefully this introduction has piqued your interest in learning more by either reading the GNU Make manual or picking up a book on the subject. I am myself only beginning my investigation into replacing my existing build tools with Make.
 

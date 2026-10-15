@@ -31,7 +31,7 @@ func what(i interface{ do() }) {
 If you expected the `what` function to print `i == nil: true`, then keep
 reading...
 
-## Typed Nils
+## 🕳️ Typed Nils
 
 The behavior observed is due to the way interfaces and nil values interact in
 Go. To understand why the `what` function is able to see the `i` argument as
@@ -44,7 +44,7 @@ non-nil, we need to dig into the details of how Go handles interface values.
    is because the interface value now contains a type (the concrete type) and a
    value (`nil`).
 
-## Explanation
+## 💡 Explanation
 
 1. Declaring `var i *impl` initializes it to `nil`.
    - `i` is a pointer to `impl` and is initialized to `nil`.
@@ -63,7 +63,7 @@ non-nil, we need to dig into the details of how Go handles interface values.
    - The type part of the interface is `*impl`.
    - The value part of the interface is `nil`.
 
-## Summary
+## 📋 Summary
 
 The `what` function sees the `i` argument as non-nil because, in Go, an
 interface holding a `nil` pointer is not itself `nil`. The interface contains
@@ -71,7 +71,7 @@ type information (`*impl`) and a `nil` value. Therefore, when the code checks if
 `i` is `nil`, it returns `false` since the type information (`*impl`) is
 present.
 
-## Reference material
+## 📚 Reference material
 
 - [Go FAQ][1]
 - [Dave Cheney][2]

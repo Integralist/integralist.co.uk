@@ -7,7 +7,7 @@ tags: [go]
 
 This is my own personal style guide for Go.
 
-## Reference Materials
+## 📚 Reference Materials
 
 The following reference materials are my 'go to' whenever I'm unsure of something (they're mostly official resources).
 
@@ -26,7 +26,7 @@ The following reference materials are my 'go to' whenever I'm unsure of somethin
 > Refer to the [specification](https://golang.org/ref/spec) if ever confused about what the expected behaviour is.\
 > See also the [go.mod reference](https://go.dev/doc/modules/gomod-ref).
 
-## Naming
+## 🏷️ Naming
 
 The following is a summary of how to name things in Go, gleaned from either my own experiences over the years or from some of the above reference materials.
 
@@ -65,7 +65,7 @@ The following is a summary of how to name things in Go, gleaned from either my o
 > [!TIP]
 > Refer also to https://github.com/kettanaito/naming-cheatsheet
 
-## Whitespace
+## 📐 Whitespace
 
 The go standard library has no strong conventions or idioms for how to handle whitespace. So try and be concise without leaving the user with a wall of text to digest. Additionally, you can use block syntax `{...}` to help group related logic:
 
@@ -91,7 +91,7 @@ if {
 }
 ```
 
-## Quick note on Code Design
+## 📐 Quick note on Code Design
 
 Not always obvious but be wary of returning concrete types when building a package to be used as a library.
 
@@ -103,7 +103,7 @@ The solution was for us to return an interface. This made it simple to mock the 
 
 I recommend reading my other post ["Thinking about Interfaces in Go"](/posts/go-interfaces/).
 
-## Quick guide to Errors
+## ⚠️ Quick guide to Errors
 
 When you wrap errors your message **should include**:
 
@@ -158,7 +158,7 @@ See also the article "[When life gives you lemons, write better error messages](
 
 Essentially, the error "message" shouldn't necessarily be formatted like "error doing x" or "failed to do x" (as I had been led to believe the former was the standard way of writing an error message). After reviewing "good" examples of Go code (e.g. at the time of writing [this was one such example](https://github.com/search?q=repo%3Agoogle%2Fexposure-notifications-server%20errors.New&type=code)) it seems there is no 'format' for the error message other than to be direct/specific.
 
-## Quick guide to `panic`
+## 🚨 Quick guide to `panic`
 
 - The use of `panic` is reserved for when an error is _unrecoverable_.
 - What constitutes an "unrecoverable" error is contentious. Here are some definitions:
@@ -173,7 +173,7 @@ Essentially, the error "message" shouldn't necessarily be formatted like "error 
 - The use of `recover` is for when you disagree with the library authors.
 - Wherever possible avoid `panic` and return an error for the caller to handle.
 
-## Quick guide to slice 'gotchas'
+## 🍕 Quick guide to slice 'gotchas'
 
 The first gotcha to be aware of is that in Go assigning a new value to a parameter with `=` won't affect the argument in any way. So consider the following simple code that tries to append a value to a slice...
 
@@ -264,7 +264,7 @@ fmt.Println(c) /* [5 4]     */
 
 The 'fix', like shown earlier, is `b := a[:2:2]` which sets the capacity of the `b` slice such that `append` will cause a new array to be allocated. This means `a` will not be modified, nor will the `c` slice of `a`.
 
-## Quick guide to pass-by-value vs pass-by-pointer
+## 👉 Quick guide to pass-by-value vs pass-by-pointer
 
 > [!TIP]
 > Reference articles: [goinbigdata.com](https://goinbigdata.com/golang-pass-by-pointer-vs-pass-by-value/) and [dave.cheney.net](https://dave.cheney.net/2017/04/29/there-is-no-pass-by-reference-in-go) and [alexedwards.net](https://www.alexedwards.net/blog/demystifying-function-parameters-in-go).
@@ -338,7 +338,7 @@ We now know that Go will not pass the `&person` pointer, but a _copy_ of the poi
 So, if the `changeName` function were to modify the `p` argument variable it receives, this would actually cause the `person` variable to be updated.
 This happens because although the `&person` pointer was copied into the function argument, the `&person` and `p` are two _different_ pointers to the _same_ struct which is stored at the same memory address. This is quite different to C++'s reference variables.
 
-## Quick guide to functions with large signature
+## 📜 Quick guide to functions with large signature
 
 Your functions should have concise/relevant arguments passed in.
 

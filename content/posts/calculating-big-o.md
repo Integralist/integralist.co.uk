@@ -5,13 +5,13 @@ description: A quick reference for calculating Big O time complexity by identify
 tags: [python, performance]
 ---
 
-## Introduction
+## 📖 Introduction
 
 This post includes a condensed version of the information gleened from the excellent [interactivepython.org](http://interactivepython.org/runestone/static/pythonds/AlgorithmAnalysis/BigONotation.html) section on algorithm analysis. I strongly recommend you read that if you require more detailed information.
 
 The purpose of this post is simply to restructure and simplify the principles offered so I can use it as a quick reference for future practice.
 
-## Algorithm
+## ⚙️ Algorithm
 
 ```py
 def sumOfN(n):
@@ -24,7 +24,7 @@ def sumOfN(n):
 print(sumOfN(10))  # 55
 ```
 
-## Analysis Steps
+## 📋 Analysis Steps
 
 You want to quantify the number of operations (or 'steps') in the algorithm.
 
@@ -35,7 +35,7 @@ To do this:
 - Track repeatable operations (e.g. `theSum = theSum + i`).
 - Identify the most 'dominant' portion.
 
-## Explanation
+## 💡 Explanation
 
 Think about our algorithm `sumOfN`: we have `n` number of items and we're concerned about the time complexity.
 
@@ -70,7 +70,7 @@ f(n) == dominant part of T(n)
 
 Typically we'll not include the `f(...)` part of the syntax when using Big-O though. So instead of `O(f(n))` we'll just say `O(n)`.
 
-## Significant or Insignificant?
+## ⚖️ Significant or Insignificant?
 
 As `n` gets larger, continuing to use `T(n) = 1+n` as our example, the 'constant' `1` (i.e. the computation that happened once: `theSum = 0`) becomes less and less significant.
 
@@ -93,7 +93,7 @@ To clarify this further, I'm going to paste verbatim the interactivepython descr
 >
 > We would say then that the function `T(n)` has an order of magnitude `f(n) = n2`, or simply that it is `O(n2)`.
 
-## Example Analysis
+## 🔬 Example Analysis
 
 ```py
 a = 5
@@ -138,7 +138,7 @@ Think about it: looping over `n` items and making two assignments within each it
 > [!IMPORTANT]
 > Remember: although we write 'Big-O' as `O(...)` the underlying principle is `O(f(...))`, where `f(...)` is the dominant part of `T(...)` and when focusing in on the dominant part of the time complexity we drop the constants -- also known as the _coefficient_ -- (e.g. `3n2` thus becomes `n2`). This is because the constants become _insignificant_ as `n` grows.
 
-## When is Big-O not relevant?
+## ❓ When is Big-O not relevant?
 
 I recently asked in a computer science forum for help in understanding what the Big-O time complexity would be for a 'web crawler'. Specifically I was asking in relation to the following crawler implementation I had built: [go-web-crawler](https://github.com/integralist/go-web-crawler).
 

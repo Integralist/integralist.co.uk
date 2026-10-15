@@ -5,13 +5,13 @@ description: A quick introduction to writing maintainable CSS using the Block, E
 tags: [css]
 ---
 
-## Introduction
+## 📖 Introduction
 
 This is a super quick post to introduce you to a method of writing more maintainable CSS by using what's called "[BEM](http://bem.info)".
 
 Update: [@necolas](http://twitter.com/necolas) made a comment worth noting, that I'm using a modified version of the BEM naming conventions (BEM is a total framework that goes beyond just naming of classes and writing maintainable CSS). So I thought it best to make note of that here so as to not cause any confusion.
 
-## BEM: Block, Element, Modifier
+## 🧱 BEM: Block, Element, Modifier
 
 BEM stands for "Block, Element, Modifier" and is a simple but effective way to group together different components/widgets (as shown by the following visual aid).
 
@@ -23,7 +23,7 @@ The principles are similar to other methods of structuring CSS ([OOCSS](https://
 
 The best way to understand BEM is to see an example of how it's used (see next section). But if you want the full details of its history and some more detailed/visual break down of the concepts then please see the [BEM](http://bem.info) website.
 
-## Example
+## 💡 Example
 
 Below we have a money calculator widget. You enter an amount of money (e.g. £2.12p) and when you press on 'calculate' it'll return to you a list of coins required to make up the amount specified.
 
@@ -111,7 +111,7 @@ This means that our CSS code for this widget ends up looking like this…
 }
 ```
 
-## Why BEM over the others?
+## 🤔 Why BEM over the others?
 
 I've tried a lot of different ways of writing CSS over the years. It went something like this…
 
@@ -167,7 +167,7 @@ And lastly, the word 'modifier' again is a simple but fully understood and famil
 
 But with this simplified terminology/structure it gives us all the tools we need to write maintainable and easily understandable code. BEM easily scales with the size of a project.
 
-## Conclusion
+## 🏁 Conclusion
 
 I know I've said it before about SMACSS ("*wow, I think this is it!*") but even when I first started using SMACSS I still had niggling feelings about "*hmm, it's a little complicated getting this all in place, but it seems to work well*". With BEM I've not had any of those concerns. The only initial concern I had was with the look of it. I didn't like the double underscores or the double dashes. But now I actually like them!
 

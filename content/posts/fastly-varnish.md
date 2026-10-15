@@ -5,7 +5,7 @@ description: A deep dive into how Fastly's CDN works, covering Varnish internals
 tags: [fastly, networking, performance]
 ---
 
-## UPDATE
+## 📢 UPDATE
 
 As of October 2020 I joined the Fastly team to help improve Developer Relations
 🎉
@@ -37,7 +37,7 @@ information...**
 
 ![asleep](/assets/img/asleep.webp)
 
-## Introduction
+## 📖 Introduction
 
 Fastly utilizes 'free' software (Varnish) and extends it to fit their purposes,
 but this extending of existing software can make things confusing when it comes
@@ -162,7 +162,7 @@ also not forget operations such as `return(restart)` which looks to be
 triggering an 'action' rather than a state change (in that example you might
 otherwise expect to execute something like `return(recv)`).
 
-## Varnish Default VCL
+## 📜 Varnish Default VCL
 
 When using the free version of Varnish, you'll typically implement your own
 custom VCL logic (e.g. add code to `vcl_recv` or any of the other common VCL
@@ -191,7 +191,7 @@ Specifically:
 - some modifications to the `synthetic` in `vcl_error`
 - ...and God knows what else.
 
-## Fastly Default VCL
+## ⚡ Fastly Default VCL
 
 On top of the built-in VCL the free version of Varnish uses, Fastly also
 includes its own 'default' VCL logic alongside your custom VCL.
@@ -234,7 +234,7 @@ Below are some useful links to see Fastly's default VCL:
 
 <small class="img-caption">fastly's master VCL be all like ^^</small>
 
-## Custom VCL
+## 🛠️ Custom VCL
 
 When adding your own custom VCL code you'll need to ensure that you add Fastly's
 critical default behaviours, otherwise things might not work as expected.
@@ -582,7 +582,7 @@ sub vcl_deliver {
 > consider to be VCL anti-patterns and offer solutions/alternative patterns:
 > https://www.fastly.com/blog/maintainable-vcl
 
-## Fastly TTLs
+## ⏱️ Fastly TTLs
 
 When Fastly caches your content, it of course only caches it for a set period of
 time (known as the content's "Time To Live", or TTL). Fastly [has some
@@ -645,7 +645,7 @@ There are two fundamental pieces of information I'm about to describe...
    traffic distribution across _multiple_ IPs returned from a DNS lookup, rather
    than just using one until the next DNS lookup.
 
-## Caching Priority List
+## 📊 Caching Priority List
 
 Fastly [has some
 rules](https://docs.fastly.com/guides/tutorials/cache-control-tutorial) about
@@ -680,7 +680,7 @@ takes priority over `Expires`.
 > had to add `return(deliver)` in `vcl_fetch` to prevent Fastly boilerplate from
 > executing!
 
-## Fastly Default Cached Status Codes
+## 🚦 Fastly Default Cached Status Codes
 
 The CDN (Fastly) [doesn't cache all
 responses](https://docs.fastly.com/en/guides/http-status-codes-cached-by-default).
@@ -704,7 +704,7 @@ The status codes it will cache by default are:
 > change the status code if you like to _look_ like it was a different code with
 > `set beresp.status = <new_status_code>;`).
 
-## Fastly Request Flow Diagram
+## 🗺️ Fastly Request Flow Diagram
 
 There are various request flow diagrams for Varnish
 ([example](http://book.varnish-software.com/4.0/_images/simplified_fsm.svg)) and
@@ -898,7 +898,7 @@ object or not.
 > this `vcl_hit` code logic is still part of the free Varnish software,
 > but it has been made redundant by Fastly's version.
 
-## Error Handling
+## 🚨 Error Handling
 
 In Varnish you can trigger an error using the `error` directive, like so:
 
@@ -990,7 +990,7 @@ in customer configs apparently. In the standards range, we have a special case
 attached to 550, for some reason, lost in the mists of time, but otherwise
 errors in the standards range are interpreted as specified in the IETF spec
 
-## State Variables
+## 🎛️ State Variables
 
 Each Varnish 'state' has a set of built-in variables you can use.
 
@@ -1159,7 +1159,7 @@ the one that responds last will overwrite the first cached response).
 
 <small class="img-caption">request collapsing in action ^^</small>
 
-## Clustering
+## 🗄️ Clustering
 
 Now that we know there are state variables available, and we understand
 generally when and why we would use them, let's now consider the problem of
@@ -1191,7 +1191,7 @@ Before we jump into some request flow examples (and then further onto the
 discussion of clustering), let's take a moment to define some terminology that
 will help us throughout the rest of this post...
 
-## Terminology
+## 🔤 Terminology
 
 The terminology I will use from here on, will be as follows:
 
@@ -1494,7 +1494,7 @@ effectively is a _nested_ clustering process.
 
 Let's dig into Shielding next...
 
-## Shielding
+## 🛡️ Shielding
 
 Shielding is a designated POP that a request will flow through _before_ reaching
 your origin.
@@ -1803,7 +1803,7 @@ if(req.backend.is_shield, "edge", if(fastly.ff.visits_this_service < 2, "edge", 
 > for the edge POP will no longer be the shield (clustering has been disabled
 > because of the 'pass state').
 
-## Breadcrumb Trail
+## 👣 Breadcrumb Trail
 
 Let's now consider a requirement for creating a breadcrumb trail of the various
 states a request moves through (we'll do this by defining a `X-VCL-Route` HTTP
@@ -2437,7 +2437,7 @@ was being transformed into this raw Varnish error instead.
 
 At any rate this is something to keep in mind and be mindful of.
 
-## Hit for Pass
+## ⏭️ Hit for Pass
 
 You may notice in Varnish's built-in `vcl_fetch` the following logic:
 
@@ -2565,7 +2565,7 @@ _or_ the hit-for-pass object is purged.
 > post](https://info.varnish-software.com/blog/hit-for-pass-varnish-cache) for
 > the full details.
 
-## Serving Stale
+## 🕰️ Serving Stale
 
 If we get a 5xx error from our origins we don't cache them.
 
@@ -2933,7 +2933,7 @@ than using a special backend.
 > [here](https://gist.github.com/Integralist/f7a6abdd946ad5b3b06907069f79cc48)
 > is an example Python3 script that demonstrates how we verify these behaviours.
 
-## Disable Caching
+## 🚫 Disable Caching
 
 It's possible to disable caching for either the client or fastly, or both! But
 it gets confusing with all the various documentation pages fastly provides to
@@ -2953,7 +2953,7 @@ In my experience I've found the following to be sufficient...
 - Disable CDN Caching: `Cache-Control: private` ([docs](https://docs.fastly.com/guides/tutorials/cache-control-tutorial#do-not-cache))
 - Disable ALL Caching: `Cache-Control: no-cache, no-store, private, must-revalidate, max-age=0, max-stale=0, post-check=0, pre-check=0` + `Pragma: no-cache` + `Expires: 0` ([docs](https://docs.fastly.com/guides/debugging/temporarily-disabling-caching))
 
-## Logging
+## 📝 Logging
 
 With Fastly, to set-up logging you'll need to use their UI, as this means they
 can configure the relevant integration with your log aggregation provider. This
@@ -3294,7 +3294,7 @@ I'll admit this is definitely easier to read than the HTML encoding equivalent.
 It's still a bit confusing to get right, when creating big nested structures,
 but no worse than a bunch of `%22` throughout the structure 😬
 
-## Restricting requests to another Fastly service
+## 🔒 Restricting requests to another Fastly service
 
 We had a requirement where by we had a request flow that looked something like
 the following...
@@ -3336,7 +3336,7 @@ if (req.http.fastly-ff && !req.http.myservice) {
 }
 ```
 
-## Custom Error Pages
+## 🎨 Custom Error Pages
 
 Near the beginning of this post we looked at [error handling](#4.0) in VCL. I
 want to now revisit this topic with regards to serving your own custom error
@@ -3531,7 +3531,7 @@ restarting the request).
 This is why when we get back into `vcl_deliver` we override those headers
 according to the values we tracked within the initial request flow.
 
-## Security
+## 🔐 Security
 
 There are some aspects of the CDN where you need to take extra precautions to
 protect your upstreams (and in some cases your customers data!). Let's dig into
@@ -3796,7 +3796,7 @@ sub vcl_error {
 > is a 'long string' such as `{"..."}`. Please refer to the [`string`
 > documentation](https://developer.fastly.com/reference/vcl/types/string/).
 
-## Conclusion
+## 🏁 Conclusion
 
 So there we have it, a run down of how some important aspects of Varnish and VCL
 work (and specifically for Fastly's implementation).
@@ -3812,7 +3812,7 @@ And remember...
 
 ![](https://media.giphy.com/media/iIj82XyyYM12YT5Hlm/giphy.gif)
 
-## Reference material
+## 📚 Reference material
 
 I would highly recommend watching this talk by Rogier Mulhuijzen (Senior Varnish
 Engineer - who currently works for Fastly) on "Advanced VCL":

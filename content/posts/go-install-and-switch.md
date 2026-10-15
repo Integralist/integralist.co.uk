@@ -43,7 +43,7 @@ example from which to build your _own_ solution.**
 
 Let's dig in and see what we have...
 
-## Shell Structure
+## 📁 Shell Structure
 
 OK, let's start with how I like to structure my shell files.
 
@@ -73,7 +73,7 @@ load_script ~/.config/zsh/tools.zsh
 Cool, so we know we need a `tools.zsh` script. Let's take a look at the relevant
 sections of that file. We'll start with the exports...
 
-## Exports
+## 📤 Exports
 
 ```shell
 export GOPATH="$HOME/go"
@@ -100,7 +100,7 @@ my different Go version binaries there, and then create a symlink for `go` in
 that same directory to point to the specific Go version binary I want to be
 using.
 
-## Installing Go for GOROOT
+## 🐹 Installing Go for GOROOT
 
 The first thing we need to do is identify if we have Go installed at all. We do
 this by checking if there is a `go` binary file in our `$GOROOT/bin` directory.
@@ -146,7 +146,7 @@ alias golatest="curl -L https://github.com/golang/go/tags 2>&1 | \
     rg '\d.+' -o"
 ```
 
-## Triggering a switch on directory change
+## 🔄 Triggering a switch on directory change
 
 So the key part to all this is checking the current directory to see if we need
 to download a different Go version. In the Zsh shell you have access to a

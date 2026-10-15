@@ -5,13 +5,13 @@ description: A comprehensive guide to designing, documenting, and validating API
 tags: [architecture]
 ---
 
-## Introduction
+## 📖 Introduction
 
 In the rapidly evolving landscape of software development, creating robust and user-friendly APIs has become essential. One tool that has gained immense popularity for designing, documenting, and testing APIs is OpenAPI.
 
 In this comprehensive guide, we'll explore why OpenAPI is so important, how to write an OpenAPI document, and the key sections you need to know. Whether you're a seasoned developer or just getting started, mastering OpenAPI can greatly enhance your API development process.
 
-## Why OpenAPI Matters
+## 💡 Why OpenAPI Matters
 
 OpenAPI, formerly known as Swagger, is an open-standard format for describing APIs. It serves as both a machine-readable and human-friendly documentation that enables developers to understand, visualize, and interact with APIs effortlessly. By defining your API using OpenAPI, you unlock a host of benefits:
 
@@ -21,7 +21,7 @@ OpenAPI, formerly known as Swagger, is an open-standard format for describing AP
 - **Testing and Validation**: The OpenAPI specification can be used to validate requests and responses, ensuring that your API adheres to the defined contract.
 - **Interactive Documentation**: Tools like [Swagger UI](https://swagger.io/tools/swagger-ui/) and [ReDoc](https://github.com/Redocly/redoc) allow you to create interactive documentation that lets users explore and test your API in real-time.
 
-## Summary for those short on time
+## ⚡ Summary for those short on time
 
 OpenAPI is straightforward to write once you understand the high-level structure.
 
@@ -128,7 +128,7 @@ familiar structure.
 
 OK, we've got the quick "summary" out of the way, let's dig a little deeper...
 
-## Getting Started with OpenAPI
+## 🚀 Getting Started with OpenAPI
 
 Before diving into the intricacies of writing an OpenAPI document, let's set up the basics.
 
@@ -161,7 +161,7 @@ The above example is not exhaustive as it only describes three 'objects':
 
 Refer to the [OpenAPI Object](https://spec.openapis.org/oas/v3.0.3#openapi-object) for a complete list of top-level (i.e. root object) fields.
 
-## Defining Endpoints
+## 📍 Defining Endpoints
 
 Now, let's break down the process of defining endpoints in your OpenAPI document.
 
@@ -202,7 +202,7 @@ Possible values for the `in` field are: "query", "header", "path" or "cookie".
 > [!CITE]
 > **REF:** [Parameter Object](https://spec.openapis.org/oas/v3.0.3#parameter-object).
 
-## Structuring Data
+## 🏗️ Structuring Data
 
 Defining request and response bodies, along with data types, is crucial for a well-documented API.
 
@@ -249,7 +249,7 @@ The `components` section not only supports defining `schemas` separate from wher
 > [!CITE]
 > **REF:** [Components Object](https://spec.openapis.org/oas/v3.0.3#components-object).
 
-## Adding Metadata
+## 🏷️ Adding Metadata
 
 Enhance your API documentation by adding metadata and grouping related endpoints.
 
@@ -293,7 +293,7 @@ tags:
 > [!CITE]
 > **REF:** [Tag Object](https://spec.openapis.org/oas/v3.0.3#tagObject).
 
-## Handling Errors
+## ⚠️ Handling Errors
 
 Communicating errors is crucial in API design, and OpenAPI helps you to define your error responses.
 
@@ -383,7 +383,7 @@ What this schema describes is the following example error JSON that a user might
 > [!CITE]
 > **REF:** [Response Object](https://spec.openapis.org/oas/v3.0.3#responseObject).
 
-## Testing and Validation
+## 🧪 Testing and Validation
 
 Ensure the reliability of your API by testing and validating it using OpenAPI tools.
 
@@ -398,7 +398,7 @@ Using OpenAPI also helps with generating (and maintaining) client SDKs by using 
 I've written about this process on the [Fastly dev.to blog](https://dev.to/fastly):\
 [Better Fastly API clients with OpenAPI Generator](https://dev.to/fastly/better-fastly-api-clients-with-openapi-generator-3lno)
 
-## Conclusion
+## 🏁 Conclusion
 
 Embracing OpenAPI as a core component of your API development process can lead to more efficient, well-documented, and collaborative projects.
 

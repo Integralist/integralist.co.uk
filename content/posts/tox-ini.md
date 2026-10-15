@@ -5,13 +5,13 @@ description: "What the tox tool is, how to configure tox.ini, and why its config
 tags: [python, testing]
 ---
 
-## Introduction
+## 📖 Introduction
 
 I was confused by the Python tool [tox](https://tox.readthedocs.io/en/latest/) for a long time, and was unsure what it was really used for considering lots of different Python packages appeared to rely on tox's configuration file (e.g. `tox.ini`).
 
 In this post I'm going to briefly explain what the tox tool is, and what a `tox.ini` configuration file looks like and why that configuration file can be used for more than just serving the purposes of the tox tool.
 
-## What is tox?
+## 🧪 What is tox?
 
 Tox is a tool that creates [virtual environments](/posts/python-app-dependencies/#virtual-environments), and installs the configured dependencies for those environments, for the purpose of testing a Python package (i.e. something that will be shared via [PyPi](https://pypi.org/), and so it only works with code that defines a `setup.py`).
 
@@ -27,7 +27,7 @@ The file that you use to configure tox can be one of the following...
 > [!INFO]
 > these ^^ are all [ini file](https://en.wikipedia.org/wiki/INI_file) formats -- which is information that will become more relevant/important later on.
 
-## Example tox.ini
+## 📄 Example tox.ini
 
 All configuration options for tox can be found here: [tox.readthedocs.io/en/latest/config.html](https://tox.readthedocs.io/en/latest/config.html) but the below example is a simple demonstration of how you might configure tox for a real package (e.g. this is an _actual_ `tox.ini` file I've used).
 
@@ -67,7 +67,7 @@ commands =
 > [!INFO]
 > the name after `testenv:` is the _name_ of the virtual environment that will be created (e.g. `testenv:foo` will create a "foo" virtual environment).
 
-## Configuring _other_ packages
+## ⚙️ Configuring _other_ packages
 
 A `tox.ini` file can be used to configure different types of packages, which is confusing at first because the tox home page suggests that tox is used to test _your own_ packages you plan on distributing to PyPi.
 
@@ -77,7 +77,7 @@ This is why other packages, such as [Flake8](https://flake8.pycqa.org/en/latest/
 
 The key to understanding why this works is as follows: each of these files conform to the [ini file](https://en.wikipedia.org/wiki/INI_file) format. So you're free to use whatever file _name_ you feel best suits your project, while the format of the file will stay consistent to what is expected of an `.ini` file.
 
-## Why do multiple tools support `tox.ini`?
+## 🤔 Why do multiple tools support `tox.ini`?
 
 The benefit of these various tools supporting the `tox.ini` filename specifically is to help reduce the number of configuration files a project requires.
 
@@ -112,7 +112,7 @@ markers =
     integration: mark a test as an integration test that makes http calls.
 ```
 
-## Bonus Section
+## 🎁 Bonus Section
 
 Although not directly related to the conversation about `tox.ini` I thought it worth mentioning that I discovered recently the Python logging library allows you to be able to configure logging via an ini configuration file!
 

@@ -5,15 +5,15 @@ description: Practical advice for managers and reports on running meaningful one
 tags: [management]
 ---
 
-## What is a 1:1 ?
+## 🤝 What is a 1:1 ?
 
 A 1:1 ("one to one") is a meeting between a manager and a 'report'.
 
-## What is a 'report' ?
+## 👤 What is a 'report' ?
 
 A 'report' is a member of staff of which the manager is responsible for. Specifically the manager is responsible for that person's happiness at the company and their career progression.
 
-## How important is a 1:1 ?
+## ⭐ How important is a 1:1 ?
 
 A manager's 1:1 meetings are their most important meeting, as the primary goal of this meeting is for the manager and the report to build a strong and trusted relationship.
 
@@ -21,18 +21,18 @@ If you're a line manager, then you should _always_ attend these meetings. Never 
 
 As a manager, your most important priority is your staff.
 
-## How long should a 1:1 be?
+## ⏱️ How long should a 1:1 be?
 
 At least thirty minutes, no less as there just isn't enough time to really get into what's on someones mind. If you schedule a fifteen minute 1:1, then this again suggests you don't have time, or care enough, to fit your direct report into your schedule.
 
-## When should 1:1 meetings happen?
+## 📅 When should 1:1 meetings happen?
 
 1:1's should happen regularly. Typically they are scheduled once a week, although fortnightly (i.e. once every two weeks) is more practical for some people. Just remember that if you have them weekly, then that helps to keep them shorter in length (increase the length of the 1:1 depending on how far apart they're scheduled).
 
 > [!IMPORTANT]
 > unless you're an experienced engineer of many years, don't fall into the trap of thinking "I don't _need_ regular 1:1's". You'll be surprised to discover what tidbits of feedback and shared experience can help you progress with both your practical and soft skills.
 
-## What do we talk about in a 1:1 meeting?
+## 💬 What do we talk about in a 1:1 meeting?
 
 **If you're the report**, then quite literally _anything_ that is on your mind.
 
@@ -55,7 +55,7 @@ Unfortunately most 1:1's end up being some form of status (or project) update, w
 > [!INFO]
 > † that's what project/product managers are for.
 
-## What about the silent types?
+## 🤫 What about the silent types?
 
 Now not everyone is going to be overly talkative, and so it's the line manager's responsibility to tease out the conversation.
 
@@ -85,7 +85,7 @@ Discussing a current disaster is a good way to get some feedback on a topic that
 
 Lastly, choosing an area of the business where you feel could use some improvement is also a good option for opening up the discussion and having a meaningful 1:1, and it results in similar benefits as mentioned in the previous comment.
 
-## Meeting structure
+## 📋 Meeting structure
 
 Here's the approach I'm currently taking in my 1:1 meetings...
 
@@ -106,13 +106,13 @@ Generally I want to be sure to take advantage of any opportunity where I can hel
 
 I also like to understand what a person's strong points are because this person might be able to have some greater impact on a project or team that they otherwise might not realize was an opportunity for them to be a part of. I can help them progress by getting them onto projects they wouldn't normally consider or even know about, or start helping them to prepare and to learn new relevant skills.
 
-## Making it personal
+## ❤️ Making it personal
 
 I like to find a common interest with my report. This normally happens organically but at the very least I like to have a basic understanding of what my report enjoys doing (i.e. I take an interest in them), and once I do that I feel more of a connection and more invested in helping them succeed.
 
 Do they like to read books in their spare time? Do they like rock climbing? etc. This helps me to keep the conversation light and informal when the meeting starts and I ask "How's things with you?", because if I don't get much output (e.g. I'm dealing with a 'quiet' one), then I feel like I can tease out some light conversation by asking about their interests.
 
-## Generality can be misleading
+## 🎯 Generality can be misleading
 
 If you ask "how are things?" you've asked a very general question, and that can sometimes be ok but it can also be too vague a question for your report to answer in a meaningful way.
 
@@ -130,7 +130,7 @@ So to tackle this I like to ask specific questions such as: "ok, what happened i
 
 This helps me to tease out characteristics of the report and this helps me to then align their interests with what's potentially happening within the organization.
 
-## Understanding
+## 🧠 Understanding
 
 The following questions are useful for getting a clearer understanding of what will and not work with your report. Remember, like how a good teacher will adapt their lesson plan for different types of students (some students have different learning styles), you should adapt your 1:1 to best fit your report (yes this takes effort, but this is your responsibility, and an important one at that).
 
@@ -148,14 +148,14 @@ Most of these questions are taken verbatim from [Camille Fournier](https://twitt
 - What could I do to make you enjoy your work more?
 - What part of the day do you have the most energy and focus? What changes could we make to accommodate this?
 
-## Soliciting Ideas
+## 💡 Soliciting Ideas
 
 Some questions can help the report feel like their voice is heard and that their opinions matter:
 
 - How could we change our team meetings to be more effective?
 - Do you feel your ideas are heard by the team and I?
 
-## Evolve your process
+## 🔄 Evolve your process
 
 You try things. They fail. Tweak them as necessary. If my earlier suggestions aren't working for you, then obviously make sure you're comfortable with them and that you feel like you've given them your best effort, but if they're not working don't keep forging ahead. Try a different approach.
 
@@ -163,7 +163,7 @@ Remember, these meetings aren't about you and your success as a manager. They ar
 
 If I'm taking over reporting duties from another manager, I like to talk to the previous manager to understand what worked or didn't work (in their opinion) when they had 1-1's with this report. I might ignore their suggestions or I might not, but it's good to dig into the previous manager's experience with the report.
 
-## Track progress
+## 📈 Track progress
 
 Some managers like to jot down details of their reports alongside their normal work notes. If that works for you, then fine but I personally feel that you should work with a medium that allows your notes and thoughts to be easily shareable with your report.
 
@@ -176,7 +176,7 @@ It's important for reports to understand that they own their career progression,
 
 As a manager, it's your responsibility to help and support the report with this process.
 
-## Dealing with issues
+## 🛠️ Dealing with issues
 
 If you're a line manager, then there are two types of issues:
 
@@ -202,7 +202,7 @@ This could include discussing with them topics such as:
 
 If you're the direct report and you're struggling with an issue to the point where you're now very angry, then this is a good example of why it's important to have frequent, qualitative and effective 1:1's. They allow a lot of issues to be caught ahead of time.
 
-## Thought leaders
+## 🧑‍🏫 Thought leaders
 
 For anyone interested in learning more I would highly recommend following [these key players](https://twitter.com/integralist/lists/leads/members)...
 
@@ -213,7 +213,7 @@ For anyone interested in learning more I would highly recommend following [these
 - [Kim Scott](https://twitter.com/kimballscott)
 - [Lara Hogan](https://twitter.com/lara_hogan)
 
-## Conclusion
+## 🏁 Conclusion
 
 Hopefully you've found this breakdown of 1:1 meetings interesting and are able to bring some new learnings into your own 1:1's to make them more effective and successful.
 

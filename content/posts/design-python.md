@@ -5,14 +5,14 @@ description: "Python development practices for 2019 including type hints, static
 tags: [python, architecture]
 ---
 
-## Introduction
+## 📖 Introduction
 
 This post is going to cover a few tools and features I plan on using when writing Python code in 2019.
 
 > [!TIP]
 > † read my post "[Python Management and Project Dependencies](/posts/python-app-dependencies/)".
 
-## Type Hints and Static Analysis
+## 🏷️ Type Hints and Static Analysis
 
 Some languages are weakly typed (JavaScript), some are strongly typed (Python) and some are statically typed (Go, Rust). Being _strongly_ typed means you can't perform operations inappropriate to the type. For example, in Python you can't add a number typed variable with a string typed variable.
 
@@ -62,7 +62,7 @@ I intend to use type hints a lot more in 2019 to help me both identify potential
 
 For more examples of using the typing module, please refer to either the official documentation or this useful [tutsplus.com article](https://code.tutsplus.com/tutorials/python-3-type-hints-and-static-analysis--cms-25731).
 
-## Interfaces, Protocols and Abstract Methods
+## 🔌 Interfaces, Protocols and Abstract Methods
 
 In the field of programming there are two concepts that can be a bit confusing to understand:
 
@@ -330,7 +330,7 @@ For example, our `Thing` class is a _concrete_ implementation, and so we can't p
 > [!TIP]
 > the mypy docs have [a good detailed breakdown](https://mypy.readthedocs.io/en/latest/kinds_of_types.html#the-type-of-class-objects) of how to indicate a dependency of a specific class type.
 
-## Dependency Management (with pipenv)
+## 📦 Dependency Management (with pipenv)
 
 **UPDATE 2019.12.20**: I no longer use Pipenv (as per below). I've written an updated version of how best to handle dependencies [here](/posts/python-app-dependencies/).
 
@@ -391,7 +391,7 @@ You can now install dependencies specifically for the project's specific Python 
 
 Now none of these new tools are perfect, and if you want a good run down of one engineer's perspective on them, [read here](https://chriswarrick.com/blog/2018/07/17/pipenv-promises-a-lot-delivers-very-little/).
 
-## Conclusion
+## 🏁 Conclusion
 
 That's it. We've looked at how to handle dependencies with Pipenv, and how to utilise static analysis tool mypy along with type hinting to give us more confidence in our code (as well as having the code become clearer intent).
 

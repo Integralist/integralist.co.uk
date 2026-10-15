@@ -5,14 +5,14 @@ description: A practical guide to HTTP caching covering Cache-Control, Surrogate
 tags: [networking, performance]
 ---
 
-## Introduction
+## 📖 Introduction
 
 Caching is hard. Let's try and understand it a little better.
 
 > [!INFO]
 > some sections are purposefully brief. I'm not aiming to be a specification document.
 
-## Caching at multiple layers
+## 🥞 Caching at multiple layers
 
 Caching can occur at both a 'client' level and a 'cache proxy' level.
 
@@ -48,7 +48,7 @@ In order to cache content efficiently we need to use a combination of the two he
 - [Cache Headers Example](#cache-headers-example)
 - [Conclusion](#conclusion)
 
-## Cache-Control Directives
+## 📋 Cache-Control Directives
 
 The `Cache-Control` cache response header has many directives you can configure, the following are some important ones to understand and will help you make an informed choice as to what values you set if you intend on controlling the caching of your content.
 
@@ -87,13 +87,13 @@ Unlike `no-cache` which is effectively saying "we have cached content, but befor
 
 Whenever using these (and other similar) directives, you need give consideration to what else needs to be in place to make them function efficiently. Specifically you need to be sure your origins are actually capable of handling revalidation (see '[Serving Stale Content](#serving-stale-content)' for more details), otherwise the behaviours might not work as intended or perform as well as you think they will.
 
-## Surrogate-Control Directives
+## 🏷️ Surrogate-Control Directives
 
 For the `Surrogate-Control` cache response header you'll mostly utilize the `max-age` directive along with the '[extensions](https://httpwg.org/specs/rfc5861.html)' for serving stale content (e.g. `stale-while-revalidate` and `stale-if-error`).
 
 There are some other directives defined in the [W3C Specification](https://www.w3.org/TR/edge-arch/), but it's unclear how well those are supported by our primary CDN provider (Fastly) and so it's best to avoid them unless you fully understand why you are setting them.
 
-## Fastly CDN
+## ⚡ Fastly CDN
 
 Fastly [has some rules](https://docs.fastly.com/guides/tutorials/cache-control-tutorial) about the various caching response headers it respects and in what order this behaviour is applied. The following is a summary of these rules:
 
@@ -127,7 +127,7 @@ Below is a (oversimplified †) summary of these rules.
 > [!INFO]
 > † Fastly has many factors it takes into account when deciding if an object stays in its cache (see: [LRU](https://docs.fastly.com/guides/performance-tuning/serving-stale-content#why-serving-stale-content-may-not-work-as-expected)).
 
-## Disable Caching
+## 🚫 Disable Caching
 
 Depending on your requirements, when trying to disable caching it can be confusing to know which cache control directives to utilize due to the various permutations. Below is a Fastly recommended list of directives your origin can use for handling three common scenarios.
 
@@ -143,7 +143,7 @@ Depending on your requirements, when trying to disable caching it can be confusi
 >
 > It's also worth mentioning that Fastly's use of `post-check` and `pre-check` is _also_ redundant as per [this old Microsoft article](https://blogs.msdn.microsoft.com/ie/2006/06/01/a-caching-issue-in-ie7-beta-2/) that states setting them to zero does not actually 'do anything'!
 
-## Serving Stale Content
+## ⏳ Serving Stale Content
 
 As you saw at the beginning of this post, we have a 'reverse proxy' that's placed in front of our origin servers. This proxy will configure (as a default) cache settings that will result in stale versions of our origin's cached content being served when the `max-age` TTL for that content has expired.
 
@@ -226,7 +226,7 @@ These are things that you'll need to consider when generating an `ETag` for a re
 
 In essence a strong ETag indicates that the resource's content is the same with regards to both the response body and the response headers, whereas a weak ETag indicates that the two representations are semantically equivalent. It compares only the response body. Weak ETags are prefixed with `W\` and thus can easily be distinguished between weak and strong.
 
-## Cache Headers Example
+## 💡 Cache Headers Example
 
 Let's wrap up by considering a real-world example of cache headers and what they look like, and why.
 
@@ -258,7 +258,7 @@ Things can get a bit murky if there are proxies placed _in front_ of our CDN (e.
 
 All of this leads us to the fact that when we purge our cache, we feel confident that we're capable of successfully purging it from the internet as a whole.
 
-## Conclusion
+## 🏁 Conclusion
 
 Yes, caching _is_ hard but it's also not rocket science either. Take some time to read over the `Cache-Control` directives. Try to get comfortable with them.
 

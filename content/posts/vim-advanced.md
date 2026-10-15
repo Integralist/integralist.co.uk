@@ -34,7 +34,7 @@ I see a lot of posts on Vim 'tips and tricks' and decided I'd have a go at putti
 - [Miscellaneous tips and tricks](#miscellaneous-tips-and-tricks)
 - [Conclusion](#conclusion)
 
-## Using Vim with no plugins
+## ⚡ Using Vim with no plugins
 
 OK we're going to start super basic here and demonstrate a simple, but completely usable, Vim configuration which will keep _purists_ happy.
 
@@ -179,7 +179,7 @@ silent! tnoremap <Esc> <C-\><C-n>
 
 Yes it's bigger than the 'basic' version, but remember this is still only 30 lines of configuration and it gives me a much richer experience. Again, the motivation for this post is about _not_ needing plugins, and you should aim for understanding the fundamentals of Vim, but this gives you a little bit of both worlds 😉
 
-## Recording repeatable steps with macros
+## 📼 Recording repeatable steps with macros
 
 Vim allows you to [record](https://vimhelp.org/repeat.txt.html#recording) any typed characters so that you can then replay them again. This makes applying a set of complex changes multiple times across a code base much easier.
 
@@ -221,7 +221,7 @@ If you execute `:reg` you'll see the `q` register contains something very simila
 
 If you need to run a macro a certain number of times then just prefix it with that number. For example, to run a macro six times I'd type `6@<register>`.
 
-## Modifying content with `global` command
+## 🌐 Modifying content with `global` command
 
 There are times when you want to execute an [Ex](https://vimhelp.org/cmdline.txt.html#%3A) command for any lines that match a specific pattern. That is where the [`:global`](hhttps://vimhelp.org/intro.txt.html#Exttps://vimhelp.org/repeat.txt.html#%3Aglobal) comes in handy (this is different to [substitution](https://vimhelp.org/change.txt.html#%3As), which we'll look at after).
 
@@ -282,7 +282,7 @@ Then you would use the following (note that `<Shift-j>` in normal mode causes th
 
 You can also use the `!` to cause `:global` to behave in the reverse (i.e. anything that _doesn't_ match the given pattern, apply the command to).
 
-## Substitutions, magic regex mode and other flags
+## 🔮 Substitutions, magic regex mode and other flags
 
 Most people know how to use Vim's [`:substitute`](https://vimhelp.org/change.txt.html#%3Asubstitute) command, but it seems people are less familiar with the use of [`\v`](https://vimhelp.org/pattern.txt.html#%2F%5Cv) as a way to enable 'magic mode'.
 
@@ -359,7 +359,7 @@ You could also use `\U` for uppercasing just the first letter, but you'd need to
 > [!INFO]
 > For more details refer to [`:h sub-replace-special`](https://vimhelp.org/change.txt.html#sub-replace-special), but also [`:h whitespace`](https://vimhelp.org/pattern.txt.html#whitespace) which elaborates on some other special regex pattern flags.
 
-## Searching and filtering content
+## 🔍 Searching and filtering content
 
 The following are native Vim solutions to finding files (and also searching multiple files for specific content).
 
@@ -561,7 +561,7 @@ Now it's probably worth me quickly mentioning that there are two _small_ plugins
 1. [vim-searchindex](https://github.com/google/vim-searchindex) which shows how many times a search pattern, such as `/your_pattern`, occurs in the current buffer. After each search, it displays total number of matches, as well as the index of a current match.
 1. [quick-scope](https://github.com/unblevable/quick-scope) which highlights a unique character in every word on a line to help you more efficiently jump around on a single line using the standard `f`, `F`, `t` and `T` motions.
 
-## Processing search results with `cdo` and `cfdo`
+## ⚙️ Processing search results with `cdo` and `cfdo`
 
 So you've run a search using something like `:vimgrep` or `:grep` or maybe a plugin like `:Ack`, and you've populated a 'quickfix' window (or maybe a 'location list' if using something like `:lvimgrep`) with search results. Now you want to apply some sort of change to each search result.
 
@@ -631,7 +631,7 @@ This is why I always use [`cdo`](https://vimhelp.org/quickfix.txt.html#%3Acdo) w
 :cdo execute "norm @q" | update
 ```
 
-## Filtering quickfix and location list results
+## 🎯 Filtering quickfix and location list results
 
 What's interesting about 'quickfix' and 'location' lists is that you can further filter their results. Now, admittedly if you're using a third-party plugin like [Ack](https://github.com/mileszs/ack.vim), then yes you do have more control over the search pattern using additional flags provided by a third-party plugin that will help to filter the number of results, but I'd argue there are still situations where you need even _more_ fine grained control over what's displayed in the quickfix/location lists.
 
@@ -661,7 +661,7 @@ As you can see the default behaviour of the filter is to keep only those results
 > [!TIP]
 > As this is a regex pattern you can still use `\v` to get 'magic' mode. For example `/\vyour_pattern/`.
 
-## Processing files with `<T>do`
+## 📁 Processing files with `<T>do`
 
 We've already seen `:cdo` and `:cfdo`, but there's so many more 'do' commands that can enrich your Vim experience:
 
@@ -690,7 +690,7 @@ That last bit is important because it can be a reason for using `:argdo` over `:
 
 You can't _accidentally_ add a new argument to the arglist because you have to explicitly call [`:argadd`](https://vimhelp.org/editing.txt.html#%3Aargadd) (for deleting you need [`:argdelete`](https://vimhelp.org/editing.txt.html#%3Aargdelete)). Where as with the list of buffers, that gets updated whenever you open a new file (and that is very easily done, especially when searching for content), but importantly the arglist will stay unchanged.
 
-## Automating content modification using Ex commands from the shell
+## 🐚 Automating content modification using Ex commands from the shell
 
 Vim has a nice feature where it allows you to easily run Ex commands against a file from the shell. The summary of which is:
 
@@ -759,7 +759,7 @@ FOO
 > [!INFO]
 > `norm` says execute the following characters as if the user is typing them, so `V` selects the entire line and `gU` uppercases the selection. We then print the output to stdout `%p` and then quit without trying to save the modifications.
 
-## Starting Vim with your last workspace
+## 💾 Starting Vim with your last workspace
 
 Now this feature I'm going to describe I don't use that often, but there's been a few occasions where it's saved me a lot of hassle. The feature i'm going to talk about is [`:mksession`](https://vimhelp.org/starting.txt.html#%3Amksession). There are lots of things you can do with `:mksession` so read the help documents, but I'm only going to cover the basics here because that's mostly all I ever need to use.
 
@@ -779,7 +779,7 @@ That's it! Your entire workspace is spun up exactly how you left it.
 
 Once you open Vim again you might want to change some of your workspace. If that's the case and you want the `Session.vim` file to record that updated layout in its snapshot, then run the `:mksession!` command (notice the extra `!` at the end to force overwriting the original `Session.vim` file).
 
-## Vim's start-up process
+## 🚀 Vim's start-up process
 
 The Vim documentation explains all the various steps that are gone through during 'start-up', see [`:h startup`](https://vimhelp.org/starting.txt.html#startup).
 
@@ -818,7 +818,7 @@ if ! exists(':FZF')
 endif
 ```
 
-## Debugging Vim issues
+## 🐛 Debugging Vim issues
 
 First thing first, run [`:se`](https://vimhelp.org/options.txt.html#%3Ase) to see all the Vim options that have changed from the Vim defaults. This can be a good 'at a glance' perspective on what might be wrong or why you're seeing some sort of unexpected behaviour.
 
@@ -896,7 +896,7 @@ Usage example: `vim -V9 ~/.vimrc`, but you can also write the output to a log fi
 
 OK, time for the short sections... 🙂
 
-## Autocomplete with no plugins
+## ⌨️ Autocomplete with no plugins
 
 So you want some form of auto-complete feature without the need for a third-party plugin, no problem...
 
@@ -909,7 +909,7 @@ Now you can execute `<C-x><C-o>` to get a very basic form of native code autocom
 
 Vim also provides the native command `<C-n>` for autocompletion based on words existing in all opened buffers.
 
-## Understanding line feed and carriage returns
+## ↵ Understanding line feed and carriage returns
 
 This isn't necessarily a Vim specific thing but it used to catch me out all the time. _Looking_ for line breaks and _inserting_ line breaks are two different things.
 
@@ -950,7 +950,7 @@ You would need to use a substitution like:
 
 Notice we're looking for a 'line feed' `\n` (because that's how macOS denotes a new line), while to get Vim to insert a line break we need it to _insert_ two separate 'carriage returns' `\r`.
 
-## Auto highlighting keywords (and creating your own custom highlighting)
+## 🖍️ Auto highlighting keywords (and creating your own custom highlighting)
 
 Vim can highlight certain words inside of code comments, such as...
 
@@ -980,7 +980,7 @@ augroup END
 highlight link myTodo Todo
 ```
 
-## Sorting and filtering duplicates
+## 🔢 Sorting and filtering duplicates
 
 This is such a small 'tip', and is probably obvious to most Vim users, but just in case it isn't...
 
@@ -1026,7 +1026,7 @@ baz
 foo
 ```
 
-## Miscellaneous tips and tricks
+## 💡 Miscellaneous tips and tricks
 
 If you need your cursor to always be in the middle of the screen (this is modifying the 'scroff offset' option):
 
@@ -1040,7 +1040,7 @@ Move the cursor to the top, middle, bottom of the visible screen:
 - `M`: middle
 - `L`: low (i.e. bottom of the screen)
 
-## Conclusion
+## 🏁 Conclusion
 
 So there you have it, my collection of useful Vim features that I use regularly. Let me know what you think. Anything surprising? What do you use that maybe I've missed?
 

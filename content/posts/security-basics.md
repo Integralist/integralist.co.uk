@@ -8,7 +8,7 @@ tags: [security]
 > [!TIP]
 > UPDATE: for those short on time, read the following [Introduction](#1), [What are keys and how do they work?](#2) and then skip over the sections "Understanding PKI" and "OpenSSL vs OpenSSH" as these just go into more depth on the technical aspect of different encryption concepts. Just skip until [What is GPG?](#5) (in there are two sub sections about "OpenSSH", "SSH Agent" and "OpenSSL", just skip those until you get to the next "GPG" section and continue all the way from there)
 
-## Introduction
+## 📖 Introduction
 
 This post **isn't** meant to be "this is how you do security". I'm not a security expert. I'm not even a security intermediate! When I titled this post "security basics" I wasn't kidding. If you're working with applications and/or servers in production then *please* consult someone better equipped on the subject of security.
 
@@ -37,7 +37,7 @@ Throughout this post you'll see me use words like "plaintext" and "cipher". It's
 
 When a file is said to be plaintext it simply means that it's unencrypted, whereas a cipher is a noun that refers to a plaintext that has been encrypted. That's it.
 
-## What are keys and how do they work?
+## 🔑 What are keys and how do they work?
 
 Imagine you have a plaintext file which contains a password, and you want to share this file with someone else across the internet (let's say this someone is our friend "Bob").
 
@@ -103,7 +103,7 @@ You might think for everyone to securely identify themselves they could publish 
 
 But unless you're talking (in real-life or over the phone) with the actual person you want to communicate with, then how do you *really* know who published the key was the person you think it is? Authenticating people is a difficult problem to solve and this is where PKI (Public-key infrastructure) comes in.
 
-## Understanding PKI
+## 🏛️ Understanding PKI
 
 Public key infrastructure is built on top of Public-key cryptography. The difference is that PKI introduces the concept of "certificates", and these certificates are used in the software realm much like we would use a passport.
 
@@ -479,7 +479,7 @@ So there you have it, that's pretty much how PKI (and subsequently SSL/TLS) work
 
 Let's move on!
 
-## OpenSSL vs OpenSSH
+## ⚔️ OpenSSL vs OpenSSH
 
 If you want to generate your own keys and certificates, which will enable you to connect and transmit data more securely across the internet; then you're going to need to install the [OpenSSL](https://openssl.org/) command line toolkit. OpenSSL is a library designed to implement the SSL/TLS protocols
 
@@ -509,7 +509,7 @@ Below are a list of tools that are built upon the OpenSSH protocol:
 - `sftp-server`
 - `sshd`
 
-## What is GPG?
+## 🛡️ What is GPG?
 
 [GPG](https://gnupg.org/) is a tool which provides encryption and signing capabilities. Its full name is "GNU Privacy Guard".
 
@@ -521,7 +521,7 @@ In the next section "[Creating your own keys](#6)" I'll demonstrate how to actua
 
 You may have also heard of PGP and wondered what the differences are between that and GPG: PGP is the protocol standard (defined under the name "Open PGP") which GPG implements. So PGP isn't a tool itself, but merely a specification for other tools (such as GPG) to build upon.
 
-## Creating your own keys
+## 🛠️ Creating your own keys
 
 OK, up until this point we've only been talking in a theorectical sense. Time to see some pratical use cases by demonstrating how to generate your own keys using the three different toolkits we've described up until this point (OpenSSH, OpenSSL and GPG).
 
@@ -745,7 +745,7 @@ gpg --list-sigs
 
 I recommend reading [https://alexcabal.com/creating-the-perfect-gpg-keypair/](https://alexcabal.com/creating-the-perfect-gpg-keypair/) to learn how to create your own sub signing keys and improve the security of your key process/setup.
 
-## How to encrypt data using GPG, OpenSSL and Keybase
+## 🔐 How to encrypt data using GPG, OpenSSL and Keybase
 
 Outside of PKI and SSL/TLS, the most common task people are interested in is encrypting specific files that contain sensitive information that they would prefer to be protected either from everyone or allow only a select few people to be able to access. The interface for encrypting data is different for each tool used and so we'll be looking at those we've discussed so far: GPG and OpenSSL
 
@@ -1185,7 +1185,7 @@ gpg -d secret.txt.gpg
 
 OpenSSL is not considered secure enough in today's digital age. There are known bugs with the implementation of the OpenSSL `enc` command, and so the recommendation in the security community seems to be to ditch OpenSSL for GPG (at least for these types of scenarios where we're simply encrypting a file that we want to share with someone else).
 
-## Creating, self-signing, issuing and revoking certificates
+## 📜 Creating, self-signing, issuing and revoking certificates
 
 OK, so I _was_ going to go through the process of creating a new CA root and then self-signing the certificate so we can then go ahead and issue certificates from our own personal CA. The idea was to indicate how you might do this for an organisation that doesn't want to pay for a CA to provide them a certificate (e.g. services that only allow access via client certificates doesn't have to worry about being trusted; as long the employees have trusted the organisation's self-signed certificate then it's fine).
 
@@ -1213,7 +1213,7 @@ openssl x509 -req -days 365 -in csr.pem -signkey my-private-key.pem -out my-cert
 
 OK so I ended up writing about this any way [in this article](/posts/client-cert-authentication/) where I discuss how to handle Client Certificate Authentication using Docker.
 
-## Conclusion
+## 🏁 Conclusion
 
 Hopefully, you've stuck with me until the end here and that you found the information contained useful, or dare say even enlightening. I wrote this post to help solidify my own knowledge and for this to become a future reference point for myself; but I ended up really enjoying diving into aspects such as the PKI and SSL handshake process, as it's an area that has confused me for the longest time.
 

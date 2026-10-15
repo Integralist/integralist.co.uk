@@ -5,7 +5,7 @@ description: Implementing CI/CD across dev, stage, and prod environments using G
 tags: [terraform, github, devops]
 ---
 
-## Summary
+## 📝 Summary
 
 In this post I cover what CI/CD means and how you can achieve it across multiple
 different environments (e.g. dev, stage, prod) using the GitHub Actions
@@ -16,7 +16,7 @@ I detail specific issues I experienced while implementing CI/CD for a real
 high-scale/high-profile public API, and the workarounds I needed to implement to
 resolve them.
 
-## What is CI/CD?
+## 🔄 What is CI/CD?
 
 Let's start off by answering the question:\
 _What is CI/CD_?
@@ -37,7 +37,7 @@ They're not. But what these terms mean is actually not that complicated:
 Now we have a bit of an understanding of what CI/CD is,\
 let's see how I've been able to use each of these individual concepts.
 
-## API Gateway
+## 🚪 API Gateway
 
 I needed to implement a complete CI/CD pipeline for my employer.
 
@@ -140,7 +140,7 @@ The service domain is `api-gateway-prd.edgecompute.app`.
 The Terraform state that manages this environment is stored in the Terraform
 Cloud project under the "api-gateway-production" workspace.
 
-## Implementation
+## 🛠️ Implementation
 
 So here is where I'm going to display the complete set of GitHub Actions
 workflow configuration. We'll review the code and I'll make comments about
@@ -891,7 +891,7 @@ Again, this workflow isn't as complex as the dev one, so the only interesting
 part here is that we're downloading the artifact from GitHub and then running a
 Terraform apply to upload the Compute package to our production environment.
 
-## Custom Actions
+## ⚡ Custom Actions
 
 The only other files probably worth showing you are the
 `.github/actions/tf-var-branch`, `.github/actions/tfc-dev-workspace-name` and
@@ -987,7 +987,7 @@ runs:
         comment: "Apply Run from GitHub Actions CI ${{ github.sha }}"
 ```
 
-## Conclusion
+## 🏁 Conclusion
 
 I've not covered every single line of code in the GitHub configuration. I've
 also not included the Terraform config files because they are specific to my use

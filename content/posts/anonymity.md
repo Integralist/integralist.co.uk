@@ -13,7 +13,7 @@ I am lucky enough to not suffer from such necessity, but wherever possible I do 
 
 What follows are some tools that I use to try and limit my exposure to the internet. This isn't a 'how to be 100% anonymous' guide, but maybe some of these tools will be of interest to you.
 
-## DNS
+## 🌐 DNS
 
 When you make a request for an online resource (for example this web page), your computer had to first convert the domain `integralist.co.uk` into an IP so that it could lookup the resource.
 
@@ -42,7 +42,7 @@ Here are some useful links to Cloudflare and Google if you're interested in thei
   - [DNS over TLS](https://developers.google.com/speed/public-dns/docs/dns-over-tls)
   - [DNS over HTTPS](https://developers.google.com/speed/public-dns/docs/doh/)
 
-## VPN
+## 🛡️ VPN
 
 VPN stands for "virtual private network", and is used to encrypt your internet traffic. This means no one, not even your ISP can see what resources you are requesting. All your ISP will see is you make a request to a VPN and from there you have established a secure 'tunnel' to pass data back-and-forth.
 
@@ -64,7 +64,7 @@ Paying for a VPN doesn't have to be expensive though. I pay £6 a month which is
 
 You can find VPNs for as cheap as £1 a month (e.g. Windscribe's custom built plans) or from as low as £2.99 with [NordVPN](https://nordvpn.com/) depending on the length of the plan you select.
 
-## Tor
+## 🧅 Tor
 
 [Tor (aka. The Onion Router)](https://www.torproject.org/) is a free service that directs your requested resource through multiple servers (much like the layers of an onion). The servers are chosen at random and increase your privacy by obfuscating the origin of the request through the use of encryption.
 
@@ -81,7 +81,7 @@ Equally, if there is a bug in Tor (this has happened), then the VPN will offer t
 > [!TIP]
 > there is even an entire OS that is bootable from a USB stick that routes all traffic through Tor, called [Tails](https://tails.boum.org/) (see [this simple rundown](https://www.theregister.co.uk/2019/01/30/tails_3_12/) for a recent update, and [this older review](https://www.expressvpn.com/blog/tails2-review/) for a more general feature run through).
 
-## Web Browser Extensions
+## 🧩 Web Browser Extensions
 
 I personally use the [Firefox](https://www.mozilla.org/en-GB/firefox/new/) as it offers me the best of performance and customization. Along with using a VPN I like to utilize some additional 'extensions' (or add-ons as they're referred to by Firefox) to extend the behaviour of my web browser and to help reduce my ability to be tracked.
 
@@ -134,7 +134,7 @@ But all that said, it's still worth checking what your browser is doing. For exa
 
 ![firefox data collection](/assets/img/firefox-data-collection.png)
 
-## Email
+## 📧 Email
 
 Email through free providers such as Google's [Gmail](https://gmail.com/) are definitely NOT private. Google has already admitted to reading their user's emails in order to serve them advertising based on the content of their email.
 
@@ -145,7 +145,7 @@ An alternative is to use an email provider that encrypts your messages and doesn
 > [!CAUTION]
 > due to how they encrypt your data, if you forget your password and try to reset it, you'll lose _all_ your email because they don't have a means to decrypt those files unless you provide the relevant password.
 
-## Conclusion
+## 🏁 Conclusion
 
 Remember, staying 'anonymous' and 'protecting your privacy' are actually different things. The tools I use above will not help to keep my internet actions _anonymous_. If you want a good breakdown of what that would take (which is a lot of effort!) then [read this article](https://blog.windscribe.com/how-to-actually-be-anonymous-online-801811b7088d?gi=317e75c4d929) by Windscribe VPN.
 

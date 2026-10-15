@@ -5,7 +5,7 @@ description: A team workflow for GitHub PRs using interactive rebase, squash com
 tags: [git, github]
 ---
 
-## Introduction
+## 📖 Introduction
 
 This is a quick post to cover a GitHub workflow that is utilised by our specific team (Frameworks) here at BBC News. The basis of our workflow is this:
 
@@ -14,7 +14,7 @@ This is a quick post to cover a GitHub workflow that is utilised by our specific
 - If given a "thumbs up", this means the PR author is allowed to handle merging the PR
 - The merge process requires a set of sub steps (see below)
 
-## Rebase before merge
+## 🔄 Rebase before merge
 
 At this point the PR author has been given a "thumbs up" and is preparing their PR to be merged back into the `master` branch. The steps (in summary) are:
 
@@ -27,7 +27,7 @@ At this point the PR author has been given a "thumbs up" and is preparing their 
   - the PR is mentioned (and any associated issues as well)
 - Move back to the `master` branch and `cherry-pick` in the newly squashed feature commit
 
-## Example
+## 💻 Example
 
 Below is an example set of commits we'll be working from. I create a master branch and then branch off from that with a new `feature` branch:
 
@@ -139,7 +139,7 @@ git branch -D feature
 git push origin master
 ```
 
-## (Bonus) Modifying content within an interactive rebase
+## 🎁 (Bonus) Modifying content within an interactive rebase
 
 One aspect of carrying out an interactive rebase that seems to confuse a lot of users is the ability to edit the content of a specific commit.
 

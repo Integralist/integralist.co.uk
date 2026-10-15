@@ -5,7 +5,7 @@ description: Exploring different RPC implementations in Go including net/rpc, JS
 tags: [go, grpc, networking]
 ---
 
-## Introduction
+## 📖 Introduction
 
 Let's begin by understanding what an RPC (Remote Procedure Call) actually is:
 
@@ -60,7 +60,7 @@ Only methods that satisfy the following criteria will be made available for remo
 - the method's second argument is a pointer
 - the method has return type error
 
-## RPC over HTTP
+## 🌐 RPC over HTTP
 
 I've yet to find a justification for using HTTP over TCP, but *you* may have your reasons. If that's the case, then here is an example of how to achieve this in Go.
 
@@ -178,7 +178,7 @@ Args received: &{A:4 B:2}
 The reply pointer value has been changed to: 8
 ```
 
-## RPC over TCP
+## 🔌 RPC over TCP
 
 Most of the time when you're exposing functionality and behaviour remotely, you'll want to have the least amount of overhead as possible and so you'll resort to stripping out the HTTP application layer and moving down to using just the TCP layer.
 
@@ -359,7 +359,7 @@ Args received: &{Foo:Foo! Bar:Bar!}
 The 'reply' pointer value has been changed to: Blah!
 ```
 
-## JSON
+## 📋 JSON
 
 There is another option available when creating an RPC and that is to expose a JSON formatted variation (which is *required*† if you're planning on using a different programming language to communicate with your Go RPC service - as we'll see below when we write a client using the Ruby programming language).
 
@@ -374,7 +374,7 @@ If we look back at our TCP example from earlier (the one which utilised `rpc.Ser
 - In the service: swap `rpc.ServeConn` to `jsonrpc.ServeConn`
 - In the client: swap `rpc.Dial` to `jsonrpc.Dial`
 
-## Calling from Ruby
+## 💎 Calling from Ruby
 
 If you want to utilise a client written in another programming language (such as Ruby), you'll need to have the Go service setup to use `net/rpc/jsonrpc`. Once that's done, your client can connect via a raw TCP socket and pass over JSON data, as shown in the below example:
 
@@ -404,7 +404,7 @@ The output from this program would be:
 {"id"=>"0", "result"=>"Blah!", "error"=>nil}
 ```
 
-## gRPC
+## ⚡ gRPC
 
 Google has started work on a new package called gRPC which, as per the site: [grpc.io](http://www.grpc.io/), states...
 

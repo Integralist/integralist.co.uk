@@ -5,7 +5,7 @@ description: "Building a Python encryption library using scrypt for key derivati
 tags: [python, security]
 ---
 
-## Introduction
+## 📖 Introduction
 
 I recently implemented a Python library which acts as an abstraction layer on top of an existing security algorithm (in this case [scrypt](https://www.tarsnap.com/scrypt.html)).
 
@@ -36,7 +36,7 @@ Originally I had two separate functions to distinguish them a bit more clearly b
 
 Because KDF accepts a key and is able to return the original message (given the same key) it's acting as a form of symmetrical encryption, whereas a PBKDF2 is more like a one-way hash function. Hence I named the function in this library `generate_digest` rather than something like `encrypt_message` which wouldn't have made sense when dealing with PBKDF2.
 
-## generate_digest
+## 🔐 generate_digest
 
 This is a multi-arity function that will generate a digest using either a password-based key derivation function ([KDF](https://en.wikipedia.org/wiki/Key_derivation_function)) or a [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2) depending on the input given.
 
@@ -47,11 +47,11 @@ If a `salt` is provided, then a PBKDF2 will be used to generate a _deterministic
 > [!IMPORTANT]
 > salts should be a minimum of 128bits (~16 characters) in length. Also, when specifying a maxtime with `generate_digest`, ensure you include that same value when decrypting with `decrypt_digest` or validating via `validate_digest`.
 
-## decrypt_digest and validate_digest
+## 🔓 decrypt_digest and validate_digest
 
 The `decrypt_digest` and `validate_digest` functions only apply to digests that have been generated using a password (i.e. KDF). Given the right password `decrypt_digest` will return the original message, and thus is considered more a form of symmetrical encryption than a straight one-way hash function. The `validate_digest` function will return a boolean true or false if the given password was able to decrypt the message.
 
-## Dependencies
+## 📦 Dependencies
 
 This abstraction library requires `scrypt`, which itself requires the following dependencies to be installed within the context of your service: `build-essential`, `libssl-dev`, and `python-dev`. If your service has a Dockerfile, adding these dependencies should be as simple as adding a line like the following:
 
@@ -59,14 +59,14 @@ This abstraction library requires `scrypt`, which itself requires the following 
 RUN apt-get update && apt-get install -y build-essential libssl-dev python-dev
 ```
 
-## Usage
+## 💻 Usage
 
 I suggest looking at the test suite (see below) to get an idea of how you would use the functions in this library.
 
 > [!INFO]
 > for a glossary of security terms, refer to [this document](https://docs.google.com/document/d/1qs3jEIQvocdVhSxCSPLF1BoLnp91aLnuUIasvl-maYo/edit?usp=sharing).
 
-## Tests
+## 🧪 Tests
 
 Before we look at the implementation of the library, let's take a moment to sift through its test suite.
 
@@ -153,7 +153,7 @@ def test_decrypt_digest():
     assert decrypt_digest(digest, password) == message
 ```
 
-## Implementation
+## 🛠️ Implementation
 
 OK, time to see the library code itself.
 
@@ -213,6 +213,6 @@ def validate_digest(digest: bytes,
         return False
 ```
 
-## Conclusion
+## 🏁 Conclusion
 
 Let me know what you think on twitter. Have fun.

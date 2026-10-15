@@ -5,7 +5,7 @@ description: How to configure multiple SSH keys on one machine to work with sepa
 tags: [github, security]
 ---
 
-## Introduction
+## 📖 Introduction
 
 I recently had an issue with my GitHub set-up which has since prompted me to write this post. The issue I had was dealing with multiple GitHub accounts via SSH on a single laptop.
 
@@ -19,7 +19,7 @@ git@github.com:Integralist/Go-Requester.git
 
 The problem occurred when I had to remove my personal account from the BBC/BBC-News repos and replace them with a generic [BBCMarkMcDonnell](https://github.com/BBCMarkMcDonnell) account.
 
-## The Problem?
+## ⚠️ The Problem?
 
 So the first thing I did was create myself a new SSH Key, upload the public key to my new GitHub account.
 
@@ -46,7 +46,7 @@ ssh-add -l
 
 This is a problem because I have two separate keys for the same host, and I work on both BBC and personal code from my work laptop; so I needed to figure out how to get around this issue.
 
-## The Solution
+## 💡 The Solution
 
 The solution turned out to be pretty straight forward, if not immediately obvious. I would need to modify my `~/.ssh/config` file (you'll need to create that file if you don't already have one).
 
@@ -64,7 +64,7 @@ git clone git@BBCMarkMcDonnell:bbc/mozart.git
 
 So let's take a look at how's this is done.
 
-## Creating a new Key
+## 🔑 Creating a new Key
 
 First things first, create a new SSH Key Pair and name it something relevant (e.g. I used `github_bbc_rsa`):
 
@@ -82,7 +82,7 @@ ssh-add -K ~/.ssh/github_bbc_rsa
 > [!TIP]
 > `ssh-add -l` will show you what keys have been added to the agent
 
-## SSH Config
+## ⚙️ SSH Config
 
 Now create the file `~/.ssh/config` (or modify the existing one you have):
 
@@ -124,7 +124,7 @@ What happens is SSH-Agent will do what it did before, which is look through the 
 git@Integralist:Integralist/Go-Requester.git
 ```
 
-## Optional Shell Function
+## 🐚 Optional Shell Function
 
 The last thing I did was to create a quick shell function that allowed me to update my global git settings. By default they're set to the following:
 
@@ -158,7 +158,7 @@ function switch_github() {
 }
 ```
 
-## Alternatives?
+## 🔀 Alternatives?
 
 So [Simon Thulbourn](https://twitter.com/sthulb) informed me that he personally would've used `GIT_SSH` as a simpler alternative to the above modification I made to my `~/.ssh/config` file. Now the following might not actually be the way he was thinking to do this, but it seems to be the most common route people take using `GIT_SSH`, so that's the one I'm covering.
 
@@ -207,7 +207,7 @@ Personally I prefer the `~/.ssh/config` solution as it feels a little cleaner to
 
 Although that being said, there are quite a few different ways `GIT_SSH` can be used (see Alvin Abad's blog post for more ideas). But now you know about `GIT_SSH`, maybe you'll find a variation that suits you or you'll decide to just create your own. Enjoy
 
-## Another Alternative
+## 🔄 Another Alternative
 
 I've found all sorts of issues recently with my original solution with things like Ruby's bundler or cli scripts that are hardcoded to use `git@github.com` where I can't change it to be a different host.
 

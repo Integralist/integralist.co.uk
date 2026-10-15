@@ -5,11 +5,11 @@ description: A quick introduction to HTTP/2 covering persistent connections, mul
 tags: [networking, performance]
 ---
 
-## Introduction
+## 📖 Introduction
 
 This is a super quick post for demonstrating how to utilise the new HTTP/2 protocol. If you're unfamiliar with it, then let me spend a brief few moments discussing some of the highlights.
 
-## Persistent Connections
+## 🔗 Persistent Connections
 
 When using HTTP/1.x each resource your web page specified would need its own connection. If you had three images on a page then that would be three separate connections.
 
@@ -23,23 +23,23 @@ This removes the need for previous 'performance' techniques such as:
 
 This also means that the browser is able to more precisely cache resources as there is no need to have to bundle all your static assets together. This also avoids the user downloading assets for a page that they will never visit.
 
-## Multiplexing
+## 🔀 Multiplexing
 
 This simply means that multiple resources can be loaded in parallel over a single connection. Just to be clear: this is a very good performance boost and facilitates the ability to transfer lots of resources in a much more efficient manner than HTTP/1.x
 
-## Header Compression
+## 🗜️ Header Compression
 
 Header information will no longer be sent over the wire in plaintext format. It'll now be compressed, making it smaller and the responses subsequently quicker to receive (although admittedly this is only a marginal gain).
 
 This also means we should be less concerned about having to serve static assets from a cookie-less domain, which was a problem because the size of the static resources would all become larger due to cookie data being associated with them.
 
-## Prioritization
+## 🚥 Prioritization
 
 Because all connections are multiplexed into a single connection, we need a way to prioritize certain requests over others in order to ensure the fastest possible overall response. HTTP/2 supports the concept of 'weighting' each 'stream' (see "Persistent Connections" above for details of what a stream is).
 
 I wont dive into the specifics of how this has been designed, suffice to say, if you want the gory details then I recommend you read the specification document here: [http2.github.io/http2-spec](http://http2.github.io/http2-spec/#rfc.section.5.3.2)
 
-## SSL/TLS
+## 🔒 SSL/TLS
 
 The above highlights also suggest a reduction in the overall time cost associated with the SSL/TLS 'handshake' process. Here's why:
 
@@ -48,7 +48,7 @@ The above highlights also suggest a reduction in the overall time cost associate
 - Compressing the HTTP headers will make the connection smaller (and subsequently faster)
 - Prioritized connections means allowing relevant requests to be handled in an appropriate order
 
-## Server Push
+## 🚀 Server Push
 
 In HTTP/2 the server now has the ability to send additional information along with the initial HTTP request made by the client. Now it's important to realise that the concept of 'server push' isn't the same thing as [Server-Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events).
 
@@ -60,7 +60,7 @@ A typical example given is when the client requests a HTTP page and that page ha
 
 But with HTTP/2 the server can save the client from making multiple requests by sending all the other static resources in parallel for the client's initial request for the main page/document.
 
-## Implementations
+## 🛠️ Implementations
 
 Im not sure exactly how many implementations are available for the HTTP/2 specification out in the wild, but there are two that we'll look at here in this article: [nginx](https://www.nginx.com/) and [Go](https://golang.org/).
 
@@ -206,7 +206,7 @@ User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1)...
 
 You'll notice the `Protocol: HTTP/2.0` which indicates we're handling HTTP/2 now. If you're using the Chrome web browser you can also download an extension called "HTTP/2 and SPDY indicator" which will display a blue lightning bolt on any site that is serving content via the HTTP/2 protocol.
 
-## References
+## 📚 References
 
 - [HTTP/2 FAQ](https://http2.github.io/faq/)
 - [HTTP/2 Implementations](https://github.com/http2/http2-spec/wiki/Implementations)

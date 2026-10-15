@@ -5,7 +5,7 @@ description: An overview of command-line debugging tools like tcpdump, telnet, n
 tags: [shell, networking]
 ---
 
-## Introduction
+## 📖 Introduction
 
 Not all programmers need to get their hands dirty and have to dig deep into what exactly their applications or services are doing at a lower/network level.
 
@@ -33,9 +33,9 @@ Just be aware that that there will be crossover functionality, and that on occas
 
 It was brought to my attention by [Aidy Lewis](https://twitter.com/aidylewis) that tools such as `ifconfig` and `netstat` have since been deprecated in favour of other tools. See [here](https://dougvitale.wordpress.com/2011/12/21/deprecated-linux-networking-commands-and-their-replacements/) for the details of what the replacement tools are.
 
-## Prerequisites
+## 📋 Prerequisites
 
-## TCP and HTTP
+## 🌐 TCP and HTTP
 
 The fact is in order to use tools such as `tcpdump`, `telnet` or `netstat` you do need to understand the basics of how the TCP and HTTP protocols work in order to utilise these programs fully.
 
@@ -43,7 +43,7 @@ As far as other tools are concerned, you may need to understand some networking 
 
 I'll be covering how I've used these tools but not really much more beyond that, so you may need to do some additional reading in order to appreciate what these tools offer (outside of my own experience with them).
 
-## OSI Model
+## 🧱 OSI Model
 
 Finally, before we get going, it's worth taking a moment to consider the [OSI Model](https://en.wikipedia.org/wiki/OSI_model). What this model represents are the different layers of a system. From the very real hardware level (e.g. physical cables that make the interwebs work) right up to the software level.
 
@@ -167,7 +167,7 @@ The reason this is useful, is because you can identify which layer the relevant 
 
 When debugging an issue, if you know the problem space is a particular layer of the OSI model, then you'll have an easier time identifying which tool is best suited to the investigation.
 
-## Utilities
+## 🧰 Utilities
 
 There are _many_ different utilities, some provided as built-ins to your OS, others might be [GNU](https://www.gnu.org/home.en.html) flavoured or home grown (e.g. they can be built using a myriad of programming languages) and which you have to download separately.
 
@@ -193,7 +193,7 @@ docker run -it ubuntu /bin/bash
 
 With all that out of the way, let's begin...
 
-## top
+## 🔝 top
 
 **Summary**: displays running processes with cpu and memory utilisation
 
@@ -254,7 +254,7 @@ There are also some pretty fancy alternatives, such as:
 - [`brew install htop`](http://hisham.hm/htop/)
 - [`npm install -g vtop`](https://github.com/MrRio/vtop) (node)
 
-## ps
+## 📋 ps
 
 **Summary**: displays snapshot of running processes
 
@@ -276,7 +276,7 @@ Here are some useful commands you can try:
 > [!WARNING]
 > the `f` option doesn't work the same on Mac OS (`man ps` for details)
 
-## strace
+## 🔍 strace
 
 **Summary**: monitors interactions between processes, by highlighting what syscalls are being made
 
@@ -640,7 +640,7 @@ By the way, you should be careful with backgrounded processes. If you attach to 
 > [!WARNING]
 > although `strace` is amazing, you might also want to read [this article](http://www.brendangregg.com/blog/2014-05-11/strace-wow-much-syscall.html) that discusses the oft-ignored performance overhead of using it in production
 
-## lsof
+## 📂 lsof
 
 **Summary**: lists open files
 
@@ -668,7 +668,7 @@ For example, with that last command (show the IPv4 network files) running on my 
 
 This is one of those tools that might not get used very often, but when the right problem occurs it can be a real time saver being able to see what files your machine has open.
 
-## netstat
+## 📊 netstat
 
 **Summary**: monitors network traffic
 
@@ -748,7 +748,7 @@ Effectively, if you've any kind of network issues, then this tool can help you p
 > [!TIP]
 > Update: an easy way to remember this (thanks Julia Evans - see [honorable mentions](#16) is "tuna please" `netstat -tunapl`). You can use `lsof -i -P` on Mac OS
 
-## ifconfig
+## 🔌 ifconfig
 
 **Summary**: configure or review your network interfaces
 
@@ -826,7 +826,7 @@ VLAN Configurations
 
 For more information on Network ips and how they're created (i.e. CIDRs), then you might be interested in [this quick gist](https://gist.github.com/Integralist/cff468ba808fbca09602) (but it's only basic information, so you might have better luck with your own Googling)
 
-## iftop
+## 📈 iftop
 
 **Summary**: monitors network traffic and displays table of bandwidth usage
 
@@ -887,7 +887,7 @@ Sorting:
  o - freeze current order
 ```
 
-## iptraf
+## 🚦 iptraf
 
 **Summary**: monitors network traffic (more visual than `netstat`, but not as detailed)
 
@@ -911,7 +911,7 @@ Because `iptraf` requires a lot of user interaction to get into different sectio
 
 But you'll see options like `IP traffic monitor`, which can be useful viewing. Personally I don't find `iptraf` as useful as tools such as `iftop`. But it's here for you nonetheless.
 
-## tcpdump
+## 🔬 tcpdump
 
 **Summary**: network packet sniffer
 
@@ -979,7 +979,7 @@ Although nothing to do with tcpdump, it is worth understanding (for the sake of 
 - Host B then sends its own `FIN` and `ACK` to close its connection down
 - Host A sends a final `ACK` to acknowledge Host B's last communication was received
 
-## wireshark
+## 🦈 wireshark
 
 **Summary**: network packet sniffer and analyser (gui)
 
@@ -1052,7 +1052,7 @@ The following is taken and paraphrased from the Docker website:
 
 For more details, please refer to the [documentation](https://docs.docker.com/engine/reference/run/#/runtime-privilege-and-linux-capabilities).
 
-## tshark
+## 🦈 tshark
 
 **Summary**: network packet sniffer and analyser (cli version of wireshark)
 
@@ -1125,7 +1125,7 @@ For example, if you open the pcap in wireshark, you can find the filter you need
 > [!INFO]
 > the filtering system syntax is called BPF (Berkeley Packet Filter) and you can find [documentation here](http://biot.com/capstats/bpf.html)
 
-## telnet
+## 📡 telnet
 
 **Summary**: utility for communicating with another host
 
@@ -1203,7 +1203,7 @@ Connection: Keep-Alive
 Content-Length: 50591
 ```
 
-## Honorable mentions
+## 🎖️ Honorable mentions
 
 A few months after writing this article I stumbled across a similar (but much better) post from [Julia Evans](https://twitter.com/b0rk). I then realised she has written _lots_ of amazing posts, so you should [check them out](http://jvns.ca/).
 
@@ -1215,7 +1215,7 @@ Here are some tools that she mentions that you should consider looking at:
 - ngrep: provides grep functionality for the network
 - perf: records a program on an interval for later analysis (also `perf top`)
 
-## Conclusion
+## 🏁 Conclusion
 
 There you have it. A whirlwind run down of different terminal based debugging tools. The primary one's (for me) being:
 

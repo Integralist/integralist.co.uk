@@ -5,7 +5,7 @@ description: Key takeaways from Robert C. Martin's Clean Coder on professionalis
 tags: [architecture, management]
 ---
 
-## Who is Robert C. Martin?
+## 👤 Who is Robert C. Martin?
 
 Robert C. Martin is a legend in the development industry. Commonly referred to as simply "Uncle Bob". He is a software consultant and has been programming since the mid 60's. Over the years he has written many books (some listed below) as well as shared his great knowledge of system design and coding best practices.
 
@@ -19,7 +19,7 @@ Robert C. Martin is a legend in the development industry. Commonly referred to a
 
 The last book in that list is the focus of this post.
 
-## What's it all about?
+## ❓ What's it all about?
 
 Well, I've taken the liberty to reference the author directly here as I feel his words convey the book's focus more than I ever could…
 
@@ -29,7 +29,7 @@ Well, I've taken the liberty to reference the author directly here as I feel his
 > In the coming years I would be fired from one job for carelessly missing critical dates, and nearly fired from still another for inadvertently leaking confidential information to a customer. I would take the lead on a doomed project and ride it into the ground without calling for the help I knew I needed. I would aggressively defend my technical decisions even though they flew in the face of the customers’ needs. I would hire one wholly unqualified person, saddling my employer with a huge liability to deal with. And worst of all, I would get two other people fired because of my inability to lead.
 > So think of this book as a catalog of my own errors, a blotter of my own crimes, and a set of guidelines for you to avoid walking in my early shoes.
 
-## Take responsibility
+## 🛡️ Take responsibility
 
 A professional takes responsibility for his code and his decisions. His primary focus should be to 'do no harm'.
 
@@ -52,13 +52,13 @@ A professional will keep in mind the following…
 - Make continuous changes to the code base. Constantly changing the code (i.e. improving it) should result in greater flexibility and modularity. If you leave the code static (e.g. you're afraid to change it in case it breaks something) then when management requests a change or new feature you may likely find the code is too rigid to be adapted.
 - Don't be afraid to constantly change your code. Your tests are there to back you up and should be quick to run!
 
-## Work ethic
+## 💼 Work ethic
 
 Your career is *your* responsibility, do not leave it up to your employer to train you, send you on courses or buy you books. Take control of yourself.
 
 The time you spend at work should be spent on your employers problems, not yours. A professional works hard for his employer and makes time for his 'career' in his own time. This also doesn't mean you should spend all your time on your career. You have a family/life too. Balance your work, your career and your life in appropriate measures.
 
-## Know your field
+## 📚 Know your field
 
 Professionals not only know their chosen favourite technologies, but have an understanding and interest in other technologies outside of that circle.
 
@@ -79,29 +79,29 @@ Here is a short list of things you should know (or at least be quite familiar wi
 - Disciplines (TDD, BDD, OOP, CI, Pair Programming)
 - Artifacts (UML, sequence diagrams, flow charts, decision tables)
 
-## Stay current
+## 📰 Stay current
 
 Practice. Doing your job isn't practice. Your job helps you improve your current skills, practice is learning new related skills.
 
 Professionals will participate in Code Katas. These aren't about solving problems because as a professional they would have already solved the problems presented in the kata. The purpose of code katas for a professional is to help warm them up for the days work and as a warm down at the end of the day. It allows them to try out different options for refactoring the solution and finding other shortcuts.
 
-## Collaborate
+## 👥 Collaborate
 
 A professional will plan, design and write code together with their team/co-workers. This helps open their knowledge up to new ways of thinking and solutions they may not have considered otherwise. This also facilitates faster learning and making fewer errors.
 
-## Mentoring
+## 🧑‍🏫 Mentoring
 
 Nothing demonstrates more how much you know about a subject than when you try to teach it to some one else. Juniors will ask all sorts of questions you may have long forgotten about (such as why you no longer build something in a certain way or using a certain technique). Professionals look after juniors and don't let them struggle on without help and direction.
 
-## Know your domain
+## 🏢 Know your domain
 
 A professional will research the business they are now building software for. So if you work for a travel agent then you should know a bit about that industry. You don't need to be an expert, just know enough to recognise concerns with certain technical requests or specifications.
 
-## Identify with your employer
+## 🤝 Identify with your employer
 
 Effectively your employers problems are your problems and so you need to take their perspective and understand the features they want implemented. A professional will be in a better position to advise whether those new features are actually right for the business.
 
-## Learn to say no
+## 🙅 Learn to say no
 
 If your boss tells you to implement a feature by a certain date and you know that can't happen without compromising the quality and stability of the software, then be vocal and say "no, that's not possible"
 
@@ -111,7 +111,7 @@ As a professional you were hired to carry out a specific specialised job and it'
 
 What does "I'll try" actually mean any way? That you'll work longer hours or work weekends? No, of course not. So why tell management you'll "try" when you're just going to go ahead and do what you was planning on doing before. It will just let them down when you don't succeed to finish by the deadline because management will have interpreted your "I'll try" as "I will".
 
-## Rules and principles for coding
+## 📏 Rules and principles for coding
 
 A professional has a specific set of principles when it comes to how they work…
 
@@ -129,7 +129,7 @@ A professional has a specific set of principles when it comes to how they work�
 - Professionals don't build a wall around their code. Any developer should be allowed/able to make changes to other developers code.
 - Professionals understand that pair programming is a good thing in that it helps you learn the system, find bugs faster and share knowledge more efficiently.
 
-## Acceptance Tests
+## ✅ Acceptance Tests
 
 Acceptance tests help avoid ambiguity in feature requests and how the existing system functions. They are different from unit-tests (which test individual components of the code) in that they ensure the finished application functions how the business expects it to (without the business having to understand the technical aspects of the system).
 
@@ -139,7 +139,7 @@ Acceptance tests provide the entire team with the definition of "done" (e.g. cod
 
 Professionals should never be passive-aggressive when it comes to acceptance tests. By this we mean: if you've been asked to implement a test that you think is faulty then it is your responsibility as a professional to make the business understand why the test is faulty and to come to an agreement on what an acceptable test should be. So don't act passive-aggressively (in a "well if this is what they wanted, then this is what they'll get" way) by allowing a faulty test to pass.
 
-## Managing time
+## ⏰ Managing time
 
 A professional knows how to manage their time.
 
@@ -179,7 +179,7 @@ Avoid messes. A mess is like a time black hole that sucks you in. Every step you
 
 Blind alleys and messes have very subtle differences but basically both should be recognised as early as possible so you can escape them.
 
-## Estimations
+## 🎯 Estimations
 
 A professional will try not to estimate a job by themselves. Any one who does this should expect to go over by at least 3 times as long as their original estimate.
 
@@ -187,7 +187,7 @@ Professionals will estimate with the help of their team as they know someone on 
 
 If appropriate, try breaking up a task into smaller tasks and estimating each smaller task. In doing so you'll likely find that the total sum of your estimate is larger than your original estimate would have been for the whole thing (i.e. before you split the task into smaller chunks).
 
-## Pressure
+## 🧘 Pressure
 
 A professional knows to stay calm under pressure.
 
@@ -197,7 +197,7 @@ A professional resorts to discipline and training to get through these situation
 
 Ultimately: by handling your job and your responsibilities *professionally* you'll be able to avoid pressure by avoiding situations that cause pressure.
 
-## Conclusion
+## 🏁 Conclusion
 
 This has been a bit of a whirlwind tour of "The Clean Coder: A Code of Conduct for Professional Programmers" but hopefully you've learnt a few things about how to handle yourself in a professional manner and will want to pick up the book to get the full benefit of "Uncle Bob's" experience and advice.
 

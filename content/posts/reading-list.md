@@ -10,16 +10,16 @@ I've long kept a list of books I've enjoyed reading, and decided I would share t
 > [!TIP]
 > I generally keep the [original gist](https://gist.github.com/Integralist/77877126a0b13766f0de) the most up-to-date.
 
-## Algorithms
+## 🧮 Algorithms
 
 - [Grokking Algorithms: An illustrated guide](https://www.manning.com/books/grokking-algorithms)
 
-## Best Practices
+## ✨ Best Practices
 
 - [Clean Code: A Handbook of Agile Software Craftsmanship](http://www.amazon.co.uk/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882/ref=wl_it_dp_o_pC_nS_nC?ie=UTF8&colid=1KPZ4BNV1OMC4&coliid=I1GJ3Q25TNFKN1)
 - [The Clean Coder: A Code of Conduct for Professional Programmers](http://www.amazon.co.uk/The-Clean-Coder-Professional-Programmers/dp/0137081073/ref=wl_it_dp_o_pC_S_nC?ie=UTF8&colid=1KPZ4BNV1OMC4&coliid=IJUCNB9OWB7H8)
 
-## Client-Side
+## 🖥️ Client-Side
 
 - [CSS: The Definitive Guide](http://www.amazon.co.uk/CSS-Definitive-Guide-Eric-Meyer/dp/0596527330/ref=sr_1_1?ie=UTF8&qid=1427038313&sr=8-1&keywords=css+the+definitive+guide)
 - [Don't Make Me Think: A Common Sense Approach to Web Usability](http://www.amazon.co.uk/Dont-Make-Me-Think-Usability/dp/0321965515/ref=sr_1_1?ie=UTF8&qid=1427038352&sr=8-1&keywords=dont+make+me+think)
@@ -29,62 +29,62 @@ I've long kept a list of books I've enjoyed reading, and decided I would share t
 - [Responsible Responsive Design](http://abookapart.com/products/responsible-responsive-design)
 - [Responsive Web Design](http://abookapart.com/products/responsive-web-design)
 
-## Clojure
+## ☯️ Clojure
 
 - [Clojure for the Brave and True](http://www.amazon.co.uk/Clojure-Brave-True-Ultimate-Programmer/dp/1593275919/ref=sr_1_1?ie=UTF8&qid=1427038088&sr=8-1&keywords=clojure+for+the+brave+and+true)
 - [Quick Clojure](https://www.apress.com/gb/book/9781484229514)
 - [The Joy of Clojure](http://www.amazon.co.uk/Joy-Clojure-Michael-Fogus/dp/1617291412/ref=sr_1_1?ie=UTF8&qid=1427038071&sr=8-1&keywords=joy+of+clojure)
 
-## Communication
+## 💬 Communication
 
 - [Radical Candor: care personally and challenge directly](https://www.radicalcandor.com/)
 - [Nonviolent Communication](https://www.nonviolentcommunication.com/)
 - [Authentic Communication](https://www.soundstrue.com/store/authentic-communication.html)
 
-## Concurrency
+## 🔀 Concurrency
 
 - [Programming Concurrency on the JVM: Mastering Synchronization, STM, and Actors](http://www.amazon.co.uk/Programming-Concurrency-JVM-Mastering-Synchronization/dp/193435676X)
 - [Seven Concurrency Models in Seven Weeks: When Threads Unravel](http://www.amazon.co.uk/Seven-Concurrency-Models-Weeks-Programmers/dp/1937785653/ref=sr_1_1?ie=UTF8&qid=1427038041&sr=8-1&keywords=7+concurrency+models)
 
-## Culture
+## 🤝 Culture
 
 - [Conscious Business: How to build value through values](https://www.soundstrue.com/store/conscious-business-4036.html)
 - [Powerful: building a culture of freedom and responsibility](http://pattymccord.com/book/)
 
-## Functional Programming
+## 📐 Functional Programming
 
 - [Functional Programming Patterns in Scala and Clojure](http://www.amazon.co.uk/Functional-Programming-Patterns-Scala-Clojure/dp/1937785475/ref=sr_1_1?ie=UTF8&qid=1427039601&sr=8-1&keywords=functional+programming+patterns+in+scala+and+clojure)
 - [Functional Programming in Scala](http://www.amazon.co.uk/Functional-Programming-Scala-Paul-Chiusano/dp/1617290653/ref=sr_1_1?ie=UTF8&qid=1427039625&sr=8-1&keywords=functional+programming+in+scala)
 
-## Go
+## 🐹 Go
 
 - [The Go Programming Language](http://www.amazon.co.uk/Programming-Language-Addison-Wesley-Professional-Computing/dp/0134190440/ref=sr_1_1?s=books&ie=UTF8&qid=1453287896&sr=1-1&keywords=go+programming+language)
 
-## JavaScript
+## 🌐 JavaScript
 
 - [Eloquent JavaScript: A Modern Introduction to Programming](http://www.amazon.co.uk/Eloquent-JavaScript-Modern-Introduction-Programming/dp/1593275846/ref=sr_1_1?ie=UTF8&qid=1427038759&sr=8-1&keywords=eloquent+javascript)
 - [High Performance JavaScript (Build Faster Web Application Interfaces)](http://www.amazon.co.uk/Performance-JavaScript-Faster-Application-Interfaces/dp/059680279X/ref=sr_1_1?ie=UTF8&qid=1427038840&sr=8-1&keywords=high+performance+javascript)
 - [JavaScript: The Good Parts](http://www.amazon.co.uk/JavaScript-Good-Parts-Douglas-Crockford/dp/0596517742/ref=sr_1_1?ie=UTF8&qid=1427038785&sr=8-1&keywords=javascript+the+good+parts)
 - [Test Driven JavaScript Development](http://www.amazon.co.uk/Driven-JavaScript-Development-Developers-Library/dp/0321683919/ref=sr_1_1?ie=UTF8&qid=1427038811&sr=8-1&keywords=test-driven+javascript+development)
 
-## Management
+## 👥 Management
 
 - [The Manager's Path](http://shop.oreilly.com/product/0636920056843.do)
 - [Managing Humans: Biting and Humorous Tales of a Software Engineering Manager](http://managinghumans.com/pitch.html)
 
-## Patterns
+## 📐 Patterns
 
 - [Mastering Regular Expressions](http://www.amazon.co.uk/Mastering-Regular-Expressions-Jeffrey-Paperback/dp/B006DVFVTU/ref=sr_1_5?ie=UTF8&qid=1427038873&sr=8-5&keywords=mastering+regular+expressions)
 
-## PHP
+## 🐘 PHP
 
 - [Practical Design Patterns in PHP](http://practicaldesignpatternsinphp.com/)
 
-## Python
+## 🐍 Python
 
 - [Effective Python](http://www.effectivepython.com/)
 
-## Ruby
+## 💎 Ruby
 
 - [Beginning Ruby: From Novice to Professional](http://www.amazon.co.uk/Beginning-Ruby-Novice-Professional-Experts/dp/1430223634/ref=sr_1_1?ie=UTF8&qid=1427038449&sr=8-1&keywords=beginning+ruby)
 - [Design Patterns in Ruby](http://www.amazon.co.uk/Design-Patterns-Ruby-Addison-Wesley-Professional/dp/0321490452/ref=wl_it_dp_o_pd_S_nC?ie=UTF8&colid=1KPZ4BNV1OMC4&coliid=I3ETXUMF5SXAB1)
@@ -93,11 +93,11 @@ I've long kept a list of books I've enjoyed reading, and decided I would share t
 - [Refactoring: Ruby Edition](http://www.amazon.co.uk/Refactoring-Ruby-Addison-Wesley-Professional-ebook/dp/B002TIOYWG/ref=sr_1_1?ie=UTF8&qid=1385646915&sr=8-1&keywords=ruby+refactoring)
 - [Sinatra - Up and Running](http://www.amazon.co.uk/Sinatra-Up-Running-Alan-Harris/dp/1449304230/ref=sr_1_1?ie=UTF8&qid=1385656124&sr=8-1&keywords=Sinatra+-+Up+and+Running)
 
-## Shell
+## 🐚 Shell
 
 - [Classic Shell Scripting](http://shop.oreilly.com/product/9780596005955.do)
 
-## System Design, Networking and Security
+## 🛡️ System Design, Networking and Security
 
 - [Amazon Web Services in Action](http://www.amazon.co.uk/Amazon-Web-Services-Action-Andreas-Wittig/dp/1617292885/ref=sr_1_1?s=books&ie=UTF8&qid=1453287921&sr=1-1&keywords=aws+in+action)
 - [Building Microservices](http://www.amazon.co.uk/Building-Microservices-Sam-Newman/dp/1491950358/ref=sr_1_1?ie=UTF8&qid=1427039585&sr=8-1&keywords=Building+Microservices)
@@ -105,11 +105,11 @@ I've long kept a list of books I've enjoyed reading, and decided I would share t
 - [High Performance Browser Networking](http://www.amazon.co.uk/High-Performance-Browser-Networking-performance/dp/1449344763/ref=sr_1_1?ie=UTF8&qid=1427039463&sr=8-1&keywords=high+performance+browser+networking)
 - [The Practice of Cloud System Administration: Volume 2: Designing and Operating Large Distributed Systems](http://www.amazon.co.uk/Practice-Cloud-System-Administration-Distributed/dp/032194318X/ref=sr_1_1?ie=UTF8&qid=1427039519&sr=8-1&keywords=the+practice+of+cloud+system+administration)
 
-## Testing
+## 🧪 Testing
 
 - [Growing Object Oriented Software Guided by Tests](http://www.amazon.co.uk/Growing-Object-Oriented-Software-Guided-Signature/dp/0321503627/ref=sr_1_1?ie=UTF8&qid=1385655342&sr=8-1&keywords=Growing+Object+Oriented+Software+Guided+by+Tests)
 
-## Tools
+## 🛠️ Tools
 
 - [Pro Vim](http://www.amazon.co.uk/Pro-Vim-Mark-McDonnell/dp/1484202511/ref=sr_1_1?ie=UTF8&qid=1427038180&sr=8-1&keywords=pro+vim)
 - [Vagrant: Up and Running](http://shop.oreilly.com/product/0636920026358.do)

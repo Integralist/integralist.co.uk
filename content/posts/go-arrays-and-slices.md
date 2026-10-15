@@ -9,14 +9,14 @@ I found myself recently trying to recall specific details of how [slices](https:
 
 Now the reason for why I wanted to do that isn't important. What's motivating this write-up is my want for a good reference document (not saying the official go blog isn't a good reference, but I have my own things I like to focus in on in these situations).
 
-## Composite Types
+## 🧱 Composite Types
 
 Let's recap on what we're talking about when we say "array" and "slice":
 
 - **Array**: fixed-length data structure, zero-indexed, contains same type
 - **Slice**: variable-length sequence, contains same type
 
-## Arrays
+## 📦 Arrays
 
 An array uses subscript notation to access elements, and is zero-indexed. Here is an example of both those concepts:
 
@@ -59,7 +59,7 @@ Arrays are also 'copied' when being passed into a function. This means if a func
 
 If dealing we an array data structure, remember you'll need to pass a pointer to it if you require a function to be able to modify the original array in memory.
 
-## Slices
+## 🍕 Slices
 
 A slice is a lightweight data structure that provides access to a subsequence (or 'window' view) of an underlying array.
 
@@ -167,7 +167,7 @@ slice2: []int
     []int{4, 3}
 ```
 
-## Append
+## ➕ Append
 
 You'll find in a lot of situations code that needs to append data to a slice. This results in code that uses the builtin `append` function, but interestingly will nearly always reassign the returned value back to the slice variable itself:
 
@@ -264,7 +264,7 @@ We can also see that the capacity of the slice (`cap`) has increased to double! 
 
 So what has happened is that `append` has returned a _new_ slice (which is expected), but that the slice is now pointing to a _new_ underlying array. This is the primary reason why when appending a value to a slice you'll see the slice variable is updated to the return value of `append`: because we don't know (unless we do some inspection of the returned slice) whether the underlying array has been copied to a new array in memory.
 
-## Caveat of Appending
+## ⚠️ Caveat of Appending
 
 If the underlying array had enough capacity for the appended value(s), then `append` would have still returned a new slice (because remember a slice cannot grow beyond its defined capacity) but the underlying array would still be the same array in memory. Let's see an example of that below:
 

@@ -21,7 +21,7 @@ contained shell, while the shell then spawns either a "Built-in" or "Program".
 > with the shell, and it goes into much deeper explanation that I do here. So I
 > recommend reading that also.
 
-## Kernel
+## 🌰 Kernel
 
 A computer has a kernel.
 
@@ -31,7 +31,7 @@ The kernel has no user interface.
 
 To interact with the kernel you use an intermediary "program".
 
-## Program
+## 💾 Program
 
 A "[program](https://simple.wikipedia.org/wiki/Computer_program)" is a
 structured collection of instructions (machine code) that a computer can
@@ -48,7 +48,7 @@ program is _compiled_ down into binary so it can be understood by the computer,
 or it'll be _interpreted_ by another program that then generates machine code
 out of the human readable program.
 
-## Executables
+## ⚙️ Executables
 
 Executables (or 'executable binaries') are programs.
 
@@ -72,7 +72,7 @@ $ echo $PATH
 > [!TIP]
 > separate the output by `:` and you see there are six directories
 
-## Terminal
+## 🖥️ Terminal
 
 A terminal is an input/output device.
 
@@ -92,7 +92,7 @@ would have previously been plugged into separately.
 If you don't want to use a GUI (graphical user interface) to interact with your
 computer, you can use a terminal emulator.
 
-## Shell
+## 🐚 Shell
 
 A shell is a program which is accessed _via_ a terminal emulator.
 
@@ -113,7 +113,7 @@ or
 
 - execute a 'builtin' function
 
-## Shell Builtins
+## 📦 Shell Builtins
 
 A 'builtin' function is one that is provided by the shell.
 
@@ -130,7 +130,7 @@ Other commands, like `echo`, might be (and are in this case) built into the
 shell for the sake of performance (it's quicker to call the builtin `echo` than
 it is to load and manage the external executable `echo`).
 
-## Documentation
+## 📚 Documentation
 
 Most people are aware of '[manuals](/posts/man-pages/)'.
 
@@ -348,7 +348,7 @@ type: type [-afptP] name [name ...]
     Returns success if all of the NAMEs are found; fails if any are not found.
 ```
 
-## Explicit Requests
+## 🎯 Explicit Requests
 
 When we used the `type` command earlier on the `exit` command it returned a
 single response (`exit is a shell builtin`).
@@ -393,7 +393,7 @@ $ command echo foo
 foo
 ```
 
-## Locating programs
+## 🔍 Locating programs
 
 To locate a program you use the `which` executable.
 
@@ -421,7 +421,7 @@ for builtins.
 
 Because, by nature, builtins are built _into_ the shell itself.
 
-## Hashed Types
+## 🗂️ Hashed Types
 
 If you open a fresh terminal screen and execute `type man` you would see the
 response `man is /usr/bin/man`.
@@ -517,7 +517,7 @@ declare -A BASH_CMDS=([which]="/usr/bin/which" [man]="/usr/bin/man" [clear]="/us
 > it's not as clear to read as the `hash` output, but this is probably
 > more useful for interacting with programatically.
 
-## List of all builtins vs executables
+## 📋 List of all builtins vs executables
 
 For a list of builtins you can use (in the Bash shell at least):
 

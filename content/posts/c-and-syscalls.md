@@ -12,7 +12,7 @@ I have no formal Computer Science (CS) background, I started programming in 1999
 > [!TIP]
 > See my previous post called '[Bits and Bytes)](/posts/bits-and-bytes/)' to see where these learnings are taking me.
 
-## What's the issue?
+## ❓ What's the issue?
 
 It can be confusing sometimes knowing where to look for documentation when dealing with C †
 
@@ -23,7 +23,7 @@ As an example, you might learn about the `strace` command and start investigatin
 
 This could be where your first problem arises. You might think "Ruby is written in C, so I'll look at the C documentation" and then come up with nothing.
 
-## So what's going on?
+## 🔍 So what's going on?
 
 The key is to remember that the Linux operating system (which your code is very likely running on) is itself written in C. But Linux provides its own set of functions written in C that aren't part of the C language.
 
@@ -36,7 +36,7 @@ Some of these Linux provided functions are known as 'system calls'. If you visit
 
 An alternative (searchable) list of syscalls can be found here: https://filippo.io/linux-syscall-table/
 
-## Wrapper functions?
+## 📦 Wrapper functions?
 
 Now what makes this a little more confusing is that the system calls aren't usually directly accessible. So 'section 2' of the Linux documentation may list all the 'system call' documentation, but 'section 3' lists all library functions including what are referred to as 'thin wrapper' functions for the system calls.
 
@@ -64,7 +64,7 @@ But where do some of the wrapper equivalents come from? Well, one such provider 
 
 [Here's a link also to the standard C library](https://en.wikipedia.org/wiki/C_standard_library) libc if you're interested.
 
-## Direct system call?
+## ⚡ Direct system call?
 
 What if one of the additional C libraries (libc, glibc etc) don't provide a wrapper?
 

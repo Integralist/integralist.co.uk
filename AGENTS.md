@@ -49,6 +49,8 @@ When editing or rewriting blog content, follow these rules:
 - Don't invent facts. Only improve flow, clarity, and structure.
 - Parenthetical asides are fine but keep them short. If one runs past two
   lines, break it into its own sentence.
+- Header emojis: H2 headers may use a single leading emoji for visual
+  accent in the floating sidebar (overrides global AGENTS.md for this repo).
 
 ## Gotchas
 

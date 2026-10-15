@@ -10,7 +10,7 @@ let's you run JavaScript, Go, Rust and [any other language][2] that compiles to
 Wasm at the edge... well, let's take a look and while we're at it let's try and
 understand how caching works there too.
 
-## Getting started
+## 🚀 Getting started
 
 OK, first thing you're going to need is a [fastly account][3] so follow the link
 and sign up for FREE (for more details see [here][4]).
@@ -46,7 +46,7 @@ To make sure the CLI is set up correctly, run the following command:
 fastly whoami
 ```
 
-## Create a new Compute project
+## 📁 Create a new Compute project
 
 A Compute project is a directory that contains your service/application code +
 some configuration files required by the CLI to build a Compute 'package'.
@@ -115,7 +115,7 @@ variety of tasks:
 I'll explain more, but for now let's run our project locally so we can see it
 working...
 
-## Run your code locally
+## 💻 Run your code locally
 
 At this point we can actually run our project locally without even having to
 deploy it!
@@ -162,7 +162,7 @@ Opening `http://127.0.0.1:7676` in your web browser should show the result of
 running the [Go default starter kit][11] code, which generates an `<iframe>`
 loading a Fastly hosted welcome page.
 
-## Sending requests to an origin server
+## 📡 Sending requests to an origin server
 
 OK, so let's open up the `main.go` and delete all the code and replace it with
 the following:
@@ -241,7 +241,7 @@ OK, so there were two things we need to get a better grip on:
 
 Let's get into it...
 
-## Fastly backends
+## ⚙️ Fastly backends
 
 A backend is something that needs to be defined explicitly, it's an origin
 server owned and managed by you. For example, you might have an API service that
@@ -289,7 +289,7 @@ is security. That said, if you're willing to forego security, then you can ask
 use something called a 'dynamic backend' which allows you to define backends at
 runtime in your code (see [here][16] for an example).
 
-## Fastly caching behaviour
+## ⚡ Fastly caching behaviour
 
 Now let's look at Fastly's caching behaviour as it's a bit confusing. I'm going
 to reference the official Fastly doc [Caching content with Fastly][13]:
@@ -366,7 +366,7 @@ resp.Header.Set("Cache-Control", "public, max-age=60")
 > change the `Cache-Control` value to be something cacheable if you wanted
 > `r.CacheOptions.TTL` to have any kind of effect.
 
-## Deploying your Compute service
+## 🚢 Deploying your Compute service
 
 To wrap up this post, let's get our Compute service/application deployed:
 

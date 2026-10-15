@@ -5,14 +5,14 @@ description: "A practical guide to mocking resources in Python tests using unitt
 tags: [python, testing]
 ---
 
-## Introduction
+## 📖 Introduction
 
 Mocking resources when writing tests in Python can be confusing if you're unfamiliar with doing such things. In this post I am going to cover various aspects of mocking code, which will hopefully be a useful resource for those who are a bit stuck.
 
 > [!INFO]
 > in the code examples I'm using [pytest](https://docs.pytest.org/en/latest/), but for the most part that shouldn't matter.
 
-## unittest.mock or mock
+## ❓ unittest.mock or mock
 
 In order to 'mock' a resource we'll first need the `mock` module, and this is our first stumbling block: which version do we need? i.e. there's two and they both look to be _official_ (`mock` and `unittest.mock`).
 
@@ -27,7 +27,7 @@ import unittest.mock as mock
 > [!INFO]
 > For more examples, see [this reference guide](http://www.voidspace.org.uk/python/mock/examples.html)
 
-## Decorator
+## 🎀 Decorator
 
 The most common way to mock resources is to use a Python decorator around your test function:
 
@@ -56,7 +56,7 @@ def test_stuff(mock_first, mock_second, mock_third):
     ...
 ```
 
-## Resource location
+## 📍 Resource location
 
 It's important to know that when mocking you should specify the location of the resource to be mocked, relevant to where it's _imported_. This is best explained by way of example...
 
@@ -76,7 +76,7 @@ If the full namespace path isn't referenced, which it isn't in the above example
 
 So even though `thing` exists within `app.bar` we specify `app.foo.thing` as `app.foo` is where we've imported it for use. This catches people out all the time.
 
-## Mock return_value vs side_effect
+## 🎭 Mock return_value vs side_effect
 
 If your function has a try/except around it, then you can use `side_effect` to cause the calling of the function to trigger an Exception as the returned value:
 
@@ -93,7 +93,7 @@ Otherwise if you just need a _static_ value returned, so it's evaluated at the t
 @mock.patch('app.security.secret_hash', return_value='###')
 ```
 
-## Mock Nested Calls
+## 🪆 Mock Nested Calls
 
 Calling a property on a mock returns another mock, so in order to mock very specific properties you'll need to nest your `return_value` or `side_effect`:
 
@@ -170,7 +170,7 @@ def bar(mock_httpserver):
     mock_httpserver().listen.assert_called_with(123)
 ```
 
-## Verify Exceptions
+## 🚨 Verify Exceptions
 
 If we want to verify that some piece of code throws an `Exception` type when we need it to we can mock specific resources to throw an exception and then use `pytest.raises` as a context manager around the caller of our code to be verified.
 
@@ -194,7 +194,7 @@ def test_account_confirm_failure(mock_signup):
 > [!WARNING]
 > don't make the mistake of putting any assertions within the `with` context manager. Once the Exception is raised by the function being called within the `with` context manager, all code after it inside the block is skipped.
 
-## Clearing lru_cache
+## 🧹 Clearing lru_cache
 
 If a function you wish to test has the `functools.lru_cache` decorator applied, then you'll need to be mindful of mocking the response of that function as it'll be cached in one test and the cached result will be returned when calling the function again to test some other behaviour (and might likely confuse you when you see the unexpected response).
 
@@ -220,7 +220,7 @@ foo()  # Executing foo... (notice the 'side effect of print is executed again)
 > [!WARNING]
 > debugging this isn't always obvious. Later on I demonstrate how to [mock the builtin `open` function](#mock-builtin-open-function), and in that scenario I stumbled across this issue, because although I wasn't mocking the top level function itself (I was mocking the call to `open` within), the contents of the file being opened was what was returned and being cached.
 
-## Mock Module Level/Global Variables
+## 🌐 Mock Module Level/Global Variables
 
 With a module variable you can can either set the value directly or use `mock.patch`.
 
@@ -246,7 +246,7 @@ In the `mock.patch` example, there are two key things to notice:
 
 This is because we're modifying a variable and not a direct function or 'callable' so there's no need to pass a mock into the test function (if you want to change the value a few times within the test itself then you would mock the variable but not immediately assign a value in the decorator).
 
-## Mock Instance Method
+## 🔹 Mock Instance Method
 
 There are multiple ways to achieve mocking of an instance method. One common approach is to use `mock.patch.object`, like so:
 
@@ -287,7 +287,7 @@ The reason the above example works is because we're setting `return_value` on ou
 
 But as mentioned in the above note, this approach might be a little _too_ blunt depending on what your needs are (whether you care whether you have a some what functioning class or not).
 
-## Mock Class Method
+## 🏛️ Mock Class Method
 
 To mock a class method is a similar approach to mocking an instance method.
 
@@ -305,7 +305,7 @@ def test_classmethod(self, mock_class_method):
     mock_class_method.return_value = "foobar"
 ```
 
-## Mock Entire Class
+## 📦 Mock Entire Class
 
 To mock an entire class you'll need to set the `return_value` to be a new instance of the class.
 
@@ -328,7 +328,7 @@ def test_class(self, mock_car):
 > [!INFO]
 > See other class related mocking tips [here](https://chase-seibert.github.io/blog/2015/06/25/python-mocking-cookbook.html)
 
-## Mock Async Calls
+## ⚡ Mock Async Calls
 
 Mocking asynchronous code is probably the most confusing aspect of mocking. My 'go to' solution I'll explain first, but after that I'll share some alternative methods I've seen and tried in the past.
 
@@ -517,7 +517,7 @@ async def test_buzz_api(self, client_mock):
     client_mock.get.side_effect = get
 ```
 
-## Mock Instance Types
+## 🏷️ Mock Instance Types
 
 When mocking an object you'll find that the mock replaces the entire object and so it can cause tests to pass (or fail) in unexpected ways.
 
@@ -599,7 +599,7 @@ spy.bar('baz')
 spy.bar.assert_called_with('beep')  # raises AssertionError
 ```
 
-## Mock builtin `open` function
+## 📂 Mock builtin `open` function
 
 Python's mock library provides an abstraction for mocking the builtin `open` function a lot simpler...
 
@@ -615,6 +615,6 @@ def test_load_ui_messages_successful():
 
 The `create=True` param set on `mock.patch` means that the `mock.MagicMock` returned will automagically create any attributes that are called on the mock (this is because the `open` function will attempt to access lots of different things and it's easier for mock to mock out all of that for you).
 
-## Conclusion
+## 🏁 Conclusion
 
 There we'll end. Hopefully this list of mocking techniques will be able to see you through even the most complex of code needing to be tested. Let me know what you think on twitter.

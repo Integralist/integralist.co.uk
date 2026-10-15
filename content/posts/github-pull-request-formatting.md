@@ -5,7 +5,7 @@ description: Best practices for writing clear, well-structured pull requests inc
 tags: [github]
 ---
 
-## Introduction
+## 📖 Introduction
 
 What makes a good Pull Request?
 
@@ -19,7 +19,7 @@ These opinions aren't happening at the organisational level either, but are very
 
 Below I discuss some ideas around what I've used in the past and what I'm using today and I'll leave it as an exercise for the reader to determine what parts they decide to takeaway with them.
 
-## Why
+## 🤔 Why
 
 Probably the most important part of a pull request is understanding _why_ the change is needed in the first place.
 
@@ -31,7 +31,7 @@ Maybe the feature you're adding is an internal improvement (e.g. refactor, dev t
 
 But taking a moment to stop and think about a new code change _before_ you start working on it, is an important step to take.
 
-## Size
+## 📏 Size
 
 Pull requests should be small.
 
@@ -41,7 +41,7 @@ Small pull requests allow for quicker reviews and merging. It promotes an _itera
 
 We're also able to 'fail fast' if our work priorities change and we need to switch gears or change direction altogether. We're not trying to solve every problem all at once.
 
-## Process
+## 📋 Process
 
 Pull requests should be opened almost immediately, to allow for team feedback and help in direction (depending on what you need).
 
@@ -78,19 +78,19 @@ The 'todo' section helps me to keep track of what tasks I have in order to compl
 
 Finally, the 'screen shots' section is useful for those unfamiliar with the side effects of the change to be able to visually identify where the change appears or what it looks like. This isn't always necessary, depending on the code change being made, but is useful for UI changes.
 
-## Communication
+## 💬 Communication
 
 It's important to notify fellow team members that your pull request exists, in order for them to provide appropriate feedback.
 
 You can manually `@<username>` people within a comment in the pull request, or you could create a team in GitHub and then `@<team-name>` instead (helps especially for teams who like to rotate members across other teams within an organisation).
 
-## Merge Strategies
+## 🔀 Merge Strategies
 
 I've written in the past about different '[git merge strategies](/posts/git-merge-strategies/)'. My preferred way is to `git merge --squash`, and luckily GitHub's UI provides a 'one click' way to squash merge a pull request.
 
 That's what I suggest using for merging pull requests into `master`, but you may have different requirements in your team/organisation, so pick whatever works best.
 
-## Conclusion
+## 🏁 Conclusion
 
 So this has been _my_ preferred approach to creating a good pull request.
 

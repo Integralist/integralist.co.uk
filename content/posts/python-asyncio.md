@@ -8,7 +8,7 @@ tags: [python, performance]
 This is a _quick_ guide to Python's `asyncio` module and is based on Python
 version 3.8.
 
-## Introduction
+## 📖 Introduction
 
 So let's start by addressing the elephant in the room: there are _many_ modules
 provided by the Python standard library for handling
@@ -29,7 +29,7 @@ use `asyncio` over the other available modules (e.g. `_thread` and `threading`)
 and when it's actually more appropriate to use either `multiprocessing` or
 `concurrent.futures`.
 
-## Why focus on asyncio?
+## 🎯 Why focus on asyncio?
 
 One of the issues with writing concurrent code (using either the `_thread` or
 `threading` modules) is that you suffer the cost of 'CPU context switching' (as
@@ -41,7 +41,7 @@ utilized and others are under utilized).
 
 Asyncio avoids these issues, so let's see how...
 
-## A quick `asyncio` summary
+## ⚡ A quick `asyncio` summary
 
 > [!CITE]
 > asyncio is a library to write concurrent code using the `async`/`await` syntax. -- [docs.python.org/3.8/library/asyncio.html](https://docs.python.org/3.8/library/asyncio.html)
@@ -72,7 +72,7 @@ mechanism to prevent multiple threads from accessing/mutating shared memory
 (which would otherwise subsequently cause your program to become non-thread
 safe).
 
-## A quick `concurrent.futures` summary
+## 🔮 A quick `concurrent.futures` summary
 
 > [!CITE]
 > The concurrent.futures module provides a high-level interface for
@@ -104,7 +104,7 @@ pool of threads or a pool of subprocesses, while also using a clean and modern
 Python API (as apposed to the more flexible but low-level `threading` or
 `multiprocessing` modules).
 
-## Green threads?
+## 🧵 Green threads?
 
 There are many ways to achieve asynchronous programming. There's the event loop
 approach (which asyncio implements), a 'callback' style historically favoured by
@@ -120,7 +120,7 @@ So let's take a quick look now at what the 'event loop' is, as it's the
 foundation of what makes asyncio work and why we can avoid 'callback hell' and
 the problems inherent with 'green threads'...
 
-## Event Loop
+## 🔄 Event Loop
 
 The core element of all asyncio applications is the 'event loop'. The event loop
 is what schedules and runs asynchronous tasks.
@@ -146,7 +146,7 @@ those concepts, then I'll refer you to that post.
 > official Python
 > documentation](https://docs.python.org/3.8/library/asyncio-eventloop.html).
 
-## Awaitables
+## ⏳ Awaitables
 
 The driving force behind asyncio is the ability to schedule asynchronous
 'tasks'. There are a few different types of objects in Python that help support
@@ -250,7 +250,7 @@ also some of the APIs listed in [Concurrent Functions](#concurrent-functions)).
 > for other available methods on a Future please refer to [the
 > documentation](https://docs.python.org/3.8/library/asyncio-future.html#asyncio.Future).
 
-## Running an asyncio program
+## 🏃 Running an asyncio program
 
 The high-level API (as per Python 3.7+) is:
 
@@ -343,7 +343,7 @@ uvloop.install()
 asyncio.run(hello_world())
 ```
 
-## Concurrent Functions
+## 🔀 Concurrent Functions
 
 The following functions help to co-ordinate the running of functions
 concurrently, and offer varying degrees of control dependant on the needs of
@@ -363,7 +363,7 @@ your application.
 > results. If `gather()` is cancelled, all submitted awaitables (that have not
 > completed yet) are also cancelled.
 
-## Deprecated functions
+## ⚠️ Deprecated functions
 
 - `@asyncio.coroutine`: removed in favour of `async def` in Python 3.10
 - `asyncio.sleep`: the `loop` parameter will be removed in Python 3.10
@@ -374,7 +374,7 @@ your application.
 > Python has deprecated this argument in 3.8, and will remove it completely in
 > 3.10.
 
-## Examples
+## 💡 Examples
 
 ### `gather`
 
@@ -582,7 +582,7 @@ the `hello_world` task would finish and close down the event loop. The last line
 of `hello_world` is printing the `foo` Task, where we'll see the status of the
 `foo` Task will now show as  'finished'.
 
-## Callbacks
+## 📞 Callbacks
 
 When dealing with a Task, which really is a Future, then you have the ability to
 execute a 'callback' function once the Future has a value set on it.
@@ -631,7 +631,7 @@ got the result! Foo!
 <Task finished coro=<foo() done, defined at gather.py:4> result='Foo!'>
 ```
 
-## Pools
+## 🏊 Pools
 
 When dealing with lots of concurrent operations it might be wise to utilize a
 'pool' of threads (and/or subprocesses) to prevent exhausting your application's

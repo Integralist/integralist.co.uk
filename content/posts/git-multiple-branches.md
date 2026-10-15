@@ -5,7 +5,7 @@ description: How to use git worktrees to work on multiple branches simultaneousl
 tags: [git]
 ---
 
-## Introduction
+## 📖 Introduction
 
 There are times where you might be working from a particular git branch and need to quickly jump over to a different branch to do some urgent work.
 
@@ -22,7 +22,7 @@ Oh, and then you have to think about whether you actually want to use `apply`, w
 
 This is where I was recently introduced to a concept in git referred to as a 'worktree' (thanks Kiran).
 
-## Worktree
+## 🌳 Worktree
 
 Git offers a feature referred to as a [worktree](https://git-scm.com/docs/git-worktree), and what it does is allow you to have multiple branches running at the same time.
 
@@ -33,7 +33,7 @@ This is different to manually creating a new directory and git cloning your repo
 > [!INFO]
 > as you'll see, although this workflow is pretty cool, you _could_ argue that `git stash` is just plain simpler and easier for a human mind to reason about. I'll leave that up to the reader to decide.
 
-## Example
+## 💻 Example
 
 In the following example I'm going to create a new git repo. I'll make a change in `master`, then create a new branch for doing some work. We'll then imagine that I have been given an urgent task that I must complete _now_ and yet my current non-master branch is in such a state that I want to avoid just stashing everything.
 
@@ -126,7 +126,7 @@ Presuming I'm still in the `foo_hotfix` directory and that's where I ran `git wo
 
 I can now continue working on my `foo_contents` branch.
 
-## Conclusion
+## 🏁 Conclusion
 
 Well, this was fun heh! 😉
 
