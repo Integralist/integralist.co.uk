@@ -138,5 +138,70 @@
         });
     </script>
     {{end}}{{end}}
+    <script>
+        (() => {
+            let overlay = null;
+            let overlayImg = null;
+
+            const close = () => {
+                if (!overlay) return;
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                setTimeout(() => {
+                    if (!overlay.classList.contains('active') && overlayImg) {
+                        overlayImg.src = '';
+                    }
+                }, 200);
+            };
+
+            const init = () => {
+                overlay = document.createElement('div');
+                overlay.className = 'lightbox-overlay';
+                overlay.setAttribute('role', 'dialog');
+                overlay.setAttribute('aria-modal', 'true');
+                overlay.setAttribute('aria-label', 'Image preview');
+                overlay.innerHTML = `
+                    <button class="lightbox-close" aria-label="Close image preview">&times;</button>
+                    <div class="lightbox-content">
+                        <img class="lightbox-img" src="" alt="">
+                    </div>
+                `;
+                document.body.appendChild(overlay);
+                overlayImg = overlay.querySelector('.lightbox-img');
+
+                overlay.addEventListener('click', e => {
+                    if (e.target !== overlayImg) {
+                        close();
+                    }
+                });
+
+                document.addEventListener('keydown', e => {
+                    if (e.key === 'Escape' && overlay.classList.contains('active')) {
+                        close();
+                    }
+                });
+            };
+
+            document.addEventListener('click', e => {
+                const link = e.target.closest('a');
+                if (!link) return;
+                const isImageLink = link.classList.contains('post-hero') ||
+                    (link.querySelector('img') && link.closest('.post-content, .page-content'));
+                if (!isImageLink) return;
+
+                const clickedImg = link.querySelector('img');
+                const href = link.getAttribute('href');
+                if (!href) return;
+
+                e.preventDefault();
+                if (!overlay) init();
+
+                overlayImg.src = href;
+                overlayImg.alt = clickedImg ? (clickedImg.getAttribute('alt') || '') : '';
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        })();
+    </script>
 </body>
 </html>
