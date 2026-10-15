@@ -40,13 +40,14 @@ headaches under the hood and wasn't going to work out long term.
 
 So I moved over to the Pi harness instead. Naturally, I still wanted deeper
 capabilities like subagent orchestration, better terminal telemetry, transcript
-highlighting, side conversations, inline skill argument hints, and in-place
-context shaking. So I built extensions for them:
+highlighting, side conversations, inline skill argument hints, declarative
+event hooks, and in-place context shaking. So I built extensions for them:
 [`pi-statusbar`](https://github.com/Integralist/pi-statusbar),
 [`pi-subagents`](https://github.com/Integralist/pi-subagents),
 [`pi-btw`](https://github.com/Integralist/pi-btw),
 [`pi-transcript-enhancer`](https://github.com/Integralist/pi-transcript-enhancer),
 [`pi-skill-argument-hints`](https://github.com/Integralist/pi-skill-argument-hints),
+[`pi-event-hooks`](https://github.com/Integralist/pi-event-hooks),
 and
 [`pi-context-shake`](https://github.com/Integralist/pi-context-shake).
 
@@ -98,6 +99,18 @@ natively, so I wrote
 to bridge the gap. When typing `/skill:<name>`, it reads the frontmatter
 verbatim and renders a muted inline hint right after the cursor that auto-hides
 the moment you type an argument or space.
+
+The same story played out with lifecycle hooks. Claude Code supports
+declarative shell hooks (`PreToolUse`, `PostToolUse`, `Notification`) in JSON,
+making it trivial to block dangerous commands, format files after edits, or pop
+desktop alerts. Pi has a powerful event API (`pi.on(...)`), but writing a full
+TypeScript extension just to run a one-line bash script is overkill. I built
+[`pi-event-hooks`](https://github.com/Integralist/pi-event-hooks) to bring
+declarative JSON hooks to Pi. It maps both native Pi events and Claude Code
+aliases onto shell commands from `~/.pi/agent/hooks.json` or `.pi/hooks.json`.
+Hooks can block risky calls with exit code `2` (like `git push --force` or
+touching `.env`), mutate arguments on the fly, or trigger formatters on tool
+completion without maintaining separate extensions.
 
 ```bash
 # Install everything across all harnesses cleanly
