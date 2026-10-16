@@ -69,6 +69,7 @@ My `agent-skills` repo reflects this separation with a single source of truth:
 .agents/                            # Canonical skills + conventions
 ├── AGENTS.md                       # Shared operational conventions
 └── skills/                         # Canonical skills (1 dir per skill)
+    └── shared/                     # Shared formats and policies
 
 .claude/                            # Claude Code adapter
 ├── CLAUDE.md                       # Pointer to ~/.agents/AGENTS.md
@@ -86,6 +87,14 @@ The core directory is `.agents/skills/`. Every skill is written using generic
 instructions ("prompt the user", "spawn a subagent", "read the file"). Claude
 Code gets access via a symlink (`.claude/skills -> ../.agents/skills`), while Pi
 or Gemini CLI load them straight from `~/.agents/skills/`.
+
+To stop skills turning into bloated, harness-specific walls of text, I enforce
+strict authoring rules via `writing-for-agents` and use `skill-rewrite` to keep
+each skill short enough to read in one pass. Skill descriptions stick strictly
+to trigger conditions (when to load the skill, not a duplicate summary of how it
+works), avoid harness-only shell-injection syntax, and extract shared contracts
+(`SPEC-FORMAT.md`, `ADR-FORMAT.md`, `PR-DESCRIPTION.md`, `BUILD-ITEM.md`) into
+`.agents/skills/shared/` so linked workflows never drift.
 
 When Claude Code supports handy features like path-scoped rules in
 `.claude/rules/`, I generate them automatically from the canonical conventions
@@ -178,8 +187,8 @@ skills.
 
 ```txt
 Product track:     pdd (project → discovery → design) ─┐
-                                                       ├─→ to-spec → to-plan → to-tasks → next-slice
-Engineering track: architect (research → grill) ───────┘
+                                                       ├─→ architect (spec → grill → plan) → to-tasks → next-task / next-slice
+Engineering track: architect (bootstrap → research) ───┘
 ```
 
 ### 🕵️ Phase 1: Interrogation (Poking Holes First)
@@ -232,9 +241,9 @@ off.
 
 Crucially, `design.md` is not an implementation plan (`plan.md`). It answers
 what system solution is being approved, not how an engineer will slice the pull
-requests. Once Design is approved, `pdd` hands off directly to `to-spec` to
-define the technical contracts. You do not run `architect` afterwards, because
-doing so would pointlessly duplicate the discovery you just agreed upon.
+requests. Once Design is approved, `pdd` hands off to `architect` starting at
+its Spec step, skipping bootstrap and research so both tracks share one
+engineering chain without duplicating the discovery you just agreed upon.
 
 #### Engineering-led coordination: `architect`
 
@@ -243,30 +252,42 @@ three-stage product governance dance is overkill. That is where `architect`
 comes in.
 
 Where `pdd` is a gated approval workflow for cross-functional consensus,
-`architect` is an automated coordinator for engineering delivery. It chains
-five phases together in sequence: bootstrapping project rules (`agents-md`),
+`architect` is a thin six-step coordinator for engineering delivery. It
+sequences other skills in a single `projects/<yyyy-mm-dd>-<slug>/` folder:
+bootstrapping project rules (`agents-md`, plus `clarify` if the idea is vague),
 deep research (`research`), writing the functional specification (`to-spec`),
-adversarial stress-testing (`grill-with-docs`), and implementation planning
-(`to-plan`).
+adversarial stress-testing (`grill-with-docs`), implementation planning
+(`to-plan` followed by `to-adr` to record genuine architectural decisions, and
+an optional `to-prd` when the project didn't start from a PDD Design), and
+finally handing off to execution.
 
 If `pdd` is about deciding what to build with Product, `architect` is about
-taking an engineering idea and autonomously generating the technical artefacts
-needed to build it safely.
+taking an engineering idea (or an approved PDD Design) and generating the
+technical artefacts needed to build it safely.
 
 #### The engineering handoff: specs, plans, and tasks
 
 Regardless of whether an initiative starts in `pdd` or `architect`, both tracks
 converge on the same engineering delivery pipeline under
-`projects/<yyyy-mm-dd-slug>/`:
+`projects/<yyyy-mm-dd>-<slug>/`:
 
-- **`to-spec`**: Generates a solid capability specification (`spec.md`) with
-  user stories, acceptance criteria, and testing seams. Living specs stay
-  validated in CI so contracts don't rot.
-- **`to-plan`**: Breaks the specification into vertical implementation slices
-  (`plan.md`) with explicit `Blocked-by` dependency edges and PR groupings.
-- **`to-tasks`**: Compiles a single plan slice just-in-time into a mechanical,
-  TDD-shaped runbook (`tasks.md`) with verbatim code and assertions, avoiding
-  upfront plan decay.
+- **`to-spec` & `spec-delta`**: `to-spec` writes `spec.md` with user stories
+  (framed with `voice-product`), Gherkin acceptance criteria, and testing seams.
+  Current truth lives in `docs/specs/<capability>.md` and is validated in CI;
+  whenever a change alters existing behaviour, `to-spec` and `spec-delta` record
+  a `Behavioural Delta` against the pinned baseline so the project folder keeps
+  the history while the living spec moves on.
+- **`to-plan`**: Breaks the specification (or a session's discussion when a spec
+  isn't needed) into vertical implementation slices (`plan.md`) with `Blocked by`
+  dependencies, exact `Consumes`/`Produces` interface signatures, verifiable
+  outcome milestones (`M1.1`, `M1.2` rather than step-by-step tasks), and PR
+  delivery groupings.
+- **`to-tasks`**: Compiles a single plan slice just-in-time against live code
+  into a mechanical, TDD-shaped task list (`tasks.md` or `tasks-slice-N.md`)
+  with verbatim stubs, failing tests (`red`), implementations (`green`),
+  runnable verification commands, `Supports:` links back to plan milestones, and
+  a closing integration task that runs the slice's Gherkin scenarios without
+  mocks.
 
 #### Automating the handoff: `execute-plan`
 
@@ -274,14 +295,18 @@ Until now, I've described a manual loop: run `to-tasks` for a slice, then start
 `next-task` or `next-slice`, and repeat. It works, but I'm the one joining the
 steps up and keeping track of what comes next.
 
-[`execute-plan`](https://github.com/Integralist/agent-skills/blob/a442db988eccf58be425f7145f752ec1e20c8392/.agents/skills/execute-plan/SKILL.md)
-turns that choreography into one opt-in workflow. I give it an existing plan;
-my selected session compiles only the next unblocked slice against the live
-code, then delegates one task at a time to a configured lower-cost worker. The
-selected session stays in charge: it inspects each change, runs the checks,
-handles corrections, and commits verified tasks before moving on. It reviews
-the whole slice before compiling the next one, and records evidence and
-task-to-commit links so resuming doesn't depend on checkboxes or chat history.
+[`execute-plan`](https://github.com/Integralist/agent-skills/blob/4601fe188be2b7a4001c40197eb533491f01570d/.agents/skills/execute-plan/SKILL.md)
+turns that choreography into one coordinated workflow. I give it an existing
+plan and keep my main conversation as the coordinator so its context window
+lasts the whole plan. For each unblocked slice, a premium subagent follows
+`to-tasks` to write the task list against live code, and a cheap subagent
+implements one task at a time (both staying on the session's provider and
+changing only the model and effort). The coordinator inspects each diff, runs
+the checks, diagnoses failures, and commits verified tasks before moving on. It
+accepts each slice against its milestone outcomes (running a read-only review on
+risky slices), finishes with a requirement-by-requirement audit against the plan
+and spec, and logs task-to-commit mappings in `execution.md` so resuming never
+depends on chat history.
 
 The value isn't handing decisions to a cheaper model. It's avoiding the manual
 skill-to-skill handoffs while keeping verification and acceptance with the
@@ -290,24 +315,33 @@ working manually I occasionally course-correct code to match my conventions or
 preferences. In practice, those tend to be small syntax or style adjustments,
 not problems with the code or the planned approach. So I can let the task loop
 run, review the final code and complete commit list, suggest any small edits,
-then decide whether to push or draft a PR. That makes the overall flow faster for me.
+then decide whether to push or open a PR. That makes the overall flow faster
+for me.
 
-Execution still needs explicit authorisation for the model settings and
-task-level commits. PDD approval gates remain, and the workflow won't push or
-deploy. I can still run the existing skills manually when I want to stay closer
-to each step.
+By default it confirms the setup and asks when design questions come up. Passing
+`auto` (`/skill:execute-plan <plan-path> auto`) lets it run unattended through
+all slices and the final audit, logging each non-trivial decision in
+`execution.md`. Both modes still stop hard if staging is unsafe, three fixes
+fail on the same problem, the worker model can't be verified, the provider runs
+out of credits, a commit would land on `main`/`master` without approval, or the
+PDD Design isn't approved. It never pushes or opens PRs, and I can still run the
+individual skills manually whenever I want to stay closer to each step.
 
 ### 🔨 Phase 3: Building (Small, Mechanical Slices)
 
 With tasks compiled, execution becomes fast and predictable.
 
-- **`next-task` & `next-slice`**: `next-task` implements and verifies the next
-  item in the runbook, while `next-slice` works through an entire vertical plan
-  slice in one go.
+- **`next-task` & `next-slice`**: Both work in the main thread on a `moderate`
+  model tier using a shared test-first procedure (`BUILD-ITEM.md`), whether
+  running from a compiled task list or directly from plan milestones.
+  `next-task` builds and verifies the next ready item, while `next-slice` works
+  through an entire slice, verifies every milestone outcome against the full
+  test suite, and offers one commit at the end.
 - **`conventions-*` & `go-testing`**: Enforces strict language conventions
   (`conventions-go`, `conventions-python`, `conventions-sql`, and others) and
   testing discipline (table-driven tests, `t.Context()`, bounded waits, public
-  API testing, and zero unkeyed struct literals).
+  API testing, `godog` Gherkin acceptance test wiring, and zero unkeyed struct
+  literals).
 - **`unslop`**: Strips AI tells, buzzwords, puffery, and robotic cadence from
   documentation and prose to restore a clean, authentic human voice.
 - **`cleanup`**: Runs a background audit hunting for AI-generated clutter, dead
@@ -321,9 +355,14 @@ With tasks compiled, execution becomes fast and predictable.
 Reviewing code with AI works both ways: having agents review code, and
 critically evaluating the feedback agents give you.
 
-- **`code-review`**: Runs multi-dimensional reviews across parallel subagents
-  (behaviour, security, reliability, maintainability) using `pi-subagents` to
-  catch subtle bugs without blowing up the context window.
+- **`code-review`**: Gathers the diff and intent documents (`Execution-Plan`
+  commit trailers, active project specs and plans, and living specs in
+  `docs/specs/`), then runs parallel subagents across up to five profiles
+  (behaviour and tests, security, reliability and rollout, maintainability and
+  conventions, plus spec and plan adherence). Parallel read-only verifier
+  subagents then challenge every finding and drop anything they can't prove.
+  Every reviewer and verifier runs on the session model or better, because a
+  missed defect costs more than the tokens.
 - **`is-it-safe`**: Rather than general reviews or speculative risk matrices,
   this runs an adversarial impact analysis answering one question: what is the
   worst credible outcome if this exact diff is merged? It uses an independent
@@ -353,13 +392,15 @@ When the code is tested and clean, shipping is a deterministic, mechanical step.
 - **`branch`**: Cuts a feature branch using session context and standard naming.
 - **`commit`**: Stages and groups files sensibly, enforcing titles that explain
   why the change matters rather than listing raw mechanical steps.
-- **`open-pr`**: Generates a concise pull request with clear Problem and
-  Solution sections, consequence-driven titles, and load-bearing emoji.
+- **`open-pr`**: Generates a ready-for-review pull request with clear Problem
+  and Solution sections, consequence-driven titles, and load-bearing emoji from
+  a shared `PR-DESCRIPTION.md` contract.
 - **`stacked-prs`**: Coordinates dependent PR chains with the official
-  `gh-stack` CLI extension, mapping vertical slices from `to-plan` directly into
-  isolated, easily reviewable PR layers.
-- **`bcp`**: Orchestrates branch creation, committing, and opening a PR (or
-  submitting a stacked branch) in one command.
+  `gh stack` CLI extension, opening each layer ready for review (`--auto --open`)
+  with the same shared PR description rules.
+- **`bcp`**: Thin coordinator that runs `branch`, `commit`, and `open-pr` (or
+  hands off to `stacked-prs` when `gh stack view` finds an active stack) in one
+  command.
 
 ### 🧭 Choosing the Right Analysis Skill
 
@@ -499,10 +540,12 @@ servers to bridge the gap between local code and the tools I use every day:
 Running every simple command through top-tier frontier models is slow and
 expensive. My setup enforces a bit of financial and token discipline:
 
-- **Model Tiering**: Mechanical tasks (searching files, drafting changelogs,
-  running tests) default to fast, cheap models like Gemini Flash or Claude
-  Haiku. Heavy reasoning models are kept for architecture, gnarly debugging, and
-  grilling.
+- **Model Tiering**: Subagent models are chosen by what a miss would cost.
+  Mechanical work (searching files, bulk reads, formatting, drafting prose)
+  runs on the cheapest tier, building from a finished task list (`next-task`,
+  `next-slice`) uses a moderate tier, and judgment-heavy work (code and security
+  review, root-cause diagnosis, architecture, and grilling) stays on the session
+  model or better.
 - **[`pi-subagents`](https://github.com/Integralist/pi-subagents)**: An
   extension I built to run isolated subagents in the same process. Each subagent
   gets its own context window and tool allowlist, so a deep investigation costs
@@ -538,7 +581,7 @@ model like GPT Luna on `medium` effort makes the whole flow significantly
 faster (and cheaper).
 
 You might also wonder whether having an agent create branches, commit code, and
-draft PRs is complete overkill. Personally, I don't think so. Crafting
+open PRs is complete overkill. Personally, I don't think so. Crafting
 descriptive branch names, staging logical commits with useful context, and
 writing PR descriptions that clearly outline the problem, solution, and
 supporting diagrams takes genuine effort and mental bandwidth. Offloading that
