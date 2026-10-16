@@ -37,7 +37,7 @@ Deployed via Netlify on push to `main` (`netlify.toml` runs `make run`).
 
 ## Writing style
 
-MANDATORY: Load and apply the `integralist-voice` skill (`~/.agents/skills/integralist-voice/SKILL.md`)
+MANDATORY: Load and apply the `voice-integralist` skill (`~/.agents/skills/voice-integralist/SKILL.md`)
 whenever writing, rewriting, or editing content across the site (`content/posts/`, `content/pages/`).
 
 When editing or rewriting blog content, follow these rules:
