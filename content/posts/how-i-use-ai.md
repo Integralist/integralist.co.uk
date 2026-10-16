@@ -353,7 +353,7 @@ When the code is tested and clean, shipping is a deterministic, mechanical step.
 - **`branch`**: Cuts a feature branch using session context and standard naming.
 - **`commit`**: Stages and groups files sensibly, enforcing titles that explain
   why the change matters rather than listing raw mechanical steps.
-- **`draft-pr`**: Generates a concise pull request with clear Problem and
+- **`open-pr`**: Generates a concise pull request with clear Problem and
   Solution sections, consequence-driven titles, and load-bearing emoji.
 - **`stacked-prs`**: Coordinates dependent PR chains with the official
   `gh-stack` CLI extension, mapping vertical slices from `to-plan` directly into
