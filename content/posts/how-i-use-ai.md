@@ -40,7 +40,7 @@ headaches under the hood and wasn't going to work out long term.
 
 So I moved over to the Pi harness instead. I still wanted deeper capabilities
 like subagent orchestration
-([`pi-subagents`](https://github.com/Integralist/pi-subagents)), better stauts
+([`pi-subagents`](https://github.com/Integralist/pi-subagents)), better status
 telemetry ([`pi-statusbar`](https://github.com/Integralist/pi-statusbar)),
 transcript highlighting
 ([`pi-transcript-enhancer`](https://github.com/Integralist/pi-transcript-enhancer)),
@@ -173,8 +173,11 @@ session.
   nonsense. Lead with the direct answer.
 - **Keep it brief:** Shortest complete response wins. Cap lists at around five
   items and group them by priority (see also my
-  [voice-adhd](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/voice-adhd/SKILL.md)
-  skill).
+  [voice-adhd](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/voice-adhd/SKILL.md),
+  [summarize-for-adhd](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/summarize-for-adhd/SKILL.md)
+  and
+  [summarize-for-product](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/summarize-for-product/SKILL.md)
+  skills that are all related to communication and tone of voice).
 - **Bound the steps:** If a task takes multiple steps, number them upfront so I
   know where we are. My
   [`pi-transcript-enhancer`](https://github.com/Integralist/pi-transcript-enhancer)
@@ -195,7 +198,11 @@ session.
   [go-testing](https://github.com/Integralist/agent-skills/tree/main/.agents/skills/go-testing)
   skill).
 - **Simplicity over layers:** I prefer solving problems by removing components
-  rather than stacking abstractions or wrapper functions.
+  rather than stacking abstractions or wrapper functions (see my
+  [code-module-design](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/code-module-design/SKILL.md)
+  and
+  [code-module-review](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/code-module-review/SKILL.md)
+  skills).
 - **Cite actual sources:** Never guess an API signature or config header from
   vague memory. Cite the file and line number
   (`internal/parser/frontmatter.go:42`), or explicitly flag it as an unverified
@@ -448,7 +455,9 @@ critically evaluating the feedback agents give you.
   diagram when there’s a useful flow to show and references to the sources. It
   explains behaviour and purpose rather than hunting for defects or judging
   whether a change should merge. For a PR, it can also draft a clarification
-  comment for the author, but posting needs separate approval.
+  comment for the author, but posting needs separate approval (see also my
+  [wait-what](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/wait-what/SKILL.md)
+  skill).
 
 ### 🚢 Phase 5: Shipping Without the Drama
 
@@ -626,6 +635,11 @@ expensive. My setup enforces a bit of financial and token discipline:
   atomically rewrites the session's `.jsonl` file and uses a context hook to
   keep the live LLM payload trimmed, saving tokens and stopping annoying
   compaction loops without losing the running session.
+- **[`pi-auto-model`](https://github.com/Integralist/pi-auto-model)**: An
+  extension that routes each task tier to a configured model and reasoning
+  effort, using task metadata where available and a classifier otherwise. This
+  lets me use cheaper models and lower effort for simpler tasks, rather than
+  spending frontier-model prices on everything.
 - **[`model-stats`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/model-stats/SKILL.md)**:
   A skill that parses local logs across every harness I use (Claude Code, Pi,
   Codex, OpenCode, Gemini CLI, Copilot CLI) and renders an interactive HTML
