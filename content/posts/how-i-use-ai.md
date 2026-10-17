@@ -55,6 +55,14 @@ in-place context shaking
 ([`pi-context-shake`](https://github.com/Integralist/pi-context-shake)). So I
 built extensions for them!
 
+I also wanted Pi to feel a bit less noisy while it was working. In Claude Code,
+I'd already made a custom mod to keep the useful progress visible, so I built
+[`pi-clean-view`](https://github.com/Integralist/pi-clean-view) to bring that
+experience to Pi. It hides tool calls and output behind a checklist, with
+progress meters and status labels like "Needs you", "Stuck", and "All done".
+Pressing `Ctrl+O` brings the hidden details back, and a plan-first gate stops
+other tools running until a plan exists.
+
 Already though you can see the problem. Right now, the industry doesn't have a
 cross-harness standard for runtime extensions. If you want rich runtime features
 like subagents or custom terminal UI, you inevitably have to write against
