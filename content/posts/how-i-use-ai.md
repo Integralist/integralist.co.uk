@@ -40,8 +40,10 @@ headaches under the hood and wasn't going to work out long term.
 
 So I moved over to the Pi harness instead. I still wanted deeper capabilities
 like subagent orchestration
-([`pi-subagents`](https://github.com/Integralist/pi-subagents)), better status
-telemetry ([`pi-statusbar`](https://github.com/Integralist/pi-statusbar)),
+([`pi-subagents`](https://github.com/Integralist/pi-subagents)), prompt history
+search
+([`pi-prompt-history`](https://github.com/Integralist/pi-prompt-history)),
+better status telemetry ([`pi-statusbar`](https://github.com/Integralist/pi-statusbar)),
 transcript highlighting
 ([`pi-transcript-enhancer`](https://github.com/Integralist/pi-transcript-enhancer)),
 side conversations ([`pi-btw`](https://github.com/Integralist/pi-btw)), inline
@@ -50,7 +52,7 @@ skill argument hints
 declarative event hooks
 ([`pi-event-hooks`](https://github.com/Integralist/pi-event-hooks)), and
 in-place context shaking
-([`pi-context-shake`](https://github.com/Integralist/pi-context-shake). So I
+([`pi-context-shake`](https://github.com/Integralist/pi-context-shake)). So I
 built extensions for them!
 
 Already though you can see the problem. Right now, the industry doesn't have a
@@ -143,6 +145,17 @@ aliases onto shell commands from `~/.pi/agent/hooks.json` or `.pi/hooks.json`.
 Hooks can also help block risky calls (like `git push --force` or touching
 `.env`) by returning an exit code `2`, or mutating arguments on the fly, or
 trigger formatters on tool completion without maintaining separate extensions.
+
+Then there's prompt history. Claude Code keeps a persistent, searchable
+history across sessions, so you can easily pull up prompts you ran earlier.
+In Pi, arrow history is scoped strictly to the active session. The second you
+start a new session or switch branches, you're back to retyping past prompts,
+slash commands, or shell invocations from memory. To fix that, I built
+[`pi-prompt-history`](https://github.com/Integralist/pi-prompt-history). It
+brings readline-style `Ctrl+R` reverse-search across the active session, the
+current project, or all historical sessions in `~/.pi/agent/sessions/`. It
+normalises expanded skills back to `/skill:<name>` calls, deduplicates repeated
+prompts, and drops the match straight back into the editor.
 
 Although I typically only really use the Pi harness now, I like to keep my
 agent-skills working across multiple harnesses, and so my repo has a handy
