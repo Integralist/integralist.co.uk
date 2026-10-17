@@ -21,7 +21,7 @@ All of this lives in my
 [`agent-skills`](https://github.com/Integralist/agent-skills) repo. Here is a
 look at the mental model, the setup, and how work actually gets done.
 
-## 🔌 Don't Marry Your Harness (Stay Agnostic)
+## 🔌 Don't Marry Your Harness
 
 The CLI agent ecosystem moves ridiculous fast. Every few months there's another
 tool or harness turning up: Claude Code, Pi, Gemini CLI, OpenCode, Copilot CLI,
@@ -38,30 +38,38 @@ sitting stale and an unresponsive maintainer, none of it got merged. It wasn't
 for lack of trying, but I quickly realised OpenCode had too many architectural
 headaches under the hood and wasn't going to work out long term.
 
-So I moved over to the Pi harness instead. Naturally, I still wanted deeper
-capabilities like subagent orchestration, better terminal telemetry, transcript
-highlighting, side conversations, inline skill argument hints, declarative
-event hooks, and in-place context shaking. So I built extensions for them:
-[`pi-statusbar`](https://github.com/Integralist/pi-statusbar),
-[`pi-subagents`](https://github.com/Integralist/pi-subagents),
-[`pi-btw`](https://github.com/Integralist/pi-btw),
-[`pi-transcript-enhancer`](https://github.com/Integralist/pi-transcript-enhancer),
-[`pi-skill-argument-hints`](https://github.com/Integralist/pi-skill-argument-hints),
-[`pi-event-hooks`](https://github.com/Integralist/pi-event-hooks),
-and
-[`pi-context-shake`](https://github.com/Integralist/pi-context-shake).
+So I moved over to the Pi harness instead. I still wanted deeper capabilities
+like subagent orchestration
+([`pi-subagents`](https://github.com/Integralist/pi-subagents)), better stauts
+telemetry ([`pi-statusbar`](https://github.com/Integralist/pi-statusbar)),
+transcript highlighting
+([`pi-transcript-enhancer`](https://github.com/Integralist/pi-transcript-enhancer)),
+side conversations ([`pi-btw`](https://github.com/Integralist/pi-btw)), inline
+skill argument hints
+([`pi-skill-argument-hints`](https://github.com/Integralist/pi-skill-argument-hints)),
+declarative event hooks
+([`pi-event-hooks`](https://github.com/Integralist/pi-event-hooks)), and
+in-place context shaking
+([`pi-context-shake`](https://github.com/Integralist/pi-context-shake). So I
+built extensions for them!
 
-There is an important distinction to make here, though. Right now, the industry
-doesn't have a cross-harness standard for runtime extensions. If you want rich
-runtime features like subagents or custom terminal UI, you inevitably have to
-write against whatever plugin API your harness provides. If I switch harnesses
-down the road, that glue code is what I'd have to adapt.
+Already though you can see the problem. Right now, the industry doesn't have a
+cross-harness standard for runtime extensions. If you want rich runtime features
+like subagents or custom terminal UI, you inevitably have to write against
+whatever plugin API your harness provides (which is what I've done... _twice
+now_!). If I switch harnesses (again) later down the road, that glue code is
+what I'd have to adapt. It's not trivial to design or write either. Even with
+agents doing all the work, it's still time and money/tokens, and effort to test
+and validate.
+
+## 📐 Standardisation
 
 What *can* be standardised, however, is the actual intelligence: the prompt
-logic, workflows, and operational conventions. The emerging "Skills" format
-gives us a portable way to do that. By keeping the core skills and conventions
-strictly harness-agnostic, the way I actually work isn't locked into Pi, Claude
-Code, or anything else.
+logic, workflows, and operational conventions. The
+"[Skills](https://agentskills.io/)" format gives us a portable way to do that.
+By keeping the core skills and conventions strictly harness-agnostic, the way I
+actually _work_ isn't locked into Pi, Claude Code, or anything else (even if
+some of the _niceties_ of the UI experience I've developed are).
 
 My `agent-skills` repo reflects this separation with a single source of truth:
 
@@ -89,44 +97,63 @@ Code gets access via a symlink (`.claude/skills -> ../.agents/skills`), while Pi
 or Gemini CLI load them straight from `~/.agents/skills/`.
 
 To stop skills turning into bloated, harness-specific walls of text, I enforce
-strict authoring rules via `writing-for-agents` and use `skill-rewrite` to keep
-each skill short enough to read in one pass. Skill descriptions stick strictly
-to trigger conditions (when to load the skill, not a duplicate summary of how it
-works), avoid harness-only shell-injection syntax, and extract shared contracts
-(`SPEC-FORMAT.md`, `ADR-FORMAT.md`, `PR-DESCRIPTION.md`, `BUILD-ITEM.md`) into
-`.agents/skills/shared/` so linked workflows never drift.
+strict authoring rules via
+[`writing-for-agents`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/writing-for-agents/SKILL.md)
+(I also wrote
+[`skill-rewrite`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/skill-rewrite/SKILL.md)
+after discovering what a poor job I had done with some of them 😅) to keep each
+skill short enough to read in one pass. It's important to realise that, yes, in
+our upcoming near future, agents are reading everything instead of us, but it's
+important for us to understand EXACTLY what we're asking of those agents and
+it's often too easy to just ask an agent "hey, create a new skill to do X"
+without keeping tight reigns on what is being produced. Every unmonitored input
+and output is a token, and that means time and money.
+
+Skill's have a frontmatter field called `description` which is terribly named
+because essentially it is describing the _trigger_ conditions (when to load the
+skill, not a duplicate summary of how it works). Often I'll find that multiple
+skills benefit (like code) from specific instructions or formats to be extracted
+into shared contracts (`SPEC-FORMAT.md`, `ADR-FORMAT.md`, `PR-DESCRIPTION.md`,
+`BUILD-ITEM.md`). I place these into `.agents/skills/shared/` so linked
+workflows never drift.
 
 When Claude Code supports handy features like path-scoped rules in
 `.claude/rules/`, I generate them automatically from the canonical conventions
 skills (`conventions-go`, `conventions-python`, and so on) via `make rules`.
 
-Similarly, Claude Code supports an `argument-hint` frontmatter key in
-`SKILL.md` to show syntax hints when typing slash commands (such as
-`[--edit] [--days N]` for `talking-points`). Pi does not display these
-natively, so I wrote
+Similarly, Claude Code supports an `argument-hint` frontmatter key in `SKILL.md`
+to show syntax hints when typing slash commands (such as `[--edit] [--days N]`
+for my
+[`talking-points`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/talking-points/SKILL.md)
+skill). Pi does not display these natively, so I wrote
 [`pi-skill-argument-hints`](https://github.com/Integralist/pi-skill-argument-hints)
-to bridge the gap. When typing `/skill:<name>`, it reads the frontmatter
+to bridge the gap. So now, when typing `/skill:<name>`, it reads the frontmatter
 verbatim and renders a muted inline hint right after the cursor that auto-hides
 the moment you type an argument or space.
 
-The same story played out with lifecycle hooks. Claude Code supports
-declarative shell hooks (`PreToolUse`, `PostToolUse`, `Notification`) in JSON,
-making it trivial to block dangerous commands, format files after edits, or pop
-desktop alerts. Pi has a powerful event API (`pi.on(...)`), but writing a full
-TypeScript extension just to run a one-line bash script is overkill. I built
+The same story played out with lifecycle hooks. Claude Code supports declarative
+shell hooks (`PreToolUse`, `PostToolUse`, `Notification`) in JSON, making it
+trivial to block dangerous commands, format files after edits, or pop desktop
+alerts. Pi has a powerful event API (`pi.on(...)`), but writing a full
+TypeScript extension just to run a one-line bash script is overkill for most
+people (but not me 😅). I built
 [`pi-event-hooks`](https://github.com/Integralist/pi-event-hooks) to bring
 declarative JSON hooks to Pi. It maps both native Pi events and Claude Code
 aliases onto shell commands from `~/.pi/agent/hooks.json` or `.pi/hooks.json`.
-Hooks can block risky calls with exit code `2` (like `git push --force` or
-touching `.env`), mutate arguments on the fly, or trigger formatters on tool
-completion without maintaining separate extensions.
+Hooks can also help block risky calls (like `git push --force` or touching
+`.env`) by returning an exit code `2`, or mutating arguments on the fly, or
+trigger formatters on tool completion without maintaining separate extensions.
+
+Although I typically only really use the Pi harness now, I like to keep my
+agent-skills working across multiple harnesses, and so my repo has a handy
+installation script that synchronises everything:
 
 ```bash
 # Install everything across all harnesses cleanly
 make install
 ```
 
-`make install` uses
+`make install` also uses
 [`scripts/op-inject.sh`](https://github.com/Integralist/agent-skills/blob/main/scripts/op-inject.sh)
 to inject 1Password secrets for API keys and MCP configs at install time. If
 1Password isn't signed in, it quietly skips those injections instead of
@@ -145,15 +172,17 @@ session.
 - **Cut the sycophancy:** Drop the "I would be delighted to help with that!"
   nonsense. Lead with the direct answer.
 - **Keep it brief:** Shortest complete response wins. Cap lists at around five
-  items and group them by priority.
+  items and group them by priority (see also my
+  [voice-adhd](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/voice-adhd/SKILL.md)
+  skill).
 - **Bound the steps:** If a task takes multiple steps, number them upfront so I
   know where we are. My
   [`pi-transcript-enhancer`](https://github.com/Integralist/pi-transcript-enhancer)
   extension parses progress labels (like `Step X/Y: <summary>`) and renders them
   as high-contrast gold blocks in the TUI, keeping long sessions scannable at a
   glance without modifying the raw message sent to the model.
-- **No robotic fluff:** Drop literary flourishes and hedging throat-clearing.
-  Keep the tone warm, plainspoken, and peer-to-peer.
+- **No robotic fluff:** Drop literary flourishes. Keep the tone warm,
+  plainspoken, and peer-to-peer.
 - **Load-bearing emoji only:** Emoji are fine if they signal status faster than
   words (✅ pass, ❌ fail, ⚠️ caution). Otherwise keep them out of running
   prose and code.
@@ -161,8 +190,10 @@ session.
 ### 🧪 2. Engineering Discipline & TDD
 
 - **Strict TDD:** No production code without a failing test first. Stub first,
-  prove failure on assertion (not compilation failure), write the minimum code
-  to pass, and delete assertions that survive an inverted requirement.
+  prove failure on assertion (not compilation failure), write the minimum code to
+  pass, and delete assertions that survive an inverted requirement (see also my
+  [go-testing](https://github.com/Integralist/agent-skills/tree/main/.agents/skills/go-testing)
+  skill).
 - **Simplicity over layers:** I prefer solving problems by removing components
   rather than stacking abstractions or wrapper functions.
 - **Cite actual sources:** Never guess an API signature or config header from
@@ -195,20 +226,29 @@ Engineering track: architect (bootstrap → research) ───┘
 
 Before touching code, the idea needs stress-testing.
 
-- **`clarify`**: Digs into what you actually want when a prompt is too vague. It
-  asks targeted questions to remove ambiguity upfront.
-- **`grilling`** (and `grill-me`): Puts the idea through an adversarial
-  interrogation. The agent relentlessly challenges your assumptions, edge
-  cases, and architecture choices across the design tree.
-- **`perspectives` & `decide`**: Evaluates alternatives through structured
-  lenses (risks, benefits, costs) and produces a durable decision memo or ADR
-  (Architecture Decision Record).
-- **`consensus`**: Drives cross-model debate through gated discussion rounds,
-  preserving healthy dissent when evaluating high-stakes architectural choices.
-- **`arena`**: Runs parallel candidate attempts across multiple models for
-  tricky pieces where a single shot risks locking in the wrong shape. It scores
-  candidates against a concrete rubric via an independent cross-judge, picks a
-  base, and borrows the best bits from the runners-up.
+- [**`clarify`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/clarify/SKILL.md):
+  Digs into what you actually want when a prompt is too vague. It asks targeted
+  questions to remove ambiguity upfront.
+- [**`grilling`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/grilling/SKILL.md)
+  (and
+  [`grill-me`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/grill-me/SKILL.md),
+  [`grill-with-docs`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/grill-with-docs/SKILL.md)):
+  Puts the idea through an adversarial interrogation. The agent relentlessly
+  challenges your assumptions, edge cases, and architecture choices across the
+  design tree.
+- [**`perspectives`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/perspectives/SKILL.md)
+  &
+  [**`decide`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/decide/SKILL.md):
+  Evaluates alternatives through structured lenses (risks, benefits, costs) and
+  produces a durable decision memo or ADR (Architecture Decision Record).
+- [**`consensus`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/consensus/SKILL.md):
+  Drives cross-model debate through gated discussion rounds, preserving healthy
+  dissent when evaluating high-stakes architectural choices.
+- [**`arena`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/arena/SKILL.md):
+  Runs parallel candidate attempts across multiple models for tricky pieces where
+  a single shot risks locking in the wrong shape. It scores candidates against a
+  concrete rubric via an independent cross-judge, picks a base, and borrows the
+  best bits from the runners-up.
 
 ### 📐 Phase 2: Architecture and Planning (Before the Code Rot)
 
@@ -224,14 +264,15 @@ initiatives, and `architect` for engineering-led features.
 #### Cross-functional alignment: `pdd`
 
 When Product and Engineering need to agree before anyone touches code, I use
-`pdd` (Project, Discovery, Design). It treats governance as a series of three
+[`pdd`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/pdd/SKILL.md)
+(Project, Discovery, Design). It treats governance as a series of three
 explicit, human-in-the-loop approval gates:
 
 1. **Project (`project.md`)**: Agrees on what the initiative actually is, why
    it matters, and when milestones should land.
-1. **Discovery (`discovery.md`)**: Evaluates solution directions and trade-offs
+2. **Discovery (`discovery.md`)**: Evaluates solution directions and trade-offs
    for a milestone without committing to implementation details.
-1. **Design (`design.md`)**: Documents the approved system-level architecture
+3. **Design (`design.md`)**: Documents the approved system-level architecture
    thoroughly enough for Product, Engineering, and reviewers to sign off.
 
 Unlike most agent skills that run through to the end autonomously, `pdd` stops
@@ -241,9 +282,11 @@ off.
 
 Crucially, `design.md` is not an implementation plan (`plan.md`). It answers
 what system solution is being approved, not how an engineer will slice the pull
-requests. Once Design is approved, `pdd` hands off to `architect` starting at
-its Spec step, skipping bootstrap and research so both tracks share one
-engineering chain without duplicating the discovery you just agreed upon.
+requests. Once Design is approved, `pdd` hands off to
+[`architect`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/architect/SKILL.md)
+(see following section) starting at its Spec step, skipping bootstrap and
+research so both tracks share one engineering chain without duplicating the
+discovery you just agreed upon.
 
 #### Engineering-led coordination: `architect`
 
@@ -254,12 +297,20 @@ comes in.
 Where `pdd` is a gated approval workflow for cross-functional consensus,
 `architect` is a thin six-step coordinator for engineering delivery. It
 sequences other skills in a single `projects/<yyyy-mm-dd>-<slug>/` folder:
-bootstrapping project rules (`agents-md`, plus `clarify` if the idea is vague),
-deep research (`research`), writing the functional specification (`to-spec`),
+bootstrapping project rules
+([`agents-md`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/agents-md/SKILL.md),
+plus `clarify` if the idea is vague), deep research
+([`research`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/research/SKILL.md)),
+writing the functional specification
+([`to-spec`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/to-spec/SKILL.md)),
 adversarial stress-testing (`grill-with-docs`), implementation planning
-(`to-plan` followed by `to-adr` to record genuine architectural decisions, and
-an optional `to-prd` when the project didn't start from a PDD Design), and
-finally handing off to execution.
+([`to-plan`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/to-plan/SKILL.md)
+followed by
+[`to-adr`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/to-adr/SKILL.md)
+to record genuine architectural decisions, and an optional
+[`to-prd`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/to-prd/SKILL.md)
+when the project didn't start from a PDD Design), and finally handing off to
+execution.
 
 If `pdd` is about deciding what to build with Product, `architect` is about
 taking an engineering idea (or an approved PDD Design) and generating the
@@ -271,12 +322,15 @@ Regardless of whether an initiative starts in `pdd` or `architect`, both tracks
 converge on the same engineering delivery pipeline under
 `projects/<yyyy-mm-dd>-<slug>/`:
 
-- **`to-spec` & `spec-delta`**: `to-spec` writes `spec.md` with user stories
-  (framed with `voice-product`), Gherkin acceptance criteria, and testing seams.
-  Current truth lives in `docs/specs/<capability>.md` and is validated in CI;
-  whenever a change alters existing behaviour, `to-spec` and `spec-delta` record
-  a `Behavioural Delta` against the pinned baseline so the project folder keeps
-  the history while the living spec moves on.
+- **`to-spec` &
+  [`spec-delta`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/spec-delta/SKILL.md)**:
+  `to-spec` writes `spec.md` with user stories (framed with
+  [`voice-product`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/voice-product/SKILL.md)),
+  Gherkin acceptance criteria, and testing seams. Current truth lives in
+  `docs/specs/<capability>.md` and is validated in CI; whenever a change alters
+  existing behaviour, `to-spec` and `spec-delta` record a `Behavioural Delta`
+  against the pinned baseline so the project folder keeps the history while the
+  living spec moves on.
 - **`to-plan`**: Breaks the specification (or a session's discussion when a spec
   isn't needed) into vertical implementation slices (`plan.md`) with `Blocked by`
   dependencies, exact `Consumes`/`Produces` interface signatures, verifiable
@@ -292,8 +346,11 @@ converge on the same engineering delivery pipeline under
 #### Automating the handoff: `execute-plan`
 
 Until now, I've described a manual loop: run `to-tasks` for a slice, then start
-`next-task` or `next-slice`, and repeat. It works, but I'm the one joining the
-steps up and keeping track of what comes next.
+[`next-task`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/next-task/SKILL.md)
+or
+[`next-slice`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/next-slice/SKILL.md),
+and repeat. It works, but I'm the one joining the steps up and keeping track of
+what comes next.
 
 [`execute-plan`](https://github.com/Integralist/agent-skills/blob/4601fe188be2b7a4001c40197eb533491f01570d/.agents/skills/execute-plan/SKILL.md)
 turns that choreography into one coordinated workflow. I give it an existing
@@ -338,44 +395,52 @@ With tasks compiled, execution becomes fast and predictable.
   through an entire slice, verifies every milestone outcome against the full
   test suite, and offers one commit at the end.
 - **`conventions-*` & `go-testing`**: Enforces strict language conventions
-  (`conventions-go`, `conventions-python`, `conventions-sql`, and others) and
-  testing discipline (table-driven tests, `t.Context()`, bounded waits, public
-  API testing, `godog` Gherkin acceptance test wiring, and zero unkeyed struct
-  literals).
-- **`unslop`**: Strips AI tells, buzzwords, puffery, and robotic cadence from
-  documentation and prose to restore a clean, authentic human voice.
-- **`cleanup`**: Runs a background audit hunting for AI-generated clutter, dead
-  code, and unnecessary abstractions.
-- **`precedent`**: Audits newly written code against existing conventions in the
-  codebase, flagging any inconsistencies in naming, error handling, or API
-  signatures.
+  ([`conventions-go`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/conventions-go/SKILL.md),
+  [`conventions-python`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/conventions-python/SKILL.md),
+  [`conventions-sql`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/conventions-sql/SKILL.md),
+  and others) and testing discipline (table-driven tests, `t.Context()`, bounded
+  waits, public API testing, `godog` Gherkin acceptance test wiring, and zero
+  unkeyed struct literals).
+- [**`unslop`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/unslop/SKILL.md):
+  Strips AI tells, buzzwords, puffery, and robotic cadence from documentation and
+  prose to restore a clean, authentic human voice.
+- [**`cleanup`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/cleanup/SKILL.md):
+  Runs a background audit hunting for AI-generated clutter, dead code, and
+  unnecessary abstractions.
+- [**`precedent`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/precedent/SKILL.md):
+  Audits newly written code against existing conventions in the codebase, flagging
+  any inconsistencies in naming, error handling, or API signatures.
 
 ### 🧐 Phase 4: Sceptical Review (Don't Be a Pushover)
 
 Reviewing code with AI works both ways: having agents review code, and
 critically evaluating the feedback agents give you.
 
-- **`code-review`**: Gathers the diff and intent documents (`Execution-Plan`
-  commit trailers, active project specs and plans, and living specs in
-  `docs/specs/`), then runs parallel subagents across up to five profiles
-  (behaviour and tests, security, reliability and rollout, maintainability and
-  conventions, plus spec and plan adherence). Parallel read-only verifier
-  subagents then challenge every finding and drop anything they can't prove.
-  Every reviewer and verifier runs on the session model or better, because a
-  missed defect costs more than the tokens.
-- **`is-it-safe`**: Rather than general reviews or speculative risk matrices,
-  this runs an adversarial impact analysis answering one question: what is the
-  worst credible outcome if this exact diff is merged? It uses an independent
-  max-effort subagent pass to trace a concrete failure path (trigger, changed
-  behaviour, blast radius) and test safeguards before returning a clear verdict
-  (🟢 `PROCEED`, 🟡 `HOLD`, 🔴 `STOP`). It catches nasty blast-radius surprises
-  so changes ship safely without relying solely on green tests.
-- **`code-review-feedback` & `security-review-feedback`**: When an AI reviewer
-  (or static analyser) flags an issue, you shouldn't reflexively accept it.
-  These skills force the agent to evaluate the claim with technical rigour. Is
-  the vulnerability actually reachable? Is the suggested refactor introducing
-  hidden complexity? If a suggestion is rubbish, reject it with proof.
-- **`explain-code`**:
+- [**`code-review`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/code-review/SKILL.md):
+  Gathers the diff and intent documents (`Execution-Plan` commit trailers, active
+  project specs and plans, and living specs in `docs/specs/`), then runs parallel
+  subagents across up to five profiles (behaviour and tests, security, reliability
+  and rollout, maintainability and conventions, plus spec and plan adherence).
+  Parallel read-only verifier subagents then challenge every finding and drop
+  anything they can't prove. Every reviewer and verifier runs on the session model
+  or better, because a missed defect costs more than the tokens.
+- [**`is-it-safe`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/is-it-safe/SKILL.md):
+  Rather than general reviews or speculative risk matrices, this runs an
+  adversarial impact analysis answering one question: what is the worst credible
+  outcome if this exact diff is merged? It uses an independent max-effort subagent
+  pass to trace a concrete failure path (trigger, changed behaviour, blast radius)
+  and test safeguards before returning a clear verdict (🟢 `PROCEED`, 🟡 `HOLD`,
+  🔴 `STOP`). It catches nasty blast-radius surprises so changes ship safely
+  without relying solely on green tests.
+- [**`code-review-feedback`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/code-review-feedback/SKILL.md)
+  &
+  [**`security-review-feedback`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/security-review-feedback/SKILL.md):
+  When an AI reviewer (or static analyser) flags an issue, you shouldn't
+  reflexively accept it. These skills force the agent to evaluate the claim with
+  technical rigour. Is the vulnerability actually reachable? Is the suggested
+  refactor introducing hidden complexity? If a suggestion is rubbish, reject it
+  with proof.
+- [**`explain-code`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/explain-code/SKILL.md):
   Not every question about a PR or diff is a request for a review. Sometimes I
   just want to understand what changed, why it matters, and how it fits into an
   unfamiliar system. The skill gives newcomers a concise Problem/Solution
@@ -389,18 +454,22 @@ critically evaluating the feedback agents give you.
 
 When the code is tested and clean, shipping is a deterministic, mechanical step.
 
-- **`branch`**: Cuts a feature branch using session context and standard naming.
-- **`commit`**: Stages and groups files sensibly, enforcing titles that explain
-  why the change matters rather than listing raw mechanical steps.
-- **`open-pr`**: Generates a ready-for-review pull request with clear Problem
-  and Solution sections, consequence-driven titles, and load-bearing emoji from
-  a shared `PR-DESCRIPTION.md` contract.
-- **`stacked-prs`**: Coordinates dependent PR chains with the official
-  `gh stack` CLI extension, opening each layer ready for review (`--auto --open`)
-  with the same shared PR description rules.
-- **`bcp`**: Thin coordinator that runs `branch`, `commit`, and `open-pr` (or
-  hands off to `stacked-prs` when `gh stack view` finds an active stack) in one
-  command.
+- [**`branch`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/branch/SKILL.md):
+  Cuts a feature branch using session context and standard naming.
+- [**`commit`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/commit/SKILL.md):
+  Stages and groups files sensibly, enforcing titles that explain why the change
+  matters rather than listing raw mechanical steps.
+- [**`open-pr`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/open-pr/SKILL.md):
+  Generates a ready-for-review pull request with clear Problem and Solution
+  sections, consequence-driven titles, and load-bearing emoji from a shared
+  `PR-DESCRIPTION.md` contract.
+- [**`stacked-prs`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/stacked-prs/SKILL.md):
+  Coordinates dependent PR chains with the official `gh stack` CLI extension,
+  opening each layer ready for review (`--auto --open`) with the same shared PR
+  description rules.
+- [**`bcp`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/bcp/SKILL.md):
+  Thin coordinator that runs `branch`, `commit`, and `open-pr` (or hands off to
+  `stacked-prs` when `gh stack view` finds an active stack) in one command.
 
 ### 🧭 Choosing the Right Analysis Skill
 
@@ -506,11 +575,12 @@ than dumping raw hits, it clusters messages by topic and scores them by
 frequency, breadth across teammates, recency, and emotional intensity
 (weighting your own complaints highest as your strongest signal).
 
-Crucially, it tags the audience for each item (`retro` for public channel
-topics, `1:1` for private DMs or personal behaviour). It prints a ranked
-terminal summary with the signal and a concrete proposal to bring, while keeping
-everything local: basic config on disk, messages in chat, DMs paraphrased, and
-credentials redacted on the fly.
+Crucially, it tags the audience for each item
+([`retro`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/retro/SKILL.md)
+for public channel topics, `1:1` for private DMs or personal behaviour). It
+prints a ranked terminal summary with the signal and a concrete proposal to
+bring, while keeping everything local: basic config on disk, messages in chat,
+DMs paraphrased, and credentials redacted on the fly.
 
 ## 🌐 MCP & Wiring Up Context
 
@@ -562,9 +632,9 @@ expensive. My setup enforces a bit of financial and token discipline:
   dashboard showing token consumption, spending, and reasoning effort by
   provider, model, and project. When a harness doesn't log costs directly, it
   estimates them using LiteLLM pricing data.
-- **`caveman`**: An ultra-compressed communication mode (~75% token reduction)
-  for rapid back-and-forth debugging when full conversational prose is just in
-  the way.
+- [**`caveman`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/caveman/SKILL.md):
+  An ultra-compressed communication mode (~75% token reduction) for rapid
+  back-and-forth debugging when full conversational prose is just in the way.
 
 ## 🎬 Examples in Action
 
