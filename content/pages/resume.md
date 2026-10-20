@@ -275,6 +275,14 @@ channels...
 	gratifying.</p>
 </details>
 
+<details class="testimonial">
+	<summary>Senior SRE - Certainly Team at Fastly</summary>
+	<p><i>oh hey, slack says it's 6 years! happy fastlyversary :) while we have not worked directly together, I always appreciate your input and consideration when I see it!</i></p>
+	<p><small>Certainly Team at Fastly</small></p>
+	<p class="review">Not much to say here, other than it's lovely to have
+	someone reach out to say they see you and appreciate you 💖</p>
+</details>
+
 <hr>
 
 ## 💡 Summary
