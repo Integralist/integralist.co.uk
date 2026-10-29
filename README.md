@@ -35,7 +35,7 @@ high-performance, SEO-friendly static website.
    This compiles the SSG and generates the static files into the `public/`
    directory.
 
-1. **Preview the site**:
+2. **Preview the site**:
 
    ```bash
    make serve
@@ -44,13 +44,13 @@ high-performance, SEO-friendly static website.
    This builds the site and starts a local development server at
    `http://localhost:8080`.
 
-1. **Run tests**:
+3. **Run tests**:
 
    ```bash
    make test
    ```
 
-1. **Clean build artifacts**:
+4. **Clean build artifacts**:
 
    ```bash
    make clean
@@ -143,6 +143,13 @@ GitHub-flavored alert blockquotes are supported:
 ```
 
 Supported types: `NOTE`, `TIP`, `IMPORTANT`, `WARNING`, `CAUTION`.
+
+## Image Processing
+
+```
+magick ~/Downloads/<NAME>.png -quality 85 assets/img/<NAME>.jpg
+magick ~/Pictures/"1. Example.png" -strip -resize 55% ~/Pictures/"1. Example (small).png"
+```
 
 ## Agent and LLM Support
 
