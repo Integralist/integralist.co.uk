@@ -151,7 +151,7 @@ channels...
 
 <details class="testimonial">
 	<summary>Director of Developer Experience at Fastly</summary>
-	<p><i>Look… that was f***ing impressive. 👏</i><br>Thank you so much!</p>
+	<p><i>Look… that was really impressive. 👏</i><br>Thank you so much!</p>
 	<p><small>-- Director of Developer Experience at Fastly.</small></p>
 	<p class="review">A customer was having issues with one of our tools when using Windows. Fastly pulled out all the stops to get me the access I needed to investigate and debug the issue properly and I was able to get a fix in place in a few hours, helping the customer realise what an asset Fastly is to their workflow.</p>
 </details>
