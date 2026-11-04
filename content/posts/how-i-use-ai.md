@@ -21,6 +21,9 @@ All of this lives in my
 [`agent-skills`](https://github.com/Integralist/agent-skills) repo. Here is a
 look at the mental model, the setup, and how work actually gets done.
 
+> [!NOTE]
+> AI likes emojis. Guess what... so do I. Get over it 😂
+
 ## 🔌 Don't Marry Your Harness
 
 The CLI agent ecosystem moves ridiculous fast. Every few months there's another
@@ -39,29 +42,29 @@ for lack of trying, but I quickly realised OpenCode had too many architectural
 headaches under the hood and wasn't going to work out long term.
 
 So I moved over to the Pi harness instead. I still wanted deeper capabilities
-like subagent orchestration
-([`pi-subagents`](https://github.com/Integralist/pi-subagents)), prompt history
-search
-([`pi-prompt-history`](https://github.com/Integralist/pi-prompt-history)),
-better status telemetry ([`pi-statusbar`](https://github.com/Integralist/pi-statusbar)),
-transcript highlighting
-([`pi-transcript-enhancer`](https://github.com/Integralist/pi-transcript-enhancer)),
-side conversations ([`pi-btw`](https://github.com/Integralist/pi-btw)), inline
-skill argument hints
-([`pi-skill-argument-hints`](https://github.com/Integralist/pi-skill-argument-hints)),
-declarative event hooks
-([`pi-event-hooks`](https://github.com/Integralist/pi-event-hooks)), and
-in-place context shaking
-([`pi-context-shake`](https://github.com/Integralist/pi-context-shake)). So I
+like subagent orchestration, prompt history
+search, better status telemetry,
+transcript highlighting,side conversations, inline skill argument hints, declarative event hooks,and in-place context shaking. So I
 built extensions for them!
+
+> [!WARNING]
+> I'm a Go dev. Pi extensions are Typescript. So these extensions are totally vibe coded. Don't judge me. 
+
+- [`pi-subagents`](https://github.com/Integralist/pi-subagents)
+- [`pi-prompt-history`](https://github.com/Integralist/pi-prompt-history)
+- [`pi-statusbar`](https://github.com/Integralist/pi-statusbar)
+- [`pi-transcript-enhancer`](https://github.com/Integralist/pi-transcript-enhancer)
+- [`pi-btw`](https://github.com/Integralist/pi-btw)
+- [`pi-skill-argument-hints`](https://github.com/Integralist/pi-skill-argument-hints)
+- [`pi-event-hooks`](https://github.com/Integralist/pi-event-hooks)
+- [`pi-context-shake`](https://github.com/Integralist/pi-context-shake)
 
 I also wanted Pi to feel a bit less noisy while it was working. In Claude Code,
 I'd already made a custom mod to keep the useful progress visible, so I built
 [`pi-clean-view`](https://github.com/Integralist/pi-clean-view) to bring that
 experience to Pi. It hides tool calls and output behind a checklist, with
 progress meters and status labels like "Needs you", "Stuck", and "All done".
-Pressing `Ctrl+O` brings the hidden details back, and a plan-first gate stops
-other tools running until a plan exists.
+Pressing `Ctrl+Spacebar` reveals all the hidden details in a floating overlay.
 
 Already though you can see the problem. Right now, the industry doesn't have a
 cross-harness standard for runtime extensions. If you want rich runtime features
