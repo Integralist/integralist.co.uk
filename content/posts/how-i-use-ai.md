@@ -398,9 +398,9 @@ depends on chat history.
 
 The value isn't handing decisions to a cheaper model. It's avoiding the manual
 skill-to-skill handoffs while keeping verification and acceptance with the
-coordinator. I do give up some of the minute-by-minute control, and when I'm
-working manually I occasionally course-correct code to match my conventions or
-preferences. In practice, those tend to be small syntax or style adjustments,
+coordinator. ~~I do give up some of the minute-by-minute control~~I have a verification agent run to validate the code against my `convention-*` standards so I don't have to hand-hold every line of code; but occasionally when I'm
+working manually I like to course-correct code to match my conventions or
+preferences depending on what I'm working on. In practice, those tend to be small syntax or style adjustments,
 not problems with the code or the planned approach. So I can let the task loop
 run, review the final code and complete commit list, suggest any small edits,
 then decide whether to push or open a PR. That makes the overall flow faster
