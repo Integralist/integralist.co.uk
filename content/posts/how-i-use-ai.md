@@ -635,6 +635,58 @@ servers to bridge the gap between local code and the tools I use every day:
 > CLI templates (`.claude.json.tmpl`, `.copilot/mcp-config.json.tmpl`), ensuring
 > no secrets ever leak into version control.
 
+## 🕵️ Debugging Harnesses (What's on the Wire?)
+
+When you're writing custom extensions, designing skills, or debugging an agent
+that has gone off the rails, you quickly run into a brick wall: CLI harnesses
+love hiding the raw HTTP traffic behind friendly spinners and formatted TUI
+blocks.
+
+If an agent ignores a prompt constraint, mangles a tool call, or blows up its
+context window, you're left guessing. Did the harness inject a hidden system
+prompt? Did it truncate your messages? What did the model actually stream back
+before the harness parsed it?
+
+To see what is actually happening on the wire, I built
+[`ai-agent-request-logger`](https://github.com/integralist/ai-agent-request-logger).
+It is a local Go proxy on `127.0.0.1:8787` that sits between your agent and the
+model provider:
+
+```txt
+Your agent
+  -> local proxy on 127.0.0.1
+  -> your model provider over HTTPS
+  -> the response streams back to your agent
+```
+
+Run `ai-agent-request-logger`, pick your agent (Claude Code, Pi, Copilot CLI,
+OpenCode, Gemini CLI, or custom endpoints), and the wizard prints the launch
+command or config snippet. It forwards authentication headers unchanged and
+streams responses back immediately, so your normal login, usage limits, and
+billing still apply.
+
+For Claude Code, pointing traffic through the proxy is a one-liner:
+
+```bash
+ANTHROPIC_BASE_URL='http://localhost:8787' ENABLE_TOOL_SEARCH='true' claude
+```
+
+For Pi, you drop a `baseUrl` key into `~/.pi/agent/models.json` (the wizard gives
+you the exact snippet to merge).
+
+Every interaction gets saved to `.ai-agent-request-logger/logs/` (kept in
+`.gitignore`) with three files:
+
+- `.html`: a self-contained, styled browser view with system/light/dark modes,
+  numbered messages, linked tool definitions, and folded prompts and responses.
+  Common credential headers are masked automatically.
+- `.request.txt`: the exact raw request body bytes.
+- `.response.txt`: the exact raw response body bytes.
+
+Having a clean browser view of the exact JSON payload sent and received makes
+it trivial to spot prompt drift, malformed tool schemas, or unexpected harness
+injections without tearing your hair out.
+
 ## 💰 Keeping Costs Sane
 
 Running every simple command through top-tier frontier models is slow and
