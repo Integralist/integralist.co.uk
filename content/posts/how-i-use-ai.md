@@ -24,28 +24,32 @@ look at the mental model, the setup, and how work actually gets done.
 > [!NOTE]
 > AI likes emojis. Guess what... so do I. Get over it 😂
 
-## 🔌 Don't Marry Your Harness
+## 🔌 Engineering Around the Harness
 
-The CLI agent ecosystem moves ridiculous fast. Every few months there's another
-tool or harness turning up: Claude Code, Pi, Gemini CLI, OpenCode, Copilot CLI,
-and whatever else launched this morning. Tying your prompts, custom tools, and
-habits to one specific harness is a bad idea. The second you want to switch (or
-the project dies), you lose everything.
+There are only a handful of serious CLI agent harnesses out there: Claude Code,
+Pi, OpenCode, Gemini CLI, and Copilot CLI. Each makes different architectural
+trade-offs, and out of the box, none of them give you everything you want as an
+engineer. Rather than settling for whatever a harness ships with, or complaining
+about missing features, I treat them like any other tool in my stack: if there is
+a gap in my daily workflow, I build what is needed to solve it.
 
-I say this from painful personal experience. I was once so invested in OpenCode
-that I [forked it to fix a bunch of
-issues](https://github.com/Integralist/opencode/blob/custom-features/FORK.md#changelog),
-adding prompt history search, subagent cost tracking, and skill autocomplete. I
-tried contributing those changes back upstream. But with hundreds of PRs
-sitting stale and an unresponsive maintainer, none of it got merged. It wasn't
-for lack of trying, but I quickly realised OpenCode had too many architectural
-headaches under the hood and wasn't going to work out long term.
+I started this approach with OpenCode. I liked its initial promise, but it was
+missing several capabilities I needed for serious work: prompt history search,
+subagent cost tracking, and skill autocomplete. Rather than abandoning it, I
+[forked it to fix a bunch of
+issues](https://github.com/Integralist/opencode/blob/custom-features/FORK.md#changelog)
+and implemented those features directly. I tried contributing them back
+upstream, but with hundreds of PRs sitting stale and an unresponsive maintainer,
+none of it got merged. It wasn't for lack of trying, but I quickly realised
+OpenCode had too many architectural headaches under the hood and wasn't going to
+work out long term.
 
-So I moved over to the Pi harness instead. I still wanted deeper capabilities
-like subagent orchestration, prompt history
-search, better status telemetry,
-transcript highlighting,side conversations, inline skill argument hints, declarative event hooks,and in-place context shaking. So I
-built extensions for them!
+So I moved over to the Pi harness instead. Pi gave me a much cleaner foundation
+and a proper extension model, but I still wanted deeper capabilities like
+subagent orchestration, persistent prompt history, richer status telemetry,
+transcript highlighting, side conversations, inline skill argument hints,
+declarative event hooks, and in-place context shaking. So I built extensions for
+all of them:
 
 > [!WARNING]
 > I'm a Go dev. Pi extensions are Typescript. So these extensions are totally vibe coded. Don't judge me. 
@@ -60,20 +64,20 @@ built extensions for them!
 - [`pi-context-shake`](https://github.com/Integralist/pi-context-shake)
 
 I also wanted Pi to feel a bit less noisy while it was working. In Claude Code,
-I'd already made a custom mod to keep the useful progress visible, so I built
+I'd already made a custom mod to keep useful progress visible without dumping
+raw tool output into the terminal, so I built
 [`pi-clean-view`](https://github.com/Integralist/pi-clean-view) to bring that
-experience to Pi. It hides tool calls and output behind a checklist, with
-progress meters and status labels like "Needs you", "Stuck", and "All done".
-Pressing `Ctrl+Spacebar` reveals all the hidden details in a floating overlay.
+same focused experience to Pi. It hides tool calls and output behind a checklist,
+with progress meters and status labels like "Needs you", "Stuck", and "All
+done". Pressing `Ctrl+Spacebar` reveals all the hidden details in a floating
+overlay whenever you need them.
 
-Already though you can see the problem. Right now, the industry doesn't have a
-cross-harness standard for runtime extensions. If you want rich runtime features
-like subagents or custom terminal UI, you inevitably have to write against
-whatever plugin API your harness provides (which is what I've done... _twice
-now_!). If I switch harnesses (again) later down the road, that glue code is
-what I'd have to adapt. It's not trivial to design or write either. Even with
-agents doing all the work, it's still time and money/tokens, and effort to test
-and validate.
+The reality of extending harnesses, though, is that there is no cross-harness
+standard for runtime plugins. When you write a TypeScript extension for Pi or
+patch Go code in OpenCode, you are writing against that runtime's bespoke APIs.
+If you switch harnesses later down the road, that glue code has to be adapted.
+Building custom extensions is worth the effort for daily ergonomics, but it
+means you shouldn't tie your core intelligence or prompts to any single runtime.
 
 ## 📐 Standardisation
 
@@ -716,15 +720,29 @@ expensive. My setup enforces a bit of financial and token discipline:
   effort, using task metadata where available and a classifier otherwise. This
   lets me use cheaper models and lower effort for simpler tasks, rather than
   spending frontier-model prices on everything.
+- **[`llm-stats`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/llm-stats/SKILL.md)**:
+  To evaluate which models and effort tiers give the best price-to-performance
+  trade-off, this skill pulls Artificial Analysis benchmarks and plots model
+  intelligence against task cost across effort levels:
+
+  ![Artificial Analysis intelligence index vs average cost per task](/assets/img/llm-stats.png)
+
 - **[`model-stats`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/model-stats/SKILL.md)**:
   A skill that parses local logs across every harness I use (Claude Code, Pi,
   Codex, OpenCode, Gemini CLI, Copilot CLI) and renders an interactive HTML
   dashboard showing token consumption, spending, and reasoning effort by
   provider, model, and project. When a harness doesn't log costs directly, it
-  estimates them using LiteLLM pricing data.
+  estimates them using LiteLLM pricing data:
+
+  ![AI model usage dashboard generated by model-stats](/assets/img/model-stats.png)
+
 - [**`caveman`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/caveman/SKILL.md):
   An ultra-compressed communication mode (~75% token reduction) for rapid
   back-and-forth debugging when full conversational prose is just in the way.
+
+I also track daily spend directly in my terminal with an `aicosts` script, giving me a quick breakdown of where tokens (and dollars) are actually going across models:
+
+![AI model costs breakdown in the terminal](/assets/img/ai-costs.png)
 
 ## 🎬 Examples in Action
 
