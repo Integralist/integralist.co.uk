@@ -86,6 +86,8 @@ with progress meters and status labels like "Needs you", "Stuck", and "All
 done". Pressing `Ctrl+Spacebar` reveals all the hidden details in a floating
 overlay whenever you need them.
 
+![Pi Clean View checklist showing task progress](/assets/img/pi-clean-view.png)
+
 The reality of extending harnesses, though, is that there is no cross-harness
 standard for runtime plugins. When you write a TypeScript extension for Pi or
 patch Go code in OpenCode, you are writing against that runtime's bespoke APIs.
