@@ -64,7 +64,16 @@ all of them:
 - [`pi-context-shake`](https://github.com/Integralist/pi-context-shake)
 - [`pi-stash`](https://github.com/Integralist/pi-stash)
 
-Another frequent annoyance was prompt drafting. How many times have you typed out a detailed, multi-step prompt, only to realise you need to ask a quick clarifying question or run an ad-hoc command first? Instead of cutting text to the clipboard and praying you don't clobber it, I built [`pi-stash`](https://github.com/Integralist/pi-stash). It brings git-style stashing to the prompt box: pressing `Ctrl+Alt+S` shelves your in-progress prompt to disk and clears the editor. Pressing `Ctrl+Alt+S` again on an empty prompt pops it right back, while `Ctrl+Shift+S` pops open an interactive fuzzy-search overlay to search, restore, or prune older stashed prompts:
+Let's take a moment to consider that last extension,
+[`pi-stash`](https://github.com/Integralist/pi-stash). How many times have
+you typed out a detailed, multi-step prompt, only to realise you need to ask
+a quick clarifying question or run an ad-hoc command first? Instead of
+cutting text to the clipboard and praying you don't clobber it, pi-stash
+brings git-style stashing to the prompt box: pressing `Ctrl+Alt+S` shelves
+your in-progress prompt to disk and clears the editor. Pressing `Ctrl+Alt+S`
+again on an empty prompt pops it right back, while `Ctrl+Shift+S` pops open
+an interactive fuzzy-search overlay to search, restore, or prune older stashed
+prompts:
 
 ![Fuzzy search overlay for stashed prompts in Pi](/assets/img/pi-stash.png)
 
