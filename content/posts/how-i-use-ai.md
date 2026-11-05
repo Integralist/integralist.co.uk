@@ -88,6 +88,30 @@ overlay whenever you need them.
 
 ![Pi Clean View checklist showing task progress](/assets/img/pi-clean-view.png)
 
+A similar gap existed with lifecycle hooks. Claude Code supports declarative
+shell hooks (`PreToolUse`, `PostToolUse`, `Notification`) in JSON, making it
+trivial to block dangerous commands, format files after edits, or pop desktop
+alerts. Pi has a powerful event API (`pi.on(...)`), but writing a full
+TypeScript extension just to run a one-line bash script is overkill for most
+people (but not me 😅). I built
+[`pi-event-hooks`](https://github.com/Integralist/pi-event-hooks) to bring
+declarative JSON hooks to Pi. It maps both native Pi events and Claude Code
+aliases onto shell commands from `~/.pi/agent/hooks.json` or `.pi/hooks.json`.
+Hooks can also help block risky calls (like `git push --force` or touching
+`.env`) by returning an exit code `2`, or mutating arguments on the fly, or
+trigger formatters on tool completion without maintaining separate extensions.
+
+Then there's prompt history. Claude Code keeps a persistent, searchable
+history across sessions, so you can easily pull up prompts you ran earlier.
+In Pi, arrow history is scoped strictly to the active session. The second you
+start a new session or switch branches, you're back to retyping past prompts,
+slash commands, or shell invocations from memory. To fix that, I built
+[`pi-prompt-history`](https://github.com/Integralist/pi-prompt-history). It
+brings readline-style `Ctrl+R` reverse-search across the active session, the
+current project, or all historical sessions in `~/.pi/agent/sessions/`. It
+normalises expanded skills back to `/skill:<name>` calls, deduplicates repeated
+prompts, and drops the match straight back into the editor.
+
 The reality of extending harnesses, though, is that there is no cross-harness
 standard for runtime plugins. When you write a TypeScript extension for Pi or
 patch Go code in OpenCode, you are writing against that runtime's bespoke APIs.
@@ -163,30 +187,6 @@ skill). Pi does not display these natively, so I wrote
 to bridge the gap. So now, when typing `/skill:<name>`, it reads the frontmatter
 verbatim and renders a muted inline hint right after the cursor that auto-hides
 the moment you type an argument or space.
-
-The same story played out with lifecycle hooks. Claude Code supports declarative
-shell hooks (`PreToolUse`, `PostToolUse`, `Notification`) in JSON, making it
-trivial to block dangerous commands, format files after edits, or pop desktop
-alerts. Pi has a powerful event API (`pi.on(...)`), but writing a full
-TypeScript extension just to run a one-line bash script is overkill for most
-people (but not me 😅). I built
-[`pi-event-hooks`](https://github.com/Integralist/pi-event-hooks) to bring
-declarative JSON hooks to Pi. It maps both native Pi events and Claude Code
-aliases onto shell commands from `~/.pi/agent/hooks.json` or `.pi/hooks.json`.
-Hooks can also help block risky calls (like `git push --force` or touching
-`.env`) by returning an exit code `2`, or mutating arguments on the fly, or
-trigger formatters on tool completion without maintaining separate extensions.
-
-Then there's prompt history. Claude Code keeps a persistent, searchable
-history across sessions, so you can easily pull up prompts you ran earlier.
-In Pi, arrow history is scoped strictly to the active session. The second you
-start a new session or switch branches, you're back to retyping past prompts,
-slash commands, or shell invocations from memory. To fix that, I built
-[`pi-prompt-history`](https://github.com/Integralist/pi-prompt-history). It
-brings readline-style `Ctrl+R` reverse-search across the active session, the
-current project, or all historical sessions in `~/.pi/agent/sessions/`. It
-normalises expanded skills back to `/skill:<name>` calls, deduplicates repeated
-prompts, and drops the match straight back into the editor.
 
 Although I typically only really use the Pi harness now, I like to keep my
 agent-skills working across multiple harnesses, and so my repo has a handy
@@ -537,6 +537,122 @@ Different engineering problems call for different analytical lenses:
 | **`precedent`**    | Ensuring new code matches existing codebase conventions                                    | Divergence report citing peer patterns                       |
 | **`code-review`**  | Code or diff exists and defects must be identified                                         | Verified findings across subagents                           |
 | **`is-it-safe`**   | Assessing the worst credible failure mode and blast radius before merge                    | Adversarial impact report with a PROCEED/HOLD/STOP verdict   |
+
+## 🏢 Team Adoption: When Others Vendor Your Workflows
+
+It's one thing building a workflow for yourself where you tolerate your own
+quirks. It's quite another when colleagues look at the strategic and tactical
+planning processes you've put together and decide they want them baked directly
+into their own team repositories.
+
+At my current employer, that is exactly what has happened. Multiple teams
+actually vendor my skills directly into their projects. They aren't just copying
+a few ad-hoc prompt snippets into a scratchpad, either. They treat the skills
+like an audited third-party dependency using a dedicated vendoring script
+(`bin/agent-skills.sh`), an allowlist, and a lockfile.
+
+### The allowlist: `.agents/skills.allowlist`
+
+The allowlist explicitly specifies which skills get vendored into the project's
+`.agents/skills/` directory (the `shared/` directory is always included
+automatically). It lists the primary workflows the team relies on, along with
+any prerequisite dependencies they call into:
+
+```txt
+# Skills vendored from Integralist/agent-skills by bin/agent-skills.sh;
+# shared/ is always vendored.
+# Top-level skills, sorted alphabetically.
+agents-md
+architect
+code-module-design
+conventions-acceptance-tests
+conventions-go
+conventions-markdown
+conventions-mermaid
+conventions-python
+is-it-safe
+next-slice
+next-task
+pdd
+spec-delta
+to-adr
+to-plan
+to-prd
+to-spec
+to-tasks
+voice-product
+writing-for-agents
+
+# Required by commit when declining to commit on main or master.
+branch
+# Required by architect; research when scope is unclear.
+clarify
+# Required by next-slice and next-task.
+code-review
+# Required by next-slice and next-task when the user chooses to commit.
+commit
+# Required by architect and pdd.
+critique
+# Required by grill-with-docs.
+domain-modeling
+# Required by conventions-acceptance-tests, conventions-go, and to-tasks.
+go-testing
+# Required by architect and pdd.
+grill-with-docs
+# Required by grill-with-docs.
+grilling
+# Required by architect.
+research
+```
+
+What started out as teams borrowing a few tactical execution skills (`to-spec`,
+`to-plan`, `to-tasks`) has quickly expanded. Recently, teams have been updating
+their allowlists to pull in the entire strategic planning machinery:
+[`architect`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/architect/SKILL.md)
+and the whole constellation of skills it coordinates across (`clarify`,
+`research`, `grill-with-docs`, `domain-modeling`, `to-adr`, `to-prd`, and
+`code-module-design`).
+
+### The lockfile: `.agents/skills.lock`
+
+To prevent silent drift or accidental local edits, the vendoring script writes a
+lockfile pinning the exact commit and a sha256 tree hash:
+
+```ini
+repository=https://github.com/Integralist/agent-skills.git
+ref=main
+commit=337e8299cfd8b85348292e88a8b0f449abdaf310
+tree=c4a40aac85d8f11b00661dc3fb777fcd76516f1f24615767eecf1578efc35925
+subdirectories=.agents/skills
+allowlist=.agents/skills.allowlist
+```
+
+The script supports three modes:
+
+- `update`: fetches the allowlisted skills from upstream, writes the byte-for-byte
+  content to `.agents/skills/`, and regenerates the lockfile with the new commit
+  and tree hash.
+- `check`: clones the upstream remote and reports whether the pinned ref has
+  moved.
+- `verify`: an entirely offline check that calculates the sha256 tree hash of
+  the local `.agents/skills/` directory and asserts that it matches `tree` in the
+  lockfile.
+
+That `verify` command runs inside local lint loops (`bin/lint.sh`) and CI
+pipelines. If someone tries to manually tweak a vendored skill inside the repo,
+or if files get out of sync with the lockfile, the build immediately fails
+offline. Upgrades only happen deliberately via pull requests that update the
+pin.
+
+Because both Pi and Claude Code are used across teams, the script also maintains
+a symlink (`.claude/skills -> ../.agents/skills`) so both harnesses discover the
+exact same canonical skills.
+
+Having teams vendor your workflow like a third-party software dependency is
+enormously flattering, but it also validates the time spent designing these
+pipelines. Instead of every team reinventing how to interview a problem, write a
+functional spec, or break milestones into TDD tasks, they get a repeatable,
+battle-tested planning framework right inside their repo.
 
 ## 🔍 Tight Feedback Loops with Crit and Hunk
 
