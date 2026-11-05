@@ -583,26 +583,26 @@ to-tasks
 voice-product
 writing-for-agents
 
-# Required by commit when declining to commit on main or master.
-branch
-# Required by architect; research when scope is unclear.
-clarify
 # Required by next-slice and next-task.
 code-review
 # Required by next-slice and next-task when the user chooses to commit.
 commit
+# Required by commit when declining to commit on main or master.
+branch
+# Required by architect; research when scope is unclear.
+clarify
 # Required by architect and pdd.
 critique
-# Required by grill-with-docs.
-domain-modeling
-# Required by conventions-acceptance-tests, conventions-go, and to-tasks.
-go-testing
+# Required by architect.
+research
 # Required by architect and pdd.
 grill-with-docs
 # Required by grill-with-docs.
+domain-modeling
+# Required by grill-with-docs.
 grilling
-# Required by architect.
-research
+# Required by conventions-acceptance-tests, conventions-go, and to-tasks.
+go-testing
 ```
 
 What started out as teams borrowing a few tactical execution skills (`to-spec`,
