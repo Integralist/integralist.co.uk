@@ -435,6 +435,67 @@ out of credits, a commit would land on `main`/`master` without approval, or the
 PDD Design isn't approved. It never pushes or opens PRs, and I can still run the
 individual skills manually whenever I want to stay closer to each step.
 
+#### Ditching on-disk clutter: GitHub Issues & Artifacts
+
+Keeping everything in `projects/<yyyy-mm-dd>-<slug>/` on disk works well, but it
+does have a few annoying side effects. Every feature ends up generating half a
+dozen working files (`README.md`, `spec.md`, `plan.md`, `tasks-slice-1.md`,
+`execution.md`) that sit in your working tree, pad out pull request diffs with
+hundreds of lines of planning prose that reviewers have to scroll past, and
+need a bookkeeping commit at the end just to shuffle the folder into
+`projects/completed/`.
+
+To give myself a cleaner option, I added an opt-in GitHub Issues backend
+([PR #33](https://github.com/Integralist/agent-skills/pull/33), dogfooded
+through [Issue #24](https://github.com/Integralist/agent-skills/issues/24)).
+Passing `github` or an issue number (`/skill:architect github`,
+`/skill:to-plan #24`, `/skill:next-slice #25`) switches the skills over to a
+shared
+[`GITHUB-ISSUES.md`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/shared/GITHUB-ISSUES.md)
+protocol while leaving the on-disk workflow untouched as the default. Because
+each skill only has a single conditional pointer line, normal on-disk runs
+don't pay a single extra token for the GitHub instructions.
+
+What makes this work so nicely in practice is combining two newer `gh` CLI
+capabilities: **Issue Artifacts** (`gh issue artifact`) and native
+**Sub-Issues** (`--parent` and `--blocked-by`). Durable repository truth
+(`docs/specs/*.feature`, `docs/adr/`, `GLOSSARY.md`) still lives in Git where it
+belongs, while the ephemeral project workspace maps onto a 3-level issue tree:
+
+1. **Root Project Issue (`--label project`, `<Title> (<slug>)`)**: Acts as the
+   project folder and `README.md` index. All the real documents (`spec.md`,
+   `plan.md` with `--type plan`, `research.md`, project ADRs, and
+   `execution.md`) attach directly to this root issue as versioned Issue
+   Artifacts rather than cluttering the repository tree.
+2. **Slice Sub-Issues (`--label slice`, `<slug> / S1: <Title>`)**: Created under
+   the root issue with `--parent` and chained with `--blocked-by`. The slice
+   body holds its own milestone outcomes (`M1.1`, `M1.2`), interface signatures,
+   acceptance verification table, and executor context.
+3. **Task Sub-Issues (`--label task`, `<slug> / S1-T1: <Title>`)**: Compiled
+   just-in-time per slice by `to-tasks` under the parent slice issue, each
+   holding the exact failing test (`red`), implementation guidance (`green`),
+   and verification command.
+
+![GitHub Root Issue showing nested Slice and Task sub-issues alongside spec.md and plan.md Issue Artifacts](/assets/img/github-issues.png)
+
+Compared to editing local Markdown files, the execution loop is much cleaner
+and more token-efficient. Instead of an agent re-reading and rewriting a bulky
+`tasks-slice-1.md` file on disk just to tick a checkbox, each task and slice is
+a self-contained issue packet. As soon as a task passes its test-first checks
+and is committed locally, the agent posts the `BUILD-ITEM.md` verification
+evidence table as a comment and closes the task issue (`gh issue close`).
+
+![Task sub-issue closing comment showing the verification evidence table](/assets/img/github-verification.png)
+
+Closing each task automatically updates the parent slice's `3 of 3` progress
+ring in the GitHub UI and clears the red `Blocked by` badge on the next task.
+Once all tasks in a slice pass `ACCEPT-SLICE.md`, the slice sub-issue closes
+locally too, so the next run of `next-slice` or `execute-plan` can query
+`gh issue view` and immediately see which slice is up next. Meanwhile, the Root
+Project Issue stays open while the code is in review and closes automatically
+when the pull request (`Closes #24`) merges to `main`, leaving your Git history
+containing only the actual code, tests, and durable specs.
+
 ### 🔨 Phase 3: Building (Small, Mechanical Slices)
 
 With tasks compiled, execution becomes fast and predictable.
