@@ -954,6 +954,32 @@ I also track daily spend directly in my terminal with an [`aicosts`](https://git
 
 ![AI model costs breakdown in the terminal](/assets/img/ai-costs.png)
 
+While `aicosts` is great for spotting model-level daily trends, I also wanted a
+single command for the bird's-eye view: month-to-date spend across all my
+harnesses, set against their respective company allowances. For that, I wrote
+the [`au`](https://github.com/Integralist/dotfiles/blob/ce6f7708aeff78052b4b7492599bffb642e3c472/.config/zsh/functions.zsh#L780-L1013)
+function in my dotfiles (short for "AI usage"):
+
+![Month-to-date AI usage and quota breakdown in the terminal](/assets/img/ai-usage.png)
+
+Under the hood, `au` runs six concurrent background jobs with an interactive
+terminal spinner to pull reports from disparate sources without making me wait:
+
+- It queries `ccusage` for overall daily totals, Claude usage, and Copilot CLI
+  usage.
+- It parses my local Pi agent sessions (`~/.pi/agent/sessions`) via a small
+  Node helper script to compute Copilot spend routed through Pi.
+- It drives Claude Code's interactive `/usage` screen headlessly to grab the true
+  Claude Enterprise spend and cap.
+- It calls the GitHub API (`gh api copilot_internal/user`) to fetch my Copilot
+  premium interaction quota.
+
+It then reconciles the numbers into a clean dashboard: deduplicating Claude
+spend (replacing `ccusage` estimates with authoritative Enterprise billing
+data), splitting Copilot spend between the CLI and Pi against my monthly cap,
+reporting any remaining AI spend, and isolating today's spend so I can spot
+spikes at a glance.
+
 ## 🎬 Examples in Action
 
 ### 🚀 The BCP Workflow
