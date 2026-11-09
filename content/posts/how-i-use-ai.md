@@ -66,16 +66,15 @@ all of them:
 - [`pi-subagents`](https://github.com/Integralist/pi-subagents)
 - [`pi-transcript-enhancer`](https://github.com/Integralist/pi-transcript-enhancer)
 
-Let's take a moment to consider that last extension,
-[`pi-stash`](https://github.com/Integralist/pi-stash). How many times have
-you typed out a detailed, multi-step prompt, only to realise you need to ask
-a quick clarifying question or run an ad-hoc command first? Instead of
-cutting text to the clipboard and praying you don't clobber it, pi-stash
-brings git-style stashing to the prompt box: pressing `Cmd+Shift+C` shelves
-your in-progress prompt to disk and clears the editor. Pressing `Cmd+Shift+C`
-again on an empty prompt pops it right back, while `Cmd+Shift+L` pops open
-an interactive fuzzy-search overlay to search, restore, or prune older stashed
-prompts:
+Let's take a moment to consider an extension like
+[`pi-stash`](https://github.com/Integralist/pi-stash). How many times have you
+typed out a detailed, multi-step prompt, only to realise you need to ask a quick
+clarifying question or run an ad-hoc command first? Instead of cutting text to
+the clipboard and praying you don't clobber it, pi-stash brings git-style
+stashing to the prompt box: pressing `Cmd+Shift+C` shelves your in-progress
+prompt to disk and clears the editor. Pressing `Cmd+Shift+C` again on an empty
+prompt pops it right back, while `Cmd+Shift+L` pops open an interactive
+fuzzy-search overlay to search, restore, or prune older stashed prompts:
 
 ![Fuzzy search overlay for stashed prompts in Pi](/assets/img/pi-stash.png)
 
