@@ -52,7 +52,7 @@ declarative event hooks, prompt stashing, and in-place context shaking. So I bui
 all of them:
 
 > [!WARNING]
-> I'm a Go dev. Pi extensions are Typescript. So these extensions are totally vibe coded. Don't judge me. 
+> I'm a Go dev. Pi extensions are Typescript. So these extensions are totally vibe coded. Don't judge me.
 
 - [`pi-subagents`](https://github.com/Integralist/pi-subagents)
 - [`pi-prompt-history`](https://github.com/Integralist/pi-prompt-history)
@@ -69,9 +69,9 @@ Let's take a moment to consider that last extension,
 you typed out a detailed, multi-step prompt, only to realise you need to ask
 a quick clarifying question or run an ad-hoc command first? Instead of
 cutting text to the clipboard and praying you don't clobber it, pi-stash
-brings git-style stashing to the prompt box: pressing `Ctrl+Alt+S` shelves
-your in-progress prompt to disk and clears the editor. Pressing `Ctrl+Alt+S`
-again on an empty prompt pops it right back, while `Ctrl+Shift+S` pops open
+brings git-style stashing to the prompt box: pressing `Cmd+Shift+C` shelves
+your in-progress prompt to disk and clears the editor. Pressing `Cmd+Shift+C`
+again on an empty prompt pops it right back, while `Cmd+Shift+L` pops open
 an interactive fuzzy-search overlay to search, restore, or prune older stashed
 prompts:
 
@@ -114,10 +114,11 @@ prompts, and drops the match straight back into the editor.
 
 The reality of extending harnesses, though, is that there is no cross-harness
 standard for runtime plugins. When you write a TypeScript extension for Pi or
-patch Go code in OpenCode, you are writing against that runtime's bespoke APIs.
-If you switch harnesses later down the road, that glue code has to be adapted.
-Building custom extensions is worth the effort for daily ergonomics, but it
-means you shouldn't tie your core intelligence or prompts to any single runtime.
+patch behaviour in OpenCode, you are writing against that runtime's bespoke
+APIs. If you switch harnesses later down the road, that glue code has to be
+adapted. Building custom extensions is worth the effort for daily ergonomics,
+but it means you shouldn't tie your core intelligence or prompts to any single
+runtime.
 
 ## 📐 Standardisation
 
@@ -900,21 +901,25 @@ enforce strict financial and token discipline:
   `next-slice`) uses a moderate tier, and judgment-heavy work (code and security
   review, root-cause diagnosis, architecture, and grilling) stays on the session
   model or better.
+
 - **[`pi-subagents`](https://github.com/Integralist/pi-subagents)**: An
   extension I built to run isolated subagents in the same process. Each subagent
   gets its own context window and tool allowlist, so a deep investigation costs
   the main session a single summary line instead of ten thousand tokens.
+
 - **[`pi-context-shake`](https://github.com/Integralist/pi-context-shake)**:
   An extension I built (inspired by omp's `/shake`) that shakes bloated content (massive
   tool output, images, verbose thinking) out of session history in place. It
   atomically rewrites the session's `.jsonl` file and uses a context hook to
   keep the live LLM payload trimmed, saving tokens and stopping annoying
   compaction loops without losing the running session.
+
 - **[`pi-auto-model`](https://github.com/Integralist/pi-auto-model)**: An
   extension I built that routes each task tier to a configured model and reasoning
   effort, using task metadata where available and a classifier otherwise. This
   lets me use cheaper models and lower effort for simpler tasks, rather than
   spending frontier-model prices on everything.
+
 - **[`llm-stats`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/llm-stats/SKILL.md)**:
   A skill I built to evaluate which models and effort tiers give the best price-to-performance
   trade-off. It pulls Artificial Analysis benchmarks and plots model
