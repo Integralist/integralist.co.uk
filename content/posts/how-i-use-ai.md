@@ -48,7 +48,8 @@ So I moved over to the Pi harness instead. Pi gave me a much cleaner foundation
 and a proper extension model, but I still wanted deeper capabilities like
 subagent orchestration, persistent prompt history, richer status telemetry,
 transcript highlighting, side conversations, inline skill argument hints,
-declarative event hooks, prompt stashing, and in-place context shaking. So I built extensions for
+declarative event hooks, prompt stashing, ghost-text prompt suggestions, and
+in-place context shaking. So I built extensions for
 all of them:
 
 > [!WARNING]
@@ -63,6 +64,7 @@ all of them:
 - [`pi-event-hooks`](https://github.com/Integralist/pi-event-hooks)
 - [`pi-context-shake`](https://github.com/Integralist/pi-context-shake)
 - [`pi-stash`](https://github.com/Integralist/pi-stash)
+- [`pi-auto-suggest`](https://github.com/Integralist/pi-auto-suggest)
 
 Let's take a moment to consider that last extension,
 [`pi-stash`](https://github.com/Integralist/pi-stash). How many times have
@@ -111,6 +113,15 @@ brings readline-style `Ctrl+R` reverse-search across the active session, the
 current project, or all historical sessions in `~/.pi/agent/sessions/`. It
 normalises expanded skills back to `/skill:<name>` calls, deduplicates repeated
 prompts, and drops the match straight back into the editor.
+
+The same applied to Claude Code's suggestion mode. Claude Code predicts your
+next prompt once a turn settles, which takes friction out of repetitive or
+multi-step workflows. Pi didn't have that out of the box, so I built
+[`pi-auto-suggest`](https://github.com/Integralist/pi-auto-suggest). It inspects
+the conversation and any active skill context (like `architect`, `to-spec`, or
+`to-plan`) using the cheapest fast model available, then renders muted ghost text
+in the prompt bar. Hitting `Tab` or `Right Arrow` accepts it, `Escape` clears
+it, and typing anything else simply overrides it.
 
 The reality of extending harnesses, though, is that there is no cross-harness
 standard for runtime plugins. When you write a TypeScript extension for Pi or
