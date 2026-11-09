@@ -55,16 +55,16 @@ all of them:
 > [!WARNING]
 > I'm a Go dev. Pi extensions are Typescript. So these extensions are totally vibe coded. Don't judge me.
 
-- [`pi-subagents`](https://github.com/Integralist/pi-subagents)
-- [`pi-prompt-history`](https://github.com/Integralist/pi-prompt-history)
-- [`pi-statusbar`](https://github.com/Integralist/pi-statusbar)
-- [`pi-transcript-enhancer`](https://github.com/Integralist/pi-transcript-enhancer)
-- [`pi-btw`](https://github.com/Integralist/pi-btw)
-- [`pi-skill-argument-hints`](https://github.com/Integralist/pi-skill-argument-hints)
-- [`pi-event-hooks`](https://github.com/Integralist/pi-event-hooks)
-- [`pi-context-shake`](https://github.com/Integralist/pi-context-shake)
-- [`pi-stash`](https://github.com/Integralist/pi-stash)
 - [`pi-auto-suggest`](https://github.com/Integralist/pi-auto-suggest)
+- [`pi-btw`](https://github.com/Integralist/pi-btw)
+- [`pi-context-shake`](https://github.com/Integralist/pi-context-shake)
+- [`pi-event-hooks`](https://github.com/Integralist/pi-event-hooks)
+- [`pi-prompt-history`](https://github.com/Integralist/pi-prompt-history)
+- [`pi-skill-argument-hints`](https://github.com/Integralist/pi-skill-argument-hints)
+- [`pi-stash`](https://github.com/Integralist/pi-stash)
+- [`pi-statusbar`](https://github.com/Integralist/pi-statusbar)
+- [`pi-subagents`](https://github.com/Integralist/pi-subagents)
+- [`pi-transcript-enhancer`](https://github.com/Integralist/pi-transcript-enhancer)
 
 Let's take a moment to consider that last extension,
 [`pi-stash`](https://github.com/Integralist/pi-stash). How many times have
