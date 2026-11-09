@@ -283,6 +283,19 @@ channels...
 	someone reach out to say they see you and appreciate you 💖</p>
 </details>
 
+<details class="testimonial">
+	<summary>Staff Software Engineer - API Services Team at Fastly</summary>
+	<p><i>you always have the best docs!!!</i></p>
+	<p><small>Staff Software Engineer - API Services Team at Fastly</small></p>
+	<p class="review">I was helping a colleague who was having trouble
+	configuring an AI harness. I explained what was going on and pointed them to
+	a detailed gist I regularly update. Their team asked if I'd share it more
+	broadly across the organisation, which I was happy to do. My notes usually
+	start out purely for my own benefit, but over time they get fleshed out
+	enough that others find value in them (I don't like pushing my stuff onto
+	people unprompted!).</p>
+</details>
+
 <hr>
 
 ## 💡 Summary
