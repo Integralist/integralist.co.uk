@@ -280,8 +280,8 @@ skills.
 
 ```txt
 Product track:     pdd (project → discovery → design) ─┐
-                                                       ├─→ architect (spec → grill → plan) → to-tasks → next-task / next-slice
-Engineering track: architect (bootstrap → research) ───┘
+                                                       ├─→ architect (research → grill → spec → plan) → to-tasks → next-task / next-slice
+Engineering track: architect (bootstrap) ───────────────┘
 ```
 
 ### 🕵️ Phase 1: Interrogation (Poking Holes First)
@@ -346,9 +346,9 @@ Crucially, `design.md` is not an implementation plan (`plan.md`). It answers
 what system solution is being approved, not how an engineer will slice the pull
 requests. Once Design is approved, `pdd` hands off to
 [`architect`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/architect/SKILL.md)
-(see following section) starting at its Spec step, skipping bootstrap and
-research so both tracks share one engineering chain without duplicating the
-discovery you just agreed upon.
+(see following section) starting at Research, without repeating project
+bootstrap. The approved Design carries into the engineering workflow rather
+than becoming a second set of competing requirements.
 
 #### Engineering-led coordination: `architect`
 
@@ -363,9 +363,10 @@ bootstrapping project rules
 ([`agents-md`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/agents-md/SKILL.md),
 plus `clarify` if the idea is vague), deep research
 ([`research`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/research/SKILL.md)),
-writing the functional specification
+adversarial stress-testing (`grill-with-docs`), then writing the functional
+specification
 ([`to-spec`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/to-spec/SKILL.md)),
-adversarial stress-testing (`grill-with-docs`), implementation planning
+implementation planning
 ([`to-plan`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/to-plan/SKILL.md)
 followed by
 [`to-adr`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/to-adr/SKILL.md)
@@ -381,18 +382,24 @@ technical artefacts needed to build it safely.
 #### The engineering handoff: specs, plans, and tasks
 
 Regardless of whether an initiative starts in `pdd` or `architect`, both tracks
-converge on the same engineering delivery pipeline under
-`projects/<yyyy-mm-dd>-<slug>/`:
+converge on the same engineering delivery pipeline. The working documents live
+under `projects/<yyyy-mm-dd>-<slug>/`, or as Root Issue Artifacts when I choose
+GitHub mode:
 
+- **`intent.md` (when needed)**: Keeps the original request out of the spec's
+  way. I preserve source wording and record later clarifications separately,
+  including which decisions are agreed or still proposed. The spec links to it
+  from Development Brief, and the spec/plan coverage checks read it rather than
+  relying on a summary of the chat. It sits beside the spec on disk, or becomes
+  its own Root Issue Artifact in GitHub mode. If a stable source already does
+  the job, I link that instead. This isn't another mandatory planning stage.
 - **`to-spec` &
   [`spec-delta`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/spec-delta/SKILL.md)**:
-  `to-spec` writes `spec.md` with user stories (framed with
-  [`voice-product`](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/voice-product/SKILL.md)),
-  Gherkin acceptance criteria, and testing seams. Current truth lives in
-  `docs/specs/<capability>.md` and is validated in CI; whenever a change alters
-  existing behaviour, `to-spec` and `spec-delta` record a `Behavioural Delta`
-  against the pinned baseline so the project folder keeps the history while the
-  living spec moves on.
+  `to-spec` writes `spec.md` with user stories, Gherkin acceptance criteria,
+  and testing seams. Current truth lives in `docs/specs/<capability>.feature`
+  and is validated in CI; whenever a change alters existing behaviour,
+  `to-spec` and `spec-delta` record a `Behavioural Delta` against the pinned
+  baseline so the project keeps the history while the living spec moves on.
 - **`to-plan`**: Breaks the specification (or a session's discussion when a spec
   isn't needed) into vertical implementation slices (`plan.md`) with `Blocked by`
   dependencies, exact `Consumes`/`Produces` interface signatures, verifiable
@@ -404,6 +411,20 @@ converge on the same engineering delivery pipeline under
   runnable verification commands, `Supports:` links back to plan milestones, and
   a closing integration task that runs the slice's Gherkin scenarios without
   mocks.
+
+I want these documents to make sense to someone who wasn't in the chat.
+[`voice-product`](https://github.com/Integralist/agent-skills/blob/66f3a0c79e8f2c96272e0f963c0833b3b693ebf4/.agents/skills/voice-product/SKILL.md)
+now applies throughout the spec and plan, including Implementation Decisions
+and Notes, rather than just the user stories. The technical explanations should
+tell me what a decision means for the person using the system. Plain English
+doesn't mean quietly dropping a security rule.
+
+For longer Implementation Decisions, I prefer a clear summary followed by a
+`<details>` block for exact fields, error tables or supporting rationale. The
+expanded explanations use the same voice; scope, unresolved risks and acceptance
+criteria stay visible, and reviewers still read the detail. I've also kept spec
+and intent metadata in small tables, so status and authorship don't become
+another paragraph to decode.
 
 #### Automating the handoff: `execute-plan`
 
@@ -474,10 +495,10 @@ capabilities: **Issue Artifacts** (`gh issue artifact`) and native
 belongs, while the ephemeral project workspace maps onto a 3-level issue tree:
 
 1. **Root Project Issue (`--label project`, `<Title> (<slug>)`)**: Acts as the
-   project folder and `README.md` index. All the real documents (`spec.md`,
-   `plan.md` with `--type plan`, `research.md`, project ADRs, and
-   `execution.md`) attach directly to this root issue as versioned Issue
-   Artifacts rather than cluttering the repository tree.
+   project folder and `README.md` index. All the real documents (`intent.md`
+   when needed, `spec.md`, `plan.md` with `--type plan`, `research.md`, project
+   ADRs, and `execution.md`) attach directly to this root issue as versioned
+   Issue Artifacts rather than cluttering the repository tree.
 2. **Slice Sub-Issues (`--label slice`, `<slug> / S1: <Title>`)**: Created under
    the root issue with `--parent` and chained with `--blocked-by`. The slice
    body holds its own milestone outcomes (`M1.1`, `M1.2`), interface signatures,
@@ -486,6 +507,12 @@ belongs, while the ephemeral project workspace maps onto a 3-level issue tree:
    just-in-time per slice by `to-tasks` under the parent slice issue, each
    holding the exact failing test (`red`), implementation guidance (`green`),
    and verification command.
+
+I've tightened the Root Issue description too: it is a navigation page, not a
+second spec or a running project diary. A short summary and the next action,
+with one named owner, belong near the top. Artifact purposes and statuses stay
+short; detailed requirements and history stay linked in their own artifacts.
+Current blockers and approval gates remain visible.
 
 ![GitHub Root Issue showing nested Slice and Task sub-issues alongside spec.md and plan.md Issue Artifacts](/assets/img/github-issues.png)
 
