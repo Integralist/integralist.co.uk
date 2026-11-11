@@ -279,8 +279,8 @@ debug). Instead, I break work down into a pipeline of smaller, specialised
 skills.
 
 ```txt
-Product track:     pdd (project → discovery → design) ─┐
-                                                       ├─→ architect (research → grill → spec → plan) → to-tasks → next-task / next-slice
+Product track:     pdd (project → discovery → design) ──┐
+                                                        ├── architect (research → grill → spec → plan) → to-tasks → next-task / next-slice
 Engineering track: architect (bootstrap) ───────────────┘
 ```
 
