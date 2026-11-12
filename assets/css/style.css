@@ -538,6 +538,10 @@ aside,
   border-radius: 4px;
 }
 
+.page-resume .post-hero img {
+  max-height: 600px;
+}
+
 /* --- Details/Summary --- */
 details {
   margin-block: 1rem;
