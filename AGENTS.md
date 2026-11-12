@@ -49,6 +49,19 @@ When editing or rewriting blog content, follow these rules:
 - Don't invent facts. Only improve flow, clarity, and structure.
 - Parenthetical asides are fine but keep them short. If one runs past two
   lines, break it into its own sentence.
+- Use inline code only for commands, literal syntax, configuration keys, and
+  paths readers may need to copy. Mention tool, skill, and file names in plain
+  text or as links when they are just prose.
+- For a long URL reused in a post, use a descriptive reference-style link
+  instead of repeating the inline URL.
+- Lead with what a feature does for the reader. Include API/event names, config
+  locations, flags, and model settings only when readers need them to understand
+  or reproduce the behaviour.
+- Keep parentheticals that add voice or necessary context. Cut example lists
+  and implementation detail that the sentence works without.
+- In long guides, use H2 headings for major sections and navigation, with H3/H4
+  for nested material. Give substantial alternative workflows visible, parallel
+  headings instead of burying one in dense prose.
 - Header emojis: H2 headers may use a single leading emoji for visual
   accent in the floating sidebar (overrides global AGENTS.md for this repo).
 
