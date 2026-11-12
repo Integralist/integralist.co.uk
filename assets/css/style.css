@@ -23,7 +23,7 @@
   --color-border: #344256;
   --color-callout-bg: #243044;
 
-  --content-width: 680px;
+  --content-width: 800px;
   --header-height: auto;
 
   --font-serif: "EB Garamond", Garamond, Georgia, serif;
@@ -684,7 +684,7 @@ th {
   display: none;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1400px) {
   .toc {
     display: block;
     position: fixed;
