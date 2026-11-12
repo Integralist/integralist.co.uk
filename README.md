@@ -56,6 +56,28 @@ high-performance, SEO-friendly static website.
    make clean
    ```
 
+#### Preview on a phone
+
+If your phone cannot reach the local server over Wi-Fi, use a temporary
+Cloudflare Quick Tunnel. It does not require an account. Keep `make serve`
+running. Install the Cloudflare CLI if needed:
+
+```bash
+brew install cloudflared
+```
+
+In another terminal, run:
+
+```bash
+cloudflared tunnel --url http://localhost:8080
+```
+
+Open the HTTPS URL printed by the command on your phone.
+
+> [!WARNING]
+> The URL is public while the tunnel is running. Anyone who has it can access
+> the preview. Stop the tunnel with Ctrl+C.
+
 ## Project Structure
 
 - `assets/`: CSS, images, and HTML templates.
