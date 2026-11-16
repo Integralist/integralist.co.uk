@@ -1,6 +1,6 @@
 ---
 title: Resume
-nav_order: 3
+nav_order: 4
 image: /assets/img/profile-2024.jpg
 image_position: top
 ---

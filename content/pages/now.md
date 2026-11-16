@@ -1,6 +1,6 @@
 ---
 title: Now
-nav_order: 4
+nav_order: 5
 ---
 
 This is a [now page](https://nownownow.com/about). It tells you what I'm focused
