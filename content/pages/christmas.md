@@ -5,16 +5,16 @@ nav_order: 1
 
 Here are my top ten Christmas Movies:
 
-1. [National Lampoon's Christmas Vacation](https://www.rottentomatoes.com/m/national_lampoons_christmas_vacation)
-1. [How the Grinch stole Christmas (1966)](https://www.rottentomatoes.com/m/1006223-how_the_grinch_stole_christmas)
-1. The Morcambe & Wise Christmas Special (1971)
-1. [Peanuts: A Charlie Brown Christmas](https://www.rottentomatoes.com/m/a_charlie_brown_christmas)
-1. [Mickey's Christmas Carol](https://www.rottentomatoes.com/m/mickeys-christmas-carol)
-1. [Muppets Christmas Carol](https://www.rottentomatoes.com/m/muppet_christmas_carol)
-1. [Home Alone](https://www.rottentomatoes.com/m/home_alone)
-1. [Scrooged](https://www.rottentomatoes.com/m/scrooged)
-1. [Batman Returns](https://www.rottentomatoes.com/m/batman_returns)
-1. [Friday After Next](https://www.rottentomatoes.com/m/friday_after_next)
+01. [National Lampoon's Christmas Vacation](https://www.rottentomatoes.com/m/national_lampoons_christmas_vacation)
+02. [How the Grinch stole Christmas (1966)](https://www.rottentomatoes.com/m/1006223-how_the_grinch_stole_christmas)
+03. The Morcambe & Wise Christmas Special (1971)
+04. [Peanuts: A Charlie Brown Christmas](https://www.rottentomatoes.com/m/a_charlie_brown_christmas)
+05. [Mickey's Christmas Carol](https://www.rottentomatoes.com/m/mickeys-christmas-carol)
+06. [Muppets Christmas Carol](https://www.rottentomatoes.com/m/muppet_christmas_carol)
+07. [Home Alone](https://www.rottentomatoes.com/m/home_alone)
+08. [Scrooged](https://www.rottentomatoes.com/m/scrooged)
+09. [Batman Returns](https://www.rottentomatoes.com/m/batman_returns)
+10. [Friday After Next](https://www.rottentomatoes.com/m/friday_after_next)
 
 > [!TIP]
 > **Bonus:** [Long Kiss Goodnight](https://www.rottentomatoes.com/m/long_kiss_goodnight)
@@ -24,6 +24,7 @@ Here are my top ten Christmas Movies:
 Here is a more complete (sorted) list of Christmas movies/shows I like to watch:
 
 - [101 Dalmatians](https://www.rottentomatoes.com/m/101_dalmatians)
+- [12 Days of Snoopy](https://www.rottentomatoes.com/m/snoopy_presents_12_days_of_snoopy)
 - [A Merry Little Batman](https://www.rottentomatoes.com/m/merry_little_batman)
 - [A Very Murray Christmas](https://www.rottentomatoes.com/m/a_very_murray_christmas)
 - [Absolutely Fabulous Christmas Special 2003 ("Cold Turkey")](https://www.rottentomatoes.com/tv/absolutely-fabulous/s05/e08)
