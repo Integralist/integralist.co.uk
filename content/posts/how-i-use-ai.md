@@ -157,6 +157,8 @@ current project, or all historical sessions in `~/.pi/agent/sessions/`. It
 normalises expanded skills, deduplicates repeated prompts, and drops the
 match straight back into the editor.
 
+![Pi Prompt History showing my session prompt history](/assets/img/ai-prompt-history.png)
+
 ### Suggesting the next prompt with pi-auto-suggest
 
 The same applied to Claude Code's suggestion mode. Claude Code predicts your
@@ -167,6 +169,8 @@ the conversation and any active skill context using the cheapest fast model
 available, then renders muted ghost text
 in the prompt bar. Hitting `Tab` or `Right Arrow` accepts it, `Escape` clears
 it, and typing anything else simply overrides it.
+
+![Pi Auto Suggest showing me a recommended next prompt](/assets/img/pi-auto-suggest.png)
 
 The reality of extending harnesses, though, is that there is no cross-harness
 standard for runtime plugins. When you write a TypeScript extension for Pi or
@@ -854,6 +858,8 @@ sharing. It keeps slides focused on a single idea, leans heavily on Mermaid
 diagrams to show relationships rather than describing them, and applies clean
 visual themes (a warm Claude-inspired palette or an informal Fastly-inspired
 style for colleagues).
+
+![Teach with Slides](/assets/img/teach-with-slides.png)
 
 ## 💬 Prepping Retros and 1:1s (Recency Bias Sucks)
 
