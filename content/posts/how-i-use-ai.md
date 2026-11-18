@@ -609,6 +609,21 @@ critically evaluating the feedback agents give you.
   Parallel read-only verifier subagents then challenge every finding and drop
   anything they can't prove. Every reviewer and verifier runs on the session model
   or better, because a missed defect costs more than the tokens.
+- **council**: Sometimes you want a genuine second opinion from models outside
+  the one you are already talking to. Unlike the harness-agnostic skills in
+  `.agents/skills/`, council lives under `.pi/agent/skills/council/` because it
+  relies on pi-subagents to run a read-only review in parallel across three
+  providers (GitHub Copilot, Google Vertex, and Amazon Bedrock). It inspects the
+  active session model and always picks a different model per provider, disables
+  fallback so missing models fail loudly, and hands every subagent the exact
+  same diff snapshot (using the same PR, branch, or uncommitted targets as
+  code-review). If Bedrock SSO needs refreshing, it kicks off Copilot and
+  Vertex quietly in the background while you run
+  `aws sso login --profile=bedrock`, then verifies every claimed defect against
+  the actual files before synthesising where the models agree, where they
+  disagree, and any provider gaps.
+
+  ![Pi Council running multi-provider code review subagents](/assets/img/pi-council.png)
 - [**is-it-safe**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/is-it-safe/SKILL.md):
   Rather than general reviews or speculative risk matrices, this runs an
   adversarial impact analysis answering one question: what is the worst credible
@@ -670,6 +685,7 @@ Different engineering problems call for different analytical lenses:
 | **arena**        | Non-trivial artefact where one attempt risks the wrong shape                               | Synthesised multi-model artefact                             |
 | **precedent**    | Ensuring new code matches existing codebase conventions                                    | Divergence report citing peer patterns                       |
 | **code-review**  | Code or diff exists and defects must be identified                                         | Verified findings across subagents                           |
+| **council**      | A code change needs an independent second opinion across Copilot, Vertex, and Bedrock      | Verified cross-provider agreements and disagreements         |
 | **is-it-safe**   | Assessing the worst credible failure mode and blast radius before merge                    | Adversarial impact report with a PROCEED/HOLD/STOP verdict   |
 
 ## 🏢 Team Adoption: When Others Vendor Your Workflows
