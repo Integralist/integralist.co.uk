@@ -5,23 +5,63 @@ description: "How I configure agent-skills: keeping things harness-agnostic, str
 tags: [ai, tooling]
 ---
 
-Most chat around using AI for engineering seems to land on two extremes:
-either people claiming agents will replace developers by next month, or
-complete cynicism because a model botched a regex. Neither feels particularly
-helpful to be honest.
+Before AI (which I class as really kicking off around the time Anthropic
+released their 4.6 model line) I had spent nearly 26 years _grinding_ and
+_learning_ and working HARD as a professional software engineer. Since AI, the
+world has become a very different place...
+
+Now most chat around using AI for engineering seems to land on two extremes:
+either people claiming agents will replace developers by next month, or complete
+cynicism because a model botched a regex. Neither feels particularly helpful to
+be honest.
 
 I use coding agents every single day across multiple codebases. I don't treat
 them like magical answers to everything, and I definitely don't let them dump
 unvetted code into my repositories. For me, an agent is essentially a very fast,
-enthusiastic junior engineer who happens to be a bit careless if you leave them
-unsupervised. That means giving them strict boundaries, making TDD
-non-negotiable, and having zero patience for apologies or boilerplate slop.
+enthusiastic senior\*\* engineer who happens to be a bit careless if you leave
+them unsupervised. That means you need to help them by enforcing strict
+boundaries, defining acceptance criteria, building software with test-driven
+development, and massaging their communication output to be _focused_ and
+_concise_, rather than just wall-of-text drivel slop.
 
-All of this lives in my [agent-skills] repo. Here is a look at the mental model,
-the setup, and how work actually gets done.
+> \*\*Up until probably the middle of 2026 I used to consider agents to be
+> _junior_ engineers, but the quality of models has reached a stage now where
+> they write better code than me. That's just a fact. Yes, I have better
+> judgement on quality of code as far as readability, maintainability and very
+> importantly... _clarity_. But the actual complexity of the code, and its
+> structure, models nowadays have that nailed down.
+
+All of these instructions and _guidance_ live in my [agent-skills] repo. In this
+post we're going to take a look at what it includes, why, and how it's useful to
+me (and potentially to others).
 
 > [!NOTE]
 > AI likes emojis. Guess what... so do I. Get over it 😂
+
+## 🤔 Is AI something to be scared of or worried about?
+
+Yes and no.
+
+**Yes**, because Software Engineering is changing from being strictly tactical to
+more strategic (we're all becoming Product engineers), and the reality is this
+is going to have an affect on the job market and we're already seeing large
+sways of redundancies with long term unemployment to follow. That's a real
+concern, and one I'm genuinely worried about. Hence I'm leaning HARD into AI to
+make sure my processes and workflows are airtight and allow me to stay ahead of
+the curve, and everybody else 🤞🏻😅.
+
+**No**, because my _creativity_ has never been more satisfied! I have all sorts
+of issues with different software, that in the old days I would have just
+suffered with as I wouldn't have either the skill or the time or the motivation
+to fix. Now... _anything_ is possible! Literally this morning, I realised an
+agent harness extension I had built wasn't quite slick enough for me, I needed a
+specific piece of functionality to exist for everything to be buttery smooth.
+So, I opened up my agent harness and started prompting. 15 minutes later, the
+problem was solved.
+
+This is nuts. This is amazing. This is scary. It's all the things. The cat is
+out of the bag, and it's not going back. So you might as well strap in for the
+ride.
 
 ## 🔌 Engineering Around the Harness
 
