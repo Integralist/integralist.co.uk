@@ -422,6 +422,19 @@ execution plans, and step-by-step TDD task lists. This prevents context drift,
 makes the agent's work fully auditable, and lets engineers inspect and tweak
 artifacts at every stage.
 
+On the Agentic Platform team, the platform build-out and several service
+migrations all run in parallel, which made "how far along are we?" a
+surprisingly hard question to answer. So I built a progress dashboard that maps
+every component of the system and colours it by what actually exists: shipped
+code, a local mock, work in flight, or nothing yet. It works this out from
+evidence rather than status updates, reading the main branch, open pull
+requests, issues, and Jira tickets (fetched by a headless agent and cached, so
+it costs pennies to run). Every colour comes with the reasons behind it, and
+its tests fail when a new component appears that the dashboard doesn't know
+about, so it stays accurate as the system grows. The team can now see
+progress, gaps, and blockers at a glance instead of piecing them together by
+hand.
+
 I treat agent workflows like any other software system: constantly testing,
 evolving, and cutting out friction. My daily setup includes adversarial design
 stress-testing (`grilling`), cross-model consensus, automated codebase pattern
