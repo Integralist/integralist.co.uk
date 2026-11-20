@@ -609,6 +609,7 @@ critically evaluating the feedback agents give you.
   Parallel read-only verifier subagents then challenge every finding and drop
   anything they can't prove. Every reviewer and verifier runs on the session model
   or better, because a missed defect costs more than the tokens.
+
 - **council**: Sometimes you want a genuine second opinion from models outside
   the one you are already talking to. Unlike the harness-agnostic skills in
   `.agents/skills/`, council lives under `.pi/agent/skills/council/` because it
@@ -624,6 +625,7 @@ critically evaluating the feedback agents give you.
   disagree, and any provider gaps.
 
   ![Pi Council running multi-provider code review subagents](/assets/img/pi-council.png)
+
 - [**is-it-safe**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/is-it-safe/SKILL.md):
   Rather than general reviews or speculative risk matrices, this runs an
   adversarial impact analysis answering one question: what is the worst credible
@@ -632,6 +634,7 @@ critically evaluating the feedback agents give you.
   and test safeguards before returning a clear verdict (🟢 `PROCEED`, 🟡 `HOLD`,
   🔴 `STOP`). It catches nasty blast-radius surprises so changes ship safely
   without relying solely on green tests.
+
 - [**code-review-feedback**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/code-review-feedback/SKILL.md)
   &
   [**security-review-feedback**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/security-review-feedback/SKILL.md):
@@ -640,6 +643,7 @@ critically evaluating the feedback agents give you.
   technical rigour. Is the vulnerability actually reachable? Is the suggested
   refactor introducing hidden complexity? If a suggestion is rubbish, reject it
   with proof.
+
 - [**explain-code**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/explain-code/SKILL.md):
   Not every question about a PR or diff is a request for a review. Sometimes I
   just want to understand what changed, why it matters, and how it fits into an
@@ -836,6 +840,8 @@ needed. It keeps the human firmly in the driving seat without breaking the flow.
 That said, I actually prefer a terminal experience over a browser UI, so
 nowadays I tend to use [Hunk](https://www.hunk.dev/) instead. It gives me that
 same local review loop without ever leaving my terminal window.
+
+![Hunk](/assets/img/hunk.jpg)
 
 To wire it into my agent workflow, I built a
 [hunk](https://github.com/Integralist/agent-skills/blob/cc1bf18b5a6acb1b448f550f48a02c36cdfd51f9/.agents/skills/hunk/SKILL.md)
