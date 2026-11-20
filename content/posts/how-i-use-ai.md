@@ -275,11 +275,10 @@ every session.
 - **Keep it brief:** Shortest complete response wins. Cap lists at around five
   items and group them by priority (see also my
   [voice-adhd](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/voice-adhd/SKILL.md),
-  [summarize-for-adhd](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/summarize-for-adhd/SKILL.md),
   [voice-product](https://github.com/Integralist/agent-skills/blob/66f3a0c79e8f2c96272e0f963c0833b3b693ebf4/.agents/skills/voice-product/SKILL.md),
   and
-  [summarize-for-product](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/summarize-for-product/SKILL.md)
-  skills that are all related to communication and tone of voice).
+  [summarize](https://github.com/Integralist/agent-skills/blob/9f22354a678647cdb80b9d5792f5fbf6038721d6/.agents/skills/summarize/SKILL.md)
+  skills).
 - **Bound the steps:** If a task takes multiple steps, number them upfront so I
   know where we are. My
   [pi-transcript-enhancer](https://github.com/Integralist/pi-transcript-enhancer)
@@ -301,10 +300,8 @@ every session.
   skill).
 - **Simplicity over layers:** I prefer solving problems by removing components
   rather than stacking abstractions or wrapper functions (see my
-  [code-module-design](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/code-module-design/SKILL.md)
-  and
-  [code-module-review](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/code-module-review/SKILL.md)
-  skills).
+  [code-module-design](https://github.com/Integralist/agent-skills/blob/f1830bab6b9cd7ea02e444101f753ebd67c94566/.agents/skills/code-module-design/SKILL.md)
+  skill, which also reviews existing modules with `--review`).
 - **Cite actual sources:** Never guess an API signature or config header from
   vague memory. Cite the file and line number
   (`internal/parser/frontmatter.go:42`), or explicitly flag it as an unverified
@@ -350,10 +347,10 @@ Before touching code, the idea needs stress-testing.
   [**decide**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/decide/SKILL.md):
   Evaluates alternatives through structured lenses (risks, benefits, costs) and
   produces a durable decision memo or ADR (Architecture Decision Record).
-- [**consensus**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/consensus/SKILL.md):
+- [**consensus**](https://github.com/Integralist/agent-skills/blob/6c2e03762eb5b759406b6e19f9cb0f188ee33852/archive/skills/consensus/SKILL.md) (archived):
   Drives cross-model debate through gated discussion rounds, preserving healthy
   dissent when evaluating high-stakes architectural choices.
-- [**arena**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/arena/SKILL.md):
+- [**arena**](https://github.com/Integralist/agent-skills/blob/6c2e03762eb5b759406b6e19f9cb0f188ee33852/archive/skills/arena/SKILL.md) (archived):
   Runs parallel candidate attempts across multiple models for tricky pieces where
   a single shot risks locking in the wrong shape. It scores candidates against a
   concrete rubric via an independent cross-judge, picks a base, and borrows the
@@ -601,7 +598,7 @@ With tasks compiled, execution becomes fast and predictable.
 Reviewing code with AI works both ways: having agents review code, and
 critically evaluating the feedback agents give you.
 
-- [**code-review**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/code-review/SKILL.md):
+- [**code-review**](https://github.com/Integralist/agent-skills/blob/569f0f5b61b8283a78269af9bc25b8f81db261f3/.agents/skills/code-review/SKILL.md):
   Gathers the diff and intent documents (`Execution-Plan` commit trailers, active
   project specs and plans, and living specs in `docs/specs/`), then runs parallel
   subagents across up to five profiles (behaviour and tests, security, reliability
@@ -609,6 +606,11 @@ critically evaluating the feedback agents give you.
   Parallel read-only verifier subagents then challenge every finding and drop
   anything they can't prove. Every reviewer and verifier runs on the session model
   or better, because a missed defect costs more than the tokens.
+
+  If I already have feedback from a reviewer or a static analyser, I use
+  `--feedback` instead of running another review. The skill checks whether
+  each claim holds up against the code, including whether a reported security
+  issue is actually reachable. If a suggestion is rubbish, reject it with proof.
 
 - **council**: Sometimes you want a genuine second opinion from models outside
   the one you are already talking to. Unlike the harness-agnostic skills in
@@ -634,15 +636,6 @@ critically evaluating the feedback agents give you.
   and test safeguards before returning a clear verdict (🟢 `PROCEED`, 🟡 `HOLD`,
   🔴 `STOP`). It catches nasty blast-radius surprises so changes ship safely
   without relying solely on green tests.
-
-- [**code-review-feedback**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/code-review-feedback/SKILL.md)
-  &
-  [**security-review-feedback**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/security-review-feedback/SKILL.md):
-  When an AI reviewer (or static analyser) flags an issue, you shouldn't
-  reflexively accept it. These skills force the agent to evaluate the claim with
-  technical rigour. Is the vulnerability actually reachable? Is the suggested
-  refactor introducing hidden complexity? If a suggestion is rubbish, reject it
-  with proof.
 
 - [**explain-code**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/explain-code/SKILL.md):
   Not every question about a PR or diff is a request for a review. Sometimes I
@@ -685,8 +678,6 @@ Different engineering problems call for different analytical lenses:
 | ---------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
 | **perspectives** | Brainstorming or running a "what are we missing?" pass                                     | Multi-perspective analysis                                   |
 | **decide**       | Choosing between consequential engineering options                                         | Durable decision memo / ADR                                  |
-| **consensus**    | A complex design or implementation needs independent cross-model review and approval gates | Reviewed assessment or implementation with dissent preserved |
-| **arena**        | Non-trivial artefact where one attempt risks the wrong shape                               | Synthesised multi-model artefact                             |
 | **precedent**    | Ensuring new code matches existing codebase conventions                                    | Divergence report citing peer patterns                       |
 | **code-review**  | Code or diff exists and defects must be identified                                         | Verified findings across subagents                           |
 | **council**      | A code change needs an independent second opinion across Copilot, Vertex, and Bedrock      | Verified cross-provider agreements and disagreements         |
@@ -897,9 +888,8 @@ DMs across a configurable lookback window. Rather than dumping raw hits, it
 groups messages by topic and ranks them by frequency, breadth across teammates,
 recency, and emotional intensity.
 
-Crucially, it tags the audience for each item
-([retro](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/retro/SKILL.md)
-for public channel topics, 1:1 for private DMs or personal behaviour). It
+Crucially, it tags the audience for each item (retro for public channel topics,
+1:1 for private DMs or personal behaviour). It
 prints a ranked terminal summary with the signal and a concrete proposal to
 bring, while keeping everything local: basic config on disk, messages in chat,
 DMs paraphrased, and credentials redacted on the fly.
@@ -1024,7 +1014,7 @@ enforce strict financial and token discipline:
 
   ![AI model usage dashboard generated by model-stats](/assets/img/model-stats.png)
 
-- [**`caveman`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/caveman/SKILL.md):
+- [**caveman**](https://github.com/Integralist/agent-skills/blob/6c2e03762eb5b759406b6e19f9cb0f188ee33852/archive/skills/caveman/SKILL.md) (archived):
   A skill I built for an ultra-compressed communication mode (~75% token reduction) for rapid
   back-and-forth debugging when full conversational prose is just in the way.
 
