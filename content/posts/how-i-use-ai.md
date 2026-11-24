@@ -220,11 +220,16 @@ strict authoring rules via
 (I also wrote
 [skill-rewrite](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/skill-rewrite/SKILL.md)
 after discovering what a poor job I had done with some of them 😅) to keep each
-skill short enough to read in one pass. It's important to realise that, yes, in
-our upcoming near future, agents are reading everything instead of us, but it's
+skill short enough to read in one pass. Recently I went through and trimmed out
+a lot of over-prescriptive fluff (textbook basics, starter scripts, and rigid
+turn-by-turn scripts) so the house conventions and hard guardrails stay obvious,
+while rare fallbacks sit in conditional reference files. Cross-skill calls also
+use explicit `read and follow` links rather than bare names, so every harness
+knows when to load another skill. It's important to realise that, yes, in our
+upcoming near future, agents are reading everything instead of us, but it's
 important for us to understand EXACTLY what we're asking of those agents and
 it's often too easy to just ask an agent "hey, create a new skill to do X"
-without keeping tight reigns on what is being produced.
+without keeping tight reins on what is being produced.
 
 > [!TIP]
 > **Remember:** Every unmonitored input and output is a token. \
@@ -246,9 +251,13 @@ then generating the equivalent Claude Code 'Rules' from my canonical skills.
 Claude Code also supports an `argument-hint` field in skill frontmatter. If you
 look at my
 [talking-points](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/talking-points/SKILL.md)
-skill you'll see it has `argument-hint: [--edit] [--days N]`. This means, in
-Claude Code, when you type the slash command you'll see the arguments presented
-as options. Pi does not display these hints natively, so I wrote
+skill you'll see it has `argument-hint: "[--edit] [--days N]"`. Most skills now
+standardise on `--flag` or `--key[=<value>]` inputs bound with `=` and
+`[steering]` as the sole optional positional argument (plus `#<...>` hints for
+GitHub issues and PRs), and prefer noun-first naming like `pr-open` and
+`pr-merge` so related workflows sit together alphabetically. In Claude Code,
+when you type the slash command you'll see the arguments presented as options.
+Pi does not display these hints natively, so I wrote
 [pi-skill-argument-hints](https://github.com/Integralist/pi-skill-argument-hints)
 to fill the gap. It reads the same field and shows the hint beside the cursor
 after `/skill:<name>`, hiding it as soon as I type an argument or a space.
@@ -271,7 +280,9 @@ every session.
 ### 💬 1. Communication and Tone
 
 - **Cut the sycophancy:** Drop the "_I would be delighted to help with that!_"
-  nonsense. Lead with the direct answer.
+  nonsense. Lead with the direct answer, and trigger
+  [clarify](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/clarify/SKILL.md)
+  before guessing when a request is under-specified.
 - **Keep it brief:** Shortest complete response wins. Cap lists at around five
   items and group them by priority (see also my
   [voice-adhd](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/voice-adhd/SKILL.md),
@@ -333,20 +344,23 @@ Engineering track: architect (bootstrap) ─────────────
 Before touching code, the idea needs stress-testing.
 
 - [**clarify**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/clarify/SKILL.md):
-  Digs into what you actually want when a prompt is too vague. It asks targeted
-  questions to remove ambiguity upfront.
+  Auto-triggers before guessing whenever a prompt leaves room for doubt. It
+  checks the rawest artifacts first, disambiguates candidate problem shapes, and
+  prefers external pass/fail checks with suggested defaults.
 - [**grilling**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/grilling/SKILL.md)
   (and
   [grill-me](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/grill-me/SKILL.md),
   [grill-with-docs](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/grill-with-docs/SKILL.md)):
-  Puts the idea through an adversarial interrogation. The agent relentlessly
-  challenges your assumptions, edge cases, and architecture choices across the
-  design tree.
+  Puts the idea through an adversarial interrogation. The agent settles
+  empirical questions by inspecting code or running experiments first, then
+  relentlessly challenges your assumptions, edge cases, and architecture choices
+  across the design tree.
 - [**perspectives**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/perspectives/SKILL.md)
   &
   [**decide**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/decide/SKILL.md):
   Evaluates alternatives through structured lenses (risks, benefits, costs) and
-  produces a durable decision memo or ADR (Architecture Decision Record).
+  runs a short adaptive interview plus a fresh contrarian pass to produce a
+  durable decision memo or ADR (Architecture Decision Record).
 - [**consensus**](https://github.com/Integralist/agent-skills/blob/6c2e03762eb5b759406b6e19f9cb0f188ee33852/archive/skills/consensus/SKILL.md) (archived):
   Drives cross-model debate through gated discussion rounds, preserving healthy
   dissent when evaluating high-stakes architectural choices.
@@ -399,25 +413,31 @@ When an initiative is driven by engineering, the three-stage product
 governance dance is overkill. That is where architect comes in.
 
 PDD handles cross-functional approvals. Architect coordinates engineering
-delivery through six steps:
+delivery through seven steps:
 
 1. Bootstrap the project rules with
-   [agents-md](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/agents-md/SKILL.md),
-   adding [clarify](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/clarify/SKILL.md)
-   if the idea is vague.
-2. Research the problem with
+   [agents-md](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/agents-md/SKILL.md)
+   so `AGENTS.md` is canonical and current.
+2. Clarify the idea with
+   [clarify](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/clarify/SKILL.md)
+   if it is under-specified, and spin up a sibling worktree with
+   [worktree-create](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/worktree-create/SKILL.md)
+   when working on disk rather than in `--github` mode.
+3. Research the problem with
    [research](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/research/SKILL.md),
    then stress-test it with
    [grill-with-docs](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/grill-with-docs/SKILL.md).
-3. Write the functional spec with
-   [to-spec](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/to-spec/SKILL.md).
-4. Plan the work with
+4. Write the functional spec with
+   [to-spec](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/to-spec/SKILL.md),
+   scaling independent critique (checked against cited records) to non-trivial
+   specs and pruning only if revisions add bloat.
+5. Plan the work with
    [to-plan](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/to-plan/SKILL.md),
    then record genuine architectural decisions with
    [to-adr](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/to-adr/SKILL.md).
-5. If the work did not start from an approved PDD design, add a PRD with
+6. If the work did not start from an approved PDD design, offer a PRD with
    [to-prd](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/to-prd/SKILL.md).
-6. Hand off to execution.
+7. Hand off to execution.
 
 ### The engineering handoff: specs, plans, and tasks
 
@@ -499,10 +519,11 @@ run, review the final code and complete commit list, suggest any small edits,
 then decide whether to push or open a PR. That makes the overall flow faster
 for me.
 
-By default it confirms the setup and asks when design questions come up. Passing
-`auto` (`/skill:execute-plan <plan-path> auto`) lets it run unattended through
-all slices and the final audit, logging each non-trivial decision in
-execution.md. Both modes still stop hard if staging is unsafe, three fixes
+By default it confirms the setup and asks when design questions come up (and
+creates a sibling worktree via `worktree-create` if you start on `main` or
+`master` in the main checkout). Passing `--auto`
+(`/skill:execute-plan --plan=<path> --auto`) lets it run unattended through all
+slices and the final audit, logging each non-trivial decision in execution.md. Both modes still stop hard if staging is unsafe, three fixes
 fail on the same problem, the worker model can't be verified, the provider runs
 out of credits, a commit would land on `main`/`master` without approval, or the
 PDD Design isn't approved. It never pushes or opens PRs, and I can still run the
@@ -521,9 +542,9 @@ need a bookkeeping commit at the end just to shuffle the folder into
 To give myself a cleaner option, I added an opt-in GitHub Issues backend
 ([PR #33](https://github.com/Integralist/agent-skills/pull/33), dogfooded
 through [Issue #24](https://github.com/Integralist/agent-skills/issues/24)).
-Passing "github" or an issue number (`/skill:architect github`,
-`/skill:to-plan #24`, `/skill:next-slice #25`) switches the skills over to a
-shared
+Passing `--github` or an issue number (`/skill:architect --github`,
+`/skill:to-plan --source=#24`, `/skill:next-slice #25`) switches the skills over
+to a shared
 [GITHUB-ISSUES.md](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/shared/GITHUB-ISSUES.md)
 protocol while leaving the on-disk workflow untouched as the default. Because
 each skill only has a single conditional pointer line, normal on-disk runs
@@ -535,16 +556,18 @@ lives in related issues:
 
 1. **Root project issue:** Acts as the project index and holds shared project
    documents.
-2. **Slice issues:** Sit under the root issue and track milestones, acceptance
-   checks, and implementation context.
-3. **Task issues:** Sit under a slice and hold implementation and verification
-   details for each task.
+2. **Slice issues:** Sit under the root issue and follow the same newcomer-friendly
+   `Problem` / `Solution` layout, 1 to 3 single-fact `Notes` bullets, and
+   collapsed `<details>` drawers for technical metadata and milestones.
+3. **Task issues:** Sit under a slice with the same scannable summary above the
+   fold and implementation and verification details tucked into `<details>`.
 
 I've tightened the Root Issue description too: it is a navigation page, not a
 second spec or a running project diary. A short summary and the next action,
 with one named owner, belong near the top. Artifact purposes and statuses stay
 short; detailed requirements and history stay linked in their own artifacts.
-Current blockers and approval gates remain visible.
+Current blockers and approval gates remain visible, and Root and Slice issues
+stay synced whenever tasks are compiled, artifacts change, or slices close.
 
 ![GitHub Root Issue showing nested Slice and Task sub-issues alongside spec.md and plan.md Issue Artifacts](/assets/img/github-issues.png)
 
@@ -572,10 +595,11 @@ With tasks compiled, execution becomes fast and predictable.
 
 - **next-task & next-slice**: Both work in the main thread on a "moderate" model
   tier using a shared test-first procedure (BUILD-ITEM.md), whether running from a
-  compiled task list or directly from plan milestones. next-task builds and
-  verifies the next ready item, while next-slice works through an entire slice,
-  verifies every milestone outcome against the full test suite, and offers one
-  commit at the end.
+  compiled task list or directly from plan milestones (and spinning up a sibling
+  worktree first if you start on `main` or `master` in the main checkout).
+  next-task builds and verifies the next ready item, while next-slice works
+  through an entire slice, verifies every milestone outcome against the full
+  test suite, and offers one commit at the end.
 - **`conventions-*` & go-testing**: Enforces strict language conventions
   ([conventions-go](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/conventions-go/SKILL.md),
   [conventions-python](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/conventions-python/SKILL.md),
@@ -584,8 +608,9 @@ With tasks compiled, execution becomes fast and predictable.
   waits, public API testing, [godog](https://github.com/cucumber/godog) Gherkin
   acceptance test wiring, and zero unkeyed struct literals).
 - [**`unslop`**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/unslop/SKILL.md):
-  Strips AI tells, buzzwords, puffery, and robotic cadence from documentation and
-  prose to restore a clean, authentic human voice.
+  Auto-triggers when prose sounds stiff or robotic, stripping AI tells,
+  puffery, and machine cadence (without banning literal technical terms) to
+  restore an authentic human voice.
 - [**cleanup**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/cleanup/SKILL.md):
   Runs a background audit hunting for AI-generated clutter, dead code, and
   unnecessary abstractions.
@@ -598,19 +623,23 @@ With tasks compiled, execution becomes fast and predictable.
 Reviewing code with AI works both ways: having agents review code, and
 critically evaluating the feedback agents give you.
 
-- [**code-review**](https://github.com/Integralist/agent-skills/blob/569f0f5b61b8283a78269af9bc25b8f81db261f3/.agents/skills/code-review/SKILL.md):
+- [**code-review**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/code-review/SKILL.md):
   Gathers the diff and intent documents (`Execution-Plan` commit trailers, active
   project specs and plans, and living specs in `docs/specs/`), then runs parallel
   subagents across up to five profiles (behaviour and tests, security, reliability
   and rollout, maintainability and conventions, plus spec and plan adherence).
-  Parallel read-only verifier subagents then challenge every finding and drop
-  anything they can't prove. Every reviewer and verifier runs on the session model
-  or better, because a missed defect costs more than the tokens.
+  On behavioural changes (skipping pure docs or formatting diffs), it also
+  launches `is-it-safe` as a separate read-only adversarial safety reviewer,
+  preferably on a different frontier model on the same provider. Parallel
+  read-only verifier subagents then challenge every finding and drop anything
+  they can't prove. Every reviewer and verifier runs on the session model or
+  better, because a missed defect costs more than the tokens.
 
   If I already have feedback from a reviewer or a static analyser, I use
   `--feedback` instead of running another review. The skill checks whether
-  each claim holds up against the code, including whether a reported security
-  issue is actually reachable. If a suggestion is rubbish, reject it with proof.
+  each claim holds up against the code, treating reachable auth bypasses,
+  integrity loss, and DoS issues as real impact. If a suggestion is rubbish,
+  reject it with proof.
 
 - **council**: Sometimes you want a genuine second opinion from models outside
   the one you are already talking to. Unlike the harness-agnostic skills in
@@ -640,12 +669,15 @@ critically evaluating the feedback agents give you.
 - [**explain-code**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/explain-code/SKILL.md):
   Not every question about a PR or diff is a request for a review. Sometimes I
   just want to understand what changed, why it matters, and how it fits into an
-  unfamiliar system. The skill gives newcomers a concise Problem/Solution
-  walkthrough of a PR, branch, commit, or scoped code, with a small Mermaid
-  diagram when there’s a useful flow to show and references to the sources. It
-  explains behaviour and purpose rather than hunting for defects or judging
-  whether a change should merge. For a PR, it can also draft a clarification
-  comment for the author, but posting needs separate approval (see also my
+  unfamiliar system. Using the same shared
+  [NEWCOMER-NARRATIVE.md](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/shared/NEWCOMER-NARRATIVE.md)
+  structure as `pr-open`, it opens with what the primary system does in plain
+  words and walks newcomers through one concrete `Problem` / `Solution` example,
+  with a small Mermaid diagram when there’s a useful flow to show and
+  references to the sources. It explains behaviour and purpose rather than
+  hunting for defects or judging whether a change should merge. For a PR, it can
+  also draft a clarification comment for the author, but posting needs separate
+  approval (see also my
   [wait-what](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/wait-what/SKILL.md)
   skill).
 
@@ -653,22 +685,35 @@ critically evaluating the feedback agents give you.
 
 When the code is tested and clean, shipping is a deterministic, mechanical step.
 
+- [**worktree-create**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/worktree-create/SKILL.md):
+  Creates a sibling worktree (`../<repo>-<slug>/` on `<git-username>/<slug>`)
+  so the main checkout stays clean on its default branch. This is now the
+  default starting point for planning and execution skills when you start on
+  `main` or `master`.
 - [**branch**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/branch/SKILL.md):
-  Cuts a feature branch using session context and standard naming.
+  Cuts a feature branch in place when you want to keep working in the current
+  checkout, and cleans up merged branches with `--cleanup`.
 - [**commit**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/commit/SKILL.md):
   Stages and groups files sensibly, enforcing titles that explain why the change
   matters rather than listing raw mechanical steps.
-- [**open-pr**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/open-pr/SKILL.md):
-  Generates a ready-for-review pull request with clear Problem and Solution
-  sections, consequence-driven titles, and load-bearing emoji from a shared
-  PR-DESCRIPTION.md contract.
+- [**pr-open**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/pr-open/SKILL.md):
+  Generates a ready-for-review pull request (use `--draft` for a draft) with a
+  newcomer-friendly `Problem` and `Solution`, consequence-driven titles, 1 to 3
+  `Notes` bullets, and dense inventories or checklists tucked into collapsed
+  `<details>` blocks via a shared PR-DESCRIPTION.md contract.
 - [**stacked-prs**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/stacked-prs/SKILL.md):
   Coordinates dependent PR chains with the official `gh stack` CLI extension,
   opening each layer ready for review (`--auto --open`) with the same shared PR
   description rules.
+- [**pr-merge**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/pr-merge/SKILL.md)
+  &
+  [**worktree-cleanup**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/worktree-cleanup/SKILL.md):
+  Merges an open GitHub PR after confirming checks and review status, then runs
+  `worktree-cleanup` (or `branch --cleanup`) to remove the merged worktree or
+  branch, prune remotes, and rebase the base branch.
 - [**bcp**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/bcp/SKILL.md):
-  Thin coordinator that runs branch, commit, and open-pr (or hands off to
-  stacked-prs when `gh stack view` finds an active stack) in one command.
+  Thin coordinator that runs `branch`, `commit`, and `pr-open` (or hands off to
+  `stacked-prs` when `gh stack view` finds an active stack) in one command.
 
 ### 🧭 Choosing the Right Analysis Skill
 
@@ -835,7 +880,7 @@ same local review loop without ever leaving my terminal window.
 ![Hunk](/assets/img/hunk.jpg)
 
 To wire it into my agent workflow, I built a
-[hunk](https://github.com/Integralist/agent-skills/blob/cc1bf18b5a6acb1b448f550f48a02c36cdfd51f9/.agents/skills/hunk/SKILL.md)
+[hunk](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/hunk/SKILL.md)
 skill that drives a live
 `hunk diff` TUI session through `hunk session` CLI commands. I keep ownership of
 the interactive terminal window while the agent reloads it onto whatever I'm
@@ -847,11 +892,11 @@ other and the working tree stays clean).
 When the agent reviews a changeset, it batch-applies inline notes, scrolls the
 TUI to the first stop, and highlights the exact character span I should look at.
 I can step through findings by replying `next` or `prev` in chat, or press `c`
-in Hunk to leave my own inline notes. Running `/hunk comments` tells the agent
+in Hunk to leave my own inline notes. Running `/hunk --comments` tells the agent
 to read my threads, make any approved code edits, reply directly under each
-note, and refresh the view in place. When I'm done, `/hunk done` clears the
-session notes, prunes any orphaned patch files, and restores the working-tree
-diff.
+note, and refresh the view in place (or `--address` to tackle everything at
+once). When I'm done, `/hunk --done` clears the session notes, prunes any
+orphaned patch files, and restores the working-tree diff.
 
 ## 🧑‍🏫 Teaching with Slides (Beyond Code)
 
