@@ -254,9 +254,10 @@ look at my
 skill you'll see it has `argument-hint: "[--edit] [--days N]"`. Most skills now
 standardise on `--flag` or `--key[=<value>]` inputs bound with `=` and
 `[steering]` as the sole optional positional argument (plus `#<...>` hints for
-GitHub issues and PRs), and prefer noun-first naming like `pr-open` and
-`pr-merge` so related workflows sit together alphabetically. In Claude Code,
-when you type the slash command you'll see the arguments presented as options.
+GitHub issues and PRs), and prefer noun-first naming like `pr-open`,
+`pr-monitor`, and `pr-merge` so related workflows sit together alphabetically.
+In Claude Code, when you type the slash command you'll see the arguments
+presented as options.
 Pi does not display these hints natively, so I wrote
 [pi-skill-argument-hints](https://github.com/Integralist/pi-skill-argument-hints)
 to fill the gap. It reads the same field and shows the hint beside the cursor
@@ -705,6 +706,23 @@ When the code is tested and clean, shipping is a deterministic, mechanical step.
   Coordinates dependent PR chains with the official `gh stack` CLI extension,
   opening each layer ready for review (`--auto --open`) with the same shared PR
   description rules.
+- [**pr-monitor**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/pr-monitor/SKILL.md):
+  Checks a PR for CI failures and review feedback (waiting first if checks or
+  review bots are still in flight), verifies every claim against the code
+  instead of blindly obeying bots, and summarises the proposed fixes for
+  approval before touching anything (or runs hands-off with `--auto`). Rather
+  than force-pushing and breaking review anchors, it pushes new follow-up
+  commits, replies directly inside inline threads, and marks addressed threads
+  resolved. When feedback has no inline thread, it posts a fresh `@mention`
+  comment so reviewers or bots actually get notified (editing a comment doesn't
+  notify anyone on GitHub), while appending each round's changes to one
+  consolidated amendment log comment so the PR stays easy to scan. After
+  pushing, it watches the next CI run plus a post-CI window for slow review
+  bots (2 minutes of quiet time, or up to 10 minutes while a bot is still
+  pending, overridable via `--post-ci-wait`), and can spot when a bot hits an
+  automatic run cap and advertises a manual trigger phrase. By default it runs
+  one fix-and-monitor cycle; passing `--loop` keeps repeating up to 5 rounds
+  and stops early as soon as checks are green and the PR goes quiet.
 - [**pr-merge**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/pr-merge/SKILL.md)
   &
   [**worktree-cleanup**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/worktree-cleanup/SKILL.md):
