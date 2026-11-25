@@ -251,7 +251,9 @@ then generating the equivalent Claude Code 'Rules' from my canonical skills.
 Claude Code also supports an `argument-hint` field in skill frontmatter. If you
 look at my
 [talking-points](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/talking-points/SKILL.md)
-skill you'll see it has `argument-hint: "[--edit] [--days N]"`. Most skills now
+skill you'll see it has `argument-hint: "[--edit] [--days N]"`. Every skill
+that takes flags, targets, mode toggles, or `[steering]` now declares
+`argument-hint` and keeps it in sync with the skill body. Most skills
 standardise on `--flag` or `--key[=<value>]` inputs bound with `=` and
 `[steering]` as the sole optional positional argument (plus `#<...>` hints for
 GitHub issues and PRs), and prefer noun-first naming like `pr-open`,
@@ -262,6 +264,11 @@ Pi does not display these hints natively, so I wrote
 [pi-skill-argument-hints](https://github.com/Integralist/pi-skill-argument-hints)
 to fill the gap. It reads the same field and shows the hint beside the cursor
 after `/skill:<name>`, hiding it as soon as I type an argument or a space.
+
+For permissions, `allowed-tools` now permits only strictly read-only commands or
+exact non-destructive calls (no wildcarded dual-purpose entries like
+`git branch:*` or `gh pr:*` that could let mutating flags slip past prompts).
+Commits, pushes, and PR edits stay governed by normal runtime permissions.
 
 Although I typically only really use the Pi harness now, I like to keep my
 agent-skills working across multiple harnesses, and so my repo has a handy
@@ -543,13 +550,17 @@ need a bookkeeping commit at the end just to shuffle the folder into
 To give myself a cleaner option, I added an opt-in GitHub Issues backend
 ([PR #33](https://github.com/Integralist/agent-skills/pull/33), dogfooded
 through [Issue #24](https://github.com/Integralist/agent-skills/issues/24)).
-Passing `--github` or an issue number (`/skill:architect --github`,
-`/skill:to-plan --source=#24`, `/skill:next-slice #25`) switches the skills over
-to a shared
+Passing `--github` or an issue reference (`/skill:architect --github`,
+`/skill:to-plan --source=#24`, `/skill:next-slice --plan=#25`) switches the
+skills over to a shared
 [GITHUB-ISSUES.md](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/shared/GITHUB-ISSUES.md)
-protocol while leaving the on-disk workflow untouched as the default. Because
-each skill only has a single conditional pointer line, normal on-disk runs
-don't pay a single extra token for the GitHub instructions.
+protocol while leaving the on-disk workflow untouched as the default. Once a
+project is tracked in GitHub Issues (active in the session, referenced in
+`Execution-Plan: #<n>` commit trailers, or matching an open `project` issue),
+planning, execution, and PR skills pick it up automatically without needing
+`--github` on every call. Because each skill only has a single conditional
+pointer line, normal on-disk runs don't pay a single extra token for the GitHub
+instructions.
 
 GitHub Issue Artifacts and Sub-Issues give this workflow a three-level
 structure. Durable specs, ADRs, and the glossary stay in Git; project work
@@ -672,9 +683,11 @@ critically evaluating the feedback agents give you.
   just want to understand what changed, why it matters, and how it fits into an
   unfamiliar system. Using the same shared
   [NEWCOMER-NARRATIVE.md](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/shared/NEWCOMER-NARRATIVE.md)
-  structure as `pr-open`, it opens with what the primary system does in plain
-  words and walks newcomers through one concrete `Problem` / `Solution` example,
-  with a small Mermaid diagram when there’s a useful flow to show and
+  structure as pr-open, it links defined systems and terms straight to their
+  GLOSSARY.md headings (written in voice-product prose via domain-modeling) or
+  opens with plain-words glosses, walking newcomers through one concrete
+  `Problem` / `Solution` example with a small Mermaid diagram when there’s a
+  useful flow to show and
   references to the sources. It explains behaviour and purpose rather than
   hunting for defects or judging whether a change should merge. For a PR, it can
   also draft a clarification comment for the author, but posting needs separate
@@ -699,9 +712,13 @@ When the code is tested and clean, shipping is a deterministic, mechanical step.
   matters rather than listing raw mechanical steps.
 - [**pr-open**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/pr-open/SKILL.md):
   Generates a ready-for-review pull request (use `--draft` for a draft) with a
-  newcomer-friendly `Problem` and `Solution`, consequence-driven titles, 1 to 3
+  newcomer-friendly `Problem` and `Solution`, linking defined terms to
+  GLOSSARY.md headings on first mention, consequence-driven titles, 1 to 3
   `Notes` bullets, and dense inventories or checklists tucked into collapsed
-  `<details>` blocks via a shared PR-DESCRIPTION.md contract.
+  `<details>` blocks via a shared PR-DESCRIPTION.md contract. For non-draft PRs,
+  it hands control straight back after sharing the URL and kicks off a read-only
+  background pr-monitor subagent to watch CI and bots (pass `--monitor-auto` to
+  fix arriving issues automatically).
 - [**stacked-prs**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/stacked-prs/SKILL.md):
   Coordinates dependent PR chains with the official `gh stack` CLI extension,
   opening each layer ready for review (`--auto --open`) with the same shared PR
@@ -722,13 +739,17 @@ When the code is tested and clean, shipping is a deterministic, mechanical step.
   pending, overridable via `--post-ci-wait`), and can spot when a bot hits an
   automatic run cap and advertises a manual trigger phrase. By default it runs
   one fix-and-monitor cycle; passing `--loop` keeps repeating up to 5 rounds
-  and stops early as soon as checks are green and the PR goes quiet.
+  and stops early as soon as checks are green and the PR goes quiet. Top-level
+  single-pass watches run in a read-only background subagent so you get control
+  back immediately (even if your local checkout moves to another branch), while
+  `--loop` watches inline.
 - [**pr-merge**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/pr-merge/SKILL.md)
   &
   [**worktree-cleanup**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/worktree-cleanup/SKILL.md):
-  Merges an open GitHub PR after confirming checks and review status, then runs
-  `worktree-cleanup` (or `branch --cleanup`) to remove the merged worktree or
-  branch, prune remotes, and rebase the base branch.
+  Merges an open GitHub PR after confirming checks and review status (defaulting
+  to `--squash` when permitted, overridable via `--strategy`, or hands-off with
+  `--auto`), then runs worktree-cleanup (or `branch --cleanup`) to remove the
+  merged worktree or branch, prune remotes, and rebase the base branch.
 - [**bcp**](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/bcp/SKILL.md):
   Thin coordinator that runs `branch`, `commit`, and `pr-open` (or hands off to
   `stacked-prs` when `gh stack view` finds an active stack) in one command.
@@ -1060,6 +1081,11 @@ enforce strict financial and token discipline:
   effort, using task metadata where available and a classifier otherwise. This
   lets me use cheaper models and lower effort for simpler tasks, rather than
   spending frontier-model prices on everything.
+
+- **Pi transcript notices**: Enabling `cacheMisses`, `cacheWarming`,
+  `compactionCosts`, and `reasoningDrops` under `notices` in
+  `.pi/agent/settings.json` surfaces cache churn, compaction spend, and dropped
+  reasoning inline in the transcript as they happen.
 
 - **[llm-stats](https://github.com/Integralist/agent-skills/blob/main/.agents/skills/llm-stats/SKILL.md)**:
   A skill I built to evaluate which models and effort tiers give the best price-to-performance
