@@ -29,6 +29,25 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet">
+    <script>
+    (() => {
+        const reducedMotion = window.matchMedia &&
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!('IntersectionObserver' in window) || reducedMotion) return;
+        document.documentElement.classList.add('content-reveal-ready');
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('content-revealed');
+                    observer.unobserve(entry.target);
+                });
+            });
+            document.querySelectorAll('.post, .page, .post-content p, .page-content p')
+                .forEach(element => observer.observe(element));
+        });
+    })();
+    </script>
     <link rel="stylesheet" href="/assets/css/style.css">
     {{if .MarkdownURL}}<link rel="alternate" type="text/markdown" href="{{.MarkdownURL}}">{{end}}
     {{.JSONLD}}

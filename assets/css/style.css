@@ -747,6 +747,27 @@ th {
   }
 }
 
+/* --- Content reveal --- */
+.content-reveal-ready :is(.post, .page, .post-content p, .page-content p) {
+  opacity: 0;
+  transition: opacity 400ms ease-out;
+}
+.content-reveal-ready :is(.post-content p, .page-content p) {
+  transform: translateY(0.5rem);
+  transition: opacity 400ms ease-out, transform 400ms ease-out;
+}
+.content-reveal-ready :is(.post, .page, .post-content p, .page-content p).content-revealed {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce), print {
+  .content-reveal-ready :is(.post, .page, .post-content p, .page-content p) {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 /* --- Print --- */
 @media print {
   header,
